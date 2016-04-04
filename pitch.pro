@@ -17,6 +17,7 @@ unix{
   }
 }
 win32{ #Windows
+  MY_LIB_PATH += -L"C:/home/Qwt/lib" -L"C:/home/fftw"
   MY_INCLUDE_PATH += "./" "C:/home/Qwt/include" "C:/home/fftw"
   #Note just stick the *.dll files in the executables directory to run
 }
@@ -33,7 +34,7 @@ CONFIG += precompile_header
 DEFINES += SINGLE_DRAWING_BUFFER
 LANGUAGE = C++
 TARGET = tartini
-VERSION = 1.1.0
+VERSION = 1.2.0
 
 FORMS += dialogs/settingsdialog.ui
 
@@ -296,6 +297,8 @@ unix{
     RC_FILE = icons/pitch.icns
     DEFINES += MACX
     DEFINES += __MACOSX_CORE__
+
+    #CONFIG += link_prl
     #CONFIG += static
     #REQUIRES  = full-config
     #QMAKE_CXXFLAGS += -fast -mcpu=7450
@@ -353,8 +356,8 @@ win32{
 
   DEFINES += WINDOWS
   REQUIRES += thread
-  LIBS += -L"C:/home/Qwt/lib" -lqwt5 -L"C:/home/fftw" -lfftw3f-3 -lole32
-  DEFINES += QT_DLL QT_THREAD_SUPPORT
+  LIBS += $$MY_LIB_PATH -lqwt5 -lfftw3f-3 -lole32
+  #DEFINES += QT_DLL QT_THREAD_SUPPORT
   DEFINES -= UNICODE       #I think some things broke without this?
 }
 debug{

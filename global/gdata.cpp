@@ -104,7 +104,7 @@ GData::GData(/*int buffer_size_, int winfunc_, float step_size_*/)
   //setChangenessThreshold(0.8); //1.8);
 
   //settings.init("cs.otago.ac.nz", "Tartini");
-  qsettings = new QSettings("cs.otago.ac.nz", "Tartini1.1");
+  qsettings = new QSettings("cs.otago.ac.nz", TARTINI_NAME_STR);
   TartiniSettingsDialog::setUnknownsToDefault(qsettings);
   //settings.print();
   //settings.load();
@@ -667,6 +667,7 @@ void GData::updateQuickRefSettings()
   else if(s == "Don't ask when closing unsaved files (use with care)") _savingMode = 1;
   else _savingMode = 2;
   _mouseWheelZooms = qsettings->value("Advanced/mouseWheelZooms", false).toBool();
+  setFreqA(qsettings->value("View/freqA", 440).toInt());
 }
 
 QString GData::getFilenameString()
@@ -1001,3 +1002,9 @@ void GData::setTemperedType(int type)
   }
 }
 
+void GData::setFreqA(double x)
+{
+	_freqA = x;
+	_semitoneOffset = freq2pitch(x) - freq2pitch(440.0);
+	qsettings->setValue("View/freqA", x);
+}

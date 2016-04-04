@@ -510,9 +510,10 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
         if(gdata->analysisType() == MPM_MODIFIED_CEPSTRUM) {
             ch->chooseCorrelationIndex(chunk, float(analysisData.cepstrumIndex)); //calculate pitch
         } else {
-          if(ch->isNotePlaying()) {
+          if(ch->isNotePlaying() && chunk > 0) {
             //ch->chooseCorrelationIndex(chunk, ch->getLastNote()->periodOctaveEstimate()); //calculate pitch
-            ch->chooseCorrelationIndex(chunk, ch->periodOctaveEstimate(std::max(0, chunk-1))); //calculate pitch
+            //ch->chooseCorrelationIndex(chunk, ch->periodOctaveEstimate(std::max(0, chunk-1))); //calculate pitch
+            ch->chooseCorrelationIndex(chunk, ch->periodOctaveEstimate(chunk-1)); //calculate pitch
           } else {
             ch->chooseCorrelationIndex1(chunk); //calculate pitch
           }

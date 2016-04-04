@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'amplitudewidget.h'
 **
-** Created: Tue May 22 23:40:19 2007
+** Created: Thu Jun 21 21:45:52 2007
 **      by: The Qt Meta Object Compiler version 59 (Qt 4.2.3)
 **
 ** WARNING! All changes made in this file will be lost!

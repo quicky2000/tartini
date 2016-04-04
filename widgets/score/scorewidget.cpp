@@ -39,6 +39,7 @@ ScoreWidget::ScoreWidget(QWidget *parent)
   _useFlats = false;
   _showNotes = true;
   _showOpaqueNotes = false;
+  _showAllMode = false;
   _fontHeight = 14;
   _pitchOffset = 0; //-12; //display 1 octave down
   _font = QFont("AnyStyle", _fontHeight);
@@ -126,6 +127,15 @@ ScoreWidget::NoteType ScoreWidget::getNoteType(double noteLength)
 void ScoreWidget::drawNoteAtPitch(int x, int y, int pitch, double noteLength, double volume)
 {
   pitch = bound(pitch + _pitchOffset, 0, 128);
+  if(!_showAllMode) {
+    if(noteLength < 0.2) return; //Don't show really short notes
+    if(pitch > 84) return; //Don't show extreame notes
+    if(_showBaseClef) {
+      if(pitch < 36) return;
+    } else {
+      if(pitch < 57) return;
+    }
+  }
   double noteWidth = _scaleY; //toInt((double)_scaleY * 1.2);
   double noteHeight = _scaleY;
   int yOffset;

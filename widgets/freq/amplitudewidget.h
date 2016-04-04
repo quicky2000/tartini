@@ -54,6 +54,7 @@ public:
   void paintGL();
 
   //void paintEvent( QPaintEvent * );
+  void drawVerticalRefLines();
   bool calcZoomElement(ZoomElement &ze, Channel *ch, int baseElement, double baseX);
   double calculateElement(AnalysisData *data);
   double getCurrentThreshold(int index);
@@ -85,6 +86,11 @@ signals:
   void offsetInvChanged(double);
   
 private:
+
+  double leftTime() { return gdata->view->viewLeft(); }
+  double rightTime() { return gdata->view->viewRight(); }
+  double timeWidth() { return gdata->view->viewTotalTime(); }
+	
   int dragMode;
   int mouseX, mouseY;
   double downTime, downNote;

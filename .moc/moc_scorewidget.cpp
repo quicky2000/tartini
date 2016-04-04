@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'scorewidget.h'
 **
-** Created: Mon May 21 18:21:23 2007
+** Created: Thu Jun 21 21:45:58 2007
 **      by: The Qt Meta Object Compiler version 59 (Qt 4.2.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -22,7 +22,7 @@ static const uint qt_meta_data_ScoreWidget[] = {
        1,       // revision
        0,       // classname
        0,    0, // classinfo
-       7,   10, // methods
+       8,   10, // methods
        0,    0, // properties
        0,    0, // enums/sets
 
@@ -34,6 +34,7 @@ static const uint qt_meta_data_ScoreWidget[] = {
       95,   53,   12,   12, 0x0a,
      112,   53,   12,   12, 0x0a,
      137,  131,   12,   12, 0x0a,
+     160,   53,   12,   12, 0x0a,
 
        0        // eod
 };
@@ -43,7 +44,7 @@ static const char qt_meta_stringdata_ScoreWidget[] = {
     "setScaleY(double)\0mode\0setSharpsMode(int)\0"
     "setNotesMode(int)\0setClefMode(int)\0"
     "setOpaqueMode(int)\0index\0"
-    "setTransposeLevel(int)\0"
+    "setTransposeLevel(int)\0setShowAllMode(int)\0"
 };
 
 const QMetaObject ScoreWidget::staticMetaObject = {
@@ -78,8 +79,9 @@ int ScoreWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 4: setClefMode((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 5: setOpaqueMode((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 6: setTransposeLevel((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 7: setShowAllMode((*reinterpret_cast< int(*)>(_a[1]))); break;
         }
-        _id -= 7;
+        _id -= 8;
     }
     return _id;
 }

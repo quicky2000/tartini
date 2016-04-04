@@ -45,7 +45,7 @@ private:
   bool _backgroundShading;
 
   void setLogZoomX(double x) { _logZoomX = x; _zoomX = 1.0 / exp(_logZoomX); }
-  void setLogZoomY(double y) { _logZoomY = y; _zoomY = 1.0 / exp(_logZoomY); }
+  void setLogZoomY(double y) { _logZoomY = bound(y, 0.6, 6.0); _zoomY = 1.0 / exp(_logZoomY); }
 
   QTimer *fastUpdateTimer;
   QTimer *slowUpdateTimer;
@@ -67,7 +67,8 @@ public:
 
   /** Returns how long the view is in seconds */
   //double viewWidth() { return _viewWidth; }
-  double viewWidth() { return double(_pixelWidth) / exp(_logZoomX); }
+  //double viewWidth() { return double(_pixelWidth) / exp(_logZoomX); }
+  double viewWidth() { return double(_pixelWidth) * _zoomX; }
 
   /** Allows you to specify how many seconds wide the view should be */
   //void setViewWidth(double w);
@@ -94,7 +95,8 @@ public:
 
   double viewLeft() { return currentTime() - viewOffset(); } /**< Returns the time at the left edge of the view */
   double viewRight() { return viewLeft() + viewWidth(); } /**< Returns the time at the right edge of the view */
-  double viewTotalTime() { return viewRight() - viewLeft(); } /**< Returns how long the view is in seconds */
+  //double viewTotalTime() { return viewRight() - viewLeft(); } /**< Returns how long the view is in seconds */
+  double viewTotalTime() { return viewWidth(); } /**< Returns how long the view is in seconds */
   double viewTop() { return viewBottom() + viewHeight(); } /**< Returns how many semitones are visible in the view*/
   /** Returns the screen pixel for the time t will be drawn */
   int screenPixelX(double t) { return toInt((t - viewLeft()) / zoomX()); }

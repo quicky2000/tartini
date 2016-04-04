@@ -16,10 +16,11 @@
 #ifndef TIMEAXIS_H
 #define TIMEAXIS_H
 
-#include "drawwidget.h"
 #include <qpixmap.h>
-//Added by qt3to4:
 #include <QPaintEvent>
+
+#include "drawwidget.h"
+#include "gdata.h"
 
 class QFont;
 
@@ -41,9 +42,13 @@ public:
   QSize sizeHint() const { return QSize(700, 20); }
 
   void init();
-  double leftTime() { return _leftTime; }
-  double rightTime() { return _rightTime; }
-  double timeWidth() { return rightTime() - leftTime(); }
+  //double leftTime() { return _leftTime; }
+  //double rightTime() { return _rightTime; }
+  //double timeWidth() { return rightTime() - leftTime(); }
+  double leftTime() { return gdata->view->viewLeft(); }
+  double rightTime() { return gdata->view->viewRight(); }
+  double timeWidth() { return gdata->view->viewTotalTime(); }
+
   void setFontSize(int fontSize);
   
   void paintEvent(QPaintEvent *);

@@ -24,7 +24,7 @@
 #include <QToolTip>
 #include <QComboBox>
 
-#include "pics/background.xpm"
+//#include "pics/background.xpm"
 
 ScoreView::ScoreView( int viewID_, QWidget *parent )
  : ViewWidget( viewID_, parent)
@@ -103,6 +103,13 @@ ScoreView::ScoreView( int viewID_, QWidget *parent )
   connect(transposeComboBox, SIGNAL(activated(int)), scoreWidget, SLOT(setTransposeLevel(int)));
   connect(transposeComboBox, SIGNAL(activated(int)), scoreWidget, SLOT(update()));
 
+  QComboBox *showAllModeComboBox = new QComboBox(this, "showAllModeComboBox");
+  s.clear();
+  s << "Hide extream notes" << "Show all notes";
+  showAllModeComboBox->addItems(s);
+  connect(showAllModeComboBox, SIGNAL(activated(int)), scoreWidget, SLOT(setShowAllMode(int)));
+  connect(showAllModeComboBox, SIGNAL(activated(int)), scoreWidget, SLOT(update()));
+
   bottomLayout->addWidget(scaleWheelX, 0);
   bottomLayout->addStretch(1);
   bottomLayout->addWidget(sharpsModeComboBox, 0);
@@ -114,6 +121,8 @@ ScoreView::ScoreView( int viewID_, QWidget *parent )
   bottomLayout->addWidget(opaqueModeComboBox, 0);
   bottomLayout->addStretch(1);
   bottomLayout->addWidget(transposeComboBox, 0);
+  bottomLayout->addStretch(1);
+  bottomLayout->addWidget(showAllModeComboBox, 0);
   bottomLayout->addStretch(4);
 
   //make any connections

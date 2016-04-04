@@ -108,6 +108,14 @@ void AmplitudeWidget::paintGL()
   if(view->backgroundShading() && gdata->getActiveChannel())
     drawChannelAmplitudeFilledGL(gdata->getActiveChannel());
 
+  setLineWidth(1.0);
+  glDisable(GL_LINE_SMOOTH);
+
+  drawVerticalRefLines();
+
+  setLineWidth(3.0);
+  glEnable(GL_LINE_SMOOTH);
+
   //draw all the visible channels
   for (uint i = 0; i < gdata->channels.size(); i++) {
     Channel *ch = gdata->channels.at(i);
@@ -137,6 +145,35 @@ void AmplitudeWidget::paintGL()
 
   qglColor(Qt::black);
   renderText(2, height()-3, getCurrentThresholdString());
+}
+
+void AmplitudeWidget::drawVerticalRefLines()
+{
+  //Draw the vertical reference lines
+  double timeStep = timeWidth() / double(width()) * 150.0; //time per 150 pixels
+  double timeScaleBase = pow10(floor(log10(timeStep))); //round down to the nearest power of 10
+
+  //choose a timeScaleStep which is a multiple of 1, 2 or 5 of timeScaleBase
+  int largeFreq;
+  if(timeScaleBase * 5.0 < timeStep) { largeFreq = 5; }
+  else if (timeScaleBase * 2.0 < timeStep) { largeFreq = 2; }
+  else { largeFreq = 2; timeScaleBase /= 2; }
+
+  double timePos = floor(leftTime() / (timeScaleBase*largeFreq)) * (timeScaleBase*largeFreq); //calc the first one just off the left of the screen
+  int x, largeCounter=-1;
+  double ratio = double(width()) / timeWidth();
+  double lTime = leftTime();
+
+  for(; timePos <= rightTime(); timePos += timeScaleBase) {
+    if(++largeCounter == largeFreq) {
+      largeCounter = 0;
+      glColor4ub(25, 125, 170, 128); //draw the darker lines
+    } else {
+      glColor4ub(25, 125, 170, 64); //draw the lighter lines
+	}
+    x = toInt((timePos-lTime) * ratio);
+    mygl_line(x, 0, x, height()-1);
+  }
 }
 
 /** This function has the side effect of changing ze

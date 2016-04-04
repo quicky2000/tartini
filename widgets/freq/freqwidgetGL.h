@@ -27,6 +27,8 @@
 #include <QPaintEvent>
 #include <QPaintDevice>
 #include <QGLWidget>
+
+#include "gdata.h"
 #include "channel.h"
 
 #define DRAW_VIEW_NORMAL   0
@@ -89,6 +91,10 @@ private:
   double mousePitch(int y);
   Channel *channelAtPixel(int x, int y);
   void setChannelVerticalView(Channel *ch, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY);
+
+  double leftTime() { return gdata->view->viewLeft(); }
+  double rightTime() { return gdata->view->viewRight(); }
+  double timeWidth() { return gdata->view->viewTotalTime(); }
 
   //MinMax getMinMax(std::vector<float> &data, double frameTime, double baseX, float lowBound, float highBound, std::map<int, MinMax> &preCalc);
   //int calcIndex(double frameTime, double baseX, int size);

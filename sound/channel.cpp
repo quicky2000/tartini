@@ -569,6 +569,68 @@ bool Channel::isChangingChunk(AnalysisData *data)
   else return false;
 }
 
+void Channel::backTrackNoteChange(int chunk) {
+  int first = MAX(chunk - (int)ceil(longTime/timePerChunk()), getLastNote()->startChunk()/*+5*/);
+  //printf("ceil = %d, %d\n", (int)ceil(longTime/timePerChunk()), chunk-first);
+  int last = chunk; //currentNote->endChunk();
+  if(first >= last) return;
+  float largestWeightedDiff = 0.0f; //fabs(dataAtChunk(first)->pitch - dataAtChunk(first)->shortTermMean);
+  int largestDiffChunk = first;
+  int maxJ = last - first;
+  for(int curChunk=first+1, j=1; curChunk<=last; curChunk++, j++) {
+    float weightedDiff = fabs(dataAtChunk(curChunk)->pitch - dataAtChunk(curChunk)->shortTermMean) /** float(maxJ-j)*/;
+    if(weightedDiff > largestWeightedDiff) {
+      largestWeightedDiff = weightedDiff;
+      largestDiffChunk = curChunk;
+    }
+  }
+  getLastNote()->setEndChunk(largestDiffChunk);
+  getLastNote()->recalcAvgPitch();
+  dataAtChunk(largestDiffChunk)->reason = 5;
+
+  //start on next note
+  for(int curChunk = largestDiffChunk; curChunk <= last; curChunk++) {
+    dataAtChunk(curChunk)->noteIndex = NO_NOTE;
+    dataAtChunk(curChunk)->notePlaying = false;
+    dataAtChunk(curChunk)->shortTermMean = dataAtChunk(curChunk)->pitch;
+    dataAtChunk(curChunk)->longTermMean = dataAtChunk(curChunk)->pitch;
+    dataAtChunk(curChunk)->shortTermDeviation = 0.2f;
+    dataAtChunk(curChunk)->longTermDeviation = 0.05f;
+    dataAtChunk(curChunk)->periodRatio = 1.0f;
+  }
+
+  int curChunk = largestDiffChunk;
+  if(curChunk < last) {
+    //dataAtChunk(curChunk)->noteIndex = NO_NOTE;
+    //dataAtChunk(curChunk)->notePlaying = false;
+    curChunk++;
+  }
+  while((curChunk < last) && !isVisibleChunk(dataAtChunk(curChunk))) {
+    //dataAtChunk(curChunk)->noteIndex = NO_NOTE;
+    //dataAtChunk(curChunk)->notePlaying = false;
+    curChunk++;
+  }
+  if((curChunk < last) && isVisibleChunk(dataAtChunk(curChunk))) {
+    noteIsPlaying = true;
+    noteBeginning(curChunk);
+    NoteData *currentNote = getLastNote();
+    myassert(currentNote);
+    //periodDiff = 0.0f;
+    dataAtChunk(curChunk)->noteIndex = getCurrentNoteIndex();
+    dataAtChunk(curChunk)->notePlaying = true;
+    curChunk++;
+    while((curChunk < last) && isVisibleChunk(dataAtChunk(curChunk))) {
+      dataAtChunk(curChunk)->noteIndex = getCurrentNoteIndex();
+      dataAtChunk(curChunk)->notePlaying = true;
+      currentNote->addData(dataAtChunk(curChunk), float(framesPerChunk()) / float(dataAtChunk(curChunk)->period));
+      curChunk++;
+    }
+    resetNSDFAggregate(dataAtChunk(last-1)->period); //just start the NSDF Aggregate from where we are now
+    //just start with the octave estimate from the last note
+    currentNote->setPeriodOctaveEstimate(getNote(getCurrentNoteIndex()-1)->periodOctaveEstimate());
+  }
+}
+
 /** If the current note has shifted far enough away from the mean of the current Note
     then the note is changing.
 */
@@ -587,7 +649,8 @@ bool Channel::isNoteChanging(int chunk)
     (analysisData->shortTermDeviation + analysisData->longTermDeviation);
   if(numChunks >= 5 && spread > 0.0) {
     analysisData->reason = 1;
-    //return true;
+    //backTrackNoteChange(chunk);
+    return true;
   }
 
   int firstShortChunk = MAX(chunk - (int)ceil(shortTime/timePerChunk()), getLastNote()->startChunk());
@@ -599,7 +662,8 @@ bool Channel::isNoteChanging(int chunk)
 
   if(numChunks >= (int)(ceil(longTime/timePerChunk()) / 2.0) && spread2 > 0.0) {
     analysisData->reason = 4;
-    //return true;
+    //backTrackNoteChange(chunk);
+    return true;
   }
   //if(getCurrentNote()->numChunks() >= 2 && diff > 2/*1.5*/) { //if jumping to fast anywhere then note is changing
   if(numChunks > 1 && diff > 2/*1.5*/) { //if jumping to fast anywhere then note is changing
@@ -607,6 +671,7 @@ bool Channel::isNoteChanging(int chunk)
     //printf("analysisData->pitch=%f, ", analysisData->pitch);
     //printf("prevData->shortTermMean=%f\n", prevData->shortTermMean);
     analysisData->reason = 2;
+    //backTrackNoteChange(chunk);
     return true;
   }
 /*
@@ -643,8 +708,8 @@ void Channel::processNoteDecisions(int chunk, float periodDiff)
     } else {
       //printf("ending chunk %d, ", chunk);
       //printf("%s, %s\n", isVisibleChunk(&analysisData)?"T":"F", isNoteChanging(chunk)?"T":"F");
-      noteEnding(chunk);
       noteIsPlaying = false;
+      noteEnding(chunk);
     }
   } else { //if(!noteIsPlaying)
     if(isVisibleChunk(&analysisData) /*&& !isChangingChunk(&analysisData)*/) {
@@ -665,12 +730,15 @@ void Channel::processNoteDecisions(int chunk, float periodDiff)
       //analysisData.periodOctaveEstimate = calcOctaveEstimate();
       NoteData *currentNote = getLastNote();
       myassert(currentNote);
-      currentNote->addData(&analysisData, float(framesPerChunk()) / float(analysisData.period));
-      currentNote->setPeriodOctaveEstimate(calcOctaveEstimate());
+
       analysisData.noteIndex = getCurrentNoteIndex();
       currentNote->setEndChunk(chunk+1);
+
+      currentNote->addData(&analysisData, float(framesPerChunk()) / float(analysisData.period));
+      currentNote->setPeriodOctaveEstimate(calcOctaveEstimate());
       //if(!gdata->doingActiveCepstrum()) {
-      if(!gdata->analysisType() == MPM_MODIFIED_CEPSTRUM) {
+      //if(!gdata->analysisType() == MPM_MODIFIED_CEPSTRUM) {
+      if(gdata->analysisType() != MPM_MODIFIED_CEPSTRUM) {
         recalcNotePitches(chunk);
       }
   } else { //if(!noteIsPlaying)
@@ -685,7 +753,8 @@ void Channel::noteBeginning(int chunk)
 {
   AnalysisData *analysisData = dataAtChunk(chunk);
   //noteData.push_back(NoteData(chunk, chunk+1, analysisData.logrms(), analysisData.maxIntensityDB(), analysisData.correlation(), analysisData.volumeValue())); 
-  noteData.push_back(NoteData(this, chunk, analysisData, float(framesPerChunk()) / float(analysisData->period)));
+  //noteData.push_back(NoteData(this, chunk, analysisData, float(framesPerChunk()) / float(analysisData->period)));
+  noteData.push_back(NoteData(this, chunk, analysisData));
   //initalise the aggregate NSDF data with the current NSDF data
   //std::copy(nsdfData.begin(), nsdfData.end(), nsdfAggregateData.begin());
   //addElements(nsdfAggregateData.begin(), nsdfAggregateData.end(), nsdfData.begin(), dB2Normalised(analysisData->logrms()));
@@ -697,8 +766,9 @@ void Channel::noteBeginning(int chunk)
   pitchBigSmoothingFilter->reset();
 }
 
-void Channel::noteEnding(int /*chunk*/)
+void Channel::noteEnding(int chunk)
 {
+  AnalysisData &analysisData = *dataAtChunk(chunk);
   //recalcNotePitches(chunk);
   /*
   NoteData *currentNote = getCurrentNote();
@@ -706,6 +776,11 @@ void Channel::noteEnding(int /*chunk*/)
   currentNote->nsdfAggregateData = nsdfAggregateData;
   currentNote->nsdfAggregateRoof = nsdfAggregateRoof;
   */
+  if(analysisData.reason > 0) {
+    backTrackNoteChange(chunk);
+  }
+
+  //getLastNote()->recalcAvgPitch();
 }
 
 /** Uses the nsdfAggregateData to get an estimate of
@@ -783,6 +858,12 @@ NoteData *Channel::getCurrentNote()
     if(noteIndex >= 0 && noteIndex < (int)noteData.size()) return &noteData[noteIndex];
   }
   return NULL;
+}
+
+NoteData *Channel::getNote(int noteIndex)
+{
+  if(noteIndex >= 0 && noteIndex < (int)noteData.size()) return &noteData[noteIndex];
+  else return NULL;
 }
 
 /** Choose the correlation index (with no starting octave estimate)

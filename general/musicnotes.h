@@ -17,6 +17,7 @@
 
 #include "useful.h"
 #include "array1d.h"
+#include "gdata.h"
 
 /** Returns the fractional note (from the midi scale)
 @param freq The frequency in Hz
@@ -38,6 +39,7 @@ inline double freq2note(double freq)
 */
 inline double freq2pitch(double freq)
 {
+	//if(gdata) freq += gdata->freqA() - 440.0;
 #ifdef log2
 	//return 69 + 12*log2(freq / 440);
 	//From log rules  log(x/y) = log(x) - log(y)
@@ -54,7 +56,9 @@ inline double freq2pitch(double freq)
 */
 inline double pitch2freq(double note)
 {
-  return pow10((note + 36.3763165622959152488) / 39.8631371386483481);
+	double result = pow10((note + 36.3763165622959152488) / 39.8631371386483481);
+	//if(gdata) result -= (gdata->freqA() - 440.0);
+	return result;
 }
 
 char* noteName(int pitch);

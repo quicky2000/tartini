@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'gdata.h'
 **
-** Created: Mon May 21 22:19:14 2007
+** Created: Thu Jun 21 21:45:49 2007
 **      by: The Qt Meta Object Compiler version 59 (Qt 4.2.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -22,7 +22,7 @@ static const uint qt_meta_data_GData[] = {
        1,       // revision
        0,       // classname
        0,    0, // classinfo
-      38,   10, // methods
+      40,   10, // methods
        0,    0, // properties
        0,    0, // enums/sets
 
@@ -47,26 +47,28 @@ static const uint qt_meta_data_GData[] = {
      483,  234,    6,    6, 0x0a,
      500,  259,    6,    6, 0x0a,
      521,  259,    6,    6, 0x0a,
-     542,    6,    6,    6, 0x0a,
-     571,  560,  555,    6, 0x0a,
-     611,  609,  555,    6, 0x0a,
-     633,    6,    6,    6, 0x0a,
-     662,  660,    6,    6, 0x0a,
-     692,    6,    6,    6, 0x0a,
-     717,    6,    6,    6, 0x0a,
-     729,    6,    6,    6, 0x0a,
-     738,    6,  555,    6, 0x0a,
-     745,    6,    6,    6, 0x0a,
-     752,    6,    6,    6, 0x0a,
-     758,    6,    6,    6, 0x0a,
-     772,    6,  555,    6, 0x0a,
-     788,    6,    6,    6, 0x0a,
-     805,    6,    6,    6, 0x0a,
-     843,  831,  823,    6, 0x0a,
-     882,  868,  864,    6, 0x0a,
-     927,  911,  864,    6, 0x0a,
-     953,   45,    6,    6, 0x0a,
-     982,    6,    6,    6, 0x0a,
+     542,   96,    6,    6, 0x0a,
+     559,   96,    6,    6, 0x0a,
+     573,    6,    6,    6, 0x0a,
+     602,  591,  586,    6, 0x0a,
+     642,  640,  586,    6, 0x0a,
+     664,    6,    6,    6, 0x0a,
+     693,  691,    6,    6, 0x0a,
+     723,    6,    6,    6, 0x0a,
+     748,    6,    6,    6, 0x0a,
+     760,    6,    6,    6, 0x0a,
+     769,    6,  586,    6, 0x0a,
+     776,    6,    6,    6, 0x0a,
+     783,    6,    6,    6, 0x0a,
+     789,    6,    6,    6, 0x0a,
+     803,    6,  586,    6, 0x0a,
+     819,    6,    6,    6, 0x0a,
+     836,    6,    6,    6, 0x0a,
+     874,  862,  854,    6, 0x0a,
+     913,  899,  895,    6, 0x0a,
+     958,  942,  895,    6, 0x0a,
+     984,   45,    6,    6, 0x0a,
+    1013,    6,    6,    6, 0x0a,
 
        0        // eod
 };
@@ -87,6 +89,7 @@ static const char qt_meta_stringdata_GData[] = {
     "setAmplitudeMode(int)\0pitchContourMode\0"
     "setPitchContourMode(int)\0setMusicKey(int)\0"
     "setMusicKeyType(int)\0setTemperedType(int)\0"
+    "setFreqA(double)\0setFreqA(int)\0"
     "pauseSound()\0bool\0sRec,sPlay\0"
     "openPlayRecord(SoundFile*,SoundFile*)\0"
     "s\0playSound(SoundFile*)\0"
@@ -146,35 +149,37 @@ int GData::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 15: setMusicKey((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 16: setMusicKeyType((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 17: setTemperedType((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 18: pauseSound(); break;
-        case 19: { bool _r = openPlayRecord((*reinterpret_cast< SoundFile*(*)>(_a[1])),(*reinterpret_cast< SoundFile*(*)>(_a[2])));
+        case 18: setFreqA((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 19: setFreqA((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 20: pauseSound(); break;
+        case 21: { bool _r = openPlayRecord((*reinterpret_cast< SoundFile*(*)>(_a[1])),(*reinterpret_cast< SoundFile*(*)>(_a[2])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 20: { bool _r = playSound((*reinterpret_cast< SoundFile*(*)>(_a[1])));
+        case 22: { bool _r = playSound((*reinterpret_cast< SoundFile*(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 21: updateViewLeftRightTimes(); break;
-        case 22: updateActiveChunkTime((*reinterpret_cast< double(*)>(_a[1]))); break;
-        case 23: updateQuickRefSettings(); break;
-        case 24: beginning(); break;
-        case 25: rewind(); break;
-        case 26: { bool _r = play();
+        case 23: updateViewLeftRightTimes(); break;
+        case 24: updateActiveChunkTime((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 25: updateQuickRefSettings(); break;
+        case 26: beginning(); break;
+        case 27: rewind(); break;
+        case 28: { bool _r = play();
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 27: stop(); break;
-        case 28: end(); break;
-        case 29: fastforward(); break;
-        case 30: { bool _r = closeAllFiles();
+        case 29: stop(); break;
+        case 30: end(); break;
+        case 31: fastforward(); break;
+        case 32: { bool _r = closeAllFiles();
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 31: saveActiveFile(); break;
-        case 32: closeActiveFile(); break;
-        case 33: { QString _r = saveFileAsk((*reinterpret_cast< QString(*)>(_a[1])));
+        case 33: saveActiveFile(); break;
+        case 34: closeActiveFile(); break;
+        case 35: { QString _r = saveFileAsk((*reinterpret_cast< QString(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = _r; }  break;
-        case 34: { int _r = saveFile((*reinterpret_cast< SoundFile*(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])));
+        case 36: { int _r = saveFile((*reinterpret_cast< SoundFile*(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])));
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
-        case 35: { int _r = closeFile((*reinterpret_cast< SoundFile*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
+        case 37: { int _r = closeFile((*reinterpret_cast< SoundFile*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
-        case 36: resetActiveIntThreshold((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 37: doChunkUpdate(); break;
+        case 38: resetActiveIntThreshold((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 39: doChunkUpdate(); break;
         }
-        _id -= 38;
+        _id -= 40;
     }
     return _id;
 }

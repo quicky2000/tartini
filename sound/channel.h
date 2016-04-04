@@ -161,7 +161,9 @@ public:
 
   NoteData *getLastNote();
   NoteData *getCurrentNote();
+  NoteData *getNote(int noteIndex);
   int getCurrentNoteIndex() { return int(noteData.size())-1; }
+  void backTrackNoteChange(int chunk);
   void processNoteDecisions(int chunk, float periodDiff);
   void noteBeginning(int chunk);
   void noteEnding(int chunk);

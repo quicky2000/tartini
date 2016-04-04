@@ -29,6 +29,7 @@ NoteData::NoteData(Channel *channel_)
   maxima = new Array1d<int>();
   minima = new Array1d<int>();
   _periodOctaveEstimate = 1.0f;
+  _numPeriods = 0;
 }
 
 /*
@@ -42,7 +43,7 @@ NoteData::NoteData(int startChunk_, int endChunk_, float logRMS_, float intensit
   maxPurity = purity_;
 }*/
 
-NoteData::NoteData(Channel *channel_, int startChunk_, AnalysisData *analysisData, float periods)
+NoteData::NoteData(Channel *channel_, int startChunk_, AnalysisData *analysisData)
 {
   channel = channel_;
   _startChunk = startChunk_;
@@ -52,7 +53,7 @@ NoteData::NoteData(Channel *channel_, int startChunk_, AnalysisData *analysisDat
   maxCorrelation = analysisData->correlation();
   maxPurity = analysisData->volumeValue();
   _volume = 0.0f;
-  _numPeriods = periods;
+  _numPeriods = 0.0f; //periods;
   //_periodOctaveEstimate = analysisData->periodOctaveEstimate;
   _periodOctaveEstimate = 1.0f;
   loopStep = channel->rate() / 1000;  // stepsize = 0.001 seconds
@@ -67,6 +68,7 @@ NoteData::NoteData(Channel *channel_, int startChunk_, AnalysisData *analysisDat
   nsdfAggregateRoof = 0.0;
   firstNsdfPeriod = 0.0f;
   currentNsdfPeriod = 0.0f;
+  _avgPitch = 0.0f;
 }
 
 NoteData::~NoteData()
@@ -95,6 +97,7 @@ void NoteData::addData(AnalysisData *analysisData, float periods)
   _volume = MAX(_volume, dB2Normalised(analysisData->logrms()));
   _numPeriods += periods; //sum up the periods
   //_periodOctaveEstimate = analysisData->periodOctaveEstimate; //overwrite the old estimate
+  _avgPitch = bound(freq2pitch(avgFreq()), 0.0, gdata->topPitch());
 }
 
 /** @return The length of the note (in seconds)
@@ -108,7 +111,8 @@ double NoteData::noteLength()
 */
 double NoteData::avgPitch()
 {
-  return bound(freq2pitch(avgFreq()), 0.0, gdata->topPitch());
+  //return bound(freq2pitch(avgFreq()), 0.0, gdata->topPitch());
+  return _avgPitch;
 }
 
 void NoteData::addVibratoData(int chunk)
@@ -222,4 +226,12 @@ void NoteData::addVibratoData(int chunk)
     // Calculate start of next loop
     loopStart = loopStart + ((loopLimit - loopStart) / loopStep) * loopStep + loopStep;
   }
+}
+
+void NoteData::recalcAvgPitch() {
+  _numPeriods = 0.0f;
+  for(int j=startChunk(); j<endChunk(); j++) {
+      _numPeriods += float(channel->framesPerChunk()) / float(channel->dataAtChunk(j)->period);
+  }
+  _avgPitch = bound(freq2pitch(avgFreq()), 0.0, gdata->topPitch());
 }

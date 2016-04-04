@@ -15,8 +15,9 @@
 #ifndef GDATA_H
 #define GDATA_H
 
-#define TARTINI_VERSION_STR  "1.1.0"
-//#define TARTINI_VERSION       1.1
+#define TARTINI_NAME_STR      "Tartini1.2"
+#define TARTINI_VERSION_STR   "1.2.0"
+//#define TARTINI_VERSION       1.2
 
 #include <Qt>
 #include <qapplication.h>
@@ -166,6 +167,8 @@ private:
   int _musicKeyType;
   int _temperedType;
   bool _mouseWheelZooms;
+  double _freqA;
+  double _semitoneOffset;
 
   //double _noiseThreshold;
   //double _noiseThresholdDB;
@@ -253,6 +256,8 @@ public:
   int       musicKey()     { return gMusicKey; }
   int       musicKeyType() { return _musicKeyType; }
   int       temperedType() { return _temperedType; }
+  double    freqA() { return _freqA; }
+  double    semitoneOffset() { return _semitoneOffset; }
 
 signals:
   void      activeChannelChanged(Channel *active);
@@ -281,6 +286,8 @@ public slots:
   void      setMusicKey(int key)      { if(gMusicKey != key) { gMusicKey = key; emit musicKeyChanged(key); } }
   void      setMusicKeyType(int type) { if(_musicKeyType != type) { _musicKeyType = type; emit musicKeyTypeChanged(type); } }
   void      setTemperedType(int type);
+  void      setFreqA(double x);
+  void      setFreqA(int x) { setFreqA(double(x)); }
 
   //void    setStepSize(int index);
   void      pauseSound();

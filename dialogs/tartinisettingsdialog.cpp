@@ -411,6 +411,7 @@ void TartiniSettingsDialog::setUnknownsToDefault(QSettings *s)
 
   SetIfMissing("View/autoFollow", false);
   SetIfMissing("View/backgroundShading", true);
+  SetIfMissing("View/freqA", 440);
 
   SetIfMissing("Sound/soundInput", "Default");
   SetIfMissing("Sound/soundOutput", "Default");

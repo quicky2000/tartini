@@ -119,6 +119,8 @@ void FreqWidgetGL::drawReferenceLinesGL(double /*leftTime*/, double currentTime,
 
   //glColor4ub(25, 125, 170, 196);
   //glBegin(GL_LINES);
+
+  //Draw the horizontal reference lines
   for(int octave = rootOctave; octave < topOctave; ++octave) {
     curRoot = double(octave*12 + rootOffset);
     for(int j=0; j<musicKey.size(); j++) {
@@ -168,10 +170,12 @@ void FreqWidgetGL::drawReferenceLinesGL(double /*leftTime*/, double currentTime,
         glColor4ub(25, 125, 170, 255);
         mygl_line(fontWidth, lineY, width() - 1, lineY);
       }*/
+      if(zoomY > 0.1) break;
     }
   }
   //glEnd();
 
+  //Draw the text labels down the left hand side
   for(int octave = rootOctave; octave < topOctave; ++octave) {
     curRoot = double(octave*12 + rootOffset);
     for(int j=0; j<musicKey.size(); j++) {
@@ -207,7 +211,34 @@ void FreqWidgetGL::drawReferenceLinesGL(double /*leftTime*/, double currentTime,
         glColor4ub(25, 125, 170, 255);
         mygl_line(fontWidth, lineY, width() - 1, lineY);
       }*/
+      if(zoomY > 0.1) break;
     }
+  }
+
+  //Draw the vertical reference lines
+  double timeStep = timeWidth() / double(width()) * 150.0; //time per 150 pixels
+  double timeScaleBase = pow10(floor(log10(timeStep))); //round down to the nearest power of 10
+
+  //choose a timeScaleStep which is a multiple of 1, 2 or 5 of timeScaleBase
+  int largeFreq;
+  if(timeScaleBase * 5.0 < timeStep) { largeFreq = 5; }
+  else if (timeScaleBase * 2.0 < timeStep) { largeFreq = 2; }
+  else { largeFreq = 2; timeScaleBase /= 2; }
+
+  double timePos = floor(leftTime() / (timeScaleBase*largeFreq)) * (timeScaleBase*largeFreq); //calc the first one just off the left of the screen
+  int x, largeCounter=-1;
+  double ratio = double(width()) / timeWidth();
+  double lTime = leftTime();
+
+  for(; timePos <= rightTime(); timePos += timeScaleBase) {
+    if(++largeCounter == largeFreq) {
+      largeCounter = 0;
+      glColor4ub(25, 125, 170, 128); //draw the darker lines
+    } else {
+      glColor4ub(25, 125, 170, 64); //draw the lighter lines
+	}
+    x = toInt((timePos-lTime) * ratio);
+    mygl_line(x, 0, x, height()-1);
   }
 }
 
@@ -474,28 +505,32 @@ double FreqWidgetGL::mousePitch(int y)
 void FreqWidgetGL::wheelEvent(QWheelEvent * e)
 {
     View *view = gdata->view;
-    double amount = double(e->delta()/WHEEL_DELTA);
+    double amount = double(e->delta())/WHEEL_DELTA * 0.15;
     bool isZoom = gdata->mouseWheelZooms();
     if(e->state() & (Qt::ControlModifier | Qt::ShiftModifier)) isZoom = !isZoom;
 
   if(isZoom) {
       if(e->delta() >= 0) { //zooming in
+        double before = view->logZoomY();
+        view->setZoomFactorY(view->logZoomY() + amount, height() - e->y());
+        amount = view->logZoomY() - before;
         if(gdata->running == STREAM_FORWARD) {
-          view->setZoomFactorX(view->logZoomX() + amount*0.3);
+          view->setZoomFactorX(view->logZoomX() + amount);
         } else { //zoom toward mouse pointer
-          view->setZoomFactorX(view->logZoomX() + amount*0.3, e->x());
+          view->setZoomFactorX(view->logZoomX() + amount, e->x());
         }
-        view->setZoomFactorY(view->logZoomY() + amount*0.2, height() - e->y());
       } else { //zoom out toward center
+        double before = view->logZoomY();
+        view->setZoomFactorY(view->logZoomY() + amount, height()/2);
+        amount = view->logZoomY() - before;
         if(gdata->running == STREAM_FORWARD) {
-          view->setZoomFactorX(view->logZoomX() + amount*0.3);
+          view->setZoomFactorX(view->logZoomX() + amount);
         } else {
-          view->setZoomFactorX(view->logZoomX() + amount*0.3, width()/2);
+          view->setZoomFactorX(view->logZoomX() + amount, width()/2);
         }
-        view->setZoomFactorY(view->logZoomY() + amount*0.2, height()/2);
       }
   } else { //mouse wheel scrolls
-    view->setViewBottom(view->viewBottom() + amount * view->viewHeight() * 0.1);
+    view->setViewBottom(view->viewBottom() + amount * 0.75 * view->viewHeight());
   }
   view->doSlowUpdate();
 
@@ -605,6 +640,7 @@ void FreqDrawWidget::ensurePolished() const
 
 void FreqWidgetGL::drawChannelGL(Channel *ch, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType)
 {
+  viewBottom += gdata->semitoneOffset();
   float lineWidth = 3.0f;
   float lineHalfWidth = lineWidth/2;
   ZoomLookup *z;
@@ -659,6 +695,7 @@ void FreqWidgetGL::drawChannelGL(Channel *ch, double leftTime, double currentTim
         qglColor(ze.color());
         //Note: lineTo doen't draw a pixel on the last point of the line
         //p.drawLine(n, pd.height() - lineTopHalfWidth - toInt(ze.high() / zoomY) + viewBottomOffset, n, pd.height() + lineBottomHalfWidth - toInt(ze.low() / zoomY) + viewBottomOffset);
+        //mygl_line(float(n), height() - lineHalfWidth - (ze.high() / zoomY) + viewBottomOffset, n, height() + lineHalfWidth - (ze.low() / zoomY) + viewBottomOffset);
         mygl_line(float(n), height() - lineHalfWidth - (ze.high() / zoomY) + viewBottomOffset, n, height() + lineHalfWidth - (ze.low() / zoomY) + viewBottomOffset);
       }
     }
@@ -740,6 +777,7 @@ void FreqWidgetGL::drawChannelGL(Channel *ch, double leftTime, double currentTim
 
 void FreqWidgetGL::drawChannelFilledGL(Channel *ch, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType)
 {
+  viewBottom += gdata->semitoneOffset();
   ZoomLookup *z;
   if(viewType == DRAW_VIEW_SUMMARY) z = &ch->summaryZoomLookup;
   else z = &ch->normalZoomLookup;

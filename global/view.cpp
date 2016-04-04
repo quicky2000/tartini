@@ -548,9 +548,9 @@ void View::doAutoFollowing()
   // We can't autofollow if the file is in real time.
   //if (time == active->totalTime()) return;
 
-  double startTime = time - (viewWidth() / 4.0);
+  double startTime = time - (viewWidth() / 8.0);
   //double stopTime = viewRight() - (_viewWidth / 2.0);
-  double stopTime = time + (viewWidth() / 4.0);
+  double stopTime = time + (viewWidth() / 8.0);
   
   //int startFrame = MAX(int(floor(startTime / active->timePerChunk())), 0);
   int startFrame = bound(toInt(startTime / active->timePerChunk()), 0, active->totalChunks()-1);

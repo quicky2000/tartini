@@ -54,6 +54,7 @@ class ScoreWidget : public DrawWidget {
     void setClefMode(int mode) { _showBaseClef = (mode==0); }
     void setOpaqueMode(int mode) { _showOpaqueNotes = (mode!=0); }
     void setTransposeLevel(int index) { _pitchOffset = (index - 2) * -12; }
+    void setShowAllMode(int mode) { _showAllMode = (mode!=0); }
 
   private:
     void mousePressEvent( QMouseEvent *e );
@@ -69,6 +70,7 @@ class ScoreWidget : public DrawWidget {
     bool _showNotes;
     bool _showOpaqueNotes;
     bool _useFlats;
+    bool _showAllMode;
     int _pitchOffset;
     int sharpsLookup[129];
     int flatsLookup[129];

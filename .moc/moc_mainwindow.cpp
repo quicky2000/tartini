@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created: Tue May 22 23:40:19 2007
+** Created: Thu Jun 21 21:45:39 2007
 **      by: The Qt Meta Object Compiler version 59 (Qt 4.2.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -22,7 +22,7 @@ static const uint qt_meta_data_MainWindow[] = {
        1,       // revision
        0,       // classname
        0,    0, // classinfo
-      34,   10, // methods
+      35,   10, // methods
        0,    0, // properties
        0,    0, // enums/sets
 
@@ -58,11 +58,12 @@ static const uint qt_meta_data_MainWindow[] = {
      563,   11,   11,   11, 0x0a,
      574,   11,   11,   11, 0x0a,
      584,   11,   11,   11, 0x0a,
-     613,  597,   11,   11, 0x0a,
-     640,   11,   11,   11, 0x0a,
-     665,   11,   11,   11, 0x0a,
-     692,   11,  687,   11, 0x0a,
-     711,   11,   11,   11, 0x0a,
+     604,   11,   11,   11, 0x0a,
+     633,  617,   11,   11, 0x0a,
+     660,   11,   11,   11, 0x0a,
+     685,   11,   11,   11, 0x0a,
+     712,   11,  707,   11, 0x0a,
+     731,   11,   11,   11, 0x0a,
 
        0        // eod
 };
@@ -83,8 +84,9 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "rewindReleased()\0playStopClicked()\0"
     "fastforwardPressed()\0fastforwardReleased()\0"
     "ch\0setTitle(Channel*)\0aboutTartini()\0"
-    "aboutGPL()\0aboutQt()\0printPitch()\0"
-    "type,typeString\0exportChannel(int,QString)\0"
+    "aboutGPL()\0aboutQt()\0showDocumentation()\0"
+    "printPitch()\0type,typeString\0"
+    "exportChannel(int,QString)\0"
     "exportChannelPlainText()\0exportChannelMatlab()\0"
     "bool\0loadViewGeometry()\0saveViewGeometry()\0"
 };
@@ -143,15 +145,16 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 25: aboutTartini(); break;
         case 26: aboutGPL(); break;
         case 27: aboutQt(); break;
-        case 28: printPitch(); break;
-        case 29: exportChannel((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
-        case 30: exportChannelPlainText(); break;
-        case 31: exportChannelMatlab(); break;
-        case 32: { bool _r = loadViewGeometry();
+        case 28: showDocumentation(); break;
+        case 29: printPitch(); break;
+        case 30: exportChannel((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
+        case 31: exportChannelPlainText(); break;
+        case 32: exportChannelMatlab(); break;
+        case 33: { bool _r = loadViewGeometry();
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 33: saveViewGeometry(); break;
+        case 34: saveViewGeometry(); break;
         }
-        _id -= 34;
+        _id -= 35;
     }
     return _id;
 }

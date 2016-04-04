@@ -1,4 +1,7 @@
 #include "mymatrix.h"
+#include "stdio.h"
+#include "cmath"
+#include "algorithm"
 
 #define MY_EPSILON 0.000001
 
@@ -52,6 +55,7 @@ bool invert3x3matrix(const double *x, double *y)
   y[6] = determinant2x2(x[3], x[4], x[6], x[7]) / det;
   y[7] = determinant2x2(x[1], x[0], x[7], x[6]) / det;
   y[8] = determinant2x2(x[0], x[1], x[3], x[4]) / det;
+  return true;
 }
 
 /** Moore-Penrose Matrix-inverse (or pseudo-inverse) such that X*alpha1 - Y is minimised using least squares

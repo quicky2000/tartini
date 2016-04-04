@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'freqview.h'
 **
-** Created: Mon May 21 18:21:17 2007
+** Created: Thu Jun 21 21:45:41 2007
 **      by: The Qt Meta Object Compiler version 59 (Qt 4.2.3)
 **
 ** WARNING! All changes made in this file will be lost!

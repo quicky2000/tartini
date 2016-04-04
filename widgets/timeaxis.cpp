@@ -65,14 +65,14 @@ void TimeAxis::setFontSize(int fontSize)
 
 void TimeAxis::paintEvent(QPaintEvent *)
 {
-  const int	h = height(), w = width();
+  int frameWidth = 2;
+  const int	h = height(), w = width() - 2*frameWidth;
   int fontSpace = _fontSize+2;
   
   beginDrawing(false);
   fillBackground(colorGroup().background());
 
-  double timeStep = timeWidth() / double(w) * 150.0; //time per 80 pixels
-  //double timeScaleBase = pow10(floor(log10(timeStep))); //round down to the nearest power of 10
+  double timeStep = timeWidth() / double(w) * 150.0; //time per 150 pixels
   double timeScaleBase = pow10(floor(log10(timeStep))); //round down to the nearest power of 10
 
   //choose a timeScaleStep which is a multiple of 1, 2 or 5 of timeScaleBase
@@ -134,28 +134,20 @@ void TimeAxis::paintEvent(QPaintEvent *)
       }
       
       QString numString = mins + ":" + seconds;
-      x = toInt((timePos-leftTime()) / (timeWidth() / double(w)));
+      x = frameWidth + toInt((timePos-leftTime()) / (timeWidth() / double(w)));
       p.drawText(x - (p.fontMetrics().width(numString) / 2), textBottom, numString);
-      //p.moveTo(x, bigLineTop);
-      //p.lineTo(x, bigLineBottom);
       p.drawLine(x, bigLineTop, x, bigLineBottom);
     } else {
       //draw the smaller lines
-      x = toInt((timePos-leftTime()) / (timeWidth() / double(w)));
-      //p.moveTo(x, smallLineTop);
-      //p.lineTo(x, smallLineBottom);
+      x = frameWidth + toInt((timePos-leftTime()) / (timeWidth() / double(w)));
       p.drawLine(x, smallLineTop, x, smallLineBottom);
     }
   }
   //draw the horizontal line
   if(_numbersOnTop) {
-    //p.moveTo(0, h-1);
-    //p.lineTo(w, h-1);
-    p.drawLine(0, h-1, w, h-1);
+    p.drawLine(0, h-1, width(), h-1);
   } else {
-    //p.moveTo(0, 0);
-    //p.lineTo(w, 0);
-    p.drawLine(0, 0, w, 0);
+    p.drawLine(0, 0, width(), 0);
   }
   endDrawing();
 }

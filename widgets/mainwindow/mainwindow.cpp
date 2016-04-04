@@ -43,7 +43,9 @@
 #include <qtooltip.h>
 #include <qmime.h>
 #include <q3textedit.h>
+#include <qtextedit.h>
 #include <qtextstream.h>
+#include <QTextBrowser>
 
 #include <qaction.h>
 //Added by qt3to4:
@@ -54,6 +56,7 @@
 #include <QCustomEvent>
 #include <QPrinter>
 #include <QPrintDialog>
+#include <QDesktopServices>
 
 #include "gdata.h"
 #include "mainwindow.h"
@@ -153,22 +156,23 @@ ViewData viewData[NUM_VIEWS] = {
                                  ViewData("Pitch Contour",     "&Pitch Contour",      "FreqView",          0),
                                  ViewData("Chromatic Tuner",   "&Chromatic Tuner",    "TunerView",         0),
                                  ViewData("Harmonic Track",    "3D Harmonic &Track",  "HTrackView",        0),
-                                 ViewData("Piano Keyboard",    "2D Piano &Keyboard",  "PianoView",         0),
-                                 ViewData("Harmonic Block",    "Harmonic &Block",     "HBlockView",        2),
-                                 ViewData("Pitch Compass",     "Pitch &Compass",      "PitchCompassView",  0),
-                                 ViewData("Summary View",      "&Summary View",       "SummaryView",       0),
-                                 ViewData("Volume Meter",      "&Volume Meter",       "VolumeMeterView",   0),
-                                 ViewData("Harmonic Stack",    "&Harmonic Stack",     "HStackView",        2),
-                                 ViewData("Harmonic Bubbles",  "H&armonic Bubbles",   "HBubbleView",       2),
-                                 ViewData("Harmonic Circle",   "Ha&rmonic Circle",    "HCircleView",       2),
+                                 ViewData("Vibrato View",      "V&ibrato View",       "VibratoView",       0),
+                                 ViewData("Musical Score",     "&Musical Score",      "ScoreView",         0),
                                  ViewData("Oscilloscope",      "&Oscilloscope",       "WaveView",          1),
                                  ViewData("Correlation View",  "Corre&lation View",   "CorrelationView",   1),
                                  ViewData("FFT View",          "FF&T View",           "FFTView",           1),
                                  ViewData("Cepstrum View",     "C&epstrum View",      "CepstrumView",      1),
-                                 ViewData("Debug View",        "&Debug View",         "DebugView",         2),
-                                 ViewData("Musical Score",     "&Musical Score",      "ScoreView",         2),
-                                 ViewData("Vibrato View",      "V&ibrato View",       "VibratoView",       0)
+                                 ViewData("Debug View",        "&Debug View",         "DebugView",         1),
+                                 ViewData("Harmonic Block",    "Harmonic &Block",     "HBlockView",        2),
+                                 ViewData("Harmonic Stack",    "&Harmonic Stack",     "HStackView",        2),
+                                 ViewData("Harmonic Bubbles",  "H&armonic Bubbles",   "HBubbleView",       2),
+                                 ViewData("Harmonic Circle",   "Ha&rmonic Circle",    "HCircleView",       2),
+                                 ViewData("Pitch Compass",     "Pitch &Compass",      "PitchCompassView",  2),
+                                 ViewData("Piano Keyboard",    "2D Piano &Keyboard",  "PianoView",         3),
+                                 ViewData("Summary View",      "&Summary View",       "SummaryView",       3),
+                                 ViewData("Volume Meter",      "&Volume Meter",       "VolumeMeterView",   3)
                                };
+
 
 MainWindow::MainWindow()
   : QMainWindow( NULL, Qt::WDestructiveClose )
@@ -365,7 +369,15 @@ MainWindow::MainWindow()
   //optionsMenu->insertSeparator();
   optionsMenu->addAction("&Preferences", this, SLOT(menuPreferences()));
 
+  QAction *whatsThis = QWhatsThis::createAction(this);
+  whatsThis->setToolTip("What's this?");
+  whatsThis->setWhatsThis("Click this button, then click something to learn more about it");
+
   helpMenu = menuBar()->addMenu("&Help");
+  helpMenu->addAction(whatsThis);
+  helpMenu->addSeparator();
+  helpMenu->addAction("Documentation", this, SLOT(showDocumentation()));
+  helpMenu->addSeparator();
   helpMenu->addAction("About Tartini", this, SLOT(aboutTartini())); //, 0, 0);
   helpMenu->addAction("About Qt", this, SLOT(aboutQt())); //, 0, 1);
   
@@ -400,10 +412,7 @@ MainWindow::MainWindow()
   backgroundShadingButton->setWhatsThis("Draw solid color underneath the Pitch Contour, to help you find the line");
   connect(backgroundShadingButton, SIGNAL(toggled(bool)), gdata->view, SLOT(setBackgroundShading(bool)));
 
-  QToolButton *whatsThis = QWhatsThis::whatsThisButton(NULL);
-  whatsThis->setToolTip("Whats this?");
-  whatsThis->setWhatsThis("Click this button, then click something to learn more about it");
-  analysisToolBar->addWidget(whatsThis);
+  analysisToolBar->addAction(whatsThis);
 
   View *view = gdata->view;
   QToolBar *timeBarDock = new QToolBar("Time-axis Slider", this); //, Qt::DockBottom);
@@ -463,6 +472,7 @@ MainWindow::MainWindow()
   keyToolBar->addWidget(keyLabel);
 
   QComboBox *keyComboBox = new QComboBox(keyToolBar);
+  keyComboBox->setWindowTitle("Key");
   QStringList s;
   for(int j=0; j<NUM_MUSIC_KEYS; j++) s << gMusicKeyName[j];
   keyComboBox->addItems(s);
@@ -473,6 +483,7 @@ MainWindow::MainWindow()
   connect(gdata, SIGNAL(musicKeyChanged(int)), gdata->view, SLOT(doUpdate()));
 
   keyTypeComboBox = new QComboBox(keyToolBar);
+  keyTypeComboBox->setWindowTitle("Scale type");
   s.clear();
   for(uint j=0; j<gMusicScales.size(); j++) s << gMusicScales[j].name();
   keyTypeComboBox->addItems(s);
@@ -483,6 +494,7 @@ MainWindow::MainWindow()
   connect(gdata, SIGNAL(musicKeyTypeChanged(int)), gdata->view, SLOT(doUpdate()));
 
   QComboBox *temperedComboBox = new QComboBox(keyToolBar);
+  temperedComboBox->setWindowTitle("Tempered type");
   s.clear();
   //s << "Even Tempered" << "Just Intonation";
   for(uint j=0; j<gMusicKeys.size(); j++) s << gMusicKeys[j].name();
@@ -493,7 +505,19 @@ MainWindow::MainWindow()
   connect(gdata, SIGNAL(temperedTypeChanged(int)), temperedComboBox, SLOT(setCurrentIndex(int)));
   connect(gdata, SIGNAL(temperedTypeChanged(int)), gdata->view, SLOT(doUpdate()));
 
+  QToolBar *freqAToolBar = new QToolBar("Frequency Offset Toolbar", this);
+  freqAToolBar->setWhatsThis("The frequency of an even-tempered 'A' used for reference lines in the Pitch Contour View. Default 440 Hz."
+    "Note: For other scales the root note is chosen from the even-tempered scale with that 'A'.");
+  addToolBar(freqAToolBar);
 
+  QSpinBox *freqASpinBox = new QSpinBox(400, 600, 1, freqAToolBar, "freqASpinBox");
+  freqASpinBox->setPrefix("A=");
+  freqASpinBox->setSuffix(" Hz");
+  freqASpinBox->setFocusPolicy(Qt::NoFocus);
+  freqASpinBox->setValue(toInt(gdata->freqA()));
+  freqAToolBar->addWidget(freqASpinBox);
+  connect(freqASpinBox, SIGNAL(valueChanged(int)), gdata, SLOT(setFreqA(int)));
+  connect(freqASpinBox, SIGNAL(valueChanged(int)), gdata->view, SLOT(doUpdate()));
   QFont font("Courier", 12, QFont::Bold);
   
   noteLabel = new MyLabel("Note: 9999", statusBar(), "notelabel");
@@ -1016,6 +1040,7 @@ void MainWindow::newViewAboutToShow()
 
   QMenu *technicalMenu = new QMenu("Technical");
   QMenu *experimentalMenu = new QMenu("Experimental");
+  QMenu *otherMenu = new QMenu("Other");
 
   QWidgetList opened = theWorkspace->windowList();
 
@@ -1024,6 +1049,7 @@ void MainWindow::newViewAboutToShow()
 	if(viewData[j].menuType == 0) action = newViewMenu->addAction(viewData[j].menuName);
 	else if(viewData[j].menuType == 1) action = technicalMenu->addAction(viewData[j].menuName);
 	else if(viewData[j].menuType == 2) action = experimentalMenu->addAction(viewData[j].menuName);
+  else if(viewData[j].menuType == 3) action = otherMenu->addAction(viewData[j].menuName);
 	else continue;
 
 	connect(action, SIGNAL(triggered()), createSignalMapper, SLOT(map()));
@@ -1038,6 +1064,7 @@ void MainWindow::newViewAboutToShow()
   newViewMenu->addSeparator();
   newViewMenu->addMenu(technicalMenu);
   newViewMenu->addMenu(experimentalMenu);
+  newViewMenu->addMenu(otherMenu);
 }
 
 void MainWindow::setTimeLabel(double t)
@@ -1175,6 +1202,11 @@ void MainWindow::aboutQt()
   QMessageBox::aboutQt(this, "About Qt");
 }
 
+void MainWindow::showDocumentation()
+{
+  QDesktopServices::openUrl(QUrl("http://www.tartini.net/doc"));
+}
+
 TartiniDialog::TartiniDialog(QWidget *parent) : QDialog(parent, NULL, true)
 {
   setCaption("About Tartini - Version " TARTINI_VERSION_STR);
@@ -1191,15 +1223,29 @@ TartiniDialog::TartiniDialog(QWidget *parent) : QDialog(parent, NULL, true)
   topLayout->addWidget(tartiniPicture);
   topLayout->addStretch(10);
 
-  Q3TextEdit *tartiniTextEdit = new Q3TextEdit(this, "TartiniTextEdit");
-  tartiniTextEdit->setPaper(Qt::black);
-  tartiniTextEdit->setReadOnly(true);
+  //QTextEdit *tartiniTextEdit = new QTextEdit(this, "TartiniTextEdit");
+  QTextBrowser *tartiniTextEdit = new QTextBrowser(this, "TartiniTextEdit");
+  //tartiniTextEdit->setReadOnly(true);
+  tartiniTextEdit->setOpenExternalLinks(true);
   tartiniTextEdit->setTextFormat(Qt::RichText);
-  tartiniTextEdit->setText(
-    "<qt text=\"white\">Tartini is a graphical tool for analysing the music of solo instruments.<br>"
+
+  QColor linkColor(Qt::cyan);
+  QString sheet = QString::fromLatin1("a { text-decoration: underline; color: %1 }").arg(linkColor.name());
+  tartiniTextEdit->document()->setDefaultStyleSheet(sheet);
+
+  tartiniTextEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+
+  //tartiniTextEdit->setText(
+  tartiniTextEdit->setHtml(
+    /*"<qt text=\"white\">*/"Tartini is a graphical tool for analysing the music of solo instruments.<br>"
     "This program was created by Philip McLeod as part of PhD work at the University of Otago, New Zealand<br>"
-    "You can find the latest info about Tartini at <b><u>http://www.tartini.net</u></b><br><br>"
+    "You can find the latest info about Tartini at <a href=\"http://www.tartini.net\">http://www.tartini.net</a><br><br>"
     "Copyright 2002-2007 Philip McLeod (pmcleod@cs.otago.ac.nz).<br><br>"
+
+    "New features in version 1.2 include:<br>"
+    "- The ability to set an offset frequency. i.e. not fixed to A=440 Hz<br>"
+    "- Vertical reference lines<br>"
+    "- Fixed a bug in note detection which caused a number of pitch detection problems<br><br>"
 
     "New features in version 1.1 include:<br>"
     "- A vibrato analysis tool<br>"
@@ -1220,13 +1266,13 @@ TartiniDialog::TartiniDialog(QWidget *parent) : QDialog(parent, NULL, true)
     "Miss Judy Bellingham - Support (Voice)<br>"
     "Jean-Philippe Grenier - Logo design<br>"
     "People at my lab, especially Alexis Angelidis, Sui-Ling Ming-Wong, Brendan McCane and Damon Simpson<br><br>"
-    "Tartini version " TARTINI_VERSION_STR " is released under the GPL license <b><u>http://www.gnu.org/licenses/gpl.html</u></b>.<br><br>"
+    "Tartini version " TARTINI_VERSION_STR " is released under the GPL license <a href=\"http://www.gnu.org/licenses/gpl.html\">http://www.gnu.org/licenses/gpl.html</a>.<br><br>"
 
     "<i>Libraries used by tartini include:</i><br>"
-    "Qt - <b><u>http://www.trolltech.com/qt</u></b><br>"
-    "FFTW - <b><u>http://www.fftw.org</u></b><br>"
-    "Qwt - <b><u>http://qwt.sourceforge.net</u></b><br>"
-    "RtAudio - <b><u>http://www.music.mcgill.ca/~gary/rtaudio/index.html</u></b><br>"
+    "Qt - <a href=\"http://www.trolltech.com/qt\">http://www.trolltech.com/qt</a><br>"
+    "FFTW - <a href=\"http://www.fftw.org\">http://www.fftw.org</a><br>"
+    "Qwt - <a href=\"http://qwt.sourceforge.net\">http://qwt.sourceforge.net</a><br>"
+    "RtAudio - <a href=\"http://www.music.mcgill.ca/~gary/rtaudio/index.html\">http://www.music.mcgill.ca/~gary/rtaudio/index.html</a><br>"
     "<br>"
     "This program is free software; you can redistribute it and/or modify "
     "it under the terms of the GNU General Public License as published by "
@@ -1239,19 +1285,24 @@ TartiniDialog::TartiniDialog(QWidget *parent) : QDialog(parent, NULL, true)
     "You should have received a copy of the GNU General Public License "
     "along with this program; if not, write to the Free Software "
     "Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.<br><br>"
-    "Please click 'Read License' or see LICENSE.txt for details.<br></qt>");
+    "Please click 'Read License' or see LICENSE.txt for details.<br>");//</qt>");
 
-
+  QPalette pal;
+  pal = palette();
+  pal.setColor(QPalette::Base, Qt::black);
+  pal.setColor(QPalette::Text, Qt::white);
+  tartiniTextEdit->setPalette(pal);
+  
   layout->addWidget(tartiniTextEdit);
   
   Q3BoxLayout *bottomLayout = new Q3HBoxLayout(layout);
   QPushButton *okButton = new QPushButton("&Ok", this);
-  okButton->setBackgroundColor(Qt::black);
-  QPalette pal = palette();
-  okButton->setPalette(pal);
+  /*okButton->setBackgroundColor(Qt::black);
+  pal = palette();
+  okButton->setPalette(pal);*/
   QPushButton *GPLButton = new QPushButton("&Read License", this);
-  GPLButton->setBackgroundColor(Qt::black);
-  GPLButton->setPalette(pal);
+  //GPLButton->setBackgroundColor(Qt::black);
+  //GPLButton->setPalette(pal);
   bottomLayout->addStretch(10);
   bottomLayout->addWidget(okButton);
   bottomLayout->addStretch(10);

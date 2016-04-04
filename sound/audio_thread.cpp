@@ -17,6 +17,7 @@
 #include <qrect.h>
 //Added by qt3to4:
 #include <QCustomEvent>
+#include <QMutex>
 
 #include "audio_thread.h"
 #include "audio_stream.h"
