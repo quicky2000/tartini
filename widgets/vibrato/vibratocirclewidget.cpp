@@ -16,6 +16,8 @@
 #include "gdata.h"
 #include "channel.h"
 #include "analysisdata.h"
+#include <glu.h>
+#include <gl.h>
 
 VibratoCircleWidget::VibratoCircleWidget(QWidget *parent)
   : QGLWidget(parent)

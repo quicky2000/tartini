@@ -16,6 +16,8 @@
 #include "gdata.h"
 #include "channel.h"
 #include "analysisdata.h"
+#include <glu.h>
+#include <gl.h>
 
 VibratoPeriodWidget::VibratoPeriodWidget(QWidget *parent)
   : QGLWidget(parent)

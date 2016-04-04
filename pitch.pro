@@ -14,7 +14,7 @@ unix{
   }else{ #Linux
     MY_TARTINI_PATH += .
     MY_LIB_PATH += -L$$MY_TARTINI_PATH/lib -L/usr/lib -L/usr/lib/x86_64-linux-gnu/
-    MY_INCLUDE_PATH += /usr/include/qt4/QtCore /usr/include/qt4/QtGui /usr/include/qt4 /usr/include/qwt-qt4/ /usr/include/GL $$MY_TARTINI_PATH/include
+    MY_INCLUDE_PATH += /usr/include/qt4/QtCore /usr/include/qt4/QtGui /usr/include/qt4 /usr/include/qwt-qt4/ $$MY_TARTINI_PATH/include
   }
 }
 win32{ #Windows
@@ -326,7 +326,7 @@ unix{
 
     DEFINES += LINUX
     INCLUDEPATH += $$MY_INCLUDE_PATH
-    LIBS += $$MY_LIB_PATH -lfftw3f -lqwt-qt4 -lasound -lGLU
+    LIBS += $$MY_LIB_PATH -lfftw3f -lqwt-qt4 -lasound
     CONFIG += warn_off
     QMAKE_CXXFLAGS += -Wall -Wno-non-virtual-dtor
     QMAKE_CXXFLAGS -= -g

@@ -20,6 +20,8 @@
 #include "analysisdata.h"
 #include "myglfonts.h"
 #include "musicnotes.h"
+#include <glu.h>
+#include <gl.h>
 
 VibratoWidget::VibratoWidget(QWidget *parent, int nls)
   : QGLWidget(parent)

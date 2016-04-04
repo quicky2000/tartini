@@ -23,6 +23,8 @@
 #include "array1d.h"
 #include "piano3d.h"
 #include "musicnotes.h"
+#include <glu.h>
+#include <gl.h>
 
 #ifndef WHEEL_DELTA
 #define WHEEL_DELTA 120

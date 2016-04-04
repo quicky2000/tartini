@@ -3,6 +3,8 @@
 
 #include <QGLWidget>
 #include <QString>
+#include <glu.h>
+#include <gl.h>
 
 /** 
   Simple use of MyGLFont

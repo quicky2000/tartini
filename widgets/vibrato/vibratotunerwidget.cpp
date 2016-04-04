@@ -17,7 +17,9 @@
 #include "channel.h"
 #include "analysisdata.h"
 #include "musicnotes.h"
-  
+#include <glu.h>
+#include <gl.h>
+
 VibratoTunerWidget::VibratoTunerWidget(QWidget *parent)
   : QGLWidget(parent)
 {
