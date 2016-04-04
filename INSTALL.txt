@@ -1,6 +1,6 @@
-Install instructions for Tartini (version 1.1)
+Install instructions for Tartini (version 1.2.0)
 
-To compile Tartini 1.1 from the source:
+To compile Tartini 1.2.0 from the source:
 
 Step 1.
 Make sure the following libraries are installed on your system
