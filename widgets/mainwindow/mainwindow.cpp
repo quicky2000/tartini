@@ -1216,7 +1216,7 @@ TartiniDialog::TartiniDialog(QWidget *parent) : QDialog(parent, NULL, true)
   Q3BoxLayout *topLayout = new Q3HBoxLayout(layout);
   QLabel *tartiniPicture = new QLabel(this, "TartiniPicture");
   //QPixmap *tartiniPixmap = new QPixmap();
-  QPixmap tartiniPixmap(":/res/tartinilogo.png", "PNG");
+  QPixmap tartiniPixmap(":/res/tartinilogo.jpg", "JPG");
   tartiniPicture->setPixmap(tartiniPixmap);
   tartiniPicture->setBackgroundColor(Qt::black);
   topLayout->addStretch(10);
