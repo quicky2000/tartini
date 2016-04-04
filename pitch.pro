@@ -12,8 +12,9 @@ unix{
     MY_LIB_PATH += -L/Users/student/usr/local/lib
     MY_INCLUDE_PATH += /Users/student/usr/local/include
   }else{ #Linux
-    MY_LIB_PATH += -L/home/inferno/research/pitch/lib
-    MY_INCLUDE_PATH += /home/inferno/research/pitch/include/Qt /home/inferno/research/pitch/include/qwt /home/inferno/research/pitch/include
+    MY_TARTINI_PATH += .
+    MY_LIB_PATH += -L$$MY_TARTINI_PATH/lib -L/usr/lib -L/usr/lib/x86_64-linux-gnu/
+    MY_INCLUDE_PATH += /usr/include/qt4/QtCore /usr/include/qt4/QtGui /usr/include/qt4 /usr/include/qwt-qt4/ /usr/include/GL $$MY_TARTINI_PATH/include
   }
 }
 win32{ #Windows
@@ -325,7 +326,7 @@ unix{
 
     DEFINES += LINUX
     INCLUDEPATH += $$MY_INCLUDE_PATH
-    LIBS += $$MY_LIB_PATH -lfftw3f -lqwt -lasound
+    LIBS += $$MY_LIB_PATH -lfftw3f -lqwt-qt4 -lasound -lGLU
     CONFIG += warn_off
     QMAKE_CXXFLAGS += -Wall -Wno-non-virtual-dtor
     QMAKE_CXXFLAGS -= -g
