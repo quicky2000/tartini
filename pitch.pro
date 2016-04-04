@@ -333,6 +333,9 @@ unix{
       QMAKE_CXXFLAGS += -pg
       QMAKE_LFLAGS += -pg
     }
+    tartini.files=tartini
+    tartini.path=/usr/bin
+    INSTALLS+=tartini
   }
 }
 win32{
