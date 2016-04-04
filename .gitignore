@@ -10,4 +10,5 @@ qrc_pitch.cpp
 syntax: glob
 .moc/*
 *~
+*.qm
 #EOF
