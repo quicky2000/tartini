@@ -56,23 +56,24 @@ int WaveStream::read_header()
 {
   if(!file || !(mode & F_READ)) return -1;
 
+  int len, data_type;
   char buffer[12];
   
-  fread(buffer, 1, 12, file);          // check RIFF header
+  if(fread(buffer, 1, 12, file) != 12) goto missing_data;   // check RIFF header
   if (memcmp(buffer, "RIFF", 4) || memcmp(buffer+8, "WAVE", 4)) {
     fprintf(stderr, "WaveStream: Not a wave file\n");
     return -1;
   }
   //read format chunk
-  fread(buffer, 1, 4, file);
+  if(fread(buffer, 1, 4, file) != 4) goto missing_data;
   if (memcmp(buffer, "fmt ", 4) != 0) {
     fprintf(stderr, "WaveStream: Format chunk not found\n");
     return -1;
   }
 
-  int len = igetl(file);          // read chunk length
+  len = igetl(file);          // read chunk length
   
-  int data_type = igetw(file);            // should be 1 for PCM data
+  data_type = igetw(file);            // should be 1 for PCM data
   if (data_type != 1) {
     fprintf(stderr, "WaveStream: Not PCM data\n");
     return -1;
@@ -100,15 +101,14 @@ int WaveStream::read_header()
   header_length = 36;
   
   //read though the rest of the chunk
-  int j;
-  for(j=0; j<len; j++) {
+  for(int j=0; j<len; j++) {
     fgetc(file);
     header_length++;
   }
 
   while(true) {
     //read data chunk
-    fread(buffer, 1, 4, file);
+    if(fread(buffer, 1, 4, file) != 4) goto missing_data;
     len = igetl(file);          // read chunk length
     header_length += 8;
     if(memcmp(buffer, "data", 4) == 0) break;
@@ -126,6 +126,10 @@ int WaveStream::read_header()
   _total_frames = len / frame_size();
 
   return 0;
+
+missing_data:
+  fprintf(stderr, "Error reading header\n");
+  return -1;
 }
 
 long WaveStream::read_bytes(void *data, long length)

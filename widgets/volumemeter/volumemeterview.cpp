@@ -14,9 +14,11 @@
  ***************************************************************************/
 #include "volumemeterview.h"
 #include "volumemeterwidget.h"
+//Added by qt3to4:
+#include <QResizeEvent>
 
-VolumeMeterView::VolumeMeterView( int viewID_, QWidget *parent, const char *name )
- : ViewWidget( viewID_, parent, name)
+VolumeMeterView::VolumeMeterView( int viewID_, QWidget *parent )
+ : ViewWidget( viewID_, parent)
 {
   //setCaption("Volume Meter");
 

@@ -13,12 +13,16 @@
    Please read LICENSE.txt for details.
  ***************************************************************************/
 
+#include <QMouseEvent>
+#include <QWheelEvent>
+
 #include "htrackwidget.h"
 #include "gdata.h"
 #include "useful.h"
 #include "channel.h"
 #include "array1d.h"
 #include "piano3d.h"
+#include "musicnotes.h"
 
 #ifndef WHEEL_DELTA
 #define WHEEL_DELTA 120
@@ -150,7 +154,7 @@ void HTrackWidget::paintGL()
     //Channel::getActiveChannelCurrentChunkData();
     //if(data && active->isVisibleNote(data->noteIndex)) {
     if(data && active->isVisibleChunk(data)) {
-      piano3d->setMidiKeyState(toInt(data->note), true);
+      piano3d->setMidiKeyState(toInt(data->pitch), true);
     }
   }
   glLineWidth(0.01f);
@@ -181,7 +185,7 @@ void HTrackWidget::paintGL()
     //int currentChunk = active->currentChunk();
     //int firstChunk = bound(currentChunk-64, 0, active->totalChunks()-1);
     //int lastChunk = bound(currentChunk+64, 0, active->totalChunks());
-    Array2d<float> notes(numHarmonics, visibleChunks);
+    Array2d<float> pitches(numHarmonics, visibleChunks);
     Array2d<float> amps(numHarmonics, visibleChunks);
     
     AnalysisData *data;
@@ -206,19 +210,19 @@ void HTrackWidget::paintGL()
       if(data && data->harmonicFreq.size() > 0) {
         for(harmonic=0; harmonic < numHarmonics; harmonic++) {
           //freqs(harmonic, chunkOffset) = data->harmonicFreq[harmonic];
-          notes(harmonic, chunkOffset) = freq2note(data->harmonicFreq[harmonic]);
+          pitches(harmonic, chunkOffset) = freq2pitch(data->harmonicFreq[harmonic]);
           amps(harmonic, chunkOffset) = data->harmonicAmp[harmonic];
         }
       } else {
         for(harmonic=0; harmonic < numHarmonics; harmonic++) {
-          notes(harmonic, chunkOffset) = 0.0;
+          pitches(harmonic, chunkOffset) = 0.0;
           amps(harmonic, chunkOffset) = 0.0;
         }
       }
     }
     
     bool insideLine;
-    float curNote=0.0, curAmp=0.0, prevNote, diffNote;
+    float curPitch=0.0, curAmp=0.0, prevPitch, diffNote;
     
     //draw the outlines
     setMaterialSpecular(0.0, 0.0, 0.0, 0.0);
@@ -232,30 +236,30 @@ void HTrackWidget::paintGL()
         curAmp = amps(harmonic, chunkOffset) - _peakThreshold;
         //printf("curAmp = %f\n", curAmp);
         if(curAmp > 0.0) {
-          prevNote = curNote;
-          curNote = notes(harmonic, chunkOffset);
-          diffNote = prevNote - curNote;
+          prevPitch = curPitch;
+          curPitch = pitches(harmonic, chunkOffset);
+          diffNote = prevPitch - curPitch;
           if(fabs(diffNote) < 1.0) {
             if(!insideLine) {
               glBegin(GL_LINE_STRIP);
-              glVertex3f(curNote, 0, pos);
+              glVertex3f(curPitch, 0, pos);
               insideLine = true;
             }
-            glVertex3f(curNote, curAmp, pos);
+            glVertex3f(curPitch, curAmp, pos);
           } else {
             glEnd();
             insideLine = false;
           }
         } else {
           if(insideLine) {
-            glVertex3f(curNote, 0, pos-1);
+            glVertex3f(curPitch, 0, pos-1);
             glEnd();
             insideLine = false;
           }
         }
       }
       if(insideLine) {
-        glVertex3f(curNote, 0, pos-1);
+        glVertex3f(curPitch, 0, pos-1);
         glEnd();
         insideLine = false;
       }
@@ -283,18 +287,18 @@ void HTrackWidget::paintGL()
           if(!insideLine) {
             glBegin(GL_QUAD_STRIP);
             insideLine = true;
-            curNote = notes(harmonic, chunkOffset);
-            glVertex3f(curNote, (amps(harmonic, chunkOffset) - _peakThreshold), pos);
-            glVertex3f(curNote, 0, pos);
+            curPitch = pitches(harmonic, chunkOffset);
+            glVertex3f(curPitch, (amps(harmonic, chunkOffset) - _peakThreshold), pos);
+            glVertex3f(curPitch, 0, pos);
           } else {
-            prevNote = curNote;
-            curNote = notes(harmonic, chunkOffset);
-            diffNote = prevNote - curNote;
+            prevPitch = curPitch;
+            curPitch = pitches(harmonic, chunkOffset);
+            diffNote = prevPitch - curPitch;
             if(fabs(diffNote) < 1.0) {
               //setMaterialColor(0.5f * diffNote, ((isEven)?0.5f:0.9) * diffNote, ((isEven)?0.9f:0.5) * diffNote);
               glNormal3f(diffNote ,0.0 ,1.0);
-              glVertex3f(curNote, (amps(harmonic, chunkOffset) - _peakThreshold), pos);
-              glVertex3f(curNote, 0, pos);
+              glVertex3f(curPitch, (amps(harmonic, chunkOffset) - _peakThreshold), pos);
+              glVertex3f(curPitch, 0, pos);
             } else {
               glEnd();
               insideLine = false;

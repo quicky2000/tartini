@@ -12,13 +12,16 @@
    
    Please read LICENSE.txt for details.
  ***************************************************************************/
+#include <QResizeEvent>
+
 #include "pianoview.h"
 #include "pianowidget.h"
 #include "gdata.h"
 #include "channel.h"
+#include "musicnotes.h"
 
-PianoView::PianoView( int viewID_, QWidget *parent, const char *name )
- : ViewWidget( viewID_, parent, name)
+PianoView::PianoView( int viewID_, QWidget *parent )
+ : ViewWidget( viewID_, parent)
 {
   //setCaption("Piano view");
 
@@ -26,7 +29,7 @@ PianoView::PianoView( int viewID_, QWidget *parent, const char *name )
   pianoWidget->show();
 
   //make the widget get updated when the view changes
-  connect(gdata->view, SIGNAL(onFastUpdate()), this, SLOT(changeKey()));
+  connect(gdata->view, SIGNAL(onFastUpdate(double)), this, SLOT(changeKey()));
 }
 
 PianoView::~PianoView()
@@ -47,10 +50,10 @@ void PianoView::changeKey()
     AnalysisData *data = active->dataAtCurrentChunk();
     //if(data && active->isVisibleNote(data->noteIndex)) {
     if(data && active->isVisibleChunk(data)) {
-      float note = data->note;
+      float pitch = data->pitch;
       //if (note > 0) {
         //pianoWidget->setCurrentNote(noteValue(note), data->volumeValue);
-        pianoWidget->setCurrentNote(noteValue(note), data->correlation);
+        pianoWidget->setCurrentNote(noteValue(pitch), data->correlation());
       //} else {
       //  pianoWidget->setNoNote();
       //}

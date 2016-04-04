@@ -16,6 +16,8 @@
 #define HBLOCKVIEW_H
 
 #include "viewwidget.h"
+//Added by qt3to4:
+#include <QResizeEvent>
 
 class HBlockWidget;
 
@@ -23,7 +25,7 @@ class HBlockView : public ViewWidget {
   Q_OBJECT
 
   public:
-    HBlockView(int viewID_, QWidget *parent = 0, const char *name = 0);
+    HBlockView(int viewID_, QWidget *parent = 0);
     virtual ~HBlockView();
 
     void resizeEvent(QResizeEvent *);

@@ -18,6 +18,8 @@
 
 #include "drawwidget.h"
 #include <qstring.h>
+//Added by qt3to4:
+#include <QPaintEvent>
 
 /** MyLabel uses double buffering to draw simple text.
   So is faster (espicially on the Mac) than using QLabel.

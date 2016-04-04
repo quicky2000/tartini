@@ -20,6 +20,13 @@ And array2d give you raw pointers to use rather than all that iterator crap
 Note: You can still use alot of the c++ algorithm template stuff on array2d
 Warning! Array2d uses malloc so no Constructors or Destructors are called
          on the elements in the array.
+
+Example:
+Array2d<GLfloat> myArray(10, 10);
+myArray(5, 6) = 4;
+for(GLfloat *j = myArray.begin(); j < myArray.end(); j++) *j = 0;
+vector<int>::iterator it;
+int *ptr = &*it;
 */
 
 #ifndef ARRAY2D_H
@@ -56,21 +63,28 @@ template<class T> class Array2d
   	height=h_;
   	data =(T*)malloc(size()*sizeof(T));
   	myassert(data);
+    //std::uninitialized_fill(begin(), end(), T());
   }
   Array2d(int w_, int h_, T val) { //initialise fill with val
   	w_ = MAX(w_, 0);
   	h_ = MAX(h_, 0);
   	width=w_;
   	height=h_;
-  	data =(T*)malloc(size*sizeof(T));
+  	data =(T*)malloc(size()*sizeof(T));
   	myassert(data);
-  	for(T *p = data; p != end();)
-      *p++ = val;
+  	//for(T *p = data; p != end();)
+      //*p++ = val;
+    std::uninitialized_fill(begin(), end(), val);
   }
-  virtual ~Array2d() {
+  /*virtual*/ ~Array2d() {
   	if(data) free(data);
   }
   T& operator()(int x, int y) {
+  	myassert(x >= 0 && x < width);
+  	myassert(y >= 0 && y < height);
+  	return( *(data + (width*y + x)));
+  }
+  T const& operator()(int x, int y) const {
   	myassert(x >= 0 && x < width);
   	myassert(y >= 0 && y < height);
   	return( *(data + (width*y + x)));
@@ -91,7 +105,7 @@ template<class T> class Array2d
   T *end(int y) {
 	  return begin(y)+width;
   }
-  virtual bool isEmpty() { return (data==NULL); }
+  /*virtual*/ bool isEmpty() { return (data==NULL); }
   void resize_raw(int w_, int h_) { //messes up data, but fast
 	  w_ = std::max(w_, 0);
 	  h_ = std::max(h_, 0);

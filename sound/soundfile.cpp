@@ -22,7 +22,7 @@
 #include <algorithm>
 #include "channel.h"
 
-#include <qprogressbar.h>
+#include <q3progressbar.h>
 #include "mainwindow.h"
 #include <qstatusbar.h>
 #include <qlabel.h>
@@ -37,6 +37,8 @@
 #include "ogg_stream.h"
 #endif
 #endif
+
+#include "QMessageBox"
 
 //const double v8=0x7F, v16=0x7FFF, v32=0x7FFFFFFF;
 
@@ -58,6 +60,8 @@ SoundFile::SoundFile()
   _offset = 0; //Number of frame to read into file to get to time 0 (half buffer size).
   _saved = true;
   mutex = new QMutex(true);
+  firstTimeThrough = true;
+  _doingDetailedPitch = false;
 }
 
 /*
@@ -84,7 +88,7 @@ SoundFile::~SoundFile()
 //free up all the memory of everything used
 void SoundFile::uninit()
 {
-  if(gdata->audioThread.soundFile() == this) {
+  if(gdata->audioThread.playSoundFile() == this || gdata->audioThread.recSoundFile() == this) {
     gdata->stop();
   }
 
@@ -130,7 +134,8 @@ void SoundFile::setFilteredFilename(const char *filteredFilename_)
 
 QString SoundFile::getNextTempFilename()
 {
-  QString tempFileFolder = gdata->settings.getString("General", "tempFilesFolder");
+  //QString tempFileFolder = gdata->settings.getString("General", "tempFilesFolder");
+  QString tempFileFolder = gdata->qsettings->value("General/tempFilesFolder", QDir::convertSeparators(QDir::currentDirPath())).toString();
   QDir dir = QDir(tempFileFolder);
   QFileInfo fileInfo;
   QString fileName;
@@ -182,14 +187,23 @@ bool SoundFile::openRead(const char *filename_)
   }
   //if(filteredStream->open_read((QString(filename) + QString("~")).ascii())) {
   if(filteredStream->open_write(filteredFilename, stream->freq, stream->channels, stream->bits)) {
-    fprintf(stderr, "Error opening %s\n", filename);
-    delete stream;
+    fprintf(stderr, "Error opening %s\n", filteredFilename);
+    delete stream; stream = NULL;
+    QString s = QString("Error opening ") + QString(filteredFilename) + QString(" for writing.\nPossible cause: temp folder is read-only or disk is out of space.\nPlease select a writable Temp Folder");
+    QMessageBox::warning(mainWindow, "Error", s, QMessageBox::Ok, QMessageBox::NoButton);
+    mainWindow->menuPreferences();
     return false;
   }
 
   channels.resize(stream->channels);
   int windowSize_ = gdata->getAnalysisBufferSize(stream->freq);
   fprintf(stderr, "channels = %d\n", numChannels());
+
+  int stepSize_ = gdata->getAnalysisStepSize(stream->freq);
+  //_offset = (windowSize_ / stepSize_) / 2;
+  _offset = windowSize_ / 2;
+  setFramesPerChunk(stepSize_); // The user needs to be able to set this
+
   for(int j=0; j<numChannels(); j++) {
     channels(j) = new Channel(this, windowSize_);
     fprintf(stderr, "channel size = %d\n", channels(j)->size());
@@ -199,9 +213,6 @@ bool SoundFile::openRead(const char *filename_)
   }
   myTransforms.init(windowSize_, 0, stream->freq, gdata->doingEqualLoudness());
 
-  int stepSize_ = gdata->getAnalysisStepSize(stream->freq);
-  //_offset = (windowSize_ / stepSize_) / 2;
-  _offset = windowSize_ / 2;
   fprintf(stderr, "----------Opening------------\n");
   fprintf(stderr, "filename = %s\n", filename_);
   fprintf(stderr, "rate = %d\n", rate());
@@ -210,7 +221,6 @@ bool SoundFile::openRead(const char *filename_)
   fprintf(stderr, "windowSize = %d\n", windowSize_);
   fprintf(stderr, "stepSize = %d\n", stepSize_);
   fprintf(stderr, "-----------------------------\n");
-  setFramesPerChunk(stepSize_); // The user needs to be able to set this
 
   //setup the tempChunkBuffers
   tempWindowBuffer = new float *[numChannels()];
@@ -223,6 +233,8 @@ bool SoundFile::openRead(const char *filename_)
     tempWindowBufferFiltered[c] = (new float[bufferSize()+16]) + 16; //array ranges from -16 to bufferSize()
     tempWindowBufferFilteredDouble[c] = (new double[bufferSize()+16]) + 16; //array ranges from -16 to bufferSize()
   }
+
+  _doingDetailedPitch = gdata->doingDetailedPitch();
 
   return true;
 }
@@ -253,11 +265,20 @@ bool SoundFile::openWrite(const char *filename_, int rate_, int channels_, int b
   filteredStream = new WaveStream;
   if(stream->open_write(filename, rate_, channels_, bits_)) {
     fprintf(stderr, "Error opening %s for writting\n", filename);
+    delete stream; stream = NULL;
+    delete filteredStream; filteredStream = NULL;
+    QString s = QString("Error opening ") + QString(filename) + QString(" for writing.\nPossible cause: temp folder is read-only or disk is out of space.\nPlease select a writable Temp Folder");
+    QMessageBox::warning(mainWindow, "Error", s, QMessageBox::Ok, QMessageBox::NoButton);
+    mainWindow->menuPreferences();
     return false;
   }
   if(filteredStream->open_write(filteredFilename, rate_, channels_, bits_)) {
-    fprintf(stderr, "Error opening %s for writting\n", filename);
-    delete stream;
+    fprintf(stderr, "Error opening %s for writting\n", filteredFilename);
+    delete stream; stream = NULL;
+    delete filteredStream; filteredStream = NULL;
+    QString s = QString("Error opening ") + QString(filteredFilename) + QString(" for writing.\nPossible cause: temp folder is read-only or disk is out of space.\nPlease select a writable Temp Folder");
+    QMessageBox::warning(mainWindow, "Error", s, QMessageBox::Ok, QMessageBox::NoButton);
+    mainWindow->menuPreferences();
     return false;
   }
   //printf("in_channels = %d\n", gdata->in_channels);
@@ -286,6 +307,8 @@ bool SoundFile::openWrite(const char *filename_, int rate_, int channels_, int b
     tempWindowBufferFilteredDouble[c] = (new double[bufferSize()+16]) + 16; //array ranges from -16 to bufferSize()
   }
 
+  _doingDetailedPitch = gdata->doingDetailedPitch();
+
   return true;
 }
 
@@ -297,6 +320,8 @@ void SoundFile::rec2play()
   filteredStream->open_read(filteredFilename);
   //beginning();
   jumpToChunk(totalChunks());
+  fprintf(stderr, "filteredFilename = %s\n", filteredFilename);
+  fprintf(stderr, "totalChunks = %d\n", totalChunks());
 }
 
 void SoundFile::close()
@@ -326,6 +351,7 @@ void SoundFile::unlock()
 */
 bool SoundFile::playChunk()
 {
+/*
   int c;
   int ret = blockingRead(stream, tempWindowBuffer, framesPerChunk());
   if(equalLoudness()) ret = blockingRead(filteredStream, tempWindowBufferFiltered, framesPerChunk());
@@ -336,7 +362,6 @@ bool SoundFile::playChunk()
   }
   
   lock();
-  //nextChunk();
   for(c=0; c<numChannels(); c++) {
     channels(c)->shift_left(framesPerChunk());
     toChannelBuffer(c, framesPerChunk());
@@ -346,6 +371,14 @@ bool SoundFile::playChunk()
   }
   setCurrentChunk(currentStreamChunk());
   unlock();
+  return true;
+*/
+  if(!setupPlayChunk()) return false;
+  int ret = blockingWrite(gdata->audio_stream, tempWindowBuffer, framesPerChunk());
+  if(ret < framesPerChunk()) {
+    fprintf(stderr, "Error writing to audio device\n");
+  }
+  //setCurrentChunk(currentStreamChunk());
   return true;
 }
 
@@ -399,6 +432,11 @@ void SoundFile::applyEqualLoudnessFilter(int n)
 {
   int c, j;
   for(c=0; c<numChannels(); c++) {
+    //printf("before: %f == %f\n", channels(c)->filterStateX1, channels(c)->highPassFilter->_x[0]);
+    //printf("before: %f == %f\n", channels(c)->filterStateX2, channels(c)->highPassFilter->_x[1]);
+    //printf("before: %f == %f\n", channels(c)->filterStateY1, channels(c)->highPassFilter->_y[0]);
+    //printf("before: %f == %f\n", channels(c)->filterStateY2, channels(c)->highPassFilter->_y[1]);
+/*
     tempWindowBufferDouble[c][-2] = channels(c)->filterStateX1;
     tempWindowBufferDouble[c][-1] = channels(c)->filterStateX2;
     tempWindowBufferFilteredDouble[c][-2] = channels(c)->filterStateY1;
@@ -421,9 +459,9 @@ void SoundFile::applyEqualLoudnessFilter(int n)
     
     for(j=0; j<n; j++) {
       *y = b[0]*x[0] + b[1]*x[-1] + b[2]*x[-2] - a[0]*y[-1] - a[1]*y[-2];
-      //*y = y[-1];
-      //*y = b[0]*x[-2] + b[1]*x[-1] + b[2]*x[0] - a[0]*y[-2] - a[1]*y[-1];
-      //*y = (y[-2] + y[-1] + x[0]) / 3.0f;
+      // *y = y[-1];
+      // *y = b[0]*x[-2] + b[1]*x[-1] + b[2]*x[0] - a[0]*y[-2] - a[1]*y[-1];
+      // *y = (y[-2] + y[-1] + x[0]) / 3.0f;
       *yFloat = bound(*y, -1.0, 1.0);
       y++;
       x++;
@@ -435,6 +473,19 @@ void SoundFile::applyEqualLoudnessFilter(int n)
     channels(c)->filterStateX2 = tempWindowBufferDouble[c][n-1];
     channels(c)->filterStateY1 = tempWindowBufferFilteredDouble[c][n-2];
     channels(c)->filterStateY2 = tempWindowBufferFilteredDouble[c][n-1];
+*/
+
+    //float *tempTest = (float*)malloc(n*sizeof(float));
+    //channels(c)->highPassFilter->apply(tempWindowBuffer[c], tempTest, n);
+    channels(c)->highPassFilter->filter(tempWindowBuffer[c], tempWindowBufferFiltered[c], n);
+    for(j=0; j<n; j++) tempWindowBufferFiltered[c][j] = bound(tempWindowBufferFiltered[c][j], -1.0f, 1.0f);
+    //for(j=0; j<n; j++)
+    //  if(tempWindowBufferFiltered[c][j] != tempTest[j]) printf("Filter Diff %d : %f, %f, %f\n", j, tempWindowBuffer[c][j], tempWindowBufferFiltered[c][j], tempTest[j]);
+    //printf("after: %f == %f\n", channels(c)->filterStateX1, channels(c)->highPassFilter->_x[0]);
+    //printf("after: %f == %f\n", channels(c)->filterStateX2, channels(c)->highPassFilter->_x[1]);
+    //printf("after: %f == %f\n", channels(c)->filterStateY1, channels(c)->highPassFilter->_y[0]);
+    //printf("after: %f == %f\n", channels(c)->filterStateY2, channels(c)->highPassFilter->_y[1]);
+    //free(tempTest);
   }
 }
 
@@ -448,7 +499,7 @@ void SoundFile::recordChunk(int n)
     fprintf(stderr, "Data lost in reading from audio device\n");
   }
   
-  if(equalLoudness()) applyEqualLoudnessFilter(n);
+/*  if(equalLoudness()) applyEqualLoudnessFilter(n);
   
   FilterState filterState;
   
@@ -469,6 +520,76 @@ void SoundFile::recordChunk(int n)
   if(ret < n) fprintf(stderr, "Error writing to disk\n");
   
   setCurrentChunk(currentStreamChunk());
+*/
+  finishRecordChunk(n);
+}
+
+void SoundFile::finishRecordChunk(int n)
+{
+  if(equalLoudness()) applyEqualLoudnessFilter(n);
+
+  FilterState filterState;
+
+  lock(); 
+  for(int c=0; c<numChannels(); c++) {
+    channels(c)->shift_left(n);
+    //std::copy(tempWindowBuffer[c], tempWindowBuffer[c]+n, channels(c)->end() - n);
+    //channels(c)->highPassFilter->getState(&filterState);
+    toChannelBuffer(c, n);
+    //if(channels(c) == gdata->getActiveChannel())
+    channels(c)->processNewChunk(&filterState);
+  }
+  unlock();
+
+  int ret = blockingWrite(stream, tempWindowBuffer, n);
+  if(ret < n) fprintf(stderr, "Error writing to disk\n");
+  if(equalLoudness()) ret = blockingWrite(filteredStream, tempWindowBufferFiltered, n);
+  if(ret < n) fprintf(stderr, "Error writing to disk\n");
+
+  setCurrentChunk(currentStreamChunk());
+}
+
+bool SoundFile::setupPlayChunk() {
+  int c;
+  int n = framesPerChunk();
+  int ret = blockingRead(stream, tempWindowBuffer, n);
+  if(equalLoudness()) ret = blockingRead(filteredStream, tempWindowBufferFiltered, n);
+  if(ret < n) return false;
+
+  lock();
+  for(c=0; c<numChannels(); c++) {
+    channels(c)->shift_left(n);
+    toChannelBuffer(c, n);
+    if(gdata->doingActive() && channels(c) == gdata->getActiveChannel()) {
+      channels(c)->processChunk(currentChunk()+1);
+    }
+  }
+  setCurrentChunk(currentStreamChunk());
+  unlock();
+  return true;
+}
+
+/** Plays one chunk of sound to the associated stream
+  @return true on success. false for end of file or error
+*/
+//Note: static
+bool SoundFile::playRecordChunk(SoundFile *play, SoundFile *rec)
+{
+  int n = rec->framesPerChunk();
+  myassert(n == play->framesPerChunk());
+  //int ch = rec->numChannels();
+  myassert(rec->numChannels() == play->numChannels());
+
+  play->setupPlayChunk();
+  //if(!play->setupPlayChunk()) return false;
+
+  int ret = blockingWriteRead(gdata->audio_stream, play->tempWindowBuffer, play->numChannels(), rec->tempWindowBuffer, rec->numChannels(), n);
+  if(ret < n) {
+    fprintf(stderr, "Error writing/reading to audio device\n");
+  }
+
+  rec->finishRecordChunk(n);
+  return true;
 }
 
 /** Reads framesPerChunk frames from the SoundStream s
@@ -494,6 +615,7 @@ int SoundFile::readChunk(int n)
   FilterState filterState;
   
   lock();
+
   //nextChunk();
   for(c=0; c<numChannels(); c++) {
     channels(c)->shift_left(n);
@@ -522,8 +644,10 @@ int SoundFile::blockingRead(SoundStream *s, float **buffer, int n)
   myassert(n >= 0 && n <= bufferSize());
   int ret = s->readFloats(buffer, n, numChannels());
   if(ret < n) { //if not all bytes are read
-    for(c=0; c<numChannels(); c++)  //set remaining bytes to zeros
-      memset(buffer[c]+ret, 0, (n-ret) * sizeof(float)); 
+    for(c=0; c<numChannels(); c++) { //set remaining bytes to zeros
+      //memset(buffer[c]+ret, 0, (n-ret) * sizeof(float)); 
+      std::fill(buffer[c]+ret, buffer[c]+n, 0.0f);
+    }
   }
   return ret;
 }
@@ -538,6 +662,30 @@ int SoundFile::blockingWrite(SoundStream *s, float **buffer, int n)
 {
   if(s == NULL) return n;
   return s->writeFloats(buffer, n, numChannels());
+}
+
+/** Writes n frames of data to s and reads n frames of data from s
+If less than n frams are read, the remaining buffer is filled with zeros
+@param s The SoundStream to write to then read from
+@param writeBuffer The data that is to be written to the stream
+@param readBuffer The data that is read back from the stream
+@param n The amount of data in each of the buffers. Note: They must be the same size
+@param ch The number of channels
+*/
+//Note: static
+int SoundFile::blockingWriteRead(SoundStream *s, float **writeBuffer, int writeCh, float **readBuffer, int readCh, int n)
+{
+  int c;
+  myassert(s);
+  //myassert(n >= 0 && n <= bufferSize());
+  int ret = s->writeReadFloats(writeBuffer, writeCh, readBuffer, readCh, n);
+  if(ret < n) { //if not all bytes are read
+    for(c=0; c<readCh; c++) { //set remaining bytes to zeros
+      //memset(buffer[c]+ret, 0, (n-ret) * sizeof(float)); 
+      std::fill(readBuffer[c]+ret, readBuffer[c]+n, 0.0f);
+    }
+  }
+  return ret;
 }
 
 /**
@@ -626,6 +774,7 @@ void SoundFile::preProcess()
 {
   //jumpToChunk(0);
   gdata->setDoingActiveAnalysis(true);
+  myassert(firstTimeThrough == true);
   readChunk(bufferSize() - offset());
   //readChunk(framesPerChunk());
   //processNewChunk();
@@ -640,7 +789,7 @@ void SoundFile::preProcess()
   //QLabel *message = new QLabel("Preprocessing data:", theMainWindow, "message");
 
   //QProgressBar *progress = new QProgressBar(stream->totalFrames() / framesPerChunk(), theMainWindow, "progress bar");
-  QProgressBar *progress = new QProgressBar(stream->totalFrames() / framesPerChunk(), theStatusBar, "progress bar");
+  Q3ProgressBar *progress = new Q3ProgressBar(stream->totalFrames() / framesPerChunk(), theStatusBar, "progress bar");
   progress->setProgress(0);
   progress->setMaximumHeight(16);
 
@@ -681,6 +830,7 @@ void SoundFile::preProcess()
   delete message;
 
   gdata->setDoingActiveAnalysis(false);
+  firstTimeThrough = false;
   //printf("freqLookup.size()=%d\n", channels(0)->freqLookup.size());
 }
 

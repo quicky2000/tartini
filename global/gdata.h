@@ -15,20 +15,25 @@
 #ifndef GDATA_H
 #define GDATA_H
 
-#define TARTINI_VERSION_STR  "1.0"
-#define TARTINI_VERSION       1.0
+#define TARTINI_VERSION_STR  "1.1.0"
+//#define TARTINI_VERSION       1.1
 
+#include <Qt>
 #include <qapplication.h>
 #include <qobject.h>
 
 #include <qmutex.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include <vector>
 //#include "sound_file_stream.h"
 //#include "audio_stream.h"
 #include "audio_thread.h"
 //#include "chirp_xform.h"
-#include "settings.h"
+//#include "settings.h"
+#include <QSettings>
+
 #ifndef WINDOWS
 #include <sys/time.h>
 #endif
@@ -36,6 +41,8 @@
 #include "array2d.h"
 #include "useful.h"
 #include "view.h"
+#include "analysisdata.h"
+extern int gMusicKey;
 
 #ifndef WINDOWS
 //for multi-threaded profiling
@@ -52,7 +59,7 @@ extern struct itimerval profiler_ovalue;
 #define SOUND_REC       0x02
 #define SOUND_PLAY_REC  0x03
 
-enum AmplitudeModes { AMPLITUDE_RMS, AMPLITUDE_MAX_INTENSITY, AMPLITUDE_CORRELATION, AMPLITUDE_PURITY };
+enum AnalysisModes { MPM, AUTOCORRELATION, MPM_MODIFIED_CEPSTRUM };
 
 #define NUM_WIN_SIZES 5
 extern int frame_window_sizes[NUM_WIN_SIZES];
@@ -77,43 +84,22 @@ class Filter;
 class SoundFile;
 class Channel;
 
-typedef struct
-{
-  unsigned char    red;
-  unsigned char    green;
-  unsigned char    blue;
-} FrameRGB;
-
-
 class GData : public QObject
 {
   Q_OBJECT
 
 public:
-  //double tempStuff;
-  
+  enum SavingModes { ALWAYS_ASK, NEVER_SAVE, ALWAYS_SAVE };
+
   GData(/*int buffer_size_, int winfunc_, float step_size_*/);
   virtual ~GData();
 
-  Settings settings;
+  QSettings *qsettings;
 
-  //std::vector<float> coefficients_table;
-  //Array2d<float> coefficients_table;
-
-  //QMutex bufferMutex;
-  //SoundFileStream *sound_file_stream;
-  //FWinFunc *fwinfunc;
-  //FWinFunc *loudnessFunc;
-  //SoundStream *input_stream;
-  //SoundStream *output_stream;
   int soundMode;
 
   AudioStream *audio_stream;
   bool need_update;
-  //int buffer_size;
-  //int winfunc;
-  //float step_size;
-  //int harmonicNum;
 
   std::vector<Filter*> filter_hp; //highpass filter
   std::vector<Filter*> filter_lp; //lowpass filter
@@ -165,16 +151,31 @@ private:
   bool _doingHarmonicAnalysis;
   bool _doingFreqAnalysis;
   bool _doingEqualLoudness;
+  bool _doingAutoNoiseFloor;
   int _doingActiveAnalysis;
   int _doingActiveFFT;
   int _doingActiveCepstrum;
+  bool _doingDetailedPitch;
   int _fastUpdateSpeed;
   int _slowUpdateSpeed;
-  double _noiseThreshold;
-  double _noiseThresholdDB;
+  bool _polish;
+  bool _showMeanVarianceBars;
+  int _savingMode;
+  bool _vibratoSineStyle;
+  //int _musicKey;
+  int _musicKeyType;
+  int _temperedType;
+  bool _mouseWheelZooms;
+
+  //double _noiseThreshold;
+  //double _noiseThresholdDB;
+  //double _changenessThreshold;
   int _amplitudeMode;
   int _pitchContourMode;
   int _analysisType;
+  double _dBFloor;
+  double amp_thresholds[NUM_AMP_MODES][2];
+  double amp_weights[NUM_AMP_MODES];
 
   QPixmap *_drawingBuffer;
   QColor _backgroundColor;
@@ -183,93 +184,130 @@ private:
   
   double _leftTime; /**< The lower bound of the start times of all channels */
   double _rightTime; /**< The upper bound of the finish times of all channels */
-  double _topNote; /**< The highest possible note allowed (lowest possible is 0) */
+  double _topPitch; /**< The highest possible note pitch allowed (lowest possible is 0) */
 
 public:
-  QPixmap* drawingBuffer() { return _drawingBuffer; }
-  void setLeftTime(double x); /**< Allows you to specify the leftmost time a file starts */
-  void setRightTime(double x); /**< Allows you to specify the rightmost time a file starts */
-  double leftTime() { return _leftTime; } /**< Returns the leftmost time a file starts */
-  double rightTime() { return _rightTime; }/**< Returns the rightmost time a file stops */
-  double totalTime() { return _rightTime - _leftTime; } /**< Returns the total number of seconds the files take up */
-  double topNote() { return _topNote; } /**< Returns the top note the programme allows */
-  void setTopNote(double y); /**< Allows you to specify the top note the programme should allow */
-  void setDoingActiveAnalysis(bool x) { _doingActiveAnalysis += (x) ? 1 : -1; }
-  void setDoingActiveFFT(bool x) { _doingActiveFFT += (x) ? 1 : -1; }
-  void setDoingActiveCepstrum(bool x) { _doingActiveCepstrum += (x) ? 1 : -1; setDoingActiveFFT(x); }
-  QColor getNextColor();
+  QPixmap*  drawingBuffer() { return _drawingBuffer; }
+  void      setLeftTime(double x); /**< Allows you to specify the leftmost time a file starts */
+  void      setRightTime(double x); /**< Allows you to specify the rightmost time a file starts */
+  double    leftTime() { return _leftTime; } /**< Returns the leftmost time a file starts */
+  double    rightTime() { return _rightTime; }/**< Returns the rightmost time a file stops */
+  double    totalTime() { return _rightTime - _leftTime; } /**< Returns the total number of seconds the files take up */
+  double    topPitch() { return _topPitch; } /**< Returns the top note pitch the programme allows */
+  void      setTopPitch(double y); /**< Allows you to specify the top note pitch the programme should allow */
+  void      setDoingActiveAnalysis(bool x) { _doingActiveAnalysis += (x) ? 1 : -1; }
+  void      setDoingActiveFFT(bool x) { _doingActiveFFT += (x) ? 1 : -1; }
+  void      setDoingActiveCepstrum(bool x) { _doingActiveCepstrum += (x) ? 1 : -1; setDoingActiveFFT(x); }
+  void      setDoingDetailedPitch(bool x) { _doingDetailedPitch = x; }
+  QColor    getNextColor();
 
-  int getAnalysisBufferSize(int rate);
-  int getAnalysisStepSize(int rate);
-  bool doingHarmonicAnalysis() { return _doingHarmonicAnalysis; }
-  bool doingEqualLoudness() { return _doingEqualLoudness; }
-  bool doingFreqAnalysis() { return _doingFreqAnalysis; }
-  bool doingActiveAnalysis() { return _doingActiveAnalysis; }
-  bool doingActiveFFT() { return _doingActiveFFT; }
-  bool doingActiveCepstrum() { return _doingActiveCepstrum; }
-  bool doingActive() { return (doingActiveAnalysis() || doingActiveFFT() || doingActiveCepstrum()); }
-  int amplitudeMode() { return _amplitudeMode; }
-  int pitchContourMode() { return _pitchContourMode; }
-  int fastUpdateSpeed() { return _fastUpdateSpeed; }
-  int slowUpdateSpeed() { return _slowUpdateSpeed; }
-  double noiseThreshold() { return _noiseThreshold; }
-  double noiseThresholdDB() { return _noiseThresholdDB; }
-  //void setNoiseThreshold(double noiseThreshold_);
-  void setNoiseThresholdDB(double noiseThresholdDB_);
-  int analysisType() { return _analysisType; }
-  
-  QColor backgroundColor() { return _backgroundColor; }
-  QColor shading1Color() { return _shading1Color; }
-  QColor shading2Color() { return _shading2Color; }
-  QString getFilenameString();
-  void addFileToList(SoundFile *s);
-  void removeFileFromList(SoundFile *s);
-  void clearFreqLookup();
-  void clearAmplitudeLookup();
-  int getActiveIntThreshold();
+  int       getAnalysisBufferSize(int rate);
+  int       getAnalysisStepSize(int rate);
+  bool      doingHarmonicAnalysis() { return _doingHarmonicAnalysis; }
+  bool      doingAutoNoiseFloor() { return _doingAutoNoiseFloor; }
+  bool      doingEqualLoudness() { return _doingEqualLoudness; }
+  bool      doingFreqAnalysis() { return _doingFreqAnalysis; }
+  bool      doingActiveAnalysis() { return _doingActiveAnalysis; }
+  bool      doingActiveFFT() { return _doingActiveFFT; }
+  bool      doingActiveCepstrum() { return _doingActiveCepstrum; }
+  bool      doingDetailedPitch() { return _doingDetailedPitch; }
+  bool      doingActive() { return (doingActiveAnalysis() || doingActiveFFT() || doingActiveCepstrum()); }
+  bool      vibratoSineStyle() { return _vibratoSineStyle; }
+  int       amplitudeMode() { return _amplitudeMode; }
+  int       pitchContourMode() { return _pitchContourMode; }
+  int       fastUpdateSpeed() { return _fastUpdateSpeed; }
+  int       slowUpdateSpeed() { return _slowUpdateSpeed; }
+  bool      mouseWheelZooms() { return _mouseWheelZooms; }
+
+  //double  noiseThreshold() { return _noiseThreshold; }
+  //double  noiseThresholdDB() { return _noiseThresholdDB; }
+  //double  changenessThreshold() { return _changenessThreshold; }
+  //void    setNoiseThresholdDB(double noiseThresholdDB_);
+  //void    setChangenessThreshold(double changenessThreshold_);
+  void      setAmpThreshold(int mode, int index, double value);
+  double    ampThreshold(int mode, int index);
+  void      setAmpWeight(int mode, double value);
+  double    ampWeight(int mode);
+  int       analysisType() { return _analysisType; }
+  bool      polish() { return _polish; }
+  //void    setPolish(bool polish_) { _polish = polish_; }
+  bool      showMeanVarianceBars() { return _showMeanVarianceBars; }
+  //void    setShowMeanVarianceBars(bool showMeanVarianceBars_) { _showMeanVarianceBars = showMeanVarianceBars_; }
+  int       savingMode() { return _savingMode; }
+
+  QColor    backgroundColor() { return _backgroundColor; }
+  QColor    shading1Color() { return _shading1Color; }
+  QColor    shading2Color() { return _shading2Color; }
+  QString   getFilenameString();
+  void      addFileToList(SoundFile *s);
+  void      removeFileFromList(SoundFile *s);
+  void      clearFreqLookup();
+  void      clearAmplitudeLookup();
+  void      recalcScoreThresholds();
+  int       getActiveIntThreshold();
+  double    dBFloor() { return _dBFloor; }
+  void      setDBFloor(double dBFloor_) { _dBFloor = dBFloor_; }
+  double&   rmsFloor() { return amp_thresholds[AMPLITUDE_RMS][0]; } //in dB
+  double&   rmsCeiling() { return amp_thresholds[AMPLITUDE_RMS][1]; } //in dB
+
+  int       musicKey()     { return gMusicKey; }
+  int       musicKeyType() { return _musicKeyType; }
+  int       temperedType() { return _temperedType; }
 
 signals:
-  void activeChannelChanged(Channel *active);
-  void activeIntThresholdChanged(int thresholdPercentage);
-  void leftTimeChanged(double x);
-  void rightTimeChanged(double x);
-  void timeRangeChanged(double leftTime_, double rightTime_);
-  void channelsChanged();
+  void      activeChannelChanged(Channel *active);
+  void      activeIntThresholdChanged(int thresholdPercentage);
+  void      leftTimeChanged(double x);
+  void      rightTimeChanged(double x);
+  void      timeRangeChanged(double leftTime_, double rightTime_);
+  void      channelsChanged();
+  void      onChunkUpdate();
+
+  void      musicKeyChanged(int key);
+  void      musicKeyTypeChanged(int type);
+  void      temperedTypeChanged(int type);
 
 public slots:
-  //void setBuffers(int freq, int channels);
-  //void setFrameWindowSize(int index);
-  //void setWinFunc(int index);
-  //void setPitchMethod(int channel, int index) { pitch_method[channel] = index; }
-  void setInterpolatingType(int type) { interpolating_type = type; }
-  void setBisectionSteps(int num_steps) { bisection_steps = num_steps; }
-  void setFastRepeats(int num_repeats) { fast_correlation_repeats = num_repeats; }
-  void setAmplitudeMode(int amplitudeMode);
-  void setPitchContourMode(int pitchContourMode);
-  //void setStepSize(int index);
-  void pauseSound();
-  //void openMicrophone();
-  bool openRecord(SoundFile *s);
-  bool playSound(SoundFile *s);
-  //void jump_forward(int frames);
-  void updateViewLeftRightTimes();
-  void updateActiveChunkTime(double t);
-  void updateQuickRefSettings();
-  
-  void beginning();
-  void rewind();
-  bool play();
-  void stop();
-  void end();
-  void fastforward();
+  //void    setBuffers(int freq, int channels);
+  //void    setFrameWindowSize(int index);
+  //void    setWinFunc(int index);
+  //void    setPitchMethod(int channel, int index) { pitch_method[channel] = index; }
+  void      setInterpolatingType(int type) { interpolating_type = type; }
+  void      setBisectionSteps(int num_steps) { bisection_steps = num_steps; }
+  void      setFastRepeats(int num_repeats) { fast_correlation_repeats = num_repeats; }
+  void      setAmplitudeMode(int amplitudeMode);
+  void      setPitchContourMode(int pitchContourMode);
 
-  bool closeAllFiles();
-  void saveActiveFile();
-  void closeActiveFile();
-  QString saveFileAsk(QString oldFilename);
-  int saveFile(SoundFile *s, QString newFilename);
-  int closeFile(SoundFile *s, bool ask=true);
-  void resetActiveIntThreshold(int thresholdPercentage);
+  void      setMusicKey(int key)      { if(gMusicKey != key) { gMusicKey = key; emit musicKeyChanged(key); } }
+  void      setMusicKeyType(int type) { if(_musicKeyType != type) { _musicKeyType = type; emit musicKeyTypeChanged(type); } }
+  void      setTemperedType(int type);
+
+  //void    setStepSize(int index);
+  void      pauseSound();
+  //void    openMicrophone();
+  bool      openPlayRecord(SoundFile *sRec, SoundFile *sPlay);
+  bool      playSound(SoundFile *s);
+  //void    jump_forward(int frames);
+  void      updateViewLeftRightTimes();
+  void      updateActiveChunkTime(double t);
+  void      updateQuickRefSettings();
+  
+  void      beginning();
+  void      rewind();
+  bool      play();
+  void      stop();
+  void      end();
+  void      fastforward();
+
+  bool      closeAllFiles();
+  void      saveActiveFile();
+  void      closeActiveFile();
+  QString   saveFileAsk(QString oldFilename);
+  int       saveFile(SoundFile *s, QString newFilename);
+  int       closeFile(SoundFile *s, int theSavingMode/*, bool ask=true*/);
+  void      resetActiveIntThreshold(int thresholdPercentage);
+
+  void      doChunkUpdate();
 };
 
 extern GData *gdata;

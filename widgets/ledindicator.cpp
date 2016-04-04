@@ -16,6 +16,8 @@
 #include "ledindicator.h"
 
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <QPaintEvent>
 
 LEDIndicator::LEDIndicator(QPixmap *buffer, QWidget *parent, const char *name, const QColor &on, const QColor &off)
 : QWidget(parent, name)
@@ -27,7 +29,7 @@ LEDIndicator::LEDIndicator(QPixmap *buffer, QWidget *parent, const char *name, c
   active = false;
 
   // Stop QT from erasing the background all the time
-  setBackgroundMode(NoBackground);
+  setBackgroundMode(Qt::NoBackground);
   this->buffer = buffer;
 }
 

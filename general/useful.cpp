@@ -19,46 +19,7 @@
 #include "useful.h"
 #include <stdio.h>
 #include <errno.h>
-
-//char *noteNames[12] = { "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"};
-char *noteNames[12] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
-
-char* noteName(int note)
-{
-  return noteNames[cycle(note, 12)];
-}
-
-/**
-@param note The midi note number
-@return The note octave. Middle C (midi note 60) is defined as octave 4. Making midi note 0 in octave -1
-*/
-int noteOctave(int note)
-{
-  return (note / 12) - 1;
-}
-
-/**
-@param note The midi note number
-@return The midi note within one octave. Range = 0 to 11. Where 0=C, 1=C# ... 11 = B.
-*/
-int noteValue(int note)
-{
-  return cycle(note, 12);
-}
-
-bool isBlackNote(int note)
-{
-  switch(cycle(note, 12)) {
-  case 1:
-  case 3:
-  case 6:
-  case 8:
-  case 10:
-    return true;
-  default:
-    return false;
-  }
-}
+#include "myassert.h"
 
 //return a pointer to a 2d array with each element of size size
 void **malloc2d(const int row, const int col, const int size)
@@ -292,3 +253,35 @@ bool moveFile(const char *src, const char *dest)
   return false;
 }
 
+/** Returns the power of 2 greater or equal to x
+  */
+int nextPowerOf2(int x)
+{
+  myassert(x > 1<<31);
+  int y = 1;
+  while(y < x) y <<= 1;
+  return y;
+}
+
+/*
+void binary_search_closest_test()
+{
+  std::cout << "binary_search_closest_test" << std::endl;
+  float value = 1.0;
+  float a[] = { 1.0, 2.0, 3.0, 4.0 };
+  float *aLast = a+4;
+  print_elements(a, aLast);
+  std::pair<float*, float*> range = std::equal_range(a, aLast, value);
+  std::cout << *range.first << " " << *range.second << std::endl;
+  std::cout << *binary_search_closest(a, aLast, -0.5) << std::endl;
+  std::cout << *binary_search_closest(a, aLast, 1.0) << std::endl;
+  std::cout << *binary_search_closest(a, aLast, 1.51) << std::endl;
+  std::cout << *binary_search_closest(a, aLast, 2.0) << std::endl;
+  std::cout << *binary_search_closest(a, aLast, 2.4) << std::endl;
+  std::cout << *binary_search_closest(a, aLast, 3.0) << std::endl;
+  std::cout << *binary_search_closest(a, aLast, 3.6) << std::endl;
+  std::cout << *binary_search_closest(a, aLast, 4.0) << std::endl;
+  std::cout << *binary_search_closest(a, aLast, 4.6) << std::endl;
+  std::cout << *binary_search_closest(a, aLast, 5.0) << std::endl;
+}
+*/

@@ -16,6 +16,8 @@
 #define FFTVIEW_H
 
 #include "viewwidget.h"
+//Added by qt3to4:
+#include <QResizeEvent>
 
 class FFTWidget;
 
@@ -23,7 +25,7 @@ class FFTView : public ViewWidget {
   Q_OBJECT
 
   public:
-    FFTView(int viewID_, QWidget *parent = 0, const char *name = NULL);
+    FFTView(int viewID_, QWidget *parent = 0);
     virtual ~FFTView();
 
     void resizeEvent(QResizeEvent *);

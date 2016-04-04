@@ -16,6 +16,8 @@
 #define CORRELATIONVIEW_H
 
 #include "viewwidget.h"
+//Added by qt3to4:
+#include <QResizeEvent>
 
 class CorrelationWidget;
 
@@ -23,10 +25,10 @@ class CorrelationView : public ViewWidget {
   Q_OBJECT
 
   public:
-    CorrelationView(int viewID_, QWidget *parent = 0, const char *name = NULL);
+    CorrelationView(int viewID_, QWidget *parent = 0);
     virtual ~CorrelationView();
 
-    void resizeEvent(QResizeEvent *);
+    //void resizeEvent(QResizeEvent *);
 
     QSize sizeHint() const { return QSize(400, 128); }
 

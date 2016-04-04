@@ -20,6 +20,8 @@
 
 #include <math.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QPaintEvent>
 
 TimeAxis::TimeAxis(QWidget *parent, bool numbersOnTop_)
   : DrawWidget(parent)
@@ -80,7 +82,7 @@ void TimeAxis::paintEvent(QPaintEvent *)
   else { largeFreq = 2; timeScaleBase /= 2; }
     
   // Draw Ruler Numbers
-  p.setBrush(black);
+  p.setBrush(Qt::black);
   //p.setFont(QFont("AnyStyle", h / 2 - 7));
   p.setFont(_font);
   double timePos = floor(leftTime() / (timeScaleBase*largeFreq)) * (timeScaleBase*largeFreq); //calc the first one just off the left of the screen
@@ -134,22 +136,26 @@ void TimeAxis::paintEvent(QPaintEvent *)
       QString numString = mins + ":" + seconds;
       x = toInt((timePos-leftTime()) / (timeWidth() / double(w)));
       p.drawText(x - (p.fontMetrics().width(numString) / 2), textBottom, numString);
-      p.moveTo(x, bigLineTop);
-      p.lineTo(x, bigLineBottom);
+      //p.moveTo(x, bigLineTop);
+      //p.lineTo(x, bigLineBottom);
+      p.drawLine(x, bigLineTop, x, bigLineBottom);
     } else {
       //draw the smaller lines
       x = toInt((timePos-leftTime()) / (timeWidth() / double(w)));
-      p.moveTo(x, smallLineTop);
-      p.lineTo(x, smallLineBottom);
+      //p.moveTo(x, smallLineTop);
+      //p.lineTo(x, smallLineBottom);
+      p.drawLine(x, smallLineTop, x, smallLineBottom);
     }
   }
   //draw the horizontal line
   if(_numbersOnTop) {
-    p.moveTo(0, h-1);
-    p.lineTo(w, h-1);
+    //p.moveTo(0, h-1);
+    //p.lineTo(w, h-1);
+    p.drawLine(0, h-1, w, h-1);
   } else {
-    p.moveTo(0, 0);
-    p.lineTo(w, 0);
+    //p.moveTo(0, 0);
+    //p.lineTo(w, 0);
+    p.drawLine(0, 0, w, 0);
   }
   endDrawing();
 }

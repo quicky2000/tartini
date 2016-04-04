@@ -16,6 +16,8 @@
 #define SUMMARYVIEW_H
 
 #include "viewwidget.h"
+//Added by qt3to4:
+#include <QResizeEvent>
 //#include "summarydrawwidget.h"
 class SummaryDrawWidget;
 
@@ -23,7 +25,7 @@ class SummaryView : public ViewWidget {
   Q_OBJECT
 
   public:
-    SummaryView(int viewID_, QWidget *parent = 0, const char *name = 0);
+    SummaryView(int viewID_, QWidget *parent = 0);
     virtual ~SummaryView();
 
     void resizeEvent(QResizeEvent *);

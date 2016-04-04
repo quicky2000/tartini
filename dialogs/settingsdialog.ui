@@ -1,1321 +1,1519 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>SettingsDialog</class>
-<widget class="QDialog">
-    <property name="name">
-        <cstring>SettingsDialog</cstring>
-    </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>641</width>
-            <height>403</height>
-        </rect>
-    </property>
-    <property name="caption">
-        <string>Settings</string>
-    </property>
-    <property name="sizeGripEnabled">
-        <bool>true</bool>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QLayoutWidget" row="1" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>Layout1</cstring>
+<ui version="4.0" >
+ <author>Philip McLeod</author>
+ <class>SettingsDialog</class>
+ <widget class="QDialog" name="SettingsDialog" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>570</width>
+    <height>501</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Tartini Preferences</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
+    <widget class="QTabWidget" name="tabWidget" >
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab" >
+      <attribute name="title" >
+       <string>General</string>
+      </attribute>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QGroupBox" name="quickAnalysisOptionsGroupBox" >
+         <property name="title" >
+          <string>Quick Analysis Options - Note Range</string>
+         </property>
+         <layout class="QVBoxLayout" >
+          <property name="margin" >
+           <number>9</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QComboBox" name="noteRangeChoice" >
+            <item>
+             <property name="text" >
+              <string>Custom - Choose settings from the Analysis tab</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Notes F0 and higher - Double Bass, Bass Guitar ...</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Notes F1 and higher - Cello, Guitar, Bass Clarinet, General sounds ...</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Notes F2 and higher - Violin, Viola, Clarinet, Oboe, Saxophone ...</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Notes F3 and higher - Flute, Piccolo ...</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="commentTextLabel" >
+            <property name="text" >
+             <string>Allowing lower notes results in less timing precision.</string>
             </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>buttonHelp</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Help</string>
-                    </property>
-                    <property name="accel">
-                        <string>F1</string>
-                    </property>
-                    <property name="autoDefault">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <spacer>
-                    <property name="name">
-                        <cstring>Horizontal Spacing2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>409</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>buttonOk</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;OK</string>
-                    </property>
-                    <property name="accel">
-                        <string></string>
-                    </property>
-                    <property name="autoDefault">
-                        <bool>true</bool>
-                    </property>
-                    <property name="default">
-                        <bool>true</bool>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Saves your settings and closes the dialog.</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Saves your settings and closes the dialog.</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>buttonCancel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Cancel</string>
-                    </property>
-                    <property name="accel">
-                        <string></string>
-                    </property>
-                    <property name="autoDefault">
-                        <bool>true</bool>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Disregards your settings and closes the dialog.</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Disregards your settings and closes the dialog.</string>
-                    </property>
-                </widget>
-            </hbox>
+           </widget>
+          </item>
+         </layout>
         </widget>
-        <widget class="QListBox" row="0" column="0">
+       </item>
+       <item>
+        <widget class="QGroupBox" name="tempFilesGroupBox" >
+         <property name="title" >
+          <string>Temporary Files</string>
+         </property>
+         <layout class="QVBoxLayout" >
+          <property name="margin" >
+           <number>9</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
             <item>
-                <property name="text">
-                    <string>General</string>
-                </property>
+             <widget class="QLabel" name="tempFilesFolderLabel" >
+              <property name="toolTip" >
+               <string>Temporary files used by the program are stored here. This should preferably be on a fast disk (i.e. local)</string>
+              </property>
+              <property name="text" >
+               <string>&amp;Temp Folder:</string>
+              </property>
+              <property name="buddy" >
+               <cstring>tempFilesFolder</cstring>
+              </property>
+             </widget>
             </item>
             <item>
-                <property name="text">
-                    <string>Sound</string>
-                </property>
+             <widget class="QLineEdit" name="tempFilesFolder" >
+              <property name="toolTip" >
+               <string>&lt;qt>Temporary files used by the program are stored here.&lt;br>This should preferably be on a fast disk (i.e. local)&lt;/qt></string>
+              </property>
+              <property name="whatsThis" >
+               <string/>
+              </property>
+              <property name="text" >
+               <string/>
+              </property>
+             </widget>
             </item>
             <item>
-                <property name="text">
-                    <string>Analysis</string>
-                </property>
+             <widget class="QPushButton" name="chooseTempFolderButton" >
+              <property name="sizePolicy" >
+               <sizepolicy>
+                <hsizetype>0</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize" >
+               <size>
+                <width>40</width>
+                <height>31</height>
+               </size>
+              </property>
+              <property name="toolTip" >
+               <string>Browse for a temporary folder</string>
+              </property>
+              <property name="whatsThis" >
+               <string>Browse for a temporary folder</string>
+              </property>
+              <property name="text" >
+               <string>...</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="fileGeneratingStringLabel" >
+              <property name="text" >
+               <string>Filename &amp;generating string:</string>
+              </property>
+              <property name="buddy" >
+               <cstring>filenameGeneratingString</cstring>
+              </property>
+             </widget>
             </item>
             <item>
-                <property name="text">
-                    <string>Colors</string>
-                </property>
+             <widget class="QLineEdit" name="filenameGeneratingString" >
+              <property name="text" >
+               <string>sound</string>
+              </property>
+             </widget>
             </item>
-            <property name="name">
-                <cstring>listBox</cstring>
+            <item>
+             <widget class="QSpinBox" name="fileGeneratingNumber" >
+              <property name="maximum" >
+               <number>99999</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer>
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType" >
+               <enum>QSizePolicy::Expanding</enum>
+              </property>
+              <property name="sizeHint" >
+               <size>
+                <width>71</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
             </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>0</hsizetype>
-                    <vsizetype>7</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
+            <property name="spacing" >
+             <number>6</number>
             </property>
-            <property name="currentItem">
-                <number>0</number>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>&lt;qt&gt;&lt;b&gt;Categories&lt;/b&gt;&lt;br&gt;Select an item from this list to display preferences you can change on the right.&lt;/qt&gt;</string>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string></string>
-            </property>
+            <item>
+             <widget class="QLabel" name="fileGeneratingNumberLabel" >
+              <property name="text" >
+               <string>Minimum &amp;Digits:</string>
+              </property>
+              <property name="buddy" >
+               <cstring>numberOfChannels</cstring>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="fileNumberOfDigits" >
+              <property name="maximum" >
+               <number>5</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="filenameExample" >
+              <property name="sizePolicy" >
+               <sizepolicy>
+                <hsizetype>4</hsizetype>
+                <vsizetype>5</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text" >
+               <string>sound003.wav</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer>
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" >
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </widget>
-        <widget class="QWidgetStack" row="0" column="1">
-            <property name="name">
-                <cstring>stack</cstring>
+       </item>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2" >
+      <attribute name="title" >
+       <string>Sound</string>
+      </attribute>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QGroupBox" name="generalGroupBox" >
+         <property name="title" >
+          <string>General</string>
+         </property>
+         <layout class="QVBoxLayout" >
+          <property name="margin" >
+           <number>9</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
             </property>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>pageGeneral</cstring>
-                </property>
-                <attribute name="id">
-                    <number>0</number>
-                </attribute>
-                <grid>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QGroupBox" row="0" column="0">
-                        <property name="name">
-                            <cstring>tempFilesGroupBox</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Temporary Files</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLabel" row="0" column="0">
-                                <property name="name">
-                                    <cstring>tempFilesFolderLabel</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Temp Folder:</string>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>tempFilesFolder</cstring>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Temporary files used by the program are stored here. This should preferably be on a fast disk (i.e. local)</string>
-                                </property>
-                            </widget>
-                            <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="6">
-                                <property name="name">
-                                    <cstring>tempFilesFolder</cstring>
-                                </property>
-                                <property name="frameShape">
-                                    <enum>LineEditPanel</enum>
-                                </property>
-                                <property name="frameShadow">
-                                    <enum>Sunken</enum>
-                                </property>
-                                <property name="text">
-                                    <string></string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>&lt;qt&gt;Temporary files used by the program are stored here.&lt;br&gt;This should preferably be on a fast disk (i.e. local)&lt;/qt&gt;</string>
-                                </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string></string>
-                                </property>
-                            </widget>
-                            <widget class="QPushButton" row="0" column="7">
-                                <property name="name">
-                                    <cstring>chooseTempFolderButton</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>0</hsizetype>
-                                        <vsizetype>0</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>40</width>
-                                        <height>31</height>
-                                    </size>
-                                </property>
-                                <property name="text">
-                                    <string>...</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Browse for a temporary folder</string>
-                                </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string>Browse for a temporary folder</string>
-                                </property>
-                            </widget>
-                            <spacer row="1" column="6" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>spacer8_2</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>71</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <widget class="QLineEdit" row="1" column="3" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>filenameGeneratingString</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>sound</string>
-                                </property>
-                            </widget>
-                            <widget class="QSpinBox" row="1" column="5">
-                                <property name="name">
-                                    <cstring>fileGeneratingNumber</cstring>
-                                </property>
-                                <property name="maxValue">
-                                    <number>99999</number>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="1" column="0" rowspan="1" colspan="3">
-                                <property name="name">
-                                    <cstring>fileGeneratingStringLabel</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Filename &amp;generating string:</string>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>filenameGeneratingString</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>fileGeneratingNumberLabel</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Minimum &amp;Digits:</string>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>numberOfChannels</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QSpinBox" row="2" column="2" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>fileNumberOfDigits</cstring>
-                                </property>
-                                <property name="maxValue">
-                                    <number>5</number>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="2" column="4" rowspan="1" colspan="3">
-                                <property name="name">
-                                    <cstring>filenameExample</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>4</hsizetype>
-                                        <vsizetype>5</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="text">
-                                    <string>sound003.wav</string>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
-                    <widget class="QGroupBox" row="1" column="0">
-                        <property name="name">
-                            <cstring>screenRefreshGroup</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Screen refresh</string>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>fastUpdateLabel</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>10</x>
-                                    <y>20</y>
-                                    <width>140</width>
-                                    <height>21</height>
-                                </rect>
-                            </property>
-                            <property name="text">
-                                <string>Do fast updates every</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>milliSecondsLabel2</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>220</x>
-                                    <y>50</y>
-                                    <width>90</width>
-                                    <height>21</height>
-                                </rect>
-                            </property>
-                            <property name="text">
-                                <string>milli-seconds</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>slowUpdateLabel</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>10</x>
-                                    <y>50</y>
-                                    <width>140</width>
-                                    <height>21</height>
-                                </rect>
-                            </property>
-                            <property name="text">
-                                <string>Do slow updates every</string>
-                            </property>
-                        </widget>
-                        <widget class="QSpinBox">
-                            <property name="name">
-                                <cstring>slowUpdateSpeed</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>150</x>
-                                    <y>50</y>
-                                    <width>60</width>
-                                    <height>21</height>
-                                </rect>
-                            </property>
-                            <property name="maxValue">
-                                <number>99999</number>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>&lt;qt&gt;This is how often most widgets are updated. e.g. the pitch contour. A smaller value requires more CPU time. 100 is reasonable for a 1GHz machine.&lt;/qt&gt;</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>milliSecondsLabel1</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>220</x>
-                                    <y>20</y>
-                                    <width>90</width>
-                                    <height>21</height>
-                                </rect>
-                            </property>
-                            <property name="text">
-                                <string>milli-seconds</string>
-                            </property>
-                        </widget>
-                        <widget class="QSpinBox">
-                            <property name="name">
-                                <cstring>fastUpdateSpeed</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>150</x>
-                                    <y>20</y>
-                                    <width>60</width>
-                                    <height>21</height>
-                                </rect>
-                            </property>
-                            <property name="maxValue">
-                                <number>99999</number>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>&lt;qt&gt;This is how often the smoothest widgets are updated. e.g. the tuner dial. A smaller value requires more CPU time. 50 is reasonable for a 1GHz machine.&lt;/qt&gt;</string>
-                            </property>
-                        </widget>
-                    </widget>
-                    <widget class="QGroupBox" row="2" column="0">
-                        <property name="name">
-                            <cstring>quickAnalysisOptionsGroupBox</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Quick Analysis Options - Note Range</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLabel" row="1" column="0">
-                                <property name="name">
-                                    <cstring>commentTextLabel</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Allowing lower notes results in less timing precesion.</string>
-                                </property>
-                            </widget>
-                            <widget class="QComboBox" row="0" column="0">
-                                <item>
-                                    <property name="text">
-                                        <string>Custom - Choose settings from the Analysis tab</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>Notes F0 and higher - Double Bass, Bass Guitar ...</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>Notes F1 and higher - Cello, Guitar, Bass Clarinet, General sounds ...</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>Notes F2 and higher - Violin, Viola, Clarinet, Oboe, Saxophone ...</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>Notes F3 and higher - Flute, Piccolo ...</string>
-                                    </property>
-                                </item>
-                                <property name="name">
-                                    <cstring>noteRangeChoice</cstring>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
-                </grid>
-            </widget>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>pageSound</cstring>
-                </property>
-                <attribute name="id">
-                    <number>1</number>
-                </attribute>
-                <grid>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QLayoutWidget" row="1" column="0">
-                        <property name="name">
-                            <cstring>layout4</cstring>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLabel">
-                                <property name="name">
-                                    <cstring>textLabel2</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Sound &amp;Output Source:</string>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>soundOutput</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QComboBox">
-                                <property name="name">
-                                    <cstring>soundOutput</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>5</hsizetype>
-                                        <vsizetype>0</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>&lt;qt&gt;Select from this list to choose which device should be used to play sound.&lt;/qt&gt;</string>
-                                </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string></string>
-                                </property>
-                            </widget>
-                        </hbox>
-                    </widget>
-                    <widget class="QLayoutWidget" row="0" column="0">
-                        <property name="name">
-                            <cstring>layout3</cstring>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLabel">
-                                <property name="name">
-                                    <cstring>textLabel1</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Sound &amp;Input Source:</string>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>soundInput</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QComboBox">
-                                <property name="name">
-                                    <cstring>soundInput</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>5</hsizetype>
-                                        <vsizetype>0</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>&lt;qt&gt;Select from this list to choose which device should be used to record sound.&lt;/qt&gt;</string>
-                                </property>
-                                <property name="whatsThis" stdset="0">
-                                    <string></string>
-                                </property>
-                            </widget>
-                        </hbox>
-                    </widget>
-                    <widget class="QGroupBox" row="2" column="0">
-                        <property name="name">
-                            <cstring>recordingGroupBox</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Recording</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLabel" row="0" column="0">
-                                <property name="name">
-                                    <cstring>channelsLabel</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Channels:</string>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>numberOfChannels</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QComboBox" row="0" column="1">
-                                <item>
-                                    <property name="text">
-                                        <string>Mono</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>Stereo</string>
-                                    </property>
-                                </item>
-                                <property name="name">
-                                    <cstring>numberOfChannels</cstring>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>&lt;qt&gt;Analysis is done for each individual channel, so Mono is the default.&lt;/qt&gt;</string>
-                                </property>
-                            </widget>
-                            <spacer row="0" column="2">
-                                <property name="name">
-                                    <cstring>spacer4_2</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>16</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <widget class="QLabel" row="0" column="3">
-                                <property name="name">
-                                    <cstring>sampleRateLabel</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Sample Rate:</string>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>sampleRate</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QComboBox" row="0" column="4">
-                                <item>
-                                    <property name="text">
-                                        <string>8000</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>11025</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>22050</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>44100</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>48000</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>96000</string>
-                                    </property>
-                                </item>
-                                <property name="name">
-                                    <cstring>sampleRate</cstring>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>&lt;qt&gt;44100 Hz is a good default rate that most soundcards will support. This is the sample rate used on CD's. The higher the rate the more processing time needed.&lt;/qt&gt;</string>
-                                </property>
-                            </widget>
-                            <spacer row="0" column="5">
-                                <property name="name">
-                                    <cstring>spacer5_2</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>16</width>
-                                        <height>21</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <widget class="QLabel" row="0" column="6">
-                                <property name="name">
-                                    <cstring>bitsPerSampleLabel</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Bits Per Sample:</string>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>bitsPerSample</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QComboBox" row="0" column="7">
-                                <item>
-                                    <property name="text">
-                                        <string>8</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>16</string>
-                                    </property>
-                                </item>
-                                <property name="name">
-                                    <cstring>bitsPerSample</cstring>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>&lt;qt&gt;A higher number of bits is preferable&lt;/qt&gt;</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="5">
-                                <property name="name">
-                                    <cstring>muteOutput</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Mute output when recording</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>&lt;qt&gt;Usually muting is used when you have speakers to reduce feedback&lt;/qt&gt;</string>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
-                </grid>
-            </widget>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>WStackPage</cstring>
-                </property>
-                <attribute name="id">
-                    <number>2</number>
-                </attribute>
-                <grid>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="4">
-                        <property name="name">
-                            <cstring>doingFreqAnalysis</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Do frequency analysis</string>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>&lt;qt&gt;Unchecking this will turn off all analysis. This still allows recording, and is useful on really slow machines, where the file can be opened again afterwards with analysis in non real-time.&lt;/qt&gt;</string>
-                        </property>
-                    </widget>
-                    <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="4">
-                        <property name="name">
-                            <cstring>doingHarmonicAnalysis</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Do harmonic analysis</string>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>&lt;qt&gt;Unchecking this will reduce some processor time, but the widgets that use harmonic infomation will not work.&lt;/qt&gt;</string>
-                        </property>
-                    </widget>
-                    <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="4">
-                        <property name="name">
-                            <cstring>doingEqualLoudness</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Use human-ear-filter for equal-loudness</string>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>&lt;qt&gt;Apply a 2nd order highpass butterworth filter to reduce low frequencies filtered by the middle-outer ear&lt;/qt&gt;</string>
-                        </property>
-                    </widget>
-                    <widget class="QComboBox" row="3" column="1" rowspan="1" colspan="2">
-                        <item>
-                            <property name="text">
-                                <string>MPM</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>Autocorrelation</string>
-                            </property>
-                        </item>
-                        <property name="name">
-                            <cstring>analysisType</cstring>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>&lt;qt&gt;Choose algorithm type. McLeod Pitch Method (MPM) recomended.&lt;/qt&gt;</string>
-                        </property>
-                    </widget>
-                    <spacer row="3" column="3">
-                        <property name="name">
-                            <cstring>spacer8</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>271</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QGroupBox" row="6" column="0" rowspan="1" colspan="4">
-                        <property name="name">
-                            <cstring>stepSizeGroupBox</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Step Size</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QComboBox" row="0" column="2">
-                                <item>
-                                    <property name="text">
-                                        <string>milli-seconds</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>samples</string>
-                                    </property>
-                                </item>
-                                <property name="name">
-                                    <cstring>stepSizeUnit</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="4">
-                                <property name="name">
-                                    <cstring>stepSizeRound</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Round to the nearest whole fraction of the buffer window</string>
-                                </property>
-                                <property name="checked">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>&lt;qt&gt;This enables efficient buffer manipulation. Prefered.&lt;/qt&gt;</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="0" column="0">
-                                <property name="name">
-                                    <cstring>stepSizeTextLabel</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Use &amp;step size of</string>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>stepSizeValue</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QSpinBox" row="0" column="1">
-                                <property name="name">
-                                    <cstring>stepSizeValue</cstring>
-                                </property>
-                                <property name="prefix">
-                                    <string></string>
-                                </property>
-                                <property name="maxValue">
-                                    <number>99999</number>
-                                </property>
-                                <property name="minValue">
-                                    <number>1</number>
-                                </property>
-                                <property name="value">
-                                    <number>12</number>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>&lt;qt&gt;This is how often the analysis is performed. About a half or a quarter of the buffer size is prefered.&lt;/qt&gt;</string>
-                                </property>
-                            </widget>
-                            <spacer row="0" column="3">
-                                <property name="name">
-                                    <cstring>spacer7</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>210</width>
-                                        <height>21</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                        </grid>
-                    </widget>
-                    <widget class="QGroupBox" row="5" column="0" rowspan="1" colspan="4">
-                        <property name="name">
-                            <cstring>bufferSizeGroupBox</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Buffer Size</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="4">
-                                <property name="name">
-                                    <cstring>bufferSizeRound</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Round sample size to nearest power of 2 (for speed)</string>
-                                </property>
-                                <property name="checked">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>&lt;qt&gt;This enables efficient use of the Fast Fourier Transform (FFT). Prefered.&lt;/qt&gt;</string>
-                                </property>
-                            </widget>
-                            <widget class="QComboBox" row="0" column="2">
-                                <item>
-                                    <property name="text">
-                                        <string>milli-seconds</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>samples</string>
-                                    </property>
-                                </item>
-                                <property name="name">
-                                    <cstring>bufferSizeUnit</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="0" column="0">
-                                <property name="name">
-                                    <cstring>bufferSizeTextLabel</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Use &amp;buffer size of</string>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>bufferSizeValue</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QSpinBox" row="0" column="1">
-                                <property name="name">
-                                    <cstring>bufferSizeValue</cstring>
-                                </property>
-                                <property name="maxValue">
-                                    <number>99999</number>
-                                </property>
-                                <property name="minValue">
-                                    <number>1</number>
-                                </property>
-                                <property name="value">
-                                    <number>50</number>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>&lt;qt&gt;This is the buffer size used in analysis. This determines the range of pitch that can be found&lt;/qt&gt;</string>
-                                </property>
-                            </widget>
-                            <spacer row="0" column="3">
-                                <property name="name">
-                                    <cstring>spacer6</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>180</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                        </grid>
-                    </widget>
-                    <spacer row="4" column="2" rowspan="1" colspan="2">
-                        <property name="name">
-                            <cstring>spacer18</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>330</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QLabel" row="3" column="0">
-                        <property name="name">
-                            <cstring>analysisTypeLabel</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Analysis type:</string>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="4" column="0">
-                        <property name="name">
-                            <cstring>thresholdTextLabel</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Default threshold (%):</string>
-                        </property>
-                    </widget>
-                    <widget class="QSpinBox" row="4" column="1">
-                        <property name="name">
-                            <cstring>thresholdValue</cstring>
-                        </property>
-                        <property name="maxValue">
-                            <number>100</number>
-                        </property>
-                        <property name="minValue">
-                            <number>80</number>
-                        </property>
-                        <property name="lineStep">
-                            <number>1</number>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>&lt;qt&gt;The defaul threshold for a new channel. This threshold is used in MPM to help determine the correct octave for a note's pitch. This threshold can be changed on screen per channel.&lt;/qt&gt;</string>
-                        </property>
-                    </widget>
-                </grid>
-            </widget>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>WStackPage</cstring>
-                </property>
-                <attribute name="id">
-                    <number>3</number>
-                </attribute>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>backgroundButton</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>20</x>
-                            <y>20</y>
-                            <width>151</width>
-                            <height>31</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Background</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+B</string>
-                    </property>
-                </widget>
-                <widget class="QFrame">
-                    <property name="name">
-                        <cstring>shading2Color</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>200</x>
-                            <y>100</y>
-                            <width>110</width>
-                            <height>30</height>
-                        </rect>
-                    </property>
-                    <property name="frameShape">
-                        <enum>StyledPanel</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Sunken</enum>
-                    </property>
-                    <property name="lineWidth">
-                        <number>1</number>
-                    </property>
-                </widget>
-                <widget class="QFrame">
-                    <property name="name">
-                        <cstring>shading1Color</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>200</x>
-                            <y>60</y>
-                            <width>110</width>
-                            <height>30</height>
-                        </rect>
-                    </property>
-                    <property name="frameShape">
-                        <enum>StyledPanel</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Sunken</enum>
-                    </property>
-                    <property name="lineWidth">
-                        <number>1</number>
-                    </property>
-                </widget>
-                <widget class="QFrame">
-                    <property name="name">
-                        <cstring>backgroundColor</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>200</x>
-                            <y>20</y>
-                            <width>110</width>
-                            <height>30</height>
-                        </rect>
-                    </property>
-                    <property name="frameShape">
-                        <enum>StyledPanel</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Sunken</enum>
-                    </property>
-                    <property name="lineWidth">
-                        <number>1</number>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>shading1Button</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>20</x>
-                            <y>60</y>
-                            <width>151</width>
-                            <height>31</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>Shading&amp;1</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+1</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>shading2Button</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>20</x>
-                            <y>100</y>
-                            <width>151</width>
-                            <height>31</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>Shading&amp;2</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+2</string>
-                    </property>
-                </widget>
-            </widget>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="textLabel1" >
+              <property name="text" >
+               <string>Sound &amp;Input Source:</string>
+              </property>
+              <property name="buddy" >
+               <cstring>soundInput</cstring>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="soundInput" >
+              <property name="sizePolicy" >
+               <sizepolicy>
+                <hsizetype>5</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="toolTip" >
+               <string>&lt;qt>Select from this list to choose which device should be used to record sound.&lt;/qt></string>
+              </property>
+              <property name="whatsThis" >
+               <string/>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="textLabel2" >
+              <property name="text" >
+               <string>Sound &amp;Output Source:</string>
+              </property>
+              <property name="buddy" >
+               <cstring>soundOutput</cstring>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="soundOutput" >
+              <property name="sizePolicy" >
+               <sizepolicy>
+                <hsizetype>5</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="toolTip" >
+               <string>&lt;qt>Select from this list to choose which device should be used to play sound.&lt;/qt></string>
+              </property>
+              <property name="whatsThis" >
+               <string/>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="numBuffersLabel" >
+              <property name="text" >
+               <string>Number of Buffers:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="numberOfBuffers" >
+              <property name="minimumSize" >
+               <size>
+                <width>0</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="maximum" >
+               <number>63</number>
+              </property>
+              <property name="minimum" >
+               <number>1</number>
+              </property>
+              <property name="value" >
+               <number>4</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer>
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" >
+               <size>
+                <width>181</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </widget>
-    </grid>
-</widget>
-<connections>
-    <connection>
-        <sender>buttonOk</sender>
-        <signal>clicked()</signal>
-        <receiver>SettingsDialog</receiver>
-        <slot>saveSettings()</slot>
-    </connection>
-    <connection>
-        <sender>buttonCancel</sender>
-        <signal>clicked()</signal>
-        <receiver>SettingsDialog</receiver>
-        <slot>reject()</slot>
-    </connection>
-    <connection>
-        <sender>listBox</sender>
-        <signal>highlighted(int)</signal>
-        <receiver>stack</receiver>
-        <slot>raiseWidget(int)</slot>
-    </connection>
-    <connection>
-        <sender>backgroundButton</sender>
-        <signal>clicked()</signal>
-        <receiver>SettingsDialog</receiver>
-        <slot>getBackgroundColor()</slot>
-    </connection>
-    <connection>
-        <sender>shading1Button</sender>
-        <signal>clicked()</signal>
-        <receiver>SettingsDialog</receiver>
-        <slot>getShading1Color()</slot>
-    </connection>
-    <connection>
-        <sender>shading2Button</sender>
-        <signal>clicked()</signal>
-        <receiver>SettingsDialog</receiver>
-        <slot>getShading2Color()</slot>
-    </connection>
-    <connection>
-        <sender>fileNumberOfDigits</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>SettingsDialog</receiver>
-        <slot>fileNameChanged()</slot>
-    </connection>
-    <connection>
-        <sender>fileGeneratingNumber</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>SettingsDialog</receiver>
-        <slot>fileNameChanged()</slot>
-    </connection>
-    <connection>
-        <sender>filenameGeneratingString</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>SettingsDialog</receiver>
-        <slot>fileNameChanged()</slot>
-    </connection>
-    <connection>
-        <sender>chooseTempFolderButton</sender>
-        <signal>clicked()</signal>
-        <receiver>SettingsDialog</receiver>
-        <slot>changeTempFolder()</slot>
-    </connection>
-    <connection>
-        <sender>noteRangeChoice</sender>
-        <signal>activated(int)</signal>
-        <receiver>SettingsDialog</receiver>
-        <slot>onNoteRangeChoice(int)</slot>
-    </connection>
-</connections>
-<tabstops>
-    <tabstop>listBox</tabstop>
-    <tabstop>tempFilesFolder</tabstop>
-    <tabstop>chooseTempFolderButton</tabstop>
-    <tabstop>filenameGeneratingString</tabstop>
-    <tabstop>fileGeneratingNumber</tabstop>
-    <tabstop>fileNumberOfDigits</tabstop>
-    <tabstop>fastUpdateSpeed</tabstop>
-    <tabstop>slowUpdateSpeed</tabstop>
-    <tabstop>noteRangeChoice</tabstop>
-    <tabstop>soundInput</tabstop>
-    <tabstop>soundOutput</tabstop>
-    <tabstop>numberOfChannels</tabstop>
-    <tabstop>sampleRate</tabstop>
-    <tabstop>bitsPerSample</tabstop>
-    <tabstop>muteOutput</tabstop>
-    <tabstop>doingFreqAnalysis</tabstop>
-    <tabstop>doingHarmonicAnalysis</tabstop>
-    <tabstop>doingEqualLoudness</tabstop>
-    <tabstop>analysisType</tabstop>
-    <tabstop>thresholdValue</tabstop>
-    <tabstop>bufferSizeValue</tabstop>
-    <tabstop>bufferSizeUnit</tabstop>
-    <tabstop>bufferSizeRound</tabstop>
-    <tabstop>stepSizeValue</tabstop>
-    <tabstop>stepSizeUnit</tabstop>
-    <tabstop>stepSizeRound</tabstop>
-    <tabstop>backgroundButton</tabstop>
-    <tabstop>shading1Button</tabstop>
-    <tabstop>shading2Button</tabstop>
-    <tabstop>buttonHelp</tabstop>
-    <tabstop>buttonOk</tabstop>
-    <tabstop>buttonCancel</tabstop>
-</tabstops>
-<includes>
-    <include location="global" impldecl="in implementation">qfiledialog.h</include>
-    <include location="local" impldecl="in implementation">gdata.h</include>
-    <include location="local" impldecl="in implementation">settings.h</include>
-    <include location="local" impldecl="in implementation">audio_stream.h</include>
-    <include location="global" impldecl="in implementation">qobjectlist.h</include>
-    <include location="local" impldecl="in implementation">settingsdialog.ui.h</include>
-</includes>
-<forwards>
-    <forward>class Settings;</forward>
-</forwards>
-<slots>
-    <slot>loadSetting( QObject * obj, const QString &amp; group )</slot>
-    <slot>changeTempFolder()</slot>
-    <slot>fileNameChanged()</slot>
-    <slot>getBackgroundColor()</slot>
-    <slot>getShading1Color()</slot>
-    <slot>getShading2Color()</slot>
-    <slot>saveSetting( QObject * obj, const QString group )</slot>
-    <slot>saveSettings()</slot>
-    <slot>checkAnalysisEnabled()</slot>
-    <slot>onNoteRangeChoice( int choice )</slot>
-</slots>
-<functions>
-    <function access="private" specifier="non virtual">init()</function>
-    <function returnType="QString">getPath( const QString initialPath )</function>
-    <function specifier="static">setDefaults( Settings * settings )</function>
-</functions>
-<pixmapinproject/>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="recordingGroupBox" >
+         <property name="title" >
+          <string>Recording</string>
+         </property>
+         <layout class="QVBoxLayout" >
+          <property name="margin" >
+           <number>9</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="channelsLabel" >
+              <property name="text" >
+               <string>&amp;Channels:</string>
+              </property>
+              <property name="buddy" >
+               <cstring>numberOfChannels</cstring>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="numberOfChannels" >
+              <property name="toolTip" >
+               <string>&lt;qt>Analysis is done for each individual channel, so Mono is the default.&lt;/qt></string>
+              </property>
+              <item>
+               <property name="text" >
+                <string>Mono</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Stereo</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <spacer>
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType" >
+               <enum>QSizePolicy::Expanding</enum>
+              </property>
+              <property name="sizeHint" >
+               <size>
+                <width>16</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="sampleRateLabel" >
+              <property name="text" >
+               <string>Sample &amp;Rate:</string>
+              </property>
+              <property name="buddy" >
+               <cstring>sampleRate</cstring>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="sampleRate" >
+              <property name="toolTip" >
+               <string>&lt;qt>44100 Hz is a good default rate that most soundcards will support. This is the sample rate used on CD's. The higher the rate the more processing time needed.&lt;/qt></string>
+              </property>
+              <item>
+               <property name="text" >
+                <string>8000</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>11025</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>22050</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>44100</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>48000</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>96000</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <spacer>
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType" >
+               <enum>QSizePolicy::Expanding</enum>
+              </property>
+              <property name="sizeHint" >
+               <size>
+                <width>16</width>
+                <height>21</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="bitsPerSampleLabel" >
+              <property name="text" >
+               <string>&amp;Bits Per Sample:</string>
+              </property>
+              <property name="buddy" >
+               <cstring>bitsPerSample</cstring>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="bitsPerSample" >
+              <property name="toolTip" >
+               <string>&lt;qt>A higher number of bits is preferable&lt;/qt></string>
+              </property>
+              <item>
+               <property name="text" >
+                <string>8</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>16</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="muteOutput" >
+            <property name="toolTip" >
+             <string>&lt;qt>Usually muting is used when you have speakers to reduce feedback&lt;/qt></string>
+            </property>
+            <property name="text" >
+             <string>Mute output when recording</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>271</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_3" >
+      <attribute name="title" >
+       <string>Analysis</string>
+      </attribute>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QGroupBox" name="analysisGroupBox" >
+         <property name="title" >
+          <string>Analysis</string>
+         </property>
+         <layout class="QVBoxLayout" >
+          <property name="margin" >
+           <number>9</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <layout class="QGridLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item row="1" column="0" >
+             <widget class="QCheckBox" name="doingHarmonicAnalysis" >
+              <property name="toolTip" >
+               <string>&lt;qt>Unchecking this will reduce some processor time, but the widgets that use harmonic infomation will not work.&lt;/qt></string>
+              </property>
+              <property name="text" >
+               <string>Do harmonic analysis</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0" >
+             <widget class="QCheckBox" name="doingFreqAnalysis" >
+              <property name="toolTip" >
+               <string>&lt;qt>Unchecking this will turn off all analysis. This still allows recording, and is useful on really slow machines, where the file can be opened again afterwards with analysis in non real-time.&lt;/qt></string>
+              </property>
+              <property name="text" >
+               <string>Do frequency analysis</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1" >
+             <widget class="QCheckBox" name="doingAutoNoiseFloor" >
+              <property name="toolTip" >
+               <string>&lt;qt>Uses the lowest RMS value to estimate the noise-floor&lt;/qt></string>
+              </property>
+              <property name="text" >
+               <string>Automaticly calculate noise-floor</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1" >
+             <widget class="QCheckBox" name="doingDetailedPitch" >
+              <property name="cursor" >
+               <cursor>0</cursor>
+              </property>
+              <property name="text" >
+               <string>Do detailed pitch anaysis</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0" >
+             <widget class="QCheckBox" name="doingEqualLoudness" >
+              <property name="toolTip" >
+               <string>&lt;qt>Apply a 2nd order highpass butterworth filter to reduce low frequencies filtered by the middle-outer ear&lt;/qt></string>
+              </property>
+              <property name="text" >
+               <string>Use human-ear-filter for equal-loudness</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="analysisTypeLabel" >
+              <property name="text" >
+               <string>Analysis type:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="analysisType" >
+              <property name="toolTip" >
+               <string>&lt;qt>Choose algorithm type. McLeod Pitch Method (MPM) recomended.&lt;/qt></string>
+              </property>
+              <item>
+               <property name="text" >
+                <string>MPM</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Autocorrelation</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>MPM + Modified Cepstrum</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <spacer>
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType" >
+               <enum>QSizePolicy::Expanding</enum>
+              </property>
+              <property name="sizeHint" >
+               <size>
+                <width>271</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="thresholdTextLabel" >
+              <property name="text" >
+               <string>Default threshold (%):</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="thresholdValue" >
+              <property name="toolTip" >
+               <string>&lt;qt>The defaul threshold for a new channel. This threshold is used in MPM to help determine the correct octave for a note's pitch. This threshold can be changed on screen per channel.&lt;/qt></string>
+              </property>
+              <property name="maximum" >
+               <number>100</number>
+              </property>
+              <property name="minimum" >
+               <number>80</number>
+              </property>
+              <property name="singleStep" >
+               <number>1</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer>
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType" >
+               <enum>QSizePolicy::Expanding</enum>
+              </property>
+              <property name="sizeHint" >
+               <size>
+                <width>221</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="bufferSizeGroupBox" >
+         <property name="title" >
+          <string>Buffer Size</string>
+         </property>
+         <layout class="QVBoxLayout" >
+          <property name="margin" >
+           <number>9</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="bufferSizeTextLabel" >
+              <property name="text" >
+               <string>Use &amp;buffer size of</string>
+              </property>
+              <property name="buddy" >
+               <cstring>bufferSizeValue</cstring>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="bufferSizeValue" >
+              <property name="toolTip" >
+               <string>&lt;qt>This is the buffer size used in analysis. This determines the range of pitch that can be found&lt;/qt></string>
+              </property>
+              <property name="maximum" >
+               <number>99999</number>
+              </property>
+              <property name="minimum" >
+               <number>1</number>
+              </property>
+              <property name="value" >
+               <number>50</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="bufferSizeUnit" >
+              <item>
+               <property name="text" >
+                <string>milli-seconds</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>samples</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <spacer>
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType" >
+               <enum>QSizePolicy::Expanding</enum>
+              </property>
+              <property name="sizeHint" >
+               <size>
+                <width>180</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="bufferSizeRound" >
+            <property name="toolTip" >
+             <string>&lt;qt>This enables efficient use of the Fast Fourier Transform (FFT). Prefered.&lt;/qt></string>
+            </property>
+            <property name="text" >
+             <string>Round sample size to nearest power of 2 (for speed)</string>
+            </property>
+            <property name="checked" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>20</width>
+              <height>16</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="stepSizeGroupBox" >
+         <property name="title" >
+          <string>Step Size</string>
+         </property>
+         <layout class="QVBoxLayout" >
+          <property name="margin" >
+           <number>9</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="stepSizeTextLabel" >
+              <property name="text" >
+               <string>Use &amp;step size of</string>
+              </property>
+              <property name="buddy" >
+               <cstring>stepSizeValue</cstring>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="stepSizeValue" >
+              <property name="toolTip" >
+               <string>&lt;qt>This is how often the analysis is performed. About a half or a quarter of the buffer size is prefered.&lt;/qt></string>
+              </property>
+              <property name="prefix" >
+               <string/>
+              </property>
+              <property name="maximum" >
+               <number>99999</number>
+              </property>
+              <property name="minimum" >
+               <number>1</number>
+              </property>
+              <property name="value" >
+               <number>12</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="stepSizeUnit" >
+              <item>
+               <property name="text" >
+                <string>milli-seconds</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>samples</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <spacer>
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType" >
+               <enum>QSizePolicy::Expanding</enum>
+              </property>
+              <property name="sizeHint" >
+               <size>
+                <width>210</width>
+                <height>21</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="stepSizeRound" >
+            <property name="toolTip" >
+             <string>&lt;qt>This enables efficient buffer manipulation. Prefered.&lt;/qt></string>
+            </property>
+            <property name="text" >
+             <string>Round to the nearest whole fraction of the buffer window</string>
+            </property>
+            <property name="checked" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>20</width>
+              <height>21</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_4" >
+      <attribute name="title" >
+       <string>Display</string>
+      </attribute>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QGroupBox" name="colorsGroupBox" >
+         <property name="title" >
+          <string>Colors</string>
+         </property>
+         <layout class="QGridLayout" >
+          <property name="margin" >
+           <number>9</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item row="2" column="1" >
+           <widget class="QFrame" name="shading2Color" >
+            <property name="minimumSize" >
+             <size>
+              <width>120</width>
+              <height>16</height>
+             </size>
+            </property>
+            <property name="autoFillBackground" >
+             <bool>true</bool>
+            </property>
+            <property name="frameShape" >
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow" >
+             <enum>QFrame::Sunken</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" >
+           <widget class="QFrame" name="shading1Color" >
+            <property name="minimumSize" >
+             <size>
+              <width>120</width>
+              <height>16</height>
+             </size>
+            </property>
+            <property name="autoFillBackground" >
+             <bool>true</bool>
+            </property>
+            <property name="frameShape" >
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow" >
+             <enum>QFrame::Sunken</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QFrame" name="theBackgroundColor" >
+            <property name="minimumSize" >
+             <size>
+              <width>120</width>
+              <height>16</height>
+             </size>
+            </property>
+            <property name="autoFillBackground" >
+             <bool>true</bool>
+            </property>
+            <property name="frameShape" >
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow" >
+             <enum>QFrame::Sunken</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="2" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="2" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="0" >
+           <widget class="QPushButton" name="backgroundButton" >
+            <property name="text" >
+             <string>&amp;Background</string>
+            </property>
+            <property name="shortcut" >
+             <string>Alt+B</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" >
+           <widget class="QPushButton" name="shading1Button" >
+            <property name="text" >
+             <string>Shading&amp;1</string>
+            </property>
+            <property name="shortcut" >
+             <string>Alt+1</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" >
+           <widget class="QPushButton" name="shading2Button" >
+            <property name="text" >
+             <string>Shading&amp;2</string>
+            </property>
+            <property name="shortcut" >
+             <string>Alt+2</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="screenRefreshGroup" >
+         <property name="title" >
+          <string>Screen refresh</string>
+         </property>
+         <layout class="QGridLayout" >
+          <property name="margin" >
+           <number>9</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item row="1" column="1" >
+           <widget class="QSpinBox" name="slowUpdateSpeed" >
+            <property name="toolTip" >
+             <string>&lt;qt>This is how often most widgets are updated. e.g. the pitch contour. A smaller value requires more CPU time. 100 is reasonable for a 1GHz machine.&lt;/qt></string>
+            </property>
+            <property name="maximum" >
+             <number>99999</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QSpinBox" name="fastUpdateSpeed" >
+            <property name="toolTip" >
+             <string>&lt;qt>This is how often the smoothest widgets are updated. e.g. the tuner dial. A smaller value requires more CPU time. 50 is reasonable for a 1GHz machine.&lt;/qt></string>
+            </property>
+            <property name="maximum" >
+             <number>99999</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" >
+           <widget class="QLabel" name="fastUpdateLabel" >
+            <property name="text" >
+             <string>Do fast updates every</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2" >
+           <widget class="QLabel" name="milliSecondsLabel1" >
+            <property name="text" >
+             <string>milli-seconds</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="0" >
+           <widget class="QLabel" name="slowUpdateLabel" >
+            <property name="text" >
+             <string>Do slow updates every</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2" >
+           <widget class="QLabel" name="milliSecondsLabel2" >
+            <property name="text" >
+             <string>milli-seconds</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="2" column="1" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="windowOptionsGroupBox" >
+         <property name="title" >
+          <string>GroupBox</string>
+         </property>
+         <layout class="QHBoxLayout" >
+          <property name="margin" >
+           <number>9</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QCheckBox" name="useTopLevelWidgets" >
+            <property name="text" >
+             <string>Use top level widgets</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_5" >
+      <attribute name="title" >
+       <string>Advanced</string>
+      </attribute>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QGroupBox" name="AdvancedGroupBox" >
+         <property name="title" >
+          <string>Advanced Settings</string>
+         </property>
+         <layout class="QVBoxLayout" >
+          <property name="margin" >
+           <number>9</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QCheckBox" name="showMeanVarianceBars" >
+            <property name="text" >
+             <string>Show mean/variance Bars</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="savingMode" >
+            <property name="currentIndex" >
+             <number>0</number>
+            </property>
+            <item>
+             <property name="text" >
+              <string>Ask when closing unsaved files (normal)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Don't ask when closing unsaved files (use with care)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Save all unsaved files with their default generated name (uses lots of space)</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="mouseWheelZooms" >
+            <property name="text" >
+             <string>Mouse-wheel zooms. (Note: Ctrl inverts zoom/scroll)</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="VibratoGroupBox" >
+         <property name="title" >
+          <string>Vibrato Settings</string>
+         </property>
+         <layout class="QVBoxLayout" >
+          <property name="margin" >
+           <number>9</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QCheckBox" name="vibratoSineStyle" >
+            <property name="text" >
+             <string>Use sine style for period view</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="resetDefaultsButton" >
+       <property name="toolTip" >
+        <string>Resets all of the settings back to the install state</string>
+       </property>
+       <property name="text" >
+        <string>&amp;Reset Defaults</string>
+       </property>
+       <property name="shortcut" >
+        <string>Alt+R</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>371</width>
+         <height>38</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="okButton" >
+       <property name="text" >
+        <string>OK</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancelButton" >
+       <property name="text" >
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

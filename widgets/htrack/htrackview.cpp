@@ -20,27 +20,37 @@
 #include <qslider.h>
 #include <qwt_wheel.h>
 #include <qsizegrip.h>
-#include <qgrid.h>
+#include <q3grid.h>
 #include <qtooltip.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
+#include <Q3GridLayout>
+#include <Q3Frame>
+#include <QResizeEvent>
 
-HTrackView::HTrackView( int viewID_, QWidget *parent, const char *name )
- : ViewWidget( viewID_, parent, name)
+HTrackView::HTrackView( int viewID_, QWidget *parent )
+ : ViewWidget( viewID_, parent)
 {
   //setCaption("HTrack view");
-  QGridLayout *mainLayout = new QGridLayout(this, 2, 2);
-  mainLayout->setResizeMode(QLayout::FreeResize);
+  Q3GridLayout *mainLayout = new Q3GridLayout(this, 2, 2);
+  mainLayout->setResizeMode(QLayout::SetNoConstraint);
   //QBoxLayout *topLayout = new QVBoxLayout(mainLayout);
   //QBoxLayout *rightLayout = new QVBoxLayout(mainLayout);
-  QBoxLayout *rightLayout = new QVBoxLayout();
-  QBoxLayout *bottomLayout = new QHBoxLayout();
+  Q3BoxLayout *rightLayout = new Q3VBoxLayout();
+  Q3BoxLayout *bottomLayout = new Q3HBoxLayout();
 
-  QGrid *frame = new QGrid(1, this);
-  frame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
+  Q3Grid *frame = new Q3Grid(1, this);
+  frame->setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
   //frame->setLineWidth(2);
   //frame->setMidLineWidth(2);
   QWidget *aWidget = new QWidget(frame);
   hTrackWidget = new HTrackWidget(aWidget);
+  hTrackWidget->setWhatsThis("Shows a 3D keyboard with the current note coloured. "
+    "Vertical columns (or tracks), each representing a harmonic (or component frequency), protrude from the back, and move further away over time. "
+    "The height of each track is related to how much energy is at that frequency. "
+    "Tracks alternate in colour for better visibility. It can be seen how the hamonics in a note fit into the musical scale.");
   //hTrackWidget->show();
 
   peakThresholdSlider = new QSlider(0, 100, 10, 5, Qt::Vertical, this);
@@ -87,7 +97,7 @@ HTrackView::HTrackView( int viewID_, QWidget *parent, const char *name )
   mainLayout->addWidget(sizeGrip, 1, 1);
 
   //make the widget get updated when the view changes
-  connect(gdata->view, SIGNAL(onSlowUpdate()), hTrackWidget, SLOT(update()));
+  connect(gdata->view, SIGNAL(onSlowUpdate(double)), hTrackWidget, SLOT(update()));
   connect(peakThresholdSlider, SIGNAL(valueChanged(int)), this, SLOT(setPeakThreshold(int)));
   connect(rotateYWheel, SIGNAL(valueChanged(double)), hTrackWidget, SLOT(setViewAngleVertical(double)));
   connect(rotateYWheel, SIGNAL(valueChanged(double)), hTrackWidget, SLOT(update()));

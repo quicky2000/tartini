@@ -15,8 +15,11 @@
 
 #include "pianowidget.h"
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QPaintEvent>
 #include "drawwidget.h"
 #include "gdata.h"
+#include "myqt.h"
 
 static int isBlackKeyArray[12] = { 1, -1, 2, -2, 3, 4, -3, 5, -4, 6, -5, 7 };
 
@@ -49,15 +52,16 @@ void PianoWidget::paintEvent(QPaintEvent *)
   if(isNote()) {
     int notepart = isBlackKeyArray[currentNote()];
     if(notepart >= 0) { //it's a white key
-      p.fillRect(toInt((notepart-1)*235.0*scaleX), 0, toInt(234.0*scaleX)+1, height(), DrawWidget::colorBetween(Qt::white, Qt::red, _amountPressed));
+      p.fillRect(toInt((notepart-1)*235.0*scaleX), 0, toInt(234.0*scaleX)+1, height(), colorBetween(Qt::white, Qt::red, _amountPressed));
     }
   }
   
   p.setPen(Qt::black);
   //draw the lines between the white keys
   for(j = 1; j<7; j++) {
-    p.moveTo(toInt(double(j)*235.0*scaleX), 0);
-    p.lineTo(toInt(double(j)*235.0*scaleX), height());
+    //p.moveTo(toInt(double(j)*235.0*scaleX), 0);
+    //p.lineTo(toInt(double(j)*235.0*scaleX), height());
+    p.drawLine(toInt(double(j)*235.0*scaleX), 0, toInt(double(j)*235.0*scaleX), height());
   }
 
   //draw the black keys
@@ -69,7 +73,7 @@ void PianoWidget::paintEvent(QPaintEvent *)
   if(isNote()) {
     int notepart = isBlackKeyArray[currentNote()];
     if(notepart < 0) { //it's a black key
-      p.fillRect(toInt(blackKeyOffset[-notepart-1]*scaleX), 0, toInt(110.0*scaleX), toInt(1000.0*scaleY), DrawWidget::colorBetween(Qt::black, Qt::red, _amountPressed));
+      p.fillRect(toInt(blackKeyOffset[-notepart-1]*scaleX), 0, toInt(110.0*scaleX), toInt(1000.0*scaleY), colorBetween(Qt::black, Qt::red, _amountPressed));
     }
   }
   endDrawing();

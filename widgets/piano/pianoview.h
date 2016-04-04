@@ -16,6 +16,8 @@
 #define PIANOVIEW_H
 
 #include "viewwidget.h"
+//Added by qt3to4:
+#include <QResizeEvent>
 
 class PianoWidget;
 
@@ -23,7 +25,7 @@ class PianoView : public ViewWidget {
   Q_OBJECT
 
   public:
-    PianoView(int viewID_, QWidget *parent = 0, const char *name = NULL);
+    PianoView(int viewID_, QWidget *parent = 0);
     virtual ~PianoView();
 
     void resizeEvent(QResizeEvent *);

@@ -39,7 +39,7 @@ void Settings::init(QString domain_, QString product_)
 QString Settings::getString(QString group, QString key)
 {
   // Preconditions
-  myassert( group != NULL && key != NULL);
+  myassert( !group.isNull() && !key.isNull() );
 
   // First try to load it from the map
   std::map<QString, std::map<QString, QString> >::const_iterator iter = settings.find(group);
@@ -81,7 +81,7 @@ QString Settings::getString(QString group, QString key)
 int Settings::getInt(QString group, QString key)
 {
   // Preconditions
-  myassert( group != NULL && key != NULL);
+  myassert( !group.isNull() && !key.isNull() );
 
   bool ok = false;
   int toReturn = getString(group, key).toInt(&ok);
@@ -94,7 +94,7 @@ int Settings::getInt(QString group, QString key)
 double Settings::getDouble(QString group, QString key)
 {
   // Preconditions
-  myassert( group != NULL && key != NULL);
+  myassert( !group.isNull() && !key.isNull() );
 
   bool ok = false;
   double toReturn = getString(group, key).toDouble(&ok);
@@ -107,7 +107,7 @@ double Settings::getDouble(QString group, QString key)
 bool Settings::getBool(QString group, QString key)
 {
   // Preconditions
-  myassert( group != NULL && key != NULL);
+  myassert( !group.isNull() && !key.isNull() );
 
   if(getString(group, key).at(0).lower() == QChar('t')) return true;
   else return false;
@@ -116,7 +116,7 @@ bool Settings::getBool(QString group, QString key)
 void Settings::setString(QString group, QString key, QString value)
 {
   // Preconditions
-  myassert( group != NULL && key != NULL && value != NULL);
+  myassert( !group.isNull() && !key.isNull() && !value.isNull());
 
   settings[group][key] = value;
 
@@ -145,13 +145,14 @@ void Settings::load()
 {
   myassert(domain != "" && product != "");
   
-#ifdef MACX
-  QSettings onDiskSettings(QSettings::Ini);
-#else
-  QSettings onDiskSettings(QSettings::Native);
-#endif
+//#ifdef MACX
+//  QSettings onDiskSettings(QSettings::Ini);
+//#else
+//  QSettings onDiskSettings(QSettings::Native);
+//#endif
+  QSettings onDiskSettings(domain, product);
 
-  onDiskSettings.setPath(domain, product, QSettings::User);
+  //onDiskSettings.setPath(domain, product, QSettings::UserScope);
   onDiskSettings.beginGroup(QString("/") + product);
   //onDiskSettings.beginGroup(QString("/General"));
   
@@ -170,12 +171,14 @@ void Settings::load()
   // Get all the entries in the folders, and stick them in the map
   QStringList entries;
   QString key;
-  for (uint i = 0; i < subkeys.size(); i++) {
+  for (int i = 0; i < subkeys.size(); i++) {
     entries = onDiskSettings.entryList("/" + *(subkeys.at(i)));
     //printf("There are %d entries in category %s.\n", entries.size(), (*subkeys.at(i)).data());
-    for (uint n = 0; n < entries.size(); n++) {
-      key = "/" + *(subkeys.at(i)) + "/" + *(entries.at(n));
-      (settings[*(subkeys.at(i))])[*(entries.at(n))] = onDiskSettings.readEntry(key, "");
+    for (int n = 0; n < entries.size(); n++) {
+      //key = QString("/") + *(subkeys.at(i)) + "/" + *(entries.at(n));
+      key = "/" + subkeys.at(i) + "/" + entries.at(n);
+      //(settings[*(subkeys.at(i))])[*(entries.at(n))] = onDiskSettings.readEntry(key, "");
+      (settings[subkeys.at(i)])[entries.at(n)] = onDiskSettings.readEntry(key, "");
     }
   }
 
@@ -188,21 +191,23 @@ void Settings::save()
   // Save settings to www.cs.otago.ac.nz/Pitch/Pitch/_GroupName_/_Key_/
   // Needs to be like this so it works properly in Unix.
 
-#ifdef MACX
-  QSettings onDiskSettings(QSettings::Ini);
-#else
-  QSettings onDiskSettings(QSettings::Native);
-#endif
+//#ifdef MACX
+//  QSettings onDiskSettings(QSettings::Ini);
+//#else
+//  QSettings onDiskSettings(QSettings::Native);
+//#endif
 
-  onDiskSettings.setPath(domain, product, QSettings::User);
+  QSettings onDiskSettings(domain, product);
+
+  //onDiskSettings.setPath(domain, product, QSettings::UserScope);
   onDiskSettings.beginGroup(QString("/") + product);
 
   std::map<QString, std::map<QString, QString> >::const_iterator iter = settings.begin();
-  while (!(iter == settings.end())) {
+  while (iter != settings.end()) {
     onDiskSettings.beginGroup(iter->first);
     //qDebug(onDiskSettings.group());
-    std::map<QString, QString>::const_iterator iterValue = (iter->second).begin();
-    while (!(iterValue == (iter->second).end())) {
+    std::map<QString, QString>::const_iterator iterValue = iter->second.begin();
+    while (iterValue != iter->second.end()) {
       onDiskSettings.writeEntry("/" + iterValue->first, iterValue->second);
 		  //qDebug("Wrote /" + iterValue->first + "= " + iterValue->second);
       iterValue++;
@@ -211,4 +216,16 @@ void Settings::save()
     iter++;
   }
   onDiskSettings.endGroup();
+}
+
+void Settings::print()
+{
+  std::map<QString, std::map<QString, QString> >::const_iterator iter = settings.begin();
+  for(; iter != settings.end(); iter++) {
+    std::map<QString, QString>::const_iterator iterValue = (iter->second).begin();
+    for(; iterValue != (iter->second).end(); iterValue++) {
+      printf("%s/%s=%s\n", iter->first.latin1(), iterValue->first.latin1(), iterValue->second.latin1());
+    }
+  }
+  fflush(stdout);
 }

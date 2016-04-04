@@ -12,35 +12,46 @@
    
    Please read LICENSE.txt for details.
  ***************************************************************************/
+#include <qpixmap.h>
+#include <qwt_slider.h>
+#include <qlayout.h>
+#include <qtooltip.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
+#include <QResizeEvent>
+#include <QPaintEvent>
+
 #include "tunerview.h"
 #include "tunerwidget.h"
 #include "ledindicator.h"
 #include "useful.h"
 #include "gdata.h"
 #include "channel.h"
-
-#include <qpixmap.h>
-#include <qwt_slider.h>
-#include <qlayout.h>
-#include <qtooltip.h>
+#include "musicnotes.h"
 
 int LEDLetterLookup[12] = { 2, 2, 3, 3, 4, 5, 5, 6, 6, 0, 0, 1 };
 
-TunerView::TunerView( int viewID_, QWidget *parent, const char *name )
- : ViewWidget( viewID_, parent, name)
+TunerView::TunerView( int viewID_, QWidget *parent )
+ : ViewWidget( viewID_, parent)
 {
   //setCaption("Chromatic Tuner");
 
-  QGridLayout *layout = new QGridLayout(this, 9, 3, 2);
-  layout->setResizeMode(QLayout::FreeResize);
+  Q3GridLayout *layout = new Q3GridLayout(this, 9, 3, 2);
+  layout->setResizeMode(QLayout::SetNoConstraint);
 
   // Tuner widget goes from (0, 0) to (0, 8);
-  tunerWidget = new TunerWidget(this);
+  //tunerWidget = new TunerWidget(this);
+  tunerWidget = new VibratoTunerWidget(this);
   layout->addMultiCellWidget(tunerWidget, 0, 0, 0, 8);
 
   // Slider goes from (2,0) to (2,9)
 
-  slider = new QwtSlider(this, "slider", Qt::Horizontal, QwtSlider::Bottom, QwtSlider::BgTrough);
+  //slider = new QwtSlider(this, "slider", Qt::Horizontal, QwtSlider::Bottom, QwtSlider::BgTrough);
+#if QWT_VERSION == 0x050000
+  slider = new QwtSlider(this, Qt::Horizontal, QwtSlider::Bottom, QwtSlider::BgTrough);
+#else
+  slider = new QwtSlider(this, Qt::Horizontal, QwtSlider::BottomScale, QwtSlider::BgTrough);
+#endif
   slider->setRange(0, 2);
   slider->setReadOnly(false);
   layout->addMultiCellWidget(slider, 1, 1, 0, 8);
@@ -72,8 +83,10 @@ TunerView::TunerView( int viewID_, QWidget *parent, const char *name )
   layout->setRowStretch( 1, 1 );
   layout->setRowStretch( 2, 0 ); 
     
-  //connect(gdata->view, SIGNAL(currentTimeChanged(double)), this, SLOT(slotCurrentTimeChanged(double)));
-  connect(gdata->view, SIGNAL(onFastUpdate()), this, SLOT(update()));
+  //connect(gdata->view, SIGNAL(onFastUpdate(double)), this, SLOT(update()));
+  //connect(gdata, SIGNAL(onChunkUpdate()), tunerWidget, SLOT(doUpdate()));
+  connect(gdata, SIGNAL(onChunkUpdate()), this, SLOT(doUpdate()));
+  connect(tunerWidget, SIGNAL(ledSet(int, bool)), this, SLOT(setLed(int, bool)));
 }
 
 TunerView::~TunerView()
@@ -98,22 +111,24 @@ void TunerView::resetLeds()
   }
 }
 
-void TunerView::slotCurrentTimeChanged(double time)
+void TunerView::slotCurrentTimeChanged(double /*time*/)
 {
+/*
   Channel *active = gdata->getActiveChannel();
 
   if (active == NULL || !active->hasAnalysisData()) {
     tunerWidget->setValue(0, 0);
     return;
   }
+  ChannelLocker channelLocker(active);
 
-  /* To work out note:
-     * Find the slider's value. This tells us how many seconds to average over.
-     * Start time is currentTime() - sliderValue.
-     * Finish time is currentTime().
-     * Calculate indexes for these times, and use them to call average.
-  */
-  
+  // To work out note:
+  //   * Find the slider's value. This tells us how many seconds to average over.
+  //   * Start time is currentTime() - sliderValue.
+  //   * Finish time is currentTime().
+  //   * Calculate indexes for these times, and use them to call average.
+  //
+
   double sliderVal = slider->value();
   double startTime = time - sliderVal;
   double stopTime = time;
@@ -123,27 +138,36 @@ void TunerView::slotCurrentTimeChanged(double time)
   int startChunk = active->chunkAtTime(startTime);
   int stopChunk = active->chunkAtTime(stopTime)+1;
 
-  float note = active->averageNote(active, startChunk, stopChunk);
-  float intensity = active->averageMaxCorrelation(active, startChunk, stopChunk);
+  float pitch;
+  if (sliderVal == 0) {
+    pitch = active->dataAtCurrentChunk()->pitch;
+  } else {
+    pitch = active->averagePitch(startChunk, stopChunk);
+  }
 
-  if (note <= 0) {
+  float intensity = active->averageMaxCorrelation(startChunk, stopChunk);
+
+  if (pitch <= 0) {
     tunerWidget->setValue(0, 0);
     return;
   }
 
-  int closeNote = toInt(note);
+  int closePitch = toInt(pitch);
   
   // We can work out how many semitones from A the note is
   //int remainder = closeNote % 12;
 
   resetLeds();
-  leds.at(LEDLetterLookup[noteValue(closeNote)])->setOn(true);
-  if(isBlackNote(closeNote)) leds.at(leds.size() - 1)->setOn(true);
+  leds.at(LEDLetterLookup[noteValue(closePitch)])->setOn(true);
+  if(isBlackNote(closePitch)) leds.at(leds.size() - 1)->setOn(true);
   
   // Tell the TunerWidget to update itself, given a value in cents
-  tunerWidget->setValue(100*(note - float(closeNote)), intensity);
+  tunerWidget->setValue(100*(pitch - float(closePitch)), intensity);
   
-/*
+*/
+
+/* Old code
+
   int toLight = -1;
   bool sharp = false;
   
@@ -174,5 +198,49 @@ void TunerView::slotCurrentTimeChanged(double time)
 
 void TunerView::paintEvent( QPaintEvent* )
 {
-  slotCurrentTimeChanged(gdata->view->currentTime());  
+  //slotCurrentTimeChanged(gdata->view->currentTime());  
+}
+
+void TunerView::setLed(int index, bool value)
+{
+  leds[index]->setOn(value);
+}
+
+void TunerView::doUpdate()
+{
+  Channel *active = gdata->getActiveChannel();
+  if (active == NULL || !active->hasAnalysisData()) {
+    tunerWidget->doUpdate(0.0);
+    return;
+  }
+  ChannelLocker channelLocker(active);
+  double time = gdata->view->currentTime();
+
+  // To work out note:
+  //   * Find the slider's value. This tells us how many seconds to average over.
+  //   * Start time is currentTime() - sliderValue.
+  //   * Finish time is currentTime().
+  //   * Calculate indexes for these times, and use them to call average.
+  //
+
+  double sliderVal = slider->value();
+
+  double pitch = 0.0;
+  if (sliderVal == 0) {
+    int chunk = active->currentChunk();
+    if(chunk >= active->totalChunks()) chunk = active->totalChunks()-1;
+    if(chunk >= 0)
+      pitch = active->dataAtChunk(chunk)->pitch;
+  } else {
+    double startTime = time - sliderVal;
+    double stopTime = time;
+  
+    int startChunk = active->chunkAtTime(startTime);
+    int stopChunk = active->chunkAtTime(stopTime)+1;
+    pitch = active->averagePitch(startChunk, stopChunk);
+  }
+
+  //float intensity = active->averageMaxCorrelation(startChunk, stopChunk);
+
+  tunerWidget->doUpdate(pitch);
 }

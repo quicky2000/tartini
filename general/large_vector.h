@@ -17,6 +17,8 @@
 #define LARGE_VECTOR_H
 
 #include <vector>
+#include "array1d.h"
+#include "SmartPtr.h"
 
 /** large_vector works like vector.
   Same:
@@ -30,17 +32,25 @@
     It is stored as a one layer tree.
     ie. there is one parent node with as many children buffers as needed.
     The size of the buffers can be specified with a second parameter to the constructor
+    operator= does a shallow copy. i.e points to the same array
 */
 template<typename T>
 class large_vector
 {
 private:
   uint _buffer_size;
-  std::vector<std::vector<T> *> _buf_ptrs;
+  //std::vector<std::vector<T> *> buf_ptrs();
+  SmartPtr<Array1d<std::vector<T> *> > _buf_ptrs;
   
+  Array1d<std::vector<T> *> &buf_ptrs() { return *_buf_ptrs; }
+
   void addBuffer(uint num=0) {
-    _buf_ptrs.push_back(new std::vector<T>(num));
-    _buf_ptrs.back()->reserve(_buffer_size);
+    buf_ptrs().push_back(new std::vector<T>(num));
+    buf_ptrs().back()->reserve(_buffer_size);
+  }
+  void removeBuffer() {
+    delete buf_ptrs().back();
+    buf_ptrs().pop_back();
   }
 
 public:
@@ -69,38 +79,50 @@ public:
   };
 
   large_vector(uint size=0, uint buffer_size=2048) {
+    _buf_ptrs = new Array1d<std::vector<T> *>();
     _buffer_size = buffer_size;
     while(size > _buffer_size) {
-      _buf_ptrs.push_back(new std::vector<T>(_buffer_size));
+      buf_ptrs().push_back(new std::vector<T>(_buffer_size));
       size-=_buffer_size;
     }
-    //_buf_ptrs.push_back(new std::vector<T>(size));
-    //_buf_ptrs.back()->reserve(_buffer_size);
+    //buf_ptrs().push_back(new std::vector<T>(size));
+    //buf_ptrs().back()->reserve(_buffer_size);
     addBuffer(size);
   }
   ~large_vector() {
-    for(uint j=0; j<_buf_ptrs.size();j++) delete _buf_ptrs[j];
+    if(_buf_ptrs.getNumRef() == 1) {
+      for(int j=0; j<buf_ptrs().size();j++) delete buf_ptrs()[j];
+    }
   }
   
   T& operator[](uint pos) {
     //myassert(empty() || pos < size());
-    return (*_buf_ptrs[pos / _buffer_size])[pos % _buffer_size];
+    return (*buf_ptrs()[pos / _buffer_size])[pos % _buffer_size];
   }
   T& at(uint pos) {
-    //myassert(empty() || pos < size());
-    return (*_buf_ptrs[pos / _buffer_size])[pos % _buffer_size];
+    myassert(empty() || pos < size());
+    return (*buf_ptrs()[pos / _buffer_size])[pos % _buffer_size];
   }
   T &front() { return at(0); }
   T &back() { return at(size()-1); }
-  uint size() { return (_buf_ptrs.size()-1)*_buffer_size + _buf_ptrs.back()->size(); }
-  bool empty() { return (_buf_ptrs.size()==1) ? _buf_ptrs.back()->empty() : false; }
+  uint size() { return (buf_ptrs().size()-1)*_buffer_size + buf_ptrs().back()->size(); }
+  bool empty() { return (buf_ptrs().size()==1) ? buf_ptrs().back()->empty() : false; }
   void push_back(const T &new_element) {
-    _buf_ptrs.back()->push_back(new_element);
-    if(_buf_ptrs.back()->size() == _buffer_size) {
-      //_buf_ptrs.push_back(new std::vector<T>(0));
-      //_buf_ptrs.back()->reserve(_buffer_size);
+    buf_ptrs().back()->push_back(new_element);
+    if(buf_ptrs().back()->size() == _buffer_size) {
+      //buf_ptrs().push_back(new std::vector<T>(0));
+      //buf_ptrs().back()->reserve(_buffer_size);
       addBuffer();
     }
+  }
+  T pop_back() {
+    if(buf_ptrs().back()->empty()) {
+      if(numBuffers() == 1) return T();
+      else removeBuffer();
+    }
+    T temp = buf_ptrs().back()->back();
+    buf_ptrs().back()->pop_back();
+    return temp;
   }
   void push_back(const T *src, uint length) {
     uint sizeBefore = size();
@@ -108,25 +130,25 @@ public:
     copyFrom(src, sizeBefore, length);
   }
   void increase_size(uint num) {
-    if(num < bufferSize() - _buf_ptrs.back()->size()) {
-      _buf_ptrs.back()->resize(_buf_ptrs.back()->size() + num);
+    if(num < bufferSize() - buf_ptrs().back()->size()) {
+      buf_ptrs().back()->resize(buf_ptrs().back()->size() + num);
     } else {
-      num -= bufferSize() - _buf_ptrs.back()->size();
-      _buf_ptrs.back()->resize(bufferSize());
+      num -= bufferSize() - buf_ptrs().back()->size();
+      buf_ptrs().back()->resize(bufferSize());
       addBuffer();
       while(num >= bufferSize()) {
         num -= bufferSize();
-        _buf_ptrs.back()->resize(bufferSize());
+        buf_ptrs().back()->resize(bufferSize());
         addBuffer();
       }
-      _buf_ptrs.back()->resize(num);
+      buf_ptrs().back()->resize(num);
     }
   }
   void clear() {
-    for(uint j=0; j<_buf_ptrs.size();j++) delete _buf_ptrs[j];
-    _buf_ptrs.clear();
-    //_buf_ptrs.push_back(new std::vector<T>(0));
-    //_buf_ptrs.back()->reserve(_buffer_size);
+    for(int j=0; j<buf_ptrs().size();j++) delete buf_ptrs()[j];
+    buf_ptrs().clear();
+    //buf_ptrs().push_back(new std::vector<T>(0));
+    //buf_ptrs().back()->reserve(_buffer_size);
     addBuffer();
   }
   iterator begin() { return iterator(this, 0); }
@@ -134,7 +156,8 @@ public:
   iterator iterator_at(uint pos) { return iterator(this, pos); }
   
   uint bufferSize() const { return _buffer_size; }
-  std::vector<T> &getBuffer(uint bufferNum) { return *_buf_ptrs[bufferNum]; }
+  int numBuffers() { return buf_ptrs().size(); }
+  std::vector<T> &getBuffer(uint bufferNum) { return *buf_ptrs()[bufferNum]; }
   //efficient copy to a single block of memory (ie array or vector)
   void copyTo(T *dest, uint start, uint length) {
     myassert(start+length <= size());
@@ -176,5 +199,36 @@ public:
     }
   }
 };
+
+
+/*
+void testLargeVectorFunc()
+{
+  int j, k;
+  int count = 0;
+  int x[1024];
+  large_vector<int> v;
+  printf("begin test\n");
+  for(j=0; j<6000; j++) {
+    for(k=0; k<1024; k++) x[k] = count++;
+    v.push_back(x, 1024);
+    v.copyTo(x, j*1024, 1024);
+    v.copyFrom(x, j*1024, 1024);
+  }
+  for(j=0; j<6000*1024; j++) if(v[j] != j) printf("%d, %d\n", v[j], j);
+
+  printf("\n");
+  large_vector<int> u;
+  u.push_back(10);
+  u.push_back(11);
+  printf("%d\n", u.back());
+  u.pop_back();
+  printf("%d\n", u.back());
+  u.pop_back();
+
+  printf("done test\n");
+  exit(0);
+}
+*/
 
 #endif

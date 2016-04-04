@@ -26,7 +26,7 @@
 #include "soundfile.h"
 #include "notedata.h"
 #include "large_vector.h"
-#include "filter.h"
+#include "Filter.h"
 
 class Channel/* : public Array1d<float>*/
 {
@@ -37,33 +37,52 @@ private:
   //int frame_num;
   int _pitch_method;
   bool visible;
+  bool noteIsPlaying;
   //double timeOffset; /**< Where the file starts in absolute time (in seconds) */
   //std::vector<AnalysisData> lookup;
   large_vector<AnalysisData> lookup;
   float _threshold;
   QMutex *mutex;
-  
+  bool isLocked;
+  int pronyWindowSize;
+  Array1d<float> pronyData;
+  fast_smooth *fastSmooth;
+
 public:
+  large_vector<float> pitchLookup;
+  large_vector<float> pitchLookupSmoothed;
   QColor color;
-  large_vector<float> filteredData;
+  //large_vector<float> filteredData;
   Array1d<float> directInput;
   Array1d<float> filteredInput;
   Array1d<float> coefficients_table;
   Array1d<float> nsdfData;
+  Array1d<float> nsdfAggregateData;
+  Array1d<float> nsdfAggregateDataScaled;
+  double nsdfAggregateRoof; //keeps the sum of scalers. i.e. The highest possible aggregate value
   Array1d<float> fftData1;
   Array1d<float> fftData2;
+  Array1d<float> fftData3;
   Array1d<float> cepstrumData;
-  std::vector<NoteData> noteData;
+  Array1d<float> detailedPitchData;
+  Array1d<float> detailedPitchDataSmoothed;
+  //std::vector<NoteData> noteData;
+  large_vector<NoteData> noteData;
   Filter *highPassFilter;
-  double filterStateX1, filterStateX2;
-  double filterStateY1, filterStateY2;
+  Filter *pitchSmallSmoothingFilter;
+  Filter *pitchBigSmoothingFilter;
+  //double filterStateX1, filterStateX2;
+  //double filterStateY1, filterStateY2;
+  double rmsFloor; //in dB
+  double rmsCeiling; //in dB
   
   ZoomLookup summaryZoomLookup;
   ZoomLookup normalZoomLookup;
   ZoomLookup amplitudeZoomLookup;
   
-  void lock() { mutex->lock(); }
-  void unlock() { mutex->unlock(); }
+  void lock() { mutex->lock(); isLocked = true; }
+  void unlock() { isLocked = false; mutex->unlock(); }
+  bool locked() { return isLocked; } //For same thread testing of asserts only
 
   //Channel();
   Channel(SoundFile *parent_, int size_, int k_=0);
@@ -117,8 +136,8 @@ public:
   bool isValidTime(double t) { return isValidChunk(chunkAtTime(t)); }
   bool isValidCurrentTime() { return isValidChunk(chunkAtCurrentTime()); }
   
-  float averageNote(Channel *ch, int begin, int end);
-  float averageMaxCorrelation(Channel *ch, int begin, int end);
+  float averagePitch(int begin, int end);
+  float averageMaxCorrelation(int begin, int end);
 
   float threshold() { return _threshold; }
   //void setThreshold(float threshold) { _threshold = threshold; }
@@ -126,14 +145,44 @@ public:
   void resetIntThreshold(int thresholdPercentage);
   void setColor(QColor c) { color = c; }
   //static QColor getNextColour();
+
+  bool isNotePlaying() { return noteIsPlaying; }
   bool isVisibleNote(int noteIndex_);
   bool isVisibleChunk(int chunk_) { return isVisibleChunk(dataAtChunk(chunk_)); }
   bool isVisibleChunk(AnalysisData *data);
+  bool isChangingChunk(AnalysisData *data);
+  bool isNoteChanging(int chunk);
   bool isLabelNote(int noteIndex_);
   void clearFreqLookup();
   void clearAmplitudeLookup();
-  
+  void recalcScoreThresholds();
+
   QString getUniqueFilename();
+
+  NoteData *getLastNote();
+  NoteData *getCurrentNote();
+  int getCurrentNoteIndex() { return int(noteData.size())-1; }
+  void processNoteDecisions(int chunk, float periodDiff);
+  void noteBeginning(int chunk);
+  void noteEnding(int chunk);
+  float calcOctaveEstimate();
+  void recalcNotePitches(int chunk);
+  void chooseCorrelationIndex1(int chunk);
+  bool chooseCorrelationIndex(int chunk, float periodOctaveEstimate);
+  void calcDeviation(int chunk);
+  bool isFirstChunkInNote(int chunk);
+  void resetNSDFAggregate(float period);
+  void addToNSDFAggregate(const float scaler, float periodDiff);
+  float calcDetailedPitch(float *input, double period, int chunk);
+  bool firstTimeThrough() { return parent->firstTimeThrough; }
+  bool doingDetailedPitch() { return parent->doingDetailedPitch(); }
+
+  void calcVibratoData(int chunk);
+  float periodOctaveEstimate(int chunk); /*< A estimate from over the whole duration of the note, to help get the correct octave */
+
+  void exportChannel(int type, QString typeString);
+  void doPronyFit(int chunk);
+  int pronyDelay() { return pronyWindowSize/2; }
 };
 
 /** Create a ChannelLocker on the stack, the channel will be freed automaticly when

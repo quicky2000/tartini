@@ -14,13 +14,16 @@
  ***************************************************************************/
 #include <qpixmap.h>
 #include <qpainter.h>
-#include <qmemarray.h>
+#include <q3memarray.h>
+//Added by qt3to4:
+#include <QPaintEvent>
 
 #include "wavewidget.h"
 #include "gdata.h"
 #include "channel.h"
 #include "analysisdata.h"
 #include "useful.h"
+#include "myqt.h"
 
 WaveWidget::WaveWidget(QWidget *parent)
   : DrawWidget(parent)
@@ -69,15 +72,15 @@ void WaveWidget::paintEvent( QPaintEvent * )
         int n = int(ceil(double(centerX) / scaleX));
         int j, x;
         p.setPen(Qt::NoPen);
-        QColor color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), data->correlation);
-        QColor color2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), data->correlation);
+        QColor color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), data->correlation());
+        QColor color2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), data->correlation());
         for(j = -n; j<n; j++) {
           x = centerX+toInt(scaleX*double(j));
           p.setBrush((j%2) ? color1 : color2);
           //p.drawRect(x, -256, toInt(period), 511);
           p.drawRect(x, 0, toInt(scaleX*double(j+1)) - toInt(scaleX*double(j)), height());
         }
-        p.setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3*data->correlation));
+        p.setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3*data->correlation()));
         for(j = -n; j<n; j++) {
           x = centerX+toInt(scaleX*j);
           //p.drawLine(x, -256, x, 256);
@@ -119,21 +122,24 @@ void WaveWidget::paintEvent( QPaintEvent * )
     }*/
     double scaleY = dh2 * zoomY();
 
-	//Use Bresenham's algorithm in 1d to choose the points to draw
-	Array1d<float> &filteredData = active->filteredInput;
-	int intStep = int(active->size() / w);
-	int remainderStep = active->size() - (intStep * w);
+    //Use Bresenham's algorithm in 1d to choose the points to draw
+    Array1d<float> &filteredData = active->filteredInput;
+
+    int intStep = int(filteredData.size() / w);
+    int remainderStep = filteredData.size() - (intStep * w);
     int pos = 0;
-	int remainder = 0;
-	for(int j=0; j<w; j++, pos+=intStep, remainder+=remainderStep) {
-		if(remainder >= w) {
-			pos++;
-			remainder -= w;
-		}
-		myassert(pos < active->size());
-		pointArray.setPoint(j, j*2, toInt(dh2 - filteredData.at(pos)*scaleY));
-	}
-	p.setPen(QPen(active->color, 0));
+    int remainder = 0;
+    for(int j=0; j<w; j++, pos+=intStep, remainder+=remainderStep) {
+      if(remainder >= w) {
+        pos++;
+        remainder -= w;
+      }
+      myassert(pos < filteredData.size());
+      if(pos >= filteredData.size()) printf("pos = %d, filteredData.size()=%d\n", pos, filteredData.size());
+      //pointArray.setPoint(j, j*2, toInt(dh2 - (filteredData.at(pos)-avg)*scaleY));
+      pointArray.setPoint(j, j*2, toInt(dh2 - (filteredData.at(pos))*scaleY));
+    }
+    p.setPen(QPen(active->color, 0));
     p.drawPolyline(pointArray);
 
 /*

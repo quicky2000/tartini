@@ -14,6 +14,8 @@
  ***************************************************************************/
 #include <qpixmap.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QPaintEvent>
 
 #include <vector>
 
@@ -31,7 +33,7 @@ VolumeMeterWidget::VolumeMeterWidget(QWidget *parent)
   //setPaletteBackgroundColor(colorGroup().background());
 
   //make the widget get updated when the view changes
-  connect(gdata->view, SIGNAL(onFastUpdate()), this, SLOT(update()));
+  connect(gdata->view, SIGNAL(onFastUpdate(double)), this, SLOT(update()));
 
   // Define the number of labels to use for available places
   //labelNumbers = new labelNumbers( {2, 3, 4, 4, 6, 6} );
@@ -135,10 +137,10 @@ void VolumeMeterWidget::paintEvent( QPaintEvent * )
   if (active != NULL && active->isValidChunk(active->currentChunk())) {
     int chunk = active->currentChunk();
     if(active->getParent()->numChannels() > 1) {
-      theVal[0] = active->getParent()->channels(0)->dataAtChunk(chunk)->maxIntensity;
-      theVal[1] = active->getParent()->channels(1)->dataAtChunk(chunk)->maxIntensity;
+      theVal[0] = active->getParent()->channels(0)->dataAtChunk(chunk)->maxIntensityDB();
+      theVal[1] = active->getParent()->channels(1)->dataAtChunk(chunk)->maxIntensityDB();
     } else {
-      theVal[0] = theVal[1] = active->dataAtChunk(chunk)->maxIntensity;
+      theVal[0] = theVal[1] = active->dataAtChunk(chunk)->maxIntensityDB();
     }
   } else {
     theVal[0] = theVal[1] = 0.0;
@@ -148,7 +150,8 @@ void VolumeMeterWidget::paintEvent( QPaintEvent * )
   //int val = toInt(analysisData->maxIntensity * double(width()));
   //double decibels = 20.0 * log10(analysisData.maxIntensity);
   for(int chnl=0; chnl<2; chnl++) {
-    double decibels = 20.0 * log10(theVal[chnl]);
+    //double decibels = 20.0 * log10(theVal[chnl]);
+    double decibels = theVal[chnl];
     // We'll show 60 dB
     //int val = toInt(((double(width() - halfLabelWidth) / 60.0) * decibels) + width() - halfLabelWidth);
     int val = toInt((double(realWidth / 60.0) * decibels) + realWidth);

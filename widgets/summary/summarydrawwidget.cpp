@@ -22,6 +22,10 @@
 
 #include <qpainter.h>
 #include <qpixmap.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QWheelEvent>
+#include <QPaintEvent>
 
 
 SummaryDrawWidget::SummaryDrawWidget(QWidget *parent)
@@ -30,7 +34,7 @@ SummaryDrawWidget::SummaryDrawWidget(QWidget *parent)
   scaler = 1.0;
 
   //make the widget get updated when the view changes
-  connect(gdata->view, SIGNAL(onFastUpdate()), this, SLOT(update()));
+  connect(gdata->view, SIGNAL(onFastUpdate(double)), this, SLOT(update()));
 }
 
 SummaryDrawWidget::~SummaryDrawWidget()
@@ -50,7 +54,7 @@ void SummaryDrawWidget::paintEvent( QPaintEvent * )
   if(gdata->totalTime() < 0) return;
 
   double timeRatio = double(width()) / gdata->totalTime();
-  double noteRatio = double(height()) / (gdata->topNote() / scaler);
+  double pitchRatio = double(height()) / (gdata->topPitch() / scaler);
 
   beginDrawing();
 
@@ -60,18 +64,20 @@ void SummaryDrawWidget::paintEvent( QPaintEvent * )
     if(!ch->isVisible()) continue;
 
     //drawChannel(ch, p, view->leftTime(), (view->totalTime() / (double) width()), 0.0f, (double) view->topNote() / (double) height(), DRAW_VIEW_SUMMARY);
-    drawChannel(ch, p, gdata->leftTime(), view->currentTime(), (gdata->totalTime() / (double) width()), 0.0f, (double) gdata->topNote() / (double) height(), DRAW_VIEW_SUMMARY);
+    drawChannel(*this, ch, p, gdata->leftTime(), view->currentTime(), (gdata->totalTime() / (double) width()), 0.0f, (double) gdata->topPitch() / (double) height(), DRAW_VIEW_SUMMARY);
   }
 
   //draw the view rectangle 
   p.setPen(QPen(colorGroup().highlight(), 1));
-  p.drawRect(int((gdata->leftTime()+view->viewLeft())*timeRatio), height()-1-int((view->viewTop())*noteRatio),
-             int(view->viewWidth()*timeRatio), int(view->viewHeight()*noteRatio));
+  p.drawRect(int((gdata->leftTime()+view->viewLeft())*timeRatio), height()-1-int((view->viewTop())*pitchRatio),
+             int(view->viewWidth()*timeRatio), int(view->viewHeight()*pitchRatio));
 
   //draw the current time line
   p.setPen(QPen(colorGroup().foreground(), 1));
-  p.moveTo(int((gdata->leftTime()+view->currentTime())*timeRatio), 0);
-  p.lineTo(int((gdata->leftTime()+view->currentTime())*timeRatio), height()-1);
+  //p.moveTo(int((gdata->leftTime()+view->currentTime())*timeRatio), 0);
+  //p.lineTo(int((gdata->leftTime()+view->currentTime())*timeRatio), height()-1);
+  p.drawLine(int((gdata->leftTime()+view->currentTime())*timeRatio), 0, 
+             int((gdata->leftTime()+view->currentTime())*timeRatio), height()-1);
 
   endDrawing();
 }
@@ -122,8 +128,8 @@ void SummaryDrawWidget::mouseMoveEvent( QMouseEvent *e )
     if (newBottom < 0) {
       newBottom = 0;
     }
-    if ((newBottom + view->viewHeight()) > gdata->topNote()) {
-      newBottom = gdata->topNote() - view->viewHeight();
+    if ((newBottom + view->viewHeight()) > gdata->topPitch()) {
+      newBottom = gdata->topPitch() - view->viewHeight();
     }
     view->setViewBottom(newBottom);
 
@@ -139,11 +145,11 @@ void SummaryDrawWidget::wheelEvent( QWheelEvent *e)
 {
   e->accept();
 
-  if (e->state() == Qt::AltButton) {
+  if (e->state() == Qt::AltModifier) {
     int horScale = toInt(gdata->totalTime() / width() * (e->delta() / 10));
     gdata->view->setCurrentTime(gdata->view->currentTime() + horScale);
   } else {
-    int vertScale = toInt(gdata->topNote() / height() * (e->delta() / 10));
+    int vertScale = toInt(gdata->topPitch() / height() * (e->delta() / 10));
     gdata->view->setViewBottom(gdata->view->viewBottom() + vertScale);
   }
 }

@@ -16,6 +16,8 @@
 #define CEPSTRUMVIEW_H
 
 #include "viewwidget.h"
+//Added by qt3to4:
+#include <QResizeEvent>
 
 class CepstrumWidget;
 
@@ -23,7 +25,7 @@ class CepstrumView : public ViewWidget {
   Q_OBJECT
 
   public:
-    CepstrumView(int viewID_, QWidget *parent = 0, const char *name = NULL);
+    CepstrumView(int viewID_, QWidget *parent = 0);
     virtual ~CepstrumView();
 
     void resizeEvent(QResizeEvent *);

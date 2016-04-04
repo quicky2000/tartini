@@ -16,9 +16,11 @@
 #include "summaryview.h"
 //#include "viewwidget.h"
 #include "summarydrawwidget.h"
+//Added by qt3to4:
+#include <QResizeEvent>
 
-SummaryView::SummaryView( int viewID_, QWidget *parent, const char *name )
- : ViewWidget( viewID_, parent, name)
+SummaryView::SummaryView(int viewID_, QWidget *parent)
+ : ViewWidget( viewID_, parent)
 {
   //setCaption("Summary View");
 

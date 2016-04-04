@@ -13,10 +13,11 @@
    Please read LICENSE.txt for details.
  ***************************************************************************/
 
+#include <algorithm>
+
 #include "piano3d.h"
 #include "useful.h"
-
-#include <algorithm>
+#include "musicnotes.h"
 
 double keyOffsetTable[12] = { 0.0, 15.5, 23.5, 43.5, 47.0, 70.5, 85.5, 94.0, 112.5, 117.5, 139.0, 141.0 };
 

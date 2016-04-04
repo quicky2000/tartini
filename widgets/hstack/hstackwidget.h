@@ -16,6 +16,9 @@
 #define HSTACKWIDGET_H
 
 #include "drawwidget.h"
+//Added by qt3to4:
+#include <QPixmap>
+#include <QPaintEvent>
 
 // Forward declarations of classes the h file doesn't need to know specifics about
 class QPixmap;
@@ -29,11 +32,23 @@ class HStackWidget : public DrawWidget {
 
     void paintEvent( QPaintEvent * );
 
-    QSize sizeHint() const { return QSize(300, 200); }
+    //QSize sizeHint() const { return QSize(300, 200); }
 
   private:
     QPixmap *buffer;
+    int windowSize;
+    float viewheight;
+    float top;
 
+  public slots:
+    void setWindowSize(double);
+    void setDBOffset(double);
+    void setDBRange(double);
+
+  signals:
+    void windowSizeChanged(double);
+    void dBOffsetChanged(double);
+    void dBRangeChanged(double);
 };
 
 

@@ -56,6 +56,10 @@ public:
   View();
   virtual ~View();
 
+  void init(); //plase call this after a window has been created
+
+
+
   // Relates to the views
 
   /** Returns the current time in seconds */
@@ -92,6 +96,8 @@ public:
   double viewRight() { return viewLeft() + viewWidth(); } /**< Returns the time at the right edge of the view */
   double viewTotalTime() { return viewRight() - viewLeft(); } /**< Returns how long the view is in seconds */
   double viewTop() { return viewBottom() + viewHeight(); } /**< Returns how many semitones are visible in the view*/
+  /** Returns the screen pixel for the time t will be drawn */
+  int screenPixelX(double t) { return toInt((t - viewLeft()) / zoomX()); }
   
   // Relates to where the files start/stop
   
@@ -105,8 +111,6 @@ public:
   double logZoomX() { return _logZoomX; }
   double logZoomY() { return _logZoomY; }
 
-  float averageNote(Channel *ch, int begin, int end);
-  
   void setPixelHeight(int h);
   void setPixelWidth(int w);
   void setLogZoomYRaw(double y) { setLogZoomY(y); }
@@ -139,9 +143,9 @@ public slots:
   bool backgroundShading() { return _backgroundShading; }
   
 signals:
-  void onSlowUpdate();
+  //void onSlowUpdate();
   void onSlowUpdate(double currentTime_);
-  void onFastUpdate();
+  //void onFastUpdate();
   void onFastUpdate(double currentTime_);
   void viewChanged();
   void scrollableYChanged(double x);

@@ -15,9 +15,11 @@
 #include "pitchcompassview.h"
 #include "pitchcompassdrawwidget.h"
 #include "gdata.h"
+//Added by qt3to4:
+#include <QResizeEvent>
 
-PitchCompassView::PitchCompassView(int viewID_, QWidget *parent, const char *name, int mode)
-  : ViewWidget(viewID_, parent, name)
+PitchCompassView::PitchCompassView(int viewID_, QWidget *parent, int mode)
+  : ViewWidget(viewID_, parent)
 {
   //setCaption("Pitch Compass");
   pitchCompassDrawWidget = new PitchCompassDrawWidget(this, "compass", mode);

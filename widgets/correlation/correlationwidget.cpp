@@ -14,17 +14,23 @@
  ***************************************************************************/
 #include <qpixmap.h>
 #include <qpainter.h>
-#include <qmemarray.h>
+#include <q3memarray.h>
+//Added by qt3to4:
+#include <QPaintEvent>
 
 #include "correlationwidget.h"
 #include "gdata.h"
 #include "channel.h"
 #include "analysisdata.h"
 #include "useful.h"
+#include "myqt.h"
+#include "myalgo.h"
+
 
 CorrelationWidget::CorrelationWidget(QWidget *parent)
   : DrawWidget(parent)
 {
+  aggregateMode = 0;
 }
 
 CorrelationWidget::~CorrelationWidget()
@@ -36,6 +42,7 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
   Channel *active = gdata->getActiveChannel();
 
   AnalysisData *data = NULL;
+  int chunk=0;
   double dh2 = double(height()-1) / 2.0;
   double pixelStep;
   int j, x, y;
@@ -46,7 +53,8 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
     pixelStep = double(active->nsdfData.size()) / double(width());
     
     active->lock();
-    data = active->dataAtCurrentChunk();
+    chunk = active->currentChunk();
+    data = active->dataAtChunk(chunk);
 
     //int centerX = width() / 2;
     if(data) {
@@ -59,14 +67,14 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
       if(gdata->view->backgroundShading() && period > 4.0 && period < double(active->nsdfData.size())) {
         int n = int(ceil(double(width()) / scaleX)); //number of colored patches
         p.setPen(Qt::NoPen);
-        QColor color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), data->correlation);
-        QColor color2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), data->correlation);
+        QColor color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), data->correlation());
+        QColor color2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), data->correlation());
         for(j = 0; j<n; j++) {
           x = toInt(scaleX*double(j));
           p.setBrush((j%2) ? color1 : color2);
           p.drawRect(x, 0, toInt(scaleX*double(j+1)) - toInt(scaleX*double(j)), height());
         }
-        p.setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3*data->correlation));
+        p.setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3*data->correlation()));
         for(j = 0; j<n; j++) {
           x = toInt(scaleX*double(j));
           p.drawLine(x, 0, x, height());
@@ -94,34 +102,24 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
       int w = width() / 2; //only do every second pixel (for speed)
       //draw the waveform
       if(int(pointArray.size()) != w) pointArray.resize(w);
+      if(lookup.size() != w) lookup.resize(w);
 
-	  //Use Bresenham's algorithm in 1d to choose the points to draw
-	  Array1d<float> &nsdfData = active->nsdfData;
-	  int intStep = int(active->nsdfData.size() / w);
-	  int remainderStep = active->nsdfData.size() - (intStep * w);
-	  int pos = 0;
-	  int remainder = 0;
-	  for(int j=0; j<w; j++, pos+=intStep, remainder+=remainderStep) {
-		  if(remainder >= w) {
-			  pos++;
-			  remainder -= w;
-		  }
-		  myassert(pos < active->nsdfData.size());
-		  pointArray.setPoint(j, j*2, toInt(dh2 - nsdfData.at(pos)*dh2));
-	  }
-	  p.setPen(QPen(active->color, 0));
-	  p.drawPolyline(pointArray);
-	  
-/*
-      for(j=0; j<width(); j++) { //cheap hack to go faster (by drawing less points) - causes aliasing
-        myassert(int(pixelStep*j) < active->nsdfData.size());
-        pointArray.setPoint(j, j, toInt(dh2 - active->nsdfData.at(int(pixelStep*j))*dh2));
+      NoteData *currentNote = active->getCurrentNote();
+      Array1d<float> *input = &(active->nsdfData);
+      if(currentNote) {
+        if(aggregateMode == 1) input = &currentNote->nsdfAggregateData;
+        else if(aggregateMode == 2) input = &currentNote->nsdfAggregateDataScaled;
       }
-	  p.setPen(QPen(active->color, 0));
+      //bresenham1d(*input, lookup);
+      maxAbsDecimate1d(*input, lookup);
+      for(int j=0; j<w; j++) {
+        pointArray.setPoint(j, j*2, toInt(dh2 - lookup[j]*dh2));
+      }
+
+      p.setPen(QPen(active->color, 0));
       p.drawPolyline(pointArray);
-*/
     }
-    if(data) {
+    if(data && (aggregateMode == 0)) {
       double ratio = double(width()) / double(active->nsdfData.size()); //pixels per index
       //float highest = active->nsdfData.at(data->highestCorrelationIndex);
       //float chosen = active->nsdfData.at(data->chosenCorrelationIndex);
@@ -161,10 +159,24 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
         y = toInt(dh2 - data->periodEstimatesAmp[data->chosenCorrelationIndex] * dh2);
         p.drawEllipse(x-2, y-2, 5, 5);
       }
+
+      //draw a line at the chosen correlation period
+      if(data->chosenCorrelationIndex >= 0) {
+        p.setPen(Qt::green);
+        p.setBrush(Qt::green);
+        //x = toInt(double(data->periodOctaveEstimate) * ratio);
+        x = toInt(double(active->periodOctaveEstimate(chunk)) * ratio);
+        p.drawLine(x, 0, x, height());
+      }
     }
     
     active->unlock();
     
   }
   endDrawing();
+}
+
+void CorrelationWidget::setAggregateMode(int mode) {
+  aggregateMode = mode;
+  update();
 }

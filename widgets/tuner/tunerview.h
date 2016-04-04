@@ -16,7 +16,12 @@
 #define TUNERVIEW_H
 
 #include <vector>
+#include <QPixmap>
+#include <QResizeEvent>
+#include <QPaintEvent>
+
 #include "viewwidget.h"
+#include "vibratotunerwidget.h"
 
 class QPixmap;
 class TunerWidget;
@@ -28,7 +33,7 @@ class TunerView : public ViewWidget {
   Q_OBJECT
 
   public:
-    TunerView(int viewID_, QWidget *parent = 0, const char *name = 0);
+    TunerView(int viewID_, QWidget *parent = 0);
     virtual ~TunerView();
 
     void resizeEvent(QResizeEvent *);
@@ -38,13 +43,16 @@ class TunerView : public ViewWidget {
 
   public slots:
     void slotCurrentTimeChanged(double time);
+    void setLed(int index, bool value);
+    void doUpdate();
 
   private:
     void resetLeds();
     //float averageNote(Channel *ch, int begin, int end);
 	  //float averageIntensity(Channel *ch, int begin, int end);
     
-    TunerWidget *tunerWidget;
+    //TunerWidget *tunerWidget;
+    VibratoTunerWidget *tunerWidget;
     std::vector<LEDIndicator*> leds;
     QwtSlider *slider;
 

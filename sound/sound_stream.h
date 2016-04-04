@@ -34,7 +34,7 @@ class SoundStream
   SoundStream() { mode=F_NONE; }
   virtual ~SoundStream() {}
 
-  int sample_size() { return bits / 8; }
+  int sample_size() { return (bits+7) / 8; }
   int frame_size() { return sample_size() * channels; }
 
   virtual long read_bytes(void *data, long length) = 0;
@@ -48,6 +48,7 @@ class SoundStream
 
   virtual int writeFloats(float **channelData, int length, int ch);
   virtual int readFloats(float **channelData, int length, int ch);
+  virtual int writeReadFloats(float **outChannelData, int outCh, float **inChannelData, int inCh, int length);
 };
 
 #endif

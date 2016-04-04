@@ -1,13 +1,10 @@
 
- Tartini (version 1) is Copyright (C) 2002-2005 Philip McLeod.
+ Tartini (version 1.1) is Copyright (C) 2002-2007 Philip McLeod.
 
- You may use, distribute and copy Tartini (version 1) under the terms of
+ You may use, distribute and copy Tartini (version 1.1) under the terms of
  GNU General Public License version 2, which is displayed below.
 
- An exception has been made to allow the use of the Non-Comercial edition
- of Qt3 for Windows with Tartini (version 1).
-
- The source for Tartini (version 1) can be downloaded from http://www.tartini.net
+ The source for Tartini (version 1.1) can be downloaded from http://www.tartini.net
  or write to Philip McLeod, Department of Computer Science, University of Otago,
  PO Box 56, Dunedin 9015, New Zealand.
 

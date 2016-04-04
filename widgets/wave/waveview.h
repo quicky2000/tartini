@@ -16,6 +16,8 @@
 #define WAVEVIEW_H
 
 #include "viewwidget.h"
+//Added by qt3to4:
+#include <QResizeEvent>
 
 class WaveWidget;
 
@@ -23,7 +25,7 @@ class WaveView : public ViewWidget {
   Q_OBJECT
 
   public:
-    WaveView(int viewID_, QWidget *parent = 0, const char *name = NULL);
+    WaveView(int viewID_, QWidget *parent = 0);
     virtual ~WaveView();
 
     void resizeEvent(QResizeEvent *);

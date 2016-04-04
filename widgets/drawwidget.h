@@ -17,32 +17,38 @@
 
 #include <qpainter.h>
 #include <qwidget.h>
+#include <QGLWidget>
 #include <qobject.h>
+//Added by qt3to4:
+#include <QPixmap>
 #include <vector>
 #include <map>
+#include <QPaintDevice>
 
 #include "useful.h"
 
 #define DRAW_VIEW_NORMAL   0
 #define DRAW_VIEW_SUMMARY  1
+#define DRAW_VIEW_PRINT    2
 
 class Channel;
 class QPixmap;
+class ZoomElement;
 
 class DrawWidget : public QWidget {
   Q_OBJECT
 
 public:
-  DrawWidget(QWidget *parent, const char* name = 0, WFlags f = WDestructiveClose);
+  DrawWidget(QWidget *parent, const char* name = 0, Qt::WFlags f = Qt::WDestructiveClose);
   virtual ~DrawWidget();
 
-	static QColor colorBetween(QColor a, QColor b, double ratio);
+	//static QColor colorBetween(QColor a, QColor b, double ratio);
 
   /* Draw the channel onto the painter using the MinMax algorithm or individual samples if the zoom is high enough */
-  void drawChannel(Channel *ch, QPainter &p, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType);
+  static void drawChannel(QPaintDevice &pd, Channel *ch, QPainter &p, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType);
   void drawChannelFilled(Channel *ch, QPainter &p, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType);
   void setChannelVerticalView(Channel *ch, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY);
-  void setLineWidth(int width);
+  static void setLineWidth(int width);
   
   void beginDrawing(bool clearBackground_=true);
   void endDrawing(bool drawToScreen_=true);
@@ -50,13 +56,17 @@ public:
   void fillBackground(const QColor &color);
   void checkSize();
   void drawToScreen();
+  static bool calcZoomElement(Channel *ch, ZoomElement &ze, int baseElement, double baseX);
+  void drawArray(float *input, int n, int sampleStep=1, double theZoomY=1.0, double offset=0);
   
 protected:
-  int lineWidth;
-  int lineTopHalfWidth;
-  int lineBottomHalfWidth;
+  static int lineWidth;
+  static int lineTopHalfWidth;
+  static int lineBottomHalfWidth;
 
-  QPixmap *buffer;
+  QPixmap *_buffer;
+  QPaintDevice *paintDevice;
+
   QPainter p;
 };
 

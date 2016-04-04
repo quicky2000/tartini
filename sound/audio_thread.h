@@ -42,15 +42,19 @@ class AudioThread : public QThread {
 
   virtual void run();
   void start();
-  void start(SoundFile *s);
+  void start(SoundFile *sPlay, SoundFile *sRec);
   void stop();
   void stopAndWait();
       
   int doStuff();
-  SoundFile *soundFile() { return _soundFile; }
+  SoundFile *playSoundFile() { return _playSoundFile; }
+  SoundFile *recSoundFile() { return _recSoundFile; }
+  //SoundFile *curSoundFile() { return (_playSoundFile) ? _playSoundFile : _recSoundFile; }
+  SoundFile *curSoundFile() { return (_recSoundFile) ? _recSoundFile : _playSoundFile; }
   
  private:
-  SoundFile *_soundFile;
+  SoundFile *_playSoundFile;
+  SoundFile *_recSoundFile;
   
   bool stopping;
   bool first;

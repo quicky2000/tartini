@@ -20,6 +20,7 @@
 //#include "freqdrawwidget.h"
 
 class FreqDrawWidget;
+class FreqWidgetGL;
 class AmplitudeWidget;
 class MyScrollBar;
 class TimeAxis;
@@ -29,17 +30,20 @@ class FreqView: public ViewWidget {
   Q_OBJECT
 
   public:
-    FreqView(int viewID_, QWidget *parent = 0, const char *name = 0);
+    FreqView(int viewID_, QWidget *parent = 0);
     virtual ~FreqView();
 
-    QSize sizeHint() const { return QSize(600, 600); }
+    QSize sizeHint() const { return QSize(600, 560); }
 
   public slots:
     void zoomIn();
     void zoomOut();
+    void setAmplitudeZoom(double);
   
   private:
-    FreqDrawWidget *freqDrawWidget;
+    //FreqDrawWidget *freqDrawWidget;
+    //FreqDrawWidget *freqWidgetGL;
+    FreqWidgetGL *freqWidgetGL;
     AmplitudeWidget *amplitudeWidget;
     MyScrollBar *freqScrollBar;
     MyScrollBar *amplitudeScrollBar;

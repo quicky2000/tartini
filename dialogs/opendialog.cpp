@@ -18,23 +18,30 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+//#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include "gdata.h"
 
 OpenDialog::OpenDialog(QWidget * parent)
- : QFileDialog(QDir::convertSeparators(gdata->settings.getString("Dialogs", "openFilesFolder")),
- "Wave files (*.wav)", parent, NULL, true)
+// : Q3FileDialog(QDir::convertSeparators(gdata->settings.getString("Dialogs", "openFilesFolder")),
+// : QFileDialog(QDir::convertSeparators(gdata->qsettings->value("Dialogs/openFilesFolder", QDir::currentDirPath()).toString()),
+ : QFileDialog(parent, "Open File", QDir::convertSeparators(gdata->qsettings->value("Dialogs/openFilesFolder", QDir::currentDirPath()).toString()),
+ "Wave files (*.wav)")
 {
   setCaption("Choose a file to open");
   setMode(QFileDialog::ExistingFile);
 
+/*
   QWidget *baseWidget = new QWidget(this);
   addWidgets(NULL, baseWidget, NULL);
-  QBoxLayout *baseLayout = new QVBoxLayout(baseWidget);
+  Q3BoxLayout *baseLayout = new QVBoxLayout(baseWidget);
 
   rememberFolderCheckBox = new QCheckBox("Remember current folder", baseWidget);
-  rememberFolderCheckBox->setChecked(gdata->settings.getBool("Dialogs", "rememberOpenFolder"));
+  rememberFolderCheckBox->setChecked(gdata->qsettings->value("Dialogs/rememberOpenFolder", true).toBool());
   baseLayout->addSpacing(10);
   baseLayout->addWidget(rememberFolderCheckBox);
+*/
 }
 
 OpenDialog::~OpenDialog()
@@ -43,13 +50,17 @@ OpenDialog::~OpenDialog()
 
 void OpenDialog::accept()
 {
+/*
   bool remember = rememberFolderCheckBox->isChecked();
-  gdata->settings.setBool("Dialogs", "rememberOpenFolder", remember);
+  //gdata->settings.setBool("Dialogs", "rememberOpenFolder", remember);
+  gdata->qsettings->setValue("Dialogs/rememberOpenFolder", remember);
   if(remember == true) {
     const QDir *curDir = dir();
-    gdata->settings.setString("Dialogs", "openFilesFolder", curDir->absPath());
+    //gdata->settings.setString("Dialogs", "openFilesFolder", curDir->absPath());
+    gdata->qsettings->setValue("Dialogs/openFilesFolder", curDir->absPath());
     delete curDir;
   }
+*/
   QFileDialog::accept();
 }
 

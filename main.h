@@ -23,6 +23,11 @@
 #include <qapplication.h>
 
 
+#ifdef MACX
+#include <qstring.h>
+extern QString macxPathString;
+#endif
+
 //extern QColor stdcol[19];
 //extern MainWindow *mainWindow;
 

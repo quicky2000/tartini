@@ -22,6 +22,10 @@
 #include <qpixmap.h>
 #include <qevent.h>
 #include <qobject.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QWheelEvent>
+#include <QPaintEvent>
 
 #include <map>
 
@@ -44,7 +48,7 @@ class SummaryDrawWidget : public DrawWidget {
     void mousePressEvent( QMouseEvent *e );
     void mouseMoveEvent( QMouseEvent *e );
     void mouseReleaseEvent( QMouseEvent *e );
-    void SummaryDrawWidget::wheelEvent( QWheelEvent *e);
+    void wheelEvent( QWheelEvent *e);
 
   private:
     QPixmap *buffer;

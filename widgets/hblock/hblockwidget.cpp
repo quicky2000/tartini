@@ -14,12 +14,15 @@
  ***************************************************************************/
 #include <qpixmap.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <QPaintEvent>
 
 #include "hblockwidget.h"
 #include "gdata.h"
 #include "channel.h"
 #include "analysisdata.h"
 #include "useful.h"
+#include "myqt.h"
 
 HBlockWidget::HBlockWidget(QWidget *parent)
   : DrawWidget(parent)
@@ -58,8 +61,8 @@ void HBlockWidget::paintEvent( QPaintEvent * )
   
       // Work out the bar height for each harmonic
       double barHeight = double(height()) / double(harmonicFreq.size());
-      QColor fillColor = colorBetween(colorGroup().background(), active->color, data.volumeValue);
-      QColor outlineColor = colorBetween(colorGroup().background(), Qt::black, data.volumeValue);
+      QColor fillColor = colorBetween(colorGroup().background(), active->color, data.volumeValue());
+      QColor outlineColor = colorBetween(colorGroup().background(), Qt::black, data.volumeValue());
       p.setBrush(fillColor);
   
       int barStart = 0;
@@ -74,7 +77,7 @@ void HBlockWidget::paintEvent( QPaintEvent * )
         p.setPen(outlineColor);
         p.setBrush(colorBetween(fillColor, Qt::black, data.harmonicNoise[i]));
         // Work out how many pixels wide the harmonic should be
-        barWidth = harmonicAmp.at(i) * width();
+        barWidth = (harmonicAmp.at(i)) * width();
         /* Work out how many pixels the harmonic should be offset from where it would be
         * if it were exactly (i+1)f   */
         //diff = toInt( (harmonicFreq.at(i) - (i+1) * fund) / fund * width() / 10.0 );

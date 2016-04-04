@@ -23,6 +23,9 @@
 //#include <qobject.h>
 
 #include <vector>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QPaintEvent>
 
 // Forward declarations of classes the h file doesn't need to know specifics about
 class QPixmap;

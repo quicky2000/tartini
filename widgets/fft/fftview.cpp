@@ -16,9 +16,11 @@
 #include "fftwidget.h"
 #include "gdata.h"
 #include "channel.h"
+//Added by qt3to4:
+#include <QResizeEvent>
 
-FFTView::FFTView( int viewID_, QWidget *parent, const char *name )
- : ViewWidget( viewID_, parent, name)
+FFTView::FFTView( int viewID_, QWidget *parent )
+ : ViewWidget( viewID_, parent)
 {
   gdata->setDoingActiveFFT(true);
   
@@ -33,7 +35,7 @@ FFTView::FFTView( int viewID_, QWidget *parent, const char *name )
   fftWidget->show();
 
   //make the widget get updated when the view changes
-  connect(gdata->view, SIGNAL(onFastUpdate()), fftWidget, SLOT(update()));
+  connect(gdata->view, SIGNAL(onFastUpdate(double)), fftWidget, SLOT(update()));
 }
 
 FFTView::~FFTView()

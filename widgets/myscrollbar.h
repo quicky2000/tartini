@@ -14,6 +14,8 @@
  ***************************************************************************/
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <QResizeEvent>
 #include "useful.h"
 
 class QScrollBar;
@@ -32,9 +34,9 @@ class MyScrollBar : public QWidget
   QScrollBar *bar;
   
 public:
-  MyScrollBar(Orientation orientation, QWidget * parent, const char * name = 0);
+  MyScrollBar(Qt::Orientation orientation, QWidget * parent, const char * name = 0);
     //QScrollBar(orientation, parent, name) { }
-  MyScrollBar(double minValue_, double maxValue_, double linesPerPage_, double pageStep_, double value_, double step_, Orientation orientation, QWidget * parent, const char * name = 0);
+    MyScrollBar(double minValue_, double maxValue_, double linesPerPage_, double pageStep_, double value_, double step_, Qt::Orientation orientation, QWidget * parent, const char * name = 0);
       //QScrollBar(minValue, maxValue, MAX(toInt(double(pageStep)/double(linesPerPage)), 1), MAX(pageStep, 1), value, orientation, parent, name) { _linesPerPage = linesPerPage; }
   virtual ~MyScrollBar();
 
@@ -59,10 +61,11 @@ public slots:
   void sliderMoving(int value);
   void sliderMoving();
   void setStep(double step_);
+  void actionTriggering(int action);
 
 signals:
   void valueChanged(double value_);
   //void valueChanged();
   void sliderMoved(double value_);
-  void sliderMoved();
+  //void sliderMoved();
 };

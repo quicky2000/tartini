@@ -27,7 +27,7 @@ ZoomLookup::~ZoomLookup()
 void ZoomLookup::clear()
 {
   _table.clear();
-  _hasValue.clear();
+  //_hasValue.clear();
   _size = 0;
 }
 
@@ -42,7 +42,7 @@ void ZoomLookup::setSize(int size_)
 {
   _size = size_;
   _table.resize(size_);
-  _hasValue.resize(size_);
+  //_hasValue.resize(size_, false);
 }
 
 

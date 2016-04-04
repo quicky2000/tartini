@@ -16,45 +16,63 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <qmainwindow.h>
-#include <qworkspace.h>
-#include <qdialog.h>
+#include <QMainWindow>
+#include <QWorkspace>
+#include <QDialog>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <QEvent>
+#include <QLabel>
+//#include <Q3PopupMenu>
+#include <QSignalMapper>
 //#include "audio_stream.h"
 //#include "sound_file_stream.h"
 //#include "fwinfunc.h"
 //#include "audio_thread.h"
 
 class Preferences;
-class QListView;
-class QListViewItem;
-class QDockWindow;
+class Q3ListView;
+class Q3ListViewItem;
+class Q3DockWindow;
 class QLabel;
 class QwtSlider;
 class MyScrollBar;
 class QTimer;
-class QIconSet;
+class QIcon;
 class QToolButton;
 class Channel;
 class MyLabel;
+class QComboBox;
 
 struct ViewData
 {
-	ViewData(QString title_, QString menuName_, QString className_)
+	ViewData(QString title_, QString menuName_, QString className_, int menuType_)
 	{
-    title = title_;
+		title = title_;
 		menuName = menuName_;
 		className = className_;
+		menuType = menuType_;
 	};
   QString title;
   QString menuName;
   QString className;
+  int menuType;
 };
 
-#define NUM_VIEWS 13
-enum VIEW_NAMES { VIEW_OPEN_FILES, VIEW_FREQ, VIEW_TUNER, VIEW_HTRACK,
+enum VIEW_MENU_TYPES {
+	MENU_TYPE_MAIN,
+	MENU_TYPE_TECHNICAL,
+	MENU_TYPE_EXPERIMENTAL
+};
+
+#define NUM_VIEWS 19
+enum VIEW_NAMES {
+  VIEW_OPEN_FILES, VIEW_FREQ, VIEW_TUNER, VIEW_HTRACK,
   VIEW_PIANO, VIEW_HBLOCK, VIEW_PITCH_COMPASS, VIEW_SUMMARY,
-  VIEW_VOLUME_METER/*, VIEW_HSTACK*/, 
-  VIEW_WAVE, VIEW_CORRELATION, VIEW_FFT, VIEW_CEPSTRUM };
+  VIEW_VOLUME_METER, VIEW_HSTACK,VIEW_HBUBBLE, VIEW_HCIRCLE,
+  VIEW_WAVE, VIEW_CORRELATION, VIEW_FFT, VIEW_CEPSTRUM, VIEW_DEBUGVIEW,
+  VIEW_SCORE, VIEW_VIBRATO
+};
 
 extern ViewData viewData[NUM_VIEWS];
 
@@ -68,32 +86,36 @@ class MainWindow : public QMainWindow
   virtual ~MainWindow();
 
   void keyPressEvent ( QKeyEvent * e );
-  bool close(bool alsoDelete);
   void message(QString s, int msec);
-  QListView *theListView;
+  Q3ListView *theListView;
   
-  QDockWindow *listDockWindow;
-  QDockWindow *summaryDockWindow;
   QWorkspace *theWorkspace;
 
-  QPopupMenu *newViewMenu;
-  QPopupMenu *windowMenu;
-  QPopupMenu *optionsMenu;
-  QPopupMenu *helpMenu;
+  QMenu *newViewMenu;
+  QMenu *windowMenu;
+  QMenu *optionsMenu;
+  QMenu *helpMenu;
 
   MyLabel *timeLabel;
   MyLabel *chunkLabel;
   MyLabel *noteLabel;
   QwtSlider *timeSlider;
   MyScrollBar *timeScrollBar;
+  QComboBox *keyTypeComboBox;
     
-  QToolButton *playStopButton;
-  QToolButton *recordButton;
-  QIconSet *playIconSet;
-  QIconSet *stopIconSet;
-  QIconSet *recordIconSet;
+  //QToolButton *playStopButton;
+  QAction *playStopAction;
+  //QToolButton *recordButton;
+  QAction *recordAction;
+  QAction *playRecordAction;
+  QIcon *playIconSet;
+  QIcon *playRecordIconSet;
+  QIcon *stopIconSet;
+  QIcon *recordIconSet;
   QTimer *rewindTimer;
   QTimer *fastforwardTimer;
+
+  QSignalMapper *createSignalMapper;
   
  protected:
   //void customEvent( QCustomEvent * e );
@@ -111,14 +133,17 @@ public slots:
   void openFile(const char *filename);
 
   void openRecord();
+  void openPlayRecord();
+  void openRecord(bool andPlay);
   //void toggleOption(int id);
   void closeAllWidgets();
+  void closeEvent(QCloseEvent *event);
   void menuPreferences();
 
   void windowMenuAboutToShow();
   void windowMenuActivated(int id);
   void newViewAboutToShow();
-  void openView(int viewID);
+  QWidget *openView(int viewID);
   void setTimeLabel(double t);
   void setChunkLabel();
   void setNoteLabel();
@@ -132,7 +157,15 @@ public slots:
   void fastforwardReleased();
   void setTitle(Channel *ch);
   void aboutTartini();
+  void aboutGPL();
   void aboutQt();
+  void printPitch();
+  void exportChannel(int type, QString typeString);
+  void exportChannelPlainText();
+  void exportChannelMatlab();
+
+  bool loadViewGeometry();
+  void saveViewGeometry();
 };
 
 class TartiniDialog : public QDialog
@@ -141,9 +174,20 @@ class TartiniDialog : public QDialog
  
  public:
   TartiniDialog(QWidget *parent = NULL);
+  QSize sizeHint() const { return QSize(600, 600); }
+};
+
+class GPLDialog : public QDialog
+{
+  Q_OBJECT
+ 
+ public:
+  GPLDialog(QWidget *parent = NULL);
   QSize sizeHint() const { return QSize(600, 480); }
 };
 
 extern MainWindow *mainWindow;
+class MyGLFont;
+extern MyGLFont *mygl_font;
 
 #endif

@@ -19,11 +19,17 @@
 #ifdef MYDEBUG // Cause a crash in debug mode so you can trace it with your debugger
 
 #define myassert(expr) if(!(expr)) { \
-  fprintf(stderr, "Assert Failed, casing a crash\n"); fflush(stderr); \
+  fprintf(stderr, "Assert Failed: %s in %s line %u.\nCausing a trace crash.\n", #expr, __FILE__, __LINE__); \
+  fflush(stderr); \
   *((int*)0) = 0; } //cause a crash
 
 #else // Do nothing when not in debug mode
 #define myassert(expr) ;
 #endif
+
+#define myAlwaysAssert(expr) if(!(expr)) { \
+  fprintf(stderr, "Assert Failed: %s in %s line %u.\nCausing a trace crash.\n", #expr, __FILE__, __LINE__); \
+  fflush(stderr); \
+  *((int*)0) = 0; } //cause a crash
 
 #endif //MYASSERT

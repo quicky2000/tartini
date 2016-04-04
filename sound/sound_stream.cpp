@@ -117,6 +117,13 @@ int SoundStream::readFloats(float **channelData, int length, int ch)
     return 0;
 }
 
+int SoundStream::writeReadFloats(float **outChannelData, int outCh, float **inChannelData, int inCh, int length)
+{
+  writeFloats(outChannelData, length, outCh);
+  return readFloats(inChannelData, length, inCh);
+  //not implimented yet.
+  //return 0;
+}
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *

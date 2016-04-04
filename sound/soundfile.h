@@ -29,7 +29,8 @@ extern const double v8, v16, v32;
 
 class SoundFile
 {
-private:
+//private:
+protected:
   int _chunkNum;
   int _framesPerChunk; /**< The number of samples to move every chunk */
   float **tempWindowBuffer; //array is indexed from -16 !!
@@ -40,9 +41,11 @@ private:
   int _offset;
   bool _saved;
   QMutex *mutex;
+  bool _doingDetailedPitch;
 
   int blockingRead(SoundStream *s, float **buffer, int n); //low level
   int blockingWrite(SoundStream *s, float **buffer, int n); //low level
+  static int blockingWriteRead(SoundStream *s, float **writeBuffer, int writeCh, float **readBuffer, int readCh, int n);
   void toChannelBuffers(int n); //low level
   void toChannelBuffer(int c, int n);
 public:
@@ -52,6 +55,7 @@ public:
   SoundFileStream *filteredStream; /**< Pointer to the file's filtered SoundFileStream */
   Array1d<Channel*> channels; /**< The actual sound data is stored seperately for each channel */
   MyTransforms myTransforms;
+  bool firstTimeThrough;
   
   SoundFile();
   //SoundFile(const char *filename_);
@@ -73,8 +77,11 @@ public:
   //int readN(SoundStream *s, int n);
   int readN(int n);
   bool playChunk();
+  bool setupPlayChunk();
   //bool recordChunk();
   void recordChunk(int n);
+  void finishRecordChunk(int n);
+  static bool playRecordChunk(SoundFile *playSoundFile, SoundFile *recSoundFile);
   //void initRecordingChunk();
   void applyEqualLoudnessFilter(int n);
   //int readChunk(SoundStream *s=NULL);
@@ -121,6 +128,9 @@ public:
   bool saved() { return _saved; }
   void setSaved(bool newState) { _saved = newState; }
   bool equalLoudness() { return myTransforms.equalLoudness; }
+  bool doingDetailedPitch() { return _doingDetailedPitch; }
+
+  friend bool playRecordChunk(SoundFile *playSoundFile, SoundFile *recSoundFile, int n);
 };
 
 #endif

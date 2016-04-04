@@ -16,9 +16,15 @@
 #include "correlationwidget.h"
 #include "gdata.h"
 #include "channel.h"
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+//#include <QCheckBox>
+#include <QComboBox>
 
-CorrelationView::CorrelationView( int viewID_, QWidget *parent, const char *name )
- : ViewWidget( viewID_, parent, name)
+CorrelationView::CorrelationView( int viewID_, QWidget *parent )
+ : ViewWidget( viewID_, parent)
 {
   //setCaption("Wave view");
   gdata->setDoingActiveAnalysis(true);
@@ -31,11 +37,25 @@ CorrelationView::CorrelationView( int viewID_, QWidget *parent, const char *name
   }
 
   correlationWidget = new CorrelationWidget(this);
-  correlationWidget->show();
+  QStringList s;
+  s << "Chunk correlation" << "Note Aggregate Correlation" << "Note Aggregate Correlation Scaled";
+  QComboBox *aggregateModeComboBox = new QComboBox(this, "aggregateModeComboBox");
+  aggregateModeComboBox->addItems(s);
+  QHBoxLayout *hLayout = new QHBoxLayout();
+  hLayout->setMargin(0);
+  hLayout->addWidget(aggregateModeComboBox);
+  hLayout->addStretch(1);
+  connect(aggregateModeComboBox, SIGNAL(activated(int)), correlationWidget, SLOT(setAggregateMode(int)));
+
+  QVBoxLayout *mainLayout = new QVBoxLayout(this);
+  mainLayout->setMargin(0);
+  mainLayout->addWidget(correlationWidget);
+  mainLayout->addLayout(hLayout);
+
 
   //make the widget get updated when the view changes
-  //connect(gdata->view, SIGNAL(onFastUpdate()), correlationWidget, SLOT(update()));
-  connect(gdata->view, SIGNAL(onSlowUpdate()), correlationWidget, SLOT(update()));
+  //connect(gdata->view, SIGNAL(onFastUpdate(double)), correlationWidget, SLOT(update()));
+  connect(gdata->view, SIGNAL(onSlowUpdate(double)), correlationWidget, SLOT(update()));
 }
 
 CorrelationView::~CorrelationView()
@@ -44,7 +64,9 @@ CorrelationView::~CorrelationView()
   delete correlationWidget;
 }
 
+/*
 void CorrelationView::resizeEvent(QResizeEvent *)
 {
   correlationWidget->resize(size());
 }
+*/

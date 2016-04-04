@@ -16,7 +16,8 @@
 #ifndef OPENDIALOG_H
 #define OPENDIALOG_H
 
-#include <qfiledialog.h>
+//#include <q3filedialog.h>
+#include <QFileDialog>
 
 class QCheckBox;
 

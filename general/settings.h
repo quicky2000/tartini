@@ -42,6 +42,8 @@ public:
 
 	void load(); //loads settings in from disk
   void save(); //saves settings out to disk
+
+  void print();
 private:
 	std::map<QString, std::map<QString, QString> > settings; /*< A memory version of the settings on disk. Only the Settings form can change these values. */
 	//std::map<QString, std::map<QString, QString> > defaults; /*< Default settings */

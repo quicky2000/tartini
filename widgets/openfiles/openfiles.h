@@ -16,10 +16,12 @@
 #define OPENFILES_H
 
 #include "viewwidget.h"
+//Added by qt3to4:
+#include <QResizeEvent>
 
 class Channel;
-class QListView;
-class QListViewItem;
+class Q3ListView;
+class Q3ListViewItem;
 
 class OpenFiles : public ViewWidget {
 
@@ -30,7 +32,7 @@ class OpenFiles : public ViewWidget {
     virtual ~OpenFiles();
 
   //private: // Although it should be private, really
-    QListView *theListView;
+    Q3ListView *theListView;
 
     void resizeEvent(QResizeEvent *);
 
@@ -38,8 +40,8 @@ class OpenFiles : public ViewWidget {
 
   public slots:
     void refreshChannelList();
-    void listViewChanged(QListViewItem* item);
-    void slotCurrentChanged(QListViewItem* item);
+    void listViewChanged(Q3ListViewItem* item);
+    void slotCurrentChanged(Q3ListViewItem* item);
     //void slotAddFilename(QString s);
 	  void slotActiveChannelChanged(Channel *active);
 

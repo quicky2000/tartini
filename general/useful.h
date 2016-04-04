@@ -17,10 +17,11 @@
 
 #include <stdlib.h>
 
+/*
 #if (defined (WIN32) || defined (_WIN32))
   #include  <math.h>
-  /*  Win32 doesn't seem to have the lrint or lrintf functions.
-  **  Therefore implement inline versions of these functions here.  */
+  //  Win32 doesn't seem to have the lrint or lrintf functions.
+  //  Therefore implement inline versions of these functions here.
   __inline long int 
   lrint (double flt)
   { int intgr;
@@ -40,14 +41,14 @@
     return intgr ;
   }
 #else
-
+*/
 //to get the lrint and lrintf functions we must use the C99 defines
 #define _ISOC9X_SOURCE  1
 #define _ISOC99_SOURCE  1
 #define __USE_ISOC9X  1
 #define __USE_ISOC99  1
 #include  <math.h>
-#endif /*(defined (WIN32) || defined (_WIN32))*/
+//#endif //(defined (WIN32) || defined (_WIN32))
 
 #define MIN(x,y)    ((x)<(y) ? (x) : (y))
 #define MAX(x,y)    ((x)>(y) ? (x) : (y))
@@ -78,10 +79,12 @@ double powi(const double x, const int y);
 double nearestPowerOf2(double x);
 
 #ifndef pow10
+//rasises 10^x
 inline double pow10(double x) { return pow(10.0, x); }
 #endif
 
 #ifndef pow2
+//rasises 2^x
 inline double pow2(double x) { return pow(2.0, x); }
 #endif
 
@@ -89,6 +92,10 @@ inline double pow2(double x) { return pow(2.0, x); }
 //From log rules  log_b(x) = log_a(x) / log_a(b)
 inline double log2(double x) { return log(x) / 0.69314718055994530941723212145818; }
 #endif
+
+inline double logBaseN(double baseN, double x) {
+  return log(x) / log(baseN);
+}
 
 //return a random number between 0 and 1 (inclusive)
 inline double prand()
@@ -109,21 +116,26 @@ inline int cycle(const int a, const int b)
     else return b + ((a+1) % b) - 1;
 }
 
-inline double myround(const double x)
-{
+inline double myround(const double x) {
   return floor(x + 0.5);
 }
 
-inline int toInt(const float x)
-{
+inline int toInt(const float x) {
   return lrintf(x);
   //return int(floor(x + 0.5));
 }
 
-inline int toInt(const double x)
-{
+inline int toInt(const double x) {
   return lrint(x);
   //return int(floor(x + 0.5));
+}
+
+inline int intFloor(const float x) {
+  return lrintf(x-0.5);
+}
+
+inline int intFloor(const double x) {
+  return lrint(x-0.5);
 }
 
 /*Round x up to the nearest multiple of multiple*/
@@ -141,13 +153,28 @@ inline bool within(T plusMinus, T value1, T value2)
   return (value1 >= value2-plusMinus) ? (value1 <= value2+plusMinus) : false;
 }
 
+/** Returns true if x is between lowerBound and upperBound (inclusive)
+*/
+template<class T>
+inline bool between(T x, T lowerBound, T upperBound)
+{
+  return (x >= lowerBound) && (x <= upperBound);
+}
+
 //makes  lowerBound <= var <= upperBound
 template<class T>
-T bound(T var, T lowerBound, T upperBound)
+inline T bound(T var, T lowerBound, T upperBound)
 {
+/*
   if(var < lowerBound) var = lowerBound;
   if(var > upperBound) var = upperBound;
   return var;
+*/
+  //this way will deal with NAN, setting it to lowerBound
+  if(var >= lowerBound) {
+    if(var <= upperBound) return var;
+    else return upperBound;
+  } else return lowerBound;
 }
 
 /** Returns the x position of the min/max of a parabola
@@ -180,57 +207,6 @@ inline void parabolaTurningPoint2(T y_1, T y0, T y1, T xOffset, T *x, T *y)
   }
 }
 
-/** Returns the fractional note (from the midi scale)
-@param freq The frequency in Hz
-@return The note in fractional part semitones from the midi scale.
-*/
-/*
-inline double freq2note(double freq)
-{
-  return log10(freq/27.5) / 0.025085832972;
-}
-*/
-
-/** Converts the frequencies freq (in hertz) into their note number on the midi scale
-    i.e. the number of semi-tones above C0
-    Note: The note will contain its fractional part
-    Reference = http://www.borg.com/~jglatt/tutr/notenum.htm
-  @param freq The frequency in Hz
-  @return The note in fractional part semitones from the midi scale.
-*/
-inline double freq2note(double freq)
-{
-#ifdef log2
-	//return 69 + 12*log2(freq / 440);
-	//From log rules  log(x/y) = log(x) - log(y)
-	//return 69 + 12*(log2(freq) - log2(440));
-	return -36.3763165622959152488 + 12.0*log2(freq);
-#else
-	//From log rules  log_b(x) = log_a(x) / log_a(b)
-	//return 69 + 39.8631371386483481*log10(freq / 440);
-	return -36.3763165622959152488 + 39.8631371386483481*log10(freq);
-#endif
-}
-
-/** Does the opposite of the function above
-*/
-inline double note2freq(double note)
-{
-  return pow10((note + 36.3763165622959152488) / 39.8631371386483481);
-}
-
-char* noteName(int note);
-inline char* noteName(double note) { return noteName(toInt(note)); }
-
-int noteOctave(int note);
-inline int noteOctave(double note) { return noteOctave(toInt(note)); }
-
-int noteValue(int note);
-inline int noteValue(double note) { return noteValue(toInt(note)); }
-
-bool isBlackNote(int note);
-inline bool isBlackNote(double note) { return isBlackNote(toInt(note)); }
-
 /*
 struct MinMax
 {
@@ -242,12 +218,12 @@ struct MinMax
 */
 struct MinMax
 {
-    MinMax::MinMax() 
+    MinMax() 
 	{
 		min = 0.0;
 		max = 0.0;
 	};
-    MinMax::MinMax(float min_, float max_) 
+    MinMax(float min_, float max_) 
 	{
 		min = min_;
 		max = max_;
@@ -275,7 +251,33 @@ void bound(T *var, T lowerBound, T upperBound)
 }
 */
 
+/** Return the index with the maximum value in an array.
+  * If more than one value with the maximum, the first is returned.
+  * @param aFirst Pointer to the beginning of the array
+  * @param length The length of the array
+  * @return The index of the maximum
+  */
+template <class ForwardIterator>
+int maxIndex(ForwardIterator aFirst, int length)
+{
+  int bestIndex = 0;
+  for(int j=1; j<length; j++) { if(aFirst[j] > aFirst[bestIndex]) bestIndex = j; }
+  return bestIndex;
+}
 
+/** Return the index with the minimum value in an array.
+  * If more than one value with the minimum, the first is returned.
+  * @param aFirst Pointer to the beginning of the array
+  * @param length The length of the array
+  * @return The index of the minimum
+  */
+template <class ForwardIterator>
+int minIndex(ForwardIterator aFirst, int length)
+{
+  int bestIndex = 0;
+  for(int j=1; j<length; j++) { if(aFirst[j] < aFirst[bestIndex]) bestIndex = j; }
+  return bestIndex;
+}
 
 #include <utility>
 
@@ -307,14 +309,105 @@ std::pair<_ForwardIter, _ForwardIter> minMaxElement(_ForwardIter __first, _Forwa
   return __result;
 }
 
+/** Add sequence 'B' element-wise to sequence 'A' and store result in 'A'
+*/
+template <class ForwardIterator>
+void addElements(ForwardIterator aFirst, ForwardIterator aLast, ForwardIterator bFirst)
+{
+  //while(aFirst != aLast) *bFirst++ += *aFirst++;
+  //while(aFirst != aLast) { *bFirst += *aFirst; bFirst++; aFirst++; }
+  while(aFirst != aLast) { *aFirst += *bFirst; ++bFirst; ++aFirst; }
+}
+
+/** Add a scaled sequence 'B' element-wise to sequence 'A' and store result in 'A'
+*/
+template <class ForwardIterator, class ElementType>
+void addElements(ForwardIterator aFirst, ForwardIterator aLast, ForwardIterator bFirst, ElementType scaler)
+{
+  //while(aFirst != aLast) *bFirst++ += *aFirst++;
+  while(aFirst != aLast) { *aFirst += (*bFirst) * scaler; ++bFirst; ++aFirst; }
+}
+
+/** Copy element-wise 'A' into 'B' scaling the scaler
+*/
+template <class ForwardIterator, class ElementType>
+void copyElementsScale(ForwardIterator aFirst, ForwardIterator aLast, ForwardIterator bFirst, ElementType scaler)
+{
+  while(aFirst != aLast) *bFirst++ = (*aFirst++) * scaler;
+}
+
+/** Copy element-wise 'A' into 'B' dividing by div
+*/
+template <class ForwardIterator, class ElementType>
+void copyElementsDivide(ForwardIterator aFirst, ForwardIterator aLast, ForwardIterator bFirst, ElementType div)
+{
+  while(aFirst != aLast) *bFirst++ = (*aFirst++) / div;
+}
+
 #include <functional>
 
-struct absoluteLess : public std::binary_function<float, float, float>
+template <class T>
+inline T absolute(const T &x) { return (x >= 0) ? x : -x; }
+
+template <class T>
+struct absoluteLess : public std::binary_function<T, T, bool>
 {
-  float operator()(float &x, float &y) const { return fabs(x) < fabs(y); }
+  bool operator()(const T &x, const T &y) const { return absolute(x) < absolute(y); }
+};
+
+template <class T>
+struct absoluteGreater : public std::binary_function<T, T, bool>
+{
+  bool operator()(T &x, T &y) const { return absolute(x) > absolute(y); }
 };
 
 bool copyFile(const char *src, const char *dest);
 bool moveFile(const char *src, const char *dest);
+
+int nextPowerOf2(int x);
+
+#include <algorithm>
+
+/*
+template<class ForwardIterator, class ElementType>
+ForwardIterator binary_search_closest(ForwardIterator first, ForwardIterator last, const ElementType &value)
+{
+  ForwardIterator i = std::lower_bound(first, last, value);
+  if(i < last-1) {
+    if(fabs(value - *i) < fabs(value - *(i+1))) return i;
+    else return i+1;
+  }
+  return i;
+}
+*/
+
+/** Given an ordered sequence, 'A', return an iterator to the closest element to value
+*/
+template <class ForwardIterator, class ElementType>
+ForwardIterator binary_search_closest(ForwardIterator aFirst, ForwardIterator aLast, const ElementType &value)
+{
+  std::pair<ForwardIterator, ForwardIterator> range = std::equal_range(aFirst, aLast, value);
+  if(range.first != aFirst) --range.first;
+  if(range.second != aLast) ++range.second;
+  ForwardIterator best = range.first;
+  ForwardIterator it = best;
+  while(++it != range.second) {
+    if(absolute(*it - value) < absolute(*best - value)) best = it;
+  }
+  return best;
+}
+
+#include <iostream>
+
+/** Print out a range of elements to cout. eg [1 2 3 4]
+*/
+template <class ForwardIterator>
+ForwardIterator print_elements(ForwardIterator aFirst, ForwardIterator aLast)
+{
+  std::cout << "[";
+  if(aFirst != aLast) std::cout << *aFirst++;
+  while(aFirst != aLast) std::cout << " " << *aFirst++;
+  std::cout << "]" << std::endl;
+}
 
 #endif

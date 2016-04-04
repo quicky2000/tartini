@@ -15,9 +15,11 @@
 #include "hblockview.h"
 #include "hblockwidget.h"
 #include "gdata.h"
+//Added by qt3to4:
+#include <QResizeEvent>
 
-HBlockView::HBlockView( int viewID_, QWidget *parent, const char *name )
- : ViewWidget( viewID_, parent, name)
+HBlockView::HBlockView( int viewID_, QWidget *parent )
+ : ViewWidget( viewID_, parent)
 {
   //setCaption("Harmonic Block");
 
@@ -25,7 +27,7 @@ HBlockView::HBlockView( int viewID_, QWidget *parent, const char *name )
   hBlockWidget->show();
 
   //make the widget get updated when the view changes
-  connect(gdata->view, SIGNAL(onFastUpdate()), hBlockWidget, SLOT(update()));
+  connect(gdata->view, SIGNAL(onFastUpdate(double)), hBlockWidget, SLOT(update()));
 }
 
 HBlockView::~HBlockView()

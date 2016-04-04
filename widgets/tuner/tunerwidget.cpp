@@ -14,12 +14,16 @@
  ***************************************************************************/
 #include <qpixmap.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3PointArray>
+#include <QPaintEvent>
 
 #include "tunerwidget.h"
 #include "gdata.h"
 #include "channel.h"
 #include "analysisdata.h"
 #include "useful.h"
+#include "myqt.h"
 
 TunerWidget::TunerWidget(QWidget *parent)
   : DrawWidget(parent)
@@ -151,7 +155,7 @@ void TunerWidget::paintEvent( QPaintEvent * )
   
     if(intensity_ > 0.0) {
       p.setBrush(colorBetween(Qt::white, Qt::red, intensity_));
-      QPointArray points(3);
+      Q3PointArray points(3);
       points.setPoint(0, noteX);
       points.setPoint(1, knobRight);
       points.setPoint(2, knobLeft);
@@ -167,14 +171,14 @@ void TunerWidget::paintEvent( QPaintEvent * )
  * @param v the value to represent (in cents). Accepts values between -60 and +60 inclusive.
  * @param intensity How sure of the note you are
  **/
-void TunerWidget::setValue(float v, float intensity)
+void TunerWidget::setValue(float v, float i)
 {
-	if (value_ != v && value_ >= -60 && value_ <= 60) {
+	if (value_ != v && v >= -60 && v <= 60) {
 		value_ = v;
 		update();
 	}
-	if (intensity_ != intensity && intensity >= 0 && intensity <= 1) {
-		intensity_ = intensity;
+	if (intensity_ != i && i >= 0 && i <= 1) {
+		intensity_ = i;
 		update();
 	}
 }

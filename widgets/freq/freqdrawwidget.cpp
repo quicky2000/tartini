@@ -14,23 +14,31 @@
  ***************************************************************************/
 
 
-#include "freqdrawwidget.h"
-#include "gdata.h"
-//#include "mycolor.h"
-#include "channel.h"
-#include "useful.h"
-#include "soundfile.h" // Temporarily!!!
-
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qcursor.h>
-#include <qsimplerichtext.h>
+#include <q3simplerichtext.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3PointArray>
+#include <QWheelEvent>
+#include <QResizeEvent>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QPaintEvent>
 
 // zoom cursors
 #include "pics/zoomx.xpm"
 #include "pics/zoomy.xpm"
 #include "pics/zoomxout.xpm"
 #include "pics/zoomyout.xpm"
+
+#include "freqdrawwidget.h"
+#include "gdata.h"
+#include "channel.h"
+#include "useful.h"
+//#include "soundfile.h" // Temporarily!!!
+#include "musicnotes.h"
 
 #ifndef WHEEL_DELTA
 #define WHEEL_DELTA 120
@@ -52,7 +60,7 @@ FreqDrawWidget::FreqDrawWidget(QWidget *parent, const char* name)
    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding, false);
    setSizePolicy(sizePolicy);
 
-   setFocusPolicy(QWidget::StrongFocus);
+   setFocusPolicy(Qt::StrongFocus);
    gdata->view->setPixelHeight(height());
 }
 
@@ -60,25 +68,14 @@ FreqDrawWidget::~FreqDrawWidget()
 {
 }
 
-void FreqDrawWidget::paintEvent(QPaintEvent *)
+void FreqDrawWidget::drawReferenceLines(QPaintDevice &pd, QPainter &p, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType)
 {
-  View *view = gdata->view;
-
-  if(view->autoFollow() && gdata->getActiveChannel() && gdata->running == STREAM_FORWARD)
-    setChannelVerticalView(gdata->getActiveChannel(), view->viewLeft(), view->currentTime(), view->zoomX(), view->viewBottom(), view->zoomY());
-    
-  beginDrawing();
-
-  //draw the red/blue background color shading if needed
-  if(view->backgroundShading() && gdata->getActiveChannel())
-    drawChannelFilled(gdata->getActiveChannel(), p, view->viewLeft(), view->currentTime(), view->zoomX(), view->viewBottom(), view->zoomY(), DRAW_VIEW_NORMAL);
-  
   // Draw the lines and notes
   QFontMetrics fm = p.fontMetrics();
   int fontHeightSpace = fm.height() / 4;
   int fontWidth = fm.width("C#0") + 3;
   
-  double step = 1.0 / view->zoomY(); //number of pixels to jump between each line
+  double step = 1.0 / zoomY; //number of pixels to jump between each line
   int noteJump; //in semi-tones
   //if(step > 20.0) {
   if(step > 10.0) {
@@ -90,44 +87,50 @@ void FreqDrawWidget::paintEvent(QPaintEvent *)
   } else {
     noteJump = 12;
   }
-  double remainder = cycle(view->viewBottom(), double(noteJump));
+  double remainder = cycle(viewBottom, double(noteJump));
   double toFirstNote = double(noteJump) - remainder;
   double start = toFirstNote * step;
   //double stop = start + (view->viewHeight() * step);
-  double stop = double(height());
+  double stop = double(pd.height());
   //int nameIndex = int(ceil(view->viewBottom() / double(noteJump)) * double(noteJump));
-  int nameIndex = toInt(view->viewBottom() + toFirstNote);
+  int nameIndex = toInt(viewBottom + toFirstNote);
   step *= noteJump;
 
   //draw the note names and reference lines
   QString noteLabel;
   int lineY = 0;
   for (double y = start; y < stop; y += step, nameIndex+=noteJump) {
-    lineY = height() - toInt(y);
+    lineY = pd.height() - toInt(y);
     if(!isBlackNote(nameIndex)) {
-      p.setPen(colorGroup().text());
-//      if(view->backgroundShading()) {
-//        noteLabel.sprintf("<qt>%s<small>%d</small></qt>", noteName(nameIndex), noteOctave(nameIndex));
-//        QSimpleRichText noteRichText(noteLabel, font());
-//        noteRichText.draw(&p, 2, lineY - noteRichText.height()/2, QRect(), colorGroup());
-//      } else {
-        noteLabel.sprintf("%s%d", noteName(nameIndex), noteOctave(nameIndex));
-        //p.drawText(2, lineY + fontHeightSpace, noteName(nameIndex) + QString::number(noteOctave(nameIndex)));
-        p.drawText(2, lineY + fontHeightSpace, noteLabel);
-//      }
+      //p.setPen(colorGroup().text());
+      p.setPen(Qt::black);
+      noteLabel.sprintf("%s%d", noteName(nameIndex), noteOctave(nameIndex));
+      p.drawText(2, lineY + fontHeightSpace, noteLabel);
       if(noteValue(nameIndex) == 0) {
-        p.setPen(QPen(Qt::black, 1, Qt::DashDotDotLine));
+        //p.setPen(QPen(Qt::black, 1, Qt::DashDotDotLine));
+        p.setPen(QPen(Qt::black, 1, Qt::SolidLine));
       } else {
-        p.setPen(QPen(QColor(144, 156, 170), 1, Qt::DashDotDotLine));
+        //transperenct colors don't seem to work on the printer
+        if(viewType == DRAW_VIEW_PRINT)
+          //p.setPen(QPen(QColor(144, 156, 170), 1, Qt::SolidLine));
+          p.setPen(QPen(QColor(128, 128, 128), 1, Qt::SolidLine));
+        else
+          p.setPen(QPen(QColor(144, 156, 170), 1, Qt::DashDotDotLine));
+          //p.setPen(QPen(QColor(0, 0, 0, 64), 1, Qt::DashDotDotLine));
       }
     } else {
-      p.setPen(QPen(QColor(136, 161, 180), 0, Qt::DotLine));
+      if(viewType == DRAW_VIEW_PRINT)
+        //p.setPen(QPen(QColor(166, 191, 210), 1, Qt::SolidLine));
+        p.setPen(QPen(QColor(196, 196, 196), 1, Qt::SolidLine));
+      else
+        p.setPen(QPen(QColor(136, 161, 180), 1, Qt::DotLine));
+        //p.setPen(QPen(QColor(0, 0, 0, 32), 1, Qt::DotLine));
     }
-#ifdef MACX
+/*#ifdef MACX //do the line stripple ourself
     if(view->backgroundShading()) {
       int pixelOffset = fontWidth;
       int numLineParts = (width() - pixelOffset + 63) / 64;
-      QPointArray macPointArray(numLineParts*6);
+      Q3PointArray macPointArray(numLineParts*6);
       for(int j=0; j<numLineParts*6; pixelOffset+=64) {
         macPointArray.setPoint(j++, pixelOffset, lineY);
         macPointArray.setPoint(j++, pixelOffset+24, lineY);
@@ -140,22 +143,58 @@ void FreqDrawWidget::paintEvent(QPaintEvent *)
     } else {
       p.drawLine(fontWidth, lineY, width() - 1, lineY);
     }
-#else
-    p.drawLine(fontWidth, lineY, width() - 1, lineY);
-#endif
+#else*/
+    int offset = toInt(currentTime / zoomX) % 32;
+    p.setClipRect(fontWidth, 0, pd.width()-fontWidth, pd.height());
+    p.drawLine(fontWidth - offset, lineY, pd.width() - 1, lineY);
+    p.setClipRect(0, 0, pd.width(), pd.height());
+//#endif
   }
+}
+
+void FreqDrawWidget::paintEvent(QPaintEvent *)
+{
+  View *view = gdata->view;
+
+  if(view->autoFollow() && gdata->getActiveChannel() && gdata->running == STREAM_FORWARD)
+    setChannelVerticalView(gdata->getActiveChannel(), view->viewLeft(), view->currentTime(), view->zoomX(), view->viewBottom(), view->zoomY());
+    
+  //double curScreenTime = (view->currentTime() - view->viewLeft()) / view->zoomX();
+  //int curTimePixel = toInt(curScreenTime);
+  int curTimePixel = view->screenPixelX(view->currentTime());
+
+  beginDrawing();
+
+  DrawWidget::setLineWidth(3);
+
+  //draw the red/blue background color shading if needed
+  if(view->backgroundShading() && gdata->getActiveChannel())
+    drawChannelFilled(gdata->getActiveChannel(), p, view->viewLeft(), view->currentTime(), view->zoomX(), view->viewBottom(), view->zoomY(), DRAW_VIEW_NORMAL);
+  
+
+  drawReferenceLines(*this, p, view->viewLeft(), view->currentTime(), view->zoomX(), view->viewBottom(), view->zoomY(), DRAW_VIEW_NORMAL);
 
   //draw all the visible channels
   for (uint i = 0; i < gdata->channels.size(); i++) {
    	Channel *ch = gdata->channels.at(i);
    	if(!ch->isVisible()) continue;
-    drawChannel(ch, p, view->viewLeft(), view->currentTime(), view->zoomX(), view->viewBottom(), view->zoomY(), DRAW_VIEW_NORMAL);
+    drawChannel(*this, ch, p, view->viewLeft(), view->currentTime(), view->zoomX(), view->viewBottom(), view->zoomY(), DRAW_VIEW_NORMAL);
+  }
+
+  // Draw a light grey band indicating which time is being used in the current window
+  if(gdata->getActiveChannel()) {
+    QColor lineColor = colorGroup().foreground();
+    lineColor.setAlpha(50);
+    Channel *ch = gdata->getActiveChannel();
+    double halfWindowTime = (double)ch->size() / (double)(ch->rate() * 2);
+    int pixelLeft = view->screenPixelX(view->currentTime() - halfWindowTime);
+    int pixelRight = view->screenPixelX(view->currentTime() + halfWindowTime);
+    p.fillRect(pixelLeft, 0, pixelRight-pixelLeft, height()-1, lineColor);
   }
 
   // Draw the current time line
   p.setPen(QPen(colorGroup().foreground(), 1));
-  double curScreenTime = (view->currentTime() - view->viewLeft()) / view->zoomX();
-  p.drawLine(toInt(curScreenTime), 0, toInt(curScreenTime), height() - 1);
+  p.drawLine(curTimePixel, 0, curTimePixel, height() - 1);
 
   endDrawing();
 }
@@ -164,7 +203,7 @@ void FreqDrawWidget::paintEvent(QPaintEvent *)
 Channel *FreqDrawWidget::channelAtPixel(int x, int y)
 {
   double time = mouseTime(x);
-  float note = mouseNote(y);
+  float pitch = mousePitch(y);
   float tolerance = 6 * gdata->view->zoomY(); //10 pixel tolerance
 
   std::vector<Channel*> channels;
@@ -173,7 +212,7 @@ Channel *FreqDrawWidget::channelAtPixel(int x, int y)
   for (std::vector<Channel*>::reverse_iterator it = gdata->channels.rbegin(); it != gdata->channels.rend();  it++) {
     if((*it)->isVisible()) {
       AnalysisData *data = (*it)->dataAtTime(time);
-      if(data && within(tolerance, data->note, note)) return *it;
+      if(data && within(tolerance, data->pitch, pitch)) return *it;
     }
   }
   return NULL;
@@ -201,17 +240,17 @@ void FreqDrawWidget::mousePressEvent( QMouseEvent *e)
   }
 
   // If the control or alt keys are pressed, zoom in or out on the correct axis, otherwise scroll.
-  if (e->state() & Qt::ControlButton) {
+  if (e->state() & Qt::ControlModifier) {
     // Do we zoom in or out?
-    if (e->state() & Qt::ShiftButton) {
+    if (e->state() & Qt::ShiftModifier) {
       //view->viewZoomOutX();
     } else {
       //view->viewZoomInX();
     }
 	  zoomed = true;
-  } else if (e->state() & Qt::AltButton) {
+  } else if (e->state() & Qt::AltModifier) {
     // Do we zoom in or out?
-    if (e->state() & Qt::ShiftButton) {
+    if (e->state() & Qt::ShiftModifier) {
       //view->viewZoomOutY();
     } else {
       //view->viewZoomInY();
@@ -284,11 +323,11 @@ double FreqDrawWidget::mouseTime(int x)
 
 
 /**
- Calculates at what note the mouse is.
+ Calculates at what note pitch the mouse is at.
  @param x the mouse's y co-ordinate
- @return the note the mouse is positioned at.
+ @return the pitch the mouse is positioned at.
  */
-double FreqDrawWidget::mouseNote(int y)
+double FreqDrawWidget::mousePitch(int y)
 {
 	return gdata->view->viewBottom() + gdata->view->zoomY() * (height() - y);
 }
@@ -296,45 +335,32 @@ double FreqDrawWidget::mouseNote(int y)
 void FreqDrawWidget::wheelEvent(QWheelEvent * e)
 {
     View *view = gdata->view;
-/*
-    // If the control or alt keys are pressed, zoom in or out on the correct axis, otherwise scroll.
-    if (e->state() & Qt::ControlButton) {
-      if (e->delta() > 0) {
-        //view->viewZoomInX();
-      } else {
-        //view->viewZoomOutX();
-      }
-    //} else if (e->state() == Qt::AltButton) {
-    }
-    if (e->state() & Qt::ShiftButton) {
-      if (e->delta() > 0) {
-        //view->viewZoomInY();
-      } else {
-        //view->viewZoomOutY();
-      }
-    }
-*/
-    if (!(e->state() & (Qt::ControlButton | Qt::ShiftButton))) {
-      //view->setViewBottom(view->viewBottom() + double(e->delta()/WHEEL_DELTA) * view->viewHeight() * 0.1);
+    double amount = double(e->delta()/WHEEL_DELTA);
+    bool isZoom = gdata->mouseWheelZooms();
+    if(e->state() & (Qt::ControlModifier | Qt::ShiftModifier)) isZoom = !isZoom;
+
+  if(isZoom) {
       if(e->delta() >= 0) { //zooming in
         if(gdata->running == STREAM_FORWARD) {
-          view->setZoomFactorX(view->logZoomX() + double(e->delta()/WHEEL_DELTA)*0.3);
+          view->setZoomFactorX(view->logZoomX() + amount*0.3);
         } else { //zoom toward mouse pointer
-          view->setZoomFactorX(view->logZoomX() + double(e->delta()/WHEEL_DELTA)*0.3, e->x());
+          view->setZoomFactorX(view->logZoomX() + amount*0.3, e->x());
         }
-        view->setZoomFactorY(view->logZoomY() + double(e->delta()/WHEEL_DELTA)*0.2, height() - e->y());
+        view->setZoomFactorY(view->logZoomY() + amount*0.2, height() - e->y());
       } else { //zoom out toward center
         if(gdata->running == STREAM_FORWARD) {
-          view->setZoomFactorX(view->logZoomX() + double(e->delta()/WHEEL_DELTA)*0.3);
+          view->setZoomFactorX(view->logZoomX() + amount*0.3);
         } else {
-          view->setZoomFactorX(view->logZoomX() + double(e->delta()/WHEEL_DELTA)*0.3, width()/2);
+          view->setZoomFactorX(view->logZoomX() + amount*0.3, width()/2);
         }
-        view->setZoomFactorY(view->logZoomY() + double(e->delta()/WHEEL_DELTA)*0.2, height()/2);
+        view->setZoomFactorY(view->logZoomY() + amount*0.2, height()/2);
       }
-	  view->doSlowUpdate();
-    }
+  } else { //mouse wheel scrolls
+    view->setViewBottom(view->viewBottom() + amount * view->viewHeight() * 0.1);
+  }
+  view->doSlowUpdate();
 
-    e->accept();
+  e->accept();
 }
 
 void FreqDrawWidget::resizeEvent (QResizeEvent *q)
@@ -347,14 +373,16 @@ void FreqDrawWidget::resizeEvent (QResizeEvent *q)
     
     v->setPixelHeight(height());
     v->setPixelWidth(width());
-    
+    //printf("resizeEvent width() = %d\n", width());
     // Work out what the times/heights of the view should be based on the zoom factors
     //float newXTime = width() * v->zoomX();
     float newYHeight = height() * v->zoomY();
     float newYBottom = v->viewBottom() - ((newYHeight - v->viewHeight()) / 2.0);
 
     //v->setViewWidth(newXTime);
+    //printf("1 viewOffset() = %d\n", v->viewOffset());
     v->setViewOffset(v->viewOffset() / oldViewWidth * v->viewWidth());
+    //printf("2 viewOffset() = %d\n", v->viewOffset());
 
     //v->setViewHeight(newYHeight);
     v->setViewBottom(newYBottom);
@@ -376,9 +404,9 @@ void FreqDrawWidget::keyPressEvent( QKeyEvent *k )
     setCursor(QCursor(QPixmap(zoomy)));
     break;
     case Qt::Key_Shift:
-    if (k->state() & Qt::ControlButton) {
+    if (k->state() & Qt::ControlModifier) {
       setCursor(QCursor(QPixmap(zoomxout)));
-    } else if (k->state() & Qt::AltButton) {
+    } else if (k->state() & Qt::AltModifier) {
       setCursor(QCursor(QPixmap(zoomyout)));
     } else {
       k->ignore();
@@ -404,9 +432,9 @@ void FreqDrawWidget::keyReleaseEvent( QKeyEvent *k)
       unsetCursor();
     break;
     case Qt::Key_Shift:
-    if (k->state() & Qt::ControlButton) {
+    if (k->state() & Qt::ControlModifier) {
       setCursor(QCursor(QPixmap(zoomx)));
-    } else if (k->state() & Qt::AltButton) {
+    } else if (k->state() & Qt::AltModifier) {
       setCursor(QCursor(QPixmap(zoomy)));
     } else {
       k->ignore();
@@ -423,10 +451,13 @@ void FreqDrawWidget::leaveEvent ( QEvent * e) {
   QWidget::leaveEvent(e);
 }
 
-void FreqDrawWidget::polish()
+/*
+void FreqDrawWidget::ensurePolished() const
 {
   //printf("width = %d\n", width());
   gdata->view->setPixelHeight(height());
+  printf("ensurePolished width() = %d\n", width());
   gdata->view->setPixelWidth(width());
   gdata->view->setViewOffset(gdata->view->viewWidth()/2.0);
 }
+*/

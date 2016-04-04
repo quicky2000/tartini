@@ -16,6 +16,8 @@
 #define HTRACKVIEW_H
 
 #include "viewwidget.h"
+//Added by qt3to4:
+#include <QResizeEvent>
 
 class HTrackWidget;
 class QSlider;
@@ -25,7 +27,7 @@ class HTrackView : public ViewWidget {
   Q_OBJECT
 
   public:
-    HTrackView(int viewID_, QWidget *parent = 0, const char *name = NULL);
+    HTrackView(int viewID_, QWidget *parent = 0);
     virtual ~HTrackView();
 
     void resizeEvent(QResizeEvent *);

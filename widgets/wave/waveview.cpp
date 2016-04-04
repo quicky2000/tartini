@@ -17,25 +17,30 @@
 #include "gdata.h"
 #include "qwt_wheel.h"
 #include "qlayout.h"
-#include "qgrid.h"
+#include "q3grid.h"
 #include "qtooltip.h"
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
+#include <Q3Frame>
+#include <QResizeEvent>
 
-WaveView::WaveView( int viewID_, QWidget *parent, const char *name )
- : ViewWidget( viewID_, parent, name)
+WaveView::WaveView( int viewID_, QWidget *parent )
+ : ViewWidget( viewID_, parent)
 {
   //setCaption("Wave view");
 
-  QBoxLayout *mainLayout = new QHBoxLayout(this);
+  Q3BoxLayout *mainLayout = new Q3HBoxLayout(this);
 
-  QGrid *waveFrame = new QGrid(1, this);
-  waveFrame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
+  Q3Grid *waveFrame = new Q3Grid(1, this);
+  waveFrame->setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
   waveWidget = new WaveWidget(waveFrame);
   //waveWidget->show();
   //mainLayout->addWidget(waveWidget);
   mainLayout->addWidget(waveFrame);
 
   //QBoxLayout *leftLayout = new QVBoxLayout(mainLayout);
-  QBoxLayout *rightLayout = new QVBoxLayout(mainLayout);
+  Q3BoxLayout *rightLayout = new Q3VBoxLayout(mainLayout);
   
   QwtWheel *freqWheelY = new QwtWheel(this);
   freqWheelY->setOrientation(Qt::Vertical);
@@ -50,8 +55,8 @@ WaveView::WaveView( int viewID_, QWidget *parent, const char *name )
   connect(waveWidget, SIGNAL(zoomYChanged(double)), waveWidget, SLOT(update()));
   
   //make the widget get updated when the view changes
-  //connect(gdata->view, SIGNAL(onFastUpdate()), waveWidget, SLOT(update()));
-  connect(gdata->view, SIGNAL(onSlowUpdate()), waveWidget, SLOT(update()));
+  //connect(gdata->view, SIGNAL(onFastUpdate(double)), waveWidget, SLOT(update()));
+  connect(gdata->view, SIGNAL(onSlowUpdate(double)), waveWidget, SLOT(update()));
 }
 
 WaveView::~WaveView()

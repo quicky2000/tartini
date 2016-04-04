@@ -16,12 +16,15 @@
 #include "pitchcompassdrawwidget.h"
 #include "channel.h"
 #include "gdata.h"
+#include "musicnotes.h"
 
 #include <qmap.h>
 #include <qstring.h>
 
 #include <qwt_compass.h>
 #include <qwt_dial_needle.h>
+//Added by qt3to4:
+#include <QResizeEvent>
 
 #define INTERVAL 90
 
@@ -80,14 +83,14 @@ void PitchCompassDrawWidget::updateCompass(double time)
   
   AnalysisData *data = active->dataAtTime(time);
 
-  if(data && data->correlation >= 0.9) {
-    double note = data->note;
+  if(data && data->correlation() >= 0.9) {
+    double pitch = data->pitch;
   
     if (mode == 0) {
       QMap< double, QString > notes;
-      double zeroVal = myround(note);
+      double zeroVal = myround(pitch);
   
-      double value = (note - zeroVal) * INTERVAL;
+      double value = (pitch - zeroVal) * INTERVAL;
       compass->setValue(value);
   
       notes[INTERVAL * 3] = noteName(toInt(zeroVal));
@@ -97,22 +100,22 @@ void PitchCompassDrawWidget::updateCompass(double time)
   
     } else if (mode == 1) {
       QMap< double, QString > notes;
-      double closeNote = myround(note);
-      double start = toInt((closeNote - note) * INTERVAL);
+      double closePitch = myround(pitch);
+      double start = toInt((closePitch - pitch) * INTERVAL);
   
       if (start < 0) start += 360;
       if (start > 360) start = fmod(start, 360.0);
       
-      notes[start] = noteName(toInt(closeNote));
+      notes[start] = noteName(toInt(closePitch));
       //printf("start (%f) = %s\n", start, noteName(closeNote));
-      notes[start - INTERVAL] = noteName(toInt(closeNote - 1));
-      notes[start + INTERVAL] = noteName(toInt(closeNote + 1));
+      notes[start - INTERVAL] = noteName(toInt(closePitch - 1));
+      notes[start + INTERVAL] = noteName(toInt(closePitch + 1));
       compass->setLabelMap(notes);
     } else { // mode == 2
       //double zeroVal = myround(note);
   
       //double value = (note - zeroVal) * 30; // So we have enough room for all 12 notes
-      double value = note * 30;
+      double value = pitch * 30;
       compass->setValue(value);
   
       //zeroVal--;

@@ -17,6 +17,8 @@
 #include <qcheckbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 #include "gdata.h"
 
 /*
@@ -27,11 +29,12 @@ const char *windowSizeBoxStr[] = { "64", "128", "256", "512", "1024", "2048", "4
 */
 
 SaveDialog::SaveDialog(/*const QString & dirName, const QString & filter, */QWidget * parent)
- : QFileDialog(QDir::convertSeparators(gdata->settings.getString("Dialogs", "saveFilesFolder")),
+// : Q3FileDialog(QDir::convertSeparators(gdata->settings.getString("Dialogs", "saveFilesFolder")),
+ : Q3FileDialog(QDir::convertSeparators(gdata->qsettings->value("Dialogs/saveFilesFolder", QDir::currentDirPath()).toString()),
                "Wave files (*.wav)", parent, NULL, true)
 {
   setCaption("Choose a filename to save under");
-  setMode(QFileDialog::AnyFile);
+  setMode(Q3FileDialog::AnyFile);
   
   //QLabel* label = new QLabel( "Added widgets", this );
   //QLineEdit* lineedit = new QLineEdit( this );
@@ -88,7 +91,7 @@ SaveDialog::SaveDialog(/*const QString & dirName, const QString & filter, */QWid
   addWidgets(NULL, baseWidget, NULL);
   //QGridLayout *baseLayout = new QGridLayout(baseWidget, 1, 5, 0, 5);
   //QGridLayout *baseLayout = new QGridLayout(baseWidget, 2, 1);
-  QBoxLayout *baseLayout = new QVBoxLayout(baseWidget);
+  Q3BoxLayout *baseLayout = new Q3VBoxLayout(baseWidget);
 /*
   baseLayout->addWidget(new QLabel("Channels:", baseWidget), 0, 0);
   channelsBox = new QComboBox(false, baseWidget, "Channels");
@@ -119,8 +122,10 @@ SaveDialog::SaveDialog(/*const QString & dirName, const QString & filter, */QWid
 */
   appendWavCheckBox =      new QCheckBox("Append .wav extension if needed", baseWidget);
   rememberFolderCheckBox = new QCheckBox("Remember current folder", baseWidget);
-  appendWavCheckBox->setChecked(gdata->settings.getBool("Dialogs", "appendWav"));
-  rememberFolderCheckBox->setChecked(gdata->settings.getBool("Dialogs", "rememberSaveFolder"));
+  //appendWavCheckBox->setChecked(gdata->settings.getBool("Dialogs", "appendWav"));
+  appendWavCheckBox->setChecked(gdata->qsettings->value("Dialogs/appendWav", true).toBool());
+  //rememberFolderCheckBox->setChecked(gdata->settings.getBool("Dialogs", "rememberSaveFolder"));
+  rememberFolderCheckBox->setChecked(gdata->qsettings->value("Dialogs/rememberSaveFolder", true).toBool());
   //baseLayout->addWidget(appendWavCheckBox, 1, 1);
   //baseLayout->addWidget(rememberFolderCheckBox, 1, 1);
   baseLayout->addSpacing(10);
@@ -137,20 +142,23 @@ SaveDialog::~SaveDialog()
 void SaveDialog::accept()
 {
   bool remember = rememberFolderCheckBox->isChecked();
-  gdata->settings.setBool("Dialogs", "rememberSaveFolder", remember);
+  //gdata->settings.setBool("Dialogs", "rememberSaveFolder", remember);
+  gdata->qsettings->setValue("Dialogs/rememberSaveFolder", remember);
   if(remember == true) {
     const QDir *curDir = dir();
-    gdata->settings.setString("Dialogs", "saveFilesFolder", curDir->absPath());
+    //gdata->settings.setString("Dialogs", "saveFilesFolder", curDir->absPath());
+    gdata->qsettings->setValue("Dialogs/saveFilesFolder", curDir->absPath());
     delete curDir;
   }
   bool appendWav = appendWavCheckBox->isChecked();
-  gdata->settings.setBool("Dialogs", "appendWav", appendWav);
+  //gdata->settings.setBool("Dialogs", "appendWav", appendWav);
+  gdata->qsettings->setValue("Dialogs/appendWav", appendWav);
   if(appendWav == true) {
     QString s = selectedFile();
     if(!s.lower().endsWith(".wav")) { s += ".wav"; }
     setSelection(s);
   }
-  QFileDialog::accept();
+  Q3FileDialog::accept();
 }
 
 QString SaveDialog::getSaveWavFileName(QWidget *parent)

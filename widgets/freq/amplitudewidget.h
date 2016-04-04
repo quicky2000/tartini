@@ -16,12 +16,22 @@
 #ifndef AMPLITUDEWIDGET_H
 #define AMPLITUDEWIDGET_H
 
-#include "drawwidget.h"
+#include <QGLWidget>
+//#include "drawwidget.h"
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QPixmap>
+#include <Q3PointArray>
+#include <QWheelEvent>
+#include <QPaintEvent>
+#include "channel.h"
 
-class QPointArray;
+class Q3PointArray;
 struct ZoomElement;
+class AnalysisData;
 
-class AmplitudeWidget : public DrawWidget {
+//class AmplitudeWidget : public DrawWidget {
+class AmplitudeWidget : public QGLWidget {
 
 Q_OBJECT
 
@@ -39,28 +49,47 @@ public:
 
   //int offset_x;
 
-  void paintEvent( QPaintEvent * );
-  void calculateZoomElement(ZoomElement &ze, Channel *ch, int startChunk, int finishChunk);
-  void drawChannelAmplitude(Channel *ch, QPainter &p);
-  void drawChannelAmplitudeFilled(Channel *ch, QPainter &p);
+  void initializeGL();
+  void resizeGL(int w, int h);
+  void paintGL();
+
+  //void paintEvent( QPaintEvent * );
+  bool calcZoomElement(ZoomElement &ze, Channel *ch, int baseElement, double baseX);
+  double calculateElement(AnalysisData *data);
+  double getCurrentThreshold(int index);
+  void setCurrentThreshold(double newThreshold, int index);
+  QString getCurrentThresholdString();
+  void setLineWidth(float width);
+  //void drawChannelAmplitude(Channel *ch, QPainter &p);
+  void drawChannelAmplitudeGL(Channel *ch);
+  //void drawChannelAmplitudeFilled(Channel *ch, QPainter &p);
+  void drawChannelAmplitudeFilledGL(Channel *ch);
   void setColors();
   QSize sizeHint() const { return QSize(400, 100); }
   void mousePressEvent( QMouseEvent *e );
   void mouseMoveEvent( QMouseEvent *e );
   void mouseReleaseEvent( QMouseEvent *e );
   void wheelEvent(QWheelEvent * e);
-  double dBRange() { return _dBRange; }
+  double range() { return _range; }
+  double maxOffset() { return 1.0 - range(); }
+  double offset() { return _offset; }
+  double offsetInv() { return _offsetInv; }
 
 public slots:
-  void setDBRange(double range);
+  void setRange(double newRange);
+  void setOffset(double newOffset);
 
 signals:
-  void dBRangeChanged(double);
+  void rangeChanged(double);
+  void offsetChanged(double);
+  void offsetInvChanged(double);
   
 private:
   int dragMode;
   int mouseX, mouseY;
   double downTime, downNote;
+  double downOffset;
+  int thresholdIndex;
 /*
  void keyPressEvent( QKeyEvent *k );
  void keyReleaseEvent( QKeyEvent *k);
@@ -77,7 +106,11 @@ private:
 */
 
   QPixmap *buffer;
-  double _dBRange;
+  double _range;
+  double _offset;
+  double _offsetInv;
+  float lineWidth;
+  float halfLineWidth;
 };
 
 #endif
