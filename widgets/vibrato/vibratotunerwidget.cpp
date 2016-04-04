@@ -159,7 +159,7 @@ void VibratoTunerWidget::resizeGL(int w, int h)
     } else {  // Big dial
       // Bigger marking + text label
       tunerLabelLookup[0] = "+50";
-      tunerLabelLookup[11] = "-50";
+      tunerLabelLookup[10] = "-50";
 
       glBegin(GL_LINES);
       glColor3ub(0, 0, 0);
