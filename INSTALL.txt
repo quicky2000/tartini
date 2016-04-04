@@ -5,13 +5,19 @@ To compile Tartini 1.2.0 from the source:
 Step 1.
 Make sure the following libraries are installed on your system
 - Qt 4.x
+- GLU
+- Alsa
 - fftw3   (configured with the --enable-float option)
 - Qwt 5.x
-(these can be downloaded from http://www.tartini.net)
+(Fttw and Qwt could be downloaded from http://www.tartini.net but osme links are broken)
+Website for FFTW : http://www.fftw.org/download.html
+Website for QWT : http://qwt.sourceforge.net/
 
+For Ubuntu users the previous packages can be installed using
+apt and the following packet names: libqt4-dev libqwt5-qt4-dev libfftw3-dev libglu1-mesa-dev libasound2-dev
 
 Step 2.
-Edit pitch.pro and put the correct library and include paths for your setup.
+Edit pitch.pro and edit MY_TARTINI_PATH if you want to build from another directory
 
 
 Step 3.
