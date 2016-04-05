@@ -13,8 +13,9 @@ unix{
     MY_INCLUDE_PATH += /Users/student/usr/local/include
   }else{ #Linux
     MY_TARTINI_PATH += .
-    MY_LIB_PATH += -L$$MY_TARTINI_PATH/lib -L/usr/lib -L/usr/lib/x86_64-linux-gnu/
-    MY_INCLUDE_PATH += /usr/include/qt4/QtCore /usr/include/qt4/QtGui /usr/include/qt4 /usr/include/qwt-qt4/ /usr/include/GL $$MY_TARTINI_PATH/include
+    MY_QWT_PATH = /usr/local/qwt-6.1.2
+    MY_LIB_PATH += -L$$MY_TARTINI_PATH/lib -L/usr/lib -L/usr/lib/x86_64-linux-gnu/ -L$$MY_QWT_PATH/lib
+    MY_INCLUDE_PATH += /usr/include/qt4/QtCore /usr/include/qt4/QtGui /usr/include/qt4 $$MY_QWT_PATH/include /usr/include/GL $$MY_TARTINI_PATH/include
   }
 }
 win32{ #Windows
