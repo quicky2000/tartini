@@ -61,8 +61,8 @@ inline double pitch2freq(double note)
 	return result;
 }
 
-char* noteName(int pitch);
-inline char* noteName(double pitch) { return noteName(toInt(pitch)); }
+const char* noteName(int pitch);
+inline const char* noteName(double pitch) { return noteName(toInt(pitch)); }
 
 int noteOctave(int pitch);
 inline int noteOctave(double pitch) { return noteOctave(toInt(pitch)); }

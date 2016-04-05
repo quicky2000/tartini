@@ -15,6 +15,7 @@
 #include "musicnotes.h"
 #include "mystring.h"
 #include "myassert.h"
+#include <qobject.h>
 
 //#include <stdio.h>
 //#include <errno.h>
@@ -30,7 +31,20 @@ char *gMusicKeyName[NUM_MUSIC_KEYS] = { "A             ", "A#/Bb", "B", "C", "C#
 int   gMusicKeyRoot[NUM_MUSIC_KEYS] = {  9,   10,      11,  0,   1,       2,   3,       4,   5,   6,        7,  8      };
 int   gMusicKey = 3; //C
 //                       0    1     2    3     4    5    6     7    8     9    10    11
-char *noteNames[12] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+const char *noteNames[12] = { 
+  QObject::tr("C"),
+  QObject::tr("C#"),
+  QObject::tr("D"),
+  QObject::tr("D#"),
+  QObject::tr("E"),
+  QObject::tr("F"),
+  QObject::tr("F#"),
+  QObject::tr("G"),
+  QObject::tr("G#"),
+  QObject::tr("A"),
+  QObject::tr("A#"),
+  QObject::tr("B")
+};
 
 /** Just Intonation
   1:1   Root
@@ -123,7 +137,7 @@ void initMusicStuff()
 11 Major 7th (7th)
 */
 
-char* noteName(int pitch)
+const char* noteName(int pitch)
 {
   return noteNames[cycle(pitch, 12)];
 }

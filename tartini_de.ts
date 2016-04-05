@@ -315,7 +315,7 @@
     <message>
         <location filename="widgets/mainwindow/mainwindow.cpp" line="460"/>
         <source>Volume Meter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lautsärke</translation>
     </message>
     <message>
         <location filename="widgets/mainwindow/mainwindow.cpp" line="464"/>
@@ -569,6 +569,66 @@
         <location filename="widgets/mainwindow/mainwindow.cpp" line="173"/>
         <source>&amp;Volume Meter</source>
         <translation type="unfinished">&amp;Lautsärke</translation>
+    </message>
+    <message>
+        <location filename="general/musicnotes.cpp" line="35"/>
+        <source>C</source>
+        <translation type="unfinished">C</translation>
+    </message>
+    <message>
+        <location filename="general/musicnotes.cpp" line="36"/>
+        <source>C#</source>
+        <translation type="unfinished">C#</translation>
+    </message>
+    <message>
+        <location filename="general/musicnotes.cpp" line="37"/>
+        <source>D</source>
+        <translation type="unfinished">D</translation>
+    </message>
+    <message>
+        <location filename="general/musicnotes.cpp" line="38"/>
+        <source>D#</source>
+        <translation type="unfinished">D#</translation>
+    </message>
+    <message>
+        <location filename="general/musicnotes.cpp" line="39"/>
+        <source>E</source>
+        <translation type="unfinished">E</translation>
+    </message>
+    <message>
+        <location filename="general/musicnotes.cpp" line="40"/>
+        <source>F</source>
+        <translation type="unfinished">F</translation>
+    </message>
+    <message>
+        <location filename="general/musicnotes.cpp" line="41"/>
+        <source>F#</source>
+        <translation type="unfinished">F#</translation>
+    </message>
+    <message>
+        <location filename="general/musicnotes.cpp" line="42"/>
+        <source>G</source>
+        <translation type="unfinished">G</translation>
+    </message>
+    <message>
+        <location filename="general/musicnotes.cpp" line="43"/>
+        <source>G#</source>
+        <translation type="unfinished">G#</translation>
+    </message>
+    <message>
+        <location filename="general/musicnotes.cpp" line="44"/>
+        <source>A</source>
+        <translation type="unfinished">A</translation>
+    </message>
+    <message>
+        <location filename="general/musicnotes.cpp" line="45"/>
+        <source>A#</source>
+        <translation type="unfinished">A#</translation>
+    </message>
+    <message>
+        <location filename="general/musicnotes.cpp" line="46"/>
+        <source>B</source>
+        <translation type="unfinished">H</translation>
     </message>
 </context>
 <context>
