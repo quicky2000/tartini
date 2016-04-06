@@ -9,6 +9,14 @@ compiler:
 before_install:
   - sudo apt-get update
   - sudo apt-get install -y libqt4-dev libqwt5-qt4-dev libfftw3-dev libglu1-mesa-dev libasound2-dev libqt4-opengl-dev
+  - wget http://downloads.sourceforge.net/project/qwt/qwt/6.1.2/qwt-6.1.2.tar.bz2
+  - bunzip2 qwt-6.1.2.tar.bz2
+  - tar -xvf qwt-6.1.2.tar
+  - cd qwt-6.1.2
+  - qmake qwt.pro
+  - make
+  - sudo make install
+  - cd ..
 
 script:
   - qmake pitch.pro
