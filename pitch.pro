@@ -15,15 +15,15 @@ unix{
     MY_TARTINI_PATH += .
 
     # QWT 5
-    QWT_LIB_NAME= qwt-qt4
-    MY_QWT_LIB_PATH =
-    MY_QWT_INCLUDE_PATH =  /usr/include/qwt-qt4/
+    #QWT_LIB_NAME= qwt-qt4
+    #MY_QWT_LIB_PATH =
+    #MY_QWT_INCLUDE_PATH =  /usr/include/qwt-qt4/
     #end of Qwt5
     # QWT 6
-    #MY_QWT_PATH = /usr/local/qwt-6.1.2
-    #QWT_LIB_NAME = qwt
-    #MY_QWT_INCLUDE_PATH = $$MY_QWT_PATH/include
-    #MY_QWT_LIB_PATH = -L$$MY_QWT_PATH/lib
+    MY_QWT_PATH = /usr/local/qwt-6.1.2
+    QWT_LIB_NAME = qwt
+    MY_QWT_INCLUDE_PATH = $$MY_QWT_PATH/include
+    MY_QWT_LIB_PATH = -L$$MY_QWT_PATH/lib
     # end of Qwt6
 
     MY_LIB_PATH += -L$$MY_TARTINI_PATH/lib -L/usr/lib -L/usr/lib/x86_64-linux-gnu/ $$MY_QWT_LIB_PATH
