@@ -244,7 +244,16 @@ VibratoView::VibratoView(int p_view_ID
     QwtWheel * l_zoom_wheel_V = new QwtWheel;
     l_zoom_wheel_V->setOrientation(Qt::Vertical);
     l_zoom_wheel_V->setWheelWidth(14);
+
+#if QWT_VERSION >= 0x060000
+    l_zoom_wheel_V->setRange(0.3, 25.0);
+    l_zoom_wheel_V->setSingleStep(0.1);
+    // Multiplicator value is 10 = 1 / 0.1
+    l_zoom_wheel_V->setPageStepCount(10);
+#else
     l_zoom_wheel_V->setRange(0.3, 25.0, 0.1, 1);
+#endif // QWT_VERSION >= 0x060000
+
     l_zoom_wheel_V->setValue(1.0);
     l_zoom_wheel_V->setFocusPolicy(Qt::NoFocus);
     l_zoom_wheel_V->setToolTip("Zoom vibrato view vertically");
@@ -274,7 +283,15 @@ VibratoView::VibratoView(int p_view_ID
     QwtWheel *l_zoom_wheel_H = new QwtWheel;
     l_zoom_wheel_H->setOrientation(Qt::Horizontal);
     l_zoom_wheel_H->setWheelWidth(14);
+
+#if QWT_VERSION >= 0x060000
+    l_zoom_wheel_H->setRange(1, 100);
+    l_zoom_wheel_H->setSingleStep(1);
+    l_zoom_wheel_H->setPageStepCount(1);
+#else
     l_zoom_wheel_H->setRange(1, 100, 1, 1);
+#endif // QWT_VERSION >= 0x060000
+
     l_zoom_wheel_H->setValue(25);
     l_zoom_wheel_H->setFocusPolicy(Qt::NoFocus);
     l_zoom_wheel_H->setToolTip("Zoom vibrato view horizontally");

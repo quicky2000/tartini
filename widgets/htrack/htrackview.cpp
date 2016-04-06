@@ -58,18 +58,39 @@ HTrackView::HTrackView( int p_view_ID
 
     m_rotate_X_wheel = new QwtWheel(this);
     m_rotate_X_wheel->setWheelWidth(20);
+#if QWT_VERSION >= 0x060000
+    m_rotate_X_wheel->setRange(-180, 180);
+    m_rotate_X_wheel->setSingleStep(0.1);
+    // Multiplicator value is 10 = 1 / 0.1
+    m_rotate_X_wheel->setPageStepCount(10);
+#else
     m_rotate_X_wheel->setRange(-180, 180, 0.1, 1);
+#endif // QWT_VERSION >= 0x060000
     m_rotate_X_wheel->setToolTip("Rotate piano horizonally");
 
     m_rotate_Y_wheel = new QwtWheel(this);
     m_rotate_Y_wheel->setOrientation(Qt::Vertical);
     m_rotate_Y_wheel->setWheelWidth(20);
+#if QWT_VERSION >= 0x060000
+    m_rotate_Y_wheel->setRange(-90, 0);
+    m_rotate_Y_wheel->setSingleStep(0.1);
+    // Multiplicator value is 10 = 1 / 0.1
+    m_rotate_Y_wheel->setPageStepCount(10);
+#else
     m_rotate_Y_wheel->setRange(-90, 0, 0.1, 1);
+#endif // QWT_VERSION >= 0x060000
     m_rotate_Y_wheel->setToolTip("Rotate piano vertically");
 
     m_distance_wheel = new QwtWheel(this);
     m_distance_wheel->setOrientation(Qt::Vertical);
+#if QWT_VERSION >= 0x060000
+    m_distance_wheel->setRange(100, 5000);
+    m_distance_wheel->setSingleStep(10);
+    // Multiplicator value is 2 = 20 / 10
+    m_distance_wheel->setPageStepCount(2);
+#else
     m_distance_wheel->setRange(100, 5000, 10, 20);
+#endif // QWT_VERSION >= 0x060000
     m_distance_wheel->setTotalAngle(20 * 360);
     m_distance_wheel->setToolTip("Move towards/away from piano");
 

@@ -61,7 +61,14 @@ HCircleView::HCircleView( int p_view_id
     QwtWheel * l_zoom_wheel = new QwtWheel(this);
     l_zoom_wheel->setOrientation(Qt::Vertical);
     l_zoom_wheel->setWheelWidth(14);
+#if QWT_VERSION >= 0x060000
+    l_zoom_wheel->setRange(0.001, 0.1);
+    l_zoom_wheel->setSingleStep(0.001);
+    // Multiplicator value is 1000 = 1 / 0.001
+    l_zoom_wheel->setPageStepCount(1000);
+#else
     l_zoom_wheel->setRange(0.001, 0.1, 0.001, 1);
+#endif // QWT_VERSION >= 0x060000
     l_zoom_wheel->setValue(0.007);
     m_h_circle_widget->setZoom(0.007);
     l_zoom_wheel->setToolTip("Zoom in or out");
@@ -70,7 +77,14 @@ HCircleView::HCircleView( int p_view_id
     QwtWheel * l_lowest_value_wheel = new QwtWheel(this);
     l_lowest_value_wheel->setOrientation(Qt::Vertical);
     l_lowest_value_wheel->setWheelWidth(14);
+#if QWT_VERSION >= 0x060000
+    l_lowest_value_wheel->setRange(-160, 10);
+    l_lowest_value_wheel->setSingleStep(0.01);
+    // Multiplicator value is 100 = 1 / 0.01
+    l_lowest_value_wheel->setPageStepCount(100);
+#else
     l_lowest_value_wheel->setRange(-160, 10, 0.01, 1);
+#endif // QWT_VERSION >= 0x060000
     l_lowest_value_wheel->setValue(-100);
     m_h_circle_widget->setLowestValue(-100);
     l_lowest_value_wheel->setToolTip("Change the lowest value");
@@ -80,7 +94,14 @@ HCircleView::HCircleView( int p_view_id
     QwtWheel* l_threshold_wheel = new QwtWheel(this);
     l_threshold_wheel->setOrientation(Qt::Horizontal);
     l_threshold_wheel->setWheelWidth(14);
+#if QWT_VERSION >= 0x060000
+    l_threshold_wheel->setRange(-160, 10);
+    l_threshold_wheel->setSingleStep(0.01);
+    // Multiplicator value is 100 = 1 / 0.01
+    l_threshold_wheel->setPageStepCount(100);
+#else
     l_threshold_wheel->setRange(-160, 10, 0.01, 1);
+#endif // QWT_VERSION >= 0x060000
     l_threshold_wheel->setValue(-100);
     m_h_circle_widget->setThreshold(-100);
     l_threshold_wheel->setToolTip("Change the harmonic threshold");

@@ -61,7 +61,13 @@ HBubbleView::HBubbleView( int p_view_id
     QwtWheel* l_harmonics_wheel = new QwtWheel(this);
     l_harmonics_wheel->setOrientation(Qt::Vertical);
     l_harmonics_wheel->setWheelWidth(14);
+#if QWT_VERSION >= 0x060000
+    l_harmonics_wheel->setRange(1, 40);
+    l_harmonics_wheel->setSingleStep(1);
+    l_harmonics_wheel->setPageStepCount(1);
+#else
     l_harmonics_wheel->setRange(1, 40, 1, 1);
+#endif // QWT_VERSION >= 0x060000
     l_harmonics_wheel->setValue(15);
     m_h_bubble_widget->setNumHarmonics(15);
     l_harmonics_wheel->setToolTip("Change number of harmonics shown");
@@ -71,7 +77,14 @@ HBubbleView::HBubbleView( int p_view_id
     QwtWheel* l_window_size_wheel = new QwtWheel(this);
     l_window_size_wheel->setOrientation(Qt::Horizontal);
     l_window_size_wheel->setWheelWidth(14);
+#if QWT_VERSION >= 0x060000
+    l_window_size_wheel->setRange(32, 1024);
+    l_window_size_wheel->setSingleStep(2);
+    // Sould be 0.5 but put to 1 because 0 zero value disable page stepping
+    l_window_size_wheel->setPageStepCount(1);
+#else
     l_window_size_wheel->setRange(32, 1024, 2, 1);
+#endif // QWT_VERSION >= 0x060000
     l_window_size_wheel->setValue(128);
     m_h_bubble_widget->setHistoryChunks(128);
     l_window_size_wheel->setToolTip("Change the window size");

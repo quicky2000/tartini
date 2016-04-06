@@ -83,7 +83,14 @@ FreqView::FreqView( int p_view_id
     m_freq_wheel_Y = new QwtWheel(l_top_widget);
     m_freq_wheel_Y->setOrientation(Qt::Vertical);
     m_freq_wheel_Y->setWheelWidth(14);
+#if QWT_VERSION >= 0x060000
+    m_freq_wheel_Y->setRange(1.6,5.0);
+    m_freq_wheel_Y->setSingleStep(0.001);
+    // Use 1000 value for multiplicator so that PageStep has size 1
+    m_freq_wheel_Y->setPageStepCount(1000);
+#else
     m_freq_wheel_Y->setRange(1.6, 5.0, 0.001, 1);
+#endif // QWT_VERSION >= 0x060000
     m_freq_wheel_Y->setValue(l_view.logZoomY());
     m_freq_wheel_Y->setToolTip("Zoom pitch contour view vertically");
     l_top_right_layout->addSpacing(20);
@@ -119,7 +126,14 @@ FreqView::FreqView( int p_view_id
     m_amplitude_wheel_Y = new QwtWheel(l_bottom_widget);
     m_amplitude_wheel_Y->setOrientation(Qt::Vertical);
     m_amplitude_wheel_Y->setWheelWidth(14);
+#if QWT_VERSION >= 0x060000
+    m_amplitude_wheel_Y->setRange(0.2, 1.00);
+    m_amplitude_wheel_Y->setSingleStep(0.01);
+    // Use 100 value for multiplicator so that PageStep has size 1
+    m_amplitude_wheel_Y->setPageStepCount(100);
+#else
     m_amplitude_wheel_Y->setRange(0.2, 1.00, 0.01, 1);
+#endif // QWT_VERSION >= 0x060000
     m_amplitude_wheel_Y->setValue(m_amplitude_widget->range());
     m_amplitude_wheel_Y->setToolTip("Zoom pitch contour view vertically");
     l_bottom_top_right_layout->addWidget(m_amplitude_wheel_Y, 0);
@@ -156,7 +170,14 @@ FreqView::FreqView( int p_view_id
     m_freq_wheel_X = new QwtWheel(l_bottom_widget);
     m_freq_wheel_X->setOrientation(Qt::Horizontal);
     m_freq_wheel_X->setWheelWidth(16);
+#if QWT_VERSION >= 0x060000
+    m_freq_wheel_X->setRange(0.5, 9.0);
+    m_freq_wheel_X->setSingleStep(0.001);
+    // Use 1000 value for multiplicator so that PageStep has size 1
+    m_freq_wheel_X->setPageStepCount(1000);
+#else
     m_freq_wheel_X->setRange(0.5, 9.0, 0.001, 1);
+#endif // QWT_VERSION >= 0x060000
     m_freq_wheel_X->setValue(2.0);
     m_freq_wheel_X->setToolTip("Zoom horizontally");
 

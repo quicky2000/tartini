@@ -45,7 +45,16 @@ WaveView::WaveView(int p_view_ID
     QwtWheel * l_freq_wheel_Y = new QwtWheel(this);
     l_freq_wheel_Y->setOrientation(Qt::Vertical);
     l_freq_wheel_Y->setWheelWidth(14);
+
+#if QWT_VERSION >= 0x060000
+    l_freq_wheel_Y->setRange(1.0, 20.0);
+    l_freq_wheel_Y->setSingleStep(0.1);
+    // Multiplicator value is 10 = 1 / 0.1
+    l_freq_wheel_Y->setPageStepCount(10);
+#else
     l_freq_wheel_Y->setRange(1.0, 20.0, 0.1, 1);
+#endif // QWT_VERSION >= 0x060000
+
     l_freq_wheel_Y->setValue(1.0);
     l_freq_wheel_Y->setToolTip("Zoom oscilloscope vertically");
     l_right_layout->addWidget(l_freq_wheel_Y, 1);
