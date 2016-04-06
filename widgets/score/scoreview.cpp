@@ -47,7 +47,14 @@ ScoreView::ScoreView(int p_view_id
     QwtWheel *l_scale_wheel_Y = new QwtWheel(this);
     l_scale_wheel_Y->setOrientation(Qt::Vertical);
     l_scale_wheel_Y->setWheelWidth(14);
+#if QWT_VERSION >= 0x060000
+    l_scale_wheel_Y->setRange(1.0, 30.0);
+    l_scale_wheel_Y->setSingleStep(0.1);
+    // Multiplicator value is 100 = 1 / 0.01
+    l_scale_wheel_Y->setPageStepCount(10);
+#else
     l_scale_wheel_Y->setRange(1.0, 30.0, 0.1, 1);
+#endif // QWT_VERSION >= 0x060000
     l_scale_wheel_Y->setValue(m_score_widget->scaleY());
     QToolTip::add(l_scale_wheel_Y, tr("Zoom vertically"));
     l_right_layout->addWidget(l_scale_wheel_Y, 1);
@@ -59,7 +66,13 @@ ScoreView::ScoreView(int p_view_id
     QwtWheel * l_scale_wheel_X = new QwtWheel(this);
     l_scale_wheel_X->setOrientation(Qt::Horizontal);
     l_scale_wheel_X->setWheelWidth(16);
+#if QWT_VERSION >= 0x060000
+    l_scale_wheel_X->setRange(1.0, 100.0);
+    l_scale_wheel_X->setSingleStep(1.1);
+    l_scale_wheel_X->setPageStepCount(1);
+#else
     l_scale_wheel_X->setRange(1.0, 100.0, 1.1, 1);
+#endif // QWT_VERSION >= 0x060000
     l_scale_wheel_X->setValue(m_score_widget->scaleX());
     QToolTip::add(l_scale_wheel_X, tr("Zoom horizontally"));
     connect(l_scale_wheel_X, SIGNAL(sliderMoved(double)), m_score_widget, SLOT(setScaleX(double)));

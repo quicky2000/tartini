@@ -82,7 +82,14 @@ FreqView::FreqView( int p_view_id
     m_freq_wheel_Y = new QwtWheel(l_top_widget);
     m_freq_wheel_Y->setOrientation(Qt::Vertical);
     m_freq_wheel_Y->setWheelWidth(14);
+#if QWT_VERSION >= 0x060000
+    m_freq_wheel_Y->setRange(1.6,5.0);
+    m_freq_wheel_Y->setSingleStep(0.001);
+    // Use 1000 value for multiplicator so that PageStep has size 1
+    m_freq_wheel_Y->setPageStepCount(1000);
+#else
     m_freq_wheel_Y->setRange(1.6, 5.0, 0.001, 1);
+#endif // QWT_VERSION >= 0x060000
     m_freq_wheel_Y->setValue(l_view.logZoomY());
     QToolTip::add(m_freq_wheel_Y, "Zoom pitch contour view vertically");
     l_top_right_layout->addSpacing(20);
@@ -116,7 +123,14 @@ FreqView::FreqView( int p_view_id
     m_amplitude_wheel_Y = new QwtWheel(l_bottom_widget);
     m_amplitude_wheel_Y->setOrientation(Qt::Vertical);
     m_amplitude_wheel_Y->setWheelWidth(14);
+#if QWT_VERSION >= 0x060000
+    m_amplitude_wheel_Y->setRange(0.2, 1.00);
+    m_amplitude_wheel_Y->setSingleStep(0.01);
+    // Use 100 value for multiplicator so that PageStep has size 1
+    m_amplitude_wheel_Y->setPageStepCount(100);
+#else
     m_amplitude_wheel_Y->setRange(0.2, 1.00, 0.01, 1);
+#endif // QWT_VERSION >= 0x060000
     m_amplitude_wheel_Y->setValue(m_amplitude_widget->range());
     QToolTip::add(m_amplitude_wheel_Y, "Zoom pitch contour view vertically");
     l_bottom_top_right_layout->addWidget(m_amplitude_wheel_Y, 0);
@@ -124,7 +138,7 @@ FreqView::FreqView( int p_view_id
     //Create the vertical scrollbar
     m_amplitude_scroll_bar = new MyScrollBar(0.0, 1.0 - m_amplitude_widget->range(), 0.20, m_amplitude_widget->range(), 0, 20, Qt::Vertical, l_bottom_widget);
     l_bottom_top_right_layout->addWidget(m_amplitude_scroll_bar, 4);
-  
+
     Q3BoxLayout * l_bottom_bottom_layout = new Q3HBoxLayout(l_bottom_layout);
 
     QComboBox * l_amplitude_mode_combo_box = new QComboBox(l_bottom_widget, "amplitudeTypeModeBox");
@@ -150,7 +164,14 @@ FreqView::FreqView( int p_view_id
     m_freq_wheel_X = new QwtWheel(l_bottom_widget);
     m_freq_wheel_X->setOrientation(Qt::Horizontal);
     m_freq_wheel_X->setWheelWidth(16);
+#if QWT_VERSION >= 0x060000
+    m_freq_wheel_X->setRange(0.5, 9.0);
+    m_freq_wheel_X->setSingleStep(0.001);
+    // Use 1000 value for multiplicator so that PageStep has size 1
+    m_freq_wheel_X->setPageStepCount(1000);
+#else
     m_freq_wheel_X->setRange(0.5, 9.0, 0.001, 1);
+#endif // QWT_VERSION >= 0x060000
     m_freq_wheel_X->setValue(2.0);
     QToolTip::add(m_freq_wheel_X, "Zoom horizontally");
 
