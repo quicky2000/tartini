@@ -13,9 +13,21 @@ unix{
     MY_INCLUDE_PATH += /Users/student/usr/local/include
   }else{ #Linux
     MY_TARTINI_PATH += .
-    MY_QWT_PATH = /usr/local/qwt-6.1.2
-    MY_LIB_PATH += -L$$MY_TARTINI_PATH/lib -L/usr/lib -L/usr/lib/x86_64-linux-gnu/ -L$$MY_QWT_PATH/lib
-    MY_INCLUDE_PATH += /usr/include/qt4/QtCore /usr/include/qt4/QtGui /usr/include/qt4 $$MY_QWT_PATH/include /usr/include/GL $$MY_TARTINI_PATH/include
+
+    # QWT 5
+    QWT_LIB_NAME= qwt-qt4
+    MY_QWT_LIB_PATH =
+    MY_QWT_INCLUDE_PATH =  /usr/include/qwt-qt4/
+    #end of Qwt5
+    # QWT 6
+    #MY_QWT_PATH = /usr/local/qwt-6.1.2
+    #QWT_LIB_NAME = qwt
+    #MY_QWT_INCLUDE_PATH = $$MY_QWT_PATH/include
+    #MY_QWT_LIB_PATH = -L$$MY_QWT_PATH/lib
+    # end of Qwt6
+
+    MY_LIB_PATH += -L$$MY_TARTINI_PATH/lib -L/usr/lib -L/usr/lib/x86_64-linux-gnu/ $$MY_QWT_LIB_PATH
+    MY_INCLUDE_PATH += /usr/include/qt4/QtCore /usr/include/qt4/QtGui /usr/include/qt4 /usr/include/GL $$MY_TARTINI_PATH/include $$MY_QWT_INCLUDE_PATH
   }
 }
 win32{ #Windows
@@ -359,8 +371,8 @@ unix{
 
     DEFINES += LINUX
     INCLUDEPATH += $$MY_INCLUDE_PATH
-    LIBS += $$MY_LIB_PATH -lfftw3f -lqwt-qt4 -lasound -lGLU
-#    CONFIG += warn_off
+    LIBS += $$MY_LIB_PATH -lfftw3f -l$$QWT_LIB_NAME -lasound -lGLU
+#   CONFIG += warn_off
     QMAKE_CXXFLAGS += -Wall
     QMAKE_CXXFLAGS -= -g
     profile {
