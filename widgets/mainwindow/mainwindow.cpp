@@ -373,18 +373,45 @@ MainWindow::MainWindow(void)
     addToolBar(Qt::BottomToolBarArea, l_time_bar_dock);
     l_time_bar_dock->setIconSize(QSize(32, 32));
 
-#if QWT_VERSION == 0x050000
-    m_time_slider = new QwtSlider(l_time_bar_dock, Qt::Horizontal, QwtSlider::None, QwtSlider::BgBoth);
-#else // QWT_VERSION == 0x050000
+#if QWT_VERSION >= 0x060000
+    m_time_slider = new QwtSlider(Qt::Horizontal,l_time_bar_dock);
+    m_time_slider->setScalePosition(QwtSlider::NoScale);
+    // To define background style for Qwt slider there are some setters to control display of groove and trough
+    // m_time_slider->setBackgroundStyle(QwtSlider::BgBoth) ;
+    // Ensure that both Groove and Trough are displayed as it was the case with Qwt 5.x
+    m_time_slider->setGroove(true);
+    m_time_slider->setTrough(true);
+
+    // Due to changes in Qwt desing it seems that the notion of range has been relaced by the notion of Scale defined in qwt_abstract_scale class
+    //  m_time_slider->setRange(g_data->leftTime(), g_data->rightTime(), 1.0/10000.0, 1000);
+    m_time_slider->setScale(g_data->leftTime(), g_data->rightTime());
+
+    // the parameters defining how the slider behave inside the scale is now defined in class qwt_abstract_slider
+    double l_range_wdith = ( g_data->leftTime() < g_data->rightTime() ? g_data->rightTime() - g_data->leftTime() : g_data->leftTime() - g_data->rightTime());
+    unsigned int l_nb_steps = ((unsigned int)(l_range_wdith * 10000.0));
+    m_time_slider->setTotalSteps(l_nb_steps);
+    m_time_slider->setPageSteps(1000);
+
+    // Graphical parameters
+    // setThumbWidth and setThumbLength has been replaced by setHandleSize
+    m_time_slider->setHandleSize(QSize(60,20));
+
+    // Don't know how to deal with margins in Qwt 6.x
+
+#else // QWT_VERSION >= 0x060000
+#if QWT_VERSION >= 0x050000
     m_time_slider = new QwtSlider(l_time_bar_dock, Qt::Horizontal, QwtSlider::NoScale, QwtSlider::BgBoth);
-#endif // QWT_VERSION == 0x050000
-    m_time_slider->setRange(g_data->leftTime(), g_data->rightTime(), 1.0 / 10000.0, 1000);
-    m_time_slider->setValue(l_view.currentTime());
-    m_time_slider->setTracking(true);
+#else // QWT_VERSION >= 0x050000
+    m_time_slider = new QwtSlider(l_time_bar_dock, Qt::Horizontal, QwtSlider::None, QwtSlider::BgBoth);
+#endif // QWT_VERSION >= 0x050000
     m_time_slider->setThumbWidth(20);
     m_time_slider->setThumbLength(60);
-    m_time_slider->setBorderWidth(4);
     m_time_slider->setMargins(2, 2);
+    m_time_slider->setRange(g_data->leftTime(), g_data->rightTime(), 1.0/10000.0, 1000);
+#endif // QWT_VERSION >= 0x060000
+    m_time_slider->setValue(l_view.currentTime());
+    m_time_slider->setTracking(true);
+    m_time_slider->setBorderWidth(4);
     m_time_slider->setMinimumWidth(200);
     m_time_slider->setWhatsThis("Drag the time slider to move back and forward through the sound file");
     connect(m_time_slider, SIGNAL(sliderMoved(double)), g_data, SLOT(updateActiveChunkTime(double)));
@@ -392,7 +419,7 @@ MainWindow::MainWindow(void)
     connect(&l_view, SIGNAL(onSlowUpdate(double)), m_time_slider, SLOT(setValue(double)));
     connect(g_data, SIGNAL(timeRangeChanged(double, double)), this, SLOT(setTimeRange(double, double)));
     l_time_bar_dock->addWidget(m_time_slider);
-  
+
     QToolBar * l_volume_meter_tool_bar = new QToolBar(tr("Volume Meter"), this);
     addToolBar(l_volume_meter_tool_bar);
     l_volume_meter_tool_bar->setIconSize(QSize(32, 32));
@@ -1054,7 +1081,18 @@ void MainWindow::setTimeRange( double p_min
 {
     if(m_time_slider)
     {
-        m_time_slider->setRange(p_min, p_max, m_time_slider->step(), 1000);
+#if QWT_VERSION >= 0x060000
+
+        // In Qwt 6.x range has been replaced by scale
+        m_time_slider->setScale(p_min, p_max);
+        // and steps and pages are managed by qwt_abstract_slider class
+        double l_range_wdith = ( p_min < p_max ? p_max - p_min : p_min - p_max);
+        unsigned int l_nb_steps = ((unsigned int)(l_range_wdith * 10000.0));
+        m_time_slider->setTotalSteps(l_nb_steps > m_time_slider->totalSteps() ? l_nb_steps : m_time_slider->totalSteps());
+        m_time_slider->setPageSteps(1000);
+#else // QWT_VERSION >= 0x060000
+        m_time_slider->setRange(p_min, p_max, m_time_slider->step(),1000);
+#endif // QWT_VERSION >= 0x060000
     }
 }
 

@@ -65,12 +65,20 @@ TunerView::TunerView(int p_view_iD_
 
     // Slider goes from (2,0) to (2,9)
 
-#if QWT_VERSION == 0x050000
-    m_slider = new QwtSlider(this, Qt::Horizontal, QwtSlider::Bottom, QwtSlider::BgTrough);
-#else
+#if QWT_VERSION >= 0x060000
+    m_slider = new QwtSlider(Qt::Horizontal,this);
+    m_slider->setScalePosition(QwtSlider::LeadingScale);
+    m_slider->setGroove(false);
+    m_slider->setTrough(true);
+    m_slider->setScale(0, 2);
+#else // QWT_VERSION >= 0x060000
+#if QWT_VERSION >= 0x050000
     m_slider = new QwtSlider(this, Qt::Horizontal, QwtSlider::BottomScale, QwtSlider::BgTrough);
-#endif
+#else // QWT_VERSION >= 0x050000
+    m_slider = new QwtSlider(this, Qt::Horizontal, QwtSlider::Bottom, QwtSlider::BgTrough);
+#endif // QWT_VERSION >= 0x050000
     m_slider->setRange(0, 2);
+#endif // QWT_VERSION >= 0x060000
     m_slider->setReadOnly(false);
     l_layout->addWidget(m_slider, 1, 0, 1, 8);
     m_slider->setToolTip(tr("Increase slider to smooth the pitch over a longer time period"));
