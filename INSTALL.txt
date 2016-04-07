@@ -24,6 +24,7 @@ Step 3.
 At the command prompt (from in the directory) type:
 qmake pitch.pro       - This will generate a Makefile
 make                  - This will compile the executable called tartini.
+lrelease pitch.pro    - This will generate the translations for tartini supported languages
 
 Note: To compile on Windows you need to use MinGW (www.mingw.org),
 since Qt4 is not supported for Visual Studio under the GPL edition.
