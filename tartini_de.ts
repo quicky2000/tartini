@@ -367,15 +367,14 @@
 <context>
     <name>OpenDialog</name>
     <message>
-        <location filename="dialogs/opendialog.cpp" line="29"/>
+        <location filename="dialogs/opendialog.cpp" line="26"/>
         <source>Open File</source>
         <translation>Datei öffnen</translation>
     </message>
     <message>
-        <location filename="dialogs/opendialog.cpp" line="29"/>
         <source>Dialogs/openFilesFolder</source>
         <translatorcomment>where?</translatorcomment>
-        <translation type="unfinished">Dialog Datei öffnen - Verzeichnis</translation>
+        <translation type="obsolete">Dialog Datei öffnen - Verzeichnis</translation>
     </message>
 </context>
 <context>
@@ -634,19 +633,22 @@
 <context>
     <name>SaveDialog</name>
     <message>
-        <location filename="dialogs/savedialog.cpp" line="33"/>
-        <location filename="dialogs/savedialog.cpp" line="150"/>
         <source>Dialogs/saveFilesFolder</source>
         <translatorcomment>where?</translatorcomment>
-        <translation type="unfinished">Dialoge/Speicherort</translation>
+        <translation type="obsolete">Dialoge/Speicherort</translation>
     </message>
     <message>
-        <location filename="dialogs/savedialog.cpp" line="34"/>
+        <location filename="dialogs/savedialog.cpp" line="31"/>
         <source>Wave files (*.wav)</source>
         <translation type="unfinished">Wave-Dateien (*.wav)</translation>
     </message>
     <message>
-        <location filename="dialogs/savedialog.cpp" line="36"/>
+        <location filename="dialogs/savedialog.cpp" line="31"/>
+        <source>Save file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dialogs/savedialog.cpp" line="33"/>
         <source>Choose a filename to save under</source>
         <translation type="unfinished">Wählen Sie einen Dateinamen unter dem gespeichert werden soll</translation>
     </message>
@@ -661,16 +663,12 @@
         <translation type="unfinished">Aktuelles Verzeichnis merken</translation>
     </message>
     <message>
-        <location filename="dialogs/savedialog.cpp" line="126"/>
-        <location filename="dialogs/savedialog.cpp" line="155"/>
         <source>Dialogs/appendWav</source>
-        <translation type="unfinished">Dialoge/Wave anhängen</translation>
+        <translation type="obsolete">Dialoge/Wave anhängen</translation>
     </message>
     <message>
-        <location filename="dialogs/savedialog.cpp" line="128"/>
-        <location filename="dialogs/savedialog.cpp" line="146"/>
         <source>Dialogs/rememberSaveFolder</source>
-        <translation type="unfinished">Dialoge/Speicherort merken</translation>
+        <translation type="obsolete">Dialoge/Speicherort merken</translation>
     </message>
 </context>
 <context>

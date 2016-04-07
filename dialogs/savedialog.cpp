@@ -30,7 +30,7 @@ const char *windowSizeBoxStr[] = { "64", "128", "256", "512", "1024", "2048", "4
 
 SaveDialog::SaveDialog(/*const QString & dirName, const QString & filter, */QWidget * parent)
 // : Q3FileDialog(QDir::convertSeparators(gdata->settings.getString("Dialogs", "saveFilesFolder")),
- : Q3FileDialog(QDir::convertSeparators(gdata->qsettings->value(tr("Dialogs/saveFilesFolder"), QDir::currentDirPath()).toString()),
+ : Q3FileDialog(QDir::convertSeparators(gdata->qsettings->value("Dialogs/saveFilesFolder", QDir::currentDirPath()).toString()),
                tr("Wave files (*.wav)"), parent, NULL, true)
 {
   setCaption(tr("Choose a filename to save under"));
@@ -123,9 +123,9 @@ SaveDialog::SaveDialog(/*const QString & dirName, const QString & filter, */QWid
   appendWavCheckBox =      new QCheckBox(tr("Append .wav extension if needed"), baseWidget);
   rememberFolderCheckBox = new QCheckBox(tr("Remember current folder"), baseWidget);
   //appendWavCheckBox->setChecked(gdata->settings.getBool("Dialogs", "appendWav"));
-  appendWavCheckBox->setChecked(gdata->qsettings->value(tr("Dialogs/appendWav"), true).toBool());
+  appendWavCheckBox->setChecked(gdata->qsettings->value("Dialogs/appendWav", true).toBool());
   //rememberFolderCheckBox->setChecked(gdata->settings.getBool("Dialogs", "rememberSaveFolder"));
-  rememberFolderCheckBox->setChecked(gdata->qsettings->value(tr("Dialogs/rememberSaveFolder"), true).toBool());
+  rememberFolderCheckBox->setChecked(gdata->qsettings->value("Dialogs/rememberSaveFolder", true).toBool());
   //baseLayout->addWidget(appendWavCheckBox, 1, 1);
   //baseLayout->addWidget(rememberFolderCheckBox, 1, 1);
   baseLayout->addSpacing(10);
@@ -143,16 +143,16 @@ void SaveDialog::accept()
 {
   bool remember = rememberFolderCheckBox->isChecked();
   //gdata->settings.setBool("Dialogs", "rememberSaveFolder", remember);
-  gdata->qsettings->setValue(tr("Dialogs/rememberSaveFolder"), remember);
+  gdata->qsettings->setValue("Dialogs/rememberSaveFolder", remember);
   if(remember == true) {
     const QDir *curDir = dir();
     //gdata->settings.setString("Dialogs", "saveFilesFolder", curDir->absPath());
-    gdata->qsettings->setValue(tr("Dialogs/saveFilesFolder"), curDir->absPath());
+    gdata->qsettings->setValue("Dialogs/saveFilesFolder", curDir->absPath());
     delete curDir;
   }
   bool appendWav = appendWavCheckBox->isChecked();
   //gdata->settings.setBool("Dialogs", "appendWav", appendWav);
-  gdata->qsettings->setValue(tr("Dialogs/appendWav"), appendWav);
+  gdata->qsettings->setValue("Dialogs/appendWav", appendWav);
   if(appendWav == true) {
     QString s = selectedFile();
     if(!s.lower().endsWith(".wav")) { s += ".wav"; }
