@@ -45,8 +45,8 @@ SaveDialog::SaveDialog(QWidget * p_parent)
     l_layout->addItem(l_base_layout);
 
     m_append_wav_check_box = new QCheckBox(tr("Append .wav extension if needed"), this);
-    m_remember_folder_check_box = new QCheckBox(tr("Remember current folder"), this);
     m_append_wav_check_box->setChecked(g_data->getSettingsValue("Dialogs/appendWav", true));
+    m_remember_folder_check_box = new QCheckBox(tr("Remember current folder"), this);
     m_remember_folder_check_box->setChecked(g_data->getSettingsValue("Dialogs/rememberSaveFolder", true));
 
     l_base_layout->addSpacing(10);
