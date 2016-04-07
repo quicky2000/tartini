@@ -19,27 +19,36 @@
 #include <qcheckbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include "gdata.h"
 
 //------------------------------------------------------------------------------
 SaveDialog::SaveDialog(QWidget * p_parent)
-: Q3FileDialog(QDir::convertSeparators(g_data->getSettingsValue("Dialogs/saveFilesFolder", QDir::currentDirPath()))
-              , tr("Wave files (*.wav)"), p_parent
-              , NULL
-              , true
-              )
+: QFileDialog( p_parent
+             , tr("Save file")
+             , QDir::convertSeparators( g_data->getSettingsValue( "Dialogs/saveFilesFolder"
+                                                                , QDir::currentDirPath()
+                                                                )
+                                      )
+             ,tr("Wave files (*.wav)")
+)
 {
     setCaption(tr("Choose a filename to save under"));
-    setMode(Q3FileDialog::AnyFile);
-  
-    QWidget *l_base_widget = new QWidget(this);
-    addWidgets(NULL, l_base_widget, NULL);
-    Q3BoxLayout *l_base_layout = new Q3VBoxLayout(l_base_widget);
-    m_append_wav_check_box =      new QCheckBox(tr("Append .wav extension if needed"), l_base_widget);
-    m_remember_folder_check_box = new QCheckBox(tr("Remember current folder"), l_base_widget);
+    setAcceptMode(QFileDialog::AcceptSave);
+    setFileMode(QFileDialog::AnyFile);
+    setModal(true);
+    setOption(QFileDialog::DontUseNativeDialog,true);
+    QLayout * l_layout = this->layout();
+
+
+    QVBoxLayout * l_base_layout = new QVBoxLayout();
+    l_layout->addItem(l_base_layout);
+
+    m_append_wav_check_box = new QCheckBox(tr("Append .wav extension if needed"), this);
+    m_remember_folder_check_box = new QCheckBox(tr("Remember current folder"), this);
     m_append_wav_check_box->setChecked(g_data->getSettingsValue("Dialogs/appendWav", true));
     m_remember_folder_check_box->setChecked(g_data->getSettingsValue("Dialogs/rememberSaveFolder", true));
+
     l_base_layout->addSpacing(10);
     l_base_layout->addWidget(m_append_wav_check_box);
     l_base_layout->addWidget(m_remember_folder_check_box);
@@ -57,9 +66,8 @@ void SaveDialog::accept(void)
     g_data->setSettingsValue("Dialogs/rememberSaveFolder", l_remember);
     if(l_remember == true)
     {
-        const QDir * l_cur_dir = dir();
-        g_data->setSettingsValue("Dialogs/saveFilesFolder", l_cur_dir->absPath());
-        delete l_cur_dir;
+        QDir l_cur_dir = directory();
+        g_data->setSettingsValue("Dialogs/saveFilesFolder", l_cur_dir.absPath());
     }
     bool l_append_wav = m_append_wav_check_box->isChecked();
     g_data->setSettingsValue("Dialogs/appendWav", l_append_wav);
@@ -70,9 +78,9 @@ void SaveDialog::accept(void)
         {
             l_string += ".wav";
         }
-        setSelection(l_string);
+        selectFile(l_string);
     }
-    Q3FileDialog::accept();
+    QFileDialog::accept();
 }
 
 //------------------------------------------------------------------------------
