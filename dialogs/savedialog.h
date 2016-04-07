@@ -24,6 +24,7 @@ extern const char *windowSizeBoxStr[];
 
 class SaveDialog : public Q3FileDialog
 {
+  Q_OBJECT
 public:
   SaveDialog(/*const QString & dirName, const QString & filter = QString::null, */QWidget * parent = 0);
   ~SaveDialog();

@@ -23,6 +23,7 @@ class QCheckBox;
 
 class OpenDialog : public QFileDialog
 {
+  Q_OBJECT
 public:
   OpenDialog(/*const QString & dirName, const QString & filter, */QWidget * parent);
   ~OpenDialog();
