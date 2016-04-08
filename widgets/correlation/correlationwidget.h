@@ -18,12 +18,9 @@
 #define CORRELATIONWIDGET_H
 
 #include "drawwidget.h"
-#include <Q3PointArray>
+#include <QPolygon>
 #include <QPaintEvent>
 #include "array1d.h"
-
-// Forward declarations of classes the h file doesn't need to know specifics about
-class Q3PointArray;
 
 class CorrelationWidget : public DrawWidget
 {
@@ -41,7 +38,7 @@ class CorrelationWidget : public DrawWidget
     void setAggregateMode(int p_mode);
 
   private:
-    Q3PointArray m_point_array;
+    QPolygon m_point_array;
     Array1d<float> m_lookup;
     int m_aggregate_mode;
 };
