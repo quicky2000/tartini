@@ -18,11 +18,11 @@
 #define CEPSTRUMWIDGET_H
 
 #include "drawwidget.h"
-#include <Q3PointArray>
+#include <QPolygon>
 #include <QPaintEvent>
 
 // Forward declarations of classes the h file doesn't need to know specifics about
-class Q3PointArray;
+class QPolygon;
 
 class CepstrumWidget : public DrawWidget
 {
@@ -37,7 +37,7 @@ class CepstrumWidget : public DrawWidget
     QSize sizeHint(void) const;
 
   private:
-    Q3PointArray m_point_array;
+    QPolygon m_point_array;
 };
 #endif // CEPSTRUMWIDGET_H
 // EOF
