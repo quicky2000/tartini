@@ -14,9 +14,8 @@
    
    Please read LICENSE.txt for details.
  ***************************************************************************/
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <q3memarray.h>
+#include <QPixmap>
+#include <QPainter>
 #include <QPaintEvent>
 
 #include "wavewidget.h"
