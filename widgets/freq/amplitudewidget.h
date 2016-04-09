@@ -21,12 +21,10 @@
 #include <QGLWidget>
 #include <QMouseEvent>
 #include <QPixmap>
-#include <Q3PointArray>
 #include <QWheelEvent>
 #include <QPaintEvent>
 #include "channel.h"
 
-class Q3PointArray;
 struct ZoomElement;
 class AnalysisData;
 

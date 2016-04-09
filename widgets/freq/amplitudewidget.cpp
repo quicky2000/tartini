@@ -23,7 +23,6 @@
 #include "zoomlookup.h"
 #include "qcursor.h"
 #include <QMouseEvent>
-#include <Q3PointArray>
 #include <QWheelEvent>
 #include <QPaintEvent>
 #include "analysisdata.h"
