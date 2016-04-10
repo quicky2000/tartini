@@ -16,10 +16,9 @@
  ***************************************************************************/
 
 
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qcursor.h>
-#include <q3simplerichtext.h>
+#include <QPixmap>
+#include <QPainter>
+#include <QCursor>
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <QResizeEvent>
