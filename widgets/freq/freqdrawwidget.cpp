@@ -21,7 +21,6 @@
 #include <qcursor.h>
 #include <q3simplerichtext.h>
 #include <QMouseEvent>
-#include <Q3PointArray>
 #include <QWheelEvent>
 #include <QResizeEvent>
 #include <QKeyEvent>
