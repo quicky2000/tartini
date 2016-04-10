@@ -15,8 +15,8 @@
    Please read LICENSE.txt for details.
  ***************************************************************************/
  
-#include <qthread.h>
-#include <Q3PointArray>
+#include <QThread>
+#include <QPolygon>
 #include <utility>
 #include <algorithm>
 #include <qpixmap.h>
@@ -187,7 +187,7 @@ void DrawWidget::drawChannel(QPaintDevice & p_paint_device,
     }
   int l_last_base_element = int(floor(double(p_channel->totalChunks()) / l_base_X));
   
-  Q3PointArray l_point_array(p_paint_device.width() * 2);
+  QPolygon pointArray(p_paint_device.width()*2);
       
   if (l_base_X > 1)
     {
@@ -804,7 +804,7 @@ void DrawWidget::drawArray(float * p_input,
   double l_dh2 = double(height() - 1) / 2.0;
   double l_scale_Y = l_dh2 * p_the_zoom_Y;
   int l_w = width() / p_sample_step;
-  Q3PointArray l_point_array(l_w);
+  QPolygon l_point_array(l_w);
   int l_int_step = int(p_n / l_w);
   int l_remainder_step = p_n - (l_int_step * l_w);
   int l_pos = 0;
