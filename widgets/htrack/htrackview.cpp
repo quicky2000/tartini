@@ -18,17 +18,16 @@
 #include "htrackwidget.h"
 #include "gdata.h"
 
-#include <qlayout.h>
-#include <qslider.h>
+#include <QLayout>
+#include <QSlider>
 #include <qwt_wheel.h>
-#include <qsizegrip.h>
-#include <q3grid.h>
-#include <qtooltip.h>
-#include <qpushbutton.h>
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
-#include <Q3GridLayout>
-#include <Q3Frame>
+#include <QSizeGrip>
+#include <QToolTip>
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QGridLayout>
+#include <QFrame>
 #include <QResizeEvent>
 
 //------------------------------------------------------------------------------
@@ -37,13 +36,13 @@ HTrackView::HTrackView( int p_view_ID
                       )
 : ViewWidget( p_view_ID, p_parent)
 {
-    Q3GridLayout * l_main_layout = new Q3GridLayout(this, 2, 2);
+    QGridLayout * l_main_layout = new QGridLayout(this, 2, 2);
     l_main_layout->setResizeMode(QLayout::SetNoConstraint);
-    Q3BoxLayout * l_right_layout = new Q3VBoxLayout();
-    Q3BoxLayout * l_bottom_layout = new Q3HBoxLayout();
+    QVBoxLayout * l_right_layout = new QVBoxLayout();
+    QHBoxLayout * l_bottom_layout = new QHBoxLayout();
 
-    Q3Grid * l_frame = new Q3Grid(1, this);
-    l_frame->setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
+    QFrame * l_frame = new QFrame(this);
+    l_frame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
     QWidget * l_a_widget = new QWidget(l_frame);
     m_h_track_widget = new HTrackWidget(l_a_widget);
     m_h_track_widget->setWhatsThis("Shows a 3D keyboard with the current note coloured. "
