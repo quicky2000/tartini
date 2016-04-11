@@ -17,9 +17,9 @@
 
 #include "opendialog.h"
 
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qcheckbox.h>
+#include <QLayout>
+#include <QLabel>
+#include <QCheckBox>
 #include <QVBoxLayout>
 #include "gdata.h"
 
