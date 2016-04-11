@@ -19,11 +19,11 @@
 #include "gdata.h"
 #include "qwt_wheel.h"
 #include "qlayout.h"
-#include "q3grid.h"
-#include "qtooltip.h"
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
-#include <Q3Frame>
+#include <QFrame>
+#include <QToolTip>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QFrame>
 #include <QResizeEvent>
 
 //------------------------------------------------------------------------------
@@ -32,14 +32,14 @@ WaveView::WaveView(int p_view_ID
                   )
 : ViewWidget(p_view_ID, p_parent)
 {
-    Q3BoxLayout * l_main_layout = new Q3HBoxLayout(this);
+    QHBoxLayout * l_main_layout = new QHBoxLayout(this);
 
-    Q3Grid * l_wave_frame = new Q3Grid(1, this);
-    l_wave_frame->setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
+    QFrame * l_wave_frame = new QFrame(this);
+    l_wave_frame->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     m_wave_widget = new WaveWidget(l_wave_frame);
     l_main_layout->addWidget(l_wave_frame);
 
-    Q3BoxLayout * l_right_layout = new Q3VBoxLayout(l_main_layout);
+    QVBoxLayout * l_right_layout = new QVBoxLayout(l_main_layout);
 
     QwtWheel * l_freq_wheel_Y = new QwtWheel(this);
     l_freq_wheel_Y->setOrientation(Qt::Vertical);
