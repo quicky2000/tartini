@@ -23,11 +23,11 @@
 #include <algorithm>
 #include "channel.h"
 
-#include <q3progressbar.h>
+#include <QProgressBar>
 #include "mainwindow.h"
-#include <qstatusbar.h>
-#include <qlabel.h>
-#include <qdir.h>
+#include <QStatusBar>
+#include <QLabel>
+#include <QDir>
 
 #include "audio_stream.h"
 #include "wave_stream.h"
@@ -643,8 +643,9 @@ void SoundFile::preProcess(void)
     QStatusBar * l_the_status_bar = l_the_main_window->statusBar();
     QLabel * l_message = new QLabel("Preprocessing data:", l_the_status_bar, "message");
 
-    Q3ProgressBar * l_progress = new Q3ProgressBar(m_stream->totalFrames() / framesPerChunk(), l_the_status_bar, "progress bar");
-    l_progress->setProgress(0);
+    QProgressBar * l_progress = new QProgressBar(l_the_status_bar);
+    l_progress->setRange(0,m_stream->totalFrames() / framesPerChunk() - 1);
+    l_progress->setValue(0);
     l_progress->setMaximumHeight(16);
 
     l_the_status_bar->addWidget(l_message);
@@ -654,7 +655,7 @@ void SoundFile::preProcess(void)
     l_progress->show();
 
     int l_frame_count = 1;
-    int l_update_interval = MAX(1, l_progress->totalSteps() / 50); // We'll update 50 times only
+    int l_update_interval = MAX(1, (l_progress->maximum() - l_progress->minimum() +1) / 50); // We'll update 50 times only
 
     while(readChunk(framesPerChunk()) == framesPerChunk())
     {
@@ -666,7 +667,7 @@ void SoundFile::preProcess(void)
 
         if(l_frame_count % l_update_interval == 0)
         {
-            l_progress->setProgress(l_progress->progress() + l_update_interval);
+            l_progress->setValue(l_progress->value() + l_update_interval);
             qApp->processEvents();
             l_frame_count = 1;
         }
@@ -679,7 +680,7 @@ void SoundFile::preProcess(void)
     m_filtered_stream->open_read(m_filtered_filename);
     jumpToChunk(0);
 
-    l_progress->setProgress(l_progress->totalSteps());
+    l_progress->setValue(l_progress->maximum());
     l_the_status_bar->removeWidget(l_progress);
     l_the_status_bar->removeWidget(l_message);
     delete l_progress;
