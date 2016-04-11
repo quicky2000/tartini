@@ -20,8 +20,8 @@
 #include "gdata.h"
 #include "musicnotes.h"
 
-#include <qmap.h>
-#include <qstring.h>
+#include <QMap>
+#include <QString>
 
 #include <qwt_compass.h>
 #include <qwt_dial_needle.h>

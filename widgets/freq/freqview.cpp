@@ -28,19 +28,16 @@
 #include "mainwindow.h"
 #include "analysisdata.h"
 
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qsizegrip.h>
-#include <qsplitter.h>
-#include <qtooltip.h>
+#include <QLayout>
+#include <QPushButton>
+#include <QSizeGrip>
+#include <QSplitter>
+#include <QToolTip>
 #include <QFrame>
 #include <qwt_wheel.h>
-#include <qcursor.h>
-#include <qcombobox.h>
-#include <qspinbox.h>
-#include <Q3Frame>
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QCursor>
+#include <QComboBox>
+#include <QSpinBox>
 #include <QFrame>
 #include <QHBoxLayout>
 #include <QVBoxLayout>

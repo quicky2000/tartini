@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 #include "pianowidget.h"
-#include <qpainter.h>
+#include <QPainter>
 #include <QPaintEvent>
 #include "drawwidget.h"
 #include "gdata.h"

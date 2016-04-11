@@ -19,7 +19,7 @@
 #define MYLABEL_H
 
 #include "drawwidget.h"
-#include <qstring.h>
+#include <QString>
 #include <QPaintEvent>
 
 /**

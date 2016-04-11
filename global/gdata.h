@@ -22,11 +22,10 @@
 //#define TARTINI_VERSION       1.2
 
 #include <Qt>
-#include <qapplication.h>
-#include <qobject.h>
+#include <QApplication>
+#include <QObject>
 
-#include <qmutex.h>
-//Added by qt3to4:
+#include <QMutex>
 #include <QPixmap>
 
 #include <vector>

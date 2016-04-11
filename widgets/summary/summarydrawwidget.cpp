@@ -19,10 +19,10 @@
 #include "gdata.h"
 #include "channel.h"
 
-#include <qthread.h>
+#include <QThread>
 
-#include <qpainter.h>
-#include <qpixmap.h>
+#include <QPainter>
+#include <QPixmap>
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <QPaintEvent>

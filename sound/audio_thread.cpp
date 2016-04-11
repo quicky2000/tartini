@@ -14,8 +14,7 @@
 ***************************************************************************/
 #include <stdio.h>
 #include <math.h>
-#include <qrect.h>
-//Added by qt3to4:
+#include <QRect>
 #include <QCustomEvent>
 #include <QMutex>
 
@@ -181,9 +180,8 @@ int AudioThread::doStuff(void)
         if(!m_play_sound_file->playChunk())
         {
             //end of file
-            QApplication::postEvent( ((MainWindow*)qApp->mainWidget()), new QCustomEvent(UPDATE_SLOW)); //for qt3.x
-            //stop the audio thread playing
-            return 0;
+            QApplication::postEvent( ((MainWindow*)qApp->mainWidget()), new QCustomEvent(UPDATE_SLOW));
+            return 0; //stop the audio thread playing
         }
         if(!g_data->getAudioStream())
         {
@@ -211,9 +209,8 @@ int AudioThread::doStuff(void)
             if(!SoundFile::playRecordChunk(m_play_sound_file, m_rec_sound_file))
             {
                 //end of file
-                QApplication::postEvent( ((MainWindow*)qApp->mainWidget()), new QCustomEvent(UPDATE_SLOW)); //for qt3.x
-                //stop the audio thread playing
-                return 0;
+                QApplication::postEvent( ((MainWindow*)qApp->mainWidget()), new QCustomEvent(UPDATE_SLOW));
+                return 0; //stop the audio thread playing
             }
         }
     }

@@ -17,7 +17,7 @@
 
 #include "ledindicator.h"
 
-#include <qpixmap.h>
+#include <QPixmap>
 #include <QPaintEvent>
 
 //------------------------------------------------------------------------------

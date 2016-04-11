@@ -18,8 +18,8 @@
 #ifndef PIANO_H
 #define PIANO_H
 
-#include <qwidget.h>
-#include <qpixmap.h>
+#include <QWidget>
+#include <QPixmap>
 #include <QPaintEvent>
 #include "drawwidget.h"
 

@@ -16,7 +16,7 @@
 ***************************************************************************/
 #ifndef MYSCROLLBAR_H
 #define MYSCROLLBAR_H
-#include <qwidget.h>
+#include <QWidget>
 #include <QResizeEvent>
 #include "useful.h"
 

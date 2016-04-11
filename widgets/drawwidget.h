@@ -17,10 +17,10 @@
 #ifndef DRAWWIDGET_H
 #define DRAWWIDGET_H
 
-#include <qpainter.h>
-#include <qwidget.h>
+#include <QPainter>
+#include <QWidget>
 #include <QGLWidget>
-#include <qobject.h>
+#include <QObject>
 #include <QPixmap>
 #include <vector>
 #include <map>

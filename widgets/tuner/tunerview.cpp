@@ -14,7 +14,7 @@
    
    Please read LICENSE.txt for details.
  ***************************************************************************/
-#include <qpixmap.h>
+#include <QPixmap>
 #include <qwt_slider.h>
 #include <QLayout>
 #include <QToolTip>

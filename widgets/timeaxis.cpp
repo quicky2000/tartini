@@ -20,7 +20,7 @@
 #include "gdata.h"
 
 #include <math.h>
-#include <qpainter.h>
+#include <QPainter>
 #include <QPaintEvent>
 
 //------------------------------------------------------------------------------

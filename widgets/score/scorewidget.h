@@ -18,7 +18,7 @@
 #define SCOREWIDGET_H
 
 #include "drawwidget.h"
-#include "qfont.h"
+#include <QFont>
 #include <QMouseEvent>
 #include <QPaintEvent>
 

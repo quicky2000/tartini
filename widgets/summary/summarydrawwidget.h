@@ -21,9 +21,9 @@
 #include "drawwidget.h"
 #include "useful.h"
 
-#include <qpixmap.h>
-#include <qevent.h>
-#include <qobject.h>
+#include <QPixmap>
+#include <QEvent>
+#include <QObject>
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <QPaintEvent>
