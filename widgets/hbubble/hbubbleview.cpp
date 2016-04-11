@@ -21,19 +21,18 @@
 #include "useful.h" 
 #include "myscrollbar.h"
 
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qsizegrip.h>
-#include <qsplitter.h>
-#include <qtooltip.h>
-#include <q3grid.h>
+#include <QLayout>
+#include <QPushButton>
+#include <QSizeGrip>
+#include <QSplitter>
+#include <QToolTip>
+#include <QFrame>
 #include <qwt_wheel.h>
-#include <qcursor.h>
-#include <qcombobox.h>
-#include <qspinbox.h>
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
-#include <Q3Frame>
+#include <QCursor>
+#include <QComboBox>
+#include <QSpinBox>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 //------------------------------------------------------------------------------
 HBubbleView::HBubbleView( int p_view_id
@@ -43,18 +42,18 @@ HBubbleView::HBubbleView( int p_view_id
 {
     setCaption("Harmonic Bubbles");
 
-    Q3BoxLayout *l_main_layout = new Q3HBoxLayout(this);
+    QHBoxLayout *l_main_layout = new QHBoxLayout(this);
 
-    Q3BoxLayout *l_left_layout = new Q3VBoxLayout(l_main_layout);
-    Q3BoxLayout *l_right_layout = new Q3VBoxLayout(l_main_layout);
+    QVBoxLayout *l_left_layout = new QVBoxLayout(l_main_layout);
+    QVBoxLayout *l_right_layout = new QVBoxLayout(l_main_layout);
 
-    Q3Grid *l_wave_frame = new Q3Grid(1, this);
-    l_wave_frame->setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
+    QFrame *l_wave_frame = new QFrame(this);
+    l_wave_frame->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     l_left_layout->addWidget(l_wave_frame);
 
     m_h_bubble_widget = new HBubbleWidget(l_wave_frame);
 
-    Q3BoxLayout *l_bottom_layout = new Q3HBoxLayout(l_left_layout);
+    QHBoxLayout *bottomLayout = new QHBoxLayout(leftLayout);
 
     QwtWheel* l_harmonics_wheel = new QwtWheel(this);
     l_harmonics_wheel->setOrientation(Qt::Vertical);
