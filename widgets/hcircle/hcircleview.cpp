@@ -21,19 +21,18 @@
 #include "useful.h" 
 #include "myscrollbar.h"
 
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qsizegrip.h>
-#include <qsplitter.h>
-#include <qtooltip.h>
-#include <q3grid.h>
+#include <QLayout>
+#include <QPushButton>
+#include <QSizeGrip>
+#include <QSplitter>
+#include <QToolTip>
 #include <qwt_wheel.h>
-#include <qcursor.h>
-#include <qcombobox.h>
-#include <qspinbox.h>
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
-#include <Q3Frame>
+#include <QCursor>
+#include <QComboBox>
+#include <QSpinBox>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QFrame>
 
 //------------------------------------------------------------------------------
 HCircleView::HCircleView( int p_view_id
@@ -43,18 +42,18 @@ HCircleView::HCircleView( int p_view_id
 {
     setCaption("Harmonic Circle");
 
-    Q3BoxLayout * l_main_layout = new Q3HBoxLayout(this);
+    QHBoxLayout * l_main_layout = new QHBoxLayout(this);
 
-    Q3BoxLayout * l_left_layout = new Q3VBoxLayout(l_main_layout);
-    Q3BoxLayout * l_right_layout = new Q3VBoxLayout(l_main_layout);
- 
-    Q3Grid * l_wave_frame = new Q3Grid(1, this);
-    l_wave_frame->setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
+    QVBoxLayout * l_left_layout = new QVBoxLayout(l_main_layout);
+    QVBoxLayout * l_right_layout = new QVBoxLayout(l_main_layout);
+
+    QFrame * l_wave_frame = new QFrame(this);
+    l_wave_frame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
     l_left_layout->addWidget(l_wave_frame);
 
     m_h_circle_widget = new HCircleWidget(l_wave_frame);
 
-    Q3BoxLayout * l_bottom_layout = new Q3HBoxLayout(l_left_layout);
+    QHBoxLayout * l_bottom_layout = new QHBoxLayout(l_left_layout);
  
     QwtWheel * l_zoom_wheel = new QwtWheel(this);
     l_zoom_wheel->setOrientation(Qt::Vertical);
@@ -64,7 +63,7 @@ HCircleView::HCircleView( int p_view_id
     m_h_circle_widget->setZoom(0.007);
     QToolTip::add(l_zoom_wheel, "Zoom in or out");
     l_right_layout->addWidget(l_zoom_wheel);
-  
+
     QwtWheel * l_lowest_value_wheel = new QwtWheel(this);
     l_lowest_value_wheel->setOrientation(Qt::Vertical);
     l_lowest_value_wheel->setWheelWidth(14);
