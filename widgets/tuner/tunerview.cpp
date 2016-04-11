@@ -16,9 +16,9 @@
  ***************************************************************************/
 #include <qpixmap.h>
 #include <qwt_slider.h>
-#include <qlayout.h>
-#include <qtooltip.h>
-#include <Q3GridLayout>
+#include <QLayout>
+#include <QToolTip>
+#include <QGridLayout>
 #include <QResizeEvent>
 #include <QPaintEvent>
 
@@ -55,7 +55,7 @@ TunerView::TunerView(int p_view_iD_
             )
 {
 
-    Q3GridLayout * l_layout = new Q3GridLayout(this, 9, 3, 2);
+    QGridLayout * l_layout = new QGridLayout(this, 9, 3, 2);
     l_layout->setResizeMode(QLayout::SetNoConstraint);
 
     // Tuner widget goes from (0, 0) to (0, 8);
