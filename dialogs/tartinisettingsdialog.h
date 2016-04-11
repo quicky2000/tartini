@@ -9,7 +9,7 @@
 #ifndef TARTINISETTINGSDIALOG_H
 #define TARTINISETTINGSDIALOG_H
 
-#include <qcolordialog.h>
+#include <QColorDialog>
 #include <QCustomEvent>
 #include "mainwindow.h"
 #include <QDialog>

@@ -6,7 +6,7 @@
 ** init() function in place of a constructor, and a destroy() function in
 ** place of a destructor.
 *****************************************************************************/
-#include <qcolordialog.h>
+#include <QColorDialog>
 #include <QCustomEvent>
 #include "mainwindow.h"
 #include "tartinisettingsdialog.h"
