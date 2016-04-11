@@ -33,7 +33,7 @@
 #include <qsizegrip.h>
 #include <qsplitter.h>
 #include <qtooltip.h>
-#include <q3grid.h>
+#include <QFrame>
 #include <qwt_wheel.h>
 #include <qcursor.h>
 #include <qcombobox.h>
@@ -41,6 +41,9 @@
 #include <Q3Frame>
 #include <Q3HBoxLayout>
 #include <Q3VBoxLayout>
+#include <QFrame>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 //------------------------------------------------------------------------------
 FreqView::FreqView( int p_view_id
@@ -50,18 +53,18 @@ FreqView::FreqView( int p_view_id
 {
     View & l_view = g_data->getView();
 
-    Q3BoxLayout *l_main_layout = new Q3VBoxLayout(this);
+    QVBoxLayout *l_main_layout = new QVBoxLayout(this);
     l_main_layout->setResizeMode(QLayout::SetNoConstraint);
 
     QSplitter * l_splitter = new QSplitter(Qt::Vertical, this);
     QWidget * l_top_widget = new QWidget(l_splitter);
-    Q3BoxLayout * l_top_layout = new Q3HBoxLayout(l_top_widget);
-    Q3BoxLayout * l_top_left_layout = new Q3VBoxLayout(l_top_layout);
+    QHBoxLayout * l_top_layout = new QHBoxLayout(l_top_widget);
+    QVBoxLayout * l_top_left_layout = new QVBoxLayout(l_top_layout);
   
     m_time_axis = new TimeAxis(l_top_widget, g_data->leftTime(), g_data->rightTime(), true);
     m_time_axis->setWhatsThis("The time in seconds");
     l_top_left_layout->addWidget(m_time_axis);
-  
+
     QFrame * l_freq_frame = new QFrame;
     l_freq_frame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
     QVBoxLayout *l_freq_frame_layout = new QVBoxLayout;
@@ -97,8 +100,8 @@ FreqView::FreqView( int p_view_id
 
     //------------bottom half------------------
     QWidget * l_bottom_widget = new QWidget(l_splitter);
-    Q3BoxLayout * l_bottom_layout = new Q3VBoxLayout(l_bottom_widget);
-    Q3BoxLayout * l_bottom_top_layout = new Q3HBoxLayout(l_bottom_layout);
+    QVBoxLayout * l_bottom_layout = new QVBoxLayout(l_bottom_widget);
+    QHBoxLayout * l_bottom_top_layout = new QHBoxLayout(l_bottom_layout);
 
     QFrame * l_amplitude_frame = new QFrame;
     l_amplitude_frame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
@@ -111,7 +114,7 @@ FreqView::FreqView( int p_view_id
     l_amplitude_frame->setLayout(l_amplitude_frame_layout);
     l_bottom_top_layout->addWidget(l_amplitude_frame);
 
-    Q3BoxLayout *l_bottom_top_right_layout = new Q3VBoxLayout(l_bottom_top_layout);
+    QVBoxLayout *l_bottom_top_right_layout = new QVBoxLayout(l_bottom_top_layout);
 
     m_amplitude_wheel_Y = new QwtWheel(l_bottom_widget);
     m_amplitude_wheel_Y->setOrientation(Qt::Vertical);
@@ -124,8 +127,8 @@ FreqView::FreqView( int p_view_id
     //Create the vertical scrollbar
     m_amplitude_scroll_bar = new MyScrollBar(0.0, 1.0 - m_amplitude_widget->range(), 0.20, m_amplitude_widget->range(), 0, 20, Qt::Vertical, l_bottom_widget);
     l_bottom_top_right_layout->addWidget(m_amplitude_scroll_bar, 4);
-  
-    Q3BoxLayout * l_bottom_bottom_layout = new Q3HBoxLayout(l_bottom_layout);
+
+    QHBoxLayout * l_bottom_bottom_layout = new QHBoxLayout(l_bottom_layout);
 
     QComboBox * l_amplitude_mode_combo_box = new QComboBox(l_bottom_widget, "amplitudeTypeModeBox");
     l_amplitude_mode_combo_box->setWhatsThis("Select different algorithm parameters to view in the bottom pannel");
