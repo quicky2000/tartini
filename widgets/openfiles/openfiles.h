@@ -19,10 +19,10 @@
 
 #include "viewwidget.h"
 #include <QResizeEvent>
+#include <QItemSelection>
+#include <QTableWidgetItem>
 
 class Channel;
-class Q3ListView;
-class Q3ListViewItem;
 
 class OpenFiles : public ViewWidget
 {
@@ -36,13 +36,13 @@ class OpenFiles : public ViewWidget
     virtual ~OpenFiles(void);
 
     //private: // Although it should be private, really
-    Q3ListView *m_the_list_view;
+    QTableWidget * m_table;
 
     void resizeEvent(QResizeEvent *);
 
     QSize sizeHint(void) const;
 
-  public slots:
+  private slots:
     void refreshChannelList();
 
     /**
@@ -50,14 +50,12 @@ class OpenFiles : public ViewWidget
      *
      * @param p_item the channel to toggle.
      */
-    void listViewChanged(Q3ListViewItem * p_item);
+    void listViewChanged();
 
     /**
      * Changes the active channel to the item.
-     *
-     * @param p_item the channel to toggle.
      */
-    void slotCurrentChanged(Q3ListViewItem * p_item);
+    void slotCurrentChanged(int p_row, int p_column);
     void slotActiveChannelChanged(Channel * p_active);
 
 };
