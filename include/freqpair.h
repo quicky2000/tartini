@@ -19,7 +19,7 @@
 
 #include <vector>
 
-#include <qmutex.h>
+#include <QMutex>
 
 #include <stdio.h>
 

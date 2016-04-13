@@ -22,11 +22,11 @@
 #include "mainwindow.h"
 
 
-#include <qapplication.h>
+#include <QApplication>
 
 
 #ifdef MACX
-#include <qstring.h>
+#include <QString>
 extern QString macxPathString;
 #endif // MACX
 

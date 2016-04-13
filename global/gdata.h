@@ -39,7 +39,7 @@
 #ifndef WINDOWS
 #include <sys/time.h>
 #endif
-#include <qcolor.h>
+#include <QColor>
 #include "array2d.h"
 #include "useful.h"
 #include "view.h"

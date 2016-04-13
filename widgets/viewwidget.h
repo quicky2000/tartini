@@ -15,7 +15,7 @@
 #ifndef VIEWWIDGET_H
 #define VIEWWIDGET_H
 
-#include <qapplication.h>
+#include <QWidget>
 
 class ViewWidget : public QWidget
 {

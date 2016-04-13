@@ -20,7 +20,7 @@
 
 #include <vector>
 #include <stdio.h>
-#include <qgl.h>
+#include <QGLWidget>
 #include "myassert.h"
 
 #define WHITE_KEY_WIDTH            23.5f

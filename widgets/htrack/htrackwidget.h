@@ -18,7 +18,7 @@
 #ifndef HTRACK_H
 #define HTRACK_H
 
-#include <qgl.h>
+#include <QGLWidget>
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <vector>

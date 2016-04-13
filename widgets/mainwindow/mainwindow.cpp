@@ -39,7 +39,7 @@
 #include <QTextStream>
 #include <QTextBrowser>
 
-#include <qaction.h>
+#include <QAction>
 #include <QKeyEvent>
 #include <QEvent>
 #include <QHBoxLayout>

@@ -17,7 +17,7 @@
 #ifndef AUDIO_THREAD_H
 #define AUDIO_THREAD_H
 
-#include <qthread.h>
+#include <QThread>
 
 #include <time.h>
 

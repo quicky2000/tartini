@@ -14,8 +14,8 @@
    
    Please read LICENSE.txt for details.
  ***************************************************************************/
-#include <qpixmap.h>
-#include <qpainter.h>
+#include <QPixmap>
+#include <QPainter>
 
 #include "scorewidget.h"
 #include "scoresegmentiterator.h"

@@ -19,9 +19,9 @@
 #include <unistd.h>
 #endif
 
-#include <qpixmap.h>
+#include <QPixmap>
 #include <QMessageBox>
-#include <qfile.h>
+#include <QFile>
 #include <stdio.h>
 
 #include "gdata.h"

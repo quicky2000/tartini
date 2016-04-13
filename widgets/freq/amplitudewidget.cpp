@@ -28,7 +28,7 @@
 #include "analysisdata.h"
 #include "conversions.h"
 
-#include <qpixmap.h>
+#include <QPixmap>
 
 #ifndef WHEEL_DELTA
 #define WHEEL_DELTA 120

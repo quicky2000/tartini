@@ -16,8 +16,8 @@
 
 #include "myassert.h"
 
-#include <qsettings.h>
-#include <qdir.h>
+#include <QSettings>
+#include <QDir>
 
 //-----------------------------------------------------------------------------
 Settings::Settings()

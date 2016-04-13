@@ -12,7 +12,6 @@
 
    Please read LICENSE.txt for details.
  ***************************************************************************/
-#include <qglobal.h>
 #include "mystring.h"
 #include <string.h>
 #include <stdlib.h>

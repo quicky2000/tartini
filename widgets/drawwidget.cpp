@@ -19,7 +19,7 @@
 #include <QPolygon>
 #include <utility>
 #include <algorithm>
-#include <qpixmap.h>
+#include <QPixmap>
 
 #include "drawwidget.h"
 #include "channel.h"

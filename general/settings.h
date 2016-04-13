@@ -16,7 +16,7 @@
 #define SETTINGS_H
 
 #include <map>
-#include <qstring.h>
+#include <QString>
 
 class Settings
 {

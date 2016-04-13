@@ -12,7 +12,6 @@
    
    Please read LICENSE.txt for details.
  ***************************************************************************/
-#include <qglobal.h>
 #include <string.h>
 #include "myio.h"
 #include "wave_stream.h"

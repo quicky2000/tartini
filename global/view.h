@@ -18,8 +18,8 @@
 #ifndef VIEW_H
 #define VIEW_H
 
-#include <qobject.h>
-#include <qtimer.h>
+#include <QObject>
+#include <QTimer>
 #include "useful.h"
 
 class Channel;
