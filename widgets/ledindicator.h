@@ -18,7 +18,6 @@
 #define LEDINDICATOR_H
 
 #include "drawwidget.h"
-#include <QPixmap>
 #include <QPaintEvent>
 
 class QColor;
@@ -52,7 +51,6 @@ class LEDIndicator : public QWidget
     QColor m_on;
     QColor m_off;
     bool m_active;
-    QPixmap *m_buffer;
 };
 
 #endif // LEDINDICATOR_H
