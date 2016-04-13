@@ -14,7 +14,7 @@
    
    Please read LICENSE.txt for details.
  ***************************************************************************/
-#include <q3filedialog.h>
+#include <QFileDialog>
 #if defined(_OS_LINUX_) || defined(Q_OS_LINUX)
 #include <unistd.h>
 #endif
