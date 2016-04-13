@@ -19,6 +19,8 @@
 #include <QSettings>
 #include <QDir>
 
+#include <iostream>
+
 //-----------------------------------------------------------------------------
 Settings::Settings()
 {
@@ -60,14 +62,14 @@ QString Settings::getString( QString p_group
         }
         else
         {
-            fprintf(stderr, "No defined key[%s] in group[%s]. (%s, %s)\n", p_key.ascii(), p_group.ascii(), m_domain.ascii(), m_product.ascii());
+            fprintf(stderr, "No defined key[%s] in group[%s]. (%s, %s)\n", p_key.toLocal8Bit().data(), p_group.toLocal8Bit().data(), m_domain.toLocal8Bit().data(), m_product.toLocal8Bit().data());
             myassert(false); //The defaults haven't been defined for this key!
             return QString("");
         }
     }
     else
     {
-        fprintf(stderr, "No defined group[%s], can't get key[%s]. (%s, %s)\n", p_group.ascii(), p_key.ascii(), m_domain.ascii(), m_product.ascii());
+        fprintf(stderr, "No defined group[%s], can't get key[%s]. (%s, %s)\n", p_group.toLocal8Bit().data(), p_key.toLocal8Bit().data(), m_domain.toLocal8Bit().data(), m_product.toLocal8Bit().data());
         myassert(false); //The defaults haven't been defined for this key!
         return QString("");
     }
@@ -81,7 +83,7 @@ QString Settings::getString( QString p_group
       QString value = defIterValue->second;
       (settings[group])[key] = defIterValue->second;
     } else {
-      fprintf(stderr, "Default setting for group[%s], key[%s] does not exist!\n", group.ascii(), key.ascii());
+      fprintf(stderr, "Default setting for group[%s], key[%s] does not exist!\n", group.toLocal8Bit().data(), key.toLocal8Bit().data());
       myassert(false); //The defaults haven't been defined for this key!
       return QString("");
     }
@@ -129,7 +131,7 @@ bool Settings::getBool( QString p_group
     // Preconditions
     myassert(!p_group.isNull() && !p_key.isNull());
 
-    if(getString(p_group, p_key).at(0).lower() == QChar('t'))
+    if(getString(p_group, p_key).at(0).toLower() == QChar('t'))
     {
         return true;
     }
@@ -199,33 +201,16 @@ void Settings::load()
     l_on_disk_settings.beginGroup(QString("/") + m_product);
     //l_on_disk_settings.beginGroup(QString("/General"));
   
-    /* QT is the stupidest thing in the world. Instead of being able to use the
-     * subkeylist function, which is meant to do _exactly_ what I want, we can't
-     * use it in anything but Windows. So, we have to iterate through our
-     * defaults map and use the first key as a category.
-     */
-    QStringList l_subkeys;
-    std::map<QString, std::map<QString, QString> >::const_iterator iter = m_settings.begin();
-    while (!(iter == m_settings.end()))
+    QStringList l_groups = l_on_disk_settings.childGroups();
+    for(unsigned int l_group_index = 0 ; l_group_index < l_groups.size() ; ++l_group_index)
     {
-      l_subkeys += iter->first;
-      iter++;
-    }
-  
-    // Get all the entries in the folders, and stick them in the map
-    QStringList l_entries;
-    QString l_key;
-    for(int i = 0; i < l_subkeys.size(); i++)
-    {
-        l_entries = l_on_disk_settings.entryList("/" + *(l_subkeys.at(i)));
-        //printf("There are %d entries in category %s.\n", l_entries.size(), (*l_subkeys.at(i)).data());
-        for(int l_n = 0; l_n < l_entries.size(); l_n++)
+        l_on_disk_settings.beginGroup(l_groups[l_group_index]);
+        QStringList l_keys = l_on_disk_settings.allKeys();
+        for(unsigned int l_key_index = 0 ; l_key_index < l_keys.size() ; ++l_key_index)
         {
-            //key = QString("/") + *(l_subkeys.at(i)) + "/" + *(l_entries.at(l_n));
-            l_key = "/" + l_subkeys.at(i) + "/" + l_entries.at(l_n);
-            //(settings[*(l_subkeys.at(i))])[*(l_entries.at(l_n))] = l_on_disk_settings.readEntry(l_key, "");
-            (m_settings[l_subkeys.at(i)])[l_entries.at(l_n)] = l_on_disk_settings.readEntry(l_key, "");
+            m_settings[l_groups[l_group_index]][l_keys[l_key_index]] = l_on_disk_settings.value(l_keys[l_key_index]).toString();
         }
+        l_on_disk_settings.endGroup();
     }
 
     l_on_disk_settings.endGroup();
@@ -257,7 +242,7 @@ void Settings::save()
         std::map<QString, QString>::const_iterator l_iter_value = l_iter->second.begin();
         while (l_iter_value != l_iter->second.end())
         {
-            l_on_disk_settings.writeEntry("/" + l_iter_value->first, l_iter_value->second);
+            l_on_disk_settings.setValue("/" + l_iter_value->first, l_iter_value->second);
             //qDebug("Wrote /" + l_iter_value->first + "= " + l_iter_value->second);
             l_iter_value++;
         }
@@ -276,7 +261,7 @@ void Settings::print()
         std::map<QString, QString>::const_iterator l_iter_value = (l_iter->second).begin();
         for(; l_iter_value != (l_iter->second).end(); l_iter_value++)
         {
-            printf("%s/%s=%s\n", l_iter->first.latin1(), l_iter_value->first.latin1(), l_iter_value->second.latin1());
+            printf("%s/%s=%s\n", l_iter->first.toLocal8Bit().data(), l_iter_value->first.toLocal8Bit().data(), l_iter_value->second.toLocal8Bit().data());
         }
     }
     fflush(stdout);
