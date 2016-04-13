@@ -641,9 +641,9 @@ void SoundFile::preProcess(void)
     readChunk(bufferSize() - offset());
 
     // Create a progress bar in the status bar to tell the user we're preprocessing
-    MainWindow * l_the_main_window = (MainWindow*) qApp->mainWidget();
+    MainWindow * l_the_main_window = g_main_window;
     QStatusBar * l_the_status_bar = l_the_main_window->statusBar();
-    QLabel * l_message = new QLabel("Preprocessing data:", l_the_status_bar, "message");
+    QLabel * l_message = new QLabel("Preprocessing data:", l_the_status_bar);
 
     QProgressBar * l_progress = new QProgressBar(l_the_status_bar);
     l_progress->setRange(0,m_stream->totalFrames() / framesPerChunk() - 1);
