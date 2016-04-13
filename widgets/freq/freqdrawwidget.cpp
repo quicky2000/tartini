@@ -46,7 +46,7 @@
 FreqDrawWidget::FreqDrawWidget( QWidget *p_parent
                               , const char* p_name
                               )
-: DrawWidget(p_parent, p_name, Qt::WDestructiveClose)
+: DrawWidget(p_parent, Qt::WDestructiveClose)
 {
     setMouseTracking(true);
 

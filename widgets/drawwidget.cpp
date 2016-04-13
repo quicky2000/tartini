@@ -39,8 +39,8 @@ int DrawWidget::m_line_top_half_width = 2;
 int DrawWidget::m_line_bottom_half_width = 1;
 
 //------------------------------------------------------------------------------
-DrawWidget::DrawWidget(QWidget * p_parent, const char* /*p_name*/, Qt::WFlags p_flags):
-  QWidget(p_parent, NULL/*p_name*/, p_flags)
+DrawWidget::DrawWidget(QWidget * p_parent):
+  QWidget(p_parent)
 {
 #ifdef SHARED_DRAWING_BUFFER
   m_buffer = gdata->drawingBuffer();

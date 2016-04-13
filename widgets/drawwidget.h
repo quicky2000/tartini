@@ -41,7 +41,7 @@ class DrawWidget : public QWidget
   Q_OBJECT
 
 public:
-  DrawWidget(QWidget * p_parent, const char* p_name = 0, Qt::WFlags p_flags = Qt::WDestructiveClose);
+  DrawWidget(QWidget * p_parent);
   virtual ~DrawWidget(void);
 
 
