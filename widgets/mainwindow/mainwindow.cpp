@@ -1173,7 +1173,6 @@ TartiniDialog::TartiniDialog(QWidget *p_parent)
     QTextBrowser * l_tartini_text_edit = new QTextBrowser(this);
     l_tartini_text_edit->setObjectName("TartiniTextEdit");
     l_tartini_text_edit->setOpenExternalLinks(true);
-    l_tartini_text_edit->setTextFormat(Qt::RichText);
 
     QColor l_link_color(Qt::cyan);
     QString l_sheet = QString::fromLatin1("a { text-decoration: underline; color: %1 }").arg(l_link_color.name());
@@ -1263,7 +1262,7 @@ GPLDialog::GPLDialog(QWidget *p_parent)
 
     QTextEdit * l_GPL_text_edit = new QTextEdit(this, "GPLTextEdit");
     l_GPL_text_edit->setReadOnly(true);
-    l_GPL_text_edit->setTextFormat(Qt::PlainText);
+    l_GPL_text_edit->setAcceptRichText(false);
     QString l_the_text;
     {
         QFile l_the_file(":res/LICENSE.txt");
