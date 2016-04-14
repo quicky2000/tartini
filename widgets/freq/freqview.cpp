@@ -221,14 +221,14 @@ void FreqView::zoomIn(void)
     bool l_done_it = false;
     if(g_data->getRunning() != STREAM_FORWARD)
     {
-        if(m_freq_widget_GL->hasMouse())
+        if(m_freq_widget_GL->testAttribute(Qt::WA_UnderMouse))
         {
             QPoint l_mouse_pos = m_freq_widget_GL->mapFromGlobal(QCursor::pos());
             g_data->getView().setZoomFactorX(g_data->getView().logZoomX() + 0.1, l_mouse_pos.x());
             g_data->getView().setZoomFactorY(g_data->getView().logZoomY() + 0.1, m_freq_widget_GL->height() - l_mouse_pos.y());
             l_done_it = true;
         }
-        else if(m_amplitude_widget->hasMouse())
+        else if(m_amplitude_widget->testAttribute(Qt::WA_UnderMouse))
         {
             QPoint l_mouse_pos = m_amplitude_widget->mapFromGlobal(QCursor::pos());
             g_data->getView().setZoomFactorX(g_data->getView().logZoomX() + 0.1, l_mouse_pos.x());
@@ -248,7 +248,7 @@ void FreqView::zoomIn(void)
 void FreqView::zoomOut(void)
 {
     g_data->getView().setZoomFactorX(g_data->getView().logZoomX() - 0.1);
-    if(!m_amplitude_widget->hasMouse())
+    if(!m_amplitude_widget->testAttribute(Qt::WA_UnderMouse))
     {
         g_data->getView().setZoomFactorY(g_data->getView().logZoomY() - 0.1);
     }
