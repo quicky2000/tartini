@@ -60,11 +60,11 @@ void TartiniSettingsDialog::loadSetting( QObject * p_object
     }
     else if(p_object->metaObject()->className() == "QComboBox")
     {
-        ((QComboBox*)p_object)->setCurrentText(g_data->getSettingsStringValue(l_full_key));
+         ((QComboBox*)p_object)->setCurrentIndex(((QComboBox*)p_object)->findText(g_data->getSettingsStringValue(l_full_key)));
     }
-    else if(p_object->isA("QPushButton") && ((QPushButton*)p_object)->isToggleButton())
+    else if(p_object->isA("QPushButton") && ((QPushButton*)p_object)->isCheckable())
     {
-        ((QPushButton*)p_object)->setOn(g_data->getSettingsBoolValue(l_full_key));
+        ((QPushButton*)p_object)->setChecked(g_data->getSettingsBoolValue(l_full_key));
     }
     else if(p_object->metaObject()->className() == "QCheckBox")
     {
@@ -203,9 +203,9 @@ void TartiniSettingsDialog::saveSetting(QObject *p_object, const QString p_group
     {
         g_data->setSettingsValue(l_full_key, ((QComboBox*)p_object)->currentText());
     }
-    else if(p_object->isA("QPushButton") && ((QPushButton*)p_object)->isToggleButton())
+    else if(p_object->isA("QPushButton") && ((QPushButton*)p_object)->isCheckable())
     {
-        g_data->setSettingsValue(l_full_key, ((QPushButton*)p_object)->isOn());
+        g_data->setSettingsValue(l_full_key, ((QPushButton*)p_object)->isChecked());
     }
     else if(p_object->metaObject()->className() == "QCheckBox")
     {
