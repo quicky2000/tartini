@@ -40,7 +40,7 @@ HCircleView::HCircleView( int p_view_id
                         )
 : ViewWidget( p_view_id, p_parent)
 {
-    setCaption("Harmonic Circle");
+    setWindowTitle("Harmonic Circle");
 
     QHBoxLayout * l_main_layout = new QHBoxLayout(this);
 

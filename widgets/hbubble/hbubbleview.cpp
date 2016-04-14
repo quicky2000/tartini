@@ -40,7 +40,7 @@ HBubbleView::HBubbleView( int p_view_id
                         )
 : ViewWidget( p_view_id, p_parent)
 {
-    setCaption("Harmonic Bubbles");
+    setWindowTitle("Harmonic Bubbles");
 
     QHBoxLayout *l_main_layout = new QHBoxLayout(this);
 

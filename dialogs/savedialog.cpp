@@ -33,7 +33,7 @@ SaveDialog::SaveDialog(QWidget * p_parent)
              ,tr("Wave files (*.wav)")
 )
 {
-    setCaption(tr("Choose a filename to save under"));
+    setWindowTitle(tr("Choose a filename to save under"));
     setAcceptMode(QFileDialog::AcceptSave);
     setFileMode(QFileDialog::AnyFile);
     setModal(true);
