@@ -1159,8 +1159,10 @@ TartiniDialog::TartiniDialog(QWidget *p_parent)
 {
     setCaption("About Tartini - Version " TARTINI_VERSION_STR);
     setBackgroundColor(Qt::black);
-    QVBoxLayout * l_layout = new QVBoxLayout(this, 6, 6);
 
+    QVBoxLayout * l_layout = new QVBoxLayout(this);
+    l_layout->setContentsMargins(6,6,6,6);
+    l_layout->setSpacing(6);
     QHBoxLayout * l_top_layout = new QHBoxLayout(l_layout);
     QLabel * l_tartini_picture = new QLabel(this);
     l_tartini_picture->setObjectName("TartiniPicture");
@@ -1259,8 +1261,10 @@ GPLDialog::GPLDialog(QWidget *p_parent)
 : QDialog(p_parent, NULL, true)
 {
     setCaption("GPL Licence");
-    QVBoxLayout * l_layout = new QVBoxLayout(this, 6, 6);
 
+    QVBoxLayout * l_layout = new QVBoxLayout(this);
+    l_layout->setContentsMargins(6,6,6,6);
+    l_layout->setSpacing(6);
     QTextEdit * l_GPL_text_edit = new QTextEdit(this);
     l_GPL_text_edit->setObjectName("GPLTextEdit");
     l_GPL_text_edit->setReadOnly(true);
