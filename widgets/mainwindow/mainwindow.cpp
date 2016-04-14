@@ -694,7 +694,7 @@ void MainWindow::openFile(const char *p_file_name)
 
     g_data->addFileToList(l_new_sound_file);
     g_data->setActiveChannel(&(l_new_sound_file->getChannel(0)));
-    QApplication::postEvent(g_main_window, new QCustomEvent(UPDATE_SLOW));
+    QApplication::postEvent(g_main_window, new QEvent(static_cast<QEvent::Type>(UPDATE_SLOW)));
     g_data->getView().doUpdate();
 }
 
