@@ -55,12 +55,13 @@ TunerView::TunerView(int p_view_iD_
             )
 {
 
-    QGridLayout * l_layout = new QGridLayout(this, 9, 3, 2);
-    l_layout->setResizeMode(QLayout::SetNoConstraint);
+    QGridLayout * l_layout = new QGridLayout(this);
+    l_layout->setSpacing(2);
+    l_layout->setSizeConstraint(QLayout::SetNoConstraint);
 
     // Tuner widget goes from (0, 0) to (0, 8);
     m_tuner_widget = new VibratoTunerWidget(this);
-    l_layout->addMultiCellWidget(m_tuner_widget, 0, 0, 0, 8);
+    l_layout->addWidget(m_tuner_widget, 0, 0, 1, 8);
 
     // Slider goes from (2,0) to (2,9)
 
@@ -71,7 +72,7 @@ TunerView::TunerView(int p_view_iD_
 #endif
     m_slider->setRange(0, 2);
     m_slider->setReadOnly(false);
-    l_layout->addMultiCellWidget(m_slider, 1, 1, 0, 8);
+    l_layout->addWidget(m_slider, 1, 0, 1, 8);
     m_slider->setToolTip(tr("Increase slider to smooth the pitch over a longer time period"));
 
     m_led_buffer = new QPixmap();
