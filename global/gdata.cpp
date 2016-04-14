@@ -36,7 +36,6 @@
 #include "audio_stream.h"
 #include "Filter.h"
 #include "mystring.h"
-#include "q3listview.h"
 #include "soundfile.h"
 #include "channel.h"
 #include "tartinisettingsdialog.h"
