@@ -44,15 +44,18 @@ HStackView::HStackView( int p_view_id
 
     QHBoxLayout * l_main_layout = new QHBoxLayout(this);
 
-    QVBoxLayout * l_left_layout = new QVBoxLayout(l_main_layout);
-    QVBoxLayout * l_right_layout = new QVBoxLayout(l_main_layout);
+    QVBoxLayout * l_left_layout = new QVBoxLayout();
+    l_main_layout->addLayout(l_left_layout);
+    QVBoxLayout * l_right_layout = new QVBoxLayout();
+    l_main_layout->addLayout(l_right_layout);
 
     QFrame * l_wave_frame = new QFrame(this);
     l_wave_frame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
     l_left_layout->addWidget(l_wave_frame);
     m_h_stack_widget = new HStackWidget(l_wave_frame);
 
-    QHBoxLayout * l_bottom_layout = new QHBoxLayout(l_left_layout);
+    QHBoxLayout * l_bottom_layout = new QHBoxLayout();
+    l_left_layout->addLayout(l_bottom_layout);
 
     QwtWheel * l_db_range_wheel = new QwtWheel(this);
     l_db_range_wheel->setOrientation(Qt::Vertical);

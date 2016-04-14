@@ -35,13 +35,16 @@ ScoreView::ScoreView(int p_view_id
 
     QHBoxLayout * l_main_layout = new QHBoxLayout(this);
 
-    QVBoxLayout * l_left_layout = new QVBoxLayout(l_main_layout);
-    QVBoxLayout * l_right_layout = new QVBoxLayout(l_main_layout);
+    QVBoxLayout * l_left_layout = new QVBoxLayout();
+    l_main_layout->addLayout(l_left_layout);
+    QVBoxLayout * l_right_layout = new QVBoxLayout();
+    l_main_layout->addLayout(l_right_layout);
 
     //create a drawing object
     m_score_widget = new ScoreWidget(this);
     l_left_layout->addWidget(m_score_widget);
-    QHBoxLayout * l_bottom_layout = new QHBoxLayout(l_left_layout);
+    QHBoxLayout * l_bottom_layout = new QHBoxLayout();
+    l_left_layout->addLayout(l_bottom_layout);
 
     //vertical scroll wheel
     QwtWheel *l_scale_wheel_Y = new QwtWheel(this);

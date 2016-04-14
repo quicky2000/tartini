@@ -44,8 +44,10 @@ HCircleView::HCircleView( int p_view_id
 
     QHBoxLayout * l_main_layout = new QHBoxLayout(this);
 
-    QVBoxLayout * l_left_layout = new QVBoxLayout(l_main_layout);
-    QVBoxLayout * l_right_layout = new QVBoxLayout(l_main_layout);
+    QVBoxLayout * l_left_layout = new QVBoxLayout();
+    l_main_layout->addLayout(l_left_layout);
+    QVBoxLayout * l_right_layout = new QVBoxLayout();
+    l_main_layout->addLayout(l_right_layout);
 
     QFrame * l_wave_frame = new QFrame(this);
     l_wave_frame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
@@ -53,7 +55,8 @@ HCircleView::HCircleView( int p_view_id
 
     m_h_circle_widget = new HCircleWidget(l_wave_frame);
 
-    QHBoxLayout * l_bottom_layout = new QHBoxLayout(l_left_layout);
+    QHBoxLayout * l_bottom_layout = new QHBoxLayout();
+    l_left_layout->addLayout(l_bottom_layout);
  
     QwtWheel * l_zoom_wheel = new QwtWheel(this);
     l_zoom_wheel->setOrientation(Qt::Vertical);
@@ -73,7 +76,7 @@ HCircleView::HCircleView( int p_view_id
     l_lowest_value_wheel->setToolTip("Change the lowest value");
     l_right_layout->addWidget(l_lowest_value_wheel);
     l_right_layout->addStretch(2);
- 
+
     QwtWheel* l_threshold_wheel = new QwtWheel(this);
     l_threshold_wheel->setOrientation(Qt::Horizontal);
     l_threshold_wheel->setWheelWidth(14);

@@ -1220,7 +1220,8 @@ TartiniDialog::TartiniDialog(QWidget *p_parent)
     l_tartini_text_edit->setPalette(l_palette);
     l_layout->addWidget(l_tartini_text_edit);
   
-    QHBoxLayout * l_bottom_layout = new QHBoxLayout(l_layout);
+    QHBoxLayout * l_bottom_layout = new QHBoxLayout();
+    l_layout->addLayout(l_bottom_layout);
     QPushButton * l_ok_button = new QPushButton("&Ok", this);
     QPushButton * l_GPL_button = new QPushButton("&Read License", this);
     l_bottom_layout->addStretch(10);
@@ -1255,7 +1256,8 @@ GPLDialog::GPLDialog(QWidget *p_parent)
   
     l_layout->addWidget(l_GPL_text_edit);
 
-    QHBoxLayout * l_bottom_layout = new QHBoxLayout(l_layout);
+    QHBoxLayout * l_bottom_layout = new QHBoxLayout();
+    l_layout->addLayout(l_bottom_layout);
     QPushButton * l_ok_button = new QPushButton("&Ok", this);
     l_bottom_layout->addStretch(10);
     l_bottom_layout->addWidget(l_ok_button);

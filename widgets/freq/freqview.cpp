@@ -56,7 +56,8 @@ FreqView::FreqView( int p_view_id
     QSplitter * l_splitter = new QSplitter(Qt::Vertical, this);
     QWidget * l_top_widget = new QWidget(l_splitter);
     QHBoxLayout * l_top_layout = new QHBoxLayout(l_top_widget);
-    QVBoxLayout * l_top_left_layout = new QVBoxLayout(l_top_layout);
+    QVBoxLayout * l_top_left_layout = new QVBoxLayout();
+    l_top_layout->addLayout(l_top_left_layout);
   
     m_time_axis = new TimeAxis(l_top_widget, g_data->leftTime(), g_data->rightTime(), true);
     m_time_axis->setWhatsThis("The time in seconds");
@@ -98,7 +99,8 @@ FreqView::FreqView( int p_view_id
     //------------bottom half------------------
     QWidget * l_bottom_widget = new QWidget(l_splitter);
     QVBoxLayout * l_bottom_layout = new QVBoxLayout(l_bottom_widget);
-    QHBoxLayout * l_bottom_top_layout = new QHBoxLayout(l_bottom_layout);
+    QHBoxLayout * l_bottom_top_layout = new QHBoxLayout();
+    l_bottom_layout->addLayout(l_bottom_top_layout);
 
     QFrame * l_amplitude_frame = new QFrame;
     l_amplitude_frame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
@@ -111,7 +113,8 @@ FreqView::FreqView( int p_view_id
     l_amplitude_frame->setLayout(l_amplitude_frame_layout);
     l_bottom_top_layout->addWidget(l_amplitude_frame);
 
-    QVBoxLayout *l_bottom_top_right_layout = new QVBoxLayout(l_bottom_top_layout);
+    QVBoxLayout *l_bottom_top_right_layout = new QVBoxLayout();
+    l_bottom_top_layout->addLayout(l_bottom_top_right_layout);
 
     m_amplitude_wheel_Y = new QwtWheel(l_bottom_widget);
     m_amplitude_wheel_Y->setOrientation(Qt::Vertical);
@@ -125,7 +128,8 @@ FreqView::FreqView( int p_view_id
     m_amplitude_scroll_bar = new MyScrollBar(0.0, 1.0 - m_amplitude_widget->range(), 0.20, m_amplitude_widget->range(), 0, 20, Qt::Vertical, l_bottom_widget);
     l_bottom_top_right_layout->addWidget(m_amplitude_scroll_bar, 4);
 
-    QHBoxLayout * l_bottom_bottom_layout = new QHBoxLayout(l_bottom_layout);
+    QHBoxLayout * l_bottom_bottom_layout = new QHBoxLayout();
+    l_bottom_layout->addLayout(l_bottom_bottom_layout);
 
     QComboBox * l_amplitude_mode_combo_box = new QComboBox(l_bottom_widget, "amplitudeTypeModeBox");
     l_amplitude_mode_combo_box->setWhatsThis("Select different algorithm parameters to view in the bottom pannel");
