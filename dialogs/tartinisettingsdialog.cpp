@@ -66,7 +66,7 @@ void TartiniSettingsDialog::loadSetting( QObject * p_object
     {
         ((QPushButton*)p_object)->setOn(g_data->getSettingsBoolValue(l_full_key));
     }
-    else if(p_object->isA("QCheckBox"))
+    else if(p_object->metaObject()->className() == "QCheckBox")
     {
          ((QCheckBox*)p_object)->setChecked(g_data->getSettingsBoolvalue(l_full_key));
     }
@@ -207,7 +207,7 @@ void TartiniSettingsDialog::saveSetting(QObject *p_object, const QString p_group
     {
         g_data->setSettingsValue(l_full_key, ((QPushButton*)p_object)->isOn());
     }
-    else if(p_object->isA("QCheckBox"))
+    else if(p_object->metaObject()->className() == "QCheckBox")
     {
         g_data->setSettingsValue(l_full_key, ((QCheckBox*)p_object)->isChecked());
     }
@@ -215,7 +215,7 @@ void TartiniSettingsDialog::saveSetting(QObject *p_object, const QString p_group
     {
         g_data->setSettingsValue(l_full_key, ((QSpinBox*)p_object)->value());
     }
-    else if(p_object->isA("QFrame"))
+    else if(p_object->metaObject()->className() == "QFrame")
     {
         QColor l_color =  ((QFrame*)p_object)->palette().color(QPalette::Window);
         g_data->setSettingsValue(l_full_key,l_color.name());
