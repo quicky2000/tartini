@@ -457,7 +457,9 @@ MainWindow::MainWindow(void)
                                    );
     addToolBar(l_freq_A_tool_bar);
 
-    QSpinBox * l_freq_A_spin_box = new QSpinBox(400, 600, 1, l_freq_A_tool_bar, "freqASpinBox");
+    QSpinBox * l_freq_A_spin_box = new QSpinBox(l_freq_A_tool_bar);
+    l_freq_A_spin_box->setRange(400,600);
+    l_freq_A_spin_box->setSingleStep(1);
     l_freq_A_spin_box->setPrefix("A=");
     l_freq_A_spin_box->setSuffix(" Hz");
     l_freq_A_spin_box->setFocusPolicy(Qt::NoFocus);
