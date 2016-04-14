@@ -155,7 +155,7 @@ VibratoView::VibratoView(int p_view_ID
     l_smoothed_periods_button->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     l_smoothed_periods_button->setFocusPolicy(Qt::NoFocus);
     l_smoothed_periods_button->setDown(true);
-    QToolTip::add(l_smoothed_periods_button, "Use smoothed periods");
+    l_smoothed_periods_button->setToolTip("Use smoothed periods");
     l_period_layout->addWidget(l_smoothed_periods_button, 2, 0, 1, 1);
 
     QPushButton * l_draw_sine_reference_button = new QPushButton("DSR");
@@ -163,7 +163,7 @@ VibratoView::VibratoView(int p_view_ID
     l_draw_sine_reference_button->setMinimumWidth(30);
     l_draw_sine_reference_button->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     l_draw_sine_reference_button->setFocusPolicy(Qt::NoFocus);
-    QToolTip::add(l_draw_sine_reference_button, "Draw the reference sinewave");
+    l_draw_sine_reference_button->setToolTip("Draw the reference sinewave");
     l_period_layout->addWidget(l_draw_sine_reference_button, 2, 1, 1, 1);
 
     QPushButton * l_sine_style_button = new QPushButton("SS");
@@ -171,7 +171,7 @@ VibratoView::VibratoView(int p_view_ID
     l_sine_style_button->setMinimumWidth(30);
     l_sine_style_button->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     l_sine_style_button->setFocusPolicy(Qt::NoFocus);
-    QToolTip::add(l_sine_style_button, "Use sine style: /\\/ instead of cosine style: \\/");
+    l_sine_style_button->setToolTip("Use sine style: /\\/ instead of cosine style: \\/");
     l_period_layout->addWidget(l_sine_style_button, 2, 2, 1, 1);
 
     QPushButton * l_draw_prev_periods_button = new QPushButton("DPP");
@@ -179,7 +179,7 @@ VibratoView::VibratoView(int p_view_ID
     l_draw_prev_periods_button->setMinimumWidth(30);
     l_draw_prev_periods_button->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     l_draw_prev_periods_button->setFocusPolicy(Qt::NoFocus);
-    QToolTip::add(l_draw_prev_periods_button, "Draw previous periods");
+    l_draw_prev_periods_button->setToolTip("Draw previous periods");
     l_period_layout->addWidget(l_draw_prev_periods_button, 2, 3, 1, 1);
 
     QPushButton * l_period_scaling_button = new QPushButton("PS");
@@ -187,7 +187,7 @@ VibratoView::VibratoView(int p_view_ID
     l_period_scaling_button->setMinimumWidth(30);
     l_period_scaling_button->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     l_period_scaling_button->setFocusPolicy(Qt::NoFocus);
-    QToolTip::add(l_period_scaling_button, "Scale previous periods to the current period");
+    l_period_scaling_button->setToolTip("Scale previous periods to the current period");
     l_period_layout->addWidget(l_period_scaling_button, 2, 4, 1, 1);
 
     QPushButton * l_draw_comparison_button = new QPushButton("DC");
@@ -195,7 +195,7 @@ VibratoView::VibratoView(int p_view_ID
     l_draw_comparison_button->setMinimumWidth(30);
     l_draw_comparison_button->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     l_draw_comparison_button->setFocusPolicy(Qt::NoFocus);
-    QToolTip::add(l_draw_comparison_button, "Draw comparison between period and sinewave");
+    l_draw_comparison_button->setToolTip("Draw comparison between period and sinewave");
     l_period_layout->addWidget(l_draw_comparison_button, 2, 5, 1, 1);
 
     l_period_layout->setRowStretch(2, 0);
@@ -247,7 +247,7 @@ VibratoView::VibratoView(int p_view_ID
     l_zoom_wheel_V->setRange(0.3, 25.0, 0.1, 1);
     l_zoom_wheel_V->setValue(1.0);
     l_zoom_wheel_V->setFocusPolicy(Qt::NoFocus);
-    QToolTip::add(l_zoom_wheel_V, "Zoom vibrato view vertically");
+    l_zoom_wheel_V->setToolTip("Zoom vibrato view vertically");
     l_bottom_right_layout->addWidget(l_zoom_wheel_V, 0, 0, 1, 1);
 
     // The vertical scrollbar
@@ -255,7 +255,7 @@ VibratoView::VibratoView(int p_view_ID
     l_scroll_bar_V->setRange(-250, 250);
     l_scroll_bar_V->setValue(0);
     l_scroll_bar_V->setPageStep(100);
-    QToolTip::add(l_scroll_bar_V, "Scroll vibrato view vertically");
+    l_scroll_bar_V->setToolTip("Scroll vibrato view vertically");
     l_bottom_right_layout->addWidget(l_scroll_bar_V, 1, 0, 4, 1);
     l_bottom_right_layout->setRowStretch(1, 1);
 
@@ -277,7 +277,7 @@ VibratoView::VibratoView(int p_view_ID
     l_zoom_wheel_H->setRange(1, 100, 1, 1);
     l_zoom_wheel_H->setValue(25);
     l_zoom_wheel_H->setFocusPolicy(Qt::NoFocus);
-    QToolTip::add(l_zoom_wheel_H, "Zoom vibrato view horizontally");
+    l_zoom_wheel_H->setToolTip("Zoom vibrato view horizontally");
     l_bottom_bottom_layout->addWidget(l_zoom_wheel_H, 0, 4, 1, 1);
 
     // The resize grip

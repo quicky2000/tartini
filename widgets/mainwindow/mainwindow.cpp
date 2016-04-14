@@ -454,20 +454,20 @@ MainWindow::MainWindow(void)
     m_note_label = new MyLabel("Note: 9999", statusBar(), "notelabel");
     statusBar()->addPermanentWidget(m_note_label, 0);
     setNoteLabel();
-    QToolTip::add(m_note_label, "The current note number in the active file");
+    m_note_label->setToolTip("The current note number in the active file");
     connect(&(g_data->getView()), SIGNAL(onSlowUpdate(double)), this, SLOT(setNoteLabel()));
 
 
     m_chunk_label = new MyLabel("Chunk: 999999", statusBar(), "chunklabel");
     statusBar()->addPermanentWidget(m_chunk_label, 0);
     setChunkLabel();
-    QToolTip::add(m_chunk_label, "The current chunk number in the active file");
+    m_chunk_label->setToolTip("The current chunk number in the active file");
     connect(&(g_data->getView()), SIGNAL(onSlowUpdate(double)), this, SLOT(setChunkLabel()));
 
     m_time_label = new MyLabel("Time: -00:00.000", statusBar(), "timelabel");
     statusBar()->addPermanentWidget(m_time_label, 0);
     setTimeLabel(0);
-    QToolTip::add(m_time_label, tr("The current time positon for all files (mins:sec)"));
+    m_time_label->setToolTip(tr("The current time positon for all files (mins:sec)"));
     connect(&(g_data->getView()), SIGNAL(onSlowUpdate(double)), this, SLOT(setTimeLabel(double)));
 
     statusBar()->message( "Ready", 2000 );

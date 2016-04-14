@@ -46,7 +46,7 @@ WaveView::WaveView(int p_view_ID
     l_freq_wheel_Y->setWheelWidth(14);
     l_freq_wheel_Y->setRange(1.0, 20.0, 0.1, 1);
     l_freq_wheel_Y->setValue(1.0);
-    QToolTip::add(l_freq_wheel_Y, "Zoom oscilloscope vertically");
+    l_freq_wheel_Y->setToolTip("Zoom oscilloscope vertically");
     l_right_layout->addWidget(l_freq_wheel_Y, 1);
     l_right_layout->addStretch(2);
 

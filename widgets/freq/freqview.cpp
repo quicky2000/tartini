@@ -84,7 +84,7 @@ FreqView::FreqView( int p_view_id
     m_freq_wheel_Y->setWheelWidth(14);
     m_freq_wheel_Y->setRange(1.6, 5.0, 0.001, 1);
     m_freq_wheel_Y->setValue(l_view.logZoomY());
-    QToolTip::add(m_freq_wheel_Y, "Zoom pitch contour view vertically");
+    m_freq_wheel_Y->setToolTip("Zoom pitch contour view vertically");
     l_top_right_layout->addSpacing(20);
     l_top_right_layout->addWidget(m_freq_wheel_Y, 0);
   
@@ -118,7 +118,7 @@ FreqView::FreqView( int p_view_id
     m_amplitude_wheel_Y->setWheelWidth(14);
     m_amplitude_wheel_Y->setRange(0.2, 1.00, 0.01, 1);
     m_amplitude_wheel_Y->setValue(m_amplitude_widget->range());
-    QToolTip::add(m_amplitude_wheel_Y, "Zoom pitch contour view vertically");
+    m_amplitude_wheel_Y->setToolTip("Zoom pitch contour view vertically");
     l_bottom_top_right_layout->addWidget(m_amplitude_wheel_Y, 0);
 
     //Create the vertical scrollbar
@@ -152,7 +152,7 @@ FreqView::FreqView( int p_view_id
     m_freq_wheel_X->setWheelWidth(16);
     m_freq_wheel_X->setRange(0.5, 9.0, 0.001, 1);
     m_freq_wheel_X->setValue(2.0);
-    QToolTip::add(m_freq_wheel_X, "Zoom horizontally");
+    m_freq_wheel_X->setToolTip("Zoom horizontally");
 
     l_bottom_bottom_layout->addStretch(2);
     l_bottom_bottom_layout->addWidget(l_amplitude_mode_combo_box, 0);

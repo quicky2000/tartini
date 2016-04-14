@@ -61,7 +61,7 @@ HBubbleView::HBubbleView( int p_view_id
     l_harmonics_wheel->setRange(1, 40, 1, 1);
     l_harmonics_wheel->setValue(15);
     m_h_bubble_widget->setNumHarmonics(15);
-    QToolTip::add(l_harmonics_wheel, "Change number of harmonics shown");
+    l_harmonics_wheel->setToolTip("Change number of harmonics shown");
     l_right_layout->addWidget(l_harmonics_wheel);
     l_right_layout->addStretch(2);
 
@@ -71,7 +71,7 @@ HBubbleView::HBubbleView( int p_view_id
     l_window_size_wheel->setRange(32, 1024, 2, 1);
     l_window_size_wheel->setValue(128);
     m_h_bubble_widget->setHistoryChunks(128);
-    QToolTip::add(l_window_size_wheel, "Change the window size");
+    l_window_size_wheel->setToolTip("Change the window size");
     l_bottom_layout->addWidget(l_window_size_wheel);
     l_bottom_layout->addStretch(2);
 
