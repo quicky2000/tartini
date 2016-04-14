@@ -61,7 +61,11 @@ public:
   //float correlation; /*< How well the fundamental frequency fits the signal (0=no fit, 1=perfet fit) */
   //float logrms; /*< The Root-mean-square, a measure of intensity/volume in the chunk */
   //float maxIntensityDB;
+ private:
   int highestCorrelationIndex;
+ public:
+  int getHighestCorrelationIndex(void)const;
+  void setHighestCorrelationIndex(int p_index);
   int chosenCorrelationIndex;
   float periodRatio; /*< The ratio of the current period to the period at the beginning of the current note */
 

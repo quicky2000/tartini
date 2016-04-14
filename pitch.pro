@@ -26,8 +26,8 @@ win32{ #Windows
 
 TEMPLATE = app
 CONFIG += qt thread opengl
-CONFIG -= debug
-CONFIG += release
+CONFIG += debug
+CONFIG -= release
 CONFIG += warn_on
 CONFIG += precompile_header
 #CONFIG += profile

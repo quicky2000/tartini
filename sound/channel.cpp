@@ -885,7 +885,7 @@ void Channel::chooseCorrelationIndex1(int chunk)
     return;
   }
   //choose a cutoff value based on the highest value and a relative threshold
-  float highest = analysisData.periodEstimatesAmp[analysisData.highestCorrelationIndex];
+  float highest = analysisData.periodEstimatesAmp[analysisData.getHighestCorrelationIndex()];
   float cutoff = highest * threshold();
   //find the first of the maxPositions which is above the cutoff
   for(iterPos = 0; iterPos < analysisData.periodEstimatesAmp.size(); iterPos++) {
@@ -944,7 +944,7 @@ bool Channel::chooseCorrelationIndex(int chunk, float periodOctaveEstimate)
 
     //myassert(wantedMaxPos > 0);
   } else {
-    choosenMaxIndex = analysisData.highestCorrelationIndex;
+    choosenMaxIndex = analysisData.getHighestCorrelationIndex();
   }
   if(choosenMaxIndex != analysisData.chosenCorrelationIndex) isDifferentIndex = true;
   analysisData.chosenCorrelationIndex = choosenMaxIndex;

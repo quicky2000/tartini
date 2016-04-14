@@ -21,6 +21,15 @@ const char *amp_display_string[NUM_AMP_MODES] = { "RMS Amp Threshold = %0.2f, %0
 double(*amp_mode_func[NUM_AMP_MODES])(double) = { &dB2Normalised, &dB2Normalised, &same, &oneMinus, &same, &same, &same };
 double(*amp_mode_inv_func[NUM_AMP_MODES])(double) = { &normalised2dB, &normalised2dB, &same, &oneMinus, &same, &same, &same };
 
+int AnalysisData::getHighestCorrelationIndex(void)const
+{
+  return highestCorrelationIndex;
+}
+void AnalysisData::setHighestCorrelationIndex(int p_index)
+{
+  highestCorrelationIndex = p_index;
+}
+
 AnalysisData::AnalysisData()
 {
   std::fill(values, values+NUM_AMP_MODES, 0.0f);
