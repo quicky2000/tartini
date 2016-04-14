@@ -42,7 +42,8 @@ CorrelationView::CorrelationView( int p_view_ID
     m_correlation_widget = new CorrelationWidget(this);
     QStringList l_string_list;
     l_string_list << "Chunk correlation" << "Note Aggregate Correlation" << "Note Aggregate Correlation Scaled";
-    QComboBox *l_aggregate_mode_combo_box = new QComboBox(this, "aggregateModeComboBox");
+    QComboBox *l_aggregate_mode_combo_box = new QComboBox(this);
+    l_aggregate_mode_combo_box->setObjectName("aggregateModeComboBox");
     l_aggregate_mode_combo_box->addItems(l_string_list);
     QHBoxLayout *l_h_layout = new QHBoxLayout();
     l_h_layout->setMargin(0);

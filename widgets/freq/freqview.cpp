@@ -131,7 +131,8 @@ FreqView::FreqView( int p_view_id
     QHBoxLayout * l_bottom_bottom_layout = new QHBoxLayout();
     l_bottom_layout->addLayout(l_bottom_bottom_layout);
 
-    QComboBox * l_amplitude_mode_combo_box = new QComboBox(l_bottom_widget, "amplitudeTypeModeBox");
+    QComboBox * l_amplitude_mode_combo_box = new QComboBox(l_bottom_widget);
+    l_amplitude_mode_combo_box->setObjectName("amplitudeTypeModeBox");
     l_amplitude_mode_combo_box->setWhatsThis("Select different algorithm parameters to view in the bottom pannel");
     int l_j;
     QStringList l_string_list;
@@ -143,7 +144,8 @@ FreqView::FreqView( int p_view_id
     connect(l_amplitude_mode_combo_box, SIGNAL(activated(int)), g_data, SLOT(setAmplitudeMode(int)));
     connect(l_amplitude_mode_combo_box, SIGNAL(activated(int)), m_amplitude_widget, SLOT(update()));
 
-    QComboBox * l_pitch_contour_mode_combo_box = new QComboBox(l_bottom_widget, "pitchContourModeComboBox");
+    QComboBox * l_pitch_contour_mode_combo_box = new QComboBox(l_bottom_widget);
+    l_pitch_contour_mode_combo_box->setObjectName("pitchContourModeComboBox");
     l_pitch_contour_mode_combo_box->setWhatsThis("Select whether the Pitch Contour line fades in/out with clarity/loudness of the sound or is a solid dark line");
     l_string_list.clear();
     l_string_list << "Clarity fading" << "Note grouping";
@@ -173,7 +175,7 @@ FreqView::FreqView( int p_view_id
     l_size_policy.setHeightForWidth(false);
     l_size_grip->setSizePolicy(l_size_policy);
     l_bottom_bottom_layout->addWidget(l_size_grip);
-  
+
     //Actually add all the widgets into the widget layout
     l_main_layout->addWidget(l_splitter);
 

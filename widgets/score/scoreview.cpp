@@ -68,35 +68,45 @@ ScoreView::ScoreView(int p_view_id
     connect(l_scale_wheel_X, SIGNAL(sliderMoved(double)), m_score_widget, SLOT(setScaleX(double)));
     connect(l_scale_wheel_X, SIGNAL(sliderMoved(double)), m_score_widget, SLOT(update()));
 
-    QComboBox * l_sharps_mode_combo_box = new QComboBox(this, tr("sharpsModeComboBox"));
+    QComboBox * l_sharps_mode_combo_box = new QComboBox(this);
+    l_sharps_mode_combo_box->setObjectName("sharpsModeComboBox");
+
     QStringList l_string_list;
     l_string_list << tr("Sharps") << tr("Flats");
     l_sharps_mode_combo_box->addItems(l_string_list);
     connect(l_sharps_mode_combo_box, SIGNAL(activated(int)), m_score_widget, SLOT(setSharpsMode(int)));
     connect(l_sharps_mode_combo_box, SIGNAL(activated(int)), m_score_widget, SLOT(update()));
 
-    QComboBox * l_notes_mode_combo_box = new QComboBox(this, tr("notesModeComboBox"));
+    QComboBox * l_notes_mode_combo_box = new QComboBox(this);
+    l_notes_mode_combo_box->setObjectName("notesModeComboBox");
+
     l_string_list.clear();
     l_string_list << tr("Notes") << tr("MIDI blocks");
     l_notes_mode_combo_box->addItems(l_string_list);
     connect(l_notes_mode_combo_box, SIGNAL(activated(int)), m_score_widget, SLOT(setNotesMode(int)));
     connect(l_notes_mode_combo_box, SIGNAL(activated(int)), m_score_widget, SLOT(update()));
 
-    QComboBox * l_clef_mode_combo_box = new QComboBox(this, tr("clefModeComboBox"));
+    QComboBox * l_clef_mode_combo_box = new QComboBox(this);
+    l_clef_mode_combo_box->setObjectName("clefModeComboBox");
+
     l_string_list.clear();
     l_string_list << tr("Both clefs") << tr("Treble clef");
     l_clef_mode_combo_box->addItems(l_string_list);
     connect(l_clef_mode_combo_box, SIGNAL(activated(int)), m_score_widget, SLOT(setClefMode(int)));
     connect(l_clef_mode_combo_box, SIGNAL(activated(int)), m_score_widget, SLOT(update()));
 
-    QComboBox * l_opaque_mode_combo_box = new QComboBox(this, tr("opaqueModeComboBox"));
+    QComboBox * l_opaque_mode_combo_box = new QComboBox(this);
+    l_opaque_mode_combo_box->setObjectName("opaqueModeComboBox");
+
     l_string_list.clear();
     l_string_list << tr("See-through notes") << tr("Opaque notes");
     l_opaque_mode_combo_box->addItems(l_string_list);
     connect(l_opaque_mode_combo_box, SIGNAL(activated(int)), m_score_widget, SLOT(setOpaqueMode(int)));
     connect(l_opaque_mode_combo_box, SIGNAL(activated(int)), m_score_widget, SLOT(update()));
 
-    QComboBox * l_transpose_combo_box = new QComboBox(this, tr("transposeComboBox"));
+    QComboBox * l_transpose_combo_box = new QComboBox(this);
+    l_transpose_combo_box->setObjectName("transposeComboBox");
+
     l_string_list.clear();
     l_string_list << tr("Up 2 octaves") << tr("Up 1 octave") << tr("As played") << tr("Down 1 octave") << tr("Down 2 octaves");
     l_transpose_combo_box->addItems(l_string_list);
@@ -104,7 +114,9 @@ ScoreView::ScoreView(int p_view_id
     connect(l_transpose_combo_box, SIGNAL(activated(int)), m_score_widget, SLOT(setTransposeLevel(int)));
     connect(l_transpose_combo_box, SIGNAL(activated(int)), m_score_widget, SLOT(update()));
 
-    QComboBox * l_show_all_mode_combo_box = new QComboBox(this, "showAllModeComboBox");
+    QComboBox * l_show_all_mode_combo_box = new QComboBox(this);
+    l_show_all_mode_combo_box->setObjectName("showAllModeComboBox");
+
     l_string_list.clear();
     l_string_list << tr("Hide extream notes") << tr("Show all notes");
     l_show_all_mode_combo_box->addItems(l_string_list);

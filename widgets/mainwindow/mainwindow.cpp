@@ -181,7 +181,8 @@ MainWindow::MainWindow(void)
 #endif // MYDEBUG
 
     //Create the main Workspace for the view widgets to go in (for MDI)
-    m_the_workspace = new QWorkspace(this, "TheWorkspace");
+    m_the_workspace = new QWorkspace(this);
+    m_the_workspace->setObjectName("TheWorkspace");
     setCentralWidget( m_the_workspace );
   
     //Create the file Toolbar
