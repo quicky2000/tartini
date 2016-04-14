@@ -146,7 +146,7 @@ class MainWindow : public QMainWindow
     void menuPreferences(void);
 
     void windowMenuAboutToShow(void);
-    void windowMenuActivated(int p_id);
+    void windowMenuActivated(void);
     void newViewAboutToShow(void);
 
     /**

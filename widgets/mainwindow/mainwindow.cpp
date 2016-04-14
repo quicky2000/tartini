@@ -315,7 +315,6 @@ MainWindow::MainWindow(void)
 
     //Create the Window Menu
     m_window_menu = menuBar()->addMenu(tr("&Windows"));
-    m_window_menu->setCheckable( true );
     connect(m_window_menu, SIGNAL( aboutToShow() ), this, SLOT( windowMenuAboutToShow() ) );
 
     //Create the Options Menu
@@ -796,26 +795,28 @@ void MainWindow::windowMenuAboutToShow(void)
     QWidgetList l_windows = m_the_workspace->windowList();
     for(int l_i = 0; l_i < int(l_windows.count()); ++l_i )
     {
-        int l_id = m_window_menu->insertItem(l_windows.at(l_i)->caption(), this, SLOT( windowMenuActivated( int ) ) );
-        m_window_menu->setItemParameter(l_id, l_i );
-        m_window_menu->setItemChecked(l_id, m_the_workspace->activeWindow() == l_windows.at(l_i) );
+        QAction * l_action = m_window_menu->addAction(l_windows.at(l_i)->windowTitle(),this, SLOT( windowMenuActivated() ) );
+        l_action->setData(l_i);
+        l_action->setChecked(m_the_workspace->activeWindow() == l_windows.at(l_i));
     }
 
-    m_window_menu->insertSeparator();
-    int l_cascade = m_window_menu->insertItem( "&Cascade", m_the_workspace, SLOT( cascade() ), 0 );
-    int l_close = m_window_menu->insertItem( "Close &All", this, SLOT( closeAllWidgets() ), 0 );
+    m_window_menu->addSeparator();
+    QAction * l_cascade = m_window_menu->addAction( "&Cascade", m_the_workspace, SLOT( cascade() ));
+    QAction * l_close = m_window_menu->addAction( "Close &All", this, SLOT( closeAllWidgets() ));
 
     if(l_windows.isEmpty())
     {
-        m_window_menu->setItemEnabled( l_cascade, false );
-        m_window_menu->setItemEnabled( l_close, false );
+        l_cascade->setEnabled(false);
+        l_close->setEnabled(false);
     }
 }
 
 //------------------------------------------------------------------------------
-void MainWindow::windowMenuActivated(int p_id)
+void MainWindow::windowMenuActivated(void)
 {
-    QWidget * l_widget = m_the_workspace->windowList().at(p_id);
+    int l_id = static_cast<QAction*>(sender())->data().toInt();
+    std::cout << "windowMenuActivated " << l_id << std::endl ;
+    QWidget* l_widget = m_the_workspace->windowList().at( l_id );
     if( l_widget )
     {
         l_widget->showNormal();
