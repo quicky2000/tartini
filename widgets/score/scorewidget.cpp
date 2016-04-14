@@ -352,7 +352,7 @@ void ScoreWidget::paintEvent(QPaintEvent *)
     if(l_active_channel)
     {
         QString l_page_string;
-        get_painter().drawText(m_font_width, height() - 4, l_page_string.sprintf(tr("Page %d of %d"), l_score_segment_iter.curPage() + 1, l_score_segment_iter.numPages()));
+        get_painter().drawText(m_font_width, height() - 4, l_page_string.sprintf("Page %d of %d", l_score_segment_iter.curPage() + 1, l_score_segment_iter.numPages()));
         while(l_score_segment_iter.next())
         {
             drawScoreSegment(l_active_channel, l_score_segment_iter.leftX(), l_score_segment_iter.lineCenterY(), l_score_segment_iter.leftTime(), l_score_segment_iter.rightTime());

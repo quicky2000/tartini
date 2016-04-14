@@ -491,7 +491,7 @@ int GData::getAnalysisBufferSize(int p_rate)
 {  
     int l_window_size = m_settings->value("Analysis/bufferSizeValue", 48).toInt();
     QString l_window_size_unit = m_settings->value("Analysis/bufferSizeUnit", "milli-seconds").toString();
-    if(l_window_size_unit.lower() == "milli-seconds")
+    if(l_window_size_unit.toLower() == "milli-seconds")
     {
         //convert to samples
         l_window_size = int(double(l_window_size) * double(p_rate) / 1000.0);
@@ -508,7 +508,7 @@ int GData::getAnalysisStepSize(int p_rate)
 {  
     int l_step_size = m_settings->value("Analysis/stepSizeValue", 24).toInt();
     QString l_step_size_unit = m_settings->value("Analysis/stepSizeUnit", "milli-seconds").toString();
-    if(l_step_size_unit.lower() == "milli-seconds")
+    if(l_step_size_unit.toLower() == "milli-seconds")
     {
         //convert to samples
         l_step_size = int(double(l_step_size) * double(p_rate) / 1000.0);
@@ -574,11 +574,11 @@ QString GData::getFilenameString(void)
     int l_digits = m_settings->value("General/fileNumberOfDigits", 2).toInt();
     if(l_digits == 0)
     {
-        l_filename.sprintf("%s.wav", l_file_generating_string.latin1());
+        l_filename.sprintf("%s.wav", l_file_generating_string.toStdString().c_str());
     }
     else
     {
-        l_filename.sprintf("%s%0*d.wav", l_file_generating_string.latin1(), l_digits, l_file_generating_number);
+        l_filename.sprintf("%s%0*d.wav", l_file_generating_string.toStdString().c_str(), l_digits, l_file_generating_number);
     }
     return l_filename;
 }
@@ -709,17 +709,17 @@ int GData::saveFile( SoundFile * p_sound_file
     int l_pos = p_sound_file->getStream().pos();
     p_sound_file->getStream().close();
   
-    int l_ret = (moveFile(l_old_filename.latin1(), p_new_filename.latin1())) ? 0 : -1;
+    int l_ret = (moveFile(l_old_filename.toStdString().c_str(), p_new_filename.toStdString().c_str())) ? 0 : -1;
     if(l_ret == 0)
     {
-        p_sound_file->getStream().open_read(p_new_filename.latin1());
+        p_sound_file->getStream().open_read(p_new_filename.toStdString().c_str());
         p_sound_file->getStream().jump_to_frame(l_pos);
         p_sound_file->setSaved(true);
-        p_sound_file->setFilename(p_new_filename.latin1());
+        p_sound_file->setFilename(p_new_filename.toStdString().c_str());
     }
     else
     {
-        p_sound_file->getStream().open_read(l_old_filename.latin1());
+        p_sound_file->getStream().open_read(l_old_filename.toStdString().c_str());
         p_sound_file->getStream().jump_to_frame(l_pos);
     }
     return l_ret;
@@ -785,7 +785,7 @@ int GData::closeFile( SoundFile * p_sound_file
 
     if(p_saving_mode == ALWAYS_ASK)
     {
-        QString l_filename = QString(getFilenamePart(l_old_filename.latin1()));
+        QString l_filename = QString(getFilenamePart(l_old_filename.toStdString().c_str()));
         int l_option = QMessageBox::question(NULL
                                             , QString("Save changes to file '") + l_filename + "' ?"
                                             , QString("Save changes to the file '") + l_filename + QString("' ?\n")

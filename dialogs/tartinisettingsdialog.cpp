@@ -41,7 +41,7 @@ void TartiniSettingsDialog::loadSetting( QObject * p_object
                                        , const QString & p_group
                                        )
 {
-    QString l_key = p_object->name();
+    QString l_key = p_object->objectName();
     QString l_full_key = p_group + "/" + l_key;
 
     if(p_object->isA("QGroupBox"))
@@ -132,11 +132,11 @@ void TartiniSettingsDialog::fileNameChanged(void)
     int l_digits = fileNumberOfDigits->value();
     if(l_digits == 0)
     {
-        l_filename.sprintf("%s.wav", filenameGeneratingString->text().latin1());
+        l_filename.sprintf("%s.wav", filenameGeneratingString->text().toStdString().c_str());
     }
     else
     {
-        l_filename.sprintf("%s%0*d.wav", filenameGeneratingString->text().latin1(), l_digits, fileGeneratingNumber->value());
+        l_filename.sprintf("%s%0*d.wav", filenameGeneratingString->text().toStdString().c_str(), l_digits, fileGeneratingNumber->value());
     }
     filenameExample->setText(l_filename);
 }
