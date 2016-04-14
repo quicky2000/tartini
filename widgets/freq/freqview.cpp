@@ -169,7 +169,9 @@ FreqView::FreqView( int p_view_id
     //Create the resize grip. The thing in the bottom right hand corner
     QSizeGrip * l_size_grip = new QSizeGrip(l_bottom_widget);
     l_size_grip->setFixedSize(15, 15);
-    l_size_grip->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, false));
+    QSizePolicy l_size_policy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    l_size_policy.setHeightForWidth(false);
+    l_size_grip->setSizePolicy(l_size_policy);
     l_bottom_bottom_layout->addWidget(l_size_grip);
   
     //Actually add all the widgets into the widget layout

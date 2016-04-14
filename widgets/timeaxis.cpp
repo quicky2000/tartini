@@ -52,7 +52,9 @@ TimeAxis::TimeAxis(QWidget * p_parent
 //------------------------------------------------------------------------------
 void TimeAxis::init(void)
 {
-    setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed, false));
+    QSizePolicy l_size_policy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    l_size_policy.setHeightForWidth(false);
+    setSizePolicy(l_size_policy);
 
 #ifdef MACX
     setFontSize(14);

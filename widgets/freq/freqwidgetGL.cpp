@@ -57,7 +57,8 @@ FreqWidgetGL::FreqWidgetGL( QWidget * /*parent*/
 
     m_drag_mode = DragNone;
 
-    QSizePolicy l_size_policy(QSizePolicy::Expanding, QSizePolicy::Expanding, false);
+    QSizePolicy l_size_policy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    l_size_policy.setHeightForWidth(false);
     setSizePolicy(l_size_policy);
 
     setFocusPolicy(Qt::StrongFocus);
