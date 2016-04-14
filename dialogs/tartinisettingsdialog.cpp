@@ -90,10 +90,10 @@ void TartiniSettingsDialog::init(void)
     // Go through all the categories on the left, and insert all the preferences we can into the fields.
     // Combo boxes must be done separately.
     soundInput->clear();
-    soundInput->insertStringList(AudioStream::getInputDeviceNames());
+    soundInput->insertItems(0,AudioStream::getInputDeviceNames());
     soundOutput->clear();
-    soundOutput->insertStringList(AudioStream::getOutputDeviceNames());
-  
+    soundOutput->insertItems(0,AudioStream::getOutputDeviceNames());
+
     QString l_group;
     //Iterate over all groups
     for(int l_i = 0; l_i < tabWidget->count(); l_i++)
@@ -249,13 +249,13 @@ void TartiniSettingsDialog::checkAnalysisEnabled(void)
     QComboBox * l_note_range_choice = tabWidget->widget(0)->findChild<QComboBox *>("noteRangeChoice");
     myassert(l_note_range_choice);
   
-    int l_choice = l_note_range_choice->currentItem();
-  
+    int l_choice = l_note_range_choice->currentIndex();
+
     QGroupBox * l_buffer_size_group_box = tabWidget->widget(2)->findChild<QGroupBox*>("bufferSizeGroupBox");
     myassert(l_buffer_size_group_box);
     QGroupBox * l_step_size_group_box = tabWidget->widget(2)->findChild<QGroupBox*>("stepSizeGroupBox");
     myassert(l_step_size_group_box);
-  
+
     if(l_choice == 0)
     {
         l_buffer_size_group_box->setEnabled(true);
@@ -305,8 +305,8 @@ void TartiniSettingsDialog::onNoteRangeChoice(int p_choice)
     }
     if(p_choice > 0)
     {
-        l_buffer_size_unit->setCurrentText("milli-seconds");
-        l_step_size_unit->setCurrentText("milli-seconds");
+        l_buffer_size_unit->setCurrentIndex(l_buffer_size_unit->findText("milli-seconds"));
+        l_step_size_unit->setCurrentIndex(l_step_size_unit->findText("milli-seconds"));
         l_buffer_size_round->setChecked(true);
         l_step_size_round->setChecked(true);
     }
