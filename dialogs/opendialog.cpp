@@ -35,7 +35,7 @@ OpenDialog::OpenDialog(QWidget * p_parent)
              , "Wave files (*.wav)"
              )
 {
-  setCaption("Choose a file to open");
+  setWindowTitle("Choose a file to open");
   setFileMode(QFileDialog::ExistingFile);
 }
 
