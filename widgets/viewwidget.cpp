@@ -16,10 +16,11 @@
 #include "mainwindow.h"
 
 //------------------------------------------------------------------------------
-ViewWidget::ViewWidget( int p_view_ID, QWidget * /*p_parent*/, Qt::WFlags p_flags ):
-  QWidget( NULL, Qt::WDestructiveClose | p_flags ),
+ViewWidget::ViewWidget( int p_view_ID, QWidget * /*p_parent*/):
+  QWidget( NULL),
   m_view_ID(p_view_ID)
 {
+  setAttribute(Qt::WA_DeleteOnClose);
   setWindowTitle(g_view_data[m_view_ID].m_title);
   setAutoFillBackground(true);
 }

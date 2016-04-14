@@ -16,9 +16,10 @@
 
 //------------------------------------------------------------------------------
 TartiniSettingsDialog::TartiniSettingsDialog(QWidget * p_parent)
-: QDialog(p_parent, Qt::WDestructiveClose)
+: QDialog(p_parent)
 {
     setupUi(this);
+    setAttribute(Qt::WA_DeleteOnClose);
 
     connect(okButton, SIGNAL(clicked()), this, SLOT(saveSettings()));
     connect(cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
