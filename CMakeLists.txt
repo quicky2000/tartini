@@ -295,7 +295,7 @@ set(MY_SOURCE_FILES ${MY_SOURCE_FILES} ${MY_HEADER_FILES})
 
 # Qt Manangement
 #-----------------
-find_package( Qt4 REQUIRED QtCore QtGui QtOpenGL Qt3Support)
+find_package( Qt4 REQUIRED QtCore QtGui QtOpenGL)
 include( ${QT_USE_FILE} )
 add_definitions( ${QT_DEFINITIONS} )
 include_directories( ${CMAKE_BINARY_DIR} )
