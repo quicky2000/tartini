@@ -562,11 +562,11 @@ void MainWindow::keyPressEvent (QKeyEvent * p_event)
     View & l_view = g_data->getView();
 
     double l_speed = 1;
-    if(p_event->state() & Qt::ShiftModifier)
+    if(p_event->QInputEvent::modifiers() & Qt::ShiftModifier)
     {
         l_speed *= 4;
     }
-    if(p_event->state() & Qt::ControlModifier)
+    if(p_event->QInputEvent::modifiers() & Qt::ControlModifier)
     {
         l_speed *= 10;
     }
