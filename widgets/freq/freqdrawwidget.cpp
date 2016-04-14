@@ -257,20 +257,20 @@ void FreqDrawWidget::mousePressEvent( QMouseEvent * p_mouse_event)
     }
 
     // If the control or alt keys are pressed, zoom in or out on the correct axis, otherwise scroll.
-    if(p_mouse_event->state() & Qt::ControlModifier)
+    if(p_mouse_event->QInputEvent::modifiers() & Qt::ControlModifier)
     {
         // Do we zoom in or out?
-        if (p_mouse_event->state() & Qt::ShiftModifier)
+        if(p_mouse_event->QInputEvent::modifiers() & Qt::ShiftModifier)
         {
         }
         else
         {
         }
     }
-    else if (p_mouse_event->state() & Qt::AltModifier)
+    else if(p_mouse_event->QInputEvent::modifiers() & Qt::AltModifier)
     {
         // Do we zoom in or out?
-        if (p_mouse_event->state() & Qt::ShiftModifier)
+        if(p_mouse_event->QInputEvent::modifiers() & Qt::ShiftModifier)
         {
         }
         else
@@ -361,7 +361,7 @@ void FreqDrawWidget::wheelEvent(QWheelEvent * p_wheel_event)
     View & l_view = g_data->getView();
     double l_amount = double(p_wheel_event->delta() / WHEEL_DELTA);
     bool l_is_zoom = g_data->mouseWheelZooms();
-    if(p_wheel_event->state() & (Qt::ControlModifier | Qt::ShiftModifier))
+    if(p_wheel_event->QInputEvent::modifiers() & (Qt::ControlModifier | Qt::ShiftModifier))
     {
         l_is_zoom = !l_is_zoom;
     }
@@ -409,7 +409,7 @@ void FreqDrawWidget::wheelEvent(QWheelEvent * p_wheel_event)
 //------------------------------------------------------------------------------
 void FreqDrawWidget::resizeEvent (QResizeEvent * p_resize_event)
 {
-    if (p_resize_event->size() == p_resize_event->oldSize())
+    if(p_resize_event->size() == p_resize_event->oldSize())
     {
         return;
     }
@@ -440,11 +440,11 @@ void FreqDrawWidget::keyPressEvent( QKeyEvent * p_key_event )
             setCursor(QCursor(QPixmap(zoomy)));
             break;
         case Qt::Key_Shift:
-            if(p_key_event->state() & Qt::ControlModifier)
+            if(p_key_event->QInputEvent::modifiers() & Qt::ControlModifier)
             {
                 setCursor(QCursor(QPixmap(zoomxout)));
             }
-            else if(p_key_event->state() & Qt::AltModifier)
+            else if(p_key_event->QInputEvent::modifiers() & Qt::AltModifier)
             {
                 setCursor(QCursor(QPixmap(zoomyout)));
             }
@@ -456,7 +456,7 @@ void FreqDrawWidget::keyPressEvent( QKeyEvent * p_key_event )
         default:
             p_key_event->ignore();
             break;
-    } 
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -469,11 +469,11 @@ void FreqDrawWidget::keyReleaseEvent( QKeyEvent * p_key_event)
             unsetCursor();
             break;
         case Qt::Key_Shift:
-            if(p_key_event->state() & Qt::ControlModifier)
+            if(p_key_event->QInputEvent::modifiers() & Qt::ControlModifier)
             {
                 setCursor(QCursor(QPixmap(zoomx)));
             }
-            else if(p_key_event->state() & Qt::AltModifier)
+            else if(p_key_event->QInputEvent::modifiers() & Qt::AltModifier)
             {
                 setCursor(QCursor(QPixmap(zoomy)));
             }

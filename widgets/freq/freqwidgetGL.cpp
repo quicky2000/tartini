@@ -336,20 +336,20 @@ void FreqWidgetGL::mousePressEvent( QMouseEvent *p_mouse_event)
     }
 
     // If the control or alt keys are pressed, zoom in or out on the correct axis, otherwise scroll.
-    if(p_mouse_event->state() & Qt::ControlModifier)
+    if(p_mouse_event->QInputEvent::modifiers() & Qt::ControlModifier)
     {
         // Do we zoom in or out?
-        if(p_mouse_event->state() & Qt::ShiftModifier)
+        if(p_mouse_event->QInputEvent::modifiers() & Qt::ShiftModifier)
         {
         }
         else
         {
         }
     }
-    else if (p_mouse_event->state() & Qt::AltModifier)
+    else if(p_mouse_event->QInputEvent::modifiers() & Qt::AltModifier)
     {
         // Do we zoom in or out?
-        if (p_mouse_event->state() & Qt::ShiftModifier)
+        if(p_mouse_event->QInputEvent::modifiers() & Qt::ShiftModifier)
         {
         }
         else
@@ -440,7 +440,7 @@ void FreqWidgetGL::wheelEvent(QWheelEvent * p_wheel_event)
     View & l_view = g_data->getView();
     double l_amount = double(p_wheel_event->delta()) / WHEEL_DELTA * 0.15;
     bool l_is_zoom = g_data->mouseWheelZooms();
-    if(p_wheel_event->state() & (Qt::ControlModifier | Qt::ShiftModifier))
+    if(p_wheel_event->QInputEvent::modifiers() & (Qt::ControlModifier | Qt::ShiftModifier))
     {
         l_is_zoom = !l_is_zoom;
     }
@@ -526,11 +526,11 @@ void FreqWidgetGL::keyPressEvent( QKeyEvent *p_key_event )
             setCursor(QCursor(QPixmap(zoomy)));
             break;
         case Qt::Key_Shift:
-            if (p_key_event->state() & Qt::ControlModifier)
+            if(p_key_event->QInputEvent::modifiers() & Qt::ControlModifier)
             {
                 setCursor(QCursor(QPixmap(zoomxout)));
             }
-            else if (p_key_event->state() & Qt::AltModifier)
+            else if(p_key_event->QInputEvent::modifiers() & Qt::AltModifier)
             {
                 setCursor(QCursor(QPixmap(zoomyout)));
             }
@@ -556,11 +556,11 @@ void FreqWidgetGL::keyReleaseEvent( QKeyEvent *p_key_event)
             unsetCursor();
             break;
         case Qt::Key_Shift:
-            if(p_key_event->state() & Qt::ControlModifier)
+            if(p_key_event->QInputEvent::modifiers() & Qt::ControlModifier)
             {
                 setCursor(QCursor(QPixmap(zoomx)));
             }
-            else if(p_key_event->state() & Qt::AltModifier)
+            else if(p_key_event->QInputEvent::modifiers() & Qt::AltModifier)
             {
                 setCursor(QCursor(QPixmap(zoomy)));
             }
