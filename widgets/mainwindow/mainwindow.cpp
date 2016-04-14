@@ -1163,13 +1163,15 @@ TartiniDialog::TartiniDialog(QWidget *p_parent)
     QVBoxLayout * l_layout = new QVBoxLayout(this);
     l_layout->setContentsMargins(6,6,6,6);
     l_layout->setSpacing(6);
-    QHBoxLayout * l_top_layout = new QHBoxLayout(l_layout);
     setBackgroundRole(QPalette::Shadow);
+
+    QHBoxLayout * l_top_layout = new QHBoxLayout();
+    l_layout->addLayout(l_top_layout);
     QLabel * l_tartini_picture = new QLabel(this);
     l_tartini_picture->setObjectName("TartiniPicture");
     QPixmap l_tartini_pixmap(":/res/tartinilogo.jpg", "JPG");
     l_tartini_picture->setPixmap(l_tartini_pixmap);
-    l_tartini_picture->setBackgroundColor(Qt::black);
+    l_tartini_picture->setBackgroundRole(QPalette::Shadow);
     l_top_layout->addStretch(10);
     l_top_layout->addWidget(l_tartini_picture);
     l_top_layout->addStretch(10);
