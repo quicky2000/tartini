@@ -317,7 +317,7 @@ void TartiniSettingsDialog::onNoteRangeChoice(int p_choice)
 void TartiniSettingsDialog::setUnknownsToDefault(GData & p_gdata)
 {
     SetIfMissing("General/bindOpenSaveFolders", true);
-    SetIfMissing("General/tempFilesFolder", QDir::convertSeparators(QDir::currentDirPath()));
+    SetIfMissing("General/tempFilesFolder", QDir::convertSeparators(QDir::currentPath()));
     SetIfMissing("General/filenameGeneratingString", "Untitled");
     SetIfMissing("General/fileGeneratingNumber", 1);
     SetIfMissing("General/fileNumberOfDigits", 2);
@@ -358,9 +358,9 @@ void TartiniSettingsDialog::setUnknownsToDefault(GData & p_gdata)
     SetIfMissing("Display/useTopLevelWidgets", false);
 
     SetIfMissing("Dialogs/rememberOpenFolder", true);
-    SetIfMissing("Dialogs/openFilesFolder", QDir::convertSeparators(QDir::currentDirPath()));
+    SetIfMissing("Dialogs/openFilesFolder", QDir::convertSeparators(QDir::currentPath()));
     SetIfMissing("Dialogs/rememberSaveFolder", true);
-    SetIfMissing("Dialogs/saveFilesFolder", QDir::convertSeparators(QDir::currentDirPath()));
+    SetIfMissing("Dialogs/saveFilesFolder", QDir::convertSeparators(QDir::currentPath()));
     SetIfMissing("Dialogs/appendWav", true);
 
     SetIfMissing("Advanced/showMeanVarianceBars", false);

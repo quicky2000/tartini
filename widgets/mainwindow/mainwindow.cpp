@@ -649,7 +649,7 @@ void MainWindow::keyPressEvent (QKeyEvent * p_event)
 //------------------------------------------------------------------------------
 void MainWindow::openFile(void)
 {
-    QString l_last_folder = QDir::convertSeparators(g_data->getSettingsValue("Dialogs/openFilesFolder", QDir::currentDirPath()));
+    QString l_last_folder = QDir::convertSeparators(g_data->getSettingsValue("Dialogs/openFilesFolder", QDir::currentPath()));
     QString l_file_name = QFileDialog::getOpenFileName(this, "Open File", l_last_folder, "Sounds (*.wav)");
     if(l_file_name.isEmpty())
     {
@@ -728,7 +728,7 @@ void MainWindow::openRecord(bool p_and_play)
         l_step_size = l_play_sound_file->bufferSize()/2;
     }
 
-    QString l_temp_file_folder = g_data->getSettingsValue("General/tempFilesFolder", QDir::convertSeparators(QDir::currentDirPath()));
+    QString l_temp_file_folder = g_data->getSettingsValue("General/tempFilesFolder", QDir::convertSeparators(QDir::currentPath()));
     QDir l_dir = QDir(l_temp_file_folder);
     QFileInfo l_file_info;
     QString l_file_name;

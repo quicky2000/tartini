@@ -24,15 +24,15 @@
 #include "gdata.h"
 
 //------------------------------------------------------------------------------
-OpenDialog::OpenDialog(QWidget * p_parent):
-QFileDialog( p_parent
-           , tr("Open File")
-           , QDir::convertSeparators(g_data->getSettingsValue( "Dialogs/openFilesFolder"
-                                                             , QDir::currentDirPath()
+OpenDialog::OpenDialog(QWidget * p_parent)
+: QFileDialog( p_parent
+             , tr("Open File")
+             , QDir::convertSeparators(g_data->getSettingsValue( "Dialogs/openFilesFolder"
+                                                             , QDir::currentPath()
                                                              )
                                     )
-           , "Wave files (*.wav)"
-           )
+             , "Wave files (*.wav)"
+             )
 {
   setCaption("Choose a file to open");
   setMode(QFileDialog::ExistingFile);
