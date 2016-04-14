@@ -1170,7 +1170,8 @@ TartiniDialog::TartiniDialog(QWidget *p_parent)
     l_top_layout->addWidget(l_tartini_picture);
     l_top_layout->addStretch(10);
 
-    QTextBrowser * l_tartini_text_edit = new QTextBrowser(this, "TartiniTextEdit");
+    QTextBrowser * l_tartini_text_edit = new QTextBrowser(this);
+    l_tartini_text_edit->setObjectName("TartiniTextEdit");
     l_tartini_text_edit->setOpenExternalLinks(true);
     l_tartini_text_edit->setTextFormat(Qt::RichText);
 
