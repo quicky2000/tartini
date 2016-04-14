@@ -37,7 +37,7 @@ HTrackView::HTrackView( int p_view_ID
 : ViewWidget( p_view_ID, p_parent)
 {
     QGridLayout * l_main_layout = new QGridLayout(this);
-    l_main_layout->setResizeMode(QLayout::SetNoConstraint);
+    l_main_layout->setSizeConstraint(QLayout::SetNoConstraint);
     QVBoxLayout * l_right_layout = new QVBoxLayout();
     QHBoxLayout * l_bottom_layout = new QHBoxLayout();
 
