@@ -44,7 +44,7 @@ void TartiniSettingsDialog::loadSetting( QObject * p_object
     QString l_key = p_object->objectName();
     QString l_full_key = p_group + "/" + l_key;
 
-    if(p_object->isA("QGroupBox"))
+    if(p_object->metaObject()->className() == "QGroupBox")
     {
         //Iterate over the groupBox's children
         const QList<QObject*> & l_widgets = p_object->children();
@@ -53,11 +53,11 @@ void TartiniSettingsDialog::loadSetting( QObject * p_object
             loadSetting(*l_widget_iter, p_group);
         }
     }
-    else if(p_object->isA("QLineEdit"))
+    else if(p_object->metaObject()->className() == "QLineEdit")
     {
-        ((QLineEdit*)p_object)->setText(g_data->getSettingsStringValue(l_full_key));
+        ((QLineEdit*)p_object)->setText(g_data->getSettingsValue(l_full_key).toString());
     }
-    else if(p_object->isA("QComboBox"))
+    else if(p_object->metaObject()->className() == "QComboBox")
     {
         ((QComboBox*)p_object)->setCurrentText(g_data->getSettingsStringValue(l_full_key));
     }
@@ -67,13 +67,13 @@ void TartiniSettingsDialog::loadSetting( QObject * p_object
     }
     else if(p_object->isA("QCheckBox"))
     {
-        ((QCheckBox*)p_object)->setChecked(g_data->getSettingsBoolValue(l_full_key));
+         ((QCheckBox*)p_object)->setChecked(g_data->getSettingsBoolvalue(l_full_key));
     }
-    else if(p_object->isA("QSpinBox"))
+    else if(p_object->metaObject()->className() == "QSpinBox")
     {
         ((QSpinBox*)p_object)->setValue(g_data->getSettingsIntValue(l_full_key));
     }
-    else if(p_object->isA("QFrame"))
+    else if(p_object->metaObject()->className() == "QFrame")
     {
         QColor l_color;
         l_color.setNamedColor(g_data->getSettingsStringValue(l_full_key));
@@ -183,7 +183,7 @@ void TartiniSettingsDialog::saveSetting(QObject *p_object, const QString p_group
     QString l_key = p_object->name();
     QString l_full_key = p_group + "/" + l_key;
 
-    if(p_object->isA("QGroupBox"))
+    if(p_object->metaObject()->className() == "QGroupBox")
     {
         //Iterate over the groupBox's children
         const QList<QObject*> & l_widgets = p_object->children();
