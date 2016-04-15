@@ -496,7 +496,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
       if(chunk > 0
 // && prevAnalysisData->highestCorrelationIndex!=-1
 ) {
-        float prevPeriod = prevAnalysisData->periodEstimates[prevAnalysisData->getHighestCorrelationIndex()];
+        float prevPeriod = prevAnalysisData->getHighestCorrelationIndex() != -1 ? prevAnalysisData->periodEstimates[prevAnalysisData->getHighestCorrelationIndex()] : 0;
         std::vector<float>::iterator closestIter = binary_search_closest(analysisData.periodEstimates.begin(), analysisData.periodEstimates.end(), prevPeriod);
         //print_elements(analysisData.periodEstimates.begin(), analysisData.periodEstimates.end());
         //printf("closestIter = %f, %f\n", *closestIter, prevPeriod);
