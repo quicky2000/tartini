@@ -44,8 +44,9 @@ void TartiniSettingsDialog::loadSetting( QObject * p_object
 {
     QString l_key = p_object->objectName();
     QString l_full_key = p_group + "/" + l_key;
+    std::string l_class_name = p_object->metaObject()->className();
 
-    if(p_object->metaObject()->className() == "QGroupBox")
+    if(l_class_name == "QGroupBox")
     {
         //Iterate over the groupBox's children
         const QList<QObject*> & l_widgets = p_object->children();
@@ -54,27 +55,27 @@ void TartiniSettingsDialog::loadSetting( QObject * p_object
             loadSetting(*l_widget_iter, p_group);
         }
     }
-    else if(p_object->metaObject()->className() == "QLineEdit")
+    else if(l_class_name == "QLineEdit")
     {
-        ((QLineEdit*)p_object)->setText(g_data->getSettingsValue(l_full_key).toString());
+         ((QLineEdit*)p_object)->setText(g_data->getSettingsStringValue(l_full_key));
     }
-    else if(p_object->metaObject()->className() == "QComboBox")
+    else if(l_class_name == "QComboBox")
     {
          ((QComboBox*)p_object)->setCurrentIndex(((QComboBox*)p_object)->findText(g_data->getSettingsStringValue(l_full_key)));
     }
-    else if(p_object->metaObject()->className() == "QPushButton" && ((QPushButton*)p_object)->isCheckable())
+    else if(l_class_name == "QPushButton" && ((QPushButton*)p_object)->isCheckable())
     {
         ((QPushButton*)p_object)->setChecked(g_data->getSettingsBoolValue(l_full_key));
     }
-    else if(p_object->metaObject()->className() == "QCheckBox")
+    else if(l_class_name == "QCheckBox")
     {
-         ((QCheckBox*)p_object)->setChecked(g_data->getSettingsBoolvalue(l_full_key));
+         ((QCheckBox*)p_object)->setChecked(g_data->getSettingsBoolValue(l_full_key));
     }
-    else if(p_object->metaObject()->className() == "QSpinBox")
+    else if(l_class_name == "QSpinBox")
     {
-        ((QSpinBox*)p_object)->setValue(g_data->getSettingsIntValue(l_full_key));
+        ((QSpinBox*)p_object)->setValue(g_data->getSettingsBoolValue(l_full_key));
     }
-    else if(p_object->metaObject()->className() == "QFrame")
+    else if(l_class_name == "QFrame")
     {
         QColor l_color;
         l_color.setNamedColor(g_data->getSettingsStringValue(l_full_key));
@@ -185,8 +186,9 @@ void TartiniSettingsDialog::saveSetting(QObject *p_object, const QString p_group
 {
     QString l_key = p_object->objectName();
     QString l_full_key = p_group + "/" + l_key;
+    std::string l_class_name = p_object->metaObject()->className();
 
-    if(p_object->metaObject()->className() == "QGroupBox")
+    if(l_class_name == "QGroupBox")
     {
         //Iterate over the groupBox's children
         const QList<QObject*> & l_widgets = p_object->children();
@@ -195,27 +197,27 @@ void TartiniSettingsDialog::saveSetting(QObject *p_object, const QString p_group
             saveSetting(*l_widget_iter, p_group);
         }
     }
-    else if(p_object->metaObject()->className() == "QLineEdit")
+    else if(l_class_name == "QLineEdit")
     {
         g_data->setSettingsValue(l_full_key, ((QLineEdit*)p_object)->text());
     }
-    else if(p_object->metaObject()->className() == "QComboBox")
+    else if(l_class_name == "QComboBox")
     {
         g_data->setSettingsValue(l_full_key, ((QComboBox*)p_object)->currentText());
     }
-    else if(p_object->metaObject()->className() == "QPushButton" && ((QPushButton*)p_object)->isCheckable())
+    else if(l_class_name == "QPushButton" && ((QPushButton*)p_object)->isCheckable())
     {
         g_data->setSettingsValue(l_full_key, ((QPushButton*)p_object)->isChecked());
     }
-    else if(p_object->metaObject()->className() == "QCheckBox")
+    else if(l_class_name == "QCheckBox")
     {
         g_data->setSettingsValue(l_full_key, ((QCheckBox*)p_object)->isChecked());
     }
-    else if(p_object->metaObject()->className() == "QSpinBox")
+    else if(l_class_name == "QSpinBox")
     {
         g_data->setSettingsValue(l_full_key, ((QSpinBox*)p_object)->value());
     }
-    else if(p_object->metaObject()->className() == "QFrame")
+    else if(l_class_name == "QFrame")
     {
         QColor l_color =  ((QFrame*)p_object)->palette().color(QPalette::Window);
         g_data->setSettingsValue(l_full_key,l_color.name());
