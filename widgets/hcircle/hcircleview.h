@@ -34,6 +34,8 @@ class HCircleView: public ViewWidget
     QSize sizeHint(void) const;
 
   private:
+    void resizeEvent(QResizeEvent *);
+
     HCircleWidget *m_h_circle_widget;
 };
 #endif // HCIRCLEVIEW_H

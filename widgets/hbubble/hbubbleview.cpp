@@ -97,4 +97,10 @@ QSize HBubbleView::sizeHint(void) const
 {
     return QSize(300, 200);
 }
+
+//------------------------------------------------------------------------------
+void HBubbleView::resizeEvent(QResizeEvent *)
+{ 
+    m_h_bubble_widget->resize(size());
+}
 // EOF

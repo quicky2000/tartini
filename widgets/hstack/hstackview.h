@@ -34,6 +34,8 @@ class HStackView : public ViewWidget
     QSize sizeHint(void) const;
 
  private:
+    void resizeEvent(QResizeEvent *);
+
     HStackWidget * m_h_stack_widget;
 };
 #endif // HSTACKVIEW_H
