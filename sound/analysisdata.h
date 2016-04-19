@@ -153,48 +153,6 @@ struct greaterPitch : public std::binary_function<AnalysisData &, AnalysisData &
   }
 };
 
-/*
-struct lessCorrelation : public std::binary_function<AnalysisData &, AnalysisData &, bool> {
-	bool operator()(const AnalysisData &x, const AnalysisData &y) { return x.correlation < y.correlation; }
-};
-
-struct greaterCorrelation : public std::binary_function<AnalysisData &, AnalysisData &, bool> {
-	bool operator()(const AnalysisData &x, const AnalysisData &y) { return x.correlation > y.correlation; }
-};
-
-struct lessVolumeValue : public std::binary_function<AnalysisData &, AnalysisData &, bool> {
-	bool operator()(const AnalysisData &x, const AnalysisData &y) { return x.volumeValue < y.volumeValue; }
-};
-
-struct greaterVolumeValue : public std::binary_function<AnalysisData &, AnalysisData &, bool> {
-	bool operator()(const AnalysisData &x, const AnalysisData &y) { return x.volumeValue > y.volumeValue; }
-};
-
-struct lessLogRMS : public std::binary_function<AnalysisData &, AnalysisData &, bool> {
-  bool operator()(const AnalysisData &x, const AnalysisData &y) { return x.logrms < y.logrms; }
-};
-
-struct greaterLogRMS : public std::binary_function<AnalysisData &, AnalysisData &, bool> {
-  bool operator()(const AnalysisData &x, const AnalysisData &y) { return x.logrms > y.logrms; }
-};
-
-struct lessMaxIntensityDB : public std::binary_function<AnalysisData &, AnalysisData &, bool> {
-  bool operator()(const AnalysisData &x, const AnalysisData &y) { return x.maxIntensityDB < y.maxIntensityDB; }
-};
-
-struct greaterMaxIntensityDB : public std::binary_function<AnalysisData &, AnalysisData &, bool> {
-  bool operator()(const AnalysisData &x, const AnalysisData &y) { return x.maxIntensityDB > y.maxIntensityDB; }
-};
-
-struct lessChangeness : public std::binary_function<AnalysisData &, AnalysisData &, bool> {
-  bool operator()(const AnalysisData &x, const AnalysisData &y) { return x.changeness < y.changeness; }
-};
-
-struct greaterChangeness : public std::binary_function<AnalysisData &, AnalysisData &, bool> {
-  bool operator()(const AnalysisData &x, const AnalysisData &y) { return x.changeness > y.changeness; }
-};
-*/
-
 struct lessValue : public std::binary_function<AnalysisData &, AnalysisData &, bool>
 {
   int v;
