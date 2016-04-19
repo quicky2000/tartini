@@ -4,6 +4,8 @@
     begin                : Sat Dec 11 2004
     copyright            : (C) 2004 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -542,7 +544,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
     //float periodDiff = 0.0f;
     if(gdata->doingFreqAnalysis() && ch->doingDetailedPitch() && ch->firstTimeThrough()) {
       //periodDiff = ch->calcDetailedPitch(curInput, analysisData.period, chunk);
-      float periodDiff2 = ch->calcDetailedPitch(curInput, analysisData.period, chunk);
+      float periodDiff2 = ch->calcDetailedPitch(curInput, analysisData.getPeriod(), chunk);
       //printf("chunk=%d, %f, %f\n", chunk, periodDiff, periodDiff2);
       periodDiff = periodDiff2;
 

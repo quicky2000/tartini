@@ -4,6 +4,8 @@
     begin                : 19 Mar 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -192,8 +194,8 @@ bool AmplitudeWidget::calcZoomElement(ZoomElement &ze, Channel *ch, int baseElem
   std::pair<large_vector<AnalysisData>::iterator, large_vector<AnalysisData>::iterator> a =
     minMaxElement(ch->dataIteratorAtChunk(startChunk), ch->dataIteratorAtChunk(finishChunk), lessValue(mode));
   myassert(a.second != ch->dataIteratorAtChunk(finishChunk));
-  float low = (*amp_mode_func[mode])(a.first->values[mode]);
-  float high = (*amp_mode_func[mode])(a.second->values[mode]);
+  float low = (*amp_mode_func[mode])(a.first->getValue(mode));
+  float high = (*amp_mode_func[mode])(a.second->getValue(mode));
   
   ze.set(low, high, 0, ch->color, NO_NOTE, (startChunk+finishChunk)/2);
   return true;
@@ -201,7 +203,7 @@ bool AmplitudeWidget::calcZoomElement(ZoomElement &ze, Channel *ch, int baseElem
 
 double AmplitudeWidget::calculateElement(AnalysisData *data)
 {
-  double val = (*amp_mode_func[gdata->amplitudeMode()])(data->values[gdata->amplitudeMode()]);
+  double val = (*amp_mode_func[gdata->amplitudeMode()])(data->getValue(gdata->amplitudeMode()));
   return val;
 }
 

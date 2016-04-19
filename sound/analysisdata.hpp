@@ -17,6 +17,27 @@
       along with this program.  If not, see <http://www.gnu.org/licenses/>
 */
 
+#include <assert.h>
+
+//------------------------------------------------------------------------------
+float AnalysisData::getValue(size_t p_index)const
+{
+  assert(p_index < NUM_AMP_MODES);
+  return values[p_index];
+}
+
+//------------------------------------------------------------------------------
+float AnalysisData::getPeriod(void)const
+{
+  return period;
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setPeriod(float p_period)
+{
+  period = p_period;
+}
+
 //------------------------------------------------------------------------------
 int AnalysisData::getHighestCorrelationIndex(void)const
 {

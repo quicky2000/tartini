@@ -4,6 +4,8 @@
     begin                : Wed Feb 22 2006
     copyright            : (C) 2006 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -54,7 +56,7 @@ void DebugWidget::paintEvent( QPaintEvent * )
     AnalysisData &data = *ch->dataAtChunk(chunk);
     QString s;
     printString(s.sprintf("Chunk = %d", chunk));
-    printString(s.sprintf("period = %f", data.period));
+    printString(s.sprintf("period = %f", data.getPeriod()));
     printString(s.sprintf("fundamentalFreq = %f", data.fundamentalFreq));
     printString(s.sprintf("pitch = %f", data.pitch));
     printString(s.sprintf("pitchSum = %f", data.pitchSum));

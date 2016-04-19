@@ -4,6 +4,8 @@
     begin                : Sat Jul 10 2004
     copyright            : (C) 2004-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -622,10 +624,10 @@ void Channel::backTrackNoteChange(int chunk) {
     while((curChunk < last) && isVisibleChunk(dataAtChunk(curChunk))) {
       dataAtChunk(curChunk)->noteIndex = getCurrentNoteIndex();
       dataAtChunk(curChunk)->notePlaying = true;
-      currentNote->addData(dataAtChunk(curChunk), float(framesPerChunk()) / float(dataAtChunk(curChunk)->period));
+      currentNote->addData(dataAtChunk(curChunk), float(framesPerChunk()) / float(dataAtChunk(curChunk)->getPeriod()));
       curChunk++;
     }
-    resetNSDFAggregate(dataAtChunk(last-1)->period); //just start the NSDF Aggregate from where we are now
+    resetNSDFAggregate(dataAtChunk(last-1)->getPeriod()); //just start the NSDF Aggregate from where we are now
     //just start with the octave estimate from the last note
     currentNote->setPeriodOctaveEstimate(getNote(getCurrentNoteIndex()-1)->periodOctaveEstimate());
   }
@@ -734,7 +736,7 @@ void Channel::processNoteDecisions(int chunk, float periodDiff)
       analysisData.noteIndex = getCurrentNoteIndex();
       currentNote->setEndChunk(chunk+1);
 
-      currentNote->addData(&analysisData, float(framesPerChunk()) / float(analysisData.period));
+      currentNote->addData(&analysisData, float(framesPerChunk()) / float(analysisData.getPeriod()));
       currentNote->setPeriodOctaveEstimate(calcOctaveEstimate());
       //if(!gdata->doingActiveCepstrum()) {
       //if(!gdata->analysisType() == MPM_MODIFIED_CEPSTRUM) {
@@ -758,7 +760,7 @@ void Channel::noteBeginning(int chunk)
   //initalise the aggregate NSDF data with the current NSDF data
   //std::copy(nsdfData.begin(), nsdfData.end(), nsdfAggregateData.begin());
   //addElements(nsdfAggregateData.begin(), nsdfAggregateData.end(), nsdfData.begin(), dB2Normalised(analysisData->logrms()));
-  resetNSDFAggregate(analysisData->period);
+  resetNSDFAggregate(analysisData->getPeriod());
   //addToNSDFAggregate(dB2Linear(analysisData->logrms()), 0.0f);
   //printf("Note Beginning: period = %f\n", analysisData->period);
 
@@ -840,7 +842,7 @@ void Channel::recalcNotePitches(int chunk)
     //if(chooseCorrelationIndex(curChunk, periodOctaveEstimate)) numNotesChangedIndex++;
     if(chooseCorrelationIndex(curChunk, periodOctaveEstimate(curChunk))) numNotesChangedIndex++;
     calcDeviation(curChunk);
-    currentNote->addData(dataAtChunk(curChunk), float(framesPerChunk()) / float(dataAtChunk(curChunk)->period));
+    currentNote->addData(dataAtChunk(curChunk), float(framesPerChunk()) / float(dataAtChunk(curChunk)->getPeriod()));
   }
   //printf("numNotesChangedIndex=%d/%d\n", numNotesChangedIndex, last-first+1);
 }
@@ -895,10 +897,10 @@ void Channel::chooseCorrelationIndex1(int chunk)
   analysisData.correlation() = analysisData.periodEstimatesAmp[choosenMaxIndex];
   
   //double period = analysisData.periodEstimates[choosenMaxIndex];
-  analysisData.period = analysisData.getPeriodEstimatesAt(choosenMaxIndex);
+  analysisData.setPeriod(analysisData.getPeriodEstimatesAt(choosenMaxIndex));
   //float clarityMin = get_fine_clarity_measure(period);
   //double freq = rate / period;
-  double freq = rate() / analysisData.period;
+  double freq = rate() / analysisData.getPeriod();
   analysisData.fundamentalFreq = float(freq);
   analysisData.pitch = bound(freq2pitch(freq), 0.0, gdata->topPitch());
   //if(isnan(analysisData.note)) analysisData.note = 0.0f;
@@ -951,10 +953,10 @@ bool Channel::chooseCorrelationIndex(int chunk, float periodOctaveEstimate)
   analysisData.correlation() = analysisData.periodEstimatesAmp[choosenMaxIndex];
   
   //double period = analysisData.periodEstimates[choosenMaxIndex];
-  analysisData.period = analysisData.getPeriodEstimatesAt(choosenMaxIndex);
+  analysisData.setPeriod(analysisData.getPeriodEstimatesAt(choosenMaxIndex));
   //float clarityMin = get_fine_clarity_measure(period);
   //double freq = rate / period;
-  double freq = rate() / analysisData.period;
+  double freq = rate() / analysisData.getPeriod();
   analysisData.fundamentalFreq = float(freq);
   analysisData.pitch = bound(freq2pitch(freq), 0.0, gdata->topPitch());
   if(chunk > 0 && !isFirstChunkInNote(chunk)) {

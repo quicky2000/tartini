@@ -4,6 +4,8 @@
     begin                : Mon May 23 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -231,7 +233,7 @@ void NoteData::addVibratoData(int chunk)
 void NoteData::recalcAvgPitch() {
   _numPeriods = 0.0f;
   for(int j=startChunk(); j<endChunk(); j++) {
-      _numPeriods += float(channel->framesPerChunk()) / float(channel->dataAtChunk(j)->period);
+    _numPeriods += float(channel->framesPerChunk()) / float(channel->dataAtChunk(j)->getPeriod());
   }
   _avgPitch = bound(freq2pitch(avgFreq()), 0.0, gdata->topPitch());
 }

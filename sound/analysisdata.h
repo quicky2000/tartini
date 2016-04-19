@@ -40,6 +40,10 @@ extern double(*amp_mode_inv_func[NUM_AMP_MODES])(double);
 class AnalysisData
 {
 public: 
+  inline float getValue(size_t p_index)const;
+  inline float getPeriod(void)const;
+  inline void setPeriod(float p_period);
+
   inline int getHighestCorrelationIndex(void)const;
   inline void setHighestCorrelationIndex(int p_index);
   inline bool isPeriodEstimatesEmpty(void)const;
@@ -49,8 +53,10 @@ public:
   inline void addPeriodEstimates(float p_value);
   inline float searchClosestPeriodEstimates(const float & p_value)const;
 
+ private:
   float values[NUM_AMP_MODES];
   float period; /*< The period of the fundamental (in samples) */
+ public:
   float fundamentalFreq; /*< The fundamental frequency in hertz */
   float pitch; /*< The pitch in semi-tones */
   float _freqCentroid;
@@ -169,16 +175,31 @@ struct greaterChangeness : public std::binary_function<AnalysisData &, AnalysisD
 };
 */
 
-struct lessValue : public std::binary_function<AnalysisData &, AnalysisData &, bool> {
+struct lessValue : public std::binary_function<AnalysisData &, AnalysisData &, bool>
+{
   int v;
-  lessValue(int v_) { v = v_; }
-  bool operator()(const AnalysisData &x, const AnalysisData &y) { return x.values[v] < y.values[v]; }
+  inline lessValue(int v_)
+  {
+    v = v_;
+  }
+  inline bool operator()(const AnalysisData &x, const AnalysisData &y)
+  {
+    return x.getValue(v) < y.getValue(v);
+  }
 };
 
-struct greaterValue : public std::binary_function<AnalysisData &, AnalysisData &, bool> {
+struct greaterValue : public std::binary_function<AnalysisData &, AnalysisData &, bool>
+{
   int v;
-  greaterValue(int v_) { v = v_; }
-  bool operator()(const AnalysisData &x, const AnalysisData &y) { return x.values[v] > y.values[v]; }
+  inline greaterValue(int v_)
+  {
+    v = v_;
+  }
+
+  inline bool operator()(const AnalysisData &x, const AnalysisData &y)
+  {
+    return x.getValue(v) > y.getValue(v);
+  }
 };
 
 #include "analysisdata.hpp"
