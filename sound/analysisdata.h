@@ -48,6 +48,8 @@ public:
   inline float getPitch(void)const;
   inline void setPitch(float p_pitch);
   inline float getFreqCentroid(void)const;
+  inline const double & getPitchSum(void)const;
+  inline void setPitchSum(const double & p_pitch_sum);
 
   inline int getHighestCorrelationIndex(void)const;
   inline void setHighestCorrelationIndex(int p_index);
@@ -64,8 +66,8 @@ public:
   float fundamentalFreq; /*< The fundamental frequency in hertz */
   float pitch; /*< The pitch in semi-tones */
   float _freqCentroid;
- public:
   double pitchSum; /*< The sum of pitches so far in a note */
+ public:
   double pitch2Sum; /*< The sum of pitches squared so far in a note */
   double shortTermMean; /*< The mean note so far */
   double shortTermDeviation; /*< The deviation of the note so far (based on standard deviation) */

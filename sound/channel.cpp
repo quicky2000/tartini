@@ -904,7 +904,7 @@ void Channel::chooseCorrelationIndex1(int chunk)
   analysisData.setFundamentalFreq(float(freq));
   analysisData.setPitch(bound(freq2pitch(freq), 0.0, gdata->topPitch()));
   //if(isnan(analysisData.note)) analysisData.note = 0.0f;
-  analysisData.pitchSum = (double)analysisData.getPitch();
+  analysisData.setPitchSum((double)analysisData.getPitch());
   analysisData.pitch2Sum = sq((double)analysisData.getPitch());
 }
 
@@ -960,10 +960,10 @@ bool Channel::chooseCorrelationIndex(int chunk, float periodOctaveEstimate)
   analysisData.setFundamentalFreq(float(freq));
   analysisData.setPitch(bound(freq2pitch(freq), 0.0, gdata->topPitch()));
   if(chunk > 0 && !isFirstChunkInNote(chunk)) {
-    analysisData.pitchSum = dataAtChunk(chunk-1)->pitchSum + (double)analysisData.getPitch();
+    analysisData.setPitchSum(dataAtChunk(chunk-1)->getPitchSum() + (double)analysisData.getPitch());
     analysisData.pitch2Sum = dataAtChunk(chunk-1)->pitch2Sum + sq((double)analysisData.getPitch());
   } else {
-    analysisData.pitchSum = (double)analysisData.getPitch();
+    analysisData.setPitchSum((double)analysisData.getPitch());
     analysisData.pitch2Sum = sq((double)analysisData.getPitch());
   }
   //if(isnan(analysisData.note)) analysisData.note = 0.0f;
@@ -986,7 +986,7 @@ void Channel::calcDeviation(int chunk) {
   int numChunks = (lastChunk - firstChunk);
   double mean_sum, mean, sumX2, variance, standard_deviation;
   if(numChunks > 0) {
-    mean_sum = (lastChunkData.pitchSum - firstChunkData->pitchSum);
+    mean_sum = (lastChunkData.getPitchSum() - firstChunkData->getPitchSum());
     mean = mean_sum / double(numChunks);
     lastChunkData.longTermMean = mean;
     sumX2 = (lastChunkData.pitch2Sum - firstChunkData->pitch2Sum);
@@ -1003,7 +1003,7 @@ void Channel::calcDeviation(int chunk) {
   firstChunkData = dataAtChunk(firstChunk);
   numChunks = (lastChunk - firstChunk);
   if(numChunks > 0) {
-    mean_sum = (lastChunkData.pitchSum - firstChunkData->pitchSum);
+    mean_sum = (lastChunkData.getPitchSum() - firstChunkData->getPitchSum());
     mean = mean_sum / double(numChunks);
     lastChunkData.shortTermMean = mean;
     sumX2 = (lastChunkData.pitch2Sum - firstChunkData->pitch2Sum);
