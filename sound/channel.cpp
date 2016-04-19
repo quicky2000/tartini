@@ -580,7 +580,7 @@ void Channel::backTrackNoteChange(int chunk) {
   int largestDiffChunk = first;
   int maxJ = last - first;
   for(int curChunk=first+1, j=1; curChunk<=last; curChunk++, j++) {
-    float weightedDiff = fabs(dataAtChunk(curChunk)->getPitch() - dataAtChunk(curChunk)->shortTermMean) /** float(maxJ-j)*/;
+    float weightedDiff = fabs(dataAtChunk(curChunk)->getPitch() - dataAtChunk(curChunk)->getShortTermMean()) /** float(maxJ-j)*/;
     if(weightedDiff > largestWeightedDiff) {
       largestWeightedDiff = weightedDiff;
       largestDiffChunk = curChunk;
@@ -594,7 +594,7 @@ void Channel::backTrackNoteChange(int chunk) {
   for(int curChunk = largestDiffChunk; curChunk <= last; curChunk++) {
     dataAtChunk(curChunk)->noteIndex = NO_NOTE;
     dataAtChunk(curChunk)->notePlaying = false;
-    dataAtChunk(curChunk)->shortTermMean = dataAtChunk(curChunk)->getPitch();
+    dataAtChunk(curChunk)->setShortTermMean(dataAtChunk(curChunk)->getPitch());
     dataAtChunk(curChunk)->longTermMean = dataAtChunk(curChunk)->getPitch();
     dataAtChunk(curChunk)->shortTermDeviation = 0.2f;
     dataAtChunk(curChunk)->longTermDeviation = 0.05f;
@@ -646,8 +646,8 @@ bool Channel::isNoteChanging(int chunk)
   //Note: analysisData.noteIndex is still undefined here
   int numChunks = getLastNote()->numChunks();
 
-  float diff = fabs(analysisData->getPitch() - analysisData->shortTermMean);
-  double spread = fabs(analysisData->shortTermMean - analysisData->longTermMean) -
+  float diff = fabs(analysisData->getPitch() - analysisData->getShortTermMean());
+  double spread = fabs(analysisData->getShortTermMean() - analysisData->longTermMean) -
     (analysisData->shortTermDeviation + analysisData->longTermDeviation);
   if(numChunks >= 5 && spread > 0.0) {
     analysisData->reason = 1;
@@ -657,7 +657,7 @@ bool Channel::isNoteChanging(int chunk)
 
   int firstShortChunk = MAX(chunk - (int)ceil(shortTime/timePerChunk()), getLastNote()->startChunk());
   AnalysisData *firstShortData = dataAtChunk(firstShortChunk);
-  double spread2 = fabs(analysisData->shortTermMean - firstShortData->longTermMean) -
+  double spread2 = fabs(analysisData->getShortTermMean() - firstShortData->longTermMean) -
     (analysisData->shortTermDeviation + firstShortData->longTermDeviation);
   analysisData->spread = spread;
   analysisData->spread2 = spread2;
@@ -1005,13 +1005,13 @@ void Channel::calcDeviation(int chunk) {
   if(numChunks > 0) {
     mean_sum = (lastChunkData.getPitchSum() - firstChunkData->getPitchSum());
     mean = mean_sum / double(numChunks);
-    lastChunkData.shortTermMean = mean;
+    lastChunkData.setShortTermMean(mean);
     sumX2 = (lastChunkData.getPitch2Sum() - firstChunkData->getPitch2Sum());
     variance = sumX2 / double(numChunks) - sq(mean);
     standard_deviation = sqrt(fabs(variance));
     lastChunkData.shortTermDeviation = shortBase + sqrt(standard_deviation)*shortStretch;
   } else {
-    lastChunkData.shortTermMean = firstChunkData->getPitch();
+    lastChunkData.setShortTermMean(firstChunkData->getPitch());
     lastChunkData.shortTermDeviation = shortBase;
   }
 }

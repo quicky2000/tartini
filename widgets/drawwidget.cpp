@@ -380,8 +380,8 @@ void DrawWidget::drawChannelFilled(Channel *ch, QPainter &p, double leftTime, do
           }
   
           //shortTermMean bars
-          y2 = height() - 1 - toInt((data->shortTermMean + data->shortTermDeviation) / zoomY) + viewBottomOffset;
-          y3 = height() - 1 - toInt((data->shortTermMean - data->shortTermDeviation) / zoomY) + viewBottomOffset;
+          y2 = height() - 1 - toInt((data->getShortTermMean() + data->shortTermDeviation) / zoomY) + viewBottomOffset;
+          y3 = height() - 1 - toInt((data->getShortTermMean() - data->shortTermDeviation) / zoomY) + viewBottomOffset;
           if(ze.noteIndex() % 2 == 0) {
             evenMidPoints2.setPoint(evenMidPointIndex2++, n, y2);
             evenMidPoints2.setPoint(evenMidPointIndex2++, n, y3);
@@ -486,8 +486,8 @@ void DrawWidget::drawChannelFilled(Channel *ch, QPainter &p, double leftTime, do
           noteRect[rectIndex++].setBottom(y3);
   
           //shortTermMean bars
-          y2 = height() - 1 - toInt((data->shortTermMean + data->shortTermDeviation) / zoomY) + viewBottomOffset;
-          y3 = height() - 1 - toInt((data->shortTermMean - data->shortTermDeviation) / zoomY) + viewBottomOffset;
+          y2 = height() - 1 - toInt((data->getShortTermMean() + data->shortTermDeviation) / zoomY) + viewBottomOffset;
+          y3 = height() - 1 - toInt((data->getShortTermMean() - data->shortTermDeviation) / zoomY) + viewBottomOffset;
           noteRect2[rectIndex2].setLeft(x);
           noteRect2[rectIndex2].setRight(toInt(n+stepSize));
           noteRect2[rectIndex2].setTop(y2);

@@ -93,6 +93,18 @@ void AnalysisData::setPitch2Sum(const double & p_pitch_2_sum)
 }
 
 //------------------------------------------------------------------------------
+const double & AnalysisData::getShortTermMean(void)const
+{
+  return shortTermMean;
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setShortTermMean(const double & p_short_term_mean)
+{
+  shortTermMean = p_short_term_mean;
+}
+
+//------------------------------------------------------------------------------
 int AnalysisData::getHighestCorrelationIndex(void)const
 {
   return highestCorrelationIndex;
