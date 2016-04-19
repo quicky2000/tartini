@@ -4,6 +4,8 @@
     begin                : Wed Dec 15 2004
     copyright            : (C) 2004-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -84,7 +86,7 @@ void PitchCompassDrawWidget::updateCompass(double time)
   AnalysisData *data = active->dataAtTime(time);
 
   if(data && data->correlation() >= 0.9) {
-    double pitch = data->pitch;
+    double pitch = data->getPitch();
   
     if (mode == 0) {
       QMap< double, QString > notes;

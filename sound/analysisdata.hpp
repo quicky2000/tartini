@@ -39,6 +39,18 @@ void AnalysisData::setPeriod(float p_period)
 }
 
 //------------------------------------------------------------------------------
+float AnalysisData::getPitch(void)const
+{
+  return pitch;
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setPitch(float p_pitch)
+{
+  pitch = p_pitch;
+}
+
+//------------------------------------------------------------------------------
 int AnalysisData::getHighestCorrelationIndex(void)const
 {
   return highestCorrelationIndex;

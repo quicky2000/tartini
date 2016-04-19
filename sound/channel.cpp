@@ -421,7 +421,7 @@ float Channel::averagePitch(int begin, int end)
     data = dataAtChunk(i);
     //weight = window_weight * data->correlation * data->rms;
     weight = window_weight * data->correlation() * dB2Linear(data->logrms());
-    total += data->pitch * weight;
+    total += data->getPitch() * weight;
     goodCount += weight;
   }
   //if (goodCount < 1.0) return -1;
@@ -580,7 +580,7 @@ void Channel::backTrackNoteChange(int chunk) {
   int largestDiffChunk = first;
   int maxJ = last - first;
   for(int curChunk=first+1, j=1; curChunk<=last; curChunk++, j++) {
-    float weightedDiff = fabs(dataAtChunk(curChunk)->pitch - dataAtChunk(curChunk)->shortTermMean) /** float(maxJ-j)*/;
+    float weightedDiff = fabs(dataAtChunk(curChunk)->getPitch() - dataAtChunk(curChunk)->shortTermMean) /** float(maxJ-j)*/;
     if(weightedDiff > largestWeightedDiff) {
       largestWeightedDiff = weightedDiff;
       largestDiffChunk = curChunk;
@@ -594,8 +594,8 @@ void Channel::backTrackNoteChange(int chunk) {
   for(int curChunk = largestDiffChunk; curChunk <= last; curChunk++) {
     dataAtChunk(curChunk)->noteIndex = NO_NOTE;
     dataAtChunk(curChunk)->notePlaying = false;
-    dataAtChunk(curChunk)->shortTermMean = dataAtChunk(curChunk)->pitch;
-    dataAtChunk(curChunk)->longTermMean = dataAtChunk(curChunk)->pitch;
+    dataAtChunk(curChunk)->shortTermMean = dataAtChunk(curChunk)->getPitch();
+    dataAtChunk(curChunk)->longTermMean = dataAtChunk(curChunk)->getPitch();
     dataAtChunk(curChunk)->shortTermDeviation = 0.2f;
     dataAtChunk(curChunk)->longTermDeviation = 0.05f;
     dataAtChunk(curChunk)->periodRatio = 1.0f;
@@ -646,7 +646,7 @@ bool Channel::isNoteChanging(int chunk)
   //Note: analysisData.noteIndex is still undefined here
   int numChunks = getLastNote()->numChunks();
 
-  float diff = fabs(analysisData->pitch - analysisData->shortTermMean);
+  float diff = fabs(analysisData->getPitch() - analysisData->shortTermMean);
   double spread = fabs(analysisData->shortTermMean - analysisData->longTermMean) -
     (analysisData->shortTermDeviation + analysisData->longTermDeviation);
   if(numChunks >= 5 && spread > 0.0) {
@@ -902,10 +902,10 @@ void Channel::chooseCorrelationIndex1(int chunk)
   //double freq = rate / period;
   double freq = rate() / analysisData.getPeriod();
   analysisData.fundamentalFreq = float(freq);
-  analysisData.pitch = bound(freq2pitch(freq), 0.0, gdata->topPitch());
+  analysisData.setPitch(bound(freq2pitch(freq), 0.0, gdata->topPitch()));
   //if(isnan(analysisData.note)) analysisData.note = 0.0f;
-  analysisData.pitchSum = (double)analysisData.pitch;
-  analysisData.pitch2Sum = sq((double)analysisData.pitch);
+  analysisData.pitchSum = (double)analysisData.getPitch();
+  analysisData.pitch2Sum = sq((double)analysisData.getPitch());
 }
 
 /** This uses an octave extimate to help chose the correct correlation index
@@ -958,13 +958,13 @@ bool Channel::chooseCorrelationIndex(int chunk, float periodOctaveEstimate)
   //double freq = rate / period;
   double freq = rate() / analysisData.getPeriod();
   analysisData.fundamentalFreq = float(freq);
-  analysisData.pitch = bound(freq2pitch(freq), 0.0, gdata->topPitch());
+  analysisData.setPitch(bound(freq2pitch(freq), 0.0, gdata->topPitch()));
   if(chunk > 0 && !isFirstChunkInNote(chunk)) {
-    analysisData.pitchSum = dataAtChunk(chunk-1)->pitchSum + (double)analysisData.pitch;
-    analysisData.pitch2Sum = dataAtChunk(chunk-1)->pitch2Sum + sq((double)analysisData.pitch);
+    analysisData.pitchSum = dataAtChunk(chunk-1)->pitchSum + (double)analysisData.getPitch();
+    analysisData.pitch2Sum = dataAtChunk(chunk-1)->pitch2Sum + sq((double)analysisData.getPitch());
   } else {
-    analysisData.pitchSum = (double)analysisData.pitch;
-    analysisData.pitch2Sum = sq((double)analysisData.pitch);
+    analysisData.pitchSum = (double)analysisData.getPitch();
+    analysisData.pitch2Sum = sq((double)analysisData.getPitch());
   }
   //if(isnan(analysisData.note)) analysisData.note = 0.0f;
   return isDifferentIndex;
@@ -994,7 +994,7 @@ void Channel::calcDeviation(int chunk) {
     standard_deviation = sqrt(fabs(variance));
     lastChunkData.longTermDeviation = longBase + sqrt(standard_deviation)*longStretch;
   } else {
-    lastChunkData.longTermMean = firstChunkData->pitch;
+    lastChunkData.longTermMean = firstChunkData->getPitch();
     lastChunkData.longTermDeviation = longBase;
   }
 
@@ -1011,7 +1011,7 @@ void Channel::calcDeviation(int chunk) {
     standard_deviation = sqrt(fabs(variance));
     lastChunkData.shortTermDeviation = shortBase + sqrt(standard_deviation)*shortStretch;
   } else {
-    lastChunkData.shortTermMean = firstChunkData->pitch;
+    lastChunkData.shortTermMean = firstChunkData->getPitch();
     lastChunkData.shortTermDeviation = shortBase;
   }
 }
@@ -1254,7 +1254,7 @@ void Channel::exportChannel(int type, QString typeString)
     out << "        Time(secs) Pitch(semi-tones)       Volume(rms)" << endl;
     out << qSetFieldWidth(18);
     for(int j=0; j<totalChunks(); j++) {
-      out << timeAtChunk(j) <<  dataAtChunk(j)->pitch << dataAtChunk(j)->logrms() << endl;
+      out << timeAtChunk(j) <<  dataAtChunk(j)->getPitch() << dataAtChunk(j)->logrms() << endl;
     }
   } else if(type == 1) { //matlab file
     out << "t = [";
@@ -1267,7 +1267,7 @@ void Channel::exportChannel(int type, QString typeString)
     out << "pitch = [";
     for(int j=0; j<totalChunks(); j++) {
       if(j>0) out << ", ";
-      out << dataAtChunk(j)->pitch;
+      out << dataAtChunk(j)->getPitch();
     }
     out << "];" << endl;
 
@@ -1290,7 +1290,7 @@ void Channel::doPronyFit(int chunk)
   AnalysisData *data = dataAtChunk(center);
   //AnalysisData *data = dataAtChunk(chunk);
   for(int j=0; j<pronyWindowSize; j++) {
-    pronyData[j] = dataAtChunk(start + j)->pitch;
+    pronyData[j] = dataAtChunk(start + j)->getPitch();
   }
   //PronyData p = pronyFit(pronyData.begin(), pronyWindowSize, 2, timePerChunk(), true);
   PronyData p;
@@ -1300,7 +1300,7 @@ void Channel::doPronyFit(int chunk)
     if(p.error < 1.0) {
       data->vibratoSpeed = p.freqHz(timePerChunk());
       if(p.omega * pronyWindowSize < TwoPi) {
-        data->vibratoPitch = data->pitch;
+        data->vibratoPitch = data->getPitch();
       } else {
         data->vibratoWidth = p.amp;
         data->vibratoPhase = p.phase;
@@ -1312,10 +1312,10 @@ void Channel::doPronyFit(int chunk)
         data->vibratoWidthAdjust = 0.0f;
       }
     } else {
-      data->vibratoPitch = data->pitch;
+      data->vibratoPitch = data->getPitch();
     }
   } else {
-    data->vibratoPitch = data->pitch;
+    data->vibratoPitch = data->getPitch();
   }
 }
 

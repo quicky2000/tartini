@@ -43,6 +43,8 @@ public:
   inline float getValue(size_t p_index)const;
   inline float getPeriod(void)const;
   inline void setPeriod(float p_period);
+  inline float getPitch(void)const;
+  inline void setPitch(float p_pitch);
 
   inline int getHighestCorrelationIndex(void)const;
   inline void setHighestCorrelationIndex(int p_index);
@@ -56,9 +58,9 @@ public:
  private:
   float values[NUM_AMP_MODES];
   float period; /*< The period of the fundamental (in samples) */
- public:
   float fundamentalFreq; /*< The fundamental frequency in hertz */
   float pitch; /*< The pitch in semi-tones */
+ public:
   float _freqCentroid;
   double pitchSum; /*< The sum of pitches so far in a note */
   double pitch2Sum; /*< The sum of pitches squared so far in a note */
@@ -125,12 +127,20 @@ struct greaterFundametalFreq : public std::binary_function<AnalysisData &, Analy
 	bool operator()(const AnalysisData &x, const AnalysisData &y) { return x.fundamentalFreq > y.fundamentalFreq; }
 };
 
-struct lessPitch : public std::binary_function<AnalysisData &, AnalysisData &, bool> {
-	bool operator()(const AnalysisData &x, const AnalysisData &y) { return x.pitch < y.pitch; }
+struct lessPitch : public std::binary_function<AnalysisData &, AnalysisData &, bool>
+{
+  bool operator()(const AnalysisData &x, const AnalysisData &y)
+  {
+    return x.getPitch() < y.getPitch();
+  }
 };
 
-struct greaterPitch : public std::binary_function<AnalysisData &, AnalysisData &, bool> {
-	bool operator()(const AnalysisData &x, const AnalysisData &y) { return x.pitch > y.pitch; }
+struct greaterPitch : public std::binary_function<AnalysisData &, AnalysisData &, bool>
+{
+  bool operator()(const AnalysisData &x, const AnalysisData &y)
+  {
+    return x.getPitch() > y.getPitch();
+  }
 };
 
 /*

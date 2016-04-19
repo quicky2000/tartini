@@ -4,6 +4,8 @@
     begin                : May 18 2005
     copyright            : (C) 2005-2007 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -597,8 +599,8 @@ void VibratoWidget::doUpdate()
             if(offset > endOfNote) offset = endOfNote;
             if (offset < beginningOfNote + 3*smoothDelay) {
               int timeAtZero = beginningOfNote + smoothDelay;
-              float scaleX = (offset - timeAtZero) / float(2*smoothDelay);
-              float pitchAtZero = active->dataAtChunk(myStartChunk)->pitch;
+              float scaleX = (offset - timeAtZero) / float(2 * smoothDelay);
+              float pitchAtZero = active->dataAtChunk(myStartChunk)->getPitch();
               //float pitchAt2SmoothDelay = pitchLookupUsed.at(beginningOfNote + 3*smoothDelay);
               int smoothDelayPos3 = std::min(beginningOfNote + 3*smoothDelay, (int)pitchLookupUsed.size()-1);
               if(smoothDelayPos3 >= 0) {
@@ -631,7 +633,7 @@ void VibratoWidget::doUpdate()
           x = (chunk - myStartChunk) * zoomFactorX - windowOffset;
           if (x < noteLabelOffset) { continue; }
           if (x > width() - noteLabelOffset) { break; }
-          y = halfHeight + ((active->dataAtChunk(chunk)->pitch - avgPitch) * zoomFactorYx100) + offsetY;
+          y = halfHeight + ((active->dataAtChunk(chunk)->getPitch() - avgPitch) * zoomFactorYx100) + offsetY;
 
           vertices[verticesCounter++] = x;
           vertices[verticesCounter++] = y;

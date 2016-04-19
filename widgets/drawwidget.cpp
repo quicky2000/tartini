@@ -4,6 +4,8 @@
     begin                : Fri Dec 10 2004
     copyright            : (C) 2004-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -242,7 +244,7 @@ void DrawWidget::drawChannel(QPaintDevice &pd, Channel *ch, QPainter &p, double 
       x = toInt(n);
       //note = (data->isValid()) ? data->note : 0.0f;
       //note = (ch->isVisibleNote(data->noteIndex)) ? data->note : 0.0f;
-      pitch = (ch->isVisibleChunk(data)) ? data->pitch : 0.0f;
+      pitch = (ch->isVisibleChunk(data)) ? data->getPitch() : 0.0f;
       myassert(pitch >= 0.0 && pitch <= gdata->topPitch());
       //pitch = bound(pitch, 0, gdata->topPitch());
       y = pd.height() - 1 - toInt(pitch / zoomY) + viewBottomOffset;
@@ -463,7 +465,7 @@ void DrawWidget::drawChannelFilled(Channel *ch, QPainter &p, double leftTime, do
       lastN = x;
       //note = (data->isValid()) ? data->note : 0.0f;
       //note = (ch->isVisibleNote(data->noteIndex)) ? data->note : 0.0f;
-      pitch = (ch->isVisibleChunk(data)) ? data->pitch : 0.0f;
+      pitch = (ch->isVisibleChunk(data)) ? data->getPitch() : 0.0f;
       //if(ch->isVisibleChunk(data)) {
       if(data->noteIndex >= 0) {
         isNoteRectEven[rectIndex] = (data->noteIndex % 2) == 0;
@@ -666,7 +668,7 @@ void DrawWidget::setChannelVerticalView(Channel *ch, double leftTime, double cur
 */
       x = toInt(n);
       lastN = x;
-      pitch = (ch->isVisibleChunk(data)) ? data->pitch : 0.0f;
+      pitch = (ch->isVisibleChunk(data)) ? data->getPitch() : 0.0f;
       myassert(pitch >= 0.0 && pitch <= gdata->topPitch());
       //corr = data->correlation*sqrt(data->rms)*10.0;
       corr = data->correlation()*dB2ViewVal(data->logrms());
@@ -735,8 +737,8 @@ bool DrawWidget::calcZoomElement(Channel *ch, ZoomElement &ze, int baseElement, 
   float low, high;
   int noteIndex;
   if(ch->isVisibleChunk(&*err)) {
-    low = a.first->pitch;
-    high = a.second->pitch;
+    low = a.first->getPitch();
+    high = a.second->getPitch();
     noteIndex = a.first->noteIndex;
   } else {
     low = 0;

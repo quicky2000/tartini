@@ -4,6 +4,8 @@
     begin                : Fri Dec 10 2004
     copyright            : (C) 2004-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -382,7 +384,7 @@ Channel *FreqWidgetGL::channelAtPixel(int x, int y)
   for (std::vector<Channel*>::reverse_iterator it = gdata->channels.rbegin(); it != gdata->channels.rend();  it++) {
     if((*it)->isVisible()) {
       AnalysisData *data = (*it)->dataAtTime(time);
-      if(data && within(tolerance, data->pitch, pitch)) return *it;
+      if(data && within(tolerance, data->getPitch(), pitch)) return *it;
     }
   }
   return NULL;
@@ -748,7 +750,7 @@ void FreqWidgetGL::drawChannelGL(Channel *ch, double leftTime, double currentTim
       x = toInt(n);
       //note = (data->isValid()) ? data->note : 0.0f;
       //note = (ch->isVisibleNote(data->noteIndex)) ? data->note : 0.0f;
-      pitch = (ch->isVisibleChunk(data)) ? data->pitch : 0.0f;
+      pitch = (ch->isVisibleChunk(data)) ? data->getPitch() : 0.0f;
       myassert(pitch >= 0.0 && pitch <= gdata->topPitch());
       //pitch = bound(pitch, 0, gdata->topPitch());
       y = height() - 1 - toInt(pitch / zoomY) + viewBottomOffset;
@@ -978,7 +980,7 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch, double leftTime, double curr
       lastN = x;
       //note = (data->isValid()) ? data->note : 0.0f;
       //note = (ch->isVisibleNote(data->noteIndex)) ? data->note : 0.0f;
-      pitch = (ch->isVisibleChunk(data)) ? data->pitch : 0.0f;
+      pitch = (ch->isVisibleChunk(data)) ? data->getPitch() : 0.0f;
       //if(ch->isVisibleChunk(data)) {
 
       if(data->noteIndex >= 0) {
@@ -1081,8 +1083,8 @@ bool FreqWidgetGL::calcZoomElement(Channel *ch, ZoomElement &ze, int baseElement
   float low, high;
   int noteIndex;
   if(ch->isVisibleChunk(&*err)) {
-    low = a.first->pitch;
-    high = a.second->pitch;
+    low = a.first->getPitch();
+    high = a.second->getPitch();
     noteIndex = a.first->noteIndex;
   } else {
     low = 0;
@@ -1211,7 +1213,7 @@ void FreqWidgetGL::setChannelVerticalView(Channel *ch, double leftTime, double c
 */
       x = toInt(n);
       lastN = x;
-      pitch = (ch->isVisibleChunk(data)) ? data->pitch : 0.0f;
+      pitch = (ch->isVisibleChunk(data)) ? data->getPitch() : 0.0f;
       myassert(pitch >= 0.0 && pitch <= gdata->topPitch());
       //corr = data->correlation*sqrt(data->rms)*10.0;
       corr = data->correlation()*dB2ViewVal(data->logrms());

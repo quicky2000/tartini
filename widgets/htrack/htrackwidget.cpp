@@ -4,6 +4,8 @@
     begin                : Aug 2002
     copyright            : (C) 2002-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -156,7 +158,7 @@ void HTrackWidget::paintGL()
     //Channel::getActiveChannelCurrentChunkData();
     //if(data && active->isVisibleNote(data->noteIndex)) {
     if(data && active->isVisibleChunk(data)) {
-      piano3d->setMidiKeyState(toInt(data->pitch), true);
+      piano3d->setMidiKeyState(toInt(data->getPitch()), true);
     }
   }
   glLineWidth(0.01f);

@@ -4,6 +4,8 @@
     begin                : 24 Mar 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -50,7 +52,7 @@ void PianoView::changeKey()
     AnalysisData *data = active->dataAtCurrentChunk();
     //if(data && active->isVisibleNote(data->noteIndex)) {
     if(data && active->isVisibleChunk(data)) {
-      float pitch = data->pitch;
+      float pitch = data->getPitch();
       //if (note > 0) {
         //pianoWidget->setCurrentNote(noteValue(note), data->volumeValue);
         pianoWidget->setCurrentNote(noteValue(pitch), data->correlation());

@@ -58,7 +58,7 @@ void DebugWidget::paintEvent( QPaintEvent * )
     printString(s.sprintf("Chunk = %d", chunk));
     printString(s.sprintf("period = %f", data.getPeriod()));
     printString(s.sprintf("fundamentalFreq = %f", data.fundamentalFreq));
-    printString(s.sprintf("pitch = %f", data.pitch));
+    printString(s.sprintf("pitch = %f", data.getPitch()));
     printString(s.sprintf("pitchSum = %f", data.pitchSum));
     printString(s.sprintf("pitch2Sum = %f", data.pitch2Sum));
     printString(s.sprintf("_freqCentroid = %f", data._freqCentroid));
