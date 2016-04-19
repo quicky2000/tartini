@@ -81,6 +81,18 @@ void AnalysisData::setPitchSum(const double & p_pitch_sum)
 }
 
 //------------------------------------------------------------------------------
+const double & AnalysisData::getPitch2Sum(void)const
+{
+  return pitch2Sum;
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setPitch2Sum(const double & p_pitch_2_sum)
+{
+  pitch2Sum = p_pitch_2_sum;
+}
+
+//------------------------------------------------------------------------------
 int AnalysisData::getHighestCorrelationIndex(void)const
 {
   return highestCorrelationIndex;
