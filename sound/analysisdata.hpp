@@ -115,4 +115,52 @@ float AnalysisData::searchClosestPeriodEstimates(const float & p_value)const
   return *l_closest_iter;
 }
 
+//------------------------------------------------------------------------------
+bool lessFundametalFreq::operator()(const AnalysisData & x, const AnalysisData & y)
+{
+  return x.getFundamentalFreq() < y.getFundamentalFreq();
+}
+
+//------------------------------------------------------------------------------
+bool greaterFundametalFreq::operator()(const AnalysisData &x, const AnalysisData &y)
+{
+  return x.getFundamentalFreq() > y.getFundamentalFreq();
+}
+
+//------------------------------------------------------------------------------
+bool lessPitch::operator()(const AnalysisData &x, const AnalysisData &y)
+{
+  return x.getPitch() < y.getPitch();
+}
+
+//------------------------------------------------------------------------------
+bool greaterPitch::operator()(const AnalysisData &x, const AnalysisData &y)
+{
+  return x.getPitch() > y.getPitch();
+}
+
+//------------------------------------------------------------------------------
+lessValue::lessValue(int v_)
+{
+  v = v_;
+}
+
+//------------------------------------------------------------------------------
+bool lessValue::operator()(const AnalysisData &x, const AnalysisData &y)
+{
+  return x.getValue(v) < y.getValue(v);
+}
+
+//------------------------------------------------------------------------------
+greaterValue::greaterValue(int v_)
+{
+  v = v_;
+}
+
+//------------------------------------------------------------------------------
+bool greaterValue::operator()(const AnalysisData &x, const AnalysisData &y)
+{
+  return x.getValue(v) > y.getValue(v);
+}
+
 //EOF

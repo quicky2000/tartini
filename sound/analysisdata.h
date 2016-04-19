@@ -107,8 +107,8 @@ public:
   bool notePlaying;
   bool done;
   //bool isValid();
-  AnalysisData();
-  void calcScores();
+  AnalysisData(void);
+  void calcScores(void);
 
   float &logrms() { return values[AMPLITUDE_RMS]; }
   float &maxIntensityDB() { return values[AMPLITUDE_MAX_INTENSITY]; }
@@ -123,61 +123,36 @@ public:
 
 struct lessFundametalFreq : public std::binary_function<AnalysisData &, AnalysisData &, bool>
 {
-  bool operator()(const AnalysisData & x, const AnalysisData & y)
-  {
-    return x.getFundamentalFreq() < y.getFundamentalFreq();
-  }
+  inline bool operator()(const AnalysisData & x, const AnalysisData & y);
 };
 
 struct greaterFundametalFreq : public std::binary_function<AnalysisData &, AnalysisData &, bool>
 {
-  bool operator()(const AnalysisData &x, const AnalysisData &y)
-  {
-    return x.getFundamentalFreq() > y.getFundamentalFreq();
-  }
+  inline bool operator()(const AnalysisData &x, const AnalysisData &y);
 };
 
 struct lessPitch : public std::binary_function<AnalysisData &, AnalysisData &, bool>
 {
-  bool operator()(const AnalysisData &x, const AnalysisData &y)
-  {
-    return x.getPitch() < y.getPitch();
-  }
+  inline bool operator()(const AnalysisData &x, const AnalysisData &y);
 };
 
 struct greaterPitch : public std::binary_function<AnalysisData &, AnalysisData &, bool>
 {
-  bool operator()(const AnalysisData &x, const AnalysisData &y)
-  {
-    return x.getPitch() > y.getPitch();
-  }
+  inline bool operator()(const AnalysisData &x, const AnalysisData &y);
 };
 
 struct lessValue : public std::binary_function<AnalysisData &, AnalysisData &, bool>
 {
   int v;
-  inline lessValue(int v_)
-  {
-    v = v_;
-  }
-  inline bool operator()(const AnalysisData &x, const AnalysisData &y)
-  {
-    return x.getValue(v) < y.getValue(v);
-  }
+  inline lessValue(int v_);
+  inline bool operator()(const AnalysisData &x, const AnalysisData &y);
 };
 
 struct greaterValue : public std::binary_function<AnalysisData &, AnalysisData &, bool>
 {
   int v;
-  inline greaterValue(int v_)
-  {
-    v = v_;
-  }
-
-  inline bool operator()(const AnalysisData &x, const AnalysisData &y)
-  {
-    return x.getValue(v) > y.getValue(v);
-  }
+  inline greaterValue(int v_);
+  inline bool operator()(const AnalysisData &x, const AnalysisData &y);
 };
 
 #include "analysisdata.hpp"
