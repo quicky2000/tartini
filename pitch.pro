@@ -123,6 +123,7 @@ HEADERS += main.h \
   general/mytransforms.h \
   widgets/timeaxis.h \
   sound/analysisdata.h \
+  sound/analysisdata.hpp \
   widgets/volumemeter/volumemeterview.h \
   widgets/volumemeter/volumemeterwidget.h \
   include/myassert.h \

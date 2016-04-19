@@ -4,6 +4,8 @@
     begin                : Fri Dec 17 2004
     copyright            : (C) 2004 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -38,6 +40,15 @@ extern double(*amp_mode_inv_func[NUM_AMP_MODES])(double);
 class AnalysisData
 {
 public: 
+  inline int getHighestCorrelationIndex(void)const;
+  inline void setHighestCorrelationIndex(int p_index);
+  inline bool isPeriodEstimatesEmpty(void)const;
+  inline size_t getPeriodEstimatesSize(void)const;
+  inline float getPeriodEstimatesAt(size_t p_index)const;
+  inline void clearPeriodEstimates(void);
+  inline void addPeriodEstimates(float p_value);
+  inline float searchClosestPeriodEstimates(const float & p_value)const;
+
   float values[NUM_AMP_MODES];
   float period; /*< The period of the fundamental (in samples) */
   float fundamentalFreq; /*< The fundamental frequency in hertz */
@@ -64,8 +75,6 @@ public:
  private:
   int highestCorrelationIndex;
  public:
-  int getHighestCorrelationIndex(void)const;
-  void setHighestCorrelationIndex(int p_index);
   int chosenCorrelationIndex;
   float periodRatio; /*< The ratio of the current period to the period at the beginning of the current note */
 
@@ -74,7 +83,9 @@ public:
   //float periodOctaveEstimate; /*< A estimate from over the whole duration of the note, to help get the correct octave */
   //float volumeValue; /*< A value between 0 and 1 related to volume and correlation */
   //float changeness; /*< 0 for a stedy note, larger for a fast changing frequency */
+ private:
   std::vector<float> periodEstimates;
+ public:
   std::vector<float> periodEstimatesAmp;
   std::vector<float> harmonicAmpNoCutOff;
   std::vector<float> harmonicAmpRelative;
@@ -170,4 +181,7 @@ struct greaterValue : public std::binary_function<AnalysisData &, AnalysisData &
   bool operator()(const AnalysisData &x, const AnalysisData &y) { return x.values[v] > y.values[v]; }
 };
 
-#endif
+#include "analysisdata.hpp"
+
+#endif // ANALYSIS_DAYA_H
+//EOF

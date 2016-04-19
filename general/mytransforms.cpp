@@ -466,7 +466,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
     }
 
     //store some of the best period estimates
-    analysisData.periodEstimates.clear();
+    analysisData.clearPeriodEstimates();
     analysisData.periodEstimatesAmp.clear();
     //float smallThreshold = 0.7f;
     //float smallCutoff = output[overallMaxIndex] * smallThreshold;
@@ -479,14 +479,14 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
         //do a parabola fit to find the maximum
         parabolaTurningPoint2(output[*iter-1], output[*iter], output[*iter+1], float(*iter + 1), &x, &y);
         y = bound(y, -1.0f, 1.0f);
-        analysisData.periodEstimates.push_back(x);
+        analysisData.addPeriodEstimates(x);
         analysisData.periodEstimatesAmp.push_back(y);
       }
     }
     
     float periodDiff = 0.0f;
     //if(maxPositions.empty()) { //no period found
-    if(analysisData.periodEstimates.empty()) { //no period found
+    if(analysisData.isPeriodEstimatesEmpty()) { //no period found
       //analysisData.correlation() = 0.0f;
       analysisData.calcScores();
       analysisData.done = true;
@@ -496,11 +496,11 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
       if(chunk > 0
 // && prevAnalysisData->highestCorrelationIndex!=-1
 ) {
-        float prevPeriod = prevAnalysisData->getHighestCorrelationIndex() != -1 ? prevAnalysisData->periodEstimates[prevAnalysisData->getHighestCorrelationIndex()] : 0;
-        std::vector<float>::iterator closestIter = binary_search_closest(analysisData.periodEstimates.begin(), analysisData.periodEstimates.end(), prevPeriod);
-        //print_elements(analysisData.periodEstimates.begin(), analysisData.periodEstimates.end());
-        //printf("closestIter = %f, %f\n", *closestIter, prevPeriod);
-        periodDiff = *closestIter - prevPeriod;
+        float prevPeriod = prevAnalysisData->getHighestCorrelationIndex() != -1 ? prevAnalysisData->getPeriodEstimatesAt(prevAnalysisData->getHighestCorrelationIndex()) : 0;
+
+	//        std::vector<float>::iterator closestIter = binary_search_closest(analysisData.getPeriodEstimates().begin(), analysisData.getPeriodEstimates().end(), prevPeriod);
+	//        periodDiff = *closestIter - prevPeriod;
+        periodDiff = analysisData.searchClosestPeriodEstimates(prevPeriod) - prevPeriod;
         if(absolute(periodDiff) > 8.0f) periodDiff = 0.0f;
       }
 
@@ -532,7 +532,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
       if(gdata->doingHarmonicAnalysis()) {
         std::copy(dataTime, dataTime+n, dataTemp);
         if(analysisData.chosenCorrelationIndex >= 0)
-          doHarmonicAnalysis(dataTemp, analysisData, analysisData.periodEstimates[analysisData.chosenCorrelationIndex]/*period*/);
+          doHarmonicAnalysis(dataTemp, analysisData, analysisData.getPeriodEstimatesAt(analysisData.chosenCorrelationIndex)/*period*/);
         //doHarmonicAnalysis(input, analysisData, period);
       }
 

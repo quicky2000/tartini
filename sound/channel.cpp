@@ -875,7 +875,7 @@ void Channel::chooseCorrelationIndex1(int chunk)
   AnalysisData &analysisData = *dataAtChunk(chunk);
   uint iterPos;
   int choosenMaxIndex = 0;
-  if(analysisData.periodEstimates.empty()) { //no period found
+  if(analysisData.isPeriodEstimatesEmpty()) { //no period found
 /*
     analysisData.fundamentalFreq = 0.0f;
     analysisData.note = 0.0f;
@@ -895,7 +895,7 @@ void Channel::chooseCorrelationIndex1(int chunk)
   analysisData.correlation() = analysisData.periodEstimatesAmp[choosenMaxIndex];
   
   //double period = analysisData.periodEstimates[choosenMaxIndex];
-  analysisData.period = analysisData.periodEstimates[choosenMaxIndex];
+  analysisData.period = analysisData.getPeriodEstimatesAt(choosenMaxIndex);
   //float clarityMin = get_fine_clarity_measure(period);
   //double freq = rate / period;
   double freq = rate() / analysisData.period;
@@ -916,7 +916,7 @@ bool Channel::chooseCorrelationIndex(int chunk, float periodOctaveEstimate)
   uint iterPos;
   int choosenMaxIndex = 0;
   bool isDifferentIndex = false;
-  if(analysisData.periodEstimates.empty()) { //no period found
+  if(analysisData.isPeriodEstimatesEmpty()) { //no period found
 /*
     analysisData.fundamentalFreq = 0.0f;
     analysisData.note = 0.0f;
@@ -935,10 +935,10 @@ bool Channel::chooseCorrelationIndex(int chunk, float periodOctaveEstimate)
     }
     */
   //choose the periodEstimate which is closest to the periodOctaveEstimate
-    float minDist = fabs(analysisData.periodEstimates[0] - periodOctaveEstimate);
+    float minDist = fabs(analysisData.getPeriodEstimatesAt(0) - periodOctaveEstimate);
     float dist;
-    for(iterPos = 1; iterPos < analysisData.periodEstimates.size(); iterPos++) {
-      dist = fabs(analysisData.periodEstimates[iterPos] - periodOctaveEstimate);
+    for(iterPos = 1; iterPos < analysisData.getPeriodEstimatesSize(); iterPos++) {
+      dist = fabs(analysisData.getPeriodEstimatesAt(iterPos) - periodOctaveEstimate);
       if(dist < minDist) { minDist = dist; choosenMaxIndex = iterPos; }
     }
 
@@ -951,7 +951,7 @@ bool Channel::chooseCorrelationIndex(int chunk, float periodOctaveEstimate)
   analysisData.correlation() = analysisData.periodEstimatesAmp[choosenMaxIndex];
   
   //double period = analysisData.periodEstimates[choosenMaxIndex];
-  analysisData.period = analysisData.periodEstimates[choosenMaxIndex];
+  analysisData.period = analysisData.getPeriodEstimatesAt(choosenMaxIndex);
   //float clarityMin = get_fine_clarity_measure(period);
   //double freq = rate / period;
   double freq = rate() / analysisData.period;

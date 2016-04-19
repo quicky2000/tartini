@@ -127,8 +127,8 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
       //draw a dot at all the period estimates
       p.setPen(Qt::blue);
       p.setBrush(Qt::blue);
-      for(j=0; j<int(data->periodEstimates.size()); j++) {
-        x = toInt(double(data->periodEstimates[j]) * ratio);
+      for(j=0; j<int(data->getPeriodEstimatesSize()); j++) {
+        x = toInt(double(data->getPeriodEstimatesAt(j)) * ratio);
         y = toInt(dh2 - data->periodEstimatesAmp[j] * dh2);
         p.drawEllipse(x-2, y-2, 5, 5);
       }
@@ -144,7 +144,7 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
         p.setPen(Qt::black);
         p.setBrush(Qt::black);
         //x = toInt(double(data->highestCorrelationIndex) * ratio);
-        x = toInt(double(data->periodEstimates[data->getHighestCorrelationIndex()]) * ratio);
+        x = toInt(double(data->getPeriodEstimatesAt(data->getHighestCorrelationIndex())) * ratio);
         y = toInt(dh2 - highest * dh2);
         p.drawEllipse(x-2, y-2, 5, 5);
       }
@@ -155,7 +155,7 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
         p.setBrush(Qt::red);
         //x = toInt(double(data->chosenCorrelationIndex) * ratio);
         //y = toInt(dh2 - chosen * dh2);
-        x = toInt(double(data->periodEstimates[data->chosenCorrelationIndex]) * ratio);
+        x = toInt(double(data->getPeriodEstimatesAt(data->chosenCorrelationIndex)) * ratio);
         y = toInt(dh2 - data->periodEstimatesAmp[data->chosenCorrelationIndex] * dh2);
         p.drawEllipse(x-2, y-2, 5, 5);
       }
