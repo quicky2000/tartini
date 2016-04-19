@@ -4,6 +4,8 @@
     begin                : Mon Jan 10 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -57,7 +59,7 @@ void HBlockWidget::paintEvent( QPaintEvent * )
   
       // Get the frame's fundamental frequency
       //float fund = active->lookup[frame].fundamentalFreq;
-      float fund = data.fundamentalFreq;
+      float fund = data.getFundamentalFreq();
   
       // Work out the bar height for each harmonic
       double barHeight = double(height()) / double(harmonicFreq.size());

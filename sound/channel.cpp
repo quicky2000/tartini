@@ -901,7 +901,7 @@ void Channel::chooseCorrelationIndex1(int chunk)
   //float clarityMin = get_fine_clarity_measure(period);
   //double freq = rate / period;
   double freq = rate() / analysisData.getPeriod();
-  analysisData.fundamentalFreq = float(freq);
+  analysisData.setFundamentalFreq(float(freq));
   analysisData.setPitch(bound(freq2pitch(freq), 0.0, gdata->topPitch()));
   //if(isnan(analysisData.note)) analysisData.note = 0.0f;
   analysisData.pitchSum = (double)analysisData.getPitch();
@@ -957,7 +957,7 @@ bool Channel::chooseCorrelationIndex(int chunk, float periodOctaveEstimate)
   //float clarityMin = get_fine_clarity_measure(period);
   //double freq = rate / period;
   double freq = rate() / analysisData.getPeriod();
-  analysisData.fundamentalFreq = float(freq);
+  analysisData.setFundamentalFreq(float(freq));
   analysisData.setPitch(bound(freq2pitch(freq), 0.0, gdata->topPitch()));
   if(chunk > 0 && !isFirstChunkInNote(chunk)) {
     analysisData.pitchSum = dataAtChunk(chunk-1)->pitchSum + (double)analysisData.getPitch();

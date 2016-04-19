@@ -43,6 +43,8 @@ public:
   inline float getValue(size_t p_index)const;
   inline float getPeriod(void)const;
   inline void setPeriod(float p_period);
+  inline float getFundamentalFreq(void)const;
+  inline void setFundamentalFreq(float p_fundamental_freq);
   inline float getPitch(void)const;
   inline void setPitch(float p_pitch);
 
@@ -119,12 +121,20 @@ public:
   float &noteChangeScore() { return values[NOTE_CHANGE_SCORE]; }
 };
 
-struct lessFundametalFreq : public std::binary_function<AnalysisData &, AnalysisData &, bool> {
-	bool operator()(const AnalysisData &x, const AnalysisData &y) { return x.fundamentalFreq < y.fundamentalFreq; }
+struct lessFundametalFreq : public std::binary_function<AnalysisData &, AnalysisData &, bool>
+{
+  bool operator()(const AnalysisData & x, const AnalysisData & y)
+  {
+    return x.getFundamentalFreq() < y.getFundamentalFreq();
+  }
 };
 
-struct greaterFundametalFreq : public std::binary_function<AnalysisData &, AnalysisData &, bool> {
-	bool operator()(const AnalysisData &x, const AnalysisData &y) { return x.fundamentalFreq > y.fundamentalFreq; }
+struct greaterFundametalFreq : public std::binary_function<AnalysisData &, AnalysisData &, bool>
+{
+  bool operator()(const AnalysisData &x, const AnalysisData &y)
+  {
+    return x.getFundamentalFreq() > y.getFundamentalFreq();
+  }
 };
 
 struct lessPitch : public std::binary_function<AnalysisData &, AnalysisData &, bool>

@@ -39,6 +39,18 @@ void AnalysisData::setPeriod(float p_period)
 }
 
 //------------------------------------------------------------------------------
+float AnalysisData::getFundamentalFreq(void)const
+{
+  return fundamentalFreq;
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setFundamentalFreq(float p_fundamental_freq)
+{
+  fundamentalFreq = p_fundamental_freq;
+}
+
+//------------------------------------------------------------------------------
 float AnalysisData::getPitch(void)const
 {
   return pitch;

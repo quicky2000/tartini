@@ -4,6 +4,8 @@
     begin                : May 18 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,7 +55,7 @@ void FFTWidget::paintEvent( QPaintEvent * )
     data = active->dataAtCurrentChunk();
 
     if(data) {
-      double freq = data->fundamentalFreq;
+      double freq = data->getFundamentalFreq();
       double normalisedFreq = freq / double(active->rate()) * 2.0;
       //double numPeriods = double(active->size()) / period;
       double scaleX = normalisedFreq * double(width()); //pixels per fundamental freq

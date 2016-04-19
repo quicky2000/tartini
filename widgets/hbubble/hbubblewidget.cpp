@@ -4,6 +4,8 @@
     begin                : Mon Jan 10 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -78,14 +80,14 @@ void HBubbleWidget::paintEvent( QPaintEvent * )
         data = active->dataAtChunk(active->currentChunk() - historyChunks + j + 1);
         if (data != 0)
         {
-	    if (data->harmonicFreq.size() != 0 && data->fundamentalFreq != 0)
+	  if (data->harmonicFreq.size() != 0 && data->getFundamentalFreq() != 0)
 	    {
 		for (i = 0; i < numHarmonics; i++)
 		{
 			int radius = toInt((data->harmonicAmpNoCutOff[i]+160.0)/160.0 * (float)height()/numHarmonics/2);
 			if (radius > 0)
 			{
-				float flat_sharp = (data->harmonicFreq[i] / data->fundamentalFreq - (i+1))*10;
+			  float flat_sharp = (data->harmonicFreq[i] / data->getFundamentalFreq() - (i+1))*10;
 				QColor c;
 				if (flat_sharp > 0)
 					c = colorBetween(qRgb(255,255,255), qRgb(255,0,0),flat_sharp);
