@@ -596,7 +596,7 @@ void Channel::backTrackNoteChange(int chunk) {
     dataAtChunk(curChunk)->notePlaying = false;
     dataAtChunk(curChunk)->setShortTermMean(dataAtChunk(curChunk)->getPitch());
     dataAtChunk(curChunk)->longTermMean = dataAtChunk(curChunk)->getPitch();
-    dataAtChunk(curChunk)->shortTermDeviation = 0.2f;
+    dataAtChunk(curChunk)->setShortTermDeviation(0.2f);
     dataAtChunk(curChunk)->longTermDeviation = 0.05f;
     dataAtChunk(curChunk)->periodRatio = 1.0f;
   }
@@ -648,7 +648,7 @@ bool Channel::isNoteChanging(int chunk)
 
   float diff = fabs(analysisData->getPitch() - analysisData->getShortTermMean());
   double spread = fabs(analysisData->getShortTermMean() - analysisData->longTermMean) -
-    (analysisData->shortTermDeviation + analysisData->longTermDeviation);
+    (analysisData->getShortTermDeviation() + analysisData->longTermDeviation);
   if(numChunks >= 5 && spread > 0.0) {
     analysisData->reason = 1;
     //backTrackNoteChange(chunk);
@@ -658,7 +658,7 @@ bool Channel::isNoteChanging(int chunk)
   int firstShortChunk = MAX(chunk - (int)ceil(shortTime/timePerChunk()), getLastNote()->startChunk());
   AnalysisData *firstShortData = dataAtChunk(firstShortChunk);
   double spread2 = fabs(analysisData->getShortTermMean() - firstShortData->longTermMean) -
-    (analysisData->shortTermDeviation + firstShortData->longTermDeviation);
+    (analysisData->getShortTermDeviation() + firstShortData->longTermDeviation);
   analysisData->spread = spread;
   analysisData->spread2 = spread2;
 
@@ -1009,10 +1009,10 @@ void Channel::calcDeviation(int chunk) {
     sumX2 = (lastChunkData.getPitch2Sum() - firstChunkData->getPitch2Sum());
     variance = sumX2 / double(numChunks) - sq(mean);
     standard_deviation = sqrt(fabs(variance));
-    lastChunkData.shortTermDeviation = shortBase + sqrt(standard_deviation)*shortStretch;
+    lastChunkData.setShortTermDeviation(shortBase + sqrt(standard_deviation)*shortStretch);
   } else {
     lastChunkData.setShortTermMean(firstChunkData->getPitch());
-    lastChunkData.shortTermDeviation = shortBase;
+    lastChunkData.setShortTermDeviation(shortBase);
   }
 }
 

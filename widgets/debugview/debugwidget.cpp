@@ -63,7 +63,7 @@ void DebugWidget::paintEvent( QPaintEvent * )
     printString(s.sprintf("pitch2Sum = %f", data.getPitch2Sum()));
     printString(s.sprintf("_freqCentroid = %f", data.getFreqCentroid()));
     printString(s.sprintf("shortTermMean = %f", data.getShortTermMean()));
-    printString(s.sprintf("shortTermDeviation = %f", data.shortTermDeviation));
+    printString(s.sprintf("shortTermDeviation = %f", data.getShortTermDeviation()));
     printString(s.sprintf("longTermMean = %f", data.longTermMean));
     printString(s.sprintf("longTermDeviation = %f", data.longTermDeviation));
     printString(s.sprintf("highestCorrelationIndex = %d", data.getHighestCorrelationIndex()));

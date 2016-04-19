@@ -54,6 +54,8 @@ public:
   inline void setPitch2Sum(const double & p_pitch_2_sum);
   inline const double & getShortTermMean(void)const;
   inline void setShortTermMean(const double & p_short_term_mean);
+  inline const double & getShortTermDeviation(void)const;
+  inline void setShortTermDeviation(const double & p_short_term_deviation);
 
   inline int getHighestCorrelationIndex(void)const;
   inline void setHighestCorrelationIndex(int p_index);
@@ -73,8 +75,8 @@ public:
   double pitchSum; /*< The sum of pitches so far in a note */
   double pitch2Sum; /*< The sum of pitches squared so far in a note */
   double shortTermMean; /*< The mean note so far */
- public:
   double shortTermDeviation; /*< The deviation of the note so far (based on standard deviation) */
+ public:
   double longTermMean; /*> The mean note so far */
   double longTermDeviation; /*< The deviation of the note so far (based on standard deviation) */
   double spread;
