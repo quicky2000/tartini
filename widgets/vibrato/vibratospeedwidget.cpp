@@ -383,7 +383,7 @@ void VibratoSpeedWidget::doUpdate()
 
       currentNoteNumber = data->noteIndex;
       if (useProny) {
-        vibratoSpeed = data->vibratoSpeed;
+        vibratoSpeed = data->getVibratoSpeed();
         vibratoWidth = 200 * data->getVibratoWidth();
       } else if((active->doingDetailedPitch()) && (active->pitchLookupSmoothed.size() > 0)) {
         large_vector<float> pitchLookupUsed = active->pitchLookupSmoothed;

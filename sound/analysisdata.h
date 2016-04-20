@@ -70,6 +70,8 @@ public:
   inline void setVibratoWidth(float p_vibrato_width);
   inline float getVibratoWidthAdjust(void)const;
   inline void setVibratoWidthAdjust(float p_vibrato_width_adjust);
+  inline float getVibratoSpeed(void)const;
+  inline void setVibratoSpeed(float p_vibrato_speed);
 
   inline int getHighestCorrelationIndex(void)const;
   inline void setHighestCorrelationIndex(int p_index);
@@ -102,8 +104,8 @@ public:
   float vibratoPitch;
   float vibratoWidth;
   float vibratoWidthAdjust;
- public:
   float vibratoSpeed;
+ public:
   float vibratoPhase;
   float vibratoError;
   int reason; /*< The reason why there was a note change */

@@ -1303,7 +1303,7 @@ void Channel::doPronyFit(int chunk)
     data->vibratoError = p.error;
     data->setVibratoPitch(p.yOffset);
     if(p.error < 1.0) {
-      data->vibratoSpeed = p.freqHz(timePerChunk());
+      data->setVibratoSpeed(p.freqHz(timePerChunk()));
       if(p.omega * pronyWindowSize < TwoPi) {
         data->setVibratoPitch(data->getPitch());
       } else {
