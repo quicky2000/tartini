@@ -1042,7 +1042,7 @@ void MyTransforms::doHarmonicAnalysis(float *input, AnalysisData &analysisData, 
   
   analysisData.resizeHarmonicAmpNoCutOff(numHarmonics);
   analysisData.resizeHarmonicAmp(numHarmonics);
-  analysisData.harmonicFreq.resize(numHarmonics);
+  analysisData.resizeHarmonicFreq(numHarmonics);
   analysisData.harmonicNoise.resize(numHarmonics);
 
   for(int j=0; j<numHarmonics; j++) {
@@ -1071,7 +1071,7 @@ void MyTransforms::doHarmonicAnalysis(float *input, AnalysisData &analysisData, 
     //while(diffAngle2 > 0.5) diffAngle2--;
     diffAngle2 = cycle(diffAngle2 + 0.5, 1.0) - 0.5;
     analysisData.harmonicNoise[j] = fabs(diffAngle2 - diffAngle);
-    analysisData.harmonicFreq[j] = float(freq * double(j+1)) + (freq*diffAngle);
+    analysisData.setHarmonicFreqAt(j, float(freq * double(j+1)) + (freq*diffAngle));
   }
 }
 /*

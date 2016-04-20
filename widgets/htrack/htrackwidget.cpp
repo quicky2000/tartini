@@ -211,10 +211,10 @@ void HTrackWidget::paintGL()
     //build a table of frequencies and amplitudes for faster drawing
     for(chunkOffset=0; chunkOffset<visibleChunks; chunkOffset++) {
       data = active->dataAtChunk(startChunk + chunkOffset);
-      if(data && data->harmonicFreq.size() > 0) {
+      if(data && data->getHarmonicFreqSize() > 0) {
         for(harmonic=0; harmonic < numHarmonics; harmonic++) {
           //freqs(harmonic, chunkOffset) = data->harmonicFreq[harmonic];
-          pitches(harmonic, chunkOffset) = freq2pitch(data->harmonicFreq[harmonic]);
+          pitches(harmonic, chunkOffset) = freq2pitch(data->getHarmonicFreqAt(harmonic));
           amps(harmonic, chunkOffset) = data->getHarmonicAmpAt(harmonic);
         }
       } else {

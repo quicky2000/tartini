@@ -13,7 +13,7 @@
    (at your option) any later version.
    
    Please read LICENSE.txt for details.
- ***************************************************************************/
+***************************************************************************/
 #include <qpixmap.h>
 #include <qpainter.h>
 //Added by qt3to4:
@@ -73,12 +73,12 @@ void HCircleWidget::paintEvent( QPaintEvent * )
   QString s;
 
   if (threshold > lowestValue)
-  {
-  	p.setPen(QPen(colorBetween(gdata->backgroundColor(),qRgb(128,128,128),0.3),2));
-  	int radius = toInt((double)height()*zoom*(threshold-lowestValue));
-  	p.drawEllipse(width()/2-radius,height()/2-radius,2*radius,2*radius);
- 	p.drawText(width()/2-radius+5,height()/2,s.sprintf("Threshold"));
-  }
+    {
+      p.setPen(QPen(colorBetween(gdata->backgroundColor(),qRgb(128,128,128),0.3),2));
+      int radius = toInt((double)height()*zoom*(threshold-lowestValue));
+      p.drawEllipse(width()/2-radius,height()/2-radius,2*radius,2*radius);
+      p.drawText(width()/2-radius+5,height()/2,s.sprintf("Threshold"));
+    }
   
   //p.setPen(QPen(qRgb(128,128,128),1));
   p.setPen(QPen(QColor(128,128,128),1));
@@ -86,15 +86,15 @@ void HCircleWidget::paintEvent( QPaintEvent * )
   double step = 10;  
 
   for (scale = 0; scale > -160; scale -= step)
-  {
-	if (scale > lowestValue)
+    {
+      if (scale > lowestValue)
 	{
 	  int radius = toInt((double)height()*zoom*(scale-lowestValue));
 	  p.drawEllipse(width()/2-radius,height()/2-radius,2*radius,2*radius);
 	  
 	  p.drawText(width()/2+radius,height()/2,s.sprintf("%1.1f", scale));
   	}
-  }
+    }
 
   
   f = new QFont(p.font());
@@ -102,42 +102,42 @@ void HCircleWidget::paintEvent( QPaintEvent * )
   p.setFont(*f);
 
   if (active)
-  {
-	AnalysisData *data = active->dataAtCurrentChunk();
+    {
+      AnalysisData *data = active->dataAtCurrentChunk();
 
 
-	if (data)
+      if (data)
 	{
-		int i;
-		double octave = data->getFundamentalFreq();
-		double nextoctave = octave * 2;	
-    int dotSize = 6;
-    int halfDotSize = dotSize / 2;
-		p.setPen(QPen(Qt::black,2));
-		for (i = 0; i < numHarmonics; i++)
+	  int i;
+	  double octave = data->getFundamentalFreq();
+	  double nextoctave = octave * 2;	
+	  int dotSize = 6;
+	  int halfDotSize = dotSize / 2;
+	  p.setPen(QPen(Qt::black,2));
+	  for (i = 0; i < numHarmonics; i++)
+	    {
+	      if (data->getHarmonicFreqAt(i) > nextoctave)
 		{
-			if (data->harmonicFreq[i] > nextoctave)
-			{
-				octave = nextoctave;
-				nextoctave = octave * 2;
-			}
-			if (data->getHarmonicAmpNoCutOffAt(i) > MAX(threshold, lowestValue))			
-			{
-				double angle = (data->harmonicFreq[i] - octave) / (nextoctave - octave) * 2 * PI;
-				double size = height()*zoom*(data->getHarmonicAmpNoCutOffAt(i) - lowestValue);
-				double size1 = height()*zoom*(MAX(threshold, lowestValue)-lowestValue);
-				int x1 = toInt(sin(angle)*size1);
-				int y1 = toInt(-cos(angle)*size1);
-				int x = toInt(sin(angle)*size); 
-				int y = toInt(-cos(angle)*size);
-				
-				p.drawLine(width()/2+x1, height()/2+y1, width()/2+x, height()/2+y);
-        p.drawEllipse(width()/2+x-halfDotSize, height()/2+y-halfDotSize, dotSize, dotSize);
-				QString s;
-				p.drawText(width()/2+x+5, height()/2+y,s.sprintf("%d", i+1));
-			}
+		  octave = nextoctave;
+		  nextoctave = octave * 2;
 		}
+	      if (data->getHarmonicAmpNoCutOffAt(i) > MAX(threshold, lowestValue))			
+		{
+		  double angle = (data->getHarmonicFreqAt(i) - octave) / (nextoctave - octave) * 2 * PI;
+		  double size = height()*zoom*(data->getHarmonicAmpNoCutOffAt(i) - lowestValue);
+		  double size1 = height()*zoom*(MAX(threshold, lowestValue)-lowestValue);
+		  int x1 = toInt(sin(angle)*size1);
+		  int y1 = toInt(-cos(angle)*size1);
+		  int x = toInt(sin(angle)*size); 
+		  int y = toInt(-cos(angle)*size);
+				
+		  p.drawLine(width()/2+x1, height()/2+y1, width()/2+x, height()/2+y);
+		  p.drawEllipse(width()/2+x-halfDotSize, height()/2+y-halfDotSize, dotSize, dotSize);
+		  QString s;
+		  p.drawText(width()/2+x+5, height()/2+y,s.sprintf("%d", i+1));
+		}
+	    }
 	}
-  }
-  	endDrawing();
+    }
+  endDrawing();
 }

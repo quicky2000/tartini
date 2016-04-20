@@ -80,14 +80,14 @@ void HBubbleWidget::paintEvent( QPaintEvent * )
         data = active->dataAtChunk(active->currentChunk() - historyChunks + j + 1);
         if (data != 0)
         {
-	  if (data->harmonicFreq.size() != 0 && data->getFundamentalFreq() != 0)
+	  if (data->getHarmonicFreqSize() != 0 && data->getFundamentalFreq() != 0)
 	    {
 		for (i = 0; i < numHarmonics; i++)
 		{
 		  int radius = toInt((data->getHarmonicAmpNoCutOffAt(i)+160.0)/160.0 * (float)height()/numHarmonics/2);
 			if (radius > 0)
 			{
-			  float flat_sharp = (data->harmonicFreq[i] / data->getFundamentalFreq() - (i+1))*10;
+			  float flat_sharp = (data->getHarmonicFreqAt(i) / data->getFundamentalFreq() - (i+1))*10;
 				QColor c;
 				if (flat_sharp > 0)
 					c = colorBetween(qRgb(255,255,255), qRgb(255,0,0),flat_sharp);

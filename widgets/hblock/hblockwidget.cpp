@@ -49,17 +49,13 @@ void HBlockWidget::paintEvent( QPaintEvent * )
       active->lock();
       AnalysisData data = *theData;
       active->unlock();
-  
-      // We have harmonicFreq - the actual frequencies of the harmonies - and harmonicAmp, their amplitude
-      //std::vector<float> harmonicFreq = active->lookup[frame].harmonicFreq;
-      std::vector<float> harmonicFreq = data.harmonicFreq;
-  
+    
       // Get the frame's fundamental frequency
       //float fund = active->lookup[frame].fundamentalFreq;
       float fund = data.getFundamentalFreq();
   
       // Work out the bar height for each harmonic
-      double barHeight = double(height()) / double(harmonicFreq.size());
+      double barHeight = double(height()) / double(data.getHarmonicFreqSize());
       QColor fillColor = colorBetween(colorGroup().background(), active->color, data.volumeValue());
       QColor outlineColor = colorBetween(colorGroup().background(), Qt::black, data.volumeValue());
       p.setBrush(fillColor);
@@ -72,15 +68,15 @@ void HBlockWidget::paintEvent( QPaintEvent * )
       * The harmonic frequencies are defined as f, 2f, 3f, 4f, 5f...
       * harmonicFreq stores what the harmonics have been calculated to be.
       */
-      for (uint i = 0; i < harmonicFreq.size(); i++) {
+      for (uint i = 0; i < data.getHarmonicFreqSize(); i++) {
         p.setPen(outlineColor);
         p.setBrush(colorBetween(fillColor, Qt::black, data.harmonicNoise[i]));
         // Work out how many pixels wide the harmonic should be
         barWidth = (data.getHarmonicAmpAt(i)) * width();
         /* Work out how many pixels the harmonic should be offset from where it would be
         * if it were exactly (i+1)f   */
-        //diff = toInt( (harmonicFreq.at(i) - (i+1) * fund) / fund * width() / 10.0 );
-        diff = toInt( (harmonicFreq.at(i) - (i+1) * fund) / fund * barWidth );
+        //diff = toInt( (data.getHarmonicFreqAt(i) - (i+1) * fund) / fund * width() / 10.0 );
+        diff = toInt( (data.getHarmonicFreqAt(i) - (i+1) * fund) / fund * barWidth );
         // Work out the starting position, and draw the bar
         barStart = toInt( ((width() / 2) + diff) - barWidth / 2);
 	     int barBottom = height() - toInt(barHeight * i);
