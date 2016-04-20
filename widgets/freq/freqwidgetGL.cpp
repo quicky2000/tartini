@@ -868,8 +868,8 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch, double leftTime, double curr
 
         if(gdata->showMeanVarianceBars()) {
           //longTermMean bars
-          y2 = height() - 1 - toInt((data->getLongTermMean() + data->longTermDeviation) / zoomY) + viewBottomOffset;
-          y3 = height() - 1 - toInt((data->getLongTermMean() - data->longTermDeviation) / zoomY) + viewBottomOffset;
+          y2 = height() - 1 - toInt((data->getLongTermMean() + data->getLongTermDeviation()) / zoomY) + viewBottomOffset;
+          y3 = height() - 1 - toInt((data->getLongTermMean() - data->getLongTermDeviation()) / zoomY) + viewBottomOffset;
           if(ze.noteIndex() % 2 == 0) {
             //evenMidPoints.setPoint(evenMidPointIndex++, n, y2);
             //evenMidPoints.setPoint(evenMidPointIndex++, n, y3);
@@ -989,8 +989,8 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch, double leftTime, double curr
         if(gdata->showMeanVarianceBars()) {
           x2 = toInt(n+stepSize);
           //longTermMean bars
-          y2 = height() - 1 - toInt((data->getLongTermMean() + data->longTermDeviation) / zoomY) + viewBottomOffset;
-          y3 = height() - 1 - toInt((data->getLongTermMean() - data->longTermDeviation) / zoomY) + viewBottomOffset;
+          y2 = height() - 1 - toInt((data->getLongTermMean() + data->getLongTermDeviation()) / zoomY) + viewBottomOffset;
+          y3 = height() - 1 - toInt((data->getLongTermMean() - data->getLongTermDeviation()) / zoomY) + viewBottomOffset;
           /*noteRect[rectIndex].setLeft(x);
           noteRect[rectIndex].setRight(toInt(n+stepSize));
           noteRect[rectIndex].setTop(y2);

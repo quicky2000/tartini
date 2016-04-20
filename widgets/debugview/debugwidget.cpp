@@ -65,7 +65,7 @@ void DebugWidget::paintEvent( QPaintEvent * )
     printString(s.sprintf("shortTermMean = %f", data.getShortTermMean()));
     printString(s.sprintf("shortTermDeviation = %f", data.getShortTermDeviation()));
     printString(s.sprintf("longTermMean = %f", data.getLongTermMean()));
-    printString(s.sprintf("longTermDeviation = %f", data.longTermDeviation));
+    printString(s.sprintf("longTermDeviation = %f", data.getLongTermDeviation()));
     printString(s.sprintf("highestCorrelationIndex = %d", data.getHighestCorrelationIndex()));
     printString(s.sprintf("chosenCorrelationIndex = %d", data.chosenCorrelationIndex));
     //printString(s.sprintf("periodOctaveEstimate = %f", data.periodOctaveEstimate));
