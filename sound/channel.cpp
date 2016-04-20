@@ -1314,7 +1314,7 @@ void Channel::doPronyFit(int chunk)
         //dataAtChunk(center)->vibratoPitch += fitCenter;
         //dataAtChunk(center)->vibratoPitch = xCenter;
         //dataAtChunk(center)->vibratoWidthAdjust = xCenter / fitCenter;
-        data->vibratoWidthAdjust = 0.0f;
+        data->setVibratoWidthAdjust(0.0f);
       }
     } else {
       data->setVibratoPitch(data->getPitch());

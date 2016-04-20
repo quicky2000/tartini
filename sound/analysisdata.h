@@ -68,6 +68,8 @@ public:
   inline void setVibratoPitch(float p_vibrato_pitch);
   inline float getVibratoWidth(void)const;
   inline void setVibratoWidth(float p_vibrato_width);
+  inline float getVibratoWidthAdjust(void)const;
+  inline void setVibratoWidthAdjust(float p_vibrato_width_adjust);
 
   inline int getHighestCorrelationIndex(void)const;
   inline void setHighestCorrelationIndex(int p_index);
@@ -99,8 +101,8 @@ public:
   double spread2;
   float vibratoPitch;
   float vibratoWidth;
- public:
   float vibratoWidthAdjust;
+ public:
   float vibratoSpeed;
   float vibratoPhase;
   float vibratoError;

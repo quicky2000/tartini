@@ -189,6 +189,18 @@ void AnalysisData::setVibratoWidth(float p_vibrato_width)
 }
 
 //------------------------------------------------------------------------------
+float AnalysisData::getVibratoWidthAdjust(void)const
+{
+  return vibratoWidthAdjust;
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setVibratoWidthAdjust(float p_vibrato_width_adjust)
+{
+  vibratoWidthAdjust = p_vibrato_width_adjust;
+}
+
+//------------------------------------------------------------------------------
 int AnalysisData::getHighestCorrelationIndex(void)const
 {
   return highestCorrelationIndex;
