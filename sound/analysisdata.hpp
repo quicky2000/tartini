@@ -243,6 +243,18 @@ int AnalysisData::getHighestCorrelationIndex(void)const
 }
 
 //------------------------------------------------------------------------------
+int AnalysisData::getReason(void)const
+{
+  return reason;
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setReason(int p_reason)
+{
+  reason = p_reason;
+}
+
+//------------------------------------------------------------------------------
 void AnalysisData::setHighestCorrelationIndex(int p_index)
 {
   highestCorrelationIndex = p_index;

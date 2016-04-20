@@ -588,7 +588,7 @@ void Channel::backTrackNoteChange(int chunk) {
   }
   getLastNote()->setEndChunk(largestDiffChunk);
   getLastNote()->recalcAvgPitch();
-  dataAtChunk(largestDiffChunk)->reason = 5;
+  dataAtChunk(largestDiffChunk)->setReason(5);
 
   //start on next note
   for(int curChunk = largestDiffChunk; curChunk <= last; curChunk++) {
@@ -650,7 +650,7 @@ bool Channel::isNoteChanging(int chunk)
   double spread = fabs(analysisData->getShortTermMean() - analysisData->getLongTermMean()) -
     (analysisData->getShortTermDeviation() + analysisData->getLongTermDeviation());
   if(numChunks >= 5 && spread > 0.0) {
-    analysisData->reason = 1;
+    analysisData->setReason(1);
     //backTrackNoteChange(chunk);
     return true;
   }
@@ -663,7 +663,7 @@ bool Channel::isNoteChanging(int chunk)
   analysisData->setSpread2(spread2);
 
   if(numChunks >= (int)(ceil(longTime/timePerChunk()) / 2.0) && spread2 > 0.0) {
-    analysisData->reason = 4;
+    analysisData->setReason(4);
     //backTrackNoteChange(chunk);
     return true;
   }
@@ -672,7 +672,7 @@ bool Channel::isNoteChanging(int chunk)
     //printf("numChunks=%d\n", getCurrentNote()->numChunks());
     //printf("analysisData->pitch=%f, ", analysisData->pitch);
     //printf("prevData->shortTermMean=%f\n", prevData->shortTermMean);
-    analysisData->reason = 2;
+    analysisData->setReason(2);
     //backTrackNoteChange(chunk);
     return true;
   }
@@ -702,7 +702,7 @@ void Channel::processNoteDecisions(int chunk, float periodDiff)
   AnalysisData &analysisData = *dataAtChunk(chunk);
   //AnalysisData *prevAnalysisData = dataAtChunk(chunk-1);
 
-  analysisData.reason = 0;
+  analysisData.setReason(0);
   //look for note transitions
   if(noteIsPlaying) {
     if(isVisibleChunk(&analysisData) /*&& !isChangingChunk(&analysisData)*/ && !isNoteChanging(chunk)) {
@@ -778,7 +778,7 @@ void Channel::noteEnding(int chunk)
   currentNote->nsdfAggregateData = nsdfAggregateData;
   currentNote->nsdfAggregateRoof = nsdfAggregateRoof;
   */
-  if(analysisData.reason > 0) {
+  if(analysisData.getReason() > 0) {
     backTrackNoteChange(chunk);
   }
 

@@ -72,7 +72,7 @@ void DebugWidget::paintEvent( QPaintEvent * )
     printString(s.sprintf("periodOctaveEstimate = %f", ch->periodOctaveEstimate(chunk)));
     printString(s.sprintf("noteIndex = %d", data.noteIndex));
     printString(s.sprintf("done = %s", data.done ? "true" : "false"));
-    printString(s.sprintf("reason = %d", data.reason));
+    printString(s.sprintf("reason = %d", data.getReason()));
     printString(s.sprintf("notePlaying = %d", data.notePlaying));
     printString(s.sprintf("spread = %f", data.getSpread()));
     printString(s.sprintf("spread2 = %f", data.getSpread2()));
