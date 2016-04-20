@@ -153,6 +153,18 @@ void AnalysisData::setSpread(const double & p_spread)
 }
 
 //------------------------------------------------------------------------------
+const double & AnalysisData::getSpread2(void)const
+{
+  return spread2;
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setSpread2(const double & p_spread2)
+{
+  spread2 = p_spread2;
+}
+
+//------------------------------------------------------------------------------
 int AnalysisData::getHighestCorrelationIndex(void)const
 {
   return highestCorrelationIndex;

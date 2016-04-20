@@ -62,6 +62,8 @@ public:
   inline void setLongTermDeviation(const double & p_long_term_deviation);
   inline const double & getSpread(void)const;
   inline void setSpread(const double & p_spread);
+  inline const double & getSpread2(void)const;
+  inline void setSpread2(const double & p_spread2);
 
   inline int getHighestCorrelationIndex(void)const;
   inline void setHighestCorrelationIndex(int p_index);
@@ -90,8 +92,8 @@ public:
   double longTermMean; /*> The mean note so far */
   double longTermDeviation; /*< The deviation of the note so far (based on standard deviation) */
   double spread;
- public:
   double spread2;
+ public:
   float vibratoPitch;
   float vibratoWidth;
   float vibratoWidthAdjust;
