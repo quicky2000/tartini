@@ -327,7 +327,7 @@ void Channel::processNewChunk(FilterState *filterState)
   myassert(parent->currentRawChunk() == MAX(0, parent->currentStreamChunk()-1) ||
            parent->currentRawChunk() == MAX(0, parent->currentStreamChunk()));
   lookup.push_back(AnalysisData());
-  lookup.back().filterState = *filterState;
+  lookup.back().setFilterState(*filterState);
   //printf("lookup=%d\n", lookup.capacity());
   //AnalysisData &analysisData = lookup.back();
   //parent->myTransforms.calculateAnalysisData(begin(), analysisData, nsdfData.begin(), threshold());

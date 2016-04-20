@@ -516,6 +516,12 @@ void AnalysisData::setHarmonicNoiseAt(size_t p_index, float p_value)
 }
 
 //------------------------------------------------------------------------------
+void AnalysisData::setFilterState(const FilterState & p_filter_state)
+{
+  filterState = p_filter_state;
+}
+
+//------------------------------------------------------------------------------
 bool lessFundametalFreq::operator()(const AnalysisData & x, const AnalysisData & y)
 {
   return x.getFundamentalFreq() < y.getFundamentalFreq();
