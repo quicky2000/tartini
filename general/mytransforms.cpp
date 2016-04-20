@@ -956,7 +956,7 @@ void MyTransforms::doChannelDataFFT(Channel *ch, float *curInput, int chunk)
     AnalysisData &analysisData = *ch->dataAtChunk(chunk);
     //analysisData.cepstrumIndex = findCepstrumMaximum(dataTime, nDiv2, 0.8f);
     analysisData.setCepstrumIndex(findNSDFsubMaximum(dataTime, nDiv2, 0.6f));
-    analysisData.cepstrumPitch = freq2pitch(double(analysisData.getCepstrumIndex()) / ch->rate());
+    analysisData.setCepstrumPitch(freq2pitch(double(analysisData.getCepstrumIndex()) / ch->rate()));
 /*
     //Take out everything above the pitch and reverse the cepstrum to get the frequency curve
     int maxIndex = int(std::max_element(dataTime+10, dataTime+nDiv2) - dataTime) - 3;

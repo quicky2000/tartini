@@ -297,6 +297,18 @@ void AnalysisData::setCepstrumIndex(int p_index)
 }
 
 //------------------------------------------------------------------------------
+float AnalysisData::getCepstrumPitch(void)const
+{
+  return cepstrumPitch;
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setCepstrumPitch(float p_cepstrum_pitch)
+{
+  cepstrumPitch = p_cepstrum_pitch;
+}
+
+//------------------------------------------------------------------------------
 bool AnalysisData::isPeriodEstimatesEmpty(void)const
 {
   return periodEstimates.empty();

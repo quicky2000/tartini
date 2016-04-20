@@ -86,6 +86,8 @@ public:
   inline void setPeriodRatio(float p_period_ratio);
   inline int getCepstrumIndex(void)const;
   inline void setCepstrumIndex(int p_index);
+  inline float getCepstrumPitch(void)const;
+  inline void setCepstrumPitch(float p_cepstrum_pitch);
 
   inline bool isPeriodEstimatesEmpty(void)const;
   inline size_t getPeriodEstimatesSize(void)const;
@@ -124,10 +126,7 @@ public:
   int chosenCorrelationIndex;
   float periodRatio; /*< The ratio of the current period to the period at the beginning of the current note */
   int cepstrumIndex;
- public:
-
   float cepstrumPitch;
- private:
   std::vector<float> periodEstimates;
   std::vector<float> periodEstimatesAmp;
  public:
