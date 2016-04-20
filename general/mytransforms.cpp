@@ -1040,7 +1040,7 @@ void MyTransforms::doHarmonicAnalysis(float *input, AnalysisData &analysisData, 
   double freq = rate / period;
   int harmonic;
   
-  analysisData.harmonicAmpNoCutOff.resize(numHarmonics);
+  analysisData.resizeHarmonicAmpNoCutOff(numHarmonics);
   analysisData.harmonicAmp.resize(numHarmonics);
   analysisData.harmonicFreq.resize(numHarmonics);
   analysisData.harmonicNoise.resize(numHarmonics);
@@ -1053,7 +1053,7 @@ void MyTransforms::doHarmonicAnalysis(float *input, AnalysisData &analysisData, 
     //analysisData.harmonicAmpNoCutOff[j] = analysisData.harmonicAmp[j] = log10(harmonicsAmpCenter[j]) / 5.0;
     //analysisData.harmonicAmpNoCutOff[j] = analysisData.harmonicAmp[j] = log10(harmonicsAmpCenter[j] / hanningScalar);
     //analysisData.harmonicAmpNoCutOff[j] = analysisData.harmonicAmp[j] = log10(harmonicsAmpCenter[j]/(double) n)* 20;
-    analysisData.harmonicAmpNoCutOff[j] = analysisData.harmonicAmp[j] = log10(harmonicsAmpCenter[j] / hanningScalar) * 20;
+    analysisData.setHarmonicAmpNoCutOffAt(j,analysisData.harmonicAmp[j] = log10(harmonicsAmpCenter[j] / hanningScalar) * 20);
     //analysisData.harmonicAmpNoCutOff[j] = analysisData.harmonicAmp[j] = log10(harmonicsAmpCenter[j]);
     //analysisData.harmonicAmp[j] = (analysisData.harmonicAmp[j] - gdata->noiseThresholdDB()) / (-gdata->noiseThresholdDB());
     analysisData.harmonicAmp[j] = 1.0 - (analysisData.harmonicAmp[j] / gdata->ampThreshold(AMPLITUDE_RMS, 0));

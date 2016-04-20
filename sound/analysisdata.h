@@ -101,6 +101,11 @@ public:
   inline void clearPeriodEstimatesAmp(void);
   inline void addPeriodEstimatesAmp(float p_value);
   inline int getPeriodEstimatesAmpMaxElementIndex(void)const;
+
+  inline size_t getHarmonicAmpNoCutOffSize(void)const;
+  inline float getHarmonicAmpNoCutOffAt(size_t p_index)const;
+  inline void resizeHarmonicAmpNoCutOff(size_t p_size);
+  inline void setHarmonicAmpNoCutOffAt(size_t p_index, float p_value);
  private:
   float values[NUM_AMP_MODES];
   float period; /*< The period of the fundamental (in samples) */
@@ -129,8 +134,8 @@ public:
   float cepstrumPitch;
   std::vector<float> periodEstimates;
   std::vector<float> periodEstimatesAmp;
- public:
   std::vector<float> harmonicAmpNoCutOff;
+ public:
   std::vector<float> harmonicAmpRelative;
   std::vector<float> harmonicAmp;
   std::vector<float> harmonicFreq;

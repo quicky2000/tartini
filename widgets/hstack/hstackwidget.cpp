@@ -123,12 +123,12 @@ void HStackWidget::paintEvent( QPaintEvent * )
       data = active->dataAtChunk(startChunk+i);
       if (data != 0)
       {
-        int m = MIN(data->harmonicAmpNoCutOff.size(), (unsigned) numHarmonics);
+        int m = MIN(data->getHarmonicAmpNoCutOffSize(), (unsigned) numHarmonics);
         for (j = 0; j < m;j++)
         {
           if (!isinf(data->harmonicAmpRelative[j]))
           {
-            points[j].setPoint(i+2,toInt(scaleX*(float)i),-toInt((-top + data->harmonicAmpNoCutOff[j])*scaleY)); 
+            points[j].setPoint(i+2,toInt(scaleX*(float)i),-toInt((-top + data->getHarmonicAmpNoCutOffAt(j))*scaleY)); 
           }
           else
             points[j].setPoint(i+2,toInt(scaleX*(float)i),notOnGraph); 

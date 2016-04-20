@@ -384,6 +384,35 @@ int AnalysisData::getPeriodEstimatesAmpMaxElementIndex(void)const
 }
 
 //------------------------------------------------------------------------------
+size_t AnalysisData::getHarmonicAmpNoCutOffSize(void)const
+{
+  return harmonicAmpNoCutOff.size();
+}
+
+//------------------------------------------------------------------------------
+float AnalysisData::getHarmonicAmpNoCutOffAt(size_t p_index)const
+{
+#ifdef MYDEBUG
+  return harmonicAmpNoCutOff.at(p_index);
+#else
+  return harmonicAmpNoCutOff[p_index];
+#endif // MYDEBUG
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::resizeHarmonicAmpNoCutOff(size_t p_size)
+{
+  harmonicAmpNoCutOff.resize(p_size);
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setHarmonicAmpNoCutOffAt(size_t p_index, float p_value)
+{
+  harmonicAmpNoCutOff.at(p_index) = p_value;
+  harmonicAmpNoCutOff[p_index] = p_value;
+}
+
+//------------------------------------------------------------------------------
 bool lessFundametalFreq::operator()(const AnalysisData & x, const AnalysisData & y)
 {
   return x.getFundamentalFreq() < y.getFundamentalFreq();

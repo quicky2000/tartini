@@ -84,7 +84,7 @@ void HBubbleWidget::paintEvent( QPaintEvent * )
 	    {
 		for (i = 0; i < numHarmonics; i++)
 		{
-			int radius = toInt((data->harmonicAmpNoCutOff[i]+160.0)/160.0 * (float)height()/numHarmonics/2);
+		  int radius = toInt((data->getHarmonicAmpNoCutOffAt(i)+160.0)/160.0 * (float)height()/numHarmonics/2);
 			if (radius > 0)
 			{
 			  float flat_sharp = (data->harmonicFreq[i] / data->getFundamentalFreq() - (i+1))*10;

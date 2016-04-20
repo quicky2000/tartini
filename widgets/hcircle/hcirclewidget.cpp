@@ -121,10 +121,10 @@ void HCircleWidget::paintEvent( QPaintEvent * )
 				octave = nextoctave;
 				nextoctave = octave * 2;
 			}
-			if (data->harmonicAmpNoCutOff[i] > MAX(threshold, lowestValue))			
+			if (data->getHarmonicAmpNoCutOffAt(i) > MAX(threshold, lowestValue))			
 			{
 				double angle = (data->harmonicFreq[i] - octave) / (nextoctave - octave) * 2 * PI;
-				double size = height()*zoom*(data->harmonicAmpNoCutOff[i]-lowestValue);
+				double size = height()*zoom*(data->getHarmonicAmpNoCutOffAt(i) - lowestValue);
 				double size1 = height()*zoom*(MAX(threshold, lowestValue)-lowestValue);
 				int x1 = toInt(sin(angle)*size1);
 				int y1 = toInt(-cos(angle)*size1);
