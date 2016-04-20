@@ -70,7 +70,7 @@ void HBlockWidget::paintEvent( QPaintEvent * )
       */
       for (uint i = 0; i < data.getHarmonicFreqSize(); i++) {
         p.setPen(outlineColor);
-        p.setBrush(colorBetween(fillColor, Qt::black, data.harmonicNoise[i]));
+        p.setBrush(colorBetween(fillColor, Qt::black, data.getHarmonicNoiseAt(i)));
         // Work out how many pixels wide the harmonic should be
         barWidth = (data.getHarmonicAmpAt(i)) * width();
         /* Work out how many pixels the harmonic should be offset from where it would be

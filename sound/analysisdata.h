@@ -118,6 +118,10 @@ public:
   inline size_t getHarmonicFreqSize(void)const;
   inline void resizeHarmonicFreq(size_t p_size);
   inline void setHarmonicFreqAt(size_t p_index, float p_value);
+
+  inline float getHarmonicNoiseAt(size_t p_index)const;
+  inline void resizeHarmonicNoise(size_t p_size);
+  inline void setHarmonicNoiseAt(size_t p_index, float p_value);
  private:
   float values[NUM_AMP_MODES];
   float period; /*< The period of the fundamental (in samples) */
@@ -150,8 +154,8 @@ public:
   std::vector<float> harmonicAmpRelative;
   std::vector<float> harmonicAmp;
   std::vector<float> harmonicFreq;
- public:
   std::vector<float> harmonicNoise;
+ public:
   FilterState filterState; //the state of the filter at the beginning of the chunk
   int noteIndex; //The index of the note in the noteData, or NO_NOTE
   bool notePlaying;

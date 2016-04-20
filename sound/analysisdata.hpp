@@ -490,6 +490,32 @@ void AnalysisData::setHarmonicFreqAt(size_t p_index, float p_value)
 }
 
 //------------------------------------------------------------------------------
+float AnalysisData::getHarmonicNoiseAt(size_t p_index)const
+{
+#ifdef MYDEBUG
+  return harmonicNoise.at(p_index);
+#else
+  return harmonicNoise[p_index];
+#endif // MYDEBUG
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::resizeHarmonicNoise(size_t p_size)
+{
+  harmonicNoise.resize(p_size);
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setHarmonicNoiseAt(size_t p_index, float p_value)
+{
+#ifdef MYDEBUG
+  harmonicNoise.at(p_index) = p_value;
+#else
+  harmonicNoise[p_index] = p_value;
+#endif // MYDEBUG
+}
+
+//------------------------------------------------------------------------------
 bool lessFundametalFreq::operator()(const AnalysisData & x, const AnalysisData & y)
 {
   return x.getFundamentalFreq() < y.getFundamentalFreq();
