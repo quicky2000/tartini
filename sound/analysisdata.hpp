@@ -165,6 +165,19 @@ void AnalysisData::setSpread2(const double & p_spread2)
 }
 
 //------------------------------------------------------------------------------
+float AnalysisData::getVibratoPitch(void)const
+{
+  return vibratoPitch;
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setVibratoPitch(float p_vibrato_pitch)
+{
+  vibratoPitch = p_vibrato_pitch;
+}
+
+
+//------------------------------------------------------------------------------
 int AnalysisData::getHighestCorrelationIndex(void)const
 {
   return highestCorrelationIndex;

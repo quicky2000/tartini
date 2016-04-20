@@ -509,9 +509,9 @@ void VibratoWidget::doUpdate()
         if (x2 < noteLabelOffset) { continue; }
         if (x2 > width() - noteLabelOffset) { x2 = width() - noteLabelOffset; }
 
-        float vibratoPitch1 = active->dataAtChunk(chunk)->vibratoPitch;
+        float vibratoPitch1 = active->dataAtChunk(chunk)->getVibratoPitch();
         float vibratoWidth1 = active->dataAtChunk(chunk)->vibratoWidth;
-        float vibratoPitch2 = active->dataAtChunk(chunk + 1)->vibratoPitch;
+        float vibratoPitch2 = active->dataAtChunk(chunk + 1)->getVibratoPitch();
         float vibratoWidth2 = active->dataAtChunk(chunk + 1)->vibratoWidth;
         float y1 = halfHeight + ((vibratoPitch1 + vibratoWidth1 - avgPitch) * zoomFactorYx100) + offsetY;
         float y2 = halfHeight + ((vibratoPitch1 - vibratoWidth1 - avgPitch) * zoomFactorYx100) + offsetY;
@@ -556,7 +556,7 @@ void VibratoWidget::doUpdate()
         float x = (chunk - myStartChunk) * zoomFactorX - windowOffset;
         if (x < noteLabelOffset) { continue; }
         if (x > width() - noteLabelOffset) { break; }
-        float y = halfHeight + ((active->dataAtChunk(chunk)->vibratoPitch - avgPitch) * zoomFactorYx100) + offsetY;
+        float y = halfHeight + ((active->dataAtChunk(chunk)->getVibratoPitch() - avgPitch) * zoomFactorYx100) + offsetY;
 
         vertices[verticesCounter++] = x;
         vertices[verticesCounter++] = y;

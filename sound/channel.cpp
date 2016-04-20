@@ -1301,11 +1301,11 @@ void Channel::doPronyFit(int chunk)
   PronyData p;
   if(pronyFit(&p, pronyData.begin(), pronyWindowSize, 2, true)) {
     data->vibratoError = p.error;
-    data->vibratoPitch = p.yOffset;
+    data->setVibratoPitch(p.yOffset);
     if(p.error < 1.0) {
       data->vibratoSpeed = p.freqHz(timePerChunk());
       if(p.omega * pronyWindowSize < TwoPi) {
-        data->vibratoPitch = data->getPitch();
+        data->setVibratoPitch(data->getPitch());
       } else {
         data->vibratoWidth = p.amp;
         data->vibratoPhase = p.phase;
@@ -1317,10 +1317,10 @@ void Channel::doPronyFit(int chunk)
         data->vibratoWidthAdjust = 0.0f;
       }
     } else {
-      data->vibratoPitch = data->getPitch();
+      data->setVibratoPitch(data->getPitch());
     }
   } else {
-    data->vibratoPitch = data->getPitch();
+    data->setVibratoPitch(data->getPitch());
   }
 }
 
