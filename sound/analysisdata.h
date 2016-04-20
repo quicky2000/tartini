@@ -78,7 +78,6 @@ public:
   inline void setVibratoError(float p_vibrato_error);
   inline int getReason(void)const;
   inline void setReason(int p_reason);
-
   inline int getHighestCorrelationIndex(void)const;
   inline void setHighestCorrelationIndex(int p_index);
   inline bool isPeriodEstimatesEmpty(void)const;
@@ -114,11 +113,6 @@ public:
   float vibratoPhase;
   float vibratoError;
   int reason; /*< The reason why there was a note change */
- public:
-  //float correlation; /*< How well the fundamental frequency fits the signal (0=no fit, 1=perfet fit) */
-  //float logrms; /*< The Root-mean-square, a measure of intensity/volume in the chunk */
-  //float maxIntensityDB;
- private:
   int highestCorrelationIndex;
  public:
   int chosenCorrelationIndex;
@@ -126,9 +120,6 @@ public:
 
   int cepstrumIndex;
   float cepstrumPitch;
-  //float periodOctaveEstimate; /*< A estimate from over the whole duration of the note, to help get the correct octave */
-  //float volumeValue; /*< A value between 0 and 1 related to volume and correlation */
-  //float changeness; /*< 0 for a stedy note, larger for a fast changing frequency */
  private:
   std::vector<float> periodEstimates;
   std::vector<float> periodEstimatesAmp;
