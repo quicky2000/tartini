@@ -66,6 +66,11 @@ public:
   inline void addPeriodEstimates(float p_value);
   inline float searchClosestPeriodEstimates(const float & p_value)const;
 
+  inline size_t getPeriodEstimatesAmpSize(void)const;
+  inline float getPeriodEstimatesAmpAt(size_t p_index)const;
+  inline void clearPeriodEstimatesAmp(void);
+  inline void addPeriodEstimatesAmp(float p_value);
+  inline int getPeriodEstimatesAmpMaxElementIndex(void)const;
  private:
   float values[NUM_AMP_MODES];
   float period; /*< The period of the fundamental (in samples) */
@@ -104,8 +109,8 @@ public:
   //float changeness; /*< 0 for a stedy note, larger for a fast changing frequency */
  private:
   std::vector<float> periodEstimates;
- public:
   std::vector<float> periodEstimatesAmp;
+ public:
   std::vector<float> harmonicAmpNoCutOff;
   std::vector<float> harmonicAmpRelative;
   std::vector<float> harmonicAmp;

@@ -887,14 +887,19 @@ void Channel::chooseCorrelationIndex1(int chunk)
     return;
   }
   //choose a cutoff value based on the highest value and a relative threshold
-  float highest = analysisData.periodEstimatesAmp[analysisData.getHighestCorrelationIndex()];
+  float highest = analysisData.getPeriodEstimatesAmpAt(analysisData.getHighestCorrelationIndex());
   float cutoff = highest * threshold();
   //find the first of the maxPositions which is above the cutoff
-  for(iterPos = 0; iterPos < analysisData.periodEstimatesAmp.size(); iterPos++) {
-    if(analysisData.periodEstimatesAmp[iterPos] >= cutoff) { choosenMaxIndex = iterPos; break; }
-  }
+  for(iterPos = 0; iterPos < analysisData.getPeriodEstimatesAmpSize(); iterPos++)
+    {
+      if(analysisData.getPeriodEstimatesAmpAt(iterPos) >= cutoff)
+	{
+	  choosenMaxIndex = iterPos;
+	  break;
+	}
+    }
   analysisData.chosenCorrelationIndex = choosenMaxIndex;
-  analysisData.correlation() = analysisData.periodEstimatesAmp[choosenMaxIndex];
+  analysisData.correlation() = analysisData.getPeriodEstimatesAmpAt(choosenMaxIndex);
   
   //double period = analysisData.periodEstimates[choosenMaxIndex];
   analysisData.setPeriod(analysisData.getPeriodEstimatesAt(choosenMaxIndex));
@@ -950,7 +955,7 @@ bool Channel::chooseCorrelationIndex(int chunk, float periodOctaveEstimate)
   }
   if(choosenMaxIndex != analysisData.chosenCorrelationIndex) isDifferentIndex = true;
   analysisData.chosenCorrelationIndex = choosenMaxIndex;
-  analysisData.correlation() = analysisData.periodEstimatesAmp[choosenMaxIndex];
+  analysisData.correlation() = analysisData.getPeriodEstimatesAmpAt(choosenMaxIndex);
   
   //double period = analysisData.periodEstimates[choosenMaxIndex];
   analysisData.setPeriod(analysisData.getPeriodEstimatesAt(choosenMaxIndex));

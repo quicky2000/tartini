@@ -131,12 +131,12 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
       p.setBrush(Qt::blue);
       for(j=0; j<int(data->getPeriodEstimatesSize()); j++) {
         x = toInt(double(data->getPeriodEstimatesAt(j)) * ratio);
-        y = toInt(dh2 - data->periodEstimatesAmp[j] * dh2);
+        y = toInt(dh2 - data->getPeriodEstimatesAmpAt(j) * dh2);
         p.drawEllipse(x-2, y-2, 5, 5);
       }
       
       if(data->getHighestCorrelationIndex() >= 0) {
-        float highest = data->periodEstimatesAmp[data->getHighestCorrelationIndex()];
+        float highest = data->getPeriodEstimatesAmpAt(data->getHighestCorrelationIndex());
         //draw threshold line
         p.setPen(QPen(colorBetween(colorGroup().background(), Qt::black, 0.3), 0));
         y = toInt(dh2 - (highest * active->threshold()) * dh2);
@@ -158,7 +158,7 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
         //x = toInt(double(data->chosenCorrelationIndex) * ratio);
         //y = toInt(dh2 - chosen * dh2);
         x = toInt(double(data->getPeriodEstimatesAt(data->chosenCorrelationIndex)) * ratio);
-        y = toInt(dh2 - data->periodEstimatesAmp[data->chosenCorrelationIndex] * dh2);
+        y = toInt(dh2 - data->getPeriodEstimatesAmpAt(data->chosenCorrelationIndex) * dh2);
         p.drawEllipse(x-2, y-2, 5, 5);
       }
 

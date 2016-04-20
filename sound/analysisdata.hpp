@@ -170,6 +170,40 @@ float AnalysisData::searchClosestPeriodEstimates(const float & p_value)const
 }
 
 //------------------------------------------------------------------------------
+size_t AnalysisData::getPeriodEstimatesAmpSize(void)const
+{
+  return periodEstimatesAmp.size();
+}
+
+//------------------------------------------------------------------------------
+float AnalysisData::getPeriodEstimatesAmpAt(size_t p_index)const
+{
+#ifdef MYDEBUG
+  return periodEstimatesAmp.at(p_index);
+#else
+  return periodEstimatesAmp[p_index];
+#endif // MYDEBUG
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::clearPeriodEstimatesAmp(void)
+{
+  periodEstimatesAmp.clear();
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::addPeriodEstimatesAmp(float p_value)
+{
+  periodEstimatesAmp.push_back(p_value);
+}
+
+//------------------------------------------------------------------------------
+int AnalysisData::getPeriodEstimatesAmpMaxElementIndex(void)const
+{
+  return int(std::max_element(periodEstimatesAmp.begin(), periodEstimatesAmp.end()) - periodEstimatesAmp.begin());
+}
+
+//------------------------------------------------------------------------------
 bool lessFundametalFreq::operator()(const AnalysisData & x, const AnalysisData & y)
 {
   return x.getFundamentalFreq() < y.getFundamentalFreq();

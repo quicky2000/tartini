@@ -469,7 +469,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
 
     //store some of the best period estimates
     analysisData.clearPeriodEstimates();
-    analysisData.periodEstimatesAmp.clear();
+    analysisData.clearPeriodEstimatesAmp();
     //float smallThreshold = 0.7f;
     //float smallCutoff = output[overallMaxIndex] * smallThreshold;
     float smallCutoff = 0.4f;
@@ -482,7 +482,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
         parabolaTurningPoint2(output[*iter-1], output[*iter], output[*iter+1], float(*iter + 1), &x, &y);
         y = bound(y, -1.0f, 1.0f);
         analysisData.addPeriodEstimates(x);
-        analysisData.periodEstimatesAmp.push_back(y);
+        analysisData.addPeriodEstimatesAmp(y);
       }
     }
     
@@ -506,7 +506,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
         if(absolute(periodDiff) > 8.0f) periodDiff = 0.0f;
       }
 
-      int nsdfMaxIndex = int(std::max_element(analysisData.periodEstimatesAmp.begin(), analysisData.periodEstimatesAmp.end()) - analysisData.periodEstimatesAmp.begin());
+      int nsdfMaxIndex = analysisData.getPeriodEstimatesAmpMaxElementIndex();
       analysisData.setHighestCorrelationIndex(nsdfMaxIndex);
 
       if(!analysisData.done) {
