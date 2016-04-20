@@ -106,6 +106,9 @@ public:
   inline float getHarmonicAmpNoCutOffAt(size_t p_index)const;
   inline void resizeHarmonicAmpNoCutOff(size_t p_size);
   inline void setHarmonicAmpNoCutOffAt(size_t p_index, float p_value);
+
+  inline float getHarmonicAmpRelativeAt(size_t p_index)const;
+  inline size_t getHarmonicAmpRelativeSize(void)const;
  private:
   float values[NUM_AMP_MODES];
   float period; /*< The period of the fundamental (in samples) */
@@ -135,8 +138,8 @@ public:
   std::vector<float> periodEstimates;
   std::vector<float> periodEstimatesAmp;
   std::vector<float> harmonicAmpNoCutOff;
- public:
   std::vector<float> harmonicAmpRelative;
+ public:
   std::vector<float> harmonicAmp;
   std::vector<float> harmonicFreq;
   std::vector<float> harmonicNoise;

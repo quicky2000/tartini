@@ -4,6 +4,8 @@
     begin                : Mon Jan 10 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -126,7 +128,7 @@ void HStackWidget::paintEvent( QPaintEvent * )
         int m = MIN(data->getHarmonicAmpNoCutOffSize(), (unsigned) numHarmonics);
         for (j = 0; j < m;j++)
         {
-          if (!isinf(data->harmonicAmpRelative[j]))
+          if (!isinf(data->getHarmonicAmpRelativeAt(j)))
           {
             points[j].setPoint(i+2,toInt(scaleX*(float)i),-toInt((-top + data->getHarmonicAmpNoCutOffAt(j))*scaleY)); 
           }

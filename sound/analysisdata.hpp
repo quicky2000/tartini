@@ -408,8 +408,27 @@ void AnalysisData::resizeHarmonicAmpNoCutOff(size_t p_size)
 //------------------------------------------------------------------------------
 void AnalysisData::setHarmonicAmpNoCutOffAt(size_t p_index, float p_value)
 {
+#ifdef MYDEBUG
   harmonicAmpNoCutOff.at(p_index) = p_value;
+#else
   harmonicAmpNoCutOff[p_index] = p_value;
+#endif // MYDEBUG
+}
+
+//------------------------------------------------------------------------------
+float AnalysisData::getHarmonicAmpRelativeAt(size_t p_index)const
+{
+#ifdef MYDEBUG
+  return harmonicAmpRelative.at(p_index);
+#else
+  return harmonicAmpRelative[p_index];
+#endif // MYDEBUG
+}
+
+//------------------------------------------------------------------------------
+size_t AnalysisData::getHarmonicAmpRelativeSize(void)const
+{
+  return harmonicAmpRelative.size();
 }
 
 //------------------------------------------------------------------------------
