@@ -213,6 +213,30 @@ void AnalysisData::setVibratoSpeed(float p_vibrato_speed)
 }
 
 //------------------------------------------------------------------------------
+float AnalysisData::getVibratoPhase(void)const
+{
+  return vibratoPhase;
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setVibratoPhase(float p_vibrato_phase)
+{
+  vibratoPhase = p_vibrato_phase;
+}
+
+//------------------------------------------------------------------------------
+float AnalysisData::getVibratoError(void)const
+{
+  return vibratoError;
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setVibratoError(float p_vibrato_error)
+{
+  vibratoError = p_vibrato_error;
+}
+
+//------------------------------------------------------------------------------
 int AnalysisData::getHighestCorrelationIndex(void)const
 {
   return highestCorrelationIndex;

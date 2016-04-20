@@ -1308,7 +1308,7 @@ void Channel::doPronyFit(int chunk)
         data->setVibratoPitch(data->getPitch());
       } else {
         data->setVibratoWidth(p.amp);
-        data->vibratoPhase = p.phase;
+        data->setVibratoPhase(p.phase);
         //float xCenter = pronyData[pronyWindowSize/2-1];
         //float fitCenter = p.amp * sin((pronyWindowSize/2-1)*p.omega + p.phase);
         //dataAtChunk(center)->vibratoPitch += fitCenter;

@@ -72,6 +72,8 @@ public:
   inline void setVibratoWidthAdjust(float p_vibrato_width_adjust);
   inline float getVibratoSpeed(void)const;
   inline void setVibratoSpeed(float p_vibrato_speed);
+  inline float getVibratoPhase(void)const;
+  inline void setVibratoPhase(float p_vibrato_phase);
 
   inline int getHighestCorrelationIndex(void)const;
   inline void setHighestCorrelationIndex(int p_index);
@@ -105,8 +107,8 @@ public:
   float vibratoWidth;
   float vibratoWidthAdjust;
   float vibratoSpeed;
- public:
   float vibratoPhase;
+ public:
   float vibratoError;
   int reason; /*< The reason why there was a note change */
   //float correlation; /*< How well the fundamental frequency fits the signal (0=no fit, 1=perfet fit) */
