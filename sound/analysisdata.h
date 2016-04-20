@@ -109,6 +109,10 @@ public:
 
   inline float getHarmonicAmpRelativeAt(size_t p_index)const;
   inline size_t getHarmonicAmpRelativeSize(void)const;
+
+  inline float getHarmonicAmpAt(size_t p_index)const;
+  inline void resizeHarmonicAmp(size_t p_size);
+  inline void setHarmonicAmpAt(size_t p_index, float p_value);
  private:
   float values[NUM_AMP_MODES];
   float period; /*< The period of the fundamental (in samples) */
@@ -139,8 +143,8 @@ public:
   std::vector<float> periodEstimatesAmp;
   std::vector<float> harmonicAmpNoCutOff;
   std::vector<float> harmonicAmpRelative;
- public:
   std::vector<float> harmonicAmp;
+ public:
   std::vector<float> harmonicFreq;
   std::vector<float> harmonicNoise;
   FilterState filterState; //the state of the filter at the beginning of the chunk

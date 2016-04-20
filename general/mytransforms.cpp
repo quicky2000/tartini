@@ -1041,7 +1041,7 @@ void MyTransforms::doHarmonicAnalysis(float *input, AnalysisData &analysisData, 
   int harmonic;
   
   analysisData.resizeHarmonicAmpNoCutOff(numHarmonics);
-  analysisData.harmonicAmp.resize(numHarmonics);
+  analysisData.resizeHarmonicAmp(numHarmonics);
   analysisData.harmonicFreq.resize(numHarmonics);
   analysisData.harmonicNoise.resize(numHarmonics);
 
@@ -1053,11 +1053,12 @@ void MyTransforms::doHarmonicAnalysis(float *input, AnalysisData &analysisData, 
     //analysisData.harmonicAmpNoCutOff[j] = analysisData.harmonicAmp[j] = log10(harmonicsAmpCenter[j]) / 5.0;
     //analysisData.harmonicAmpNoCutOff[j] = analysisData.harmonicAmp[j] = log10(harmonicsAmpCenter[j] / hanningScalar);
     //analysisData.harmonicAmpNoCutOff[j] = analysisData.harmonicAmp[j] = log10(harmonicsAmpCenter[j]/(double) n)* 20;
-    analysisData.setHarmonicAmpNoCutOffAt(j,analysisData.harmonicAmp[j] = log10(harmonicsAmpCenter[j] / hanningScalar) * 20);
+    analysisData.setHarmonicAmpAt(j, log10(harmonicsAmpCenter[j] / hanningScalar) * 20);
+    analysisData.setHarmonicAmpNoCutOffAt(j,analysisData.getHarmonicAmpAt(j));
     //analysisData.harmonicAmpNoCutOff[j] = analysisData.harmonicAmp[j] = log10(harmonicsAmpCenter[j]);
     //analysisData.harmonicAmp[j] = (analysisData.harmonicAmp[j] - gdata->noiseThresholdDB()) / (-gdata->noiseThresholdDB());
-    analysisData.harmonicAmp[j] = 1.0 - (analysisData.harmonicAmp[j] / gdata->ampThreshold(AMPLITUDE_RMS, 0));
-    if(analysisData.harmonicAmp[j] < 0.0) analysisData.harmonicAmp[j] = 0.0;
+    analysisData.setHarmonicAmpAt(j, 1.0 - (analysisData.getHarmonicAmpAt(j) / gdata->ampThreshold(AMPLITUDE_RMS, 0)));
+    if(analysisData.getHarmonicAmpAt(j) < 0.0) analysisData.setHarmonicAmpAt(j,0.0);
     //should be 1 whole period between left and right. i.e. the same freq give 0 phase difference
     double diffAngle = (harmonicsPhaseRight[j] - harmonicsPhaseLeft[j]) / twoPI;
     //if(diffAngle < 0) diffAngle++;

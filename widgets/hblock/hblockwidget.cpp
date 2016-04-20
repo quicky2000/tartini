@@ -53,9 +53,6 @@ void HBlockWidget::paintEvent( QPaintEvent * )
       // We have harmonicFreq - the actual frequencies of the harmonies - and harmonicAmp, their amplitude
       //std::vector<float> harmonicFreq = active->lookup[frame].harmonicFreq;
       std::vector<float> harmonicFreq = data.harmonicFreq;
-      // harmonicAmp values range between 0-1
-      //std::vector<float> harmonicAmp = active->lookup[frame].harmonicAmp;
-      std::vector<float> harmonicAmp = data.harmonicAmp;
   
       // Get the frame's fundamental frequency
       //float fund = active->lookup[frame].fundamentalFreq;
@@ -79,7 +76,7 @@ void HBlockWidget::paintEvent( QPaintEvent * )
         p.setPen(outlineColor);
         p.setBrush(colorBetween(fillColor, Qt::black, data.harmonicNoise[i]));
         // Work out how many pixels wide the harmonic should be
-        barWidth = (harmonicAmp.at(i)) * width();
+        barWidth = (data.getHarmonicAmpAt(i)) * width();
         /* Work out how many pixels the harmonic should be offset from where it would be
         * if it were exactly (i+1)f   */
         //diff = toInt( (harmonicFreq.at(i) - (i+1) * fund) / fund * width() / 10.0 );

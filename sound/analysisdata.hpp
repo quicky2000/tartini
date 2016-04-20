@@ -432,6 +432,32 @@ size_t AnalysisData::getHarmonicAmpRelativeSize(void)const
 }
 
 //------------------------------------------------------------------------------
+float AnalysisData::getHarmonicAmpAt(size_t p_index)const
+{
+#ifdef MYDEBUG
+  return harmonicAmp.at(p_index);
+#else
+  return harmonicAmp[p_index];
+#endif // MYDEBUG
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::resizeHarmonicAmp(size_t p_size)
+{
+  harmonicAmp.resize(p_size);
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setHarmonicAmpAt(size_t p_index, float p_value)
+{
+#ifdef MYDEBUG
+  harmonicAmp.at(p_index) = p_value;
+#else
+  harmonicAmp[p_index] = p_value;
+#endif // MYDEBUG
+}
+
+//------------------------------------------------------------------------------
 bool lessFundametalFreq::operator()(const AnalysisData & x, const AnalysisData & y)
 {
   return x.getFundamentalFreq() < y.getFundamentalFreq();

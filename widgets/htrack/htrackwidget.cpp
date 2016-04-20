@@ -215,7 +215,7 @@ void HTrackWidget::paintGL()
         for(harmonic=0; harmonic < numHarmonics; harmonic++) {
           //freqs(harmonic, chunkOffset) = data->harmonicFreq[harmonic];
           pitches(harmonic, chunkOffset) = freq2pitch(data->harmonicFreq[harmonic]);
-          amps(harmonic, chunkOffset) = data->harmonicAmp[harmonic];
+          amps(harmonic, chunkOffset) = data->getHarmonicAmpAt(harmonic);
         }
       } else {
         for(harmonic=0; harmonic < numHarmonics; harmonic++) {
