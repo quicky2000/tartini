@@ -369,8 +369,8 @@ void DrawWidget::drawChannelFilled(Channel *ch, QPainter &p, double leftTime, do
 
         if(gdata->showMeanVarianceBars()) {
           //longTermMean bars
-          y2 = height() - 1 - toInt((data->longTermMean + data->longTermDeviation) / zoomY) + viewBottomOffset;
-          y3 = height() - 1 - toInt((data->longTermMean - data->longTermDeviation) / zoomY) + viewBottomOffset;
+          y2 = height() - 1 - toInt((data->getLongTermMean() + data->longTermDeviation) / zoomY) + viewBottomOffset;
+          y3 = height() - 1 - toInt((data->getLongTermMean() - data->longTermDeviation) / zoomY) + viewBottomOffset;
           if(ze.noteIndex() % 2 == 0) {
             evenMidPoints.setPoint(evenMidPointIndex++, n, y2);
             evenMidPoints.setPoint(evenMidPointIndex++, n, y3);
@@ -478,8 +478,8 @@ void DrawWidget::drawChannelFilled(Channel *ch, QPainter &p, double leftTime, do
 
         if(gdata->showMeanVarianceBars()) {
           //longTermMean bars
-          y2 = height() - 1 - toInt((data->longTermMean + data->longTermDeviation) / zoomY) + viewBottomOffset;
-          y3 = height() - 1 - toInt((data->longTermMean - data->longTermDeviation) / zoomY) + viewBottomOffset;
+          y2 = height() - 1 - toInt((data->getLongTermMean() + data->longTermDeviation) / zoomY) + viewBottomOffset;
+          y3 = height() - 1 - toInt((data->getLongTermMean() - data->longTermDeviation) / zoomY) + viewBottomOffset;
           noteRect[rectIndex].setLeft(x);
           noteRect[rectIndex].setRight(toInt(n+stepSize));
           noteRect[rectIndex].setTop(y2);

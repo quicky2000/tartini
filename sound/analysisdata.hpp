@@ -117,6 +117,18 @@ void AnalysisData::setShortTermDeviation(const double & p_short_term_deviation)
 }
 
 //------------------------------------------------------------------------------
+const double & AnalysisData::getLongTermMean(void)const
+{
+  return longTermMean;
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setLongTermMean(const double & p_long_term_mean)
+{
+  longTermMean = p_long_term_mean;
+}
+
+//------------------------------------------------------------------------------
 int AnalysisData::getHighestCorrelationIndex(void)const
 {
   return highestCorrelationIndex;
