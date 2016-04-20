@@ -237,12 +237,6 @@ void AnalysisData::setVibratoError(float p_vibrato_error)
 }
 
 //------------------------------------------------------------------------------
-int AnalysisData::getHighestCorrelationIndex(void)const
-{
-  return highestCorrelationIndex;
-}
-
-//------------------------------------------------------------------------------
 int AnalysisData::getReason(void)const
 {
   return reason;
@@ -255,9 +249,27 @@ void AnalysisData::setReason(int p_reason)
 }
 
 //------------------------------------------------------------------------------
+int AnalysisData::getHighestCorrelationIndex(void)const
+{
+  return highestCorrelationIndex;
+}
+
+//------------------------------------------------------------------------------
 void AnalysisData::setHighestCorrelationIndex(int p_index)
 {
   highestCorrelationIndex = p_index;
+}
+
+//------------------------------------------------------------------------------
+int AnalysisData::getChosenCorrelationIndex(void)const
+{
+  return chosenCorrelationIndex;
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setChosenCorrelationIndex(int p_index)
+{
+  chosenCorrelationIndex = p_index;
 }
 
 //------------------------------------------------------------------------------

@@ -152,18 +152,18 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
       }
       
       //draw a dot at the chosen correlation period
-      if(data->chosenCorrelationIndex >= 0) {
+      if(data->getChosenCorrelationIndex() >= 0) {
         p.setPen(Qt::red);
         p.setBrush(Qt::red);
         //x = toInt(double(data->chosenCorrelationIndex) * ratio);
         //y = toInt(dh2 - chosen * dh2);
-        x = toInt(double(data->getPeriodEstimatesAt(data->chosenCorrelationIndex)) * ratio);
-        y = toInt(dh2 - data->getPeriodEstimatesAmpAt(data->chosenCorrelationIndex) * dh2);
+        x = toInt(double(data->getPeriodEstimatesAt(data->getChosenCorrelationIndex())) * ratio);
+        y = toInt(dh2 - data->getPeriodEstimatesAmpAt(data->getChosenCorrelationIndex()) * dh2);
         p.drawEllipse(x-2, y-2, 5, 5);
       }
 
       //draw a line at the chosen correlation period
-      if(data->chosenCorrelationIndex >= 0) {
+      if(data->getChosenCorrelationIndex() >= 0) {
         p.setPen(Qt::green);
         p.setBrush(Qt::green);
         //x = toInt(double(data->periodOctaveEstimate) * ratio);

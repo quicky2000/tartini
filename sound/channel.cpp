@@ -898,7 +898,7 @@ void Channel::chooseCorrelationIndex1(int chunk)
 	  break;
 	}
     }
-  analysisData.chosenCorrelationIndex = choosenMaxIndex;
+  analysisData.setChosenCorrelationIndex(choosenMaxIndex);
   analysisData.correlation() = analysisData.getPeriodEstimatesAmpAt(choosenMaxIndex);
   
   //double period = analysisData.periodEstimates[choosenMaxIndex];
@@ -953,8 +953,8 @@ bool Channel::chooseCorrelationIndex(int chunk, float periodOctaveEstimate)
   } else {
     choosenMaxIndex = analysisData.getHighestCorrelationIndex();
   }
-  if(choosenMaxIndex != analysisData.chosenCorrelationIndex) isDifferentIndex = true;
-  analysisData.chosenCorrelationIndex = choosenMaxIndex;
+  if(choosenMaxIndex != analysisData.getChosenCorrelationIndex()) isDifferentIndex = true;
+  analysisData.setChosenCorrelationIndex(choosenMaxIndex);
   analysisData.correlation() = analysisData.getPeriodEstimatesAmpAt(choosenMaxIndex);
   
   //double period = analysisData.periodEstimates[choosenMaxIndex];

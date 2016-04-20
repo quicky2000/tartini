@@ -80,6 +80,9 @@ public:
   inline void setReason(int p_reason);
   inline int getHighestCorrelationIndex(void)const;
   inline void setHighestCorrelationIndex(int p_index);
+  inline int getChosenCorrelationIndex(void)const;
+  inline void setChosenCorrelationIndex(int p_index);
+
   inline bool isPeriodEstimatesEmpty(void)const;
   inline size_t getPeriodEstimatesSize(void)const;
   inline float getPeriodEstimatesAt(size_t p_index)const;
@@ -114,8 +117,8 @@ public:
   float vibratoError;
   int reason; /*< The reason why there was a note change */
   int highestCorrelationIndex;
- public:
   int chosenCorrelationIndex;
+ public:
   float periodRatio; /*< The ratio of the current period to the period at the beginning of the current note */
 
   int cepstrumIndex;

@@ -533,8 +533,8 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
 
       if(gdata->doingHarmonicAnalysis()) {
         std::copy(dataTime, dataTime+n, dataTemp);
-        if(analysisData.chosenCorrelationIndex >= 0)
-          doHarmonicAnalysis(dataTemp, analysisData, analysisData.getPeriodEstimatesAt(analysisData.chosenCorrelationIndex)/*period*/);
+        if(analysisData.getChosenCorrelationIndex() >= 0)
+          doHarmonicAnalysis(dataTemp, analysisData, analysisData.getPeriodEstimatesAt(analysisData.getChosenCorrelationIndex())/*period*/);
         //doHarmonicAnalysis(input, analysisData, period);
       }
 
