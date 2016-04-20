@@ -512,7 +512,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
       if(!analysisData.done) {
         //if(gdata->doingActiveCepstrum()) {
         if(gdata->analysisType() == MPM_MODIFIED_CEPSTRUM) {
-            ch->chooseCorrelationIndex(chunk, float(analysisData.cepstrumIndex)); //calculate pitch
+	  ch->chooseCorrelationIndex(chunk, float(analysisData.getCepstrumIndex())); //calculate pitch
         } else {
           if(ch->isNotePlaying() && chunk > 0) {
             //ch->chooseCorrelationIndex(chunk, ch->getLastNote()->periodOctaveEstimate()); //calculate pitch
@@ -955,8 +955,8 @@ void MyTransforms::doChannelDataFFT(Channel *ch, float *curInput, int chunk)
     for(int j=0; j<nDiv2; j++) ch->cepstrumData[j] = dataTime[j];
     AnalysisData &analysisData = *ch->dataAtChunk(chunk);
     //analysisData.cepstrumIndex = findCepstrumMaximum(dataTime, nDiv2, 0.8f);
-    analysisData.cepstrumIndex = findNSDFsubMaximum(dataTime, nDiv2, 0.6f);
-    analysisData.cepstrumPitch = freq2pitch(double(analysisData.cepstrumIndex) / ch->rate());
+    analysisData.setCepstrumIndex(findNSDFsubMaximum(dataTime, nDiv2, 0.6f));
+    analysisData.cepstrumPitch = freq2pitch(double(analysisData.getCepstrumIndex()) / ch->rate());
 /*
     //Take out everything above the pitch and reverse the cepstrum to get the frequency curve
     int maxIndex = int(std::max_element(dataTime+10, dataTime+nDiv2) - dataTime) - 3;

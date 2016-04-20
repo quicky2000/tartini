@@ -284,6 +284,17 @@ void AnalysisData::setPeriodRatio(float p_period_ratio)
   periodRatio = p_period_ratio;
 }
 
+//------------------------------------------------------------------------------
+int AnalysisData::getCepstrumIndex(void)const
+{
+  return cepstrumIndex;
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setCepstrumIndex(int p_index)
+{
+  cepstrumIndex = p_index;
+}
 
 //------------------------------------------------------------------------------
 bool AnalysisData::isPeriodEstimatesEmpty(void)const
