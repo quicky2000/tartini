@@ -510,9 +510,9 @@ void VibratoWidget::doUpdate()
         if (x2 > width() - noteLabelOffset) { x2 = width() - noteLabelOffset; }
 
         float vibratoPitch1 = active->dataAtChunk(chunk)->getVibratoPitch();
-        float vibratoWidth1 = active->dataAtChunk(chunk)->vibratoWidth;
+        float vibratoWidth1 = active->dataAtChunk(chunk)->getVibratoWidth();
         float vibratoPitch2 = active->dataAtChunk(chunk + 1)->getVibratoPitch();
-        float vibratoWidth2 = active->dataAtChunk(chunk + 1)->vibratoWidth;
+        float vibratoWidth2 = active->dataAtChunk(chunk + 1)->getVibratoWidth();
         float y1 = halfHeight + ((vibratoPitch1 + vibratoWidth1 - avgPitch) * zoomFactorYx100) + offsetY;
         float y2 = halfHeight + ((vibratoPitch1 - vibratoWidth1 - avgPitch) * zoomFactorYx100) + offsetY;
         float y3 = halfHeight + ((vibratoPitch2 - vibratoWidth2 - avgPitch) * zoomFactorYx100) + offsetY;

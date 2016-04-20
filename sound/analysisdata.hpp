@@ -176,6 +176,17 @@ void AnalysisData::setVibratoPitch(float p_vibrato_pitch)
   vibratoPitch = p_vibrato_pitch;
 }
 
+//------------------------------------------------------------------------------
+float AnalysisData::getVibratoWidth(void)const
+{
+  return vibratoWidth;
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setVibratoWidth(float p_vibrato_width)
+{
+  vibratoWidth = p_vibrato_width;
+}
 
 //------------------------------------------------------------------------------
 int AnalysisData::getHighestCorrelationIndex(void)const

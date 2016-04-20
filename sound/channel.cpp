@@ -1307,7 +1307,7 @@ void Channel::doPronyFit(int chunk)
       if(p.omega * pronyWindowSize < TwoPi) {
         data->setVibratoPitch(data->getPitch());
       } else {
-        data->vibratoWidth = p.amp;
+        data->setVibratoWidth(p.amp);
         data->vibratoPhase = p.phase;
         //float xCenter = pronyData[pronyWindowSize/2-1];
         //float fitCenter = p.amp * sin((pronyWindowSize/2-1)*p.omega + p.phase);
