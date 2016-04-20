@@ -141,6 +141,18 @@ void AnalysisData::setLongTermDeviation(const double & p_long_term_deviation)
 }
 
 //------------------------------------------------------------------------------
+const double & AnalysisData::getSpread(void)const
+{
+  return spread;
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setSpread(const double & p_spread)
+{
+  spread = p_spread;
+}
+
+//------------------------------------------------------------------------------
 int AnalysisData::getHighestCorrelationIndex(void)const
 {
   return highestCorrelationIndex;

@@ -659,7 +659,7 @@ bool Channel::isNoteChanging(int chunk)
   AnalysisData *firstShortData = dataAtChunk(firstShortChunk);
   double spread2 = fabs(analysisData->getShortTermMean() - firstShortData->getLongTermMean()) -
     (analysisData->getShortTermDeviation() + firstShortData->getLongTermDeviation());
-  analysisData->spread = spread;
+  analysisData->setSpread(spread);
   analysisData->spread2 = spread2;
 
   if(numChunks >= (int)(ceil(longTime/timePerChunk()) / 2.0) && spread2 > 0.0) {

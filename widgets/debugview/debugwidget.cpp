@@ -74,7 +74,7 @@ void DebugWidget::paintEvent( QPaintEvent * )
     printString(s.sprintf("done = %s", data.done ? "true" : "false"));
     printString(s.sprintf("reason = %d", data.reason));
     printString(s.sprintf("notePlaying = %d", data.notePlaying));
-    printString(s.sprintf("spread = %f", data.spread));
+    printString(s.sprintf("spread = %f", data.getSpread()));
     printString(s.sprintf("spread2 = %f", data.spread2));
     printString(s.sprintf("logrms = %f", data.logrms()));
     printString(s.sprintf("normalised_logrms = %f", dB2Normalised(data.logrms())));
