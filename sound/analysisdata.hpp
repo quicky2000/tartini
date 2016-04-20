@@ -273,6 +273,19 @@ void AnalysisData::setChosenCorrelationIndex(int p_index)
 }
 
 //------------------------------------------------------------------------------
+float AnalysisData::getPeriodRatio(void)const
+{
+  return periodRatio;
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setPeriodRatio(float p_period_ratio)
+{
+  periodRatio = p_period_ratio;
+}
+
+
+//------------------------------------------------------------------------------
 bool AnalysisData::isPeriodEstimatesEmpty(void)const
 {
   return periodEstimates.empty();

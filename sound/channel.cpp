@@ -598,7 +598,7 @@ void Channel::backTrackNoteChange(int chunk) {
     dataAtChunk(curChunk)->setLongTermMean(dataAtChunk(curChunk)->getPitch());
     dataAtChunk(curChunk)->setShortTermDeviation(0.2f);
     dataAtChunk(curChunk)->setLongTermDeviation(0.05f);
-    dataAtChunk(curChunk)->periodRatio = 1.0f;
+    dataAtChunk(curChunk)->setPeriodRatio(1.0f);
   }
 
   int curChunk = largestDiffChunk;
@@ -1054,7 +1054,7 @@ void Channel::addToNSDFAggregate(const float scaler, float periodDiff)
   currentNote->nsdfAggregateRoof += scaler;
   currentNote->currentNsdfPeriod += periodDiff;
   float periodRatio = currentNote->currentNsdfPeriod / currentNote->firstNsdfPeriod;
-  analysisData.periodRatio = periodRatio;
+  analysisData.setPeriodRatio(periodRatio);
   //printf("%f, periodDiff = %f\n", currentNote->currentNsdfPeriod, periodDiff);
   //printf("currentNsdfPeriod = %f\n", currentNote->currentNsdfPeriod);
   //printf("ratio=%f\n", periodRatio);
@@ -1240,7 +1240,7 @@ float Channel::periodOctaveEstimate(int chunk)
 
   AnalysisData *analysisData = dataAtChunk(chunk);
   if(analysisData && analysisData->noteIndex >= 0) {
-    return noteData[analysisData->noteIndex].periodOctaveEstimate() * analysisData->periodRatio;
+    return noteData[analysisData->noteIndex].periodOctaveEstimate() * analysisData->getPeriodRatio();
   }
   else return -1.0f;
 }

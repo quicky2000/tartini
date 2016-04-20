@@ -82,6 +82,8 @@ public:
   inline void setHighestCorrelationIndex(int p_index);
   inline int getChosenCorrelationIndex(void)const;
   inline void setChosenCorrelationIndex(int p_index);
+  inline float getPeriodRatio(void)const;
+  inline void setPeriodRatio(float p_period_ratio);
 
   inline bool isPeriodEstimatesEmpty(void)const;
   inline size_t getPeriodEstimatesSize(void)const;
@@ -118,8 +120,8 @@ public:
   int reason; /*< The reason why there was a note change */
   int highestCorrelationIndex;
   int chosenCorrelationIndex;
- public:
   float periodRatio; /*< The ratio of the current period to the period at the beginning of the current note */
+ public:
 
   int cepstrumIndex;
   float cepstrumPitch;

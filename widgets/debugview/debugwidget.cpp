@@ -85,7 +85,7 @@ void DebugWidget::paintEvent( QPaintEvent * )
     printString(s.sprintf("vibratoPhase = %f", data.getVibratoPhase()));
     printString(s.sprintf("vibratoError = %f", data.getVibratoError()));
     printString(s.sprintf("vibratoWidthAdjust = %f", data.getVibratoWidthAdjust()));
-    printString(s.sprintf("periodRatio = %f", data.periodRatio));
+    printString(s.sprintf("periodRatio = %f", data.getPeriodRatio()));
   }
 
   endDrawing();
