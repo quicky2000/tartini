@@ -14,6 +14,7 @@
  ***************************************************************************/
 
 #include "main.h"
+#include "application.h"
 
 #ifdef MACX
 #include <CoreFoundation/CoreFoundation.h>
@@ -73,7 +74,7 @@ int main( int argc, char **argv )
   CFRelease(macPath);
 #endif
 	
-  QApplication a( argc, argv );
+  application a( argc, argv );
   QString locale = QLocale::system().name();
 
   QTranslator translator;
