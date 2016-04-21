@@ -534,6 +534,18 @@ void AnalysisData::setNoteIndex(int p_node_index)
 }
 
 //------------------------------------------------------------------------------
+void AnalysisData::setNotePlaying(bool p_note_playing)
+{
+  notePlaying = p_note_playing;
+}
+
+//------------------------------------------------------------------------------
+bool AnalysisData::isNotePlaying(void)const
+{
+  return notePlaying;
+}
+
+//------------------------------------------------------------------------------
 bool lessFundametalFreq::operator()(const AnalysisData & x, const AnalysisData & y)
 {
   return x.getFundamentalFreq() < y.getFundamentalFreq();

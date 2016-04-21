@@ -73,7 +73,7 @@ void DebugWidget::paintEvent( QPaintEvent * )
     printString(s.sprintf("noteIndex = %d", data.getNoteIndex()));
     printString(s.sprintf("done = %s", data.done ? "true" : "false"));
     printString(s.sprintf("reason = %d", data.getReason()));
-    printString(s.sprintf("notePlaying = %d", data.notePlaying));
+    printString(s.sprintf("notePlaying = %d", data.isNotePlaying()));
     printString(s.sprintf("spread = %f", data.getSpread()));
     printString(s.sprintf("spread2 = %f", data.getSpread2()));
     printString(s.sprintf("logrms = %f", data.logrms()));

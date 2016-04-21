@@ -593,7 +593,7 @@ void Channel::backTrackNoteChange(int chunk) {
   //start on next note
   for(int curChunk = largestDiffChunk; curChunk <= last; curChunk++) {
     dataAtChunk(curChunk)->setNoteIndex(NO_NOTE);
-    dataAtChunk(curChunk)->notePlaying = false;
+    dataAtChunk(curChunk)->setNotePlaying(false);
     dataAtChunk(curChunk)->setShortTermMean(dataAtChunk(curChunk)->getPitch());
     dataAtChunk(curChunk)->setLongTermMean(dataAtChunk(curChunk)->getPitch());
     dataAtChunk(curChunk)->setShortTermDeviation(0.2f);
@@ -619,11 +619,11 @@ void Channel::backTrackNoteChange(int chunk) {
     myassert(currentNote);
     //periodDiff = 0.0f;
     dataAtChunk(curChunk)->setNoteIndex(getCurrentNoteIndex());
-    dataAtChunk(curChunk)->notePlaying = true;
+    dataAtChunk(curChunk)->setNotePlaying(true);
     curChunk++;
     while((curChunk < last) && isVisibleChunk(dataAtChunk(curChunk))) {
       dataAtChunk(curChunk)->setNoteIndex(getCurrentNoteIndex());
-      dataAtChunk(curChunk)->notePlaying = true;
+      dataAtChunk(curChunk)->setNotePlaying(true);
       currentNote->addData(dataAtChunk(curChunk), float(framesPerChunk()) / float(dataAtChunk(curChunk)->getPeriod()));
       curChunk++;
     }
@@ -721,7 +721,7 @@ void Channel::processNoteDecisions(int chunk, float periodDiff)
     }
   }
 
-  analysisData.notePlaying = noteIsPlaying;
+  analysisData.setNotePlaying(noteIsPlaying);
 
   if(noteIsPlaying) {
       //addTo(nsdfData.begin(), nsdfData.end(), nsdfAggregateData.begin());

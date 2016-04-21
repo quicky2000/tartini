@@ -127,6 +127,8 @@ public:
   inline int getNoteIndex(void)const;
   inline void setNoteIndex(int p_node_index);
 
+  inline void setNotePlaying(bool p_note_playing);
+  inline bool isNotePlaying(void)const;
  private:
   float values[NUM_AMP_MODES];
   float period; /*< The period of the fundamental (in samples) */
@@ -162,8 +164,8 @@ public:
   std::vector<float> harmonicNoise;
   FilterState filterState; //the state of the filter at the beginning of the chunk
   int noteIndex; //The index of the note in the noteData, or NO_NOTE
- public:
   bool notePlaying;
+ public:
   bool done;
   //bool isValid();
   AnalysisData(void);
