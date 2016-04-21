@@ -852,7 +852,7 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch, double leftTime, double curr
       int y = height() - 1 - toInt(ze.high() / zoomY) + viewBottomOffset;
       int y2, y3;
       //if(ze.noteIndex >= 0) {
-      if(ze.noteIndex() != -1 && ch->dataAtChunk(ze.midChunk())->noteIndex != -1) {
+      if(ze.noteIndex() != -1 && ch->dataAtChunk(ze.midChunk())->getNoteIndex() != -1) {
         myassert(ze.noteIndex() >= 0);
         myassert(ze.noteIndex() < int(ch->noteData.size()));
         myassert(ch->isValidChunk(ze.midChunk()));
@@ -983,8 +983,8 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch, double leftTime, double curr
       pitch = (ch->isVisibleChunk(data)) ? data->getPitch() : 0.0f;
       //if(ch->isVisibleChunk(data)) {
 
-      if(data->noteIndex >= 0) {
-        isNoteRectEven[rectIndex] = (data->noteIndex % 2) == 0;
+      if(data->getNoteIndex() >= 0) {
+        isNoteRectEven[rectIndex] = (data->getNoteIndex() % 2) == 0;
 
         if(gdata->showMeanVarianceBars()) {
           x2 = toInt(n+stepSize);
@@ -1085,7 +1085,7 @@ bool FreqWidgetGL::calcZoomElement(Channel *ch, ZoomElement &ze, int baseElement
   if(ch->isVisibleChunk(&*err)) {
     low = a.first->getPitch();
     high = a.second->getPitch();
-    noteIndex = a.first->noteIndex;
+    noteIndex = a.first->getNoteIndex();
   } else {
     low = 0;
     high = 0;

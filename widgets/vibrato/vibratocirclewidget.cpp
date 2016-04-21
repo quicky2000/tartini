@@ -158,9 +158,9 @@ void VibratoCircleWidget::doUpdate()
 
   if ((active) && (active->doingDetailedPitch()) && (active->pitchLookupSmoothed.size() > 0)) {
     AnalysisData *data = active->dataAtCurrentChunk();
-    if(data && active->isVisibleNote(data->noteIndex) && active->isLabelNote(data->noteIndex)) {
+    if(data && active->isVisibleNote(data->getNoteIndex()) && active->isLabelNote(data->getNoteIndex())) {
       NoteData *note = new NoteData();
-      note = &(active->noteData[data->noteIndex]);
+      note = &(active->noteData[data->getNoteIndex()]);
 
       // Determine which delay to use
       int smoothDelay = active->pitchBigSmoothingFilter->delay();

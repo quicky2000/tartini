@@ -377,11 +377,11 @@ void VibratoSpeedWidget::doUpdate()
     AnalysisData *data;
     if(gdata->soundMode & SOUND_REC) data = active->dataAtChunk(active->chunkAtCurrentTime() - active->pronyDelay());
     else data = active->dataAtCurrentChunk();
-    if(data && active->isVisibleNote(data->noteIndex) && active->isLabelNote(data->noteIndex)) {
+    if(data && active->isVisibleNote(data->getNoteIndex()) && active->isLabelNote(data->getNoteIndex())) {
       NoteData *note = new NoteData();
-      note = &(active->noteData[data->noteIndex]);
+      note = &(active->noteData[data->getNoteIndex()]);
 
-      currentNoteNumber = data->noteIndex;
+      currentNoteNumber = data->getNoteIndex();
       if (useProny) {
         vibratoSpeed = data->getVibratoSpeed();
         vibratoWidth = 200 * data->getVibratoWidth();

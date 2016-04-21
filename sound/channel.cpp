@@ -592,7 +592,7 @@ void Channel::backTrackNoteChange(int chunk) {
 
   //start on next note
   for(int curChunk = largestDiffChunk; curChunk <= last; curChunk++) {
-    dataAtChunk(curChunk)->noteIndex = NO_NOTE;
+    dataAtChunk(curChunk)->setNoteIndex(NO_NOTE);
     dataAtChunk(curChunk)->notePlaying = false;
     dataAtChunk(curChunk)->setShortTermMean(dataAtChunk(curChunk)->getPitch());
     dataAtChunk(curChunk)->setLongTermMean(dataAtChunk(curChunk)->getPitch());
@@ -618,11 +618,11 @@ void Channel::backTrackNoteChange(int chunk) {
     NoteData *currentNote = getLastNote();
     myassert(currentNote);
     //periodDiff = 0.0f;
-    dataAtChunk(curChunk)->noteIndex = getCurrentNoteIndex();
+    dataAtChunk(curChunk)->setNoteIndex(getCurrentNoteIndex());
     dataAtChunk(curChunk)->notePlaying = true;
     curChunk++;
     while((curChunk < last) && isVisibleChunk(dataAtChunk(curChunk))) {
-      dataAtChunk(curChunk)->noteIndex = getCurrentNoteIndex();
+      dataAtChunk(curChunk)->setNoteIndex(getCurrentNoteIndex());
       dataAtChunk(curChunk)->notePlaying = true;
       currentNote->addData(dataAtChunk(curChunk), float(framesPerChunk()) / float(dataAtChunk(curChunk)->getPeriod()));
       curChunk++;
@@ -733,7 +733,7 @@ void Channel::processNoteDecisions(int chunk, float periodDiff)
       NoteData *currentNote = getLastNote();
       myassert(currentNote);
 
-      analysisData.noteIndex = getCurrentNoteIndex();
+      analysisData.setNoteIndex(getCurrentNoteIndex());
       currentNote->setEndChunk(chunk+1);
 
       currentNote->addData(&analysisData, float(framesPerChunk()) / float(analysisData.getPeriod()));
@@ -856,7 +856,7 @@ NoteData *Channel::getCurrentNote()
 {
   AnalysisData *analysisData = dataAtCurrentChunk();
   if(analysisData) {
-    int noteIndex = analysisData->noteIndex;
+    int noteIndex = analysisData->getNoteIndex();
     if(noteIndex >= 0 && noteIndex < (int)noteData.size()) return &noteData[noteIndex];
   }
   return NULL;
@@ -1024,7 +1024,7 @@ void Channel::calcDeviation(int chunk) {
 bool Channel::isFirstChunkInNote(int chunk)
 {
   AnalysisData *analysisData = dataAtChunk(chunk);
-  if(analysisData && analysisData->noteIndex >= 0 && noteData[analysisData->noteIndex].startChunk() == chunk) return true;
+  if(analysisData && analysisData->getNoteIndex() >= 0 && noteData[analysisData->getNoteIndex()].startChunk() == chunk) return true;
   else return false;
 }
 
@@ -1229,7 +1229,7 @@ float Channel::calcDetailedPitch(float *input, double period, int /*chunk*/)
 void Channel::calcVibratoData(int chunk)
 {
   NoteData *currentNote = getLastNote();
-  if (currentNote && (dataAtChunk(chunk)->noteIndex >=0)) {
+  if (currentNote && (dataAtChunk(chunk)->getNoteIndex() >=0)) {
     currentNote->addVibratoData(chunk);
   }
 }
@@ -1239,8 +1239,8 @@ float Channel::periodOctaveEstimate(int chunk)
   //return (float)rate() / 440.0f;
 
   AnalysisData *analysisData = dataAtChunk(chunk);
-  if(analysisData && analysisData->noteIndex >= 0) {
-    return noteData[analysisData->noteIndex].periodOctaveEstimate() * analysisData->getPeriodRatio();
+  if(analysisData && analysisData->getNoteIndex() >= 0) {
+    return noteData[analysisData->getNoteIndex()].periodOctaveEstimate() * analysisData->getPeriodRatio();
   }
   else return -1.0f;
 }

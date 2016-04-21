@@ -288,11 +288,11 @@ void ScoreWidget::mousePressEvent( QMouseEvent *e )
         //Find the last note played at time t
         int chunk = ch->chunkAtTime(t);
         AnalysisData *data = ch->dataAtChunk(chunk);
-        while (data && data->noteIndex < 0 && chunk > 0) {
+        while (data && data->getNoteIndex() < 0 && chunk > 0) {
           data = ch->dataAtChunk(--chunk);
         }
-        if(data && data->noteIndex >= 0) {
-            int startChunk = ch->noteData[data->noteIndex].startChunk();
+        if(data && data->getNoteIndex() >= 0) {
+	  int startChunk = ch->noteData[data->getNoteIndex()].startChunk();
             gdata->updateActiveChunkTime(ch->timeAtChunk(startChunk));
             //gdata->updateActiveChunkTime(t);
             if(gdata->running == STREAM_STOP) {

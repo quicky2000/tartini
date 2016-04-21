@@ -228,9 +228,9 @@ void VibratoTunerWidget::doUpdate(double thePitch)
 
   if (active) {
     AnalysisData *data = active->dataAtCurrentChunk();
-    if(data && active->isVisibleNote(data->noteIndex) && active->isLabelNote(data->noteIndex)) {
+    if(data && active->isVisibleNote(data->getNoteIndex()) && active->isLabelNote(data->getNoteIndex())) {
       NoteData *note = new NoteData();
-      note = &(active->noteData[data->noteIndex]);
+      note = &(active->noteData[data->getNoteIndex()]);
 /*
       large_vector<float> pitchLookupUsed = active->pitchLookupSmoothed;
       int smoothDelay = active->pitchBigSmoothingFilter->delay();

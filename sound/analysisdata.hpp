@@ -522,6 +522,18 @@ void AnalysisData::setFilterState(const FilterState & p_filter_state)
 }
 
 //------------------------------------------------------------------------------
+int AnalysisData::getNoteIndex(void)const
+{
+  return noteIndex;
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setNoteIndex(int p_node_index)
+{
+  noteIndex = p_node_index;
+}
+
+//------------------------------------------------------------------------------
 bool lessFundametalFreq::operator()(const AnalysisData & x, const AnalysisData & y)
 {
   return x.getFundamentalFreq() < y.getFundamentalFreq();

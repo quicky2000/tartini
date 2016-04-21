@@ -124,6 +124,8 @@ public:
   inline void setHarmonicNoiseAt(size_t p_index, float p_value);
 
   inline void setFilterState(const FilterState & p_filter_state);
+  inline int getNoteIndex(void)const;
+  inline void setNoteIndex(int p_node_index);
 
  private:
   float values[NUM_AMP_MODES];
@@ -159,8 +161,8 @@ public:
   std::vector<float> harmonicFreq;
   std::vector<float> harmonicNoise;
   FilterState filterState; //the state of the filter at the beginning of the chunk
- public:
   int noteIndex; //The index of the note in the noteData, or NO_NOTE
+ public:
   bool notePlaying;
   bool done;
   //bool isValid();

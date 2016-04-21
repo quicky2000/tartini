@@ -1102,7 +1102,7 @@ void MainWindow::setNoteLabel()
   if(active) {
     active->lock();
     AnalysisData *data = active->dataAtCurrentChunk();
-    if(data && active->isVisibleNote(data->noteIndex) && active->isLabelNote(data->noteIndex)) sprintf(temp, "Note: %d", data->noteIndex);
+    if(data && active->isVisibleNote(data->getNoteIndex()) && active->isLabelNote(data->getNoteIndex())) sprintf(temp, "Note: %d", data->getNoteIndex());
     else sprintf(temp, "Note:    ");
     active->unlock();
   } else {
