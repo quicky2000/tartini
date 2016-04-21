@@ -618,6 +618,12 @@ float AnalysisData::getVolumeValue(void)const
 }
 
 //------------------------------------------------------------------------------
+float AnalysisData::getNoteScore(void)const
+{
+  return values[NOTE_SCORE];
+}
+
+//------------------------------------------------------------------------------
 bool lessFundametalFreq::operator()(const AnalysisData & x, const AnalysisData & y)
 {
   return x.getFundamentalFreq() < y.getFundamentalFreq();

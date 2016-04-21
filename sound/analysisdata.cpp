@@ -100,7 +100,7 @@ void AnalysisData::calcScores(void)
     {
       a[j] = bound(((*amp_mode_func[j])(values[j]) - (*amp_mode_func[j])(gdata->ampThreshold(j,0))) / ((*amp_mode_func[j])(gdata->ampThreshold(j,1)) - (*amp_mode_func[j])(gdata->ampThreshold(j,0))), 0.0, 1.0);
     }
-  noteScore() = a[AMPLITUDE_RMS] * a[AMPLITUDE_CORRELATION];
+  values[NOTE_SCORE] = a[AMPLITUDE_RMS] * a[AMPLITUDE_CORRELATION];
   noteChangeScore() = (1.0 - a[FREQ_CHANGENESS]);
 }
 //EOF

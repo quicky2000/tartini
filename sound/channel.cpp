@@ -541,7 +541,7 @@ bool Channel::isVisibleNote(int noteIndex_)
 bool Channel::isVisibleChunk(AnalysisData *data)
 {
   myassert(data);
-  if(data->noteScore() >= gdata->ampThreshold(NOTE_SCORE,0)) return true;
+  if(data->getNoteScore() >= gdata->ampThreshold(NOTE_SCORE,0)) return true;
 /*  if(gdata->pitchContourMode() == 0) {
     if(gdata->amplitudeMode() == AMPLITUDE_RMS) {
       //if(data->logrms() >= gdata->noiseThresholdDB()) return true;
