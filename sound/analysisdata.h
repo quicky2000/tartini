@@ -57,6 +57,7 @@ public:
   inline float getPitch(void)const;
   inline void setPitch(float p_pitch);
   inline float getFreqCentroid(void)const;
+  inline void setFreqCentroid(float p_value);
   inline const double & getPitchSum(void)const;
   inline void setPitchSum(const double & p_pitch_sum);
   inline const double & getPitch2Sum(void)const;
@@ -191,7 +192,6 @@ public:
   bool done;
  public:
 
-  float &freqCentroid() { return _freqCentroid; }
   float &deltaFreqCentroid() { return values[DELTA_FREQ_CENTROID]; }
   float volumeValue() { return (dB2Normalised(values[AMPLITUDE_RMS]) + values[AMPLITUDE_CORRELATION]-1.0f) * 0.2; }
   float &noteScore() { return values[NOTE_SCORE]; }

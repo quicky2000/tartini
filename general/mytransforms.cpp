@@ -437,9 +437,9 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
     //}
 
     //analysisData.freqCentroid() = calcFreqCentroid(storeFFT, size);
-    analysisData.freqCentroid() = calcFreqCentroidFromLogMagnitudes(ch->fftData1.begin(), ch->fftData1.size());
+    analysisData.setFreqCentroid(calcFreqCentroidFromLogMagnitudes(ch->fftData1.begin(), ch->fftData1.size()));
     if(prevAnalysisData)
-      analysisData.deltaFreqCentroid() = bound(fabs(analysisData.freqCentroid() - prevAnalysisData->freqCentroid())*20.0, 0.0, 1.0);
+      analysisData.deltaFreqCentroid() = bound(fabs(analysisData.getFreqCentroid() - prevAnalysisData->getFreqCentroid()) * 20.0, 0.0, 1.0);
     else 
       analysisData.deltaFreqCentroid() = 0.0;
     

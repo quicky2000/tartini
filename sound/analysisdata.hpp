@@ -57,6 +57,12 @@ float AnalysisData::getFreqCentroid(void)const
 }
 
 //------------------------------------------------------------------------------
+void AnalysisData::setFreqCentroid(float p_value)
+{
+  _freqCentroid = p_value;
+}
+
+//------------------------------------------------------------------------------
 float AnalysisData::getPitch(void)const
 {
   return pitch;
