@@ -570,6 +570,18 @@ void AnalysisData::setLogRms(float p_log_rms)
 }
 
 //------------------------------------------------------------------------------
+float AnalysisData::getMaxIntensityDB(void)const
+{
+  return values[AMPLITUDE_MAX_INTENSITY];
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setMaxIntensityDB(float p_value)
+{
+  values[AMPLITUDE_MAX_INTENSITY] = p_value;
+}
+
+//------------------------------------------------------------------------------
 bool lessFundametalFreq::operator()(const AnalysisData & x, const AnalysisData & y)
 {
   return x.getFundamentalFreq() < y.getFundamentalFreq();

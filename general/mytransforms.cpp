@@ -402,7 +402,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
   //freqPerBin = rate / 2.0 / double(size);
 
   //analysisData.maxIntensity = fabs(*std::max_element(input, input+n, absoluteLess()));
-  analysisData.maxIntensityDB() = linear2dB(fabs(*std::max_element(curInput, curInput+n, absoluteLess<float>())));
+  analysisData.setMaxIntensityDB(linear2dB(fabs(*std::max_element(curInput, curInput+n, absoluteLess<float>()))));
   
   //if(gdata->doingActiveFFT()) {
     //std::copy(curInput, curInput+n, dataTime);

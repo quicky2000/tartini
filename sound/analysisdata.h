@@ -143,6 +143,9 @@ public:
 
   inline float getLogRms(void)const;
   inline void setLogRms(float p_log_rms);
+
+  inline float getMaxIntensityDB(void)const;
+  inline void setMaxIntensityDB(float p_value);
  private:
   float values[NUM_AMP_MODES];
   float period; /*< The period of the fundamental (in samples) */
@@ -182,7 +185,6 @@ public:
   bool done;
  public:
 
-  float &maxIntensityDB() { return values[AMPLITUDE_MAX_INTENSITY]; }
   float &correlation() { return values[AMPLITUDE_CORRELATION]; }
   float &changeness() { return values[FREQ_CHANGENESS]; }
   float &freqCentroid() { return _freqCentroid; }
