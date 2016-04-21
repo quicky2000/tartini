@@ -528,7 +528,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
         ch->doPronyFit(chunk); //calculate vibratoPitch, vibratoWidth, vibratoSpeed
       }
 
-      analysisData.changeness() = 0.0f;
+      analysisData.setChangeness(0.0f);
       //analysisData.changeness() = get_max_note_change(dataTime, analysisData.period);
 
       if(gdata->doingHarmonicAnalysis()) {

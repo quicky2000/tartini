@@ -150,6 +150,8 @@ public:
   inline float getCorrelation(void)const;
   inline void setCorrelation(float p_value);
 
+  inline void setChangeness(float p_value);
+
  private:
   float values[NUM_AMP_MODES];
   float period; /*< The period of the fundamental (in samples) */
@@ -189,7 +191,6 @@ public:
   bool done;
  public:
 
-  float &changeness() { return values[FREQ_CHANGENESS]; }
   float &freqCentroid() { return _freqCentroid; }
   float &deltaFreqCentroid() { return values[DELTA_FREQ_CENTROID]; }
   float volumeValue() { return (dB2Normalised(values[AMPLITUDE_RMS]) + values[AMPLITUDE_CORRELATION]-1.0f) * 0.2; }

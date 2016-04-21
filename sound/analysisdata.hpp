@@ -593,6 +593,13 @@ void AnalysisData::setCorrelation(float p_value)
   values[AMPLITUDE_CORRELATION] = p_value;
 }
 
+
+//------------------------------------------------------------------------------
+void AnalysisData::setChangeness(float p_value)
+{
+  values[FREQ_CHANGENESS] = p_value;
+}
+
 //------------------------------------------------------------------------------
 bool lessFundametalFreq::operator()(const AnalysisData & x, const AnalysisData & y)
 {
