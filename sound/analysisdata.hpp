@@ -546,6 +546,18 @@ bool AnalysisData::isNotePlaying(void)const
 }
 
 //------------------------------------------------------------------------------
+void AnalysisData::setDone(bool p_done)
+{
+  done = p_done;
+}
+
+//------------------------------------------------------------------------------
+bool AnalysisData::isDone(void)const
+{
+  return done;
+}
+
+//------------------------------------------------------------------------------
 bool lessFundametalFreq::operator()(const AnalysisData & x, const AnalysisData & y)
 {
   return x.getFundamentalFreq() < y.getFundamentalFreq();

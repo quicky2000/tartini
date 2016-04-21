@@ -419,7 +419,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
     //analysisData.rms = nsdf(dataTime, output) / double(n/*size*/);
     double logrms = linear2dB(nsdf(dataTime, ch->nsdfData.begin()) / double(n)); /**< Do the NSDF calculation */
     analysisData.logrms() = logrms;
-    if(gdata->doingAutoNoiseFloor() && !analysisData.done) {
+    if(gdata->doingAutoNoiseFloor() && !analysisData.isDone()) {
       //do it for gdata. this is only here for old code. remove some stage
       if(chunk == 0) { gdata->rmsFloor() = 0.0; gdata->rmsCeiling() = gdata->dBFloor(); }
       if(logrms+15 < gdata->rmsFloor()) gdata->rmsFloor() = logrms+15;
@@ -444,7 +444,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
       analysisData.deltaFreqCentroid() = 0.0;
     
     findNSDFMaxima(ch->nsdfData.begin(), k, nsdfMaxPositions);
-    if(!analysisData.done) {
+    if(!analysisData.isDone()) {
       //if(ch->isNotePlaying()) {
         //analysisData.periodOctaveEstimate = ch->calcOctaveEstimate(chunk, threshold);
 /*
@@ -491,7 +491,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
     if(analysisData.isPeriodEstimatesEmpty()) { //no period found
       //analysisData.correlation() = 0.0f;
       analysisData.calcScores();
-      analysisData.done = true;
+      analysisData.setDone(true);
       //goto finished; //return;
     } else {
       //calc the periodDiff
@@ -509,7 +509,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
       int nsdfMaxIndex = analysisData.getPeriodEstimatesAmpMaxElementIndex();
       analysisData.setHighestCorrelationIndex(nsdfMaxIndex);
 
-      if(!analysisData.done) {
+      if(!analysisData.isDone()) {
         //if(gdata->doingActiveCepstrum()) {
         if(gdata->analysisType() == MPM_MODIFIED_CEPSTRUM) {
 	  ch->chooseCorrelationIndex(chunk, float(analysisData.getCepstrumIndex())); //calculate pitch
@@ -557,10 +557,10 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
 */
     }
 
-    if(!analysisData.done) {
+    if(!analysisData.isDone()) {
       analysisData.calcScores();
       ch->processNoteDecisions(chunk, periodDiff);
-      analysisData.done = true;
+      analysisData.setDone(true);
     }
 
     if(gdata->doingFreqAnalysis() && ch->doingDetailedPitch() && ch->firstTimeThrough()) {
@@ -573,7 +573,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
     ch->pitchLookupSmoothed.copyTo(ch->detailedPitchDataSmoothed.begin(), chunk*ch->detailedPitchDataSmoothed.size(), ch->detailedPitchDataSmoothed.size());
   }
 
-  if(!analysisData.done) {
+  if(!analysisData.isDone()) {
     int j;
     //calc rms by hand
     double rms = 0.0;
@@ -583,7 +583,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
     //analysisData.rms = sqrt(analysisData.rms);
     analysisData.logrms() = linear2dB(rms / float(n));
     analysisData.calcScores();
-    analysisData.done = true;
+    analysisData.setDone(true);
   }
 
 }
