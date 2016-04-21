@@ -154,6 +154,8 @@ public:
   inline void setChangeness(float p_value);
 
   inline void setDeltaFreqCentroid(float p_value);
+
+  inline float getVolumeValue(void)const;
  private:
   float values[NUM_AMP_MODES];
   float period; /*< The period of the fundamental (in samples) */
@@ -193,7 +195,6 @@ public:
   bool done;
  public:
 
-  float volumeValue() { return (dB2Normalised(values[AMPLITUDE_RMS]) + values[AMPLITUDE_CORRELATION]-1.0f) * 0.2; }
   float &noteScore() { return values[NOTE_SCORE]; }
   float &noteChangeScore() { return values[NOTE_CHANGE_SCORE]; }
 };

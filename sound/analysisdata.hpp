@@ -612,6 +612,12 @@ void AnalysisData::setDeltaFreqCentroid(float p_value)
 }
 
 //------------------------------------------------------------------------------
+float AnalysisData::getVolumeValue(void)const
+{
+  return (dB2Normalised(values[AMPLITUDE_RMS]) + values[AMPLITUDE_CORRELATION] - 1.0f) * 0.2;
+}
+
+//------------------------------------------------------------------------------
 bool lessFundametalFreq::operator()(const AnalysisData & x, const AnalysisData & y)
 {
   return x.getFundamentalFreq() < y.getFundamentalFreq();
