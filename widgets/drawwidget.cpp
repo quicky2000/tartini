@@ -227,7 +227,7 @@ void DrawWidget::drawChannel(QPaintDevice &pd, Channel *ch, QPainter &p, double 
       AnalysisData *data = ch->dataAtChunk(intChunk);
       err = data->correlation();
       //vol = dB2ViewVal(data->logrms(), ch->rmsCeiling, ch->rmsFloor);
-      vol = dB2Normalised(data->logrms(), ch->rmsCeiling, ch->rmsFloor);
+      vol = dB2Normalised(data->getLogRms(), ch->rmsCeiling, ch->rmsFloor);
       //if (err >= CERTAIN_THRESHOLD) {
       
       //float val = MIN(ch->dataAtChunk(intChunk)->volumeValue, 1.0);
@@ -457,7 +457,7 @@ void DrawWidget::drawChannelFilled(Channel *ch, QPainter &p, double leftTime, do
       if(gdata->pitchContourMode() == 0)
         //p.setPen(QPen(colorBetween(colorGroup().background(), ch->color, err*2.0-1.0), lineWidth));
         //p.setPen(QPen(colorBetween(gdata->backgroundColor(),  ch->color, err*sqrt(data->rms)*10.0), lineWidth));
-        p.setPen(QPen(colorBetween(QColor(255, 255, 255), ch->color, err*dB2ViewVal(data->logrms())), lineWidth));
+        p.setPen(QPen(colorBetween(QColor(255, 255, 255), ch->color, err * dB2ViewVal(data->getLogRms())), lineWidth));
       else
         p.setPen(QPen(ch->color, lineWidth));
       
@@ -671,7 +671,7 @@ void DrawWidget::setChannelVerticalView(Channel *ch, double leftTime, double cur
       pitch = (ch->isVisibleChunk(data)) ? data->getPitch() : 0.0f;
       myassert(pitch >= 0.0 && pitch <= gdata->topPitch());
       //corr = data->correlation*sqrt(data->rms)*10.0;
-      corr = data->correlation()*dB2ViewVal(data->logrms());
+      corr = data->correlation() * dB2ViewVal(data->getLogRms());
       if(pitch > 0.0f) {
         float weight = corr;
         if(minY < pitch) minY = pitch;
@@ -747,7 +747,7 @@ bool DrawWidget::calcZoomElement(Channel *ch, ZoomElement &ze, int baseElement, 
   }
   //float corr = err->correlation()*dB2ViewVal(err->logrms());
   //float corr = err->correlation()*dB2ViewVal(err->logrms(), ch->rmsCeiling, ch->rmsFloor);
-  float corr = err->correlation()*dB2Normalised(err->logrms(), ch->rmsCeiling, ch->rmsFloor);
+  float corr = err->correlation() * dB2Normalised(err->getLogRms(), ch->rmsCeiling, ch->rmsFloor);
   QColor theColor = (gdata->pitchContourMode() == 0) ? colorBetween(gdata->backgroundColor(), ch->color, corr) : ch->color;
 
   ze.set(low, high, corr, theColor, noteIndex, (startChunk+finishChunk)/2);

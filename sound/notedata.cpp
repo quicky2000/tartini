@@ -50,7 +50,7 @@ NoteData::NoteData(Channel *channel_, int startChunk_, AnalysisData *analysisDat
   channel = channel_;
   _startChunk = startChunk_;
   _endChunk = startChunk_ + 1;
-  maxLogRMS = analysisData->logrms();
+  maxLogRMS = analysisData->getLogRms();
   maxIntensityDB = analysisData->maxIntensityDB();
   maxCorrelation = analysisData->correlation();
   maxPurity = analysisData->volumeValue();
@@ -92,11 +92,11 @@ void NoteData::resetData()
 
 void NoteData::addData(AnalysisData *analysisData, float periods)
 {
-  maxLogRMS = MAX(maxLogRMS, analysisData->logrms());
+  maxLogRMS = MAX(maxLogRMS, analysisData->getLogRms());
   maxIntensityDB = MAX(maxIntensityDB, analysisData->maxIntensityDB());
   maxCorrelation = MAX(maxCorrelation, analysisData->correlation());
   maxPurity = MAX(maxPurity, analysisData->volumeValue());
-  _volume = MAX(_volume, dB2Normalised(analysisData->logrms()));
+  _volume = MAX(_volume, dB2Normalised(analysisData->getLogRms()));
   _numPeriods += periods; //sum up the periods
   //_periodOctaveEstimate = analysisData->periodOctaveEstimate; //overwrite the old estimate
   _avgPitch = bound(freq2pitch(avgFreq()), 0.0, gdata->topPitch());

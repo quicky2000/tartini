@@ -558,6 +558,18 @@ bool AnalysisData::isDone(void)const
 }
 
 //------------------------------------------------------------------------------
+float AnalysisData::getLogRms(void)const
+{
+  return values[AMPLITUDE_RMS];
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setLogRms(float p_log_rms)
+{
+  values[AMPLITUDE_RMS] = p_log_rms;
+}
+
+//------------------------------------------------------------------------------
 bool lessFundametalFreq::operator()(const AnalysisData & x, const AnalysisData & y)
 {
   return x.getFundamentalFreq() < y.getFundamentalFreq();

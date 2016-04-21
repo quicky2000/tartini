@@ -46,6 +46,9 @@ extern double(*amp_mode_inv_func[NUM_AMP_MODES])(double);
 class AnalysisData
 {
 public: 
+  AnalysisData(void);
+  void calcScores(void);
+
   inline float getValue(size_t p_index)const;
   inline float getPeriod(void)const;
   inline void setPeriod(float p_period);
@@ -137,6 +140,9 @@ public:
   inline bool isNotePlaying(void)const;
   inline void setDone(bool p_done);
   inline bool isDone(void)const;
+
+  inline float getLogRms(void)const;
+  inline void setLogRms(float p_log_rms);
  private:
   float values[NUM_AMP_MODES];
   float period; /*< The period of the fundamental (in samples) */
@@ -175,10 +181,7 @@ public:
   bool notePlaying;
   bool done;
  public:
-  AnalysisData(void);
-  void calcScores(void);
 
-  float &logrms() { return values[AMPLITUDE_RMS]; }
   float &maxIntensityDB() { return values[AMPLITUDE_MAX_INTENSITY]; }
   float &correlation() { return values[AMPLITUDE_CORRELATION]; }
   float &changeness() { return values[FREQ_CHANGENESS]; }

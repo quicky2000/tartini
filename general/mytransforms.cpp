@@ -418,7 +418,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
     //analysisData.rms = nsdf(dataTime, output.begin()) / double(n/*size*/);
     //analysisData.rms = nsdf(dataTime, output) / double(n/*size*/);
     double logrms = linear2dB(nsdf(dataTime, ch->nsdfData.begin()) / double(n)); /**< Do the NSDF calculation */
-    analysisData.logrms() = logrms;
+    analysisData.setLogRms(logrms);
     if(gdata->doingAutoNoiseFloor() && !analysisData.isDone()) {
       //do it for gdata. this is only here for old code. remove some stage
       if(chunk == 0) { gdata->rmsFloor() = 0.0; gdata->rmsCeiling() = gdata->dBFloor(); }
@@ -581,7 +581,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
       rms += sq(dataTime[j]);
     }
     //analysisData.rms = sqrt(analysisData.rms);
-    analysisData.logrms() = linear2dB(rms / float(n));
+    analysisData.setLogRms(linear2dB(rms / float(n)));
     analysisData.calcScores();
     analysisData.setDone(true);
   }

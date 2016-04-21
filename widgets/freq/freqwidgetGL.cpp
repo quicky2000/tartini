@@ -727,7 +727,7 @@ void FreqWidgetGL::drawChannelGL(Channel *ch, double leftTime, double currentTim
       AnalysisData *data = ch->dataAtChunk(intChunk);
       err = data->correlation();
       //vol = dB2ViewVal(data->logrms(), ch->rmsCeiling, ch->rmsFloor);
-      vol = dB2Normalised(data->logrms(), ch->rmsCeiling, ch->rmsFloor);
+      vol = dB2Normalised(data->getLogRms(), ch->rmsCeiling, ch->rmsFloor);
       //if (err >= CERTAIN_THRESHOLD) {
       
       //float val = MIN(ch->dataAtChunk(intChunk)->volumeValue, 1.0);
@@ -971,7 +971,7 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch, double leftTime, double curr
 
       //float val = MIN(ch->dataAtChunk(intChunk)->volumeValue, 1.0);
       if(gdata->pitchContourMode() == 0)
-       qglColor(colorBetween(QColor(255, 255, 255), ch->color, err*dB2ViewVal(data->logrms())));
+       qglColor(colorBetween(QColor(255, 255, 255), ch->color, err * dB2ViewVal(data->getLogRms())));
       else
         //p.setPen(QPen(ch->color, lineWidth));
         qglColor(ch->color);
@@ -1093,7 +1093,7 @@ bool FreqWidgetGL::calcZoomElement(Channel *ch, ZoomElement &ze, int baseElement
   }
   //float corr = err->correlation()*dB2ViewVal(err->logrms());
   //float corr = err->correlation()*dB2ViewVal(err->logrms(), ch->rmsCeiling, ch->rmsFloor);
-  float corr = err->correlation()*dB2Normalised(err->logrms(), ch->rmsCeiling, ch->rmsFloor);
+  float corr = err->correlation() * dB2Normalised(err->getLogRms(), ch->rmsCeiling, ch->rmsFloor);
   QColor theColor = (gdata->pitchContourMode() == 0) ? colorBetween(gdata->backgroundColor(), ch->color, corr) : ch->color;
 
   ze.set(low, high, corr, theColor, noteIndex, (startChunk+finishChunk)/2);
@@ -1216,7 +1216,7 @@ void FreqWidgetGL::setChannelVerticalView(Channel *ch, double leftTime, double c
       pitch = (ch->isVisibleChunk(data)) ? data->getPitch() : 0.0f;
       myassert(pitch >= 0.0 && pitch <= gdata->topPitch());
       //corr = data->correlation*sqrt(data->rms)*10.0;
-      corr = data->correlation()*dB2ViewVal(data->logrms());
+      corr = data->correlation() * dB2ViewVal(data->getLogRms());
       if(pitch > 0.0f) {
         float weight = corr;
         if(minY < pitch) minY = pitch;

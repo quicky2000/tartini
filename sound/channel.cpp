@@ -420,7 +420,7 @@ float Channel::averagePitch(int begin, int end)
     window_weight = 0.5 - 0.5 * cos(window_pos * (2 * PI));
     data = dataAtChunk(i);
     //weight = window_weight * data->correlation * data->rms;
-    weight = window_weight * data->correlation() * dB2Linear(data->logrms());
+    weight = window_weight * data->correlation() * dB2Linear(data->getLogRms());
     total += data->getPitch() * weight;
     goodCount += weight;
   }
@@ -728,7 +728,7 @@ void Channel::processNoteDecisions(int chunk, float periodDiff)
       //addElements(nsdfAggregateData.begin(), nsdfAggregateData.end(), nsdfData.begin(), dB2Normalised(analysisData.logrms()));
       //addToNSDFAggregate(dB2Normalised(analysisData.logrms()));
       //addToNSDFAggregate(dB2Linear(analysisData.logrms()), analysisData.period);
-      addToNSDFAggregate(dB2Linear(analysisData.logrms()), periodDiff);
+      addToNSDFAggregate(dB2Linear(analysisData.getLogRms()), periodDiff);
       //analysisData.periodOctaveEstimate = calcOctaveEstimate();
       NoteData *currentNote = getLastNote();
       myassert(currentNote);
@@ -1259,7 +1259,7 @@ void Channel::exportChannel(int type, QString typeString)
     out << "        Time(secs) Pitch(semi-tones)       Volume(rms)" << endl;
     out << qSetFieldWidth(18);
     for(int j=0; j<totalChunks(); j++) {
-      out << timeAtChunk(j) <<  dataAtChunk(j)->getPitch() << dataAtChunk(j)->logrms() << endl;
+      out << timeAtChunk(j) <<  dataAtChunk(j)->getPitch() << dataAtChunk(j)->getLogRms() << endl;
     }
   } else if(type == 1) { //matlab file
     out << "t = [";
@@ -1279,7 +1279,7 @@ void Channel::exportChannel(int type, QString typeString)
     out << "volume = [";
     for(int j=0; j<totalChunks(); j++) {
       if(j>0) out << ", ";
-      out << dataAtChunk(j)->logrms();
+      out << dataAtChunk(j)->getLogRms();
     }
     out << "];" << endl;
   }
