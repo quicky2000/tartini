@@ -26,8 +26,14 @@
 
 #include "conversions.h"
 
-//enum AmplitudeModes { AMPLITUDE_RMS, AMPLITUDE_MAX_INTENSITY, AMPLITUDE_CORRELATION, AMPLITUDE_PURITY, FREQ_CHANGENESS };
-enum AmplitudeModes { AMPLITUDE_RMS, AMPLITUDE_MAX_INTENSITY, AMPLITUDE_CORRELATION, FREQ_CHANGENESS, DELTA_FREQ_CENTROID, NOTE_SCORE, NOTE_CHANGE_SCORE };
+enum AmplitudeModes {
+  AMPLITUDE_RMS,
+  AMPLITUDE_MAX_INTENSITY,
+  AMPLITUDE_CORRELATION,
+  FREQ_CHANGENESS,
+  DELTA_FREQ_CENTROID,
+  NOTE_SCORE,
+  NOTE_CHANGE_SCORE };
 
 #define NUM_AMP_MODES 7
 extern const char *amp_mode_names[NUM_AMP_MODES];
@@ -169,7 +175,6 @@ public:
   bool notePlaying;
   bool done;
  public:
-  //bool isValid();
   AnalysisData(void);
   void calcScores(void);
 
