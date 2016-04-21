@@ -439,9 +439,9 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
     //analysisData.freqCentroid() = calcFreqCentroid(storeFFT, size);
     analysisData.setFreqCentroid(calcFreqCentroidFromLogMagnitudes(ch->fftData1.begin(), ch->fftData1.size()));
     if(prevAnalysisData)
-      analysisData.deltaFreqCentroid() = bound(fabs(analysisData.getFreqCentroid() - prevAnalysisData->getFreqCentroid()) * 20.0, 0.0, 1.0);
+      analysisData.setDeltaFreqCentroid(bound(fabs(analysisData.getFreqCentroid() - prevAnalysisData->getFreqCentroid()) * 20.0, 0.0, 1.0));
     else 
-      analysisData.deltaFreqCentroid() = 0.0;
+      analysisData.setDeltaFreqCentroid(0.0);
     
     findNSDFMaxima(ch->nsdfData.begin(), k, nsdfMaxPositions);
     if(!analysisData.isDone()) {
