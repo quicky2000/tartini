@@ -74,15 +74,15 @@ void WaveWidget::paintEvent( QPaintEvent * )
         int n = int(ceil(double(centerX) / scaleX));
         int j, x;
         p.setPen(Qt::NoPen);
-        QColor color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), data->correlation());
-        QColor color2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), data->correlation());
+        QColor color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), data->getCorrelation());
+        QColor color2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), data->getCorrelation());
         for(j = -n; j<n; j++) {
           x = centerX+toInt(scaleX*double(j));
           p.setBrush((j%2) ? color1 : color2);
           //p.drawRect(x, -256, toInt(period), 511);
           p.drawRect(x, 0, toInt(scaleX*double(j+1)) - toInt(scaleX*double(j)), height());
         }
-        p.setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3*data->correlation()));
+        p.setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3*data->getCorrelation()));
         for(j = -n; j<n; j++) {
           x = centerX+toInt(scaleX*j);
           //p.drawLine(x, -256, x, 256);

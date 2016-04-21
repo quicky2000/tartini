@@ -420,7 +420,7 @@ float Channel::averagePitch(int begin, int end)
     window_weight = 0.5 - 0.5 * cos(window_pos * (2 * PI));
     data = dataAtChunk(i);
     //weight = window_weight * data->correlation * data->rms;
-    weight = window_weight * data->correlation() * dB2Linear(data->getLogRms());
+    weight = window_weight * data->getCorrelation() * dB2Linear(data->getLogRms());
     total += data->getPitch() * weight;
     goodCount += weight;
   }
@@ -473,11 +473,11 @@ float Channel::averageMaxCorrelation(int begin, int end)
   //if (begin > end || begin >= ch->lookup.size() || end >= ch->lookup.size()) return -1;
 
   // Init the total to be the first item
-  float totalCorrelation = dataAtChunk(begin)->correlation();
+  float totalCorrelation = dataAtChunk(begin)->getCorrelation();
 
   for (int i = begin + 1; i < end; i++) {
      //total += ch->dataAtChunk(i)->volumeValue;
-     totalCorrelation += dataAtChunk(i)->correlation();
+     totalCorrelation += dataAtChunk(i)->getCorrelation();
   }
   //return (total / (end - begin + 1));
   return (totalCorrelation / (end - begin + 1));
@@ -899,7 +899,7 @@ void Channel::chooseCorrelationIndex1(int chunk)
 	}
     }
   analysisData.setChosenCorrelationIndex(choosenMaxIndex);
-  analysisData.correlation() = analysisData.getPeriodEstimatesAmpAt(choosenMaxIndex);
+  analysisData.setCorrelation(analysisData.getPeriodEstimatesAmpAt(choosenMaxIndex));
   
   //double period = analysisData.periodEstimates[choosenMaxIndex];
   analysisData.setPeriod(analysisData.getPeriodEstimatesAt(choosenMaxIndex));
@@ -955,7 +955,7 @@ bool Channel::chooseCorrelationIndex(int chunk, float periodOctaveEstimate)
   }
   if(choosenMaxIndex != analysisData.getChosenCorrelationIndex()) isDifferentIndex = true;
   analysisData.setChosenCorrelationIndex(choosenMaxIndex);
-  analysisData.correlation() = analysisData.getPeriodEstimatesAmpAt(choosenMaxIndex);
+  analysisData.setCorrelation(analysisData.getPeriodEstimatesAmpAt(choosenMaxIndex));
   
   //double period = analysisData.periodEstimates[choosenMaxIndex];
   analysisData.setPeriod(analysisData.getPeriodEstimatesAt(choosenMaxIndex));

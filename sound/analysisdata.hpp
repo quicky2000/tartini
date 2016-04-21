@@ -582,6 +582,18 @@ void AnalysisData::setMaxIntensityDB(float p_value)
 }
 
 //------------------------------------------------------------------------------
+float AnalysisData::getCorrelation(void)const
+{
+  return values[AMPLITUDE_CORRELATION];
+}
+
+//------------------------------------------------------------------------------
+void AnalysisData::setCorrelation(float p_value)
+{
+  values[AMPLITUDE_CORRELATION] = p_value;
+}
+
+//------------------------------------------------------------------------------
 bool lessFundametalFreq::operator()(const AnalysisData & x, const AnalysisData & y)
 {
   return x.getFundamentalFreq() < y.getFundamentalFreq();

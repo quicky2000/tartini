@@ -85,7 +85,7 @@ void PitchCompassDrawWidget::updateCompass(double time)
   
   AnalysisData *data = active->dataAtTime(time);
 
-  if(data && data->correlation() >= 0.9) {
+  if(data && data->getCorrelation() >= 0.9) {
     double pitch = data->getPitch();
   
     if (mode == 0) {

@@ -55,7 +55,7 @@ void PianoView::changeKey()
       float pitch = data->getPitch();
       //if (note > 0) {
         //pianoWidget->setCurrentNote(noteValue(note), data->volumeValue);
-        pianoWidget->setCurrentNote(noteValue(pitch), data->correlation());
+        pianoWidget->setCurrentNote(noteValue(pitch), data->getCorrelation());
       //} else {
       //  pianoWidget->setNoNote();
       //}

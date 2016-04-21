@@ -64,14 +64,14 @@ void FFTWidget::paintEvent( QPaintEvent * )
       if(gdata->view->backgroundShading() && scaleX > 4.0 && scaleX < double(width())) {
         int n = int(ceil(double(width()) / scaleX)); //number of colored patches
         p.setPen(Qt::NoPen);
-        QColor color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), data->correlation());
-        QColor color2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), data->correlation());
+        QColor color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), data->getCorrelation());
+        QColor color2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), data->getCorrelation());
         for(j = 0; j<n; j++) {
           x = toInt(scaleX*double(j));
           p.setBrush((j%2) ? color1 : color2);
-          p.drawRect(x, 0, toInt(scaleX*double(j+1)) - toInt(scaleX*double(j)), height());
+          p.drawRect(x, 0, toInt(scaleX*double(j+1)) - toInt(scaleX * double(j)), height());
         }
-        p.setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3*data->correlation()));
+        p.setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3 * data->getCorrelation()));
         for(j = 0; j<n; j++) {
           x = toInt(scaleX*double(j));
           p.drawLine(x, 0, x, height());

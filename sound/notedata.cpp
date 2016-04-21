@@ -52,7 +52,7 @@ NoteData::NoteData(Channel *channel_, int startChunk_, AnalysisData *analysisDat
   _endChunk = startChunk_ + 1;
   maxLogRMS = analysisData->getLogRms();
   maxIntensityDB = analysisData->getMaxIntensityDB();
-  maxCorrelation = analysisData->correlation();
+  maxCorrelation = analysisData->getCorrelation();
   maxPurity = analysisData->volumeValue();
   _volume = 0.0f;
   _numPeriods = 0.0f; //periods;
@@ -94,7 +94,7 @@ void NoteData::addData(AnalysisData *analysisData, float periods)
 {
   maxLogRMS = MAX(maxLogRMS, analysisData->getLogRms());
   maxIntensityDB = MAX(maxIntensityDB, analysisData->getMaxIntensityDB());
-  maxCorrelation = MAX(maxCorrelation, analysisData->correlation());
+  maxCorrelation = MAX(maxCorrelation, analysisData->getCorrelation());
   maxPurity = MAX(maxPurity, analysisData->volumeValue());
   _volume = MAX(_volume, dB2Normalised(analysisData->getLogRms()));
   _numPeriods += periods; //sum up the periods

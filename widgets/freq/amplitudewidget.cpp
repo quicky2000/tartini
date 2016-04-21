@@ -306,7 +306,7 @@ void AmplitudeWidget::drawChannelAmplitudeGL(Channel *ch)
       myassert(data);
       
       if(!data) continue;
-      err = data->correlation();
+      err = data->getCorrelation();
 
       val = calculateElement(data);
 
@@ -409,7 +409,7 @@ void AmplitudeWidget::drawChannelAmplitudeFilledGL(Channel *ch)
       myassert(data);
       
       if(!data) continue;
-      err = data->correlation();
+      err = data->getCorrelation();
 
       val = calculateElement(data);
 
