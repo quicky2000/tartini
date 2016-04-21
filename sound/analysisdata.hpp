@@ -624,6 +624,12 @@ float AnalysisData::getNoteScore(void)const
 }
 
 //------------------------------------------------------------------------------
+float AnalysisData::getNoteChangeScore(void)const
+{
+  return values[NOTE_CHANGE_SCORE];
+}
+
+//------------------------------------------------------------------------------
 bool lessFundametalFreq::operator()(const AnalysisData & x, const AnalysisData & y)
 {
   return x.getFundamentalFreq() < y.getFundamentalFreq();

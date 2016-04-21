@@ -567,7 +567,7 @@ bool Channel::isVisibleChunk(AnalysisData *data)
 bool Channel::isChangingChunk(AnalysisData *data)
 {
   myassert(data);
-  if(data->noteChangeScore() >= gdata->ampThreshold(NOTE_CHANGE_SCORE,0)) return true;
+  if(data->getNoteChangeScore() >= gdata->ampThreshold(NOTE_CHANGE_SCORE,0)) return true;
   else return false;
 }
 

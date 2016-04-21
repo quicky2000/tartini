@@ -158,6 +158,9 @@ public:
   inline float getVolumeValue(void)const;
 
   inline float getNoteScore(void)const;
+
+  inline float getNoteChangeScore(void)const;
+
  private:
   float values[NUM_AMP_MODES];
   float period; /*< The period of the fundamental (in samples) */
@@ -195,9 +198,6 @@ public:
   int noteIndex; //The index of the note in the noteData, or NO_NOTE
   bool notePlaying;
   bool done;
- public:
-
-  float &noteChangeScore() { return values[NOTE_CHANGE_SCORE]; }
 };
 
 struct lessFundametalFreq : public std::binary_function<AnalysisData &, AnalysisData &, bool>
