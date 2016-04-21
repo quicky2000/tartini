@@ -61,35 +61,36 @@ double(*amp_mode_inv_func[NUM_AMP_MODES])(double) =
 };
 
 //------------------------------------------------------------------------------
-AnalysisData::AnalysisData(void)
+AnalysisData::AnalysisData(void):
+  period(0.0f),
+  fundamentalFreq(0.0f),
+  pitch(0.0f),
+  _freqCentroid(0.0f),
+  pitchSum(0.0f),
+  pitch2Sum(0.0),
+  shortTermMean(0.0),
+  shortTermDeviation(0.0),
+  longTermMean(0.0),
+  longTermDeviation(0.0),
+  spread(0.0),
+  spread2(0.0),
+  vibratoPitch(0.0f),
+  vibratoWidth(0.0f),
+  vibratoWidthAdjust(0.0f),
+  vibratoSpeed(0.0f),
+  vibratoPhase(0.0f),
+  vibratoError(0.0f),
+  reason(0),
+  highestCorrelationIndex(-1),
+  chosenCorrelationIndex(-1),
+  periodRatio(1.0f),
+  cepstrumIndex(-1),
+  cepstrumPitch(0.0f),
+  noteIndex(NO_NOTE),
+  notePlaying(false),
+  done(false)
 {
   std::fill(values, values + NUM_AMP_MODES, 0.0f);
-  period = 0.0f;
-  fundamentalFreq = 0.0f;
-  pitch = 0.0f;
-  _freqCentroid = 0.0f;
-  pitchSum = 0.0f;
-  pitch2Sum = 0.0;
-  shortTermMean = 0.0;
-  shortTermDeviation = 0.0;
-  longTermMean = 0.0;
-  longTermDeviation = 0.0;
-  spread = spread2 = 0.0;
-  vibratoPitch = 0.0f;
-  vibratoWidth = 0.0f;
-  vibratoWidthAdjust = 0.0f;
-  vibratoSpeed = 0.0f;
-  vibratoPhase = 0.0f;
-  vibratoError = 0.0f;
-  reason = 0;
-  highestCorrelationIndex = -1;
-  chosenCorrelationIndex = -1;
-  periodRatio = 1.0f;
-  cepstrumIndex = -1;
-  cepstrumPitch = 0.0f;
-  noteIndex = NO_NOTE;
-  notePlaying = false;
-  done = false;
 }
 
 //------------------------------------------------------------------------------
