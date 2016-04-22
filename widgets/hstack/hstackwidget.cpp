@@ -46,14 +46,6 @@ void HStackWidget::setWindowSize(double _windowsize)
   }
 }
 
-void HStackWidget::setDBOffset(double offset)
-{
-  //if(top != offset + viewheight / 2) {
-  //  top = offset + viewheight / 2;
-  //  emit dBOffsetChanged(top);
-  //}
-}
-
 void HStackWidget::setDBRange(double range)
 {
   if(viewheight != range) {

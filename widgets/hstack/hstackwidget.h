@@ -42,7 +42,6 @@ class HStackWidget : public DrawWidget {
 
   public slots:
     void setWindowSize(double);
-    void setDBOffset(double);
     void setDBRange(double);
 
   signals:
