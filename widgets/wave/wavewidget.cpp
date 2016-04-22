@@ -51,11 +51,8 @@ void WaveWidget::paintEvent( QPaintEvent * )
 
   beginDrawing(false);
 
-  double pixelStep;
-  
-  if(active) {
-	pixelStep = double(active->size()) / double(width());
-    //pixelStep = double(active->size()-1) / double(width());
+  if(active)
+    {
     
     active->lock();
     AnalysisData *data = active->dataAtCurrentChunk();
