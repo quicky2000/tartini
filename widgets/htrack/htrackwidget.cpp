@@ -269,20 +269,17 @@ void HTrackWidget::paintGL()
       }
     }
     
-    bool isEven;
     //draw the faces
     glShadeModel(GL_FLAT);
     //glShadeModel(GL_SMOOTH);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     for(harmonic=0; harmonic < numHarmonics; harmonic++) {
       if(harmonic % 2 == 0) {
-        isEven = true;
         //glColor4f( 0.5f, 0.5f, 0.9f, 0.2f );
         setMaterialColor(0.5f, 0.5f, 0.9f);
       } else {
         //glColor4f( 0.5f, 0.9f, 0.5f, 0.2f );
         setMaterialColor(0.5f, 0.9f, 0.5f);
-        isEven = false;
       }
       insideLine = false;
       pos = -double(visibleChunks-1);
