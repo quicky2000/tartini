@@ -439,7 +439,7 @@ RtAudioDeviceInfo RtApi :: getDeviceInfo( int device )
   return info;
 }
 
-char * const RtApi :: getStreamBuffer(void)
+char * RtApi :: getStreamBuffer(void)
 {
   verifyStream();
   return stream_.userBuffer;
