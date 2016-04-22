@@ -149,7 +149,7 @@ public:
   char * getStreamBuffer();
   RtApi::StreamState getStreamState() const;
   virtual void tickStream() = 0;
-  virtual void closeStream();
+  virtual void closeStream() = 0;
   virtual void startStream() = 0;
   virtual void stopStream() = 0;
   virtual void abortStream() = 0;
@@ -250,7 +250,7 @@ protected:
     "probed" remains false (no exception is thrown).  A successful
     probe is indicated by probed = true.
   */
-  virtual void probeDeviceInfo( RtApiDevice *info );
+  virtual void probeDeviceInfo( RtApiDevice *info ) = 0;
 
   /*!
     Protected, api-specific method which attempts to open a device
@@ -262,7 +262,7 @@ protected:
   */
   virtual bool probeDeviceOpen( int device, StreamMode mode, int channels, 
                                 int sampleRate, RtAudioFormat format,
-                                int *bufferSize, int numberOfBuffers );
+                                int *bufferSize, int numberOfBuffers )=0;
 
   /*!
     Protected method which returns the index in the devices array to

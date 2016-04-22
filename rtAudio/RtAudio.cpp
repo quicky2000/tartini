@@ -457,25 +457,6 @@ int RtApi :: getDefaultOutputDevice(void)
   return 0;
 }
 
-void RtApi :: closeStream(void)
-{
-  // MUST be implemented in subclasses!
-}
-
-void RtApi :: probeDeviceInfo( RtApiDevice *info )
-{
-  // MUST be implemented in subclasses!
-}
-
-bool RtApi :: probeDeviceOpen( int device, StreamMode mode, int channels, 
-                               int sampleRate, RtAudioFormat format,
-                               int *bufferSize, int numberOfBuffers )
-{
-  // MUST be implemented in subclasses!
-  return FAILURE;
-}
-
-
 // *************************************************** //
 //
 // OS/API-specific methods.
