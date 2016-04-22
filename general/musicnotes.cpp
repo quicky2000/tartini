@@ -27,7 +27,20 @@ std::vector<MusicKey> gMusicKeys;
 std::vector<MusicScale> gMusicScales;
 //char *gMusicKeyName[7] = { "A", "B", "C", "D", "E", "F", "G" };
 //int   gMusicKeyRoot[7] = {  9,   11,  0,   2,   4,   5,   7  };
-char *gMusicKeyName[NUM_MUSIC_KEYS] = { "A             ", "A#/Bb", "B", "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab" };
+char *gMusicKeyName[NUM_MUSIC_KEYS] = 
+  {(char*)"A             ",
+   (char*)"A#/Bb",
+   (char*)"B",
+   (char*)"C",
+   (char*)"C#/Db",
+   (char*)"D",
+   (char*)"D#/Eb",
+   (char*)"E",
+   (char*)"F",
+   (char*)"F#/Gb",
+   (char*)"G",
+   (char*)"G#/Ab"
+  };
 int   gMusicKeyRoot[NUM_MUSIC_KEYS] = {  9,   10,      11,  0,   1,       2,   3,       4,   5,   6,        7,  8      };
 int   gMusicKey = 3; //C
 //                       0    1     2    3     4    5    6     7    8     9    10    11
