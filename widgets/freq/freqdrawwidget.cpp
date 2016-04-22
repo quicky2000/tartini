@@ -230,7 +230,6 @@ void FreqDrawWidget::mousePressEvent( QMouseEvent *e)
 {
   View *view = gdata->view;
   int timeX = toInt(view->viewOffset() / view->zoomX());
-  bool zoomed = false;
   dragMode = DragNone;
   
   
@@ -249,7 +248,6 @@ void FreqDrawWidget::mousePressEvent( QMouseEvent *e)
     } else {
       //view->viewZoomInX();
     }
-	  zoomed = true;
   } else if (e->state() & Qt::AltModifier) {
     // Do we zoom in or out?
     if (e->state() & Qt::ShiftModifier) {
@@ -257,7 +255,6 @@ void FreqDrawWidget::mousePressEvent( QMouseEvent *e)
     } else {
       //view->viewZoomInY();
     }
-	  zoomed = true;
   } else {
     //mouseDown = true;
     mouseX = e->x();
