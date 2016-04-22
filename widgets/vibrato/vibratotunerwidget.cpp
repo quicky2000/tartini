@@ -131,8 +131,17 @@ void VibratoTunerWidget::resizeGL(int w, int h)
   // Calculate line markings & text labels
   float step = (2 * theta) / 12.0;
   tunerLabelCounter = 0;
-  char *tunerLabelLookup[11] = { "+50   ", "+40", "+30", "+20", "+10", "0",
-                                 "-10", "-20", "-30", "-40", "   -50" };
+  char *tunerLabelLookup[11] = { (char*)"+50   ",
+				 (char*)"+40",
+				 (char*)"+30",
+				 (char*)"+20",
+				 (char*)"+10",
+				 (char*)"0",
+                                 (char*)"-10",
+				 (char*)"-20",
+				 (char*)"-30",
+				 (char*)"-40",
+				 (char*)"   -50" };
 
   for (int j=0; j<11; j++) {
     float i = rho + step * (j+1);
@@ -160,8 +169,8 @@ void VibratoTunerWidget::resizeGL(int w, int h)
       }
     } else {  // Big dial
       // Bigger marking + text label
-      tunerLabelLookup[0] = "+50";
-      tunerLabelLookup[10] = "-50";
+      tunerLabelLookup[0] = (char*)"+50";
+      tunerLabelLookup[10] = (char*)"-50";
 
       glBegin(GL_LINES);
       glColor3ub(0, 0, 0);
