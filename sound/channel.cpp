@@ -578,14 +578,15 @@ void Channel::backTrackNoteChange(int chunk) {
   if(first >= last) return;
   float largestWeightedDiff = 0.0f; //fabs(dataAtChunk(first)->pitch - dataAtChunk(first)->shortTermMean);
   int largestDiffChunk = first;
-  int maxJ = last - first;
-  for(int curChunk=first+1, j=1; curChunk<=last; curChunk++, j++) {
-    float weightedDiff = fabs(dataAtChunk(curChunk)->getPitch() - dataAtChunk(curChunk)->getShortTermMean()) /** float(maxJ-j)*/;
-    if(weightedDiff > largestWeightedDiff) {
-      largestWeightedDiff = weightedDiff;
-      largestDiffChunk = curChunk;
+  for(int curChunk=first+1, j=1; curChunk<=last; curChunk++, j++)
+    {
+      float weightedDiff = fabs(dataAtChunk(curChunk)->getPitch() - dataAtChunk(curChunk)->getShortTermMean());
+      if(weightedDiff > largestWeightedDiff)
+	{
+	  largestWeightedDiff = weightedDiff;
+	  largestDiffChunk = curChunk;
+	}
     }
-  }
   getLastNote()->setEndChunk(largestDiffChunk);
   getLastNote()->recalcAvgPitch();
   dataAtChunk(largestDiffChunk)->setReason(5);
@@ -1108,16 +1109,8 @@ float Channel::calcDetailedPitch(float *input, double period, int /*chunk*/)
   //else subwindow_size = iPeriod;
   subwindow_size = n/4;
   int num = n/2;
-  int left_start = n/4 - iPeriod/2;
-  int left_finsh = left_start + num;
-  int right_start = n/4 + iPeriod/2;
-  int right_finsh = right_start + num;
   if(iPeriod > subwindow_size) {
     subwindow_size = n/4 - (iPeriod - n/4);
-    left_start = 0;
-    left_finsh = left_start + num;
-    right_start = iPeriod;
-    right_finsh = right_start + num;
   }
   //int num = n-subwindow_size-iPeriod;
 

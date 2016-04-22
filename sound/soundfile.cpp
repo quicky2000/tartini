@@ -493,7 +493,6 @@ void SoundFile::applyEqualLoudnessFilter(int n)
 void SoundFile::recordChunk(int n)
 {
   //int n = offset();
-  int c;
   int ret = blockingRead(gdata->audio_stream, tempWindowBuffer, n);
   if(ret < n) {
     fprintf(stderr, "Data lost in reading from audio device\n");
