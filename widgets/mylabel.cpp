@@ -24,7 +24,7 @@ MyLabel::MyLabel(const QString & p_text
                 ,QWidget * p_parent
                 ,const char * p_name
                 )
-: DrawWidget(p_parent)
+: DrawWidget(p_parent, p_name)
 , m_text(p_text)
 {
     QFontMetrics l_font_metric = QFontMetrics(get_painter().font());

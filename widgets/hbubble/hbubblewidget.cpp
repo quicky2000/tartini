@@ -27,7 +27,7 @@
 
 //------------------------------------------------------------------------------
 HBubbleWidget::HBubbleWidget(QWidget *p_parent)
-: DrawWidget(p_parent)
+: DrawWidget(p_parent, "HBubbleWidget")
 {
     fprintf(stderr,"Initializing\n");
     m_history_chunks = 32;

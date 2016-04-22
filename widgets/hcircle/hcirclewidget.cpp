@@ -27,7 +27,7 @@
 
 //------------------------------------------------------------------------------
 HCircleWidget::HCircleWidget(QWidget *p_parent)
-: DrawWidget(p_parent)
+: DrawWidget(p_parent, "HCircleWidget")
 {
     //make the widget get updated when the view changes
     m_zoom = 0.001;

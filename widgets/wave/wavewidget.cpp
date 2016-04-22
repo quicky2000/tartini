@@ -27,7 +27,7 @@
 
 //------------------------------------------------------------------------------
 WaveWidget::WaveWidget(QWidget *parent)
-: DrawWidget(parent)
+: DrawWidget(parent, "WaveWidget")
 {
     setZoomY(1.0);
 }

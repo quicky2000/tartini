@@ -27,7 +27,7 @@
 
 //------------------------------------------------------------------------------
 HBlockWidget::HBlockWidget(QWidget *p_parent)
-: DrawWidget(p_parent)
+: DrawWidget(p_parent, "HBlockWidget")
 {
 }
 

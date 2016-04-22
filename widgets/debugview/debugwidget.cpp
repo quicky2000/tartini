@@ -26,7 +26,7 @@
 
 //------------------------------------------------------------------------------
 DebugWidget::DebugWidget(QWidget * p_parent)
-: DrawWidget(p_parent)
+: DrawWidget(p_parent, "DebugWidget")
 {
     m_text_Y = 0;
 }

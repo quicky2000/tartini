@@ -36,6 +36,7 @@ PitchCompassDrawWidget::PitchCompassDrawWidget( QWidget *p_parent
                                               )
 : QWidget(p_parent)
 {
+    setObjectName(p_name);
     setAttribute(Qt::WA_DeleteOnClose);
     this->m_mode = p_mode;
 

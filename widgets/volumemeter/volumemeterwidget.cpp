@@ -29,7 +29,7 @@
 
 //------------------------------------------------------------------------------
 VolumeMeterWidget::VolumeMeterWidget(QWidget * p_parent)
-: DrawWidget(p_parent)
+: DrawWidget(p_parent, "VolumeMeterWidget")
 {
     //make the widget get updated when the view changes
     connect(&(g_data->getView()), SIGNAL(onFastUpdate(double)), this, SLOT(update()));

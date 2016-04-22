@@ -28,7 +28,7 @@
 
 //------------------------------------------------------------------------------
 CorrelationWidget::CorrelationWidget(QWidget * p_parent)
-: DrawWidget(p_parent)
+: DrawWidget(p_parent, "CorrelationWidget")
 {
     m_aggregate_mode = 0;
 }

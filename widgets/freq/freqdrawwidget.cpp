@@ -47,7 +47,7 @@
 FreqDrawWidget::FreqDrawWidget( QWidget *p_parent
                               , const char* p_name
                               )
-: DrawWidget(p_parent)
+: DrawWidget(p_parent, p_name)
 {
     setMouseTracking(true);
     setAttribute(Qt::WA_DeleteOnClose);

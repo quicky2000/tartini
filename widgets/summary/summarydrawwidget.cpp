@@ -29,7 +29,7 @@
 
 //------------------------------------------------------------------------------
 SummaryDrawWidget::SummaryDrawWidget(QWidget *p_parent)
-: DrawWidget(p_parent)
+: DrawWidget(p_parent, "SummaryDrawWidget")
 {
     m_scaler = 1.0;
 
