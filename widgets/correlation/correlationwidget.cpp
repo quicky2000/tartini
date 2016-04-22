@@ -46,13 +46,11 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
   AnalysisData *data = NULL;
   int chunk=0;
   double dh2 = double(height()-1) / 2.0;
-  double pixelStep;
   int j, x, y;
     
   beginDrawing(false);
     
   if(active) {
-    pixelStep = double(active->nsdfData.size()) / double(width());
     
     active->lock();
     chunk = active->currentChunk();
