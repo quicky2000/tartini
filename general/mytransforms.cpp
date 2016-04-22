@@ -1038,7 +1038,6 @@ void MyTransforms::doHarmonicAnalysis(float *input, AnalysisData &analysisData, 
   //printf("\n");
   
   double freq = rate / period;
-  int harmonic;
   
   analysisData.resizeHarmonicAmpNoCutOff(numHarmonics);
   analysisData.resizeHarmonicAmp(numHarmonics);
@@ -1046,7 +1045,6 @@ void MyTransforms::doHarmonicAnalysis(float *input, AnalysisData &analysisData, 
   analysisData.resizeHarmonicNoise(numHarmonics);
 
   for(int j=0; j<numHarmonics; j++) {
-    harmonic = (j+1) * iNumPeriodsUse;
     //analysisData.harmonicAmp[j] = float(analysisData.correlation / double(j+1));
     //analysisData.harmonicFreq[j] = float(freq * double(j+1));
     //analysisData.harmonicAmp[j] = log10(sqrt(sq(dataFFT[j+1]) + sq(dataFFT[n-(j+1)]))) / 10.0;
