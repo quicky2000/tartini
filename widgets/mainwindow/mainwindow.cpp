@@ -1370,7 +1370,7 @@ void MainWindow::printPitch()
     double viewTop = view->viewTop();//gdata->topPitch();
     double zoomX = (rightTime-leftTime) / double(w);
     double zoomY = (viewTop-viewBottom) / double(h);
-    FreqDrawWidget::drawReferenceLines(printer, p, leftTime, 0.0, zoomX, viewBottom, zoomY, DRAW_VIEW_PRINT);
+    FreqDrawWidget::drawReferenceLines(printer, p, 0.0, zoomX, viewBottom, zoomY, DRAW_VIEW_PRINT);
 
     double dotsPerLineStepY = 1.0 / zoomY;
     double dotsPerMM = double(printer.height()) / double(printer.heightMM()); /*printer.resolution()*/

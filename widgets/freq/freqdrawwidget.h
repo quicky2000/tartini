@@ -45,7 +45,7 @@ public:
 
   //int offset_x;
 
-  static void drawReferenceLines(QPaintDevice &pd, QPainter &p, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType);
+  static void drawReferenceLines(QPaintDevice &pd, QPainter &p, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType);
   void paintEvent( QPaintEvent * );
   QSize sizeHint() const { return QSize(400, 350); }
   //void ensurePolished() const;

@@ -70,7 +70,7 @@ FreqDrawWidget::~FreqDrawWidget()
 {
 }
 
-void FreqDrawWidget::drawReferenceLines(QPaintDevice &pd, QPainter &p, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType)
+void FreqDrawWidget::drawReferenceLines(QPaintDevice &pd, QPainter &p, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType)
 {
   // Draw the lines and notes
   QFontMetrics fm = p.fontMetrics();
@@ -174,7 +174,7 @@ void FreqDrawWidget::paintEvent(QPaintEvent *)
     drawChannelFilled(gdata->getActiveChannel(), p, view->viewLeft(), view->currentTime(), view->zoomX(), view->viewBottom(), view->zoomY(), DRAW_VIEW_NORMAL);
   
 
-  drawReferenceLines(*this, p, view->viewLeft(), view->currentTime(), view->zoomX(), view->viewBottom(), view->zoomY(), DRAW_VIEW_NORMAL);
+  drawReferenceLines(*this, p, view->currentTime(), view->zoomX(), view->viewBottom(), view->zoomY(), DRAW_VIEW_NORMAL);
 
   //draw all the visible channels
   for (uint i = 0; i < gdata->channels.size(); i++) {
