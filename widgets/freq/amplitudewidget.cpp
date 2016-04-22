@@ -286,7 +286,6 @@ void AmplitudeWidget::drawChannelAmplitudeGL(Channel *ch)
     glVertexPointer(2, GL_FLOAT, 0, vertexArray.begin());
     glDrawArrays(GL_LINES, 0, pointIndex);
   } else { //baseX <= 1
-    float err = 0.0;
     float val = 0.0;
     int intChunk = (int) floor(leftFrameTime); // Integer version of frame time
     double stepSize = 1.0 / baseX; // So we skip some pixels
@@ -306,7 +305,6 @@ void AmplitudeWidget::drawChannelAmplitudeGL(Channel *ch)
       myassert(data);
       
       if(!data) continue;
-      err = data->getCorrelation();
 
       val = calculateElement(data);
 
@@ -385,7 +383,6 @@ void AmplitudeWidget::drawChannelAmplitudeFilledGL(Channel *ch)
     glVertexPointer(2, GL_FLOAT, 0, vertexArray.begin());
     glDrawArrays(GL_QUAD_STRIP, 0, pointIndex);
   } else { //baseX <= 1
-    float err = 0.0;
     float val = 0.0;
     int intChunk = (int) floor(leftFrameTime); // Integer version of frame time
     double stepSize = 1.0 / baseX; // So we skip some pixels
@@ -409,7 +406,6 @@ void AmplitudeWidget::drawChannelAmplitudeFilledGL(Channel *ch)
       myassert(data);
       
       if(!data) continue;
-      err = data->getCorrelation();
 
       val = calculateElement(data);
 
