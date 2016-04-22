@@ -824,7 +824,6 @@ void GData::closeActiveFile() {
 */
 int GData::closeFile(SoundFile *s, int theSavingMode/*, bool ask*/)
 {
-  int ret = 0;
   if(s == NULL) return -1;
   QString newFilename;
   QString oldFilename(s->filename);
@@ -856,13 +855,11 @@ int GData::closeFile(SoundFile *s, int theSavingMode/*, bool ask*/)
       removeFileFromList(s);
       delete s;
       //printf("move file %s to %s\n", oldFilename.latin1(), newFilename.latin1()); fflush(stdout);
-      ret = (::moveFile(oldFilename.latin1(), newFilename.latin1())) ? 0 : -1;
       break;
     case 1: //No
       removeFileFromList(s);
       delete s;
       //printf("remove file %s\n", oldFilename.latin1()); fflush(stdout);
-      ret = ::remove(oldFilename.latin1());
       break;
     default: //Cancelled
       return 1;
@@ -870,7 +867,6 @@ int GData::closeFile(SoundFile *s, int theSavingMode/*, bool ask*/)
   } else if(theSavingMode == NEVER_SAVE) {
     removeFileFromList(s);
     delete s;
-    ret = ::remove(oldFilename.latin1()); 
   } else if(theSavingMode == ALWAYS_SAVE) {
     removeFileFromList(s);
     delete s;
