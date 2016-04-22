@@ -103,9 +103,9 @@ void OpenFiles::slotActiveChannelChanged(Channel * p_active)
     }
     if(l_found)
     {
-        for(unsigned int l_row_index = 0 ; l_row_index < m_table->rowCount() ; ++l_row_index)
+        for(int l_row_index = 0 ; l_row_index < m_table->rowCount() ; ++l_row_index)
         {
-            m_table->setItem(l_row_index,1,new QTableWidgetItem(l_row_index == l_index ? "A" : ""));
+            m_table->setItem(l_row_index,1,new QTableWidgetItem(l_row_index == (int)l_index ? "A" : ""));
         }
     }
 }
@@ -114,11 +114,11 @@ void OpenFiles::slotActiveChannelChanged(Channel * p_active)
 void OpenFiles::listViewChanged()
 {
     bool l_found = false;
-    for(unsigned int l_row = 0 ; !l_found && l_row < m_table->rowCount() ; ++l_row)
+    for(int l_row = 0 ; !l_found && l_row < m_table->rowCount() ; ++l_row)
     {
         QCheckBox * l_check_box = static_cast<QCheckBox *>(m_table->cellWidget(l_row,0));
         bool l_state = Qt::Checked == l_check_box->checkState();
-        myassert(l_row < g_data->getChannelsSize());
+        myassert(l_row < (int)g_data->getChannelsSize());
         if(g_data->getChannelAt(l_row)->isVisible() != l_state)
         {
             l_found = true;
@@ -131,8 +131,8 @@ void OpenFiles::listViewChanged()
 //------------------------------------------------------------------------------
 void OpenFiles::slotCurrentChanged(int p_row, int p_column)
 {
-    unsigned int l_selected_row = p_row;
-    myassert(l_selected_row < int(g_data->getChannelsSize()));
+    int l_selected_row = p_row;
+    myassert(0 <= l_selected_row && l_selected_row < int(g_data->getChannelsSize()));
     g_data->setActiveChannel(g_data->getChannelAt(l_selected_row));
     refreshChannelList();
 }
