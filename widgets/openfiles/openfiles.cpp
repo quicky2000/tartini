@@ -42,6 +42,7 @@ OpenFiles::OpenFiles( int p_id
     l_header_list << tr("Filename(Channel)") << tr("A");
     m_table->setHorizontalHeaderLabels(l_header_list);
 
+
     m_table->setWhatsThis("A list of all open channels in all open sounds. "
                           "The current active channel is marked with an 'A' beside it. "
                           "The tick specifies if a channel should be visible or not in the multi-channel views"
@@ -51,10 +52,9 @@ OpenFiles::OpenFiles( int p_id
     m_table->setFocusPolicy(Qt::NoFocus);
     m_table->setSortingEnabled(false);
     m_table->verticalHeader()->setVisible(false);
-
     connect(g_data, SIGNAL(channelsChanged()), this, SLOT(refreshChannelList()));
     connect(g_data, SIGNAL(activeChannelChanged(Channel*)), this, SLOT(slotActiveChannelChanged(Channel *)));
-    connect(m_table, SIGNAL(cellClicked(int,int)), this, SLOT(slotCurrentChanged(int,int)));
+    connect(m_table, SIGNAL(cellClicked(int,int)), this, SLOT(slotCurrentChanged(int)));
 
     refreshChannelList();
 }
@@ -129,7 +129,7 @@ void OpenFiles::listViewChanged()
 }
 
 //------------------------------------------------------------------------------
-void OpenFiles::slotCurrentChanged(int p_row, int p_column)
+void OpenFiles::slotCurrentChanged(int p_row)
 {
     int l_selected_row = p_row;
     myassert(0 <= l_selected_row && l_selected_row < int(g_data->getChannelsSize()));

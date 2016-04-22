@@ -55,7 +55,7 @@ class OpenFiles : public ViewWidget
     /**
      * Changes the active channel to the item.
      */
-    void slotCurrentChanged(int p_row, int p_column);
+    void slotCurrentChanged(int p_row);
     void slotActiveChannelChanged(Channel * p_active);
 
 };
