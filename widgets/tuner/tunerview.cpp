@@ -76,15 +76,15 @@ TunerView::TunerView(int p_view_iD_
     m_slider->setToolTip(tr("Increase slider to smooth the pitch over a longer time period"));
 
     m_led_buffer = new QPixmap();
-    m_leds.push_back(new LEDIndicator(m_led_buffer, this, "A"));
-    m_leds.push_back(new LEDIndicator(m_led_buffer, this, "B"));
-    m_leds.push_back(new LEDIndicator(m_led_buffer, this, "C"));
-    m_leds.push_back(new LEDIndicator(m_led_buffer, this, "D"));
-    m_leds.push_back(new LEDIndicator(m_led_buffer, this, "E"));
-    m_leds.push_back(new LEDIndicator(m_led_buffer, this, "F"));
-    m_leds.push_back(new LEDIndicator(m_led_buffer, this, "G"));
+    m_leds.push_back(new LEDIndicator(this, "A"));
+    m_leds.push_back(new LEDIndicator(this, "B"));
+    m_leds.push_back(new LEDIndicator(this, "C"));
+    m_leds.push_back(new LEDIndicator(this, "D"));
+    m_leds.push_back(new LEDIndicator(this, "E"));
+    m_leds.push_back(new LEDIndicator(this, "F"));
+    m_leds.push_back(new LEDIndicator(this, "G"));
 
-    m_leds.push_back(new LEDIndicator(m_led_buffer, this, "#"));
+    m_leds.push_back(new LEDIndicator(this, "#"));
 
     // Add the leds for note names into the positions (1, 0) to (1, 6)
     for(int l_n = 0; l_n < 7; l_n++)

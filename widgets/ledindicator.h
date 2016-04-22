@@ -29,8 +29,7 @@ class LEDIndicator : public QWidget
   Q_OBJECT
 
   public:
-    LEDIndicator(QPixmap * p_buffer
-                ,QWidget * p_parent = 0
+    LEDIndicator(QWidget * p_parent = 0
                 ,const char *p_name = 0
                 ,const QColor & p_on = Qt::red
                 ,const QColor & p_off = Qt::darkRed

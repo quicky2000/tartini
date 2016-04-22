@@ -21,8 +21,7 @@
 #include <QPaintEvent>
 
 //------------------------------------------------------------------------------
-LEDIndicator::LEDIndicator(QPixmap *p_buffer
-                          ,QWidget *p_parent
+LEDIndicator::LEDIndicator(QWidget *p_parent
                           ,const char *p_name
                           ,const QColor & p_on
                           ,const QColor &p_off
