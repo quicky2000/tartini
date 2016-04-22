@@ -89,7 +89,6 @@ void FFTWidget::paintEvent( QPaintEvent * )
 
     //draw the waveform
     //float size = active->fftData1.size();
-    double ratio = double(height()) * 20.0 / 85.0; //Show 85dB
 /*
     p.setPen(QPen(active->color, 0));
     for(int j=0; j<width(); j++) { //cheap hack to go faster (by drawing less points)
@@ -99,7 +98,6 @@ void FFTWidget::paintEvent( QPaintEvent * )
     }
     p.drawPolyline(pointArray);
 */
-    ratio = double(height()) / 2.0 / 2.5;
     p.setPen(QPen(Qt::red, 0));
     for(int j=0; j<width(); j++) { //cheap hack to go faster (by drawing less points)
       myassert(int(pixelStep*j) < active->fftData2.size());
