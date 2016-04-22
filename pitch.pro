@@ -331,7 +331,7 @@ unix{
     DEFINES += LINUX
     INCLUDEPATH += $$MY_INCLUDE_PATH
     LIBS += $$MY_LIB_PATH -lfftw3f -lqwt-qt4 -lasound -lGLU
-    CONFIG += warn_off
+#    CONFIG += warn_off
     QMAKE_CXXFLAGS += -Wall -Wno-non-virtual-dtor
     QMAKE_CXXFLAGS -= -g
     profile {
