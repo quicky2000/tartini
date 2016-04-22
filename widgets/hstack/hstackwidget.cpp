@@ -101,13 +101,13 @@ void HStackWidget::paintEvent( QPaintEvent * )
 
     float lbl;
 
-    char* txt = "%1.1f";
+    char* txt = (char*)"%1.1f";
     float increase = 10;
 
     if (viewheight < 50) increase = 5;
     if (viewheight < 10) 
     {
-      txt = "%1.2f";
+      txt = (char*)"%1.2f";
       increase = 1;
     }
 
