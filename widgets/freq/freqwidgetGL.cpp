@@ -400,7 +400,6 @@ void FreqWidgetGL::mousePressEvent( QMouseEvent *e)
 {
   View *view = gdata->view;
   int timeX = toInt(view->viewOffset() / view->zoomX());
-  bool zoomed = false;
   dragMode = DragNone;
   
   
@@ -419,7 +418,6 @@ void FreqWidgetGL::mousePressEvent( QMouseEvent *e)
     } else {
       //view->viewZoomInX();
     }
-	  zoomed = true;
   } else if (e->state() & Qt::AltModifier) {
     // Do we zoom in or out?
     if (e->state() & Qt::ShiftModifier) {
@@ -427,7 +425,6 @@ void FreqWidgetGL::mousePressEvent( QMouseEvent *e)
     } else {
       //view->viewZoomInY();
     }
-	  zoomed = true;
   } else {
     //mouseDown = true;
     mouseX = e->x();
@@ -951,7 +948,8 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch, double leftTime, double curr
     }
 
   } else { // More pixels than samples
-    float err = 0.0, pitch = 0.0, prevPitch = 0.0;
+    float err = 0.0;
+    float pitch = 0.0;
     int intChunk = (int) floor(frameTime); // Integer version of frame time
     if(intChunk < 0) intChunk = 0;
     double stepSize = 1.0 / baseX; // So we skip some pixels
@@ -1018,7 +1016,6 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch, double leftTime, double curr
       //bottomPoints.setPoint(pointIndex++, x, y);
       bottomPoints[pointIndex++].set(x, y);
       bottomPoints[pointIndex++].set(x, height());
-      prevPitch = pitch;
     }
     //bottomPoints.setPoint(pointIndex, bottomPoints.point(pointIndex-1).x(), height());
     //pointIndex++;
@@ -1147,8 +1144,6 @@ void FreqWidgetGL::setChannelVerticalView(Channel *ch, double leftTime, double c
  leftBaseWidth rightBaseWidth
 */
 
-  int firstN = n;
-  int lastN = firstN;
   
   //QPointArray bottomPoints(width()*2);
   //int pointIndex = 0;
@@ -1179,7 +1174,6 @@ void FreqWidgetGL::setChannelVerticalView(Channel *ch, double leftTime, double c
       bottomPoints.setPoint(pointIndex++, n, y);
       bottomPoints.setPoint(pointIndex++, n, height());
 */
-      lastN = n;
     }
 /*
     p.setPen(Qt::NoPen);
@@ -1189,21 +1183,18 @@ void FreqWidgetGL::setChannelVerticalView(Channel *ch, double leftTime, double c
     p.drawLineSegments(bottomPoints, 0, pointIndex/2);
 */
   } else { // More pixels than samples
-    float err = 0.0, pitch = 0.0, prevPitch = 0.0;
+    float pitch = 0.0;
     int intChunk = (int) floor(frameTime); // Integer version of frame time
     if(intChunk < 0) intChunk = 0;
     double stepSize = 1.0 / baseX; // So we skip some pixels
-    int x = 0, y;
     float corr;
     
     double start = (double(intChunk) - frameTime) * stepSize;
     double stop = width() + (2 * stepSize);
     //bottomPoints.setPoint(pointIndex++, toInt(start), height());
-    lastN = firstN = toInt(start);
     for (double n = start; n < stop && intChunk < (int)ch->totalChunks(); n += stepSize, intChunk++) {
       myassert(intChunk >= 0);
       AnalysisData *data = ch->dataAtChunk(intChunk);
-      err = data->getCorrelation();
       
 /*
       if(gdata->pitchContourMode() == 0)
@@ -1211,8 +1202,6 @@ void FreqWidgetGL::setChannelVerticalView(Channel *ch, double leftTime, double c
       else
         p.setPen(QPen(ch->color, lineWidth));
 */
-      x = toInt(n);
-      lastN = x;
       pitch = (ch->isVisibleChunk(data)) ? data->getPitch() : 0.0f;
       myassert(pitch >= 0.0 && pitch <= gdata->topPitch());
       //corr = data->correlation*sqrt(data->rms)*10.0;
@@ -1226,9 +1215,7 @@ void FreqWidgetGL::setChannelVerticalView(Channel *ch, double leftTime, double c
         ys.push_back(pitch);
         weightings.push_back(weight);
       }
-      y = height() - 1 - toInt(pitch / zoomY) + viewBottomOffset;
       //bottomPoints.setPoint(pointIndex++, x, y);
-      prevPitch = pitch;
     }
     //bottomPoints.setPoint(pointIndex, bottomPoints.point(pointIndex-1).x(), height());
     //pointIndex++;
