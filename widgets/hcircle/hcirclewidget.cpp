@@ -114,7 +114,9 @@ void HCircleWidget::paintEvent( QPaintEvent * )
 	  int dotSize = 6;
 	  int halfDotSize = dotSize / 2;
 	  p.setPen(QPen(Qt::black,2));
-	  for (i = 0; i < numHarmonics; i++)
+	  int m = MIN(data->getHarmonicAmpNoCutOffSize(), (unsigned) numHarmonics);
+	  assert(data->getHarmonicAmpNoCutOffSize() == data->getHarmonicFreqSize());
+	  for (i = 0; i < m; i++)
 	    {
 	      if (data->getHarmonicFreqAt(i) > nextoctave)
 		{
