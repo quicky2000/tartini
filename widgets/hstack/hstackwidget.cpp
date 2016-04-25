@@ -120,7 +120,7 @@ void HStackWidget::paintEvent( QPaintEvent * )
         int m = MIN(data->getHarmonicAmpNoCutOffSize(), (unsigned) numHarmonics);
         for (j = 0; j < m;j++)
         {
-          if (!isinf(data->getHarmonicAmpRelativeAt(j)))
+          if (!isinf(data->getHarmonicAmpNoCutOffAt(j)))
           {
             points[j].setPoint(i+2,toInt(scaleX*(float)i),-toInt((-top + data->getHarmonicAmpNoCutOffAt(j))*scaleY)); 
           }
