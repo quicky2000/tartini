@@ -618,7 +618,7 @@ bool MainWindow::event( QEvent * e )
       gdata->view->doSlowUpdate();
     }
 */
-    gdata->need_update = false;
+    gdata->setNeedUpdate(false);
 	  return true;
   } else if(e->type() == SOUND_STARTED) {
     //playStopButton->setIconSet(*stopIconSet);

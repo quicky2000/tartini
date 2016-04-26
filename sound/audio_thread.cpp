@@ -234,15 +234,15 @@ int AudioThread::doStuff()
   //int fastUpdateAfter = (_soundFile->bufferSize() / _soundFile->framesPerChunk()) / 2;
   int slowUpdateAfter = toInt(double(gdata->slowUpdateSpeed()) / 1000.0 / curSoundFile()->timePerChunk());
   int fastUpdateAfter = toInt(double(gdata->fastUpdateSpeed()) / 1000.0 / curSoundFile()->timePerChunk());
-  if(!gdata->need_update) {
+  if(!gdata->needUpdate()) {
     if((slow_update_count >= slowUpdateAfter) || force_update) {
-      gdata->need_update = true;
+      gdata->setNeedUpdate(true);
       fast_update_count = 0;
       slow_update_count = 0;
       //QApplication::postEvent( ((MainWindow*)qApp->mainWidget()), new QCustomEvent(UPDATE_SLOW));
       QApplication::postEvent(mainWindow, new QCustomEvent(UPDATE_SLOW));
     } else if(fast_update_count >= fastUpdateAfter) {
-      gdata->need_update = true;
+      gdata->setNeedUpdate(true);
       fast_update_count = 0;
       //QApplication::postEvent( ((MainWindow*)qApp->mainWidget()), new QCustomEvent(UPDATE_FAST));
       QApplication::postEvent(mainWindow, new QCustomEvent(UPDATE_FAST));

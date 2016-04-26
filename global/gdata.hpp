@@ -146,4 +146,17 @@ void GData::setAudioStream(AudioStream * p_audio_stream)
 {
   audio_stream = p_audio_stream;
 }
+
+//------------------------------------------------------------------------------
+bool GData::needUpdate(void)const
+{
+  return need_update;
+}
+
+//------------------------------------------------------------------------------
+void GData::setNeedUpdate(bool p_need_update)
+{
+  need_update = p_need_update;
+}
+
 //EOF

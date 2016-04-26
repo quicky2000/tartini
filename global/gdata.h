@@ -116,13 +116,16 @@ public:
 
   inline AudioStream * getAudioStream(void)const;
   inline void setAudioStream(AudioStream * p_audio_stream);
+
+  inline bool needUpdate(void)const;
+  inline void setNeedUpdate(bool p_need_update);
  private:
   QSettings *qsettings;
   int soundMode;
   AudioStream *audio_stream;
+  bool need_update;
 
  public:
-  bool need_update;
 
   std::vector<Filter*> filter_hp; //highpass filter
   std::vector<Filter*> filter_lp; //lowpass filter
