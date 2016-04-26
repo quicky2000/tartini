@@ -124,11 +124,11 @@ public:
   int soundMode;
   AudioStream *audio_stream;
   bool need_update;
+  std::vector<Filter*> filter_hp; //highpass filter
+  std::vector<Filter*> filter_lp; //lowpass filter
 
  public:
 
-  std::vector<Filter*> filter_hp; //highpass filter
-  std::vector<Filter*> filter_lp; //lowpass filter
 
   //bool equalLoudness;
   //bool useMasking;
