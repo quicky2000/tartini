@@ -374,7 +374,7 @@ bool SoundFile::playChunk()
   return true;
 */
   if(!setupPlayChunk()) return false;
-  int ret = blockingWrite(gdata->audio_stream, tempWindowBuffer, framesPerChunk());
+  int ret = blockingWrite(gdata->getAudioStream(), tempWindowBuffer, framesPerChunk());
   if(ret < framesPerChunk()) {
     fprintf(stderr, "Error writing to audio device\n");
   }
@@ -493,7 +493,7 @@ void SoundFile::applyEqualLoudnessFilter(int n)
 void SoundFile::recordChunk(int n)
 {
   //int n = offset();
-  int ret = blockingRead(gdata->audio_stream, tempWindowBuffer, n);
+  int ret = blockingRead(gdata->getAudioStream(), tempWindowBuffer, n);
   if(ret < n) {
     fprintf(stderr, "Data lost in reading from audio device\n");
   }
@@ -582,7 +582,7 @@ bool SoundFile::playRecordChunk(SoundFile *play, SoundFile *rec)
   play->setupPlayChunk();
   //if(!play->setupPlayChunk()) return false;
 
-  int ret = blockingWriteRead(gdata->audio_stream, play->tempWindowBuffer, play->numChannels(), rec->tempWindowBuffer, rec->numChannels(), n);
+  int ret = blockingWriteRead(gdata->getAudioStream(), play->tempWindowBuffer, play->numChannels(), rec->tempWindowBuffer, rec->numChannels(), n);
   if(ret < n) {
     fprintf(stderr, "Error writing/reading to audio device\n");
   }

@@ -113,13 +113,15 @@ public:
 
   inline int getSoundMode(void)const;
   inline void setSoundMode(const int & p_mode);
+
+  inline AudioStream * getAudioStream(void)const;
+  inline void setAudioStream(AudioStream * p_audio_stream);
  private:
   QSettings *qsettings;
   int soundMode;
+  AudioStream *audio_stream;
 
  public:
-
-  AudioStream *audio_stream;
   bool need_update;
 
   std::vector<Filter*> filter_hp; //highpass filter

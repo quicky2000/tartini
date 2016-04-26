@@ -125,9 +125,9 @@ void AudioThread::run()
    gdata->setSoundMode(SOUND_PLAY);
   }
 
-  if(gdata->audio_stream) {
-    delete gdata->audio_stream;
-    gdata->audio_stream = NULL;
+  if(gdata->getAudioStream()) {
+    delete gdata->getAudioStream();
+    gdata->setAudioStream(NULL);
   }
   _playSoundFile = NULL;
   _recSoundFile = NULL;
@@ -164,21 +164,21 @@ int AudioThread::doStuff()
       QApplication::postEvent( ((MainWindow*)qApp->mainWidget()), new QCustomEvent(UPDATE_SLOW)); //for qt3.x
       return 0; //stop the audio thread playing
     }
-    if(!gdata->audio_stream) {
+	  if(!gdata->getAudioStream()) {
       if (++sleepCount % 4 == 0) {
         int sleepval = (1000 * _playSoundFile->framesPerChunk()) / _playSoundFile->rate();
         msleep(sleepval * 4);
       }
     }
   } else if(gdata->getSoundMode() == SOUND_REC) {  // SOUND_REC
-    int bufferChunks = gdata->audio_stream->inTotalBufferFrames() / _recSoundFile->framesPerChunk();
+    int bufferChunks = gdata->getAudioStream()->inTotalBufferFrames() / _recSoundFile->framesPerChunk();
     //printf("bufferChunks=%d\n", bufferChunks);
     if(frame_num > bufferChunks)
       _recSoundFile->recordChunk(_recSoundFile->framesPerChunk());
 	//msleep(1);
   }
   else if(gdata->getSoundMode() == SOUND_PLAY_REC) {
-    int bufferChunks = gdata->audio_stream->inTotalBufferFrames() / _recSoundFile->framesPerChunk();
+    int bufferChunks = gdata->getAudioStream()->inTotalBufferFrames() / _recSoundFile->framesPerChunk();
     if(frame_num > bufferChunks) {
       if(!SoundFile::playRecordChunk(_playSoundFile, _recSoundFile)) { //end of file
         QApplication::postEvent( ((MainWindow*)qApp->mainWidget()), new QCustomEvent(UPDATE_SLOW)); //for qt3.x

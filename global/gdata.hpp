@@ -134,4 +134,16 @@ void GData::setSoundMode(const int & p_mode)
 {
   soundMode = p_mode;
 }
+
+//------------------------------------------------------------------------------
+AudioStream * GData::getAudioStream(void)const
+{
+  return audio_stream;
+}
+
+//------------------------------------------------------------------------------
+void GData::setAudioStream(AudioStream * p_audio_stream)
+{
+  audio_stream = p_audio_stream;
+}
 //EOF
