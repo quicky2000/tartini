@@ -110,11 +110,14 @@ public:
   inline int getSettingsIntValue(const QString & p_key)const;
   inline bool getSettingsBoolValue(const QString & p_key)const;
   inline QString getSettingsStringValue(const QString & p_key)const;
-  private:
+
+  inline int getSoundMode(void)const;
+  inline void setSoundMode(const int & p_mode);
+ private:
   QSettings *qsettings;
+  int soundMode;
 
  public:
-  int soundMode;
 
   AudioStream *audio_stream;
   bool need_update;

@@ -92,12 +92,13 @@ void AudioThread::run()
   //if(((MainWindow*) qApp->mainWidget())->zoomFreqView) ((MainWindow*) qApp->mainWidget())->zoomFreqView->offset_x = 0;
 
   //read to the 1 chunk befor time 0
-  if((gdata->soundMode & SOUND_REC)) {
-    gdata->setDoingActiveAnalysis(true);
-    myassert(_recSoundFile->firstTimeThrough == true);
-    //_soundFile->initRecordingChunk();
-    _recSoundFile->recordChunk(_recSoundFile->offset());
-  }
+  if((gdata->getSoundMode() & SOUND_REC))
+    {
+      gdata->setDoingActiveAnalysis(true);
+      myassert(_recSoundFile->firstTimeThrough == true);
+      //_soundFile->initRecordingChunk();
+      _recSoundFile->recordChunk(_recSoundFile->offset());
+    }
   
   QApplication::postEvent(mainWindow, new QCustomEvent(SOUND_STARTED));
   gdata->running = STREAM_FORWARD;
@@ -117,11 +118,11 @@ void AudioThread::run()
 
   gdata->running = STREAM_STOP;
 
-  if((gdata->soundMode & SOUND_REC)) {
+  if((gdata->getSoundMode() & SOUND_REC)) {
     gdata->setDoingActiveAnalysis(false);
     _recSoundFile->firstTimeThrough = false;
    _recSoundFile->rec2play();
-    gdata->soundMode = SOUND_PLAY;
+   gdata->setSoundMode(SOUND_PLAY);
   }
 
   if(gdata->audio_stream) {
@@ -157,7 +158,7 @@ int AudioThread::doStuff()
 //#if WINDOWS
 //  if((gdata->soundMode & SOUND_PLAY)) {
 //#else
-  if(gdata->soundMode == SOUND_PLAY) {
+  if(gdata->getSoundMode() == SOUND_PLAY) {
 //#endif
 	  if(!_playSoundFile->playChunk()) { //end of file
       QApplication::postEvent( ((MainWindow*)qApp->mainWidget()), new QCustomEvent(UPDATE_SLOW)); //for qt3.x
@@ -169,14 +170,14 @@ int AudioThread::doStuff()
         msleep(sleepval * 4);
       }
     }
-  } else if(gdata->soundMode == SOUND_REC) {  // SOUND_REC
+  } else if(gdata->getSoundMode() == SOUND_REC) {  // SOUND_REC
     int bufferChunks = gdata->audio_stream->inTotalBufferFrames() / _recSoundFile->framesPerChunk();
     //printf("bufferChunks=%d\n", bufferChunks);
     if(frame_num > bufferChunks)
       _recSoundFile->recordChunk(_recSoundFile->framesPerChunk());
 	//msleep(1);
   }
-  else if(gdata->soundMode == SOUND_PLAY_REC) {
+  else if(gdata->getSoundMode() == SOUND_PLAY_REC) {
     int bufferChunks = gdata->audio_stream->inTotalBufferFrames() / _recSoundFile->framesPerChunk();
     if(frame_num > bufferChunks) {
       if(!SoundFile::playRecordChunk(_playSoundFile, _recSoundFile)) { //end of file

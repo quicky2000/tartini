@@ -123,4 +123,15 @@ QString GData::getSettingsStringValue(const QString & p_key)const
 
 }
 
+//------------------------------------------------------------------------------
+int GData::getSoundMode(void)const
+{
+  return soundMode;
+}
+
+//------------------------------------------------------------------------------
+void GData::setSoundMode(const int & p_mode)
+{
+  soundMode = p_mode;
+}
 //EOF
