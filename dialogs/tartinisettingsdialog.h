@@ -16,6 +16,8 @@
 //#include "settings.h"
 #include <QSettings>
 
+class GData;
+
 class TartiniSettingsDialog : public QDialog, private Ui_SettingsDialog {
   Q_OBJECT
 
@@ -36,6 +38,6 @@ public slots:
   void saveSettings();
   void checkAnalysisEnabled();
   void onNoteRangeChoice(int choice);
-  static void setUnknownsToDefault(QSettings *s);
+  static void setUnknownsToDefault(GData & p_gdata);
   void resetDefaults();
 };

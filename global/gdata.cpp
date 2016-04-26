@@ -105,7 +105,7 @@ GData::GData(/*int buffer_size_, int winfunc_, float step_size_*/)
 
   //settings.init("cs.otago.ac.nz", "Tartini");
   qsettings = new QSettings("cs.otago.ac.nz", TARTINI_NAME_STR);
-  TartiniSettingsDialog::setUnknownsToDefault(qsettings);
+  TartiniSettingsDialog::setUnknownsToDefault(*this);
   //settings.print();
   //settings.load();
   //settings.print();

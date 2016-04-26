@@ -95,8 +95,25 @@ public:
   GData(/*int buffer_size_, int winfunc_, float step_size_*/);
   virtual ~GData();
 
+  inline bool settingsContains(const QString & p_key)const;
+  inline int getSettingsValue(const QString & p_key,const int & p_default_value)const;
+  inline bool getSettingsValue(const QString & p_key,const bool & p_default_value)const;
+  inline QString getSettingsValue(const QString & p_key,const QString & p_default_value)const;
+  inline QPoint getSettingsValue(const QString & p_key,const QPoint & p_default_value)const;
+  inline QSize getSettingsValue(const QString & p_key,const QSize & p_default_value)const;
+  inline void setSettingsValue(const QString & p_key,const QString & p_value);
+  inline void setSettingsValue(const QString & p_key,const int & p_value);
+  inline void setSettingsValue(const QString & p_key,const QPoint & p_value);
+  inline void setSettingsValue(const QString & p_key,const QSize & p_value);
+  inline void clearSettings(void);
+  inline void syncSettings(void);
+  inline int getSettingsIntValue(const QString & p_key)const;
+  inline bool getSettingsBoolValue(const QString & p_key)const;
+  inline QString getSettingsStringValue(const QString & p_key)const;
+  private:
   QSettings *qsettings;
 
+ public:
   int soundMode;
 
   AudioStream *audio_stream;
@@ -318,5 +335,7 @@ public slots:
 };
 
 extern GData *gdata;
+
+#include "gdata.hpp"
 
 #endif

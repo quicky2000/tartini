@@ -198,7 +198,7 @@ Channel::Channel(SoundFile *parent_, int size_, int k_) : lookup(0, 128)/*, filt
   noteIsPlaying = false;
   //setThreshold(0.97f);
   //setIntThreshold(gdata->settings.getInt("Analysis", "thresholdValue"));
-  setIntThreshold(gdata->qsettings->value("Analysis/thresholdValue", 93).toInt());
+  setIntThreshold(gdata->getSettingsValue("Analysis/thresholdValue", 93));
   //estimate = 0.0;
   freq = 0.0;
   mutex = new QMutex(true);

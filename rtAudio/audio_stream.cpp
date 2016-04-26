@@ -51,14 +51,14 @@ int AudioStream::open(int mode_, int freq_, int channels_, int /*bits_*/, int bu
 
   QStringList inNames = getInputDeviceNames();
   //const char *audioInput = gdata->qsettings->value("Sound/soundInput", "/dev/dsp").toString();
-  const char *audioInput = gdata->qsettings->value("Sound/soundInput", "Default").toString();
+  const char *audioInput = gdata->getSettingsValue("Sound/soundInput", QString("Default"));
   //inDevice = inNames.indexOf(audioInput);
   //if(inDevice == -1) inDevice = 0;
   inDevice = getDeviceNumber(audioInput);
 
   QStringList outNames = getOutputDeviceNames();
   //const char *audioOutput = gdata->qsettings->value("Sound/soundOutput", "/dev/dsp").toString();
-  const char *audioOutput = gdata->qsettings->value("Sound/soundOutput", "Default").toString();
+  const char *audioOutput = gdata->getSettingsValue("Sound/soundOutput", QString("Default"));
   //outDevice = outNames.indexOf(audioOutput);
   //if(outDevice == -1) outDevice = 0;
   outDevice = getDeviceNumber(audioOutput);

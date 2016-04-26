@@ -55,23 +55,23 @@ void TartiniSettingsDialog::loadSetting(QObject *obj, const QString &group)
     }
   } else if(obj->isA("QLineEdit")) {
     //((QLineEdit*)obj)->setText((gdata->settings).getString(group, key));
-    ((QLineEdit*)obj)->setText(gdata->qsettings->value(fullKey).toString());
+    ((QLineEdit*)obj)->setText(gdata->getSettingsStringValue(fullKey));
   } else if(obj->isA("QComboBox")) {
     //((QComboBox*)obj)->setCurrentText((gdata->settings).getString(group, key));
-    ((QComboBox*)obj)->setCurrentText(gdata->qsettings->value(fullKey).toString());
+    ((QComboBox*)obj)->setCurrentText(gdata->getSettingsStringValue(fullKey));
   } else if(obj->isA("QPushButton") && ((QPushButton*)obj)->isToggleButton()) {
     //((QPushButton*)obj)->setOn((gdata->settings).getBool(group, key));
-    ((QPushButton*)obj)->setOn(gdata->qsettings->value(fullKey).toBool());
+    ((QPushButton*)obj)->setOn(gdata->getSettingsBoolValue(fullKey));
   } else if(obj->isA("QCheckBox")) {
     //((QCheckBox*)obj)->setChecked((gdata->settings).getBool(group, key));
-    ((QCheckBox*)obj)->setChecked(gdata->qsettings->value(fullKey).toBool());
+    ((QCheckBox*)obj)->setChecked(gdata->getSettingsBoolValue(fullKey));
   } else if(obj->isA("QSpinBox")) {
     //((QSpinBox*)obj)->setValue((gdata->settings).getInt(group, key));
-    ((QSpinBox*)obj)->setValue(gdata->qsettings->value(fullKey).toInt());
+    ((QSpinBox*)obj)->setValue(gdata->getSettingsIntValue(fullKey));
   } else if(obj->isA("QFrame")) {
     QColor color;
     //color.setNamedColor((gdata->settings).getString(group, key));
-    color.setNamedColor(gdata->qsettings->value(fullKey).toString());
+    color.setNamedColor(gdata->getSettingsStringValue(fullKey));
     ((QFrame*)obj)->setPaletteBackgroundColor(color);
   }
 }
@@ -217,22 +217,22 @@ void TartiniSettingsDialog::saveSetting(QObject *obj, const QString group)
     }
   } else if(obj->isA("QLineEdit")) {
     //(gdata->settings).setString(group, key, ((QLineEdit*)obj)->text());
-    gdata->qsettings->setValue(fullKey, ((QLineEdit*)obj)->text());
+    gdata->setSettingsValue(fullKey, ((QLineEdit*)obj)->text());
   } else if(obj->isA("QComboBox")) {
     //(gdata->settings).setString(group, key, ((QComboBox*)obj)->currentText());
-    gdata->qsettings->setValue(fullKey, ((QComboBox*)obj)->currentText());
+    gdata->setSettingsValue(fullKey, ((QComboBox*)obj)->currentText());
   } else if(obj->isA("QPushButton") && ((QPushButton*)obj)->isToggleButton()) {
     //(gdata->settings).setBool(group, key, ((QPushButton*)obj)->isOn());
-    gdata->qsettings->setValue(fullKey, ((QPushButton*)obj)->isOn());
+    gdata->setSettingsValue(fullKey, ((QPushButton*)obj)->isOn());
   } else if(obj->isA("QCheckBox")) {
     //(gdata->settings).setBool(group, key, ((QCheckBox*)obj)->isChecked());
-    gdata->qsettings->setValue(fullKey, ((QCheckBox*)obj)->isChecked());
+    gdata->setSettingsValue(fullKey, ((QCheckBox*)obj)->isChecked());
   } else if(obj->isA("QSpinBox")) {
     //(gdata->settings).setInt(group, key, ((QSpinBox*)obj)->value());
-    gdata->qsettings->setValue(fullKey, ((QSpinBox*)obj)->value());
+    gdata->setSettingsValue(fullKey, ((QSpinBox*)obj)->value());
   } else if(obj->isA("QFrame")) {
     //(gdata->settings).setString(group, key, ((QFrame*)obj)->paletteBackgroundColor().name());
-    gdata->qsettings->setValue(fullKey, ((QFrame*)obj)->paletteBackgroundColor().name());
+    gdata->setSettingsValue(fullKey, ((QFrame*)obj)->paletteBackgroundColor().name());
   }
 }
 
@@ -254,7 +254,7 @@ void TartiniSettingsDialog::saveSettings()
   }
   
   //(gdata->settings).save();
-  gdata->qsettings->sync();
+  gdata->syncSettings();
 	
   QApplication::postEvent(mainWindow, new QCustomEvent(SETTINGS_CHANGED));
 	
@@ -398,9 +398,9 @@ void TartiniSettingsDialog::setUnknownstToDefault(Settings *settings)
 */
 
 #define SetIfMissing(key, value) \
-  if(!s->contains(key)) s->setValue(key, value)
+  if(!p_gdata.settingsContains(key)) p_gdata.setSettingsValue(key, value)
 
-void TartiniSettingsDialog::setUnknownsToDefault(QSettings *s)
+void TartiniSettingsDialog::setUnknownsToDefault(GData & p_gdata)
 {
   SetIfMissing("General/bindOpenSaveFolders", true);
   SetIfMissing("General/tempFilesFolder", QDir::convertSeparators(QDir::currentDirPath()));
@@ -466,10 +466,10 @@ void TartiniSettingsDialog::setUnknownsToDefault(QSettings *s)
 
 void TartiniSettingsDialog::resetDefaults()
 {
-  gdata->qsettings->clear();
+  gdata->clearSettings();
   //setDefaults(&gdata->settings);
   //gdata->settings.save();
-  setUnknownsToDefault(gdata->qsettings);
-  gdata->qsettings->sync();
+  setUnknownsToDefault(*gdata);
+  gdata->syncSettings();
   init();
 }

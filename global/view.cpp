@@ -47,9 +47,9 @@ View::View()
   //_zoomY = 0.034286;
 	
   //_autoFollow = gdata->settings.getBool("View", "autoFollow");
-  _autoFollow = gdata->qsettings->value("View/autoFollow", true).toBool();
+  _autoFollow = gdata->getSettingsValue("View/autoFollow", true);
   //_backgroundShading = gdata->settings.getBool("View", "backgroundShading");
-  _backgroundShading = gdata->qsettings->value("View/backgroundShading", true).toBool();
+  _backgroundShading = gdata->getSettingsValue("View/backgroundShading", true);
 
   needFastUpdate = false;
   needSlowUpdate = false;
@@ -574,13 +574,13 @@ void View::setAutoFollow(bool isChecked)
 {
 	_autoFollow = isChecked;
 	//gdata->settings.setBool("View", "autoFollow", isChecked);
-  gdata->qsettings->setValue("View/autoFollow", isChecked);
+  gdata->setSettingsValue("View/autoFollow", isChecked);
 }
 
 void View::setBackgroundShading(bool isChecked)
 {
   _backgroundShading = isChecked;
   //gdata->settings.setBool("View", "backgroundShading", isChecked);
-  gdata->qsettings->setValue("View/backgroundShading", isChecked);
+  gdata->setSettingsValue("View/backgroundShading", isChecked);
   emit onSlowUpdate(_currentTime);
 }

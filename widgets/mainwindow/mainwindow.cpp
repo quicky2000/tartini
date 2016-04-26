@@ -740,11 +740,11 @@ void MainWindow::openFile()
   QString s = QString(d.selectedFile());
 */
   //QString s = OpenDialog::getOpenWavFileName(this);
-  QString lastFolder = QDir::convertSeparators(gdata->qsettings->value("Dialogs/openFilesFolder", QDir::currentDirPath()).toString());
+  QString lastFolder = QDir::convertSeparators(gdata->getSettingsValue("Dialogs/openFilesFolder", QDir::currentDirPath()));
   QString s = QFileDialog::getOpenFileName(this, "Open File", lastFolder, "Sounds (*.wav)");
   if(s.isEmpty()) return;
   s = QDir::convertSeparators(s);
-  gdata->qsettings->setValue("Dialogs/openFilesFolder", s);
+  gdata->setSettingsValue("Dialogs/openFilesFolder", s);
   openFile(s.latin1());
 }
 
@@ -789,14 +789,14 @@ void MainWindow::openRecord(bool andPlay)
   SoundFile *playSoundFile = (andPlay) ? gdata->getActiveSoundFile() : NULL;
 
   //int rate = gdata->settings.getInt("Sound", "sampleRate");
-  int rate = gdata->qsettings->value("Sound/sampleRate", 44100).toInt();
+  int rate = gdata->getSettingsValue("Sound/sampleRate", 44100);
   //QString numberOfChannels = gdata->settings.getString("Sound", "numberOfChannels");
-  QString numberOfChannels = gdata->qsettings->value("Sound/numberOfChannels", "mono").toString();
+  QString numberOfChannels = gdata->getSettingsValue("Sound/numberOfChannels", QString("mono"));
   int channels;
   if(numberOfChannels.lower() == "mono") channels = 1;
   else channels = 2;
   //int bits = gdata->settings.getInt("Sound", "bitsPerSample");
-  int bits = gdata->qsettings->value("Sound/bitsPerSample", 16).toInt();
+  int bits = gdata->getSettingsValue("Sound/bitsPerSample", 16);
   int windowSize = gdata->getAnalysisBufferSize(rate);
   int stepSize = gdata->getAnalysisStepSize(rate);
 
@@ -810,7 +810,7 @@ void MainWindow::openRecord(bool andPlay)
   }
 
   //QString tempFileFolder = gdata->settings.getString("General", "tempFilesFolder");
-  QString tempFileFolder = gdata->qsettings->value("General/tempFilesFolder", QDir::convertSeparators(QDir::currentDirPath())).toString();
+  QString tempFileFolder = gdata->getSettingsValue("General/tempFilesFolder", QDir::convertSeparators(QDir::currentDirPath()));
   QDir dir = QDir(tempFileFolder);
   QFileInfo fileInfo; //(dir, fileName);
   QString fileName;
@@ -822,9 +822,9 @@ void MainWindow::openRecord(bool andPlay)
     if(fileInfo.exists()) {
       fileExists = true;
       //int fileGeneratingNumber = gdata->settings.getInt("General", "fileGeneratingNumber");
-      int fileGeneratingNumber = gdata->qsettings->value("General/fileGeneratingNumber", 1).toInt();
+      int fileGeneratingNumber = gdata->getSettingsValue("General/fileGeneratingNumber", 1);
       //gdata->settings.setInt("General", "fileGeneratingNumber", fileGeneratingNumber+1);
-      gdata->qsettings->setValue("General/fileGeneratingNumber", fileGeneratingNumber+1);
+      gdata->setSettingsValue("General/fileGeneratingNumber", fileGeneratingNumber + 1);
     }
       /*
       if(QMessageBox::question(this, tr("Overwrite File?"),
@@ -861,9 +861,9 @@ void MainWindow::openRecord(bool andPlay)
   gdata->setActiveChannel(newSoundFile->channels(0));
 
   //int fileGeneratingNumber = gdata->settings.getInt("General", "fileGeneratingNumber");
-  int fileGeneratingNumber = gdata->qsettings->value("General/fileGeneratingNumber", 1).toInt();
+  int fileGeneratingNumber = gdata->getSettingsValue("General/fileGeneratingNumber", 1);
   //gdata->settings.setInt("General", "fileGeneratingNumber", fileGeneratingNumber+1);
-  gdata->qsettings->setValue("General/fileGeneratingNumber", fileGeneratingNumber+1);
+  gdata->setSettingsValue("General/fileGeneratingNumber", fileGeneratingNumber+1);
 }
 
 void MainWindow::windowMenuAboutToShow()
@@ -954,7 +954,7 @@ void MainWindow::menuPreferences()
 QWidget *MainWindow::openView(int viewID)
 {
   QWidget *w = NULL;
-  int useTopLevelWidgets = gdata->qsettings->value("Display/useTopLevelWidgets", false).toBool();
+  int useTopLevelWidgets = gdata->getSettingsValue("Display/useTopLevelWidgets", false);
   QWidget *parent = (useTopLevelWidgets) ? NULL : theWorkspace;
 
   switch(viewID) {
@@ -1419,16 +1419,15 @@ void MainWindow::exportChannelMatlab()
 
 bool MainWindow::loadViewGeometry()
 {
-  QSettings *s = gdata->qsettings;
   QPoint pos;
   QSize size;
   int counter = 0;
 
   for(int j=0; j<NUM_VIEWS; j++) {
     QString base = QString("geometry/") + viewData[j].className;
-    if(s->value(base+"/visible", false).toBool() == true) {
-      pos = s->value(base+"/pos", QPoint(0, 0)).toPoint();
-      size = s->value(base+"/size", QSize(100, 100)).toSize();
+    if(gdata->getSettingsValue(base+"/visible", false) == true) {
+      pos = gdata->getSettingsValue(base+"/pos", QPoint(0, 0));
+      size = gdata->getSettingsValue(base+"/size", QSize(100, 100));
       QWidget *w = openView(j);
       QWidget *p = (QWidget*)(w->parent()); //get the subwindow frame
       if(p) {
@@ -1450,8 +1449,6 @@ bool MainWindow::loadViewGeometry()
 
 void MainWindow::saveViewGeometry()
 {
-  QSettings *s = gdata->qsettings;
-
   QWidgetList opened = theWorkspace->windowList();
 
   for(int j=0; j<NUM_VIEWS; j++) {
@@ -1461,18 +1458,18 @@ void MainWindow::saveViewGeometry()
       if(QString((*it)->metaObject()->className()) == viewData[j].className) {
         QWidget *p = (QWidget*)((*it)->parent()); //get the subwindow frame
         if(!p) break;
-        s->setValue(base+"/visible", true);
-        s->setValue(base+"/pos", p->pos());
-        s->setValue(base+"/size", p->size());
+        gdata->setSettingsValue(base+"/visible", true);
+        gdata->setSettingsValue(base+"/pos", p->pos());
+        gdata->setSettingsValue(base+"/size", p->size());
         //printf("pos.x=%d, pos.y=%d\n", p->pos().x(), p->pos().y());
         found = true;
         break;
       }
     }
     if(!found) {
-      s->setValue(base+"/visible", false);
-      //s->setValue(base+"/pos", QPoint(0, 0));
-      //s->setValue(base+"/size", QSize(100, 100));
+      gdata->setSettingsValue(base+"/visible", false);
+      //gdata->setSettingsValue(base+"/pos", QPoint(0, 0));
+      //gdata->setSettingsValue(base+"/size", QSize(100, 100));
     }
   }
 }
