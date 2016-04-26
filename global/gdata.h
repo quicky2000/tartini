@@ -133,9 +133,6 @@ public:
   //bool equalLoudness;
   //bool useMasking;
   //bool useRidgeFile; //output a file with ridges found
-  double cur_note;
-  float peakThreshold;
-  float correlationThreshold;
 
   bool doingStuff;
   AudioThread audioThread;

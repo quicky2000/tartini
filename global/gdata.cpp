@@ -130,8 +130,6 @@ GData::GData(/*int buffer_size_, int winfunc_, float step_size_*/)
     //winfunc = winfunc_;
     //step_size = step_size_;
     
-    peakThreshold = -60.0; //in dB
-    correlationThreshold = 0.00001f; //0.5 in the other scale (log);
     frameCounter = 0;
     //equalLoudness = false; //true;
     //useMasking = false; //true;
@@ -165,8 +163,6 @@ GData::GData(/*int buffer_size_, int winfunc_, float step_size_*/)
     fct_out_data = (float *)calloc(2*fct.get_output_data_length(), sizeof(float));
     fct_draw_data = (FrameRGB *)calloc(buffer_size/2*64, sizeof(FrameRGB));
 #endif
-
-    cur_note = 0.0;
 
     sync_flag = 0;
     need_update = false;
