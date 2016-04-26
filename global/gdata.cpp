@@ -137,7 +137,6 @@ GData::GData(/*int buffer_size_, int winfunc_, float step_size_*/)
 
     //useRidgeFile = false; /**< Store harmonic info to a ridge file */
     
-    doingStuff = false; /**< Active/inactive */
     running = STREAM_STOP;
     
     //in_channels = 2;

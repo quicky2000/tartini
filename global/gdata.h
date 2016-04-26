@@ -134,7 +134,6 @@ public:
   //bool useMasking;
   //bool useRidgeFile; //output a file with ridges found
 
-  bool doingStuff;
   AudioThread audioThread;
   int sync_flag;
 
