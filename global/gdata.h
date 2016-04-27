@@ -122,6 +122,7 @@ public:
 
   inline const AudioThread & getAudioThread(void)const;
   inline void stopAndWaitAudioThread(void);
+
  private:
   QSettings *qsettings;
   int soundMode;
@@ -138,7 +139,6 @@ public:
   //bool useMasking;
   //bool useRidgeFile; //output a file with ridges found
 
-  int sync_flag;
 
   QMutex frameCounterMutex;
   int frameCounter;

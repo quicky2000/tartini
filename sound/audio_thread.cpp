@@ -218,15 +218,6 @@ int AudioThread::doStuff()
   //_soundFile->incrementChunkNum();
 */
 
-  /*
-    if(gdata->sync_flag == 1) {
-    gdata->audio_stream->signal1();
-    gdata->sync_flag = 0;
-    }
-  */
-
-
-
   //Set some flags to cause an update of views, every now and then
   fast_update_count++;
   slow_update_count++;

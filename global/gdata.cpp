@@ -163,7 +163,6 @@ GData::GData(/*int buffer_size_, int winfunc_, float step_size_*/)
     fct_draw_data = (FrameRGB *)calloc(buffer_size/2*64, sizeof(FrameRGB));
 #endif
 
-    sync_flag = 0;
     need_update = false;
 
     //view = new View();
