@@ -319,7 +319,7 @@ void FreqWidgetGL::paintGL()
   View *view = gdata->view;
 
 
-  if(view->autoFollow() && gdata->getActiveChannel() && gdata->running == STREAM_FORWARD)
+  if(view->autoFollow() && gdata->getActiveChannel() && gdata->getRunning() == STREAM_FORWARD)
     setChannelVerticalView(gdata->getActiveChannel(), view->viewLeft(), view->currentTime(), view->zoomX(), view->viewBottom(), view->zoomY());
 
 
@@ -513,7 +513,7 @@ void FreqWidgetGL::wheelEvent(QWheelEvent * e)
         double before = view->logZoomY();
         view->setZoomFactorY(view->logZoomY() + amount, height() - e->y());
         amount = view->logZoomY() - before;
-        if(gdata->running == STREAM_FORWARD) {
+        if(gdata->getRunning() == STREAM_FORWARD) {
           view->setZoomFactorX(view->logZoomX() + amount);
         } else { //zoom toward mouse pointer
           view->setZoomFactorX(view->logZoomX() + amount, e->x());
@@ -522,7 +522,7 @@ void FreqWidgetGL::wheelEvent(QWheelEvent * e)
         double before = view->logZoomY();
         view->setZoomFactorY(view->logZoomY() + amount, height()/2);
         amount = view->logZoomY() - before;
-        if(gdata->running == STREAM_FORWARD) {
+        if(gdata->getRunning() == STREAM_FORWARD) {
           view->setZoomFactorX(view->logZoomX() + amount);
         } else {
           view->setZoomFactorX(view->logZoomX() + amount, width()/2);

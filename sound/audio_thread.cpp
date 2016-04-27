@@ -101,7 +101,7 @@ void AudioThread::run()
     }
   
   QApplication::postEvent(mainWindow, new QCustomEvent(SOUND_STARTED));
-  gdata->running = STREAM_FORWARD;
+  gdata->setRunning(STREAM_FORWARD);
 
   while(!stopping) {
     if(doStuff() == 0) break;
@@ -116,7 +116,7 @@ void AudioThread::run()
 #endif
   }
 
-  gdata->running = STREAM_STOP;
+  gdata->setRunning(STREAM_STOP);
 
   if((gdata->getSoundMode() & SOUND_REC)) {
     gdata->setDoingActiveAnalysis(false);
@@ -138,7 +138,7 @@ void AudioThread::run()
 int AudioThread::doStuff()
 {
   int force_update = false;
-  if(gdata->running == STREAM_PAUSE) { msleep(20); return 1; } //paused
+  if(gdata->getRunning() == STREAM_PAUSE) { msleep(20); return 1; } //paused
   if(!_playSoundFile && !_recSoundFile) return 0;
 
   ++frame_num;
@@ -146,11 +146,11 @@ int AudioThread::doStuff()
   //printf("audio_thread got lock\n"); fflush(stdout);
 	
   //update one frame before pausing again
-  if(gdata->running == STREAM_UPDATE) {
-    gdata->running = STREAM_PAUSE; //update then pause
+  if(gdata->getRunning() == STREAM_UPDATE) {
+    gdata->setRunning(STREAM_PAUSE); //update then pause
     force_update = true;
   }
-  if(gdata->running != STREAM_FORWARD) return 0;
+  if(gdata->getRunning() != STREAM_FORWARD) return 0;
 
 
   

@@ -664,7 +664,7 @@ void MainWindow::keyPressEvent ( QKeyEvent * e )
       gdata->pauseSound();
       break;*/
   case Qt::Key_Left:
-    if(gdata->running == STREAM_FORWARD) {
+    if(gdata->getRunning() == STREAM_FORWARD) {
       gdata->rewind();
     } else {
       if(gdata->getActiveChannel())
@@ -676,7 +676,7 @@ void MainWindow::keyPressEvent ( QKeyEvent * e )
     }
     break;
   case Qt::Key_Right:
-    if(gdata->running == STREAM_FORWARD) {
+    if(gdata->getRunning() == STREAM_FORWARD) {
       gdata->fastforward();
     } else {
       if(gdata->getActiveChannel())
@@ -781,7 +781,7 @@ void MainWindow::openPlayRecord()
 
 void MainWindow::openRecord(bool andPlay)
 {
-  if(gdata->running) {
+  if(gdata->getRunning()) {
     gdata->stop();
     return;
   }
@@ -1140,7 +1140,7 @@ void MainWindow::rewindReleased()
 
 void MainWindow::playStopClicked()
 {
-  if(gdata->running) {
+  if(gdata->getRunning()) {
     gdata->stop();
   } else {
     gdata->play();

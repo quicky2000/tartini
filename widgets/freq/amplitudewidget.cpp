@@ -532,7 +532,7 @@ void AmplitudeWidget::wheelEvent(QWheelEvent * e)
     View *view = gdata->view;
     if (!(e->state() & (Qt::ControlModifier | Qt::ShiftModifier))) {
       //view->setViewBottom(view->viewBottom() + double(e->delta()/WHEEL_DELTA) * view->viewHeight() * 0.1);
-      if(gdata->running == STREAM_FORWARD) {
+      if(gdata->getRunning() == STREAM_FORWARD) {
         view->setZoomFactorX(view->logZoomX() + double(e->delta()/WHEEL_DELTA)*0.3);
       } else {
         if(e->delta() < 0) {

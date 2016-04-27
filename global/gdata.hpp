@@ -170,4 +170,16 @@ void GData::stopAndWaitAudioThread(void)
 {
   audioThread.stopAndWait();
 }
+
+//------------------------------------------------------------------------------
+void GData::setRunning(int p_running)
+{
+  running = p_running;
+}
+
+//------------------------------------------------------------------------------
+int GData::getRunning(void)const
+{
+  return running;
+}
 //EOF

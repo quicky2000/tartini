@@ -123,7 +123,7 @@ void SummaryDrawWidget::mouseMoveEvent( QMouseEvent *e )
     double noteRatio = double(height()) / (100.0 / scaler);
 
     // We should only change the current time if the file is stopped
-    if (gdata->running == STREAM_STOP) view->setCurrentTime(e->x()/timeRatio - gdata->leftTime() + clickCurrentTimeDiff);
+    if (gdata->getRunning() == STREAM_STOP) view->setCurrentTime(e->x()/timeRatio - gdata->leftTime() + clickCurrentTimeDiff);
     double newBottom = (height()-1- e->y())/noteRatio + clickViewBottomDiff;
     if (newBottom < 0) {
       newBottom = 0;

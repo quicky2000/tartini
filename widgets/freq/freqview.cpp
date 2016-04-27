@@ -307,7 +307,7 @@ FreqView::~FreqView()
 void FreqView::zoomIn()
 {
   bool doneIt = false;
-  if(gdata->running != STREAM_FORWARD) {
+  if(gdata->getRunning() != STREAM_FORWARD) {
     //if(freqDrawWidget->hasMouse()) {
     if(freqWidgetGL->hasMouse()) {
       //QPoint mousePos = freqDrawWidget->mapFromGlobal(QCursor::pos());

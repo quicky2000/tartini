@@ -120,6 +120,8 @@ public:
   inline const AudioThread & getAudioThread(void)const;
   inline void stopAndWaitAudioThread(void);
 
+  inline void setRunning(int p_running);
+  inline int getRunning(void)const;
  private:
   QSettings *qsettings;
   int soundMode;
@@ -129,6 +131,7 @@ public:
   std::vector<Filter*> filter_lp; //lowpass filter
   AudioThread audioThread;
 
+  int running;
  public:
 
 
@@ -145,7 +148,6 @@ public:
   //int out_channels;
   //int pitch_method[2]; //a pitch method for each channel
 
-  int running;
   //chirp_xform fct;QColor myLineColor1(32, 32, 32);
 
   //float *fct_in_data;
