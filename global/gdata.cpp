@@ -140,7 +140,6 @@ GData::GData(/*int buffer_size_, int winfunc_, float step_size_*/)
     //in_channels = 2;
     //process_channels = 1;
     //out_channels = 2;
-    using_coefficients_table = true;
 
     audio_stream = NULL;
     soundMode = SOUND_PLAY;

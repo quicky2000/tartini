@@ -146,7 +146,6 @@ public:
   //int pitch_method[2]; //a pitch method for each channel
 
   int running;
-  bool using_coefficients_table;
   //chirp_xform fct;QColor myLineColor1(32, 32, 32);
 
   //float *fct_in_data;
