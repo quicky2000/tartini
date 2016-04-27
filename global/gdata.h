@@ -129,6 +129,7 @@ public:
   std::vector<Filter*> filter_lp; //lowpass filter
   AudioThread audioThread;
 
+
  public:
 
 
@@ -145,7 +146,6 @@ public:
   //int out_channels;
   //int pitch_method[2]; //a pitch method for each channel
 
-  int bisection_steps;
   int fast_correlation_repeats;
   int running;
   bool using_coefficients_table;
@@ -296,7 +296,6 @@ public slots:
   //void    setFrameWindowSize(int index);
   //void    setWinFunc(int index);
   //void    setPitchMethod(int channel, int index) { pitch_method[channel] = index; }
-  void      setBisectionSteps(int num_steps) { bisection_steps = num_steps; }
   void      setFastRepeats(int num_repeats) { fast_correlation_repeats = num_repeats; }
   void      setAmplitudeMode(int amplitudeMode);
   void      setPitchContourMode(int pitchContourMode);

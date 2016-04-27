@@ -140,7 +140,6 @@ GData::GData(/*int buffer_size_, int winfunc_, float step_size_*/)
     //in_channels = 2;
     //process_channels = 1;
     //out_channels = 2;
-    //bisection_steps = settings.get_int("Correlation", "bisectionSteps", 8); //8;
     //fast_correlation_repeats = settings.get_int("Correlation", "fastRepeats", 512);
     using_coefficients_table = true;
 
