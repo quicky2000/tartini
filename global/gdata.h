@@ -73,9 +73,6 @@ extern const char *step_size_strings[NUM_STEP_SIZES];
 #define NUM_PITCH_METHODS 8
 extern const char *pitch_method_strings[NUM_PITCH_METHODS];
 
-#define NUM_INTERPOLATING_TYPES 3
-extern const char *interpolating_type_strings[NUM_INTERPOLATING_TYPES];
-
 class FBuffer;
 class SoundStream;
 class SoundFileStream;
@@ -148,7 +145,6 @@ public:
   //int out_channels;
   //int pitch_method[2]; //a pitch method for each channel
 
-  int interpolating_type;
   int bisection_steps;
   int fast_correlation_repeats;
   int running;
@@ -300,7 +296,6 @@ public slots:
   //void    setFrameWindowSize(int index);
   //void    setWinFunc(int index);
   //void    setPitchMethod(int channel, int index) { pitch_method[channel] = index; }
-  void      setInterpolatingType(int type) { interpolating_type = type; }
   void      setBisectionSteps(int num_steps) { bisection_steps = num_steps; }
   void      setFastRepeats(int num_repeats) { fast_correlation_repeats = num_repeats; }
   void      setAmplitudeMode(int amplitudeMode);

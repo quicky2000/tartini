@@ -64,7 +64,6 @@ const char *step_size_strings[NUM_STEP_SIZES] = { "100%", "50%", "25%", "20%", "
 
 const char *pitch_method_strings[NUM_PITCH_METHODS] = { "FFT interpolation", "Fast-correlation",  "Correlation (squared error) 1", "Correlation (squared error) 2", "Correlation (abs error) 1", "Correlation (abs error) 2", "Correlation (multiplied) 1", "Correlation (multiplied) 2" };
 
-const char *interpolating_type_strings[NUM_INTERPOLATING_TYPES] = { "Linear", "Cubic B-Spline", "Hermite Cubic" };
 GData *gdata = NULL;
 
 //Define the Phase function. This one is applicable to 
@@ -141,7 +140,6 @@ GData::GData(/*int buffer_size_, int winfunc_, float step_size_*/)
     //in_channels = 2;
     //process_channels = 1;
     //out_channels = 2;
-    interpolating_type = 2; //HERMITE_CUBIC;
     //bisection_steps = settings.get_int("Correlation", "bisectionSteps", 8); //8;
     //fast_correlation_repeats = settings.get_int("Correlation", "fastRepeats", 512);
     using_coefficients_table = true;
