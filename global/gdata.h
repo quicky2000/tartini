@@ -140,7 +140,6 @@ public:
   //bool useRidgeFile; //output a file with ridges found
 
 
-  QMutex frameCounterMutex;
   int frameCounter;
 
   //char *inputFile;
