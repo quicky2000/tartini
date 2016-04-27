@@ -80,23 +80,27 @@ void OpenFiles::refreshChannelList()
   
   QString s;
   int j=0;
-  for(std::vector<Channel*>::iterator it = gdata->channels.begin(); it != gdata->channels.end(); it++) {
-    //sprintf(s, "%s(%d)", getFilenamePart((*it)->getParent()->filename), j+1);
-    s = (*it)->getUniqueFilename();
-    //theListView->insertItem(new QListViewItem(theListView, theListView->lastItem(), " "));
+  unsigned int l_index = 0;
+  for(l_index = 0 ; l_index < gdata->getChannelsSize() ; ++l_index)
+    {
+      //sprintf(s, "%s(%d)", getFilenamePart(gdata->getChannelAt()->getParent()->filename), j+1);
+      s = gdata->getChannelAt(l_index)->getUniqueFilename();
+      //theListView->insertItem(new QListViewItem(theListView, theListView->lastItem(), " "));
 
-    Q3CheckListItem *newElement = new Q3CheckListItem(theListView, theListView->lastItem(), s, Q3CheckListItem::CheckBox);
+      Q3CheckListItem *newElement = new Q3CheckListItem(theListView, theListView->lastItem(), s, Q3CheckListItem::CheckBox);
     
-    if((*it)->isVisible()) {
-      newElement->setOn(true);
+      if(gdata->getChannelAt(l_index)->isVisible())
+	{
+	  newElement->setOn(true);
+	}
+      if(gdata->getChannelAt(l_index) == gdata->getActiveChannel())
+	{
+	  newElement->setText(1, "A");
+	  theListView->setSelected(newElement, true);
+	  theListView->setCurrentItem(newElement);
+	}
+      j++;
     }
-    if((*it) == gdata->getActiveChannel()) {
-      newElement->setText(1, "A");
-      theListView->setSelected(newElement, true);
-      theListView->setCurrentItem(newElement);
-    }
-    j++;
-  }
 }
 
 //TODO: Tidy this method up
@@ -106,8 +110,8 @@ void OpenFiles::slotActiveChannelChanged(Channel *active)
 	bool found = false;
 
 	// Find the index of the active channel
-	for (index = 0; index < int(gdata->channels.size()); index++) {
-		if (gdata->channels.at(index) == active) {
+	for (index = 0; index < int(gdata->getChannelsSize()); index++) {
+		if (gdata->getChannelAt(index) == active) {
 			found = true;
 			break;
 		}
@@ -149,9 +153,9 @@ void OpenFiles::listViewChanged(Q3ListViewItem* item)
     myChild = myChild->nextSibling();
     pos++;
   }
-  myassert(pos < int(gdata->channels.size()));
+  myassert(pos < int(gdata->getChannelsSize()));
   bool state = ((Q3CheckListItem *)item)->isOn();
-  if(gdata->channels.at(pos)->isVisible() != state) gdata->channels.at(pos)->setVisible(state);
+  if(gdata->getChannelAt(pos)->isVisible() != state) gdata->getChannelAt(pos)->setVisible(state);
   //gdata->view->doSlowUpdate();
   //gdata->view->doFastUpdate();
   gdata->view->doUpdate();
@@ -174,9 +178,9 @@ void OpenFiles::slotCurrentChanged(Q3ListViewItem* item)
     myChild = myChild->nextSibling();
     pos++;
   }
-  myassert(pos < int(gdata->channels.size()));
+  myassert(pos < int(gdata->getChannelsSize()));
   myChild->setText(1, "A");
-  gdata->setActiveChannel(gdata->channels.at(pos));
+  gdata->setActiveChannel(gdata->getChannelAt(pos));
 
   // Go through the rest of the items and reset their active channel markers
   myChild = myChild->nextSibling();

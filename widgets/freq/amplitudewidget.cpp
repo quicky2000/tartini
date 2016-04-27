@@ -119,8 +119,8 @@ void AmplitudeWidget::paintGL()
   glEnable(GL_LINE_SMOOTH);
 
   //draw all the visible channels
-  for (uint i = 0; i < gdata->channels.size(); i++) {
-    Channel *ch = gdata->channels.at(i);
+  for (uint i = 0; i < gdata->getChannelsSize(); i++) {
+    Channel *ch = gdata->getChannelAt(i);
     if(!ch->isVisible()) continue;
     //drawChannel(ch, p, view->viewLeft(), view->currentTime(), view->zoomX(), view->viewBottom(), view->zoomY(), DRAW_VIEW_NORMAL);
     drawChannelAmplitudeGL(ch);

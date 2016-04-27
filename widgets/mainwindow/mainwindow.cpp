@@ -1378,8 +1378,8 @@ void MainWindow::printPitch()
     //printf("dotsPerMM = %f\n", dotsPerMM);
     DrawWidget::setLineWidth(toInt(std::min(dotsPerMM*1.0, dotsPerLineStepY*0.2))); //1mm thick line
     //draw all the visible channels
-    for (uint i = 0; i < gdata->channels.size(); i++) {
-      Channel *ch = gdata->channels.at(i);
+    for (uint i = 0; i < gdata->getChannelsSize(); i++) {
+      Channel *ch = gdata->getChannelAt(i);
       if(!ch->isVisible()) continue;
       DrawWidget::drawChannel(printer, ch, p, leftTime, 0.0, zoomX, viewBottom, zoomY, DRAW_VIEW_PRINT);
       if(ch == gdata->getActiveChannel()) {

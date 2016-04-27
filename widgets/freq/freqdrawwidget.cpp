@@ -177,11 +177,12 @@ void FreqDrawWidget::paintEvent(QPaintEvent *)
   drawReferenceLines(*this, p, view->currentTime(), view->zoomX(), view->viewBottom(), view->zoomY(), DRAW_VIEW_NORMAL);
 
   //draw all the visible channels
-  for (uint i = 0; i < gdata->channels.size(); i++) {
-   	Channel *ch = gdata->channels.at(i);
-   	if(!ch->isVisible()) continue;
-    drawChannel(*this, ch, p, view->viewLeft(), view->currentTime(), view->zoomX(), view->viewBottom(), view->zoomY(), DRAW_VIEW_NORMAL);
-  }
+  for (uint i = 0; i < gdata->getChannelsSize(); i++)
+    {
+      Channel *ch = gdata->getChannelAt(i);
+      if(!ch->isVisible()) continue;
+      drawChannel(*this, ch, p, view->viewLeft(), view->currentTime(), view->zoomX(), view->viewBottom(), view->zoomY(), DRAW_VIEW_NORMAL);
+    }
 
   // Draw a light grey band indicating which time is being used in the current window
   if(gdata->getActiveChannel()) {
@@ -211,12 +212,16 @@ Channel *FreqDrawWidget::channelAtPixel(int x, int y)
   std::vector<Channel*> channels;
 
   //loop through channels in reverse order finding which one the user clicked on
-  for (std::vector<Channel*>::reverse_iterator it = gdata->channels.rbegin(); it != gdata->channels.rend();  it++) {
-    if((*it)->isVisible()) {
-      AnalysisData *data = (*it)->dataAtTime(time);
-      if(data && within(tolerance, data->getPitch(), pitch)) return *it;
+  unsigned int l_index = 0;
+  for (l_index = 0 ; l_index < gdata->getChannelsSize() ; ++l_index)
+    {
+      Channel * l_channel = gdata->getChannelAt(gdata->getChannelsSize() - 1 - l_index);
+      if(l_channel->isVisible())
+	{
+	  AnalysisData *data = l_channel->dataAtTime(time);
+	  if(data && within(tolerance, data->getPitch(), pitch)) return l_channel;
+	}
     }
-  }
   return NULL;
 }
 

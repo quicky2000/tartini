@@ -182,4 +182,16 @@ int GData::getRunning(void)const
 {
   return running;
 }
+
+//------------------------------------------------------------------------------
+size_t GData::getChannelsSize(void)const
+{
+  return channels.size();
+}
+
+//------------------------------------------------------------------------------
+Channel* GData::getChannelAt(size_t p_index)const
+{
+  return channels.at(p_index);
+}
 //EOF

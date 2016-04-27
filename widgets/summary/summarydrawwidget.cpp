@@ -59,8 +59,8 @@ void SummaryDrawWidget::paintEvent( QPaintEvent * )
   beginDrawing();
 
   //draw all the channels
-  for(int j = 0; j < (int)gdata->channels.size(); j++) {
-    ch = gdata->channels.at(j);
+  for(int j = 0; j < (int)gdata->getChannelsSize(); j++) {
+    ch = gdata->getChannelAt(j);
     if(!ch->isVisible()) continue;
 
     //drawChannel(ch, p, view->leftTime(), (view->totalTime() / (double) width()), 0.0f, (double) view->topNote() / (double) height(), DRAW_VIEW_SUMMARY);

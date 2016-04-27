@@ -122,6 +122,9 @@ public:
 
   inline void setRunning(int p_running);
   inline int getRunning(void)const;
+
+  inline size_t getChannelsSize(void)const;
+  inline Channel* getChannelAt(size_t p_index)const;
  private:
   QSettings *qsettings;
   int soundMode;
@@ -133,6 +136,7 @@ public:
   int running;
 
   std::vector<SoundFile*> soundFiles;
+  std::vector<Channel*> channels;
  public:
 
 
@@ -155,7 +159,6 @@ public:
   //float *fct_out_data;
   //FrameRGB *fct_draw_data;
 
-  std::vector<Channel*> channels;
   std::vector<QColor> lineColor;
   int nextColorIndex;
 
