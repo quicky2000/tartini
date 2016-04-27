@@ -130,7 +130,6 @@ GData::GData(/*int buffer_size_, int winfunc_, float step_size_*/)
     //winfunc = winfunc_;
     //step_size = step_size_;
     
-    frameCounter = 0;
     //equalLoudness = false; //true;
     //useMasking = false; //true;
     //harmonicNum = 1;

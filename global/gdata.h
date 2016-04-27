@@ -140,7 +140,6 @@ public:
   //bool useRidgeFile; //output a file with ridges found
 
 
-  int frameCounter;
 
   //char *inputFile;
 
@@ -148,6 +147,7 @@ public:
   //int process_channels;
   //int out_channels;
   //int pitch_method[2]; //a pitch method for each channel
+
   int interpolating_type;
   int bisection_steps;
   int fast_correlation_repeats;
