@@ -130,8 +130,9 @@ public:
   std::vector<Filter*> filter_hp; //highpass filter
   std::vector<Filter*> filter_lp; //lowpass filter
   AudioThread audioThread;
-
   int running;
+
+  std::vector<SoundFile*> soundFiles;
  public:
 
 
@@ -154,7 +155,6 @@ public:
   //float *fct_out_data;
   //FrameRGB *fct_draw_data;
 
-  std::vector<SoundFile*> soundFiles;
   std::vector<Channel*> channels;
   std::vector<QColor> lineColor;
   int nextColorIndex;
