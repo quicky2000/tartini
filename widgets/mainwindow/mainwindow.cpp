@@ -605,7 +605,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 bool MainWindow::event( QEvent * e )
 {
   if(e->type() == UPDATE_FAST || e->type() == UPDATE_SLOW) {
-    SoundFile *soundFile = gdata->audioThread.curSoundFile();
+    SoundFile *soundFile = gdata->getAudioThread().curSoundFile();
     if(soundFile) {
       soundFile->lock();
       gdata->view->setCurrentTime(soundFile->timeAtCurrentChunk());
@@ -656,7 +656,7 @@ void MainWindow::keyPressEvent ( QKeyEvent * e )
   switch(e->key()) {
 #ifdef MYDEBUG
   case Qt::Key_Escape:
-    gdata->audioThread.stopAndWait();
+    gdata->stopAndWaitAudioThread();
     qApp->closeAllWindows();
     break;
 #endif

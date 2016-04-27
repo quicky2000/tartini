@@ -159,4 +159,15 @@ void GData::setNeedUpdate(bool p_need_update)
   need_update = p_need_update;
 }
 
+//------------------------------------------------------------------------------
+const AudioThread & GData::getAudioThread(void)const
+{
+  return audioThread;
+}
+
+//------------------------------------------------------------------------------
+void GData::stopAndWaitAudioThread(void)
+{
+  audioThread.stopAndWait();
+}
 //EOF

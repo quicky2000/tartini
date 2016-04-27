@@ -88,7 +88,7 @@ SoundFile::~SoundFile()
 //free up all the memory of everything used
 void SoundFile::uninit()
 {
-  if(gdata->audioThread.playSoundFile() == this || gdata->audioThread.recSoundFile() == this) {
+  if(gdata->getAudioThread().playSoundFile() == this || gdata->getAudioThread().recSoundFile() == this) {
     gdata->stop();
   }
 

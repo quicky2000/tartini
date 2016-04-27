@@ -47,10 +47,10 @@ class AudioThread : public QThread {
   void stopAndWait();
       
   int doStuff();
-  SoundFile *playSoundFile() { return _playSoundFile; }
-  SoundFile *recSoundFile() { return _recSoundFile; }
+  SoundFile *playSoundFile()const { return _playSoundFile; }
+  SoundFile *recSoundFile()const { return _recSoundFile; }
   //SoundFile *curSoundFile() { return (_playSoundFile) ? _playSoundFile : _recSoundFile; }
-  SoundFile *curSoundFile() { return (_recSoundFile) ? _recSoundFile : _playSoundFile; }
+  SoundFile *curSoundFile()const { return (_recSoundFile) ? _recSoundFile : _playSoundFile; }
   
  private:
   SoundFile *_playSoundFile;

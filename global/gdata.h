@@ -119,6 +119,9 @@ public:
 
   inline bool needUpdate(void)const;
   inline void setNeedUpdate(bool p_need_update);
+
+  inline const AudioThread & getAudioThread(void)const;
+  inline void stopAndWaitAudioThread(void);
  private:
   QSettings *qsettings;
   int soundMode;
@@ -126,6 +129,7 @@ public:
   bool need_update;
   std::vector<Filter*> filter_hp; //highpass filter
   std::vector<Filter*> filter_lp; //lowpass filter
+  AudioThread audioThread;
 
  public:
 
@@ -134,7 +138,6 @@ public:
   //bool useMasking;
   //bool useRidgeFile; //output a file with ridges found
 
-  AudioThread audioThread;
   int sync_flag;
 
   QMutex frameCounterMutex;
