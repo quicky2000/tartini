@@ -129,7 +129,6 @@ public:
   std::vector<Filter*> filter_lp; //lowpass filter
   AudioThread audioThread;
 
-
  public:
 
 
@@ -146,7 +145,6 @@ public:
   //int out_channels;
   //int pitch_method[2]; //a pitch method for each channel
 
-  int fast_correlation_repeats;
   int running;
   bool using_coefficients_table;
   //chirp_xform fct;QColor myLineColor1(32, 32, 32);
@@ -296,7 +294,6 @@ public slots:
   //void    setFrameWindowSize(int index);
   //void    setWinFunc(int index);
   //void    setPitchMethod(int channel, int index) { pitch_method[channel] = index; }
-  void      setFastRepeats(int num_repeats) { fast_correlation_repeats = num_repeats; }
   void      setAmplitudeMode(int amplitudeMode);
   void      setPitchContourMode(int pitchContourMode);
 
