@@ -137,6 +137,10 @@ public:
 
   std::vector<SoundFile*> soundFiles;
   std::vector<Channel*> channels;
+
+  // To check if really usefull
+  std::vector<QColor> lineColor;
+  int nextColorIndex;
  public:
 
 
@@ -159,8 +163,6 @@ public:
   //float *fct_out_data;
   //FrameRGB *fct_draw_data;
 
-  std::vector<QColor> lineColor;
-  int nextColorIndex;
 
   View *view;
 
