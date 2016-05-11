@@ -87,9 +87,9 @@ signals:
   
 private:
 
-  double leftTime() { return gdata->view->viewLeft(); }
-  double rightTime() { return gdata->view->viewRight(); }
-  double timeWidth() { return gdata->view->viewTotalTime(); }
+  double leftTime() { return gdata->getView().viewLeft(); }
+  double rightTime() { return gdata->getView().viewRight(); }
+  double timeWidth() { return gdata->getView().viewTotalTime(); }
 	
   int dragMode;
   int mouseX, mouseY;

@@ -68,7 +68,7 @@ FreqWidgetGL::FreqWidgetGL(QWidget * /*parent*/, const char* /*name*/)
    setSizePolicy(sizePolicy);
 
    setFocusPolicy(Qt::StrongFocus);
-   gdata->view->setPixelHeight(height());
+   gdata->getView().setPixelHeight(height());
 }
 
 void FreqWidgetGL::initializeGL()
@@ -316,16 +316,16 @@ void FreqWidgetGL::drawReferenceLinesGL(double leftTime, double currentTime, dou
 void FreqWidgetGL::paintGL()
 {
   glClear(GL_COLOR_BUFFER_BIT);
-  View *view = gdata->view;
+  View & view = gdata->getView();
 
 
-  if(view->autoFollow() && gdata->getActiveChannel() && gdata->getRunning() == STREAM_FORWARD)
-    setChannelVerticalView(gdata->getActiveChannel(), view->viewLeft(), view->currentTime(), view->zoomX(), view->viewBottom(), view->zoomY());
+  if(view.autoFollow() && gdata->getActiveChannel() && gdata->getRunning() == STREAM_FORWARD)
+    setChannelVerticalView(gdata->getActiveChannel(), view.viewLeft(), view.currentTime(), view.zoomX(), view.viewBottom(), view.zoomY());
 
 
-  //double curScreenTime = (view->currentTime() - view->viewLeft()) / view->zoomX();
+  //double curScreenTime = (view.currentTime() - view.viewLeft()) / view.zoomX();
   //int curTimePixel = toInt(curScreenTime);
-  int curTimePixel = view->screenPixelX(view->currentTime());
+  int curTimePixel = view.screenPixelX(view.currentTime());
 
   //beginDrawing();
 
@@ -333,19 +333,19 @@ void FreqWidgetGL::paintGL()
   glLineWidth(3.0f);
 
   //draw the red/blue background color shading if needed
-  if(view->backgroundShading() && gdata->getActiveChannel())
-    drawChannelFilledGL(gdata->getActiveChannel(), view->viewLeft(), view->currentTime(), view->zoomX(), view->viewBottom(), view->zoomY(), DRAW_VIEW_NORMAL);
+  if(view.backgroundShading() && gdata->getActiveChannel())
+    drawChannelFilledGL(gdata->getActiveChannel(), view.viewLeft(), view.currentTime(), view.zoomX(), view.viewBottom(), view.zoomY(), DRAW_VIEW_NORMAL);
 
   glLineWidth(1.0f);
-  drawReferenceLinesGL(view->viewLeft(), view->currentTime(), view->zoomX(), view->viewBottom(), view->zoomY(), DRAW_VIEW_NORMAL);
+  drawReferenceLinesGL(view.viewLeft(), view.currentTime(), view.zoomX(), view.viewBottom(), view.zoomY(), DRAW_VIEW_NORMAL);
 
   glEnable(GL_LINE_SMOOTH);
   //draw all the visible channels
   for (uint i = 0; i < gdata->getChannelsSize(); i++) {
    	Channel *ch = gdata->getChannelAt(i);
    	if(!ch->isVisible()) continue;
-    //drawChannelGL(*this, ch, view->viewLeft(), view->currentTime(), view->zoomX(), view->viewBottom(), view->zoomY(), DRAW_VIEW_NORMAL);
-    drawChannelGL(ch, view->viewLeft(), view->currentTime(), view->zoomX(), view->viewBottom(), view->zoomY(), DRAW_VIEW_NORMAL);
+    //drawChannelGL(*this, ch, view.viewLeft(), view.currentTime(), view.zoomX(), view.viewBottom(), view.zoomY(), DRAW_VIEW_NORMAL);
+    drawChannelGL(ch, view.viewLeft(), view.currentTime(), view.zoomX(), view.viewBottom(), view.zoomY(), DRAW_VIEW_NORMAL);
   }
   glDisable(GL_LINE_SMOOTH);
 
@@ -355,8 +355,8 @@ void FreqWidgetGL::paintGL()
     lineColor.setAlpha(50);
     Channel *ch = gdata->getActiveChannel();
     double halfWindowTime = (double)ch->size() / (double)(ch->rate() * 2);
-    int pixelLeft = view->screenPixelX(view->currentTime() - halfWindowTime);
-    int pixelRight = view->screenPixelX(view->currentTime() + halfWindowTime);
+    int pixelLeft = view.screenPixelX(view.currentTime() - halfWindowTime);
+    int pixelRight = view.screenPixelX(view.currentTime() + halfWindowTime);
     //p.fillRect(pixelLeft, 0, pixelRight-pixelLeft, height()-1, lineColor);
     qglColor(lineColor);
     mygl_rect(pixelLeft, 0, pixelRight-pixelLeft, height()-1);
@@ -376,7 +376,7 @@ Channel *FreqWidgetGL::channelAtPixel(int x, int y)
 {
   double time = mouseTime(x);
   float pitch = mousePitch(y);
-  float tolerance = 6 * gdata->view->zoomY(); //10 pixel tolerance
+  float tolerance = 6 * gdata->getView().zoomY(); //10 pixel tolerance
 
   std::vector<Channel*> channels;
 
@@ -402,8 +402,8 @@ Channel *FreqWidgetGL::channelAtPixel(int x, int y)
  */
 void FreqWidgetGL::mousePressEvent( QMouseEvent *e)
 {
-  View *view = gdata->view;
-  int timeX = toInt(view->viewOffset() / view->zoomX());
+  View & view = gdata->getView();
+  int timeX = toInt(view.viewOffset() / view.zoomX());
   dragMode = DragNone;
   
   
@@ -418,16 +418,16 @@ void FreqWidgetGL::mousePressEvent( QMouseEvent *e)
   if (e->state() & Qt::ControlModifier) {
     // Do we zoom in or out?
     if (e->state() & Qt::ShiftModifier) {
-      //view->viewZoomOutX();
+      //view.viewZoomOutX();
     } else {
-      //view->viewZoomInX();
+      //view.viewZoomInX();
     }
   } else if (e->state() & Qt::AltModifier) {
     // Do we zoom in or out?
     if (e->state() & Qt::ShiftModifier) {
-      //view->viewZoomOutY();
+      //view.viewZoomOutY();
     } else {
-      //view->viewZoomInY();
+      //view.viewZoomInY();
     }
   } else {
     //mouseDown = true;
@@ -441,31 +441,31 @@ void FreqWidgetGL::mousePressEvent( QMouseEvent *e)
     } else {
       //Must have clicked on background
       dragMode = DragBackground;
-      downTime = view->currentTime();
-      downNote = view->viewBottom();
+      downTime = view.currentTime();
+      downNote = view.viewBottom();
     }
   }
 }
 
 void FreqWidgetGL::mouseMoveEvent( QMouseEvent *e )
 {
-  View *view = gdata->view;
-  int pixelAtCurrentTimeX = toInt(view->viewOffset() / view->zoomX());
+  View & view = gdata->getView();
+  int pixelAtCurrentTimeX = toInt(view.viewOffset() / view.zoomX());
   
   switch(dragMode) {
   case DragTimeBar:
     {
       int newX = pixelAtCurrentTimeX + (e->x() - mouseX);
-      view->setViewOffset(double(newX) * view->zoomX());
+      view.setViewOffset(double(newX) * view.zoomX());
       mouseX = e->x();
-      view->doSlowUpdate();
+      view.doSlowUpdate();
 	  }
     break;
   case DragBackground:
-    //view->setCurrentTime(downTime - (e->x() - mouseX) * view->zoomX());
-    view->setViewBottom(downNote - (mouseY - e->y()) * view->zoomY());
-    gdata->updateActiveChunkTime(downTime - (e->x() - mouseX) * view->zoomX());
-    view->doSlowUpdate();
+    //view.setCurrentTime(downTime - (e->x() - mouseX) * view.zoomX());
+    view.setViewBottom(downNote - (mouseY - e->y()) * view.zoomY());
+    gdata->updateActiveChunkTime(downTime - (e->x() - mouseX) * view.zoomX());
+    view.doSlowUpdate();
     break;
   case DragNone:
     if(within(4, e->x(), pixelAtCurrentTimeX)) {
@@ -490,7 +490,7 @@ void FreqWidgetGL::mouseReleaseEvent( QMouseEvent * )
  */
 double FreqWidgetGL::mouseTime(int x)
 {
-	return gdata->view->viewLeft() + gdata->view->zoomX() * x;
+	return gdata->getView().viewLeft() + gdata->getView().zoomX() * x;
 
 }
 
@@ -502,40 +502,40 @@ double FreqWidgetGL::mouseTime(int x)
  */
 double FreqWidgetGL::mousePitch(int y)
 {
-	return gdata->view->viewBottom() + gdata->view->zoomY() * (height() - y);
+	return gdata->getView().viewBottom() + gdata->getView().zoomY() * (height() - y);
 }
 
 void FreqWidgetGL::wheelEvent(QWheelEvent * e)
 {
-    View *view = gdata->view;
+  View & view = gdata->getView();
     double amount = double(e->delta())/WHEEL_DELTA * 0.15;
     bool isZoom = gdata->mouseWheelZooms();
     if(e->state() & (Qt::ControlModifier | Qt::ShiftModifier)) isZoom = !isZoom;
 
   if(isZoom) {
       if(e->delta() >= 0) { //zooming in
-        double before = view->logZoomY();
-        view->setZoomFactorY(view->logZoomY() + amount, height() - e->y());
-        amount = view->logZoomY() - before;
+        double before = view.logZoomY();
+        view.setZoomFactorY(view.logZoomY() + amount, height() - e->y());
+        amount = view.logZoomY() - before;
         if(gdata->getRunning() == STREAM_FORWARD) {
-          view->setZoomFactorX(view->logZoomX() + amount);
+          view.setZoomFactorX(view.logZoomX() + amount);
         } else { //zoom toward mouse pointer
-          view->setZoomFactorX(view->logZoomX() + amount, e->x());
+          view.setZoomFactorX(view.logZoomX() + amount, e->x());
         }
       } else { //zoom out toward center
-        double before = view->logZoomY();
-        view->setZoomFactorY(view->logZoomY() + amount, height()/2);
-        amount = view->logZoomY() - before;
+        double before = view.logZoomY();
+        view.setZoomFactorY(view.logZoomY() + amount, height()/2);
+        amount = view.logZoomY() - before;
         if(gdata->getRunning() == STREAM_FORWARD) {
-          view->setZoomFactorX(view->logZoomX() + amount);
+          view.setZoomFactorX(view.logZoomX() + amount);
         } else {
-          view->setZoomFactorX(view->logZoomX() + amount, width()/2);
+          view.setZoomFactorX(view.logZoomX() + amount, width()/2);
         }
       }
   } else { //mouse wheel scrolls
-    view->setViewBottom(view->viewBottom() + amount * 0.75 * view->viewHeight());
+    view.setViewBottom(view.viewBottom() + amount * 0.75 * view.viewHeight());
   }
-  view->doSlowUpdate();
+  view.doSlowUpdate();
 
   e->accept();
 }
@@ -546,25 +546,25 @@ void FreqWidgetGL::resizeEvent (QResizeEvent *q)
 
     if (q->size() == q->oldSize()) return;
     
-    View *v = gdata->view;
+    View & v = gdata->getView();
 
-    double oldViewWidth = double(v->viewWidth());
+    double oldViewWidth = double(v.viewWidth());
     
-    v->setPixelHeight(height());
-    v->setPixelWidth(width());
+    v.setPixelHeight(height());
+    v.setPixelWidth(width());
     //printf("resizeEvent width() = %d\n", width());
     // Work out what the times/heights of the view should be based on the zoom factors
-    //float newXTime = width() * v->zoomX();
-    float newYHeight = height() * v->zoomY();
-    float newYBottom = v->viewBottom() - ((newYHeight - v->viewHeight()) / 2.0);
+    //float newXTime = width() * v.zoomX();
+    float newYHeight = height() * v.zoomY();
+    float newYBottom = v.viewBottom() - ((newYHeight - v.viewHeight()) / 2.0);
 
-    //v->setViewWidth(newXTime);
-    //printf("1 viewOffset() = %d\n", v->viewOffset());
-    v->setViewOffset(v->viewOffset() / oldViewWidth * v->viewWidth());
-    //printf("2 viewOffset() = %d\n", v->viewOffset());
+    //v.setViewWidth(newXTime);
+    //printf("1 viewOffset() = %d\n", v.viewOffset());
+    v.setViewOffset(v.viewOffset() / oldViewWidth * v.viewWidth());
+    //printf("2 viewOffset() = %d\n", v.viewOffset());
 
-    //v->setViewHeight(newYHeight);
-    v->setViewBottom(newYBottom);
+    //v.setViewHeight(newYHeight);
+    v.setViewBottom(newYBottom);
 }
 
 /*
@@ -634,10 +634,10 @@ void FreqWidgetGL::leaveEvent ( QEvent * e) {
 void FreqDrawWidget::ensurePolished() const
 {
   //printf("width = %d\n", width());
-  gdata->view->setPixelHeight(height());
+  gdata->getView().setPixelHeight(height());
   printf("ensurePolished width() = %d\n", width());
-  gdata->view->setPixelWidth(width());
-  gdata->view->setViewOffset(gdata->view->viewWidth()/2.0);
+  gdata->getView().setPixelWidth(width());
+  gdata->getView().setViewOffset(gdata->getView().viewWidth()/2.0);
 }
 */
 
@@ -1245,7 +1245,7 @@ void FreqWidgetGL::setChannelVerticalView(Channel *ch, double leftTime, double c
     spred = sqrt(spred / numY) * 4.0;
     //printf("spred = %f\n", spred);
     if(spred < 12.0) spred = 12.0; //show a minimum of 12 semi-tones
-    gdata->view->setViewBottomRaw(meanY - gdata->view->viewHeight() / 2.0);
-    //gdata->view->setLogZoomYRaw(log(height()/spred));
+    gdata->getView().setViewBottomRaw(meanY - gdata->getView().viewHeight() / 2.0);
+    //gdata->getView().setLogZoomYRaw(log(height()/spred));
   }
 }

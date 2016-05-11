@@ -23,7 +23,7 @@ PitchCompassView::PitchCompassView(int viewID_, QWidget *parent, int mode)
 {
   //setCaption("Pitch Compass");
   pitchCompassDrawWidget = new PitchCompassDrawWidget(this, "compass", mode);
-  connect(gdata->view, SIGNAL(currentTimeChanged(double)), pitchCompassDrawWidget, SLOT(updateCompass(double)));
+  connect(&(gdata->getView()), SIGNAL(currentTimeChanged(double)), pitchCompassDrawWidget, SLOT(updateCompass(double)));
   pitchCompassDrawWidget->show();
 }
 
@@ -40,5 +40,5 @@ void PitchCompassView::changeMode(int mode)
 {
   delete pitchCompassDrawWidget;
   pitchCompassDrawWidget = new PitchCompassDrawWidget(this, "compass", mode);
-  connect(gdata->view, SIGNAL(currentTimeChanged(double)), pitchCompassDrawWidget, SLOT(updateCompass(double)));
+  connect(&(gdata->getView()), SIGNAL(currentTimeChanged(double)), pitchCompassDrawWidget, SLOT(updateCompass(double)));
 }

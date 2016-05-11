@@ -216,7 +216,7 @@ void TunerView::doUpdate()
     return;
   }
   ChannelLocker channelLocker(active);
-  double time = gdata->view->currentTime();
+  double time = gdata->getView().currentTime();
 
   // To work out note:
   //   * Find the slider's value. This tells us how many seconds to average over.

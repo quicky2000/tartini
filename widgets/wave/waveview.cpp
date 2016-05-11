@@ -56,7 +56,7 @@ WaveView::WaveView( int viewID_, QWidget *parent )
   
   //make the widget get updated when the view changes
   //connect(gdata->view, SIGNAL(onFastUpdate(double)), waveWidget, SLOT(update()));
-  connect(gdata->view, SIGNAL(onSlowUpdate(double)), waveWidget, SLOT(update()));
+  connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), waveWidget, SLOT(update()));
 }
 
 WaveView::~WaveView()

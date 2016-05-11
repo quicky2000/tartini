@@ -63,7 +63,7 @@ public:
   // Relates to the views
 
   /** Returns the current time in seconds */
-  double currentTime() { return _currentTime; }
+  const double & currentTime(void)const { return _currentTime; }
 
   /** Returns how long the view is in seconds */
   //double viewWidth() { return _viewWidth; }

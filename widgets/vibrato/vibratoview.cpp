@@ -403,9 +403,9 @@ VibratoView::VibratoView( int viewID_, QWidget *parent )
 
   connect(gdata, SIGNAL(onChunkUpdate()), vibratoPeriodWidget, SLOT(doUpdate()));
 
-  connect(gdata->view, SIGNAL(onFastUpdate(double)), vibratoTimeAxis, SLOT(update()));
+  connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), vibratoTimeAxis, SLOT(update()));
 
-  connect(gdata->view, SIGNAL(onFastUpdate(double)), vibratoWidget, SLOT(updateGL()));
+  connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), vibratoWidget, SLOT(updateGL()));
 
   // The vertical scrollbar
   connect(scrollBarV, SIGNAL(valueChanged(int)), vibratoWidget, SLOT(setOffsetY(int)));

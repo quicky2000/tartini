@@ -97,7 +97,7 @@ HTrackView::HTrackView( int viewID_, QWidget *parent )
   mainLayout->addWidget(sizeGrip, 1, 1);
 
   //make the widget get updated when the view changes
-  connect(gdata->view, SIGNAL(onSlowUpdate(double)), hTrackWidget, SLOT(update()));
+  connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), hTrackWidget, SLOT(update()));
   connect(peakThresholdSlider, SIGNAL(valueChanged(int)), this, SLOT(setPeakThreshold(int)));
   connect(rotateYWheel, SIGNAL(valueChanged(double)), hTrackWidget, SLOT(setViewAngleVertical(double)));
   connect(rotateYWheel, SIGNAL(valueChanged(double)), hTrackWidget, SLOT(update()));

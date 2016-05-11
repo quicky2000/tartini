@@ -126,7 +126,7 @@ ScoreView::ScoreView( int viewID_, QWidget *parent )
   bottomLayout->addStretch(4);
 
   //make any connections
-  connect(gdata->view, SIGNAL(onFastUpdate(double)), scoreWidget, SLOT(update()));
+  connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), scoreWidget, SLOT(update()));
 }
 
 ScoreView::~ScoreView()

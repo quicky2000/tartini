@@ -35,7 +35,7 @@ HStackWidget::HStackWidget(QWidget *parent)
   viewheight = 100;
   top = 0;
 
-  connect(gdata->view, SIGNAL(onFastUpdate(double)), this, SLOT(update()));
+  connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), this, SLOT(update()));
 }
 
 void HStackWidget::setWindowSize(double _windowsize)

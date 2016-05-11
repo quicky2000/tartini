@@ -36,7 +36,7 @@ CepstrumView::CepstrumView( int viewID_, QWidget *parent )
   cepstrumWidget->show();
 
   //make the widget get updated when the view changes
-  connect(gdata->view, SIGNAL(onFastUpdate(double)), cepstrumWidget, SLOT(update()));
+  connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), cepstrumWidget, SLOT(update()));
 }
 
 CepstrumView::~CepstrumView()

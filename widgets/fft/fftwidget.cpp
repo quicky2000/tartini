@@ -61,7 +61,7 @@ void FFTWidget::paintEvent( QPaintEvent * )
       double scaleX = normalisedFreq * double(width()); //pixels per fundamental freq
       
       //draw alternating background color indicating period
-      if(gdata->view->backgroundShading() && scaleX > 4.0 && scaleX < double(width())) {
+      if(gdata->getView().backgroundShading() && scaleX > 4.0 && scaleX < double(width())) {
         int n = int(ceil(double(width()) / scaleX)); //number of colored patches
         p.setPen(Qt::NoPen);
         QColor color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), data->getCorrelation());

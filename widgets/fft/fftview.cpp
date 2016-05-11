@@ -35,7 +35,7 @@ FFTView::FFTView( int viewID_, QWidget *parent )
   fftWidget->show();
 
   //make the widget get updated when the view changes
-  connect(gdata->view, SIGNAL(onFastUpdate(double)), fftWidget, SLOT(update()));
+  connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), fftWidget, SLOT(update()));
 }
 
 FFTView::~FFTView()

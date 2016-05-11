@@ -104,10 +104,10 @@ void AmplitudeWidget::paintGL()
   setLineWidth(3.0);
   glEnable(GL_LINE_SMOOTH);
 
-  View *view = gdata->view;
+  View & view = gdata->getView();
 
   //draw the red/blue background color shading if needed
-  if(view->backgroundShading() && gdata->getActiveChannel())
+  if(view.backgroundShading() && gdata->getActiveChannel())
     drawChannelAmplitudeFilledGL(gdata->getActiveChannel());
 
   setLineWidth(1.0);
@@ -122,7 +122,7 @@ void AmplitudeWidget::paintGL()
   for (uint i = 0; i < gdata->getChannelsSize(); i++) {
     Channel *ch = gdata->getChannelAt(i);
     if(!ch->isVisible()) continue;
-    //drawChannel(ch, p, view->viewLeft(), view->currentTime(), view->zoomX(), view->viewBottom(), view->zoomY(), DRAW_VIEW_NORMAL);
+    //drawChannel(ch, p, view.viewLeft(), view.currentTime(), view.zoomX(), view.viewBottom(), view.zoomY(), DRAW_VIEW_NORMAL);
     drawChannelAmplitudeGL(ch);
   }
 
@@ -130,7 +130,7 @@ void AmplitudeWidget::paintGL()
   glDisable(GL_LINE_SMOOTH);
   qglColor(colorGroup().foreground());
   glLineWidth(1.0);
-  double curScreenTime = (view->currentTime() - view->viewLeft()) / view->zoomX();
+  double curScreenTime = (view.currentTime() - view.viewLeft()) / view.zoomX();
   mygl_line(curScreenTime, 0, curScreenTime, height() - 1);
 
   // Draw a horizontal line at the current threshold.
@@ -238,18 +238,18 @@ void AmplitudeWidget::setLineWidth(float width)
 //void AmplitudeWidget::drawChannelAmplitude(Channel *ch, QPainter &p)
 void AmplitudeWidget::drawChannelAmplitudeGL(Channel *ch)
 {
-  View *view = gdata->view;
+  View & view = gdata->getView();
   
   ChannelLocker channelLocker(ch);
   ZoomLookup *z = &ch->amplitudeZoomLookup;
   
   // baseX is the no. of chunks a pixel must represent.
-  double baseX = view->zoomX() / ch->timePerChunk();
+  double baseX = view.zoomX() / ch->timePerChunk();
 
   z->setZoomLevel(baseX);
   
-  double currentChunk = ch->chunkFractionAtTime(view->currentTime());
-  double leftFrameTime = currentChunk - ((view->currentTime() - view->viewLeft()) / ch->timePerChunk());
+  double currentChunk = ch->chunkFractionAtTime(view.currentTime());
+  double leftFrameTime = currentChunk - ((view.currentTime() - view.viewLeft()) / ch->timePerChunk());
   int n = 0;
   int baseElement = int(floor(leftFrameTime / baseX));
   if(baseElement < 0) { n -= baseElement; baseElement = 0; }
@@ -328,18 +328,18 @@ void AmplitudeWidget::drawChannelAmplitudeGL(Channel *ch)
 //void AmplitudeWidget::drawChannelAmplitudeFilled(Channel *ch, QPainter &p)
 void AmplitudeWidget::drawChannelAmplitudeFilledGL(Channel *ch)
 {
-  View *view = gdata->view;
+  View & view = gdata->getView();
   
   ChannelLocker channelLocker(ch);
   ZoomLookup *z = &ch->amplitudeZoomLookup;
   
   // baseX is the no. of chunks a pixel must represent.
-  double baseX = view->zoomX() / ch->timePerChunk();
+  double baseX = view.zoomX() / ch->timePerChunk();
 
   z->setZoomLevel(baseX);
   
-  double currentChunk = ch->chunkFractionAtTime(view->currentTime());
-  double leftFrameTime = currentChunk - ((view->currentTime() - view->viewLeft()) / ch->timePerChunk());
+  double currentChunk = ch->chunkFractionAtTime(view.currentTime());
+  double leftFrameTime = currentChunk - ((view.currentTime() - view.viewLeft()) / ch->timePerChunk());
   int n = 0;
   int baseElement = int(floor(leftFrameTime / baseX));
   if(baseElement < 0) { n -= baseElement; baseElement = 0; }
@@ -438,8 +438,8 @@ void AmplitudeWidget::drawChannelAmplitudeFilledGL(Channel *ch)
 
 void AmplitudeWidget::mousePressEvent(QMouseEvent *e)
 {
-  View *view = gdata->view;
-  int timeX = toInt(view->viewOffset() / view->zoomX());
+  View & view = gdata->getView();
+  int timeX = toInt(view.viewOffset() / view.zoomX());
   //int pixelAtCurrentNoiseThresholdY = toInt(gdata->noiseThresholdDB() / gdata->dBFloor() / range() * double(height()));
   int pixelAtCurrentNoiseThresholdY;
   dragMode = DragNone;
@@ -465,15 +465,15 @@ void AmplitudeWidget::mousePressEvent(QMouseEvent *e)
     mouseX = e->x();
     mouseY = e->y();
     dragMode = DragBackground;
-    downTime = view->currentTime();
+    downTime = view.currentTime();
     downOffset = offset();
   }
 }
 
 void AmplitudeWidget::mouseMoveEvent(QMouseEvent *e)
 {
-  View *view = gdata->view;
-  int pixelAtCurrentTimeX = toInt(view->viewOffset() / view->zoomX());
+  View & view = gdata->getView();
+  int pixelAtCurrentTimeX = toInt(view.viewOffset() / view.zoomX());
   //int pixelAtCurrentNoiseThresholdY = -toInt(gdata->noiseThresholdDB() / dBRange() * double(height()));
   //int pixelAtCurrentNoiseThresholdY = toInt(gdata->noiseThresholdDB() / gdata->dBFloor() / range() * double(height()));
   int pixelAtCurrentNoiseThresholdY;
@@ -482,9 +482,9 @@ void AmplitudeWidget::mouseMoveEvent(QMouseEvent *e)
   case DragTimeBar:
     {
       int newX = pixelAtCurrentTimeX + (e->x() - mouseX);
-      view->setViewOffset(double(newX) * view->zoomX());
+      view.setViewOffset(double(newX) * view.zoomX());
       mouseX = e->x();
-      view->doSlowUpdate();
+      view.doSlowUpdate();
     }
     break;
   case DragNoiseThreshold:
@@ -498,14 +498,14 @@ void AmplitudeWidget::mouseMoveEvent(QMouseEvent *e)
       }*/
       setCurrentThreshold(double(height() - 1 - newY) / double(height()) * range() + offsetInv(), thresholdIndex);
       mouseY = e->y();
-      gdata->view->doSlowUpdate();
+      gdata->getView().doSlowUpdate();
     }
     break;
   case DragBackground:
-    //view->setViewBottom(downNote - (mouseY - e->y()) * view->zoomY());
-    gdata->updateActiveChunkTime(downTime - (e->x() - mouseX) * view->zoomX());
+    //view.setViewBottom(downNote - (mouseY - e->y()) * view.zoomY());
+    gdata->updateActiveChunkTime(downTime - (e->x() - mouseX) * view.zoomX());
     setOffset(downOffset - (double(e->y() - mouseY) / double(height()) * range()));
-    view->doSlowUpdate();
+    view.doSlowUpdate();
     break;
   case DragNone:
     if(within(4, e->x(), pixelAtCurrentTimeX)) {
@@ -529,19 +529,19 @@ void AmplitudeWidget::mouseReleaseEvent(QMouseEvent *)
 
 void AmplitudeWidget::wheelEvent(QWheelEvent * e)
 {
-    View *view = gdata->view;
+  View & view = gdata->getView();
     if (!(e->state() & (Qt::ControlModifier | Qt::ShiftModifier))) {
-      //view->setViewBottom(view->viewBottom() + double(e->delta()/WHEEL_DELTA) * view->viewHeight() * 0.1);
+      //view.setViewBottom(view.viewBottom() + double(e->delta()/WHEEL_DELTA) * view.viewHeight() * 0.1);
       if(gdata->getRunning() == STREAM_FORWARD) {
-        view->setZoomFactorX(view->logZoomX() + double(e->delta()/WHEEL_DELTA)*0.3);
+        view.setZoomFactorX(view.logZoomX() + double(e->delta()/WHEEL_DELTA)*0.3);
       } else {
         if(e->delta() < 0) {
-          view->setZoomFactorX(view->logZoomX() + double(e->delta()/WHEEL_DELTA)*0.3, width()/2);
+          view.setZoomFactorX(view.logZoomX() + double(e->delta()/WHEEL_DELTA)*0.3, width()/2);
         } else {
-          view->setZoomFactorX(view->logZoomX() + double(e->delta()/WHEEL_DELTA)*0.3, e->x());
+          view.setZoomFactorX(view.logZoomX() + double(e->delta()/WHEEL_DELTA)*0.3, e->x());
         }
       }
-      view->doSlowUpdate();
+      view.doSlowUpdate();
     }
 
     e->accept();

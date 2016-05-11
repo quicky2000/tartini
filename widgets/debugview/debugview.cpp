@@ -25,7 +25,7 @@ DebugView::DebugView( int viewID_, QWidget *parent )
   debugWidget->show();
 
   //make the widget get updated when the view changes
-  connect(gdata->view, SIGNAL(viewChanged()), debugWidget, SLOT(update()));
+  connect(&(gdata->getView()), SIGNAL(viewChanged()), debugWidget, SLOT(update()));
 }
 
 DebugView::~DebugView()

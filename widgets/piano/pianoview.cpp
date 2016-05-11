@@ -31,7 +31,7 @@ PianoView::PianoView( int viewID_, QWidget *parent )
   pianoWidget->show();
 
   //make the widget get updated when the view changes
-  connect(gdata->view, SIGNAL(onFastUpdate(double)), this, SLOT(changeKey()));
+  connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), this, SLOT(changeKey()));
 }
 
 PianoView::~PianoView()

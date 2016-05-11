@@ -699,7 +699,7 @@ void DrawWidget::setChannelVerticalView(Channel *ch, double leftTime, double cur
     spred = sqrt(spred / numY) * 4.0;
     //printf("spred = %f\n", spred);
     if(spred < 12.0) spred = 12.0; //show a minimum of 12 semi-tones
-    gdata->view->setViewBottomRaw(meanY - gdata->view->viewHeight() / 2.0);
+    gdata->getView().setViewBottomRaw(meanY - gdata->getView().viewHeight() / 2.0);
     //gdata->view->setLogZoomYRaw(log(height()/spred));
   }
 }

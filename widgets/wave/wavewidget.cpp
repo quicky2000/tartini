@@ -67,7 +67,7 @@ void WaveWidget::paintEvent( QPaintEvent * )
       double scaleX = period * double(width()) / double(active->size()); //pixels per period
       
       //draw altinating background color indicating period
-      if(gdata->view->backgroundShading() && period > 4.0 && period < double(active->nsdfData.size())) {
+      if(gdata->getView().backgroundShading() && period > 4.0 && period < double(active->nsdfData.size())) {
         int n = int(ceil(double(centerX) / scaleX));
         int j, x;
         p.setPen(Qt::NoPen);

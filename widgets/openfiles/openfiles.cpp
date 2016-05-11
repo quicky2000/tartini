@@ -158,7 +158,7 @@ void OpenFiles::listViewChanged(Q3ListViewItem* item)
   if(gdata->getChannelAt(pos)->isVisible() != state) gdata->getChannelAt(pos)->setVisible(state);
   //gdata->view->doSlowUpdate();
   //gdata->view->doFastUpdate();
-  gdata->view->doUpdate();
+  gdata->getView().doUpdate();
 }
 
 /**

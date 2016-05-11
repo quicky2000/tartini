@@ -44,7 +44,7 @@
 FreqView::FreqView(int viewID_, QWidget *parent)
   : ViewWidget(viewID_, parent)
 {
-  View *view = gdata->view;
+  View & view = gdata->getView();
 
   //setCaption("Frequency View");
 
@@ -100,16 +100,16 @@ FreqView::FreqView(int viewID_, QWidget *parent)
   freqWheelY->setRange(1.6, 5.0, 0.001, 1);
   //freqWheelY->setValue(3.2);
   //view->setZoomFactorY(3.2);
-  freqWheelY->setValue(view->logZoomY());
+  freqWheelY->setValue(view.logZoomY());
   QToolTip::add(freqWheelY, "Zoom pitch contour view vertically");
   topRightLayout->addSpacing(20);
   topRightLayout->addWidget(freqWheelY, 0);
   
   //Create the vertical scrollbar
-  //vScrollBar = new MyScrollBar(0, toInt((view->topNote()-view->viewHeight())*view->stepY()), 20, toInt(view->viewHeight()*view->stepY()), toInt(view->viewBottom()*view->stepY()), Qt::Vertical, this);
-  //vScrollBar = new MyScrollBar(0, gdata->topNote()-view->viewHeight(), 20, view->viewHeight(), view->viewBottom(), 20, Qt::Vertical, this);
-  freqScrollBar = new MyScrollBar(0, gdata->topPitch()-view->viewHeight(), 0.5, view->viewHeight(), 0, 20, Qt::Vertical, topWidget);
-  freqScrollBar->setValue(gdata->topPitch()-view->viewHeight()-view->viewBottom());
+  //vScrollBar = new MyScrollBar(0, toInt((view.topNote()-view.viewHeight())*view.stepY()), 20, toInt(view.viewHeight()*view.stepY()), toInt(view.viewBottom()*view.stepY()), Qt::Vertical, this);
+  //vScrollBar = new MyScrollBar(0, gdata->topNote()-view.viewHeight(), 20, view.viewHeight(), view.viewBottom(), 20, Qt::Vertical, this);
+  freqScrollBar = new MyScrollBar(0, gdata->topPitch()-view.viewHeight(), 0.5, view.viewHeight(), 0, 20, Qt::Vertical, topWidget);
+  freqScrollBar->setValue(gdata->topPitch()-view.viewHeight()-view.viewBottom());
   topRightLayout->addWidget(freqScrollBar, 4);
 
   topLayout->addLayout(topRightLayout);
@@ -221,7 +221,7 @@ FreqView::FreqView(int viewID_, QWidget *parent)
 
   
   //Create the horizontal scrollbar and +/- buttons
-  //hScrollBar = new MyScrollBar(gdata->leftTime(), gdata->rightTime(), 0.1, view->viewWidth(), view->currentTime(), 10000, Qt::Horizontal, this);
+  //hScrollBar = new MyScrollBar(gdata->leftTime(), gdata->rightTime(), 0.1, view.viewWidth(), view.currentTime(), 10000, Qt::Horizontal, this);
 /*  
   QPushButton *buttonPlusX = new QPushButton("+", this);
   buttonPlusX->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
@@ -253,20 +253,20 @@ FreqView::FreqView(int viewID_, QWidget *parent)
   //Setup all the signals and slots
   //vertical
 
-  connect(freqScrollBar, SIGNAL(sliderMoved(double)), view, SLOT(changeViewY(double)));
-  connect(freqScrollBar, SIGNAL(sliderMoved(double)), view, SLOT(doSlowUpdate()));
+  connect(freqScrollBar, SIGNAL(sliderMoved(double)), &view, SLOT(changeViewY(double)));
+  connect(freqScrollBar, SIGNAL(sliderMoved(double)), &view, SLOT(doSlowUpdate()));
 
-  connect(view, SIGNAL(viewBottomChanged(double)), freqScrollBar, SLOT(setValue(double)));
+  connect(&view, SIGNAL(viewBottomChanged(double)), freqScrollBar, SLOT(setValue(double)));
 /*  connect(view, SIGNAL(scrollableYChanged(double)), freqScrollBar, SLOT(setMaxValue(double)));
-  connect(view, SIGNAL(viewHeightChanged(double)), freqScrollBar, SLOT(setPageStep(double)));
+  connect(&view, SIGNAL(viewHeightChanged(double)), freqScrollBar, SLOT(setPageStep(double)));
 */
-  connect(freqWheelY, SIGNAL(valueChanged(double)), view, SLOT(setZoomFactorY(double)));
-  connect(view, SIGNAL(logZoomYChanged(double)), freqWheelY, SLOT(setValue(double)));
-  //connect(view, SIGNAL(logZoomYChanged(double)), freqDrawWidget, SLOT(update()));
+  connect(freqWheelY, SIGNAL(valueChanged(double)), &view, SLOT(setZoomFactorY(double)));
+  connect(&view, SIGNAL(logZoomYChanged(double)), freqWheelY, SLOT(setValue(double)));
+  //connect(&view, SIGNAL(logZoomYChanged(double)), freqDrawWidget, SLOT(update()));
   
   //horizontal
-  connect(freqWheelX, SIGNAL(valueChanged(double)), view, SLOT(setZoomFactorX(double)));
-  connect(view, SIGNAL(logZoomXChanged(double)), freqWheelX, SLOT(setValue(double)));
+  connect(freqWheelX, SIGNAL(valueChanged(double)), &view, SLOT(setZoomFactorX(double)));
+  connect(&view, SIGNAL(logZoomXChanged(double)), freqWheelX, SLOT(setValue(double)));
   //connect(view, SIGNAL(logZoomXChanged(double)), view, SLOT(doSlowUpdate()));
   //connect(buttonPlusX, SIGNAL(clicked()), view, SLOT(viewZoomInX()));
   //connect(buttonMinusX, SIGNAL(clicked()), view, SLOT(viewZoomOutX()));
@@ -291,12 +291,12 @@ FreqView::FreqView(int viewID_, QWidget *parent)
 */
   //make the widgets get updated when the view changes
   //connect(gdata->view, SIGNAL(onSlowUpdate(double)), freqDrawWidget, SLOT(update()));
-  connect(gdata->view, SIGNAL(onSlowUpdate(double)), freqWidgetGL, SLOT(update()));
+  connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), freqWidgetGL, SLOT(update()));
   //connect(gdata->view, SIGNAL(onSlowUpdate(double)), amplitudeWidget, SLOT(update()));
-  connect(gdata->view, SIGNAL(onSlowUpdate(double)), amplitudeWidget, SLOT(update()));
+  connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), amplitudeWidget, SLOT(update()));
   //connect(gdata->view, SIGNAL(onSlowUpdate(double)), timeAxis, SLOT(update()));
-  connect(gdata->view, SIGNAL(onSlowUpdate(double)), timeAxis, SLOT(update()));
-  connect(gdata->view, SIGNAL(timeViewRangeChanged(double, double)), timeAxis, SLOT(setRange(double, double)));
+  connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), timeAxis, SLOT(update()));
+  connect(&(gdata->getView()), SIGNAL(timeViewRangeChanged(double, double)), timeAxis, SLOT(setRange(double, double)));
 }
 
 FreqView::~FreqView()
@@ -312,28 +312,28 @@ void FreqView::zoomIn()
     if(freqWidgetGL->hasMouse()) {
       //QPoint mousePos = freqDrawWidget->mapFromGlobal(QCursor::pos());
       QPoint mousePos = freqWidgetGL->mapFromGlobal(QCursor::pos());
-      gdata->view->setZoomFactorX(gdata->view->logZoomX() + 0.1, mousePos.x());
-      //gdata->view->setZoomFactorY(gdata->view->logZoomY() + 0.1, freqDrawWidget->height() - mousePos.y());
-      gdata->view->setZoomFactorY(gdata->view->logZoomY() + 0.1, freqWidgetGL->height() - mousePos.y());
+      gdata->getView().setZoomFactorX(gdata->getView().logZoomX() + 0.1, mousePos.x());
+      //gdata->getView().setZoomFactorY(gdata->getView().logZoomY() + 0.1, freqDrawWidget->height() - mousePos.y());
+      gdata->getView().setZoomFactorY(gdata->getView().logZoomY() + 0.1, freqWidgetGL->height() - mousePos.y());
       doneIt = true;
     } else if(amplitudeWidget->hasMouse()) {
       QPoint mousePos = amplitudeWidget->mapFromGlobal(QCursor::pos());
-      gdata->view->setZoomFactorX(gdata->view->logZoomX() + 0.1, mousePos.x());
+      gdata->getView().setZoomFactorX(gdata->getView().logZoomX() + 0.1, mousePos.x());
       doneIt = true;
     }
   }
   if(!doneIt) {
-    gdata->view->setZoomFactorX(gdata->view->logZoomX() + 0.1);
-    gdata->view->setZoomFactorY(gdata->view->logZoomY() + 0.1);
+    gdata->getView().setZoomFactorX(gdata->getView().logZoomX() + 0.1);
+    gdata->getView().setZoomFactorY(gdata->getView().logZoomY() + 0.1);
     doneIt = true;
   }
 }
 
 void FreqView::zoomOut()
 {
-  gdata->view->setZoomFactorX(gdata->view->logZoomX() - 0.1);
+  gdata->getView().setZoomFactorX(gdata->getView().logZoomX() - 0.1);
   if(!amplitudeWidget->hasMouse()) {
-    gdata->view->setZoomFactorY(gdata->view->logZoomY() - 0.1);
+    gdata->getView().setZoomFactorY(gdata->getView().logZoomY() - 0.1);
   }
 }
 

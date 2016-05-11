@@ -397,9 +397,9 @@ MainWindow::MainWindow()
   analysisToolBar->addWidget(autoFollowButton);
   autoFollowButton->setToggleButton(true);
   autoFollowButton->setAutoRaise(true);
-  autoFollowButton->setOn(gdata->view->autoFollow());
+  autoFollowButton->setOn(gdata->getView().autoFollow());
   autoFollowButton->setWhatsThis(tr("Scrolls the Pitch Contour view up and down automaticlly with the active channel when playing or recording. Note: Manual scrolling (vertically) will be disabled during this time."));
-  connect(autoFollowButton, SIGNAL(toggled(bool)), gdata->view, SLOT(setAutoFollow(bool)));
+  connect(autoFollowButton, SIGNAL(toggled(bool)), &(gdata->getView()), SLOT(setAutoFollow(bool)));
 
   QIcon *backgroundShadingIconSet = new QIcon();
   backgroundShadingIconSet->setPixmap(QPixmap(shadingon32x32_xpm), QIcon::Small, QIcon::Normal, QIcon::On);
@@ -408,19 +408,19 @@ MainWindow::MainWindow()
   analysisToolBar->addWidget(backgroundShadingButton);
   backgroundShadingButton->setToggleButton(true);
   backgroundShadingButton->setAutoRaise(true);
-  backgroundShadingButton->setOn(gdata->view->backgroundShading());
+  backgroundShadingButton->setOn(gdata->getView().backgroundShading());
   backgroundShadingButton->setWhatsThis(tr("Draw solid color underneath the Pitch Contour, to help you find the line"));
-  connect(backgroundShadingButton, SIGNAL(toggled(bool)), gdata->view, SLOT(setBackgroundShading(bool)));
+  connect(backgroundShadingButton, SIGNAL(toggled(bool)), &(gdata->getView()), SLOT(setBackgroundShading(bool)));
 
   analysisToolBar->addAction(whatsThis);
 
-  View *view = gdata->view;
+  View & view = gdata->getView();
   QToolBar *timeBarDock = new QToolBar(tr("Time-axis Slider"), this); //, Qt::DockBottom);
   addToolBar(Qt::BottomToolBarArea, timeBarDock);
   timeBarDock->setIconSize(QSize(32, 32));
 
 /*
-  timeScrollBar = new MyScrollBar(gdata->leftTime(), gdata->rightTime(), 0.1, view->viewWidth(), view->currentTime(), 10000, Qt::Horizontal, timeBarDock);
+  timeScrollBar = new MyScrollBar(gdata->leftTime(), gdata->rightTime(), 0.1, view.viewWidth(), view.currentTime(), 10000, Qt::Horizontal, timeBarDock);
   timeScrollBar->setMinimumSize(300, 16);
   connect(timeScrollBar, SIGNAL(valueChanged(double)), view, SLOT(setCurrentTime(double)));
   connect(timeScrollBar, SIGNAL(sliderMoved(double)), gdata, SLOT(updateActiveChunkTime(double)));
@@ -435,7 +435,7 @@ MainWindow::MainWindow()
   timeSlider = new QwtSlider(timeBarDock, Qt::Horizontal, QwtSlider::NoScale, QwtSlider::BgBoth);
 #endif
   timeSlider->setRange(gdata->leftTime(), gdata->rightTime(), 1.0/10000.0, 1000);
-  timeSlider->setValue(view->currentTime());
+  timeSlider->setValue(view.currentTime());
   timeSlider->setTracking(true);
   timeSlider->setThumbWidth(20);
   timeSlider->setThumbLength(60);
@@ -449,9 +449,9 @@ MainWindow::MainWindow()
   //connect(timeSlider, SIGNAL(valueChanged(double)), view, SLOT(setCurrentTime(double)));
   timeSlider->setWhatsThis("Drag the time slider to move back and forward through the sound file");
   connect(timeSlider, SIGNAL(sliderMoved(double)), gdata, SLOT(updateActiveChunkTime(double)));
-  connect(timeSlider, SIGNAL(sliderMoved(double)), view, SLOT(doSlowUpdate()));
+  connect(timeSlider, SIGNAL(sliderMoved(double)), &view, SLOT(doSlowUpdate()));
   //connect(view, SIGNAL(currentTimeChanged(double)), timeSlider, SLOT(setValue(double)));
-  connect(view, SIGNAL(onSlowUpdate(double)), timeSlider, SLOT(setValue(double)));
+  connect(&view, SIGNAL(onSlowUpdate(double)), timeSlider, SLOT(setValue(double)));
   connect(gdata, SIGNAL(timeRangeChanged(double, double)), this, SLOT(setTimeRange(double, double)));
   //connect(view, SIGNAL(viewWidthChanged(double)), this, SLOT(setPageStep(double)));
   //connect(view, SIGNAL(onSlowUpdate()), timeSlider, SLOT(repaint()));
@@ -480,7 +480,7 @@ MainWindow::MainWindow()
   keyToolBar->addWidget(keyComboBox);
   connect(keyComboBox, SIGNAL(activated(int)), gdata, SLOT(setMusicKey(int)));
   connect(gdata, SIGNAL(musicKeyChanged(int)), keyComboBox, SLOT(setCurrentIndex(int)));
-  connect(gdata, SIGNAL(musicKeyChanged(int)), gdata->view, SLOT(doUpdate()));
+  connect(gdata, SIGNAL(musicKeyChanged(int)), &(gdata->getView()), SLOT(doUpdate()));
 
   keyTypeComboBox = new QComboBox(keyToolBar);
   keyTypeComboBox->setWindowTitle(tr("Scale type"));
@@ -491,7 +491,7 @@ MainWindow::MainWindow()
   keyToolBar->addWidget(keyTypeComboBox);
   connect(keyTypeComboBox, SIGNAL(activated(int)), gdata, SLOT(setMusicKeyType(int)));
   connect(gdata, SIGNAL(musicKeyTypeChanged(int)), keyTypeComboBox, SLOT(setCurrentIndex(int)));
-  connect(gdata, SIGNAL(musicKeyTypeChanged(int)), gdata->view, SLOT(doUpdate()));
+  connect(gdata, SIGNAL(musicKeyTypeChanged(int)), &(gdata->getView()), SLOT(doUpdate()));
 
   QComboBox *temperedComboBox = new QComboBox(keyToolBar);
   temperedComboBox->setWindowTitle(tr("Tempered type"));
@@ -503,7 +503,7 @@ MainWindow::MainWindow()
   keyToolBar->addWidget(temperedComboBox);
   connect(temperedComboBox, SIGNAL(activated(int)), gdata, SLOT(setTemperedType(int)));
   connect(gdata, SIGNAL(temperedTypeChanged(int)), temperedComboBox, SLOT(setCurrentIndex(int)));
-  connect(gdata, SIGNAL(temperedTypeChanged(int)), gdata->view, SLOT(doUpdate()));
+  connect(gdata, SIGNAL(temperedTypeChanged(int)), &(gdata->getView()), SLOT(doUpdate()));
 
   QToolBar *freqAToolBar = new QToolBar(tr("Frequency Offset Toolbar"), this);
   freqAToolBar->setWhatsThis(tr("The frequency of an even-tempered 'A' used for reference lines in the Pitch Contour View. Default 440 Hz."
@@ -517,7 +517,7 @@ MainWindow::MainWindow()
   freqASpinBox->setValue(toInt(gdata->freqA()));
   freqAToolBar->addWidget(freqASpinBox);
   connect(freqASpinBox, SIGNAL(valueChanged(int)), gdata, SLOT(setFreqA(int)));
-  connect(freqASpinBox, SIGNAL(valueChanged(int)), gdata->view, SLOT(doUpdate()));
+  connect(freqASpinBox, SIGNAL(valueChanged(int)), &(gdata->getView()), SLOT(doUpdate()));
   QFont font("Courier", 12, QFont::Bold);
   
   noteLabel = new MyLabel("Note: 9999", statusBar(), "notelabel");
@@ -530,7 +530,7 @@ MainWindow::MainWindow()
   setNoteLabel();
   QToolTip::add(noteLabel, "The current note number in the active file");
   //connect(gdata->view, SIGNAL(currentTimeChanged(double)), this, SLOT(setNoteLabel()));
-  connect(gdata->view, SIGNAL(onSlowUpdate(double)), this, SLOT(setNoteLabel()));
+  connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), this, SLOT(setNoteLabel()));
 
   
   chunkLabel = new MyLabel("Chunk: 999999", statusBar(), "chunklabel");
@@ -544,7 +544,7 @@ MainWindow::MainWindow()
   setChunkLabel();
   QToolTip::add(chunkLabel, "The current chunk number in the active file");
   //connect(gdata->view, SIGNAL(currentTimeChanged(double)), this, SLOT(setChunkLabel()));
-  connect(gdata->view, SIGNAL(onSlowUpdate(double)), this, SLOT(setChunkLabel()));
+  connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), this, SLOT(setChunkLabel()));
 
   timeLabel = new MyLabel("Time: -00:00.000", statusBar(), "timelabel");
 /*
@@ -559,7 +559,7 @@ MainWindow::MainWindow()
   setTimeLabel(0);
   QToolTip::add(timeLabel, tr("The current time positon for all files (mins:sec)"));
   //connect(gdata->view, SIGNAL(currentTimeChanged(double)), this, SLOT(setTimeLabel(double)));
-  connect(gdata->view, SIGNAL(onSlowUpdate(double)), this, SLOT(setTimeLabel(double)));
+  connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), this, SLOT(setTimeLabel(double)));
 
   //connect(gdata->view, SIGNAL(currentTimeChanged(double)), gdata, SLOT(updateActiveChunkTime(double)));
 
@@ -608,7 +608,7 @@ bool MainWindow::event( QEvent * e )
     SoundFile *soundFile = gdata->getAudioThread().curSoundFile();
     if(soundFile) {
       soundFile->lock();
-      gdata->view->setCurrentTime(soundFile->timeAtCurrentChunk());
+      gdata->getView().setCurrentTime(soundFile->timeAtCurrentChunk());
       soundFile->unlock();
     }
     gdata->updateViewLeftRightTimes();
@@ -646,7 +646,7 @@ bool MainWindow::event( QEvent * e )
 
 void MainWindow::keyPressEvent ( QKeyEvent * e )
 {
-  View *view = gdata->view;
+  View & view = gdata->getView();
   
   double speed = 1;
   if(e->state() & Qt::ShiftModifier) speed *= 4;
@@ -668,11 +668,11 @@ void MainWindow::keyPressEvent ( QKeyEvent * e )
       gdata->rewind();
     } else {
       if(gdata->getActiveChannel())
-        newTime = view->currentTime() - gdata->getActiveChannel()->timePerChunk()*speed;
+        newTime = view.currentTime() - gdata->getActiveChannel()->timePerChunk()*speed;
       else
-        newTime = view->currentTime() - 0.10*speed;  //move 1/5th of a second back
+        newTime = view.currentTime() - 0.10*speed;  //move 1/5th of a second back
       gdata->updateActiveChunkTime(newTime);
-      //view->setCurrentTime(newTime);
+      //view.setCurrentTime(newTime);
     }
     break;
   case Qt::Key_Right:
@@ -680,27 +680,27 @@ void MainWindow::keyPressEvent ( QKeyEvent * e )
       gdata->fastforward();
     } else {
       if(gdata->getActiveChannel())
-        newTime = view->currentTime() + gdata->getActiveChannel()->timePerChunk()*speed;
+        newTime = view.currentTime() + gdata->getActiveChannel()->timePerChunk()*speed;
       else
-        newTime = view->currentTime() + 0.10*speed; //move 1/5th of a second forward
+        newTime = view.currentTime() + 0.10*speed; //move 1/5th of a second forward
       gdata->updateActiveChunkTime(newTime);
     }
     break;
   case Qt::Key_Up:
-      view->setViewBottom(view->viewBottom() + 0.2*speed); //move 1/5 of a semi-tone
-      gdata->view->doSlowUpdate();
+      view.setViewBottom(view.viewBottom() + 0.2*speed); //move 1/5 of a semi-tone
+      gdata->getView().doSlowUpdate();
     break;
   case Qt::Key_Down:
-      view->setViewBottom(view->viewBottom() - 0.2*speed); //move 1/5 of a semi-tone
-      gdata->view->doSlowUpdate();
+      view.setViewBottom(view.viewBottom() - 0.2*speed); //move 1/5 of a semi-tone
+      gdata->getView().doSlowUpdate();
     break;
   case Qt::Key_PageUp:
-      view->setViewBottom(view->viewBottom() + 1.0*speed); //move 1/5 of a semi-tone
-      gdata->view->doSlowUpdate();
+      view.setViewBottom(view.viewBottom() + 1.0*speed); //move 1/5 of a semi-tone
+      gdata->getView().doSlowUpdate();
     break;
   case Qt::Key_PageDown:
-      view->setViewBottom(view->viewBottom() - 1.0*speed); //move 1/5 of a semi-tone
-      gdata->view->doSlowUpdate();
+      view.setViewBottom(view.viewBottom() - 1.0*speed); //move 1/5 of a semi-tone
+      gdata->getView().doSlowUpdate();
     break;
   case Qt::Key_Home:
       gdata->updateActiveChunkTime(gdata->leftTime());
@@ -709,23 +709,23 @@ void MainWindow::keyPressEvent ( QKeyEvent * e )
       gdata->updateActiveChunkTime(gdata->rightTime());
     break;
   case Qt::Key_Comma:
-      view->setViewOffset(view->viewOffset() - view->viewWidth()/20.0);
-      view->doSlowUpdate();
+      view.setViewOffset(view.viewOffset() - view.viewWidth()/20.0);
+      view.doSlowUpdate();
       break;
   case Qt::Key_Period:
-      view->setViewOffset(view->viewOffset() + view->viewWidth()/20.0);
-      view->doSlowUpdate();
+      view.setViewOffset(view.viewOffset() + view.viewWidth()/20.0);
+      view.doSlowUpdate();
       break;
   case Qt::Key_Plus:
   case Qt::Key_Equal:
       emit zoomInPressed();
-      //view->viewZoomInX();
-      //view->viewZoomInY();
+      //view.viewZoomInX();
+      //view.viewZoomInY();
       break;
   case Qt::Key_Minus:
       emit zoomOutPressed();
-      //view->viewZoomOutX();
-      //view->viewZoomOutY();
+      //view.viewZoomOutX();
+      //view.viewZoomOutY();
       break;
   default:
     e->ignore();
@@ -762,10 +762,10 @@ void MainWindow::openFile(const char *filename)
   
   gdata->addFileToList(newSoundFile);
   gdata->setActiveChannel(newSoundFile->channels(0));
-  //gdata->view->setCurrentTime(0.0);
+  //gdata->getView().setCurrentTime(0.0);
   QApplication::postEvent(mainWindow, new QCustomEvent(UPDATE_SLOW));
-  //gdata->view->doFastUpdate();
-  gdata->view->doUpdate();
+  //gdata->getView().doFastUpdate();
+  gdata->getView().doUpdate();
   //playSound();
 }
 
@@ -857,7 +857,7 @@ void MainWindow::openRecord(bool andPlay)
     return;
   }
   gdata->addFileToList(newSoundFile);
-  gdata->view->setCurrentTime(0.0);
+  gdata->getView().setCurrentTime(0.0);
   gdata->setActiveChannel(newSoundFile->channels(0));
 
   //int fileGeneratingNumber = gdata->settings.getInt("General", "fileGeneratingNumber");
@@ -964,7 +964,7 @@ QWidget *MainWindow::openView(int viewID)
     case VIEW_FREQ:
 	  {
         FreqView *freqView = new FreqView(viewID, parent);
-        //freqView->show();
+        //freqview.show();
         connect(this, SIGNAL(zoomInPressed()), freqView, SLOT(zoomIn()));
         connect(this, SIGNAL(zoomOutPressed()), freqView, SLOT(zoomOut()));
         w = freqView;
@@ -1356,7 +1356,7 @@ void MainWindow::printPitch()
   printer.setOrientation(QPrinter::Landscape);
   QPrintDialog printDialog(&printer, this);
   if(printDialog.exec() == QDialog::Accepted) {
-    View *view = gdata->view;
+    View & view = gdata->getView();
     //printf("starting printing\n");
     QPainter p;
     p.begin(&printer);
@@ -1364,10 +1364,10 @@ void MainWindow::printPitch()
     int h = printer.height();
     //printf("printer width = %d\n", w);
     //printf("printer height = %d\n", h);
-    double leftTime = view->viewLeft();
-    double rightTime = view->viewRight();//gdata->totalTime();
-    double viewBottom = view->viewBottom();
-    double viewTop = view->viewTop();//gdata->topPitch();
+    double leftTime = view.viewLeft();
+    double rightTime = view.viewRight();//gdata->totalTime();
+    double viewBottom = view.viewBottom();
+    double viewTop = view.viewTop();//gdata->topPitch();
     double zoomX = (rightTime-leftTime) / double(w);
     double zoomY = (viewTop-viewBottom) / double(h);
     FreqDrawWidget::drawReferenceLines(printer, p, 0.0, zoomX, viewBottom, zoomY, DRAW_VIEW_PRINT);

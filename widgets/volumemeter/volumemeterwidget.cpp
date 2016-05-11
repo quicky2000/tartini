@@ -33,7 +33,7 @@ VolumeMeterWidget::VolumeMeterWidget(QWidget *parent)
   //setPaletteBackgroundColor(colorGroup().background());
 
   //make the widget get updated when the view changes
-  connect(gdata->view, SIGNAL(onFastUpdate(double)), this, SLOT(update()));
+  connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), this, SLOT(update()));
 
   // Define the number of labels to use for available places
   //labelNumbers = new labelNumbers( {2, 3, 4, 4, 6, 6} );

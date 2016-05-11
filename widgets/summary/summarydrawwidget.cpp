@@ -34,7 +34,7 @@ SummaryDrawWidget::SummaryDrawWidget(QWidget *parent)
   scaler = 1.0;
 
   //make the widget get updated when the view changes
-  connect(gdata->view, SIGNAL(onFastUpdate(double)), this, SLOT(update()));
+  connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), this, SLOT(update()));
 }
 
 SummaryDrawWidget::~SummaryDrawWidget()
@@ -46,7 +46,7 @@ void SummaryDrawWidget::paintEvent( QPaintEvent * )
   Channel *ch;
 
   //if((right - left) <= 0) return;
-  View *view = gdata->view;
+  View & view = gdata->getView();
 /*  if (view->totalTime() == 0) {
     buffer = new QPixmap(size());
     buffer->fill(myBackgroundColor);
@@ -63,28 +63,28 @@ void SummaryDrawWidget::paintEvent( QPaintEvent * )
     ch = gdata->getChannelAt(j);
     if(!ch->isVisible()) continue;
 
-    //drawChannel(ch, p, view->leftTime(), (view->totalTime() / (double) width()), 0.0f, (double) view->topNote() / (double) height(), DRAW_VIEW_SUMMARY);
-    drawChannel(*this, ch, p, gdata->leftTime(), view->currentTime(), (gdata->totalTime() / (double) width()), 0.0f, (double) gdata->topPitch() / (double) height(), DRAW_VIEW_SUMMARY);
+    //drawChannel(ch, p, view.leftTime(), (view.totalTime() / (double) width()), 0.0f, (double) view.topNote() / (double) height(), DRAW_VIEW_SUMMARY);
+    drawChannel(*this, ch, p, gdata->leftTime(), view.currentTime(), (gdata->totalTime() / (double) width()), 0.0f, (double) gdata->topPitch() / (double) height(), DRAW_VIEW_SUMMARY);
   }
 
   //draw the view rectangle 
   p.setPen(QPen(colorGroup().highlight(), 1));
-  p.drawRect(int((gdata->leftTime()+view->viewLeft())*timeRatio), height()-1-int((view->viewTop())*pitchRatio),
-             int(view->viewWidth()*timeRatio), int(view->viewHeight()*pitchRatio));
+  p.drawRect(int((gdata->leftTime()+view.viewLeft())*timeRatio), height()-1-int((view.viewTop())*pitchRatio),
+             int(view.viewWidth()*timeRatio), int(view.viewHeight()*pitchRatio));
 
   //draw the current time line
   p.setPen(QPen(colorGroup().foreground(), 1));
-  //p.moveTo(int((gdata->leftTime()+view->currentTime())*timeRatio), 0);
-  //p.lineTo(int((gdata->leftTime()+view->currentTime())*timeRatio), height()-1);
-  p.drawLine(int((gdata->leftTime()+view->currentTime())*timeRatio), 0, 
-             int((gdata->leftTime()+view->currentTime())*timeRatio), height()-1);
+  //p.moveTo(int((gdata->leftTime()+view.currentTime())*timeRatio), 0);
+  //p.lineTo(int((gdata->leftTime()+view.currentTime())*timeRatio), height()-1);
+  p.drawLine(int((gdata->leftTime()+view.currentTime())*timeRatio), 0, 
+             int((gdata->leftTime()+view.currentTime())*timeRatio), height()-1);
 
   endDrawing();
 }
 
 void SummaryDrawWidget::mousePressEvent( QMouseEvent *e)
 {
-  View *view = gdata->view;
+  View & view = gdata->getView();
   double timeRatio = double(width()) / gdata->totalTime(); // px per second
   double noteRatio = double(height()) / (100.0 / scaler);
   clickMode = 0;
@@ -95,17 +95,17 @@ void SummaryDrawWidget::mousePressEvent( QMouseEvent *e)
   // Work out where the user clicked
   clickTime = e->x()/timeRatio + gdata->leftTime();
   clickNote = (height()-1-e->y())/noteRatio;
-  if(clickTime > view->viewLeft() && clickTime < view->viewRight() &&
-     clickNote > view->viewBottom() && clickNote < view->viewTop()) {
+  if(clickTime > view.viewLeft() && clickTime < view.viewRight() &&
+     clickNote > view.viewBottom() && clickNote < view.viewTop()) {
 	  // If they're in the view, they're dragging it.
-    clickCurrentTimeDiff = view->currentTime() - clickTime;
-    clickViewBottomDiff = view->viewBottom() - clickNote;
+    clickCurrentTimeDiff = view.currentTime() - clickTime;
+    clickViewBottomDiff = view.viewBottom() - clickNote;
     clickMode = 1;
     downScaler = scaler;
   } else {
 	  // Otherwise, move the view to where they clicked.
-    view->setCurrentTime(clickTime);
-    view->setViewBottom(int(myround(clickNote - (view->viewHeight() / 2))));
+    view.setCurrentTime(clickTime);
+    view.setViewBottom(int(myround(clickNote - (view.viewHeight() / 2))));
     clickMode = 1;
   }
 
@@ -114,7 +114,7 @@ void SummaryDrawWidget::mousePressEvent( QMouseEvent *e)
 void SummaryDrawWidget::mouseMoveEvent( QMouseEvent *e )
 {
   if(mouseDown && clickMode == 1) {
-    View *view = gdata->view;
+    View & view = gdata->getView();
   	//double newScaler = downScaler * ((double(height()) - e->y()) / (double(height()) - mouseY));
   	//if(newScaler < 1.0) newScaler = 1.0;
   	//if(newScaler > 1000.0) newScaler = 1000.0;
@@ -123,15 +123,15 @@ void SummaryDrawWidget::mouseMoveEvent( QMouseEvent *e )
     double noteRatio = double(height()) / (100.0 / scaler);
 
     // We should only change the current time if the file is stopped
-    if (gdata->getRunning() == STREAM_STOP) view->setCurrentTime(e->x()/timeRatio - gdata->leftTime() + clickCurrentTimeDiff);
+    if (gdata->getRunning() == STREAM_STOP) view.setCurrentTime(e->x()/timeRatio - gdata->leftTime() + clickCurrentTimeDiff);
     double newBottom = (height()-1- e->y())/noteRatio + clickViewBottomDiff;
     if (newBottom < 0) {
       newBottom = 0;
     }
-    if ((newBottom + view->viewHeight()) > gdata->topPitch()) {
-      newBottom = gdata->topPitch() - view->viewHeight();
+    if ((newBottom + view.viewHeight()) > gdata->topPitch()) {
+      newBottom = gdata->topPitch() - view.viewHeight();
     }
-    view->setViewBottom(newBottom);
+    view.setViewBottom(newBottom);
 
   }
 }
@@ -147,10 +147,10 @@ void SummaryDrawWidget::wheelEvent( QWheelEvent *e)
 
   if (e->state() == Qt::AltModifier) {
     int horScale = toInt(gdata->totalTime() / width() * (e->delta() / 10));
-    gdata->view->setCurrentTime(gdata->view->currentTime() + horScale);
+    gdata->getView().setCurrentTime(gdata->getView().currentTime() + horScale);
   } else {
     int vertScale = toInt(gdata->topPitch() / height() * (e->delta() / 10));
-    gdata->view->setViewBottom(gdata->view->viewBottom() + vertScale);
+    gdata->getView().setViewBottom(gdata->getView().viewBottom() + vertScale);
   }
 }
 

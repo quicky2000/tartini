@@ -194,4 +194,25 @@ Channel* GData::getChannelAt(size_t p_index)const
 {
   return channels.at(p_index);
 }
+
+//------------------------------------------------------------------------------
+const View & GData::getView(void)const
+{
+  assert(view);
+  return *view;
+}
+
+//------------------------------------------------------------------------------
+View & GData::getView(void)
+{
+  assert(view);
+  return *view;
+}
+
+//------------------------------------------------------------------------------
+void GData::setView(View & p_view)
+{
+  view = & p_view;
+}
+
 //EOF

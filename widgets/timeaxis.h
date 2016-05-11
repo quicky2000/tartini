@@ -45,9 +45,9 @@ public:
   //double leftTime() { return _leftTime; }
   //double rightTime() { return _rightTime; }
   //double timeWidth() { return rightTime() - leftTime(); }
-  double leftTime() { return gdata->view->viewLeft(); }
-  double rightTime() { return gdata->view->viewRight(); }
-  double timeWidth() { return gdata->view->viewTotalTime(); }
+  double leftTime() { return gdata->getView().viewLeft(); }
+  double rightTime() { return gdata->getView().viewRight(); }
+  double timeWidth() { return gdata->getView().viewTotalTime(); }
 
   void setFontSize(int fontSize);
   

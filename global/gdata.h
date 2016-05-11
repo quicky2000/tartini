@@ -4,6 +4,8 @@
     begin                : 2003
     copyright            : (C) 2003-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -125,6 +127,10 @@ public:
 
   inline size_t getChannelsSize(void)const;
   inline Channel* getChannelAt(size_t p_index)const;
+
+  inline const View & getView(void)const;
+  inline View & getView(void);
+  inline void setView(View & p_view);
  private:
   QSettings *qsettings;
   int soundMode;
@@ -141,6 +147,9 @@ public:
   // To check if really usefull
   std::vector<QColor> lineColor;
   int nextColorIndex;
+  // End to check
+
+  View *view;
  public:
 
 
@@ -164,7 +173,6 @@ public:
   //FrameRGB *fct_draw_data;
 
 
-  View *view;
 
   void setActiveChannel(Channel *toActive);
   Channel* getActiveChannel() { return activeChannel; }

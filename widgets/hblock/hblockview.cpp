@@ -27,7 +27,7 @@ HBlockView::HBlockView( int viewID_, QWidget *parent )
   hBlockWidget->show();
 
   //make the widget get updated when the view changes
-  connect(gdata->view, SIGNAL(onFastUpdate(double)), hBlockWidget, SLOT(update()));
+  connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), hBlockWidget, SLOT(update()));
 }
 
 HBlockView::~HBlockView()

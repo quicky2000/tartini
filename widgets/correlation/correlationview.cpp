@@ -55,7 +55,7 @@ CorrelationView::CorrelationView( int viewID_, QWidget *parent )
 
   //make the widget get updated when the view changes
   //connect(gdata->view, SIGNAL(onFastUpdate(double)), correlationWidget, SLOT(update()));
-  connect(gdata->view, SIGNAL(onSlowUpdate(double)), correlationWidget, SLOT(update()));
+  connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), correlationWidget, SLOT(update()));
 }
 
 CorrelationView::~CorrelationView()

@@ -35,7 +35,7 @@ HBubbleWidget::HBubbleWidget(QWidget *parent)
   numHarmonics = 40;
 
   //make the widget get updated when the view changes
-  connect(gdata->view, SIGNAL(onFastUpdate(double)), this, SLOT(update()));
+  connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), this, SLOT(update()));
   fprintf(stderr,"Done\n");
 }
 

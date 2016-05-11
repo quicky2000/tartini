@@ -661,8 +661,8 @@ void VibratoWidget::doUpdate()
       colorsCounter = 0;
 
       const double halfWindowTime = (double)active->size() / (double)(active->rate() * 2);
-      int pixelLeft = toInt((active->chunkAtTime(gdata->view->currentTime() - halfWindowTime) - myStartChunk) * zoomFactorX - windowOffset);
-      int pixelRight = toInt((active->chunkAtTime(gdata->view->currentTime() + halfWindowTime) - myStartChunk) * zoomFactorX - windowOffset);
+      int pixelLeft = toInt((active->chunkAtTime(gdata->getView().currentTime() - halfWindowTime) - myStartChunk) * zoomFactorX - windowOffset);
+      int pixelRight = toInt((active->chunkAtTime(gdata->getView().currentTime() + halfWindowTime) - myStartChunk) * zoomFactorX - windowOffset);
 
       vertices[verticesCounter++] = pixelLeft;
       vertices[verticesCounter++] = 0;

@@ -92,7 +92,7 @@ int main( int argc, char **argv )
   autofollow method and the signals in the View class. It can try to reference the GData 
   object before the constructor finishes, which causes an access violation in 
   Visual Studio 6. */
-  gdata->view = new View();
+  gdata->setView(*(new View()));
 
   //mainWindow = new MainWindow();
   //mainWindow->show();
@@ -100,9 +100,9 @@ int main( int argc, char **argv )
   //a.setStyle("Windows");
 
   //call init after we know the windows size
-  gdata->view->init();
+  gdata->getView().init();
 
-	mainWindow->showMaximized();
+  mainWindow->showMaximized();
     
   a.setMainWidget(mainWindow);
   mainWindow->show();
@@ -120,7 +120,7 @@ int main( int argc, char **argv )
   
   int ret = a.exec();
     
-  delete gdata->view;
+  delete & (gdata->getView());
   delete gdata;
   
   return ret;

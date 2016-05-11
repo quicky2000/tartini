@@ -33,7 +33,7 @@ HCircleWidget::HCircleWidget(QWidget *parent)
   zoom = 0.001;
   threshold = -100;
   lowestValue = -110;
-  connect(gdata->view, SIGNAL(onFastUpdate(double)), this, SLOT(update()));
+  connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), this, SLOT(update()));
 }
 
 HCircleWidget::~HCircleWidget()
