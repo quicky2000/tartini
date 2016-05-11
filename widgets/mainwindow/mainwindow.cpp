@@ -220,16 +220,20 @@ MainWindow::MainWindow(void)
     QToolBar * l_sound_tool_bar = new QToolBar("Sound Actions", this);
     addToolBar(Qt::BottomToolBarArea, l_sound_tool_bar);
     l_sound_tool_bar->setIconSize(QSize(32, 32));
-  
-    QToolButton * l_beginning_button = new QToolButton(QIcon(beginning32x32_xpm), tr("Beginning"), tr("Rewind to the beginning"), NULL, NULL, l_sound_tool_bar, tr("Beginning"));
-    l_beginning_button->setWhatsThis(tr("Jump to the beginning of the sound"));
-    l_sound_tool_bar->addWidget(l_beginning_button);
-    connect(l_beginning_button, SIGNAL(pressed()), g_data, SLOT(beginning()));
-  
+
+    QAction * l_beginning_action = new QAction(QIcon(beginning32x32_xpm),tr("Beginning"),l_sound_tool_bar);
+    l_beginning_action->setToolTip(tr("Rewind to the beginning"));
+    l_beginning_action->setWhatsThis(tr("Jump to the beginning of the sound"));
+    l_sound_tool_bar->addAction(l_beginning_action);
+    connect(l_beginning_action, SIGNAL(triggered()), g_data, SLOT(beginning()));
+
     m_rewind_timer = new QTimer(this);
     connect(m_rewind_timer, SIGNAL(timeout()), g_data, SLOT(rewind()));
-    QToolButton * l_rewind_button = new QToolButton(QIcon(rewind32x32_xpm), tr("Rewind"), tr("Rewind"), NULL, NULL, l_sound_tool_bar, tr("rewind"));
-    l_rewind_button->setWhatsThis(tr("Rewind the sound"));
+    QAction * l_rewind_action = new QAction(QIcon(rewind32x32_xpm), tr("Rewind"), l_sound_tool_bar);
+    l_rewind_action->setToolTip(tr("Rewind"));
+    l_rewind_action->setWhatsThis(tr("Rewind the sound"));
+    QToolButton * l_rewind_button = new QToolButton(l_sound_tool_bar);
+    l_rewind_button->setDefaultAction(l_rewind_action);
     l_sound_tool_bar->addWidget(l_rewind_button);
     connect(l_rewind_button, SIGNAL(pressed()), this, SLOT(rewindPressed()));
     connect(l_rewind_button, SIGNAL(released()), this, SLOT(rewindReleased()));
@@ -245,8 +249,11 @@ MainWindow::MainWindow(void)
 
     m_fast_forward_timer = new QTimer(this);
     connect(m_fast_forward_timer, SIGNAL(timeout()), g_data, SLOT(fastforward()));
-    QToolButton * l_fast_forward_button = new QToolButton(QIcon(fastforward32x32_xpm), tr("Fast-forward"), tr("Fast-forward"), NULL, NULL, l_sound_tool_bar, tr("fastforward"));
-    l_fast_forward_button->setWhatsThis(tr("Fastfoward the sound"));
+    QAction * l_fast_forward_action = new QAction(QIcon(fastforward32x32_xpm), tr("Fast-forward"), l_sound_tool_bar);
+    l_fast_forward_action->setToolTip(tr("Fast-forward"));
+    l_fast_forward_action->setWhatsThis(tr("Fastfoward the sound"));
+    QToolButton * l_fast_forward_button = new QToolButton(l_sound_tool_bar);
+    l_fast_forward_button->setDefaultAction(l_fast_forward_action);
     l_sound_tool_bar->addWidget(l_fast_forward_button);
     connect(l_fast_forward_button, SIGNAL(pressed()), this, SLOT(fastforwardPressed()));
     connect(l_fast_forward_button, SIGNAL(released()), this, SLOT(fastforwardReleased()));
@@ -332,25 +339,32 @@ MainWindow::MainWindow(void)
     l_analysis_tool_bar->setIconSize(QSize(32, 32));
 
     QIcon * l_auto_follow_icon_set = new QIcon();
-    l_auto_follow_icon_set->setPixmap(QPixmap(autofollow32x32_xpm), QIcon::Small, QIcon::Normal);
-    QToolButton * l_auto_follow_button = new QToolButton(*l_auto_follow_icon_set, tr("Auto Follow"), tr("Moves the view up and down automaticlly with the active channel when playing or recording"), NULL, NULL, l_analysis_tool_bar, tr("autoFollow"));
-    l_analysis_tool_bar->addWidget(l_auto_follow_button);
-    l_auto_follow_button->setToggleButton(true);
+    l_auto_follow_icon_set->addPixmap(QPixmap(autofollow32x32_xpm), QIcon::Normal);
+    QAction * l_auto_follow_action = new QAction(*l_auto_follow_icon_set, tr("Auto Follow"),l_analysis_tool_bar);
+    l_auto_follow_action->setToolTip(tr("Moves the view up and down automaticlly with the active channel when playing or recording"));
+    l_auto_follow_action->setCheckable(true);
+    l_auto_follow_action->setChecked(g_data->getView().autoFollow());
+    QToolButton * l_auto_follow_button = new QToolButton(l_analysis_tool_bar);
+    l_auto_follow_button->setDefaultAction(l_auto_follow_action);
     l_auto_follow_button->setAutoRaise(true);
-    l_auto_follow_button->setOn(g_data->getView().autoFollow());
     l_auto_follow_button->setWhatsThis(tr("Scrolls the Pitch Contour view up and down automaticlly with the active channel when playing or recording. Note: Manual scrolling (vertically) will be disabled during this time."));
-    connect(l_auto_follow_button, SIGNAL(toggled(bool)), &(g_data->getView()), SLOT(setAutoFollow(bool)));
+    l_analysis_tool_bar->addWidget(l_auto_follow_button);
+    connect(l_auto_follow_action, SIGNAL(toggled(bool)), &(g_data->getView()), SLOT(setAutoFollow(bool)));
 
     QIcon * l_background_shading_icon_set = new QIcon();
-    l_background_shading_icon_set->setPixmap(QPixmap(shadingon32x32_xpm), QIcon::Small, QIcon::Normal, QIcon::On);
-    l_background_shading_icon_set->setPixmap(QPixmap(shadingoff32x32_xpm), QIcon::Small, QIcon::Normal, QIcon::Off);
-    QToolButton * l_background_shading_button = new QToolButton(*l_background_shading_icon_set, "Background Shading", "Toggle background shading on/off", NULL, NULL, l_analysis_tool_bar, "backgroundShading");
-    l_analysis_tool_bar->addWidget(l_background_shading_button);
-    l_background_shading_button->setToggleButton(true);
+    l_background_shading_icon_set->addPixmap(QPixmap(shadingon32x32_xpm), QIcon::Normal, QIcon::On);
+    l_background_shading_icon_set->addPixmap(QPixmap(shadingoff32x32_xpm), QIcon::Normal, QIcon::Off);
+
+    QAction * l_background_shading_action = new QAction(*l_background_shading_icon_set, "Background Shading",l_analysis_tool_bar);
+    l_background_shading_action->setToolTip("Toggle background shading on/off");
+    l_background_shading_action->setCheckable(true);
+    l_background_shading_action->setChecked(g_data->getView().backgroundShading());
+    QToolButton * l_background_shading_button = new QToolButton(l_analysis_tool_bar);
+    l_background_shading_button->setDefaultAction(l_background_shading_action);
     l_background_shading_button->setAutoRaise(true);
-    l_background_shading_button->setOn(g_data->getView().backgroundShading());
     l_background_shading_button->setWhatsThis(tr("Draw solid color underneath the Pitch Contour, to help you find the line"));
-    connect(l_background_shading_button, SIGNAL(toggled(bool)), &(g_data->getView()), SLOT(setBackgroundShading(bool)));
+    l_analysis_tool_bar->addWidget(l_background_shading_button);
+    connect(l_background_shading_action, SIGNAL(toggled(bool)), &(g_data->getView()), SLOT(setBackgroundShading(bool)));
 
     l_analysis_tool_bar->addAction(l_whats_this);
 
