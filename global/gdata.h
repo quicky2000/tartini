@@ -151,22 +151,22 @@ public:
   /**
      Returns the leftmost time a file starts
   */
-  inline double leftTime(void); 
+  inline const double & leftTime(void)const; 
 
   /**
      Returns the rightmost time a file stops
    */
-  inline double rightTime(void);
+  inline const double & rightTime(void)const;
 
   /**
      Returns the total number of seconds the files take up
   */
-  inline double totalTime(void);
+  inline double totalTime(void)const;
 
   /**
      Returns the top note pitch the programme allows
   */
-  inline double topPitch(void);
+  inline const double & topPitch(void)const;
 
   /**
      Allows you to specify the top note pitch the programme should allow
@@ -183,35 +183,35 @@ public:
   int getAnalysisBufferSize(int rate);
   int getAnalysisStepSize(int rate);
 
-  inline bool doingHarmonicAnalysis(void);
-  inline bool doingAutoNoiseFloor(void);
-  inline bool doingEqualLoudness(void);
-  inline bool doingFreqAnalysis(void);
-  inline bool doingActiveAnalysis(void);
-  inline bool doingActiveFFT(void);
-  inline bool doingActiveCepstrum(void);
-  inline bool doingDetailedPitch(void);
-  inline bool doingActive(void);
-  inline bool vibratoSineStyle(void);
-  inline int amplitudeMode(void);
-  inline int pitchContourMode(void);
-  inline int fastUpdateSpeed(void);
-  inline int slowUpdateSpeed(void);
-  inline bool mouseWheelZooms(void);
+  inline bool doingHarmonicAnalysis(void)const;
+  inline bool doingAutoNoiseFloor(void)const;
+  inline bool doingEqualLoudness(void)const;
+  inline bool doingFreqAnalysis(void)const;
+  inline bool doingActiveAnalysis(void)const;
+  inline bool doingActiveFFT(void)const;
+  inline bool doingActiveCepstrum(void)const;
+  inline bool doingDetailedPitch(void)const;
+  inline bool doingActive(void)const;
+  inline bool vibratoSineStyle(void)const;
+  inline int amplitudeMode(void)const;
+  inline int pitchContourMode(void)const;
+  inline int fastUpdateSpeed(void)const;
+  inline int slowUpdateSpeed(void)const;
+  inline bool mouseWheelZooms(void)const;
 
   void setAmpThreshold(int mode, int index, double value);
   double ampThreshold(int mode, int index);
   void setAmpWeight(int mode, double value);
   double ampWeight(int mode);
 
-  inline int analysisType(void);
-  inline bool polish(void);
-  inline bool showMeanVarianceBars(void);
-  inline int savingMode(void);
+  inline int analysisType(void)const;
+  inline bool polish(void)const;
+  inline bool showMeanVarianceBars(void)const;
+  inline int savingMode(void)const;
 
-  inline QColor backgroundColor(void);
-  inline QColor shading1Color(void);
-  inline QColor shading2Color(void);
+  inline const QColor & backgroundColor(void)const;
+  inline const QColor & shading1Color(void)const;
+  inline const QColor & shading2Color(void)const;
 
   QString getFilenameString(void);
   void addFileToList(SoundFile *s);
@@ -221,16 +221,16 @@ public:
   void recalcScoreThresholds(void);
   int getActiveIntThreshold(void);
 
-  inline double dBFloor(void);
+  inline const double & dBFloor(void)const;
   inline void setDBFloor(double dBFloor_);
   inline double & rmsFloor(void);
   inline double & rmsCeiling(void);
 
-  inline int musicKey(void);
-  inline int musicKeyType(void);
-  inline int temperedType(void);
-  inline double freqA(void);
-  inline double semitoneOffset(void);
+  inline int musicKey(void)const;
+  inline int musicKeyType(void)const;
+  inline int temperedType(void)const;
+  inline const double & freqA(void)const;
+  inline const double & semitoneOffset(void)const;
 
 signals:
   void activeChannelChanged(Channel *active);

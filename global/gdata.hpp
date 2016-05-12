@@ -229,25 +229,25 @@ QPixmap* GData::drawingBuffer(void)
 
 
 //------------------------------------------------------------------------------
-double GData::leftTime(void)
+const double & GData::leftTime(void)const
 {
   return _leftTime;
 }
 
 //------------------------------------------------------------------------------
-double GData::rightTime(void)
+const double & GData::rightTime(void)const
 {
   return _rightTime;
 }
 
 //------------------------------------------------------------------------------
-double GData::totalTime(void)
+double GData::totalTime(void)const
 {
   return _rightTime - _leftTime;
 }
 
 //------------------------------------------------------------------------------
-double GData::topPitch(void)
+const double & GData::topPitch(void)const
 {
   return _topPitch;
 }
@@ -277,139 +277,139 @@ void GData::setDoingDetailedPitch(bool x)
 }
 
 //------------------------------------------------------------------------------
-bool GData::doingHarmonicAnalysis(void)
+bool GData::doingHarmonicAnalysis(void)const
 {
   return _doingHarmonicAnalysis;
 }
 
 //------------------------------------------------------------------------------
-bool GData::doingAutoNoiseFloor(void)
+bool GData::doingAutoNoiseFloor(void)const
 {
   return _doingAutoNoiseFloor;
 }
 
 //------------------------------------------------------------------------------
-bool GData::doingEqualLoudness(void)
+bool GData::doingEqualLoudness(void)const
 {
   return _doingEqualLoudness;
 }
 
 //------------------------------------------------------------------------------
-bool GData::doingFreqAnalysis(void)
+bool GData::doingFreqAnalysis(void)const
 {
   return _doingFreqAnalysis;
 }
 
 //------------------------------------------------------------------------------
-bool GData::doingActiveAnalysis(void)
+bool GData::doingActiveAnalysis(void)const
 {
   return _doingActiveAnalysis;
 }
 
 //------------------------------------------------------------------------------
-bool GData::doingActiveFFT(void)
+bool GData::doingActiveFFT(void)const
 {
   return _doingActiveFFT;
 }
 
 //------------------------------------------------------------------------------
-bool GData::doingActiveCepstrum(void)
+bool GData::doingActiveCepstrum(void)const
 {
   return _doingActiveCepstrum;
 }
 
 //------------------------------------------------------------------------------
-bool GData::doingDetailedPitch(void)
+bool GData::doingDetailedPitch(void)const
 {
   return _doingDetailedPitch;
 }
 
 //------------------------------------------------------------------------------
-bool GData::doingActive(void)
+bool GData::doingActive(void)const
 {
   return (doingActiveAnalysis() || doingActiveFFT() || doingActiveCepstrum());
 }
 
 //------------------------------------------------------------------------------
-bool GData::vibratoSineStyle(void)
+bool GData::vibratoSineStyle(void)const
 {
   return _vibratoSineStyle;
 }
 
 //------------------------------------------------------------------------------
-int GData::amplitudeMode(void)
+int GData::amplitudeMode(void)const
 {
   return _amplitudeMode;
 }
 
 //------------------------------------------------------------------------------
-int GData::pitchContourMode(void)
+int GData::pitchContourMode(void)const
 {
   return _pitchContourMode;
 }
 
 //------------------------------------------------------------------------------
-int GData::fastUpdateSpeed(void)
+int GData::fastUpdateSpeed(void)const
 {
   return _fastUpdateSpeed;
 }
 
 //------------------------------------------------------------------------------
-int GData::slowUpdateSpeed(void)
+int GData::slowUpdateSpeed(void)const
 {
   return _slowUpdateSpeed;
 }
 
 //------------------------------------------------------------------------------
-bool GData::mouseWheelZooms(void)
+bool GData::mouseWheelZooms(void)const
 {
   return _mouseWheelZooms;
 }
 
 //------------------------------------------------------------------------------
-int GData::analysisType(void)
+int GData::analysisType(void)const
 {
   return _analysisType;
 }
 
 //------------------------------------------------------------------------------
-bool GData::polish(void)
+bool GData::polish(void)const
 {
   return _polish;
 }
 
 //------------------------------------------------------------------------------
-bool GData::showMeanVarianceBars(void)
+bool GData::showMeanVarianceBars(void)const
 {
   return _showMeanVarianceBars;
 }
 
 //------------------------------------------------------------------------------
-int GData::savingMode(void)
+int GData::savingMode(void)const
 {
   return _savingMode;
 }
 
 //------------------------------------------------------------------------------
-QColor GData::backgroundColor(void)
+const QColor & GData::backgroundColor(void)const
 {
   return _backgroundColor;
 }
 
 //------------------------------------------------------------------------------
-QColor GData::shading1Color(void)
+const QColor & GData::shading1Color(void)const
 {
   return _shading1Color;
 }
 
 //------------------------------------------------------------------------------
-QColor GData::shading2Color(void)
+const QColor & GData::shading2Color(void)const
 {
   return _shading2Color;
 }
 
 //------------------------------------------------------------------------------
-double GData::dBFloor(void)
+const double & GData::dBFloor(void)const
 {
   return _dBFloor;
 }
@@ -433,31 +433,31 @@ double & GData::rmsCeiling(void)
 }
 
 //------------------------------------------------------------------------------
-int GData::musicKey(void)
+int GData::musicKey(void)const
 {
   return gMusicKey;
 }
 
 //------------------------------------------------------------------------------
-int GData::musicKeyType(void)
+int GData::musicKeyType(void)const
 {
   return _musicKeyType;
 }
 
 //------------------------------------------------------------------------------
-int GData::temperedType(void)
+int GData::temperedType(void)const
 {
   return _temperedType;
 }
 
 //------------------------------------------------------------------------------
-double GData::freqA(void)
+const double & GData::freqA(void)const
 {
   return _freqA;
 }
 
 //------------------------------------------------------------------------------
-double GData::semitoneOffset(void)
+const double & GData::semitoneOffset(void)const
 {
   return _semitoneOffset;
 }
