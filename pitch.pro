@@ -110,6 +110,7 @@ HEADERS += main.h \
   widgets/wave/waveview.h \
   widgets/wave/wavewidget.h \
   global/gdata.h \
+  global/gdata.hpp \
   sound/filters/Filter.h \
   sound/filters/IIR_Filter.h \
   sound/filters/FixedAveragingFilter.h \
@@ -120,6 +121,7 @@ HEADERS += main.h \
   sound/channel.h \
   sound/soundfile.h \
   global/view.h \
+  global/view.hpp \
   include/myqmutex.h \
   general/mytransforms.h \
   widgets/timeaxis.h \

@@ -4,6 +4,8 @@
     begin                : Mon Jul 26 2004
     copyright            : (C) 2004 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -42,8 +44,8 @@ private:
   bool _autoFollow; /**< Whether the view should autofollow or not */
   bool _backgroundShading;
 
-  void setLogZoomX(double x) { _logZoomX = x; _zoomX = 1.0 / exp(_logZoomX); }
-  void setLogZoomY(double y) { _logZoomY = bound(y, 0.6, 6.0); _zoomY = 1.0 / exp(_logZoomY); }
+  inline void setLogZoomX(double x);
+  inline void setLogZoomY(double y);
 
   QTimer *fastUpdateTimer;
   QTimer *slowUpdateTimer;
@@ -54,54 +56,56 @@ public:
   View();
   virtual ~View();
 
-  void init(); //plase call this after a window has been created
+  void init(); //please call this after a window has been created
 
 
 
   // Relates to the views
 
   /** Returns the current time in seconds */
-  const double & currentTime(void)const { return _currentTime; }
+  inline const double & currentTime(void)const;
 
   /** Returns how long the view is in seconds */
-  double viewWidth() { return double(_pixelWidth) * _zoomX; }
+  inline double viewWidth(void);
 
   /** Returns how many semitones fit in the view */
-  double viewHeight() { return double(_pixelHeight) / exp(_logZoomY); }
+  inline double viewHeight(void);
 
   /** Returns how many seconds are visible before the current time */
-  double viewOffset() { return _viewOffset; }
+  inline double viewOffset(void);
 
   /** Allows you to specify how many seconds should be visible before the current time */
   void setViewOffset(double x);
 
   /** Returns the lowest note visible in the view */
-  double viewBottom() { return _viewBottom; }
+  inline double viewBottom(void);
 
   /** Allows you to specify the lowest note that should be visible in the view */
   void setViewBottomRaw(double y);
   void setViewBottom(double y);
 
-  double viewLeft() { return currentTime() - viewOffset(); } /**< Returns the time at the left edge of the view */
-  double viewRight() { return viewLeft() + viewWidth(); } /**< Returns the time at the right edge of the view */
-  double viewTotalTime() { return viewWidth(); } /**< Returns how long the view is in seconds */
-  double viewTop() { return viewBottom() + viewHeight(); } /**< Returns how many semitones are visible in the view*/
-  /** Returns the screen pixel for the time t will be drawn */
-  int screenPixelX(double t) { return toInt((t - viewLeft()) / zoomX()); }
+  inline double viewLeft(void); /**< Returns the time at the left edge of the view */
+  inline double viewRight(void); /**< Returns the time at the right edge of the view */
+  inline double viewTotalTime(void); /**< Returns how long the view is in seconds */
+  inline double viewTop(void); /**< Returns how many semitones are visible in the view*/
+  /**
+     Returns the screen pixel for the time t will be drawn
+  */
+  inline int screenPixelX(double t);
   
   // Relates to where the files start/stop
   
   /** Returns the x zoom factor in seconds per pixel */
-  double zoomX() { return _zoomX; }
+  inline double zoomX(void);
   /** Returns the y zoom factor in semitones per pixel */
-  double zoomY() { return _zoomY; }
+  inline double zoomY(void);
   
-  double logZoomX() { return _logZoomX; }
-  double logZoomY() { return _logZoomY; }
+  inline double logZoomX(void);
+  inline double logZoomY(void);
 
   void setPixelHeight(int h);
   void setPixelWidth(int w);
-  void setLogZoomYRaw(double y) { setLogZoomY(y); }
+  inline void setLogZoomYRaw(double y);
     
 public slots:
   void doUpdate();
@@ -141,5 +145,7 @@ signals:
   void logZoomXChanged(double x);
   void logZoomYChanged(double x);
 };
+
+#include "view.hpp"
 
 #endif
