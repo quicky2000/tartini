@@ -28,9 +28,7 @@ class View : public QObject
 
 private:
   double _currentTime; /**< in seconds */
-  //double _viewWidth; /**< the total time visible in the view (in seconds) */
   double _viewBottom; /**< the lowest note visible */
-  //double _viewHeight; /**< the height visible in the view (in semitones) */
   double _viewOffset; /**< the amount of time visible before the current time (in seconds) */
 
   double _logZoomX; /**< the log of the number of pixels per second */
@@ -66,19 +64,10 @@ public:
   const double & currentTime(void)const { return _currentTime; }
 
   /** Returns how long the view is in seconds */
-  //double viewWidth() { return _viewWidth; }
-  //double viewWidth() { return double(_pixelWidth) / exp(_logZoomX); }
   double viewWidth() { return double(_pixelWidth) * _zoomX; }
 
-  /** Allows you to specify how many seconds wide the view should be */
-  //void setViewWidth(double w);
-
   /** Returns how many semitones fit in the view */
-  //double viewHeight() { return _viewHeight; }
   double viewHeight() { return double(_pixelHeight) / exp(_logZoomY); }
-
-  /** Allows you to specify how many semitones should fit in the view */
-  //void setViewHeight(double h);
 
   /** Returns how many seconds are visible before the current time */
   double viewOffset() { return _viewOffset; }
@@ -95,7 +84,6 @@ public:
 
   double viewLeft() { return currentTime() - viewOffset(); } /**< Returns the time at the left edge of the view */
   double viewRight() { return viewLeft() + viewWidth(); } /**< Returns the time at the right edge of the view */
-  //double viewTotalTime() { return viewRight() - viewLeft(); } /**< Returns how long the view is in seconds */
   double viewTotalTime() { return viewWidth(); } /**< Returns how long the view is in seconds */
   double viewTop() { return viewBottom() + viewHeight(); } /**< Returns how many semitones are visible in the view*/
   /** Returns the screen pixel for the time t will be drawn */
@@ -104,10 +92,8 @@ public:
   // Relates to where the files start/stop
   
   /** Returns the x zoom factor in seconds per pixel */
-  //double zoomX() { return 1.0 / exp(_logZoomX); }
   double zoomX() { return _zoomX; }
   /** Returns the y zoom factor in semitones per pixel */
-  //double zoomY() { return 1.0 / exp(_logZoomY); }
   double zoomY() { return _zoomY; }
   
   double logZoomX() { return _logZoomX; }
@@ -126,13 +112,8 @@ public slots:
   void nextSlowUpdate();
   void setCurrentTimeRaw(double x);
   void setCurrentTime(double x);
-  //void changeViewX(int x);
   void changeViewX(double x);
   void changeViewY(double y);
-  //void viewZoomInX();
-  //void viewZoomOutX();
-  //void viewZoomInY();
-  //void viewZoomOutY();
   void setZoomFactorX(double x);
   void setZoomFactorX(double x, int fixedX);
   void setZoomFactorY(double y);
@@ -145,13 +126,10 @@ public slots:
   bool backgroundShading() { return _backgroundShading; }
   
 signals:
-  //void onSlowUpdate();
   void onSlowUpdate(double currentTime_);
-  //void onFastUpdate();
   void onFastUpdate(double currentTime_);
   void viewChanged();
   void scrollableYChanged(double x);
-  //void currentTimeChanged(int x);
   void currentTimeChanged(double x);
   void viewBottomChanged(double x);
   void viewWidthChanged(double x);
