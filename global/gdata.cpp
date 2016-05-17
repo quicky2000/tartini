@@ -4,6 +4,8 @@
     begin                : 2003
     copyright            : (C) 2003-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,18 +50,60 @@ struct itimerval profiler_value;
 struct itimerval profiler_ovalue;
 #endif
 
-int frame_window_sizes[NUM_WIN_SIZES] = { 512, 1024, 2048, 4096, 8192 };
-const char *frame_window_strings[NUM_WIN_SIZES] = { "512", "1024", "2048", "4096", "8192" };
+int frame_window_sizes[NUM_WIN_SIZES] =
+  {
+    512,
+    1024,
+    2048,
+    4096,
+    8192
+  };
 
-float step_sizes[NUM_STEP_SIZES] = { 1.0f, 0.5f, 0.25f, 0.2f, 0.1f, 0.05f };
-const char *step_size_strings[NUM_STEP_SIZES] = { "100%", "50%", "25%", "20%", "10%", "5%" };
+const char *frame_window_strings[NUM_WIN_SIZES] =
+  {
+    "512",
+    "1024",
+    "2048",
+    "4096",
+    "8192"
+  };
 
-const char *pitch_method_strings[NUM_PITCH_METHODS] = { "FFT interpolation", "Fast-correlation",  "Correlation (squared error) 1", "Correlation (squared error) 2", "Correlation (abs error) 1", "Correlation (abs error) 2", "Correlation (multiplied) 1", "Correlation (multiplied) 2" };
+float step_sizes[NUM_STEP_SIZES] =
+  {
+    1.0f,
+    0.5f,
+    0.25f,
+    0.2f,
+    0.1f,
+    0.05f
+  };
+
+const char *step_size_strings[NUM_STEP_SIZES] =
+  { "100%",
+    "50%",
+    "25%",
+    "20%",
+    "10%",
+    "5%"
+  };
+
+const char *pitch_method_strings[NUM_PITCH_METHODS] =
+  {
+    "FFT interpolation",
+    "Fast-correlation",
+    "Correlation (squared error) 1",
+    "Correlation (squared error) 2",
+    "Correlation (abs error) 1",
+    "Correlation (abs error) 2",
+    "Correlation (multiplied) 1",
+    "Correlation (multiplied) 2"
+  };
 
 GData *gdata = NULL;
 
 //Define the Phase function. This one is applicable to 
 //accelerating sources since the phase goes as x^2.
+//------------------------------------------------------------------------------
 float phase_function(float x)
 {
   float phase;
@@ -69,6 +113,7 @@ float phase_function(float x)
   return(phase);
 }
 
+//------------------------------------------------------------------------------
 GData::GData(/*int buffer_size_, int winfunc_, float step_size_*/)
 {
   _polish = true;
@@ -127,7 +172,8 @@ GData::GData(/*int buffer_size_, int winfunc_, float step_size_*/)
   initMusicStuff();
 }
 
-GData::~GData()
+//------------------------------------------------------------------------------
+GData::~GData(void)
 {
   audioThread.stopAndWait();
 
@@ -153,12 +199,14 @@ GData::~GData()
   delete _drawingBuffer;
 }
 
-SoundFile* GData::getActiveSoundFile()
+//------------------------------------------------------------------------------
+SoundFile* GData::getActiveSoundFile(void)
 {
   return (activeChannel) ? activeChannel->getParent() : NULL;
 }
 
-void GData::pauseSound()
+//------------------------------------------------------------------------------
+void GData::pauseSound(void)
 {
     if(running == STREAM_FORWARD) running = STREAM_PAUSE;
     else if(running == STREAM_PAUSE) running = STREAM_FORWARD;
@@ -240,7 +288,8 @@ bool GData::playSound(SoundFile *s)
   return true;
 }
 
-void GData::updateViewLeftRightTimes()
+//------------------------------------------------------------------------------
+void GData::updateViewLeftRightTimes(void)
 {
   double left = 0.0; //in seconds
   double right = 0.0; //in seconds
@@ -254,6 +303,7 @@ void GData::updateViewLeftRightTimes()
   setRightTime(right); //in seconds
 }
 
+//------------------------------------------------------------------------------
 void GData::setActiveChannel(Channel *toActive)
 {
   activeChannel = toActive;
@@ -263,6 +313,7 @@ void GData::setActiveChannel(Channel *toActive)
   view->doUpdate();
 }
 
+//------------------------------------------------------------------------------
 void GData::updateActiveChunkTime(double t)
 {
   if((running != STREAM_STOP) && (soundMode & SOUND_REC)) return;
@@ -281,6 +332,7 @@ void GData::updateActiveChunkTime(double t)
   doChunkUpdate();
 }
 
+//------------------------------------------------------------------------------
 void GData::setLeftTime(double x)
 {
   if(x != _leftTime) {
@@ -290,6 +342,7 @@ void GData::setLeftTime(double x)
   }
 }
 
+//------------------------------------------------------------------------------
 void GData::setRightTime(double x)
 {
   if(x != _rightTime) {
@@ -299,6 +352,7 @@ void GData::setRightTime(double x)
   }
 }
 
+//------------------------------------------------------------------------------
 void GData::setTopPitch(double y)
 {
   if(y != _topPitch) {
@@ -306,16 +360,16 @@ void GData::setTopPitch(double y)
   }
 }
 
-
-
-void GData::beginning()
+//------------------------------------------------------------------------------
+void GData::beginning(void)
 {
   updateActiveChunkTime(leftTime());
   view->doSlowUpdate();
 }
 
 
-void GData::rewind()
+//------------------------------------------------------------------------------
+void GData::rewind(void)
 {
   double speed = 16;
   double diffTime = view->zoomX() * speed;
@@ -325,17 +379,20 @@ void GData::rewind()
   view->doSlowUpdate();
 }
 
-bool GData::play()
+//------------------------------------------------------------------------------
+bool GData::play(void)
 {
   return playSound(getActiveSoundFile());
 }
 
-void GData::stop()
+//------------------------------------------------------------------------------
+void GData::stop(void)
 {
   audioThread.stopAndWait();
 }
 
-void GData::fastforward()
+//------------------------------------------------------------------------------
+void GData::fastforward(void)
 {
   double speed = 16;
   double diffTime = view->zoomX() * speed;
@@ -345,12 +402,14 @@ void GData::fastforward()
   view->doSlowUpdate();
 }
   
-void GData::end()
+//------------------------------------------------------------------------------
+void GData::end(void)
 {
   updateActiveChunkTime(rightTime());
   view->doSlowUpdate();
 }
 
+//------------------------------------------------------------------------------
 int GData::getAnalysisBufferSize(int rate)
 {  
   int windowSize = qsettings->value("Analysis/bufferSizeValue", 48).toInt();
@@ -364,6 +423,7 @@ int GData::getAnalysisBufferSize(int rate)
   return windowSize;
 }
 
+//------------------------------------------------------------------------------
 int GData::getAnalysisStepSize(int rate)
 {  
   int stepSize = qsettings->value("Analysis/stepSizeValue", 24).toInt();
@@ -377,7 +437,8 @@ int GData::getAnalysisStepSize(int rate)
   return stepSize;
 }
 
-void GData::updateQuickRefSettings()
+//------------------------------------------------------------------------------
+void GData::updateQuickRefSettings(void)
 {
   _backgroundColor.setNamedColor(qsettings->value("Display/theBackgroundColor", "#BBCDE2").toString());
   _shading1Color.setNamedColor(qsettings->value("Display/shading1Color", "#BBCDEF").toString());
@@ -403,7 +464,8 @@ void GData::updateQuickRefSettings()
   setFreqA(qsettings->value("View/freqA", 440).toInt());
 }
 
-QString GData::getFilenameString()
+//------------------------------------------------------------------------------
+QString GData::getFilenameString(void)
 {
   QString fileGeneratingString = qsettings->value("General/filenameGeneratingString", "Untitled").toString();
   QString filename;
@@ -417,11 +479,13 @@ QString GData::getFilenameString()
   return filename;
 }
 
-QColor GData::getNextColor()
+//------------------------------------------------------------------------------
+QColor GData::getNextColor(void)
 {
   return lineColor.at((nextColorIndex++) % lineColor.size());
 }
 
+//------------------------------------------------------------------------------
 void GData::addFileToList(SoundFile *s)
 {
   int c;
@@ -432,6 +496,7 @@ void GData::addFileToList(SoundFile *s)
   emit channelsChanged();
 }
 
+//------------------------------------------------------------------------------
 void GData::removeFileFromList(SoundFile *s)
 {
   int j;
@@ -459,7 +524,8 @@ void GData::removeFileFromList(SoundFile *s)
   emit channelsChanged();
 }
 
-void GData::saveActiveFile() {
+//------------------------------------------------------------------------------
+void GData::saveActiveFile(void) {
   SoundFile *s = getActiveSoundFile();
   if(!s) return;
   if(s->saved()) return;
@@ -474,6 +540,7 @@ void GData::saveActiveFile() {
   }
 }
 
+//------------------------------------------------------------------------------
 QString GData::saveFileAsk(QString oldFilename)
 {
   QString newFilename = SaveDialog::getSaveWavFileName(mainWindow);
@@ -516,14 +583,15 @@ int GData::saveFile(SoundFile *s, QString newFilename)
 /**
   @return true if all the files were closed. false if cancelled
 */
-bool GData::closeAllFiles() {
+bool GData::closeAllFiles(void) {
   while(!soundFiles.empty()) {
     if(closeFile(soundFiles.at(0), gdata->savingMode()) == 1) return false; //cancelled
   }
   return true;
 }
 
-void GData::closeActiveFile() {
+//------------------------------------------------------------------------------
+void GData::closeActiveFile(void) {
   SoundFile *s = getActiveSoundFile();
   if(!s) return;
   closeFile(s, gdata->savingMode());
@@ -583,13 +651,15 @@ int GData::closeFile(SoundFile *s, int theSavingMode/*, bool ask*/)
   return 0;
 }
 
-void GData::clearFreqLookup()
+//------------------------------------------------------------------------------
+void GData::clearFreqLookup(void)
 {
   for(std::vector<Channel*>::iterator it1=channels.begin(); it1 != channels.end(); it1++) {
     (*it1)->clearFreqLookup();
   }
 }
 
+//------------------------------------------------------------------------------
 void GData::setAmplitudeMode(int amplitudeMode)
 {
   if(amplitudeMode != _amplitudeMode) {
@@ -598,6 +668,7 @@ void GData::setAmplitudeMode(int amplitudeMode)
   }
 }
 
+//------------------------------------------------------------------------------
 void GData::setPitchContourMode(int pitchContourMode)
 {
   if(pitchContourMode != _pitchContourMode) {
@@ -606,26 +677,30 @@ void GData::setPitchContourMode(int pitchContourMode)
   }
 }
 
-void GData::clearAmplitudeLookup()
+//------------------------------------------------------------------------------
+void GData::clearAmplitudeLookup(void)
 {
   for(std::vector<Channel*>::iterator it1=channels.begin(); it1 != channels.end(); it1++) {
     (*it1)->clearAmplitudeLookup();
   }
 }
   
-int GData::getActiveIntThreshold()
+//------------------------------------------------------------------------------
+int GData::getActiveIntThreshold(void)
 {
   Channel* active = getActiveChannel();
   if(active) return toInt(active->threshold() * 100.0f);
   else return qsettings->value("Analysis/thresholdValue", 93).toInt();
 }
 
+//------------------------------------------------------------------------------
 void GData::resetActiveIntThreshold(int thresholdPercentage)
 {
   Channel* active = getActiveChannel();
   if(active) active->resetIntThreshold(thresholdPercentage);
 }
 
+//------------------------------------------------------------------------------
 void GData::setAmpThreshold(int mode, int index, double value)
 {
   amp_thresholds[mode][index] = value;
@@ -633,11 +708,13 @@ void GData::setAmpThreshold(int mode, int index, double value)
   recalcScoreThresholds();
 }
 
+//------------------------------------------------------------------------------
 double GData::ampThreshold(int mode, int index)
 {
   return amp_thresholds[mode][index];
 }
 
+//------------------------------------------------------------------------------
 void GData::setAmpWeight(int mode, double value)
 {
   amp_weights[mode] = value;
@@ -645,23 +722,27 @@ void GData::setAmpWeight(int mode, double value)
   recalcScoreThresholds();
 }
 
+//------------------------------------------------------------------------------
 double GData::ampWeight(int mode)
 {
   return amp_weights[mode];
 }
 
-void GData::recalcScoreThresholds()
+//------------------------------------------------------------------------------
+void GData::recalcScoreThresholds(void)
 {
   for(std::vector<Channel*>::iterator it1=channels.begin(); it1 != channels.end(); it1++) {
     (*it1)->recalcScoreThresholds();
   }
 }
 
+//------------------------------------------------------------------------------
 void GData::doChunkUpdate()
 {
   emit onChunkUpdate();
 }
 
+//------------------------------------------------------------------------------
 void GData::setTemperedType(int type)
 {
   if(_temperedType != type) {
@@ -679,9 +760,12 @@ void GData::setTemperedType(int type)
   }
 }
 
+//------------------------------------------------------------------------------
 void GData::setFreqA(double x)
 {
 	_freqA = x;
 	_semitoneOffset = freq2pitch(x) - freq2pitch(440.0);
 	qsettings->setValue("View/freqA", x);
 }
+
+//EOF
