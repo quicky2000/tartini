@@ -43,16 +43,8 @@ AmplitudeWidget::AmplitudeWidget(QWidget * /*parent*/, const char* /*name*/)
   
   dragMode = DragNone;
   
-  //QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding, false);
-  //setSizePolicy(sizePolicy);
-  
-  //setFocusPolicy(QWidget::StrongFocus);
-  //setDBRange(120.0);
   setRange(0.8);
   setOffset(0.0);
-  //lineWidth = 2;
-  //lineTopHalfWidth = lineWidth/2 + (lineWidth % 2);
-  //lineBottomHalfWidth = lineWidth/2;
   setAttribute(Qt::WA_OpaquePaintEvent);
 }
 
@@ -63,8 +55,6 @@ void AmplitudeWidget::initializeGL()
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glEnableClientState(GL_VERTEX_ARRAY);
-  //glEnableClientState(GL_COLOR_ARRAY);
-  //setLineWidth(1.0f);
 }
 
 void AmplitudeWidget::resizeGL(int w, int h)
@@ -88,16 +78,13 @@ void AmplitudeWidget::setRange(double newRange)
 void AmplitudeWidget::setOffset(double newOffset)
 {
   newOffset = bound(newOffset, 0.0, maxOffset());
-  //if(_offset != newOffset) {
     _offset = newOffset;
     _offsetInv = maxOffset() - _offset;
     emit offsetChanged(_offset);
     emit offsetInvChanged(offsetInv());
-  //}
 }
 
 void AmplitudeWidget::paintGL()
-//void AmplitudeWidget::paintEvent(QPaintEvent *)
 {
   glClear(GL_COLOR_BUFFER_BIT);
 
@@ -122,7 +109,6 @@ void AmplitudeWidget::paintGL()
   for (uint i = 0; i < gdata->getChannelsSize(); i++) {
     Channel *ch = gdata->getChannelAt(i);
     if(!ch->isVisible()) continue;
-    //drawChannel(ch, p, view.viewLeft(), view.currentTime(), view.zoomX(), view.viewBottom(), view.zoomY(), DRAW_VIEW_NORMAL);
     drawChannelAmplitudeGL(ch);
   }
 
@@ -254,7 +240,6 @@ void AmplitudeWidget::drawChannelAmplitudeGL(Channel *ch)
   int baseElement = int(floor(leftFrameTime / baseX));
   if(baseElement < 0) { n -= baseElement; baseElement = 0; }
   int lastBaseElement = int(floor(double(ch->totalChunks()) / baseX));
-  //double heightRatio = double(height()) / dBRange();
   double heightRatio = double(height()) / range();
   
   //Q3PointArray pointArray(width()*2);
@@ -263,24 +248,18 @@ void AmplitudeWidget::drawChannelAmplitudeGL(Channel *ch)
 
   if (baseX > 1) { // More samples than pixels
     int theWidth = width();
-    //if(baseElement + theWidth > z->size()) z->setSize(baseElement + theWidth);
     if(lastBaseElement > z->size()) z->setSize(lastBaseElement);
     for(; n < theWidth && baseElement < lastBaseElement; n++, baseElement++) {
       myassert(baseElement >= 0);
       ZoomElement &ze = z->at(baseElement);
-      //if(!z->hasValue(baseElement)) {
       if(!ze.isValid()) {
         if(!calcZoomElement(ze, ch, baseElement, baseX)) continue;
       }
       
-      //pointArray.setPoint(pointIndex++, n, height() - 1 - toInt((ze.high() - offsetInv()) * heightRatio) - lineTopHalfWidth);
-      //pointArray.setPoint(pointIndex++, n, height() - 1 - toInt((ze.low() - offsetInv()) * heightRatio) + lineBottomHalfWidth);
       vertexArray[pointIndex++] = MyGLfloat2d(n, height() - 1 - ((ze.high() - offsetInv()) * heightRatio) - halfLineWidth);
       vertexArray[pointIndex++] = MyGLfloat2d(n, height() - 1 - ((ze.low() - offsetInv()) * heightRatio) + halfLineWidth);
     }
     myassert(pointIndex <= width()*2);
-    //p.setPen(ch->color);
-    //p.drawLineSegments(pointArray, 0, pointIndex/2);
     qglColor(ch->color);
     glLineWidth(1.0f);
     glVertexPointer(2, GL_FLOAT, 0, vertexArray.begin());
@@ -291,11 +270,8 @@ void AmplitudeWidget::drawChannelAmplitudeGL(Channel *ch)
     double stepSize = 1.0 / baseX; // So we skip some pixels
     float x = 0.0f, y;
 
-    //double start = 0 - stepSize;
     double start = (double(intChunk) - leftFrameTime) * stepSize;
     double stop = width() + (2 * stepSize);
-    //int squareSize = (int(sqrt(stepSize)) / 2) * 2 + 1; //make it an odd number
-    //int halfSquareSize = squareSize/2;
 
     double dn = start;
     int totalChunks = ch->totalChunks();
@@ -308,16 +284,11 @@ void AmplitudeWidget::drawChannelAmplitudeGL(Channel *ch)
 
       val = calculateElement(data);
 
-      //p.setPen(QPen(colorBetween(colorGroup().background(), ch->color, val), 1));
-
       x = dn;
       y = height() - 1 - ((val - offsetInv()) * heightRatio);
-      //pointArray.setPoint(pointIndex++, x, y);
       vertexArray[pointIndex++] = MyGLfloat2d(x, y);
     }
     myassert(pointIndex <= width()*2);
-    //p.setPen(QPen(ch->color, lineWidth));
-    //p.drawPolyline(pointArray, 0, pointIndex);
     qglColor(ch->color);
     glLineWidth(3.0f);
     glVertexPointer(2, GL_FLOAT, 0, vertexArray.begin());
@@ -325,7 +296,6 @@ void AmplitudeWidget::drawChannelAmplitudeGL(Channel *ch)
   }
 }
 
-//void AmplitudeWidget::drawChannelAmplitudeFilled(Channel *ch, QPainter &p)
 void AmplitudeWidget::drawChannelAmplitudeFilledGL(Channel *ch)
 {
   View & view = gdata->getView();
@@ -344,41 +314,25 @@ void AmplitudeWidget::drawChannelAmplitudeFilledGL(Channel *ch)
   int baseElement = int(floor(leftFrameTime / baseX));
   if(baseElement < 0) { n -= baseElement; baseElement = 0; }
   int lastBaseElement = int(floor(double(ch->totalChunks()) / baseX));
-  //double heightRatio = double(height()) / dBRange();
   double heightRatio = double(height()) / range();
   
-  //int firstN = n;
-  //int lastN = firstN;
-  
-  //Q3PointArray bottomPoints(width()*2);
   Array1d<MyGLfloat2d> vertexArray(width()*2);
   int pointIndex = 0;
-  //int topBottomPointIndex = 0;
 
   if (baseX > 1) { // More samples than pixels
     int theWidth = width();
-    //if(baseElement + theWidth > z->size()) z->setSize(baseElement + theWidth);
     if(lastBaseElement > z->size()) z->setSize(lastBaseElement);
     for(; n < theWidth && baseElement < lastBaseElement; n++, baseElement++) {
       myassert(baseElement >= 0);
       ZoomElement &ze = z->at(baseElement);
-      //if(!z->hasValue(baseElement)) {
       if(!ze.isValid()) {
         if(!calcZoomElement(ze, ch, baseElement, baseX)) continue;
       }
       
       int y = height() - 1 - toInt((ze.high() - offsetInv()) * heightRatio);
-      //bottomPoints.setPoint(topBottomPointIndex++, n, y);
-      //bottomPoints.setPoint(topBottomPointIndex++, n, height());
       vertexArray[pointIndex++] = MyGLfloat2d(n, y);
       vertexArray[pointIndex++] = MyGLfloat2d(n, height());
-      //lastN = n;
     }
-    //p.setPen(Qt::NoPen);
-    //p.setBrush(gdata->shading1Color());
-    //p.drawRect(firstN, 0, lastN, height());
-    //p.setPen(gdata->shading2Color());
-    //p.drawLineSegments(bottomPoints, 0, topBottomPointIndex/2);
     qglColor(gdata->shading2Color());
     glVertexPointer(2, GL_FLOAT, 0, vertexArray.begin());
     glDrawArrays(GL_QUAD_STRIP, 0, pointIndex);
@@ -388,19 +342,13 @@ void AmplitudeWidget::drawChannelAmplitudeFilledGL(Channel *ch)
     double stepSize = 1.0 / baseX; // So we skip some pixels
     float x = 0.0f, y;
 
-    //double start = 0 - stepSize;
     double start = (double(intChunk) - leftFrameTime) * stepSize;
     double stop = width() + (2 * stepSize);
-    //int squareSize = (int(sqrt(stepSize)) / 2) * 2 + 1; //make it an odd number
-    //int halfSquareSize = squareSize/2;
 
     double dn = start;
     int totalChunks = ch->totalChunks();
     if(intChunk < 0) { dn += stepSize * -intChunk; intChunk = 0; }
-    //bottomPoints.setPoint(topBottomPointIndex++, toInt(dn), height());
-    //vertexArray[pointIndex++] = MyGLfloat2d((GLfloat)dn, height());
     
-    //firstN = toInt(dn);
     for(; dn < stop && intChunk < totalChunks; dn += stepSize, intChunk++) {
       AnalysisData *data = ch->dataAtChunk(intChunk);
       myassert(data);
@@ -409,27 +357,12 @@ void AmplitudeWidget::drawChannelAmplitudeFilledGL(Channel *ch)
 
       val = calculateElement(data);
 
-      //p.setPen(QPen(colorBetween(colorGroup().background(), ch->color, val), 1));
-
       x = dn;
       y = height() - 1 - ((val - offsetInv()) * heightRatio);
-      //bottomPoints.setPoint(topBottomPointIndex++, x, y);
       vertexArray[pointIndex++] = MyGLfloat2d(x, y);
       vertexArray[pointIndex++] = MyGLfloat2d(x, height());
-      //lastN = x;
     }
-    //bottomPoints.setPoint(topBottomPointIndex, bottomPoints.point(topBottomPointIndex-1).x(), height());
-    //if(pointIndex > 0) {
-    //  vertexArray[pointIndex] = MyGLfloat2d(vertexArray[pointIndex-1].x, height());
-    //  pointIndex++;
-    //}
     myassert(pointIndex <= width()*2);
-    //p.setPen(Qt::NoPen);
-    //p.setBrush(gdata->shading1Color());
-    //p.drawRect(firstN, 0, lastN, height());
-    //p.setPen(gdata->shading2Color());
-    //p.setBrush(gdata->shading2Color());
-    //p.drawPolygon(bottomPoints, false, 0, topBottomPointIndex);
     qglColor(gdata->shading2Color());
     glVertexPointer(2, GL_FLOAT, 0, vertexArray.begin());
     glDrawArrays(GL_QUAD_STRIP, 0, pointIndex);
@@ -440,7 +373,6 @@ void AmplitudeWidget::mousePressEvent(QMouseEvent *e)
 {
   View & view = gdata->getView();
   int timeX = toInt(view.viewOffset() / view.zoomX());
-  //int pixelAtCurrentNoiseThresholdY = toInt(gdata->noiseThresholdDB() / gdata->dBFloor() / range() * double(height()));
   int pixelAtCurrentNoiseThresholdY;
   dragMode = DragNone;
   
@@ -474,8 +406,6 @@ void AmplitudeWidget::mouseMoveEvent(QMouseEvent *e)
 {
   View & view = gdata->getView();
   int pixelAtCurrentTimeX = toInt(view.viewOffset() / view.zoomX());
-  //int pixelAtCurrentNoiseThresholdY = -toInt(gdata->noiseThresholdDB() / dBRange() * double(height()));
-  //int pixelAtCurrentNoiseThresholdY = toInt(gdata->noiseThresholdDB() / gdata->dBFloor() / range() * double(height()));
   int pixelAtCurrentNoiseThresholdY;
   
   switch(dragMode) {
@@ -489,20 +419,13 @@ void AmplitudeWidget::mouseMoveEvent(QMouseEvent *e)
     break;
   case DragNoiseThreshold:
     {
-      //int newY = pixelAtCurrentNoiseThreshold + (e->y() - mouseY);
       int newY = e->y();  
-      /*if(gdata->amplitudeMode() == FREQ_CHANGENESS) {
-        gdata->setChangenessThreshold(double(newY) / double(height()));
-      } else {
-        gdata->setNoiseThresholdDB(double(newY) / double(height()) * gdata->dBFloor() * range());
-      }*/
       setCurrentThreshold(double(height() - 1 - newY) / double(height()) * range() + offsetInv(), thresholdIndex);
       mouseY = e->y();
       gdata->getView().doSlowUpdate();
     }
     break;
   case DragBackground:
-    //view.setViewBottom(downNote - (mouseY - e->y()) * view.zoomY());
     gdata->updateActiveChunkTime(downTime - (e->x() - mouseX) * view.zoomX());
     setOffset(downOffset - (double(e->y() - mouseY) / double(height()) * range()));
     view.doSlowUpdate();
@@ -531,7 +454,6 @@ void AmplitudeWidget::wheelEvent(QWheelEvent * e)
 {
   View & view = gdata->getView();
     if (!(e->state() & (Qt::ControlModifier | Qt::ShiftModifier))) {
-      //view.setViewBottom(view.viewBottom() + double(e->delta()/WHEEL_DELTA) * view.viewHeight() * 0.1);
       if(gdata->getRunning() == STREAM_FORWARD) {
         view.setZoomFactorX(view.logZoomX() + double(e->delta()/WHEEL_DELTA)*0.3);
       } else {
@@ -546,3 +468,4 @@ void AmplitudeWidget::wheelEvent(QWheelEvent * e)
 
     e->accept();
 }
+// EOF
