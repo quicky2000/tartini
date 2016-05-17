@@ -91,7 +91,7 @@ class GData : public QObject
 public:
   enum SavingModes { ALWAYS_ASK, NEVER_SAVE, ALWAYS_SAVE };
 
-  GData(/*int buffer_size_, int winfunc_, float step_size_*/);
+  GData(void);
   virtual ~GData(void);
 
   inline bool settingsContains(const QString & p_key)const;

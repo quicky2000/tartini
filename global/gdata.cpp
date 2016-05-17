@@ -113,22 +113,65 @@ float phase_function(float x)
 }
 
 //------------------------------------------------------------------------------
-GData::GData(void)
+GData::GData(void):
+  qsettings(NULL),
+  soundMode(SOUND_PLAY),
+  audio_stream(NULL),
+  need_update(false),
+  running(STREAM_STOP),
+  nextColorIndex(0),
+  view(NULL),
+  activeChannel(NULL),
+  _doingHarmonicAnalysis(false),
+  _doingFreqAnalysis(false),
+  _doingEqualLoudness(false),
+  _doingAutoNoiseFloor(false),
+  _doingActiveAnalysis(false),
+  _doingActiveFFT(false),
+  _doingActiveCepstrum(false),
+  _fastUpdateSpeed(0),
+  _slowUpdateSpeed(0),
+  _polish(true),
+  _showMeanVarianceBars(false),
+  _savingMode(0),
+  _vibratoSineStyle(false),
+  _musicKeyType(0), //ALL_NOTES
+  _temperedType(0), //EVEN_TEMPERED
+  _mouseWheelZooms(false),
+  _freqA(440),
+  _semitoneOffset(0.0),
+  _amplitudeMode(0),
+  _pitchContourMode(0),
+  _analysisType(0),
+  _dBFloor(-150.0),
+  _drawingBuffer(new QPixmap(1, 1)),
+  _leftTime(1.0), // Put a dummy value so that setLeftTime will be completely executed
+  _rightTime(0.0),// Put a dummy value so that setRightTime will be completely executed
+  _topPitch(128.0)
 {
-  _polish = true;
-  _drawingBuffer = new QPixmap(1, 1);
-  setDBFloor(-150.0);
-  setTopPitch(128.0);
   setLeftTime(0.0);
   setRightTime(5.0);
 
-  amp_thresholds[AMPLITUDE_RMS][0]           = -85.0; amp_thresholds[AMPLITUDE_RMS][1]           = -0.0;
-  amp_thresholds[AMPLITUDE_MAX_INTENSITY][0] = -30.0; amp_thresholds[AMPLITUDE_MAX_INTENSITY][1] = -20.0;
-  amp_thresholds[AMPLITUDE_CORRELATION][0]   =  0.40; amp_thresholds[AMPLITUDE_CORRELATION][1]   =  1.00;
-  amp_thresholds[FREQ_CHANGENESS][0]         =  0.50; amp_thresholds[FREQ_CHANGENESS][1]         =  0.02;
-  amp_thresholds[DELTA_FREQ_CENTROID][0]     =  0.00; amp_thresholds[DELTA_FREQ_CENTROID][1]     =  0.10;
-  amp_thresholds[NOTE_SCORE][0]              =  0.03; amp_thresholds[NOTE_SCORE][1]              =  0.20;
-  amp_thresholds[NOTE_CHANGE_SCORE][0]       =  0.12; amp_thresholds[NOTE_CHANGE_SCORE][1]       =  0.30;
+  amp_thresholds[AMPLITUDE_RMS][0]           = -85.0;
+  amp_thresholds[AMPLITUDE_RMS][1]           = -0.0;
+
+  amp_thresholds[AMPLITUDE_MAX_INTENSITY][0] = -30.0;
+  amp_thresholds[AMPLITUDE_MAX_INTENSITY][1] = -20.0;
+
+  amp_thresholds[AMPLITUDE_CORRELATION][0]   =  0.40;
+  amp_thresholds[AMPLITUDE_CORRELATION][1]   =  1.00;
+
+  amp_thresholds[FREQ_CHANGENESS][0]         =  0.50;
+  amp_thresholds[FREQ_CHANGENESS][1]         =  0.02;
+
+  amp_thresholds[DELTA_FREQ_CENTROID][0]     =  0.00;
+  amp_thresholds[DELTA_FREQ_CENTROID][1]     =  0.10;
+
+  amp_thresholds[NOTE_SCORE][0]              =  0.03;
+  amp_thresholds[NOTE_SCORE][1]              =  0.20;
+
+  amp_thresholds[NOTE_CHANGE_SCORE][0]       =  0.12;
+  amp_thresholds[NOTE_CHANGE_SCORE][1]       =  0.30;
 
   amp_weights[0] = 0.2;
   amp_weights[1] = 0.2;
@@ -138,23 +181,8 @@ GData::GData(void)
 
   qsettings = new QSettings("cs.otago.ac.nz", TARTINI_NAME_STR);
   TartiniSettingsDialog::setUnknownsToDefault(*this);
-  
-  activeChannel = NULL;
-  _doingActiveAnalysis = 0;
-  _doingActiveFFT = 0;
-  _amplitudeMode = 0;
-  _pitchContourMode = 0;
-  _analysisType = 0;
-  _doingActiveCepstrum = 0;
 
   updateQuickRefSettings();
-  
-  running = STREAM_STOP;
-    
-  audio_stream = NULL;
-  soundMode = SOUND_PLAY;
-
-  need_update = false;
 
   lineColor.push_back(Qt::darkRed);
   lineColor.push_back(Qt::darkGreen);
@@ -164,10 +192,6 @@ GData::GData(void)
   lineColor.push_back(Qt::darkYellow);
   lineColor.push_back(Qt::darkGray);
 
-  nextColorIndex = 0;
-
-  _musicKeyType = 0; //ALL_NOTES
-  _temperedType = 0; //EVEN_TEMPERED
   initMusicStuff();
 }
 
