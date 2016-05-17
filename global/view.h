@@ -29,10 +29,10 @@ class View : public QObject
   Q_OBJECT
 
 public:
-  View();
-  virtual ~View();
+  View(void);
+  virtual ~View(void);
 
-  void init(); //please call this after a window has been created
+  void init(void); //please call this after a window has been created
 
 
 
@@ -71,8 +71,8 @@ public:
   /**
      Allows you to specify the lowest note that should be visible in the view
   */
-  void setViewBottomRaw(double y);
-  void setViewBottom(double y);
+  void setViewBottomRaw(const double & y);
+  void setViewBottom(const double & y);
 
   /**
      Returns the time at the left edge of the view
@@ -119,31 +119,31 @@ public:
   inline void setLogZoomYRaw(double y);
     
 public slots:
-  void doUpdate();
-  void doSlowUpdate();
-  void doFastUpdate();
-  void newUpdate();
-  void nextFastUpdate();
-  void nextSlowUpdate();
+  void doUpdate(void);
+  void doSlowUpdate(void);
+  void doFastUpdate(void);
+  void newUpdate(void);
+  void nextFastUpdate(void);
+  void nextSlowUpdate(void);
   void setCurrentTimeRaw(double x);
   void setCurrentTime(double x);
-  void changeViewX(double x);
-  void changeViewY(double y);
-  void setZoomFactorX(double x);
-  void setZoomFactorX(double x, int fixedX);
-  void setZoomFactorY(double y);
-  void setZoomFactorY(double y, int fixedY);
+  void changeViewX(const double & x);
+  void changeViewY(const double & y);
+  void setZoomFactorX(const double & x);
+  void setZoomFactorX(const double & x, int fixedX);
+  void setZoomFactorY(const double & y);
+  void setZoomFactorY(const double & y, int fixedY);
   
-  void doAutoFollowing();
-  bool autoFollow() { return _autoFollow; }
+  void doAutoFollowing(void);
+  bool autoFollow(void) { return _autoFollow; }
   void setAutoFollow(bool);
   void setBackgroundShading(bool);
-  bool backgroundShading() { return _backgroundShading; }
+  bool backgroundShading(void) { return _backgroundShading; }
   
 signals:
   void onSlowUpdate(double currentTime_);
   void onFastUpdate(double currentTime_);
-  void viewChanged();
+  void viewChanged(void);
   void scrollableYChanged(double x);
   void currentTimeChanged(double x);
   void viewBottomChanged(double x);

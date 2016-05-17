@@ -197,22 +197,22 @@ void View::setViewOffset(double x)
 }
 
 //------------------------------------------------------------------------------
-void View::setViewBottomRaw(double y)
+void View::setViewBottomRaw(const double & y)
 {
   if(y != _viewBottom)
     {
       _viewBottom = y;
-      emit viewBottomChanged(gdata->topPitch()-viewHeight()-y);
+      emit viewBottomChanged(gdata->topPitch() - viewHeight() - y);
     }
 }
 
 //------------------------------------------------------------------------------
-void View::setViewBottom(double y)
+void View::setViewBottom(const double & y)
 {
   if(y != _viewBottom)
     {
       _viewBottom = y;
-      emit viewBottomChanged(gdata->topPitch()-viewHeight()-y);
+      emit viewBottomChanged(gdata->topPitch() - viewHeight() - y);
       emit viewChanged();
     }
 }
@@ -220,14 +220,14 @@ void View::setViewBottom(double y)
 
 // Changes the view without using a step value
 //------------------------------------------------------------------------------
-void View::changeViewX(double x)
+void View::changeViewX(const double & x)
 {
   setCurrentTime(x);
   emit viewChanged();
 }
 
 //------------------------------------------------------------------------------
-void View::changeViewY(double y)
+void View::changeViewY(const double & y)
 {
   setViewBottom(gdata->topPitch() - viewHeight() - y);
   emit viewChanged();
@@ -265,7 +265,7 @@ void View::setPixelWidth(int w)
 }
 
 //------------------------------------------------------------------------------
-void View::setZoomFactorX(double x)
+void View::setZoomFactorX(const double & x)
 {
   if(x != logZoomX())
     {
@@ -279,7 +279,7 @@ void View::setZoomFactorX(double x)
 }
 
 //------------------------------------------------------------------------------
-void View::setZoomFactorX(double x, int fixedX)
+void View::setZoomFactorX(const double & x, int fixedX)
 {
   if(x != logZoomX())
     {
@@ -299,23 +299,23 @@ void View::setZoomFactorX(double x, int fixedX)
 }
 
 //------------------------------------------------------------------------------
-void View::setZoomFactorY(double y)
+void View::setZoomFactorY(const double & y)
 {
   if(y != logZoomY())
     {
-      double prevCenterY = viewBottom() + viewHeight()/2.0;
+      double prevCenterY = viewBottom() + viewHeight() / 2.0;
       setLogZoomY(y);
       emit logZoomYChanged(logZoomY());
       emit scrollableYChanged(bound(gdata->topPitch() - viewHeight(), 0.0, gdata->topPitch()));
       emit viewHeightChanged(viewHeight());
     
-      setViewBottom(prevCenterY - viewHeight()/2.0);
-      emit viewBottomChanged(gdata->topPitch()-viewHeight()-viewBottom());
+      setViewBottom(prevCenterY - viewHeight() / 2.0);
+      emit viewBottomChanged(gdata->topPitch() - viewHeight() - viewBottom());
     }
 }
 
 //------------------------------------------------------------------------------
-void View::setZoomFactorY(double y, int fixedY)
+void View::setZoomFactorY(const double & y, int fixedY)
 {
   if(y != logZoomY())
     {
