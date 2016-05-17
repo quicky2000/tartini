@@ -37,79 +37,79 @@ const double & View::currentTime(void)const
 }
 
 //------------------------------------------------------------------------------
-double View::viewWidth(void)
+double View::viewWidth(void)const
 {
   return double(_pixelWidth) * _zoomX;
 }
 
 //------------------------------------------------------------------------------
-double View::viewHeight(void)
+double View::viewHeight(void)const
 {
   return double(_pixelHeight) / exp(_logZoomY);
 }
 
 //------------------------------------------------------------------------------
-double View::viewOffset(void)
+const double & View::viewOffset(void)const
 {
   return _viewOffset;
 }
 
 //------------------------------------------------------------------------------
-double View::viewBottom(void)
+const double & View::viewBottom(void)const
 {
   return _viewBottom;
 }
 
 //------------------------------------------------------------------------------
-double View::viewLeft(void)
+double View::viewLeft(void)const
 {
   return currentTime() - viewOffset();
 }
 
 //------------------------------------------------------------------------------
-double View::viewRight(void)
+double View::viewRight(void)const
 {
   return viewLeft() + viewWidth();
 }
 
 //------------------------------------------------------------------------------
-double View::viewTotalTime(void)
+double View::viewTotalTime(void)const
 {
   return viewWidth();
 }
 
 //------------------------------------------------------------------------------
-double View::viewTop(void)
+double View::viewTop(void)const
 {
   return viewBottom() + viewHeight();
 }
 
 //------------------------------------------------------------------------------
-int View::screenPixelX(double t)
+int View::screenPixelX(double t)const
 {
   return toInt((t - viewLeft()) / zoomX());
 }
 
 //------------------------------------------------------------------------------
-double View::zoomX(void)
+const double & View::zoomX(void)const
 {
   return _zoomX;
 }
 
 //------------------------------------------------------------------------------
-double View::zoomY(void)
+const double & View::zoomY(void)const
 {
   return _zoomY;
 }
 
 //------------------------------------------------------------------------------
-double View::logZoomX(void)
+const double & View::logZoomX(void)const
 {
   return _logZoomX;
 }
 
 //------------------------------------------------------------------------------
-double View::logZoomY(void)
+const double & View::logZoomY(void)const
 {
   return _logZoomY;
 }
