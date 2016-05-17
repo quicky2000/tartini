@@ -135,10 +135,10 @@ public slots:
   void setZoomFactorY(const double & y, int fixedY);
   
   void doAutoFollowing(void);
-  bool autoFollow(void) { return _autoFollow; }
+  inline bool autoFollow(void)const;
   void setAutoFollow(bool);
   void setBackgroundShading(bool);
-  bool backgroundShading(void) { return _backgroundShading; }
+  inline bool backgroundShading(void)const;
   
 signals:
   void onSlowUpdate(double currentTime_);

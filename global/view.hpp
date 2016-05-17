@@ -120,4 +120,16 @@ void View::setLogZoomYRaw(double y)
   setLogZoomY(y);
 }
 
+//------------------------------------------------------------------------------
+bool View::autoFollow(void)const
+{
+  return _autoFollow;
+}
+
+//------------------------------------------------------------------------------
+bool View::backgroundShading(void)const
+{
+  return _backgroundShading;
+}
+
 //EOF
