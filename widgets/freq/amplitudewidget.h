@@ -17,7 +17,6 @@
 #define AMPLITUDEWIDGET_H
 
 #include <QGLWidget>
-//#include "drawwidget.h"
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QPixmap>
@@ -30,31 +29,32 @@ class Q3PointArray;
 struct ZoomElement;
 class AnalysisData;
 
-//class AmplitudeWidget : public DrawWidget {
-class AmplitudeWidget : public QGLWidget {
+class AmplitudeWidget : public QGLWidget
+{
 
-Q_OBJECT
+  Q_OBJECT
 
-public:
-  enum DragModes {
-    DragNone = 0,
-    DragChannel = 1,
-    DragBackground = 2,
-    DragTimeBar = 3,
-    DragNoiseThreshold = 4
-  };
+    public:
+  enum DragModes
+    {
+      DragNone = 0,
+      DragChannel = 1,
+      DragBackground = 2,
+      DragTimeBar = 3,
+      DragNoiseThreshold = 4
+    };
 
   AmplitudeWidget(QWidget *parent, const char* name = 0);
-  virtual ~AmplitudeWidget();
+  virtual ~AmplitudeWidget(void);
 
   //int offset_x;
 
-  void initializeGL();
+  void initializeGL(void);
   void resizeGL(int w, int h);
-  void paintGL();
+  void paintGL(void);
 
   //void paintEvent( QPaintEvent * );
-  void drawVerticalRefLines();
+  void drawVerticalRefLines(void);
   bool calcZoomElement(ZoomElement &ze, Channel *ch, int baseElement, double baseX);
   double calculateElement(AnalysisData *data);
   double getCurrentThreshold(int index);
@@ -120,3 +120,4 @@ private:
 };
 
 #endif
+//EOF
