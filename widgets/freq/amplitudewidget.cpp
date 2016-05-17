@@ -39,6 +39,7 @@
 //------------------------------------------------------------------------------
 AmplitudeWidget::AmplitudeWidget(QWidget * /*parent*/, const char* /*name*/)
 //  : DrawWidget(parent, name, Qt::WDestructiveClose)
+  :_range(0.0)
 {
   setMouseTracking(true);
   
