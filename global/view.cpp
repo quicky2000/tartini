@@ -23,32 +23,32 @@
 #include "conversions.h"
 
 //------------------------------------------------------------------------------
-View::View(void)
+View::View(void):
+  _currentTime(1.0), //to force a change in the setCurrentTime call
+  _viewBottom(0.0),
+  _viewOffset(0.0), //to force a change in the setViewOffset call
+  _logZoomX(0.0),
+  _logZoomY(0.0),
+  _pixelHeight(0), //to force a change in the setPixelHeight call
+  _pixelWidth(0), //to force a change in the setPixelWidth call
+  _zoomX(0.0),
+  _zoomY(0.0),
+  _autoFollow(gdata->getSettingsValue("View/autoFollow", true)),
+  _backgroundShading(gdata->getSettingsValue("View/backgroundShading", true)),
+  fastUpdateTimer(new QTimer(this)),
+  slowUpdateTimer(new QTimer(this)),
+  needSlowUpdate(false),
+  needFastUpdate(false)
 {
-  _currentTime = 1.0; //to force a change in the setCurrentTime call
   setCurrentTime(0.0); //in seconds
 
   setLogZoomX(1.0);
   setLogZoomY(1.0);
-  _pixelWidth = 0; //to force a change in the setPixelWidth call
   setPixelWidth(400);
-  _pixelHeight = 0; //to force a change in the setPixelWidth call
   setPixelHeight(350);
-
-  _viewOffset = 0.0; //to force a change in the setViewOffset call
-
   setZoomFactorY(3.2);
-
-  _viewBottom = 0.0;
   setViewBottom(62.0); //the lowest note visible (in semitones) from C0
 
-  _autoFollow = gdata->getSettingsValue("View/autoFollow", true);
-  _backgroundShading = gdata->getSettingsValue("View/backgroundShading", true);
-
-  needFastUpdate = false;
-  needSlowUpdate = false;
-  fastUpdateTimer = new QTimer(this);
-  slowUpdateTimer = new QTimer(this);
   connect(fastUpdateTimer, SIGNAL(timeout()), this, SLOT(nextFastUpdate()));
   connect(slowUpdateTimer, SIGNAL(timeout()), this, SLOT(nextSlowUpdate()));
   connect(this, SIGNAL(viewChanged()), this, SLOT(newUpdate()));
