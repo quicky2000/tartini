@@ -39,14 +39,23 @@
 //------------------------------------------------------------------------------
 AmplitudeWidget::AmplitudeWidget(QWidget * /*parent*/, const char* /*name*/)
 //  : DrawWidget(parent, name, Qt::WDestructiveClose)
-  :_range(0.0)
+// Replace call to setRange(0.8); and setOffset(0.0) by final value assignations
+// to avoid issue with non initialised values. We don't care about signal emissions
+// because at construction time there are still not bound to slots
+  :
+dragMode(DragNone),
+mouseX(0),
+mouseY(0),
+downTime(0.0),
+downOffset(0.0),
+thresholdIndex(0),
+_range(0.8),
+_offset(0.0),
+_offsetInv(1.0 - _range),
+lineWidth(0.0),
+halfLineWidth(0.0)
 {
   setMouseTracking(true);
-  
-  dragMode = DragNone;
-  
-  setRange(0.8);
-  setOffset(0.0);
   setAttribute(Qt::WA_OpaquePaintEvent);
 }
 
