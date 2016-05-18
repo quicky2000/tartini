@@ -47,29 +47,8 @@ class AmplitudeWidget : public QGLWidget
   AmplitudeWidget(QWidget *parent, const char* name = 0);
   virtual ~AmplitudeWidget(void);
 
-  void initializeGL(void);
-  void resizeGL(int w, int h);
-  void paintGL(void);
-
-  void drawVerticalRefLines(void);
-  bool calcZoomElement(ZoomElement &ze, Channel *ch, int baseElement, double baseX);
-  double calculateElement(AnalysisData *data);
-  double getCurrentThreshold(int index);
-  void setCurrentThreshold(double newThreshold, int index);
-  QString getCurrentThresholdString(void)const;
-  void setLineWidth(float width);
-  void drawChannelAmplitudeGL(Channel *ch);
-  void drawChannelAmplitudeFilledGL(Channel *ch);
-  void setColors(void);
   inline QSize sizeHint(void) const;
-  void mousePressEvent( QMouseEvent *e );
-  void mouseMoveEvent( QMouseEvent *e );
-  void mouseReleaseEvent( QMouseEvent *e );
-  void wheelEvent(QWheelEvent * e);
   inline const double & range(void)const;
-  inline double maxOffset(void)const;
-  inline const double & offset(void)const;
-  inline const double & offsetInv(void)const;
 
 public slots:
   void setRange(double newRange);
@@ -81,11 +60,33 @@ signals:
   void offsetInvChanged(double);
   
 private:
+  void initializeGL(void);
+  void resizeGL(int w, int h);
+  void paintGL(void);
+
+  void setLineWidth(float width);
+  void drawVerticalRefLines(void);
+  double getCurrentThreshold(int index);
+  QString getCurrentThresholdString(void)const;
+  void drawChannelAmplitudeGL(Channel *ch);
+  void drawChannelAmplitudeFilledGL(Channel *ch);
+  bool calcZoomElement(ZoomElement &ze, Channel *ch, int baseElement, double baseX);
+  double calculateElement(AnalysisData *data);
+  void setCurrentThreshold(double newThreshold, int index);
+
+  void mousePressEvent( QMouseEvent *e );
+  void mouseMoveEvent( QMouseEvent *e );
+  void mouseReleaseEvent( QMouseEvent *e );
+  void wheelEvent(QWheelEvent * e);
 
   inline double leftTime(void)const;
   inline double rightTime(void)const;
   inline double timeWidth(void)const;
 	
+  inline double maxOffset(void)const;
+  inline const double & offset(void)const;
+  inline const double & offsetInv(void)const;
+
   int dragMode;
   int mouseX;
   int mouseY;
