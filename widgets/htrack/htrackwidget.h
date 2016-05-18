@@ -44,21 +44,15 @@ public:
   void mouseReleaseEvent(QMouseEvent *e);
   void wheelEvent(QWheelEvent *e);
   
-  float peakThreshold() { return _peakThreshold; }
-  double viewAngleHorizontal() { return _viewAngleHorizontal; }
-  double viewAngleVertical() { return _viewAngleVertical; }
+  inline float peakThreshold(void);
+  inline double viewAngleHorizontal(void);
+  inline double viewAngleVertical(void);
   
 public slots:
-  void setPeakThreshold(float peakThreshold) { _peakThreshold = peakThreshold; }
-  void setViewAngleHorizontal(double angle) {
-    if(angle != _viewAngleHorizontal) { _viewAngleHorizontal = angle; emit viewAngleHorizontalChanged(angle); }
-  }
-  void setViewAngleVertical(double angle) {
-    if(angle != _viewAngleVertical) { _viewAngleVertical = angle; emit viewAngleVerticalChanged(angle); }
-  }
-  void setDistanceAway(double distance) {
-    if(distance != _distanceAway) { _distanceAway = distance; emit distanceAwayChanged(distance); }
-  }
+  inline void setPeakThreshold(float peakThreshold);
+  inline void setViewAngleHorizontal(double angle);
+  inline void setViewAngleVertical(double angle);
+  inline void setDistanceAway(double distance);
   void home();
   
 signals:
@@ -77,5 +71,7 @@ private:
   Piano3d *piano3d;
   double translateX, translateY;
 };
+
+#include "htrackwidget.hpp"
 
 #endif

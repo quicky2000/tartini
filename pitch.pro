@@ -140,6 +140,7 @@ HEADERS += main.h \
   widgets/piano/pianoview.h \
   widgets/htrack/htrackview.h \
   widgets/htrack/htrackwidget.h \
+  widgets/htrack/htrackwidget.hpp \
   widgets/htrack/piano3d.h \
   widgets/correlation/correlationview.h \
   widgets/correlation/correlationwidget.h \
