@@ -47,13 +47,10 @@ class AmplitudeWidget : public QGLWidget
   AmplitudeWidget(QWidget *parent, const char* name = 0);
   virtual ~AmplitudeWidget(void);
 
-  //int offset_x;
-
   void initializeGL(void);
   void resizeGL(int w, int h);
   void paintGL(void);
 
-  //void paintEvent( QPaintEvent * );
   void drawVerticalRefLines(void);
   bool calcZoomElement(ZoomElement &ze, Channel *ch, int baseElement, double baseX);
   double calculateElement(AnalysisData *data);
@@ -61,9 +58,7 @@ class AmplitudeWidget : public QGLWidget
   void setCurrentThreshold(double newThreshold, int index);
   QString getCurrentThresholdString();
   void setLineWidth(float width);
-  //void drawChannelAmplitude(Channel *ch, QPainter &p);
   void drawChannelAmplitudeGL(Channel *ch);
-  //void drawChannelAmplitudeFilled(Channel *ch, QPainter &p);
   void drawChannelAmplitudeFilledGL(Channel *ch);
   void setColors();
   inline QSize sizeHint(void) const;
@@ -96,20 +91,6 @@ private:
   double downTime, downNote;
   double downOffset;
   int thresholdIndex;
-/*
- void keyPressEvent( QKeyEvent *k );
- void keyReleaseEvent( QKeyEvent *k);
- void leaveEvent ( QEvent * e);
- 
- void mousePressEvent( QMouseEvent *e );
- void mouseMoveEvent( QMouseEvent *e );
- void mouseReleaseEvent( QMouseEvent *e );
- void wheelEvent(QWheelEvent * e);
- void resizeEvent (QResizeEvent *q);
-
- double mouseTime(int x);
- double mouseNote(int y);
-*/
 
   QPixmap *buffer;
   double _range;
