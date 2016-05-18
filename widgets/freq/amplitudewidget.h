@@ -87,17 +87,17 @@ private:
   inline double timeWidth(void);
 	
   int dragMode;
-  int mouseX, mouseY;
-  double downTime, downNote;
+  int mouseX;
+  int mouseY;
+  double downTime;
   double downOffset;
   int thresholdIndex;
-
-  QPixmap *buffer;
   double _range;
   double _offset;
   double _offsetInv;
   float lineWidth;
   float halfLineWidth;
+
 };
 
 #include "amplitudewidget.hpp"
