@@ -74,7 +74,6 @@ private:
   double _distanceAway;
   double _viewAngleHorizontal;
   double _viewAngleVertical;
-  //GLuint theKeyboard3d;
   Piano3d *piano3d;
   double translateX, translateY;
 };
