@@ -66,15 +66,15 @@ class AmplitudeWidget : public QGLWidget
   //void drawChannelAmplitudeFilled(Channel *ch, QPainter &p);
   void drawChannelAmplitudeFilledGL(Channel *ch);
   void setColors();
-  QSize sizeHint() const { return QSize(400, 100); }
+  inline QSize sizeHint(void) const;
   void mousePressEvent( QMouseEvent *e );
   void mouseMoveEvent( QMouseEvent *e );
   void mouseReleaseEvent( QMouseEvent *e );
   void wheelEvent(QWheelEvent * e);
-  double range() { return _range; }
-  double maxOffset() { return 1.0 - range(); }
-  double offset() { return _offset; }
-  double offsetInv() { return _offsetInv; }
+  inline double range(void);
+  inline double maxOffset(void);
+  inline double offset(void);
+  inline double offsetInv(void);
 
 public slots:
   void setRange(double newRange);
@@ -87,9 +87,9 @@ signals:
   
 private:
 
-  double leftTime() { return gdata->getView().viewLeft(); }
-  double rightTime() { return gdata->getView().viewRight(); }
-  double timeWidth() { return gdata->getView().viewTotalTime(); }
+  inline double leftTime(void);
+  inline double rightTime(void);
+  inline double timeWidth(void);
 	
   int dragMode;
   int mouseX, mouseY;
@@ -118,6 +118,8 @@ private:
   float lineWidth;
   float halfLineWidth;
 };
+
+#include "amplitudewidget.hpp"
 
 #endif
 //EOF

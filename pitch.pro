@@ -136,6 +136,7 @@ HEADERS += main.h \
   general/equalloudness.h \
   widgets/piano/pianowidget.h \
   widgets/freq/amplitudewidget.h \
+  widgets/freq/amplitudewidget.hpp \
   widgets/piano/pianoview.h \
   widgets/htrack/htrackview.h \
   widgets/htrack/htrackwidget.h \
