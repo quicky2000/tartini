@@ -56,20 +56,20 @@ class AmplitudeWidget : public QGLWidget
   double calculateElement(AnalysisData *data);
   double getCurrentThreshold(int index);
   void setCurrentThreshold(double newThreshold, int index);
-  QString getCurrentThresholdString();
+  QString getCurrentThresholdString(void)const;
   void setLineWidth(float width);
   void drawChannelAmplitudeGL(Channel *ch);
   void drawChannelAmplitudeFilledGL(Channel *ch);
-  void setColors();
+  void setColors(void);
   inline QSize sizeHint(void) const;
   void mousePressEvent( QMouseEvent *e );
   void mouseMoveEvent( QMouseEvent *e );
   void mouseReleaseEvent( QMouseEvent *e );
   void wheelEvent(QWheelEvent * e);
-  inline double range(void);
-  inline double maxOffset(void);
-  inline double offset(void);
-  inline double offsetInv(void);
+  inline const double & range(void)const;
+  inline double maxOffset(void)const;
+  inline const double & offset(void)const;
+  inline const double & offsetInv(void)const;
 
 public slots:
   void setRange(double newRange);
@@ -82,9 +82,9 @@ signals:
   
 private:
 
-  inline double leftTime(void);
-  inline double rightTime(void);
-  inline double timeWidth(void);
+  inline double leftTime(void)const;
+  inline double rightTime(void)const;
+  inline double timeWidth(void)const;
 	
   int dragMode;
   int mouseX;
