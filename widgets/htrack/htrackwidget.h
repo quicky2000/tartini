@@ -30,11 +30,11 @@ class HTrackWidget : public QGLWidget
 
 public:
   HTrackWidget(QWidget *parent, const char *name = NULL);
-  ~HTrackWidget();
+  ~HTrackWidget(void);
   
-  void initializeGL();
+  void initializeGL(void);
   void resizeGL(int w, int h);
-  void paintGL();
+  void paintGL(void);
   
   void rotateX(double angle);
   void rotateY(double angle);
@@ -53,7 +53,7 @@ public slots:
   inline void setViewAngleHorizontal(double angle);
   inline void setViewAngleVertical(double angle);
   inline void setDistanceAway(double distance);
-  void home();
+  void home(void);
   
 signals:
   void distanceAwayChanged(double);
@@ -63,13 +63,15 @@ signals:
 private:
   float _peakThreshold;
   bool mouseDown;
-  int mouseX, mouseY;
+  int mouseX;
+  int mouseY;
   float gCurrentMatrix[16];
   double _distanceAway;
   double _viewAngleHorizontal;
   double _viewAngleVertical;
   Piano3d *piano3d;
-  double translateX, translateY;
+  double translateX;
+  double translateY;
 };
 
 #include "htrackwidget.hpp"
