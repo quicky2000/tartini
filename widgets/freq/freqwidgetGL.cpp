@@ -47,6 +47,8 @@
 #include "array1d.h"
 #include "musicnotes.h"
 
+#include <sstream>
+
 #ifndef WHEEL_DELTA
 #define WHEEL_DELTA 120
 #endif
@@ -187,7 +189,9 @@ void FreqWidgetGL::drawReferenceLinesGL(double /*leftTime*/, double currentTime,
         nameIndex = toInt(curPitch);
       //if((j == 0) || (gdata->musicKeyType() == GData::ALL_NOTES) || (musicKey.noteType(j) & gdata->musicKeyType())) {
         glColor3ub(0, 0, 0);
-        noteLabel.sprintf("%s%d", noteName(nameIndex), noteOctave(nameIndex));
+	std::stringstream l_stream ;
+	l_stream << noteName(nameIndex) << noteOctave(nameIndex);
+	noteLabel = QString(l_stream.str().c_str());
         renderText(2, toInt(lineY) + fontHeightSpace, noteLabel);
         //glColor3ub(144, 156, 170);
         //glColor4ub(25, 125, 170, 196);

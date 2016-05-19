@@ -27,7 +27,7 @@ std::vector<MusicKey> gMusicKeys;
 std::vector<MusicScale> gMusicScales;
 //char *gMusicKeyName[7] = { "A", "B", "C", "D", "E", "F", "G" };
 //int   gMusicKeyRoot[7] = {  9,   11,  0,   2,   4,   5,   7  };
-char *gMusicKeyName[NUM_MUSIC_KEYS] = 
+char *gMusicKeyName[NUM_MUSIC_KEYS] =
   {(char*)"A             ",
    (char*)"A#/Bb",
    (char*)"B",
@@ -44,20 +44,21 @@ char *gMusicKeyName[NUM_MUSIC_KEYS] =
 int   gMusicKeyRoot[NUM_MUSIC_KEYS] = {  9,   10,      11,  0,   1,       2,   3,       4,   5,   6,        7,  8      };
 int   gMusicKey = 3; //C
 //                       0    1     2    3     4    5    6     7    8     9    10    11
-const char *noteNames[12] = { 
-  QObject::tr("C"),
-  QObject::tr("C#"),
-  QObject::tr("D"),
-  QObject::tr("D#"),
-  QObject::tr("E"),
-  QObject::tr("F"),
-  QObject::tr("F#"),
-  QObject::tr("G"),
-  QObject::tr("G#"),
-  QObject::tr("A"),
-  QObject::tr("A#"),
-  QObject::tr("B")
-};
+const QString noteNames[12] =
+  {
+    QObject::tr("C"),
+    QObject::tr("C#"),
+    QObject::tr("D"),
+    QObject::tr("D#"),
+    QObject::tr("E"),
+    QObject::tr("F"),
+    QObject::tr("F#"),
+    QObject::tr("G"),
+    QObject::tr("G#"),
+    QObject::tr("A"),
+    QObject::tr("A#"),
+    QObject::tr("B")
+  };
 
 /** Just Intonation
   1:1   Root
@@ -152,7 +153,7 @@ void initMusicStuff()
 
 const char* noteName(int pitch)
 {
-  return noteNames[cycle(pitch, 12)];
+  return noteNames[cycle(pitch, 12)].toStdString().c_str();
 }
 
 /**
