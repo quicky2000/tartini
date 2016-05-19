@@ -17,19 +17,19 @@
 */
 
 //------------------------------------------------------------------------------
-float HTrackWidget::peakThreshold(void)
+float HTrackWidget::peakThreshold(void)const
 {
   return _peakThreshold;
 }
 
 //------------------------------------------------------------------------------
-double HTrackWidget::viewAngleHorizontal(void)
+const double & HTrackWidget::viewAngleHorizontal(void)const
 {
   return _viewAngleHorizontal;
 }
 
 //------------------------------------------------------------------------------
-double HTrackWidget::viewAngleVertical(void)
+const double & HTrackWidget::viewAngleVertical(void)const
 {
   return _viewAngleVertical;
 }
@@ -41,7 +41,7 @@ void HTrackWidget::setPeakThreshold(float peakThreshold)
 }
 
 //------------------------------------------------------------------------------
-void HTrackWidget::setViewAngleHorizontal(double angle)
+void HTrackWidget::setViewAngleHorizontal(const double & angle)
 {
   if(angle != _viewAngleHorizontal)
     {
@@ -51,7 +51,7 @@ void HTrackWidget::setViewAngleHorizontal(double angle)
 }
 
 //------------------------------------------------------------------------------
-void HTrackWidget::setViewAngleVertical(double angle)
+void HTrackWidget::setViewAngleVertical(const double & angle)
 {
   if(angle != _viewAngleVertical)
     {
@@ -61,7 +61,7 @@ void HTrackWidget::setViewAngleVertical(double angle)
 }
 
 //------------------------------------------------------------------------------
-void HTrackWidget::setDistanceAway(double distance)
+void HTrackWidget::setDistanceAway(const double & distance)
 {
   if(distance != _distanceAway)
     {

@@ -302,7 +302,7 @@ void HTrackWidget::paintGL(void)
 }
 
 //------------------------------------------------------------------------------
-void HTrackWidget::rotateX(double angle)
+void HTrackWidget::rotateX(const double & angle)
 {
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
@@ -327,7 +327,7 @@ void HTrackWidget::home(void)
 }
 
 //------------------------------------------------------------------------------
-void HTrackWidget::rotateY(double angle)
+void HTrackWidget::rotateY(const double & angle)
 {
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();

@@ -36,23 +36,23 @@ public:
   void resizeGL(int w, int h);
   void paintGL(void);
   
-  void rotateX(double angle);
-  void rotateY(double angle);
+  void rotateX(const double & angle);
+  void rotateY(const double & angle);
   void translate(float x, float y, float z);
   void mousePressEvent(QMouseEvent *e);
   void mouseMoveEvent(QMouseEvent *e);
   void mouseReleaseEvent(QMouseEvent *e);
   void wheelEvent(QWheelEvent *e);
   
-  inline float peakThreshold(void);
-  inline double viewAngleHorizontal(void);
-  inline double viewAngleVertical(void);
+  inline float peakThreshold(void)const;
+  inline const double & viewAngleHorizontal(void)const;
+  inline const double & viewAngleVertical(void)const;
   
 public slots:
   inline void setPeakThreshold(float peakThreshold);
-  inline void setViewAngleHorizontal(double angle);
-  inline void setViewAngleVertical(double angle);
-  inline void setDistanceAway(double distance);
+  inline void setViewAngleHorizontal(const double & angle);
+  inline void setViewAngleVertical(const double & angle);
+  inline void setDistanceAway(const double & distance);
   void home(void);
   
 signals:
