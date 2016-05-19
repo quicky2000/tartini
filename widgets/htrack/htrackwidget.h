@@ -32,6 +32,19 @@ public:
   HTrackWidget(QWidget *parent, const char *name = NULL);
   ~HTrackWidget(void);
   
+public slots:
+  inline void setPeakThreshold(float peakThreshold);
+  inline void setViewAngleHorizontal(const double & angle);
+  inline void setViewAngleVertical(const double & angle);
+  inline void setDistanceAway(const double & distance);
+  void home(void);
+
+signals:
+  void distanceAwayChanged(double);
+  void viewAngleHorizontalChanged(double);
+  void viewAngleVerticalChanged(double);
+
+private:
   void initializeGL(void);
   void resizeGL(int w, int h);
   void paintGL(void);
@@ -48,19 +61,6 @@ public:
   inline const double & viewAngleHorizontal(void)const;
   inline const double & viewAngleVertical(void)const;
   
-public slots:
-  inline void setPeakThreshold(float peakThreshold);
-  inline void setViewAngleHorizontal(const double & angle);
-  inline void setViewAngleVertical(const double & angle);
-  inline void setDistanceAway(const double & distance);
-  void home(void);
-  
-signals:
-  void distanceAwayChanged(double);
-  void viewAngleHorizontalChanged(double);
-  void viewAngleVerticalChanged(double);
-  
-private:
   float _peakThreshold;
   bool mouseDown;
   int mouseX;
