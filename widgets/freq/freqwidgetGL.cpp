@@ -39,10 +39,8 @@
 #include "freqwidgetGL.h"
 #include "mygl.h"
 #include "gdata.h"
-//#include "mycolor.h"
 #include "channel.h"
 #include "useful.h"
-//#include "soundfile.h" // Temporarily!!!
 #include "myqt.h"
 #include "array1d.h"
 #include "musicnotes.h"
@@ -59,12 +57,7 @@ FreqWidgetGL::FreqWidgetGL(QWidget * /*parent*/, const char* /*name*/)
 {
   setMouseTracking(true);
   
-   //offset_y = 0.0;
-   //offset_x = 0;
    dragMode = DragNone;
-   //mouseDown = false;
-   //dragCenter = false;
-   //mouseX = mouseY = 0;
 
    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding, false);
    setSizePolicy(sizePolicy);
@@ -80,8 +73,6 @@ void FreqWidgetGL::initializeGL()
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glEnableClientState(GL_VERTEX_ARRAY);
-  //glEnableClientState(GL_COLOR_ARRAY);
-  //setLineWidth(1.0f);
 }
 
 void FreqWidgetGL::resizeGL(int w, int h)
@@ -111,18 +102,12 @@ void FreqWidgetGL::drawReferenceLinesGL(double /*leftTime*/, double currentTime,
   int rootOffset = cycle(lowRoot, 12);
   int numOctaves = int(ceil(zoomY * (double)height() / 12.0))+1;
   int topOctave = rootOctave + numOctaves;
-  //printf("lowRoot = %d\n", lowRoot);
-  //printf("octaves = %d\n", octaves);
   double lineY;
   double curRoot;
   double curPitch;
   int stippleOffset = toInt(currentTime / zoomX) % 16;
   QString noteLabel;
   int nameIndex;
-  //bool drawSmallNotes = true;
-
-  //glColor4ub(25, 125, 170, 196);
-  //glBegin(GL_LINES);
 
   //Draw the horizontal reference lines
   for(int octave = rootOctave; octave < topOctave; ++octave) {
@@ -131,12 +116,7 @@ void FreqWidgetGL::drawReferenceLinesGL(double /*leftTime*/, double currentTime,
       if(musicScale.hasSemitone(musicKey.noteType(j))) { //draw it
         curPitch = curRoot + musicKey.noteOffset(j);
         lineY = double(height()) - myround((curPitch - viewBottom)/zoomY);
-        //nameIndex = toInt(curPitch);
-		if(j == 0) { //root note
-      //if((j == 0) || (gdata->musicKeyType() == GData::ALL_NOTES) || (musicKey.noteType(j) & gdata->musicKeyType())) {
-        //glColor3ub(0, 0, 0);
-        //noteLabel.sprintf("%s%d", noteName(nameIndex), noteOctave(nameIndex));
-        //renderText(2, toInt(lineY) + fontHeightSpace, noteLabel);
+	if(j == 0) { //root note
 			glColor4ub(0, 0, 0, 128);
       mygl_line(fontWidth, lineY, width() - 1, lineY);
 		} else if((gdata->musicKeyType() == MusicScale::Chromatic) && !gMusicScales[MusicScale::Major].hasSemitone(musicKey.noteType(j))) {
@@ -152,32 +132,10 @@ void FreqWidgetGL::drawReferenceLinesGL(double /*leftTime*/, double currentTime,
       mygl_line(fontWidth, lineY, width() - 1, lineY);
       glDisable(GL_LINE_STIPPLE);
 		}
-			//glEnable(GL_LINE_STIPPLE);
-        //glLineStipple(1, my_wrap_right(64716, stippleOffset));  // bitpattern 64716 = 1111110011001100
-        //mygl_line(fontWidth, lineY, width() - 1, lineY);
-		  //glVertex2f(fontWidth, lineY); glVertex2f(width()-1, lineY);
-      }/* else if(musicKey.noteType(j) == 2) {
-        if(drawSmallNotes) {
-          //glColor3ub(136, 161, 180);
-          glColor4ub(25, 125, 180, 64);
-          //glEnable(GL_LINE_STIPPLE);
-          //glLineStipple(1, my_wrap_right(0x0F0F, stippleOffset));
-          //glLineStipple(1, my_wrap_right(0x0700, stippleOffset));
-          mygl_line(fontWidth, lineY, width() - 1, lineY);
-          //glDisable(GL_LINE_STIPPLE);
-        }
-      } else {
-        glColor3ub(0, 0, 0);
-        noteLabel.sprintf("%s%d", noteName(nameIndex), noteOctave(nameIndex));
-        renderText(2, lineY + fontHeightSpace, noteLabel);
-        //glColor3ub(0, 0, 0);
-        glColor4ub(25, 125, 170, 255);
-        mygl_line(fontWidth, lineY, width() - 1, lineY);
-      }*/
+      }
       if(zoomY > 0.1) break;
     }
   }
-  //glEnd();
 
   //Draw the text labels down the left hand side
   for(int octave = rootOctave; octave < topOctave; ++octave) {
@@ -187,36 +145,12 @@ void FreqWidgetGL::drawReferenceLinesGL(double /*leftTime*/, double currentTime,
         curPitch = curRoot + musicKey.noteOffset(j);
         lineY = double(height()) - myround((curPitch - viewBottom)/zoomY);
         nameIndex = toInt(curPitch);
-      //if((j == 0) || (gdata->musicKeyType() == GData::ALL_NOTES) || (musicKey.noteType(j) & gdata->musicKeyType())) {
         glColor3ub(0, 0, 0);
 	std::stringstream l_stream ;
 	l_stream << noteName(nameIndex) << noteOctave(nameIndex);
 	noteLabel = QString(l_stream.str().c_str());
         renderText(2, toInt(lineY) + fontHeightSpace, noteLabel);
-        //glColor3ub(144, 156, 170);
-        //glColor4ub(25, 125, 170, 196);
-        //glEnable(GL_LINE_STIPPLE);
-        //glLineStipple(1, my_wrap_right(64716, stippleOffset));  // bitpattern 64716 = 1111110011001100
-        //mygl_line(fontWidth, lineY, width() - 1, lineY);
-        //glDisable(GL_LINE_STIPPLE);
-      }/* else if(musicKey.noteType(j) == 2) {
-        if(drawSmallNotes) {
-          //glColor3ub(136, 161, 180);
-          glColor4ub(25, 125, 180, 64);
-          //glEnable(GL_LINE_STIPPLE);
-          //glLineStipple(1, my_wrap_right(0x0F0F, stippleOffset));
-          //glLineStipple(1, my_wrap_right(0x0700, stippleOffset));
-          mygl_line(fontWidth, lineY, width() - 1, lineY);
-          //glDisable(GL_LINE_STIPPLE);
-        }
-      } else {
-        glColor3ub(0, 0, 0);
-        noteLabel.sprintf("%s%d", noteName(nameIndex), noteOctave(nameIndex));
-        renderText(2, lineY + fontHeightSpace, noteLabel);
-        //glColor3ub(0, 0, 0);
-        glColor4ub(25, 125, 170, 255);
-        mygl_line(fontWidth, lineY, width() - 1, lineY);
-      }*/
+      }
       if(zoomY > 0.1) break;
     }
   }
@@ -248,75 +182,6 @@ void FreqWidgetGL::drawReferenceLinesGL(double /*leftTime*/, double currentTime,
   }
 }
 
-/*
-void FreqWidgetGL::drawReferenceLinesGL(double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType)
-{
-  // Draw the lines and notes
-  QFontMetrics fm = fontMetrics();
-  int fontHeightSpace = fm.height() / 4;
-  int fontWidth = fm.width("C#0") + 3;
-
-  double step = 1.0 / zoomY; //number of pixels to jump between each line
-  int noteJump; //in semi-tones
-  if(step > 10.0) {
-    noteJump = 1;
-  } else if(step > 5.0) {
-    noteJump = 6;
-  } else {
-    noteJump = 12;
-  }
-  double remainder = cycle(viewBottom, double(noteJump));
-  double toFirstNote = double(noteJump) - remainder;
-  double start = toFirstNote * step;
-  double stop = double(height());
-  int nameIndex = toInt(viewBottom + toFirstNote);
-  step *= noteJump;
-
-  //draw the note names and reference lines
-  QString noteLabel;
-  int stippleOffset = toInt(currentTime / zoomX) % 16;
-  int lineY = 0;
-  for (double y = start; y < stop; y += step, nameIndex+=noteJump) {
-    lineY = height() - toInt(y);
-    if(!isBlackNote(nameIndex)) {
-      qglColor(Qt::black);
-      noteLabel.sprintf("%s%d", noteName(nameIndex), noteOctave(nameIndex));
-      renderText(2, lineY + fontHeightSpace, noteLabel);
-      if(noteValue(nameIndex) == 0) {
-        qglColor(Qt::black);
-      } else {
-        //transperenct colors don't seem to work on the printer
-        if(viewType == DRAW_VIEW_PRINT)
-          ////p.setPen(QPen(QColor(144, 156, 170), 1, Qt::SolidLine));
-          //p.setPen(QPen(QColor(128, 128, 128), 1, Qt::SolidLine));
-          glColor3ub(128, 128, 128);
-        else {
-          ////p.setPen(QPen(QColor(0, 0, 0, 64), 1, Qt::DashDotDotLine));
-          //p.setPen(QPen(QColor(144, 156, 170), 1, Qt::DashDotDotLine));
-          glColor3ub(144, 156, 170);
-          glEnable(GL_LINE_STIPPLE);
-          glLineStipple(1, my_wrap_right(64716, stippleOffset));  // bitpattern 64716 = 1111110011001100
-        }
-      }
-    } else {
-      if(viewType == DRAW_VIEW_PRINT)
-        ////p.setPen(QPen(QColor(166, 191, 210), 1, Qt::SolidLine));
-        //p.setPen(QPen(QColor(196, 196, 196), 1, Qt::SolidLine));
-        glColor3ub(196, 196, 196);
-      else {
-        ////p.setPen(QPen(QColor(0, 0, 0, 32), 1, Qt::DotLine));
-        //p.setPen(QPen(QColor(136, 161, 180), 1, Qt::DotLine));
-        glColor3ub(136, 161, 180);
-        glEnable(GL_LINE_STIPPLE);
-        glLineStipple(1, my_wrap_right(0x0F0F, stippleOffset));
-      }
-    }
-    mygl_line(fontWidth, lineY, width() - 1, lineY);
-    glDisable(GL_LINE_STIPPLE);
-  }
-}
-*/
-
 void FreqWidgetGL::paintGL()
 {
   glClear(GL_COLOR_BUFFER_BIT);
@@ -326,14 +191,8 @@ void FreqWidgetGL::paintGL()
   if(view.autoFollow() && gdata->getActiveChannel() && gdata->getRunning() == STREAM_FORWARD)
     setChannelVerticalView(gdata->getActiveChannel(), view.viewLeft(), view.currentTime(), view.zoomX(), view.viewBottom(), view.zoomY());
 
-
-  //double curScreenTime = (view.currentTime() - view.viewLeft()) / view.zoomX();
-  //int curTimePixel = toInt(curScreenTime);
   int curTimePixel = view.screenPixelX(view.currentTime());
 
-  //beginDrawing();
-
-  //DrawWidget::setLineWidth(3);
   glLineWidth(3.0f);
 
   //draw the red/blue background color shading if needed
@@ -348,7 +207,6 @@ void FreqWidgetGL::paintGL()
   for (uint i = 0; i < gdata->getChannelsSize(); i++) {
    	Channel *ch = gdata->getChannelAt(i);
    	if(!ch->isVisible()) continue;
-    //drawChannelGL(*this, ch, view.viewLeft(), view.currentTime(), view.zoomX(), view.viewBottom(), view.zoomY(), DRAW_VIEW_NORMAL);
     drawChannelGL(ch, view.viewLeft(), view.currentTime(), view.zoomX(), view.viewBottom(), view.zoomY(), DRAW_VIEW_NORMAL);
   }
   glDisable(GL_LINE_SMOOTH);
@@ -361,18 +219,14 @@ void FreqWidgetGL::paintGL()
     double halfWindowTime = (double)ch->size() / (double)(ch->rate() * 2);
     int pixelLeft = view.screenPixelX(view.currentTime() - halfWindowTime);
     int pixelRight = view.screenPixelX(view.currentTime() + halfWindowTime);
-    //p.fillRect(pixelLeft, 0, pixelRight-pixelLeft, height()-1, lineColor);
     qglColor(lineColor);
     mygl_rect(pixelLeft, 0, pixelRight-pixelLeft, height()-1);
   }
 
   // Draw the current time line
-  //p.setPen(QPen(colorGroup().foreground(), 1));
   qglColor(colorGroup().foreground());
   glLineWidth(1.0f);
   mygl_line(curTimePixel, 0, curTimePixel, height() - 1);
-
-  //endDrawing();
 }
 
 
@@ -422,16 +276,12 @@ void FreqWidgetGL::mousePressEvent( QMouseEvent *e)
   if (e->state() & Qt::ControlModifier) {
     // Do we zoom in or out?
     if (e->state() & Qt::ShiftModifier) {
-      //view.viewZoomOutX();
     } else {
-      //view.viewZoomInX();
     }
   } else if (e->state() & Qt::AltModifier) {
     // Do we zoom in or out?
     if (e->state() & Qt::ShiftModifier) {
-      //view.viewZoomOutY();
     } else {
-      //view.viewZoomInY();
     }
   } else {
     //mouseDown = true;
@@ -466,7 +316,6 @@ void FreqWidgetGL::mouseMoveEvent( QMouseEvent *e )
 	  }
     break;
   case DragBackground:
-    //view.setCurrentTime(downTime - (e->x() - mouseX) * view.zoomX());
     view.setViewBottom(downNote - (mouseY - e->y()) * view.zoomY());
     gdata->updateActiveChunkTime(downTime - (e->x() - mouseX) * view.zoomX());
     view.doSlowUpdate();
@@ -556,18 +405,12 @@ void FreqWidgetGL::resizeEvent (QResizeEvent *q)
     
     v.setPixelHeight(height());
     v.setPixelWidth(width());
-    //printf("resizeEvent width() = %d\n", width());
     // Work out what the times/heights of the view should be based on the zoom factors
-    //float newXTime = width() * v.zoomX();
     float newYHeight = height() * v.zoomY();
     float newYBottom = v.viewBottom() - ((newYHeight - v.viewHeight()) / 2.0);
 
-    //v.setViewWidth(newXTime);
-    //printf("1 viewOffset() = %d\n", v.viewOffset());
     v.setViewOffset(v.viewOffset() / oldViewWidth * v.viewWidth());
-    //printf("2 viewOffset() = %d\n", v.viewOffset());
 
-    //v.setViewHeight(newYHeight);
     v.setViewBottom(newYBottom);
 }
 
@@ -634,17 +477,6 @@ void FreqWidgetGL::leaveEvent ( QEvent * e) {
   QWidget::leaveEvent(e);
 }
 
-/*
-void FreqDrawWidget::ensurePolished() const
-{
-  //printf("width = %d\n", width());
-  gdata->getView().setPixelHeight(height());
-  printf("ensurePolished width() = %d\n", width());
-  gdata->getView().setPixelWidth(width());
-  gdata->getView().setViewOffset(gdata->getView().viewWidth()/2.0);
-}
-*/
-
 void FreqWidgetGL::drawChannelGL(Channel *ch, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType)
 {
   viewBottom += gdata->semitoneOffset();
@@ -657,8 +489,6 @@ void FreqWidgetGL::drawChannelGL(Channel *ch, double leftTime, double currentTim
   ChannelLocker channelLocker(ch);
 
   QColor current = ch->color;
-  //QColor invert(255 - current.red(), 255 - current.green(), 255 - current.blue());
-  //p.setPen(current);
   qglColor(current);
 
   int viewBottomOffset = toInt(viewBottom / zoomY);
@@ -672,22 +502,16 @@ void FreqWidgetGL::drawChannelGL(Channel *ch, double leftTime, double currentTim
   double currentChunk = ch->chunkFractionAtTime(currentTime);
   double leftFrameTime = currentChunk - ((currentTime - leftTime) / ch->timePerChunk());
   
-  //double leftFrameTime = leftTime / ch->timePerChunk();
-
   double frameTime = leftFrameTime;
-  //if(frameTime < 0.0) frameTime = 0.0;
   int n = 0;
   int baseElement = int(floor(frameTime / baseX));
   if(baseElement < 0) { n -= baseElement; baseElement = 0; }
   int lastBaseElement = int(floor(double(ch->totalChunks()) / baseX));
   
-  //Q3PointArray pointArray(pd.width()*2);
   Array1d<MyGLfloat2d> indexArray(width()*2);
-  //int pointIndex = 0;
       
   if (baseX > 1) { // More samples than pixels
     int theWidth = width();
-    //if(baseElement + theWidth > z->size()) z->setSize(baseElement + theWidth);
     if(lastBaseElement > z->size()) z->setSize(lastBaseElement);
     for(; n < theWidth && baseElement < lastBaseElement; n++, baseElement++) {
       myassert(baseElement >= 0);
@@ -697,19 +521,10 @@ void FreqWidgetGL::drawChannelGL(Channel *ch, double leftTime, double currentTim
       }
      
       if(ze.high() != 0.0f && ze.high() - ze.low() < 1.0) { //if range is closer than one semi-tone then draw a line between them
-      //if(ze.noteLow > 0) {
-        //p.setPen(ze.color());
         qglColor(ze.color());
-        //Note: lineTo doen't draw a pixel on the last point of the line
-        //p.drawLine(n, pd.height() - lineTopHalfWidth - toInt(ze.high() / zoomY) + viewBottomOffset, n, pd.height() + lineBottomHalfWidth - toInt(ze.low() / zoomY) + viewBottomOffset);
-        //mygl_line(float(n), height() - lineHalfWidth - (ze.high() / zoomY) + viewBottomOffset, n, height() + lineHalfWidth - (ze.low() / zoomY) + viewBottomOffset);
         mygl_line(float(n), height() - lineHalfWidth - (ze.high() / zoomY) + viewBottomOffset, n, height() + lineHalfWidth - (ze.low() / zoomY) + viewBottomOffset);
       }
     }
-    //myassert(pointIndex <= width()*2);
-    //p.setPen(ch->color);
-    //p.drawLineSegments(pointArray, 0, pointIndex/2);
-
   } else { // More pixels than samples
     float err = 0.0, pitch = 0.0, prevPitch = 0.0, vol;
     int intChunk = (int) floor(frameTime); // Integer version of frame time
@@ -717,63 +532,40 @@ void FreqWidgetGL::drawChannelGL(Channel *ch, double leftTime, double currentTim
     double stepSize = 1.0 / baseX; // So we skip some pixels
     int x = 0, y;
   
-    //double start = 0 - stepSize;
     double start = (double(intChunk) - frameTime) * stepSize;
     double stop = width() + (2 * stepSize);
     int squareSize = (int(sqrt(stepSize)) / 2) * 2 + 1; //make it an odd number
     int halfSquareSize = squareSize/2;
     int penX=0, penY=0;
-    //topPoints.setPoint(pointIndex, toInt(start), 0);
-    //bottomPoints.setPoint(pointIndex++, toInt(start), height());
     
     for (double n = start; n < stop && intChunk < (int)ch->totalChunks(); n += stepSize, intChunk++) {
       myassert(intChunk >= 0);
-      //if (intChunk < 0) continue; // So we don't go off the beginning of the array
       AnalysisData *data = ch->dataAtChunk(intChunk);
       err = data->getCorrelation();
-      //vol = dB2ViewVal(data->logrms(), ch->rmsCeiling, ch->rmsFloor);
       vol = dB2Normalised(data->getLogRms(), ch->rmsCeiling, ch->rmsFloor);
-      //if (err >= CERTAIN_THRESHOLD) {
-      
-      //float val = MIN(ch->dataAtChunk(intChunk)->volumeValue, 1.0);
       glLineWidth(lineWidth);
       if(gdata->pitchContourMode() == 0) {
-        //p.setPen(QPen(colorBetween(colorGroup().background(), ch->color, err*2.0-1.0), lineWidth));
-        //p.setPen(QPen(colorBetween(gdata->backgroundColor(),  ch->color, err*sqrt(data->rms)*10.0), lineWidth));
         if(viewType == DRAW_VIEW_PRINT) {
-          //p.setPen(QPen(colorBetween(QColor(255, 255, 255), ch->color, err*vol), lineWidth));
           qglColor(colorBetween(QColor(255, 255, 255), ch->color, err*vol));
         } else {
-          //p.setPen(QPen(colorBetween(gdata->backgroundColor(), ch->color, err*vol), lineWidth));
           qglColor(colorBetween(gdata->backgroundColor(), ch->color, err*vol));
         }
       } else {
-        //p.setPen(QPen(ch->color, lineWidth));
         qglColor(ch->color);
       }
       
       x = toInt(n);
-      //note = (data->isValid()) ? data->note : 0.0f;
-      //note = (ch->isVisibleNote(data->noteIndex)) ? data->note : 0.0f;
       pitch = (ch->isVisibleChunk(data)) ? data->getPitch() : 0.0f;
       myassert(pitch >= 0.0 && pitch <= gdata->topPitch());
-      //pitch = bound(pitch, 0, gdata->topPitch());
       y = height() - 1 - toInt(pitch / zoomY) + viewBottomOffset;
-      //y = height() - 1 - int((note / zoomY) - (viewBottom / zoomY));
       if(pitch > 0.0f) {
         if(fabs(prevPitch - pitch) < 1.0 && n != start) { //if closer than one semi-tone from previous then draw a line between them
-          //p.drawLine(penX, penY, x, y);
-          //printf("mygl_line(%f, %f, %f, %f);\n", (float)penX, (float)penY, (float)x, (float)y);
           mygl_line((float)penX, (float)penY, (float)x, (float)y);
           penX = x; penY = y;
         } else {
-          //p.drawPoint(x, y);
           penX = x; penY = y;
         }
         if(stepSize > 10) { //draw squares on the data points
-          //p.setPen(invert);
-          //p.setBrush(Qt::NoBrush);
-          //p.drawRect(x - halfSquareSize, y - halfSquareSize, squareSize, squareSize);
           mygl_rect(x - halfSquareSize, y - halfSquareSize, squareSize, squareSize);
         }
       }
@@ -793,7 +585,6 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch, double leftTime, double curr
 
   QColor current = ch->color;
   QColor invert(255 - current.red(), 255 - current.green(), 255 - current.blue());
-  //p.setPen(current);
   qglColor(current);
 
   int viewBottomOffset = toInt(viewBottom / zoomY);
@@ -807,10 +598,7 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch, double leftTime, double curr
   double currentChunk = ch->chunkFractionAtTime(currentTime);
   double leftFrameTime = currentChunk - ((currentTime - leftTime) / ch->timePerChunk());
   
-  //double leftFrameTime = leftTime / ch->timePerChunk();
-
   double frameTime = leftFrameTime;
-  //if(frameTime < 0.0) frameTime = 0.0;
   int n = 0;
   int baseElement = int(floor(frameTime / baseX));
   if(baseElement < 0) { n -= baseElement; baseElement = 0; }
@@ -819,18 +607,11 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch, double leftTime, double curr
   int firstN = n;
   int lastN = firstN;
   
-/*  QPolygon bottomPoints(width()*2);
-  QPolygon evenMidPoints(width()*2);
-  QPolygon oddMidPoints(width()*2);
-  QPolygon evenMidPoints2(width()*2);
-  QPolygon oddMidPoints2(width()*2);*/
   Array1d<MyGLfloat2d> bottomPoints(width()*2);
   Array1d<MyGLfloat2d> evenMidPoints(width()*2);
   Array1d<MyGLfloat2d> oddMidPoints(width()*2);
   Array1d<MyGLfloat2d> evenMidPoints2(width()*2);
   Array1d<MyGLfloat2d> oddMidPoints2(width()*2);
-  /*std::vector<QRect> noteRect(width()*2);
-  std::vector<QRect> noteRect2(width()*2);*/
   Array1d<MyGLfloat2d> noteRect(width()*2);
   Array1d<MyGLfloat2d> noteRect2(width()*2);
   std::vector<bool> isNoteRectEven(width()*2);
@@ -844,7 +625,6 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch, double leftTime, double curr
 
   if (baseX > 1) { // More samples than pixels
     int theWidth = width();
-    //if(baseElement + theWidth > z->size()) z->setSize(baseElement + theWidth);
     if(lastBaseElement > z->size()) z->setSize(lastBaseElement);
     for(; n < theWidth && baseElement < lastBaseElement; n++, baseElement++) {
       myassert(baseElement >= 0);
@@ -856,33 +636,20 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch, double leftTime, double curr
 
       int y = height() - 1 - toInt(ze.high() / zoomY) + viewBottomOffset;
       int y2, y3;
-      //if(ze.noteIndex >= 0) {
       if(ze.noteIndex() != -1 && ch->dataAtChunk(ze.midChunk())->getNoteIndex() != -1) {
         myassert(ze.noteIndex() >= 0);
         myassert(ze.noteIndex() < int(ch->noteData.size()));
         myassert(ch->isValidChunk(ze.midChunk()));
         AnalysisData *data = ch->dataAtChunk(ze.midChunk());
-        //double avgNote = ch->noteData[ze.noteIndex()].avgNote();
-        //printf("avgFreq = %f, ", ch->noteData[ze.noteIndex].avgFreq());
-        //printf("numPeriods = %f, ", ch->noteData[ze.noteIndex].numPeriods());
-        //printf("noteLength = %f\n", ch->noteData[ze.noteIndex].noteLength());
-        //y2 = height() - 1 - toInt((avgNote+0.5) / zoomY) + viewBottomOffset;
-        //y3 = height() - 1 - toInt((avgNote-0.5) / zoomY) + viewBottomOffset;
-        //y2 = height() - 1 - toInt((data->shortTermMean + data->shortTermDeviation) / zoomY) + viewBottomOffset;
-        //y3 = height() - 1 - toInt((data->shortTermMean - data->shortTermDeviation) / zoomY) + viewBottomOffset;
 
         if(gdata->showMeanVarianceBars()) {
           //longTermMean bars
           y2 = height() - 1 - toInt((data->getLongTermMean() + data->getLongTermDeviation()) / zoomY) + viewBottomOffset;
           y3 = height() - 1 - toInt((data->getLongTermMean() - data->getLongTermDeviation()) / zoomY) + viewBottomOffset;
           if(ze.noteIndex() % 2 == 0) {
-            //evenMidPoints.setPoint(evenMidPointIndex++, n, y2);
-            //evenMidPoints.setPoint(evenMidPointIndex++, n, y3);
             evenMidPoints[evenMidPointIndex++].set(n, y2);
             evenMidPoints[evenMidPointIndex++].set(n, y3);
           } else {
-            //oddMidPoints.setPoint(oddMidPointIndex++, n, y2);
-            //oddMidPoints.setPoint(oddMidPointIndex++, n, y3);
             oddMidPoints[oddMidPointIndex++].set(n, y2);
             oddMidPoints[oddMidPointIndex++].set(n, y3);
           }
@@ -891,36 +658,22 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch, double leftTime, double curr
           y2 = height() - 1 - toInt((data->getShortTermMean() + data->getShortTermDeviation()) / zoomY) + viewBottomOffset;
           y3 = height() - 1 - toInt((data->getShortTermMean() - data->getShortTermDeviation()) / zoomY) + viewBottomOffset;
           if(ze.noteIndex() % 2 == 0) {
-            //evenMidPoints2.setPoint(evenMidPointIndex2++, n, y2);
-            //evenMidPoints2.setPoint(evenMidPointIndex2++, n, y3);
             evenMidPoints2[evenMidPointIndex2++].set(n, y2);
             evenMidPoints2[evenMidPointIndex2++].set(n, y3);
           } else {
-            //oddMidPoints2.setPoint(oddMidPointIndex2++, n, y2);
-            //oddMidPoints2.setPoint(oddMidPointIndex2++, n, y3);
             oddMidPoints2[oddMidPointIndex2++].set(n, y2);
             oddMidPoints2[oddMidPointIndex2++].set(n, y3);
           }
         }
-      //} else {
-      //  y2 = y3 = 0;
       }
-      //bottomPoints.setPoint(pointIndex++, n, y);
-      //bottomPoints.setPoint(pointIndex++, n, height());
       bottomPoints[pointIndex++].set(n, y);
       bottomPoints[pointIndex++].set(n, height());
       lastN = n;
     }
-    //p.setPen(Qt::NoPen);
-    //p.setBrush(gdata->shading1Color());
     qglColor(gdata->shading1Color());
-    //p.drawRect(firstN, 0, lastN, height());
     mygl_rect(firstN, 0, lastN, height());
-    //p.setPen(gdata->shading2Color());
     qglColor(gdata->shading2Color());
-    //p.drawLineSegments(bottomPoints, 0, pointIndex/2);
     if(pointIndex > 1) {
-      //p.drawLines(bottomPoints.constData(), pointIndex/2);
       glVertexPointer(2, GL_FLOAT, 0, bottomPoints.begin());
       glDrawArrays(GL_QUAD_STRIP, 0, pointIndex);
     }
@@ -929,13 +682,11 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch, double leftTime, double curr
       //shortTermMean bars
       qglColor(Qt::green);
       if(evenMidPointIndex2 > 1) {
-        //p.drawLines(evenMidPoints2.constData(), evenMidPointIndex2/2);
         glVertexPointer(2, GL_FLOAT, 0, evenMidPoints2.begin());
         glDrawArrays(GL_LINES, 0, evenMidPointIndex2);
       }
       qglColor(Qt::yellow);
       if(oddMidPointIndex2 > 1) {
-        //p.drawLines(oddMidPoints2.constData(), oddMidPointIndex2/2);
         glVertexPointer(2, GL_FLOAT, 0, oddMidPoints2.begin());
         glDrawArrays(GL_LINES, 0, oddMidPointIndex2);
       }
@@ -943,13 +694,11 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch, double leftTime, double curr
       //longTermMean bars
       qglColor(Qt::yellow);
       if(evenMidPointIndex > 1) {
-        //p.drawLines(evenMidPoints.constData(), evenMidPointIndex/2);
         glVertexPointer(2, GL_FLOAT, 0, evenMidPoints.begin());
         glDrawArrays(GL_LINES, 0, evenMidPointIndex);
       }
       qglColor(Qt::green);
       if(oddMidPointIndex > 1) {
-        //p.drawLines(oddMidPoints.constData(), oddMidPointIndex/2);
         glVertexPointer(2, GL_FLOAT, 0, oddMidPoints.begin());
         glDrawArrays(GL_LINES, 0, oddMidPointIndex);
       }
@@ -963,31 +712,23 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch, double leftTime, double curr
     double stepSize = 1.0 / baseX; // So we skip some pixels
     int x = 0, y, y2, y3, x2;
   
-    //double start = 0 - stepSize;
     double start = (double(intChunk) - frameTime) * stepSize;
     double stop = width() + (2 * stepSize);
     //bottomPoints.setPoint(pointIndex++, toInt(start), height());
     lastN = firstN = toInt(start);
     for (double n = start; n < stop && intChunk < (int)ch->totalChunks(); n += stepSize, intChunk++) {
       myassert(intChunk >= 0);
-      //if (intChunk < 0) continue; // So we don't go off the beginning of the array
       AnalysisData *data = ch->dataAtChunk(intChunk);
       err = data->getCorrelation();
-      //if (err >= CERTAIN_THRESHOLD) {
 
-      //float val = MIN(ch->dataAtChunk(intChunk)->volumeValue, 1.0);
       if(gdata->pitchContourMode() == 0)
        qglColor(colorBetween(QColor(255, 255, 255), ch->color, err * dB2ViewVal(data->getLogRms())));
       else
-        //p.setPen(QPen(ch->color, lineWidth));
         qglColor(ch->color);
 
       x = toInt(n);
       lastN = x;
-      //note = (data->isValid()) ? data->note : 0.0f;
-      //note = (ch->isVisibleNote(data->noteIndex)) ? data->note : 0.0f;
       pitch = (ch->isVisibleChunk(data)) ? data->getPitch() : 0.0f;
-      //if(ch->isVisibleChunk(data)) {
 
       if(data->getNoteIndex() >= 0) {
         isNoteRectEven[rectIndex] = (data->getNoteIndex() % 2) == 0;
@@ -997,46 +738,27 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch, double leftTime, double curr
           //longTermMean bars
           y2 = height() - 1 - toInt((data->getLongTermMean() + data->getLongTermDeviation()) / zoomY) + viewBottomOffset;
           y3 = height() - 1 - toInt((data->getLongTermMean() - data->getLongTermDeviation()) / zoomY) + viewBottomOffset;
-          /*noteRect[rectIndex].setLeft(x);
-          noteRect[rectIndex].setRight(toInt(n+stepSize));
-          noteRect[rectIndex].setTop(y2);
-          noteRect[rectIndex++].setBottom(y3);*/
           noteRect[rectIndex++].set(x, y2);
           noteRect[rectIndex++].set(x2, y3);
   
           //shortTermMean bars
           y2 = height() - 1 - toInt((data->getShortTermMean() + data->getShortTermDeviation()) / zoomY) + viewBottomOffset;
           y3 = height() - 1 - toInt((data->getShortTermMean() - data->getShortTermDeviation()) / zoomY) + viewBottomOffset;
-          /*noteRect2[rectIndex2].setLeft(x);
-          noteRect2[rectIndex2].setRight(toInt(n+stepSize));
-          noteRect2[rectIndex2].setTop(y2);
-          noteRect2[rectIndex2++].setBottom(y3);*/
           noteRect2[rectIndex2++].set(x, y2);
           noteRect2[rectIndex2++].set(x2, y3);
         }
-      //} else {
-      //  note = 0.0f;
       }
 
       myassert(pitch >= 0.0 && pitch <= gdata->topPitch());
-      //note = bound(note, 0, gdata->topNote());
       y = height() - 1 - toInt(pitch / zoomY) + viewBottomOffset;
-      //bottomPoints.setPoint(pointIndex++, x, y);
       bottomPoints[pointIndex++].set(x, y);
       bottomPoints[pointIndex++].set(x, height());
     }
-    //bottomPoints.setPoint(pointIndex, bottomPoints.point(pointIndex-1).x(), height());
-    //pointIndex++;
 
     myassert(pointIndex <= width()*2);
-    //p.setPen(Qt::NoPen);
-    //p.setBrush(gdata->shading1Color());
     qglColor(gdata->shading1Color());
-    //p.drawRect(firstN, 0, lastN, height());
     mygl_rect(firstN, 0, lastN, height());
-    //p.setBrush(gdata->shading2Color());
     qglColor(gdata->shading2Color());
-    //p.drawPolygon(bottomPoints.constData(), pointIndex, Qt::OddEvenFill);
     glVertexPointer(2, GL_FLOAT, 0, bottomPoints.begin());
     glDrawArrays(GL_QUAD_STRIP, 0, pointIndex);
 
@@ -1045,7 +767,6 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch, double leftTime, double curr
       for(int j=0; j<rectIndex2; j+=2) {
         if(isNoteRectEven[j]) qglColor(Qt::green);
         else qglColor(Qt::yellow);
-        //p.drawRect(noteRect2[j]);
         mygl_rect(noteRect2[j], noteRect2[j+1]);
       }
       //longTermMean bars
@@ -1054,11 +775,8 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch, double leftTime, double curr
       QColor seeThroughGreen = Qt::green;
       seeThroughGreen.setAlpha(255);
       for(int j=0; j<rectIndex; j+=2) {
-        //if(isNoteRectEven[j]) p.setBrush(QBrush(Qt::yellow, Qt::Dense3Pattern));
-        //else p.setBrush(QBrush(Qt::green, Qt::Dense3Pattern));
         if(isNoteRectEven[j]) qglColor(seeThroughYellow);
         else qglColor(seeThroughGreen);
-        //p.drawRect(noteRect[j]);
         mygl_rect(noteRect[j], noteRect[j+1]);
       }
     }
@@ -1096,8 +814,6 @@ bool FreqWidgetGL::calcZoomElement(Channel *ch, ZoomElement &ze, int baseElement
     high = 0;
     noteIndex = NO_NOTE;
   }
-  //float corr = err->correlation()*dB2ViewVal(err->logrms());
-  //float corr = err->correlation()*dB2ViewVal(err->logrms(), ch->rmsCeiling, ch->rmsFloor);
   float corr = err->getCorrelation() * dB2Normalised(err->getLogRms(), ch->rmsCeiling, ch->rmsFloor);
   QColor theColor = (gdata->pitchContourMode() == 0) ? colorBetween(gdata->backgroundColor(), ch->color, corr) : ch->color;
 
@@ -1153,16 +869,12 @@ void FreqWidgetGL::setChannelVerticalView(Channel *ch, double leftTime, double c
 */
 
   
-  //QPointArray bottomPoints(width()*2);
-  //int pointIndex = 0;
-      
   if (baseX > 1) { // More samples than pixels
     int theWidth = width();
     if(lastBaseElement > z->size()) z->setSize(lastBaseElement);
     for(; n < theWidth && baseElement < lastBaseElement; n++, baseElement++) {
       myassert(baseElement >= 0);
       ZoomElement &ze = z->at(baseElement);
-      //if(!z->hasValue(baseElement)) {
       if(!ze.isValid()) {
         if(!calcZoomElement(ch, ze, baseElement, baseX)) continue;
       }
@@ -1177,19 +889,7 @@ void FreqWidgetGL::setChannelVerticalView(Channel *ch, double leftTime, double c
         ys.push_back((ze.low() + ze.high()) / 2.0f);
         weightings.push_back(weight);
       }
-/*
-      int y = height() - 1 - toInt(ze.high / zoomY) + viewBottomOffset;
-      bottomPoints.setPoint(pointIndex++, n, y);
-      bottomPoints.setPoint(pointIndex++, n, height());
-*/
     }
-/*
-    p.setPen(Qt::NoPen);
-    p.setBrush(gdata->shading1Color());
-    p.drawRect(firstN, 0, lastN, height());
-    p.setPen(gdata->shading2Color());
-    p.drawLineSegments(bottomPoints, 0, pointIndex/2);
-*/
   } else { // More pixels than samples
     float pitch = 0.0;
     int intChunk = (int) floor(frameTime); // Integer version of frame time
@@ -1199,20 +899,12 @@ void FreqWidgetGL::setChannelVerticalView(Channel *ch, double leftTime, double c
     
     double start = (double(intChunk) - frameTime) * stepSize;
     double stop = width() + (2 * stepSize);
-    //bottomPoints.setPoint(pointIndex++, toInt(start), height());
     for (double n = start; n < stop && intChunk < (int)ch->totalChunks(); n += stepSize, intChunk++) {
       myassert(intChunk >= 0);
       AnalysisData *data = ch->dataAtChunk(intChunk);
       
-/*
-      if(gdata->pitchContourMode() == 0)
-        p.setPen(QPen(colorBetween(gdata->backgroundColor(),  ch->color, err*sqrt(data->rms)*10.0), lineWidth));
-      else
-        p.setPen(QPen(ch->color, lineWidth));
-*/
       pitch = (ch->isVisibleChunk(data)) ? data->getPitch() : 0.0f;
       myassert(pitch >= 0.0 && pitch <= gdata->topPitch());
-      //corr = data->correlation*sqrt(data->rms)*10.0;
       corr = data->getCorrelation() * dB2ViewVal(data->getLogRms());
       if(pitch > 0.0f) {
         float weight = corr;
@@ -1223,19 +915,8 @@ void FreqWidgetGL::setChannelVerticalView(Channel *ch, double leftTime, double c
         ys.push_back(pitch);
         weightings.push_back(weight);
       }
-      //bottomPoints.setPoint(pointIndex++, x, y);
     }
-    //bottomPoints.setPoint(pointIndex, bottomPoints.point(pointIndex-1).x(), height());
-    //pointIndex++;
 
-/*
-    myassert(pointIndex <= width()*2);
-    p.setPen(Qt::NoPen);
-    p.setBrush(gdata->shading1Color());
-    p.drawRect(firstN, 0, lastN, height());
-    p.setBrush(gdata->shading2Color());
-    p.drawPolygon(bottomPoints, false, 0, pointIndex);
-*/
   }
   
   if(!ys.empty() > 0) {
@@ -1247,9 +928,7 @@ void FreqWidgetGL::setChannelVerticalView(Channel *ch, double leftTime, double c
       spred += sq(ys[j] - meanY) * weightings[j];
     }
     spred = sqrt(spred / numY) * 4.0;
-    //printf("spred = %f\n", spred);
     if(spred < 12.0) spred = 12.0; //show a minimum of 12 semi-tones
     gdata->getView().setViewBottomRaw(meanY - gdata->getView().viewHeight() / 2.0);
-    //gdata->getView().setLogZoomYRaw(log(height()/spred));
   }
 }
