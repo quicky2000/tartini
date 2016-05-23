@@ -41,31 +41,28 @@ class FreqWidgetGL : public QGLWidget
 Q_OBJECT
 
 public:
-  enum DragModes {
-    DragNone = 0,
-    DragChannel = 1,
-    DragBackground = 2,
-    DragTimeBar = 3
-  };
+  enum DragModes
+    {
+      DragNone = 0,
+      DragChannel = 1,
+      DragBackground = 2,
+      DragTimeBar = 3
+    };
 
 
   FreqWidgetGL(QWidget *parent, const char* name = 0);
-  virtual ~FreqWidgetGL();
+  virtual ~FreqWidgetGL(void);
 
-  void initializeGL();
+  void initializeGL(void);
   void resizeGL(int w, int h);
   void drawReferenceLinesGL(double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType);
   void drawChannelGL(Channel *ch, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType);
   void drawChannelFilledGL(Channel *ch, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType);
   bool calcZoomElement(Channel *ch, ZoomElement &ze, int baseElement, double baseX);
-  void paintGL();
-  QSize sizeHint() const { return QSize(400, 350); }
+  void paintGL(void);
+  inline QSize sizeHint(void)const;
 
-private:
-  int dragMode;
-  int mouseX, mouseY;
-  double downTime, downNote;
-  
+private:  
   void keyPressEvent( QKeyEvent *k );
   void keyReleaseEvent( QKeyEvent *k);
   void leaveEvent ( QEvent * e);
@@ -81,13 +78,19 @@ private:
   Channel *channelAtPixel(int x, int y);
   void setChannelVerticalView(Channel *ch, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY);
 
-  double leftTime() { return gdata->getView().viewLeft(); }
-  double rightTime() { return gdata->getView().viewRight(); }
-  double timeWidth() { return gdata->getView().viewTotalTime(); }
+  inline double leftTime(void)const;
+  inline double rightTime(void)const;
+  inline double timeWidth(void)const;
 
+  int dragMode;
+  int mouseX;
+  int mouseY;
+  double downTime;
+  double downNote;
   QPixmap *buffer;
   
 };
 
+#include "freqwidgetGL.hpp"
 #endif
 //EOF

@@ -92,6 +92,7 @@ HEADERS += main.h \
   widgets/openfiles/openfiles.h \
   widgets/freq/freqdrawwidget.h \
   widgets/freq/freqwidgetGL.h \
+  widgets/freq/freqwidgetGL.hpp \
   widgets/freq/freqview.h \
   widgets/pitchcompass/pitchcompassview.h \
   widgets/pitchcompass/pitchcompassdrawwidget.h \
