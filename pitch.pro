@@ -80,6 +80,7 @@ HEADERS += main.h \
   sound/audio_thread.h \
   general/myio.h \
   general/useful.h \
+  general/useful.hpp \
   general/mystring.h \
   general/settings.h \
   general/bspline.h \
