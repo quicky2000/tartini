@@ -4,6 +4,8 @@
     begin                : 2002
     copyright            : (C) 2002-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,20 +34,30 @@
 #define PI  3.14159265358979323846
 #define twoPI 6.28318530717958647692
 
-//return a pointer to a 2d array with each element of size size
+/**
+   return a pointer to a 2d array with each element of size size
+*/
 void **malloc2d(const int row, const int col, const int size);
 
-//like malloc2d but changes an existing 2d array
+/**
+   like malloc2d but changes an existing 2d array
+*/
 void **realloc2d(void **ptr, const int row, const int col, const int old_rol, const int old_col, const int size);
 
-//frees the memory created by malloc2d
+/**
+   frees the memory created by malloc2d
+*/
 void free2d(void **ptr, const int row);
 
-//returns x squared
+/**
+   returns x squared
+*/
 inline double sq(const double x);
 
-//return x to the power of integer y
-//works for all values of x and y
+/**
+   return x to the power of integer y
+   works for all values of x and y
+*/
 double powi(const double x, const int y);
 
 double nearestPowerOf2(double x);
@@ -157,7 +169,11 @@ float average(float *begin, float *end);
 */
 float average(float *begin, float *end, float lowBound, float highBound);
 
-int calcIndex(double frameTime, double baseX, int size);
+/**
+   This guarantees consistent blocks of indices for a given baseX value.
+   @param size the array's size
+ **/
+int calcIndex(const double & frameTime, const double & baseX, int size);
 
 /**
    Return the index with the maximum value in an array.
@@ -232,9 +248,25 @@ struct absoluteGreater : public std::binary_function<T, T, bool>
   inline bool operator()(T &x, T &y)const;
 };
 
+
+/**
+   Copies the file src to dest.
+   If dest already exists it will be overwitten
+   @return true on success, false on error
+*/
 bool copyFile(const char *src, const char *dest);
+
+/**
+   Moves the file src to the file dest.
+   If src is on the same file system as dest it is just relinked.
+   Otherwise it is copied, and the original removed.
+   @return true on success, false on error
+*/
 bool moveFile(const char *src, const char *dest);
 
+/**
+   Returns the power of 2 greater or equal to x
+*/
 int nextPowerOf2(int x);
 
 #include <algorithm>
