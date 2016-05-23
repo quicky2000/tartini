@@ -52,7 +52,7 @@ void free2d(void **ptr, const int row);
 /**
    returns x squared
 */
-inline double sq(const double x);
+inline double sq(const double & x);
 
 /**
    return x to the power of integer y
@@ -64,20 +64,20 @@ double nearestPowerOf2(double x);
 
 #ifndef pow10
 //rasises 10^x
-inline double pow10(double x);
+inline double pow10(const double x);
 #endif // pow10
 
 #ifndef pow2
 //rasises 2^x
-inline double pow2(double x);
+inline double pow2(const double & x);
 #endif // POW2
 
 #ifdef WINDOWS
 //From log rules  log_b(x) = log_a(x) / log_a(b)
-inline double log2(double x);
+inline double log2(const double & x);
 #endif // WINDOWS
 
-inline double logBaseN(double baseN, double x);
+inline double logBaseN(const double & baseN, const double & x);
 
 /**
    return a random number between 0 and 1 (inclusive)
@@ -87,19 +87,19 @@ inline double prand(void);
 /**
    cycle is like mod except it deals with negative numbers nicely
 */
-inline double cycle(const double a, const double b);
+inline double cycle(const double & a, const double & b);
 
 inline int cycle(const int a, const int b);
 
-inline double myround(const double x);
+inline double myround(const double & x);
 
 inline int toInt(const float x);
 
-inline int toInt(const double x);
+inline int toInt(const double & x);
 
 inline int intFloor(const float x);
 
-inline int intFloor(const double x);
+inline int intFloor(const double & x);
 
 /**
    Round x up to the nearest multiple of multiple
@@ -129,7 +129,7 @@ inline T bound(T var, T lowerBound, T upperBound);
    @param a, b and c are the values of the function at -1, 0 and 1
    @return The x position, or zero if no solution.
 */
-inline double parabolaTurningPoint(double a, double b, double c);
+inline double parabolaTurningPoint(const double & a, const double & b, const double & c);
 
 /**
    Calculate the x position and the y position of the min/max of a parabola at the same time

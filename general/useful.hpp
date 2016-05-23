@@ -17,15 +17,15 @@
 */
 
 //------------------------------------------------------------------------------
-double sq(const double x)
+double sq(const double & x)
 {
-  return x*x;
+  return x * x;
 }
 
 //------------------------------------------------------------------------------
 #ifndef pow10
 //rasises 10^x
-double pow10(double x)
+double pow10(const double x)
 {
   return pow(10.0, x);
 }
@@ -34,7 +34,7 @@ double pow10(double x)
 //------------------------------------------------------------------------------
 #ifndef pow2
 //rasises 2^x
-double pow2(double x)
+double pow2(const double & x)
 {
   return pow(2.0, x);
 }
@@ -43,14 +43,14 @@ double pow2(double x)
 //------------------------------------------------------------------------------
 #ifdef WINDOWS
 //From log rules  log_b(x) = log_a(x) / log_a(b)
-double log2(double x)
+double log2(const double & x)
 {
   return log(x) / 0.69314718055994530941723212145818;
 }
 #endif // WINDOWS
 
 //------------------------------------------------------------------------------
-double logBaseN(double baseN, double x)
+double logBaseN(const double & baseN, const double & x)
 {
   return log(x) / log(baseN);
 }
@@ -62,21 +62,33 @@ double prand(void)
 }
 
 //------------------------------------------------------------------------------
-double cycle(const double a, const double b)
+double cycle(const double & a, const double & b)
 {
-    if(a >= 0.0) return fmod(a, b);
-    else return b + fmod(a, b);
+    if(a >= 0.0)
+      {
+	return fmod(a, b);
+      }
+    else
+      {
+	return b + fmod(a, b);
+      }
 }
 
 //------------------------------------------------------------------------------
 int cycle(const int a, const int b)
 {
-    if(a >= 0) return a % b;
-    else return b + ((a+1) % b) - 1;
+    if(a >= 0)
+      {
+	return a % b;
+      }
+    else
+      {
+	return b + ((a+1) % b) - 1;
+      }
 }
 
 //------------------------------------------------------------------------------
-double myround(const double x)
+double myround(const double & x)
 {
   return floor(x + 0.5);
 }
@@ -88,7 +100,7 @@ int toInt(const float x)
 }
 
 //------------------------------------------------------------------------------
-int toInt(const double x)
+int toInt(const double & x)
 {
   return lrint(x);
 }
@@ -100,7 +112,7 @@ int intFloor(const float x)
 }
 
 //------------------------------------------------------------------------------
-int intFloor(const double x)
+int intFloor(const double & x)
 {
   return lrint(x-0.5);
 }
@@ -149,9 +161,9 @@ T bound(T var, T lowerBound, T upperBound)
 }
 
 //------------------------------------------------------------------------------
-double parabolaTurningPoint(double a, double b, double c)
+double parabolaTurningPoint(const double & a, const double & b, const double & c)
 {
-  double bottom = (2*(c + a - 2*b));
+  double bottom = (2 * ( c + a - 2 * b));
   return (bottom == 0.0) ? 0.0 : ((a - c) / bottom);
 }
 
