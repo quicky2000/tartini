@@ -88,7 +88,12 @@ FreqWidgetGL::~FreqWidgetGL(void)
 }
 
 //------------------------------------------------------------------------------
-void FreqWidgetGL::drawReferenceLinesGL(double /*leftTime*/, double currentTime, double zoomX, double viewBottom, double zoomY, int /*viewType*/)
+void FreqWidgetGL::drawReferenceLinesGL(const double & /*leftTime*/,
+					const double & currentTime,
+					const double & zoomX,
+					const double & viewBottom,
+					const double & zoomY,
+					int /*viewType*/)
 {
   // Draw the lines and notes
   QFontMetrics fm = fontMetrics();
@@ -276,7 +281,7 @@ void FreqWidgetGL::paintGL(void)
 }
 
 //------------------------------------------------------------------------------
-Channel *FreqWidgetGL::channelAtPixel(int x, int y)
+Channel *FreqWidgetGL::channelAtPixel(int x, int y)const
 {
   double time = mouseTime(x);
   float pitch = mousePitch(y);
@@ -413,7 +418,7 @@ void FreqWidgetGL::mouseReleaseEvent( QMouseEvent * )
  @param x the mouse's x co-ordinate
  @return the time the mouse is positioned at.
  */
-double FreqWidgetGL::mouseTime(int x)
+double FreqWidgetGL::mouseTime(int x)const
 {
   return gdata->getView().viewLeft() + gdata->getView().zoomX() * x;
 }
@@ -423,7 +428,7 @@ double FreqWidgetGL::mouseTime(int x)
  @param x the mouse's y co-ordinate
  @return the pitch the mouse is positioned at.
  */
-double FreqWidgetGL::mousePitch(int y)
+double FreqWidgetGL::mousePitch(int y)const
 {
   return gdata->getView().viewBottom() + gdata->getView().zoomY() * (height() - y);
 }
@@ -581,7 +586,13 @@ void FreqWidgetGL::leaveEvent ( QEvent * e)
 }
 
 //------------------------------------------------------------------------------
-void FreqWidgetGL::drawChannelGL(Channel *ch, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType)
+void FreqWidgetGL::drawChannelGL(Channel *ch,
+				 const double & leftTime,
+				 const double & currentTime,
+				 const double & zoomX,
+				 double viewBottom,
+				 const double & zoomY,
+				 int viewType)
 {
   viewBottom += gdata->semitoneOffset();
   float lineWidth = 3.0f;
@@ -715,7 +726,13 @@ void FreqWidgetGL::drawChannelGL(Channel *ch, double leftTime, double currentTim
 }
 
 //------------------------------------------------------------------------------
-void FreqWidgetGL::drawChannelFilledGL(Channel *ch, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType)
+void FreqWidgetGL::drawChannelFilledGL(Channel *ch,
+				       const double & leftTime,
+				       const double & currentTime,
+				       const double & zoomX,
+				       double viewBottom,
+				       const double & zoomY,
+				       int viewType)
 {
   viewBottom += gdata->semitoneOffset();
   ZoomLookup *z;
@@ -986,7 +1003,10 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch, double leftTime, double curr
   @param baseX  The number of chunks each pixel represents (can include a fraction part)
   @return false if a zoomElement can't be calculated, else true
 */
-bool FreqWidgetGL::calcZoomElement(Channel *ch, ZoomElement &ze, int baseElement, double baseX)
+bool FreqWidgetGL::calcZoomElement(Channel *ch,
+				   ZoomElement &ze,
+				   int baseElement,
+				   const double & baseX)
 {
   int startChunk = toInt(double(baseElement) * baseX);
   int finishChunk = toInt(double(baseElement+1) * baseX) + 1;
@@ -1034,7 +1054,12 @@ bool FreqWidgetGL::calcZoomElement(Channel *ch, ZoomElement &ze, int baseElement
 }
 
 //------------------------------------------------------------------------------
-void FreqWidgetGL::setChannelVerticalView(Channel *ch, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY)
+void FreqWidgetGL::setChannelVerticalView(Channel *ch,
+					  const double & leftTime,
+					  const double & currentTime,
+					  const double & zoomX,
+					  double viewBottom,
+					  const double & zoomY)
 {
   ZoomLookup *z = &ch->normalZoomLookup;
     

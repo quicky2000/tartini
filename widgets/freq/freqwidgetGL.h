@@ -55,10 +55,30 @@ private:
 
   void initializeGL(void);
   void resizeGL(int w, int h);
-  void drawReferenceLinesGL(double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType);
-  void drawChannelGL(Channel *ch, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType);
-  void drawChannelFilledGL(Channel *ch, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType);
-  bool calcZoomElement(Channel *ch, ZoomElement &ze, int baseElement, double baseX);
+  void drawReferenceLinesGL(const double & leftTime,
+			    const double & currentTime,
+			    const double & zoomX,
+			    const double & viewBottom,
+			    const double & zoomY,
+			    int viewType);
+  void drawChannelGL(Channel *ch,
+		     const double & leftTime,
+		     const double & currentTime,
+		     const double & zoomX,
+		     double viewBottom,
+		     const double & zoomY,
+		     int viewType);
+  void drawChannelFilledGL(Channel *ch,
+			   const double & leftTime,
+			   const double & currentTime,
+			   const double & zoomX,
+			   double viewBottom,
+			   const double & zoomY,
+			   int viewType);
+  bool calcZoomElement(Channel *ch,
+		       ZoomElement &ze,
+		       int baseElement,
+		       const double & baseX);
   void paintGL(void);
   inline QSize sizeHint(void)const;
 
@@ -72,10 +92,15 @@ private:
   void wheelEvent(QWheelEvent * e);
   void resizeEvent (QResizeEvent *q);
   
-  double mouseTime(int x);
-  double mousePitch(int y);
-  Channel *channelAtPixel(int x, int y);
-  void setChannelVerticalView(Channel *ch, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY);
+  double mouseTime(int x)const;
+  double mousePitch(int y)const;
+  Channel *channelAtPixel(int x, int y)const;
+  void setChannelVerticalView(Channel *ch,
+			      const double & leftTime,
+			      const double & currentTime,
+			      const double & zoomX,
+			      double viewBottom,
+			      const double & zoomY);
 
   inline double leftTime(void)const;
   inline double rightTime(void)const;
