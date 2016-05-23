@@ -41,6 +41,10 @@ class FreqWidgetGL : public QGLWidget
 Q_OBJECT
 
 public:
+  FreqWidgetGL(QWidget *parent, const char* name = 0);
+  virtual ~FreqWidgetGL(void);
+
+private:  
   enum DragModes
     {
       DragNone = 0,
@@ -48,10 +52,6 @@ public:
       DragBackground = 2,
       DragTimeBar = 3
     };
-
-
-  FreqWidgetGL(QWidget *parent, const char* name = 0);
-  virtual ~FreqWidgetGL(void);
 
   void initializeGL(void);
   void resizeGL(int w, int h);
@@ -62,7 +62,6 @@ public:
   void paintGL(void);
   inline QSize sizeHint(void)const;
 
-private:  
   void keyPressEvent( QKeyEvent *k );
   void keyReleaseEvent( QKeyEvent *k);
   void leaveEvent ( QEvent * e);
@@ -87,7 +86,6 @@ private:
   int mouseY;
   double downTime;
   double downNote;
-  QPixmap *buffer;
   
 };
 
