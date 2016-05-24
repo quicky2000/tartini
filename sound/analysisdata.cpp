@@ -38,7 +38,7 @@ const char *amp_display_string[NUM_AMP_MODES] =
     "Note Change Score Threshold = %0.2f, %0.2f"
   };
 
-double(*amp_mode_func[NUM_AMP_MODES])(double) =
+double(*amp_mode_func[NUM_AMP_MODES])(const double &) =
 {
   &dB2Normalised,
   &dB2Normalised,
@@ -49,7 +49,7 @@ double(*amp_mode_func[NUM_AMP_MODES])(double) =
   &same
 };
 
-double(*amp_mode_inv_func[NUM_AMP_MODES])(double) =
+double(*amp_mode_inv_func[NUM_AMP_MODES])(const double &) =
 {
   &normalised2dB,
   &normalised2dB,

@@ -13,12 +13,15 @@
    Please read LICENSE.txt for details.
  ***************************************************************************/
 
-double linear2dB(double x);
-double dB2Linear(double x);
-double dB2Normalised(double x);
-double normalised2dB(double x);
-double dB2ViewVal(double x);
-double same(double x);
-double oneMinus(double x);
+/**
+   x is between 0 and 1. 1 becomes 0dB and 0 becomes dBFloor (-ve)
+*/
+double linear2dB(const double & x);
+double dB2Linear(const double & x);
+double dB2Normalised(const double & x);
+double normalised2dB(const double & x);
+double dB2ViewVal(const double & x);
+double same(const double & x);
+double oneMinus(const double & x);
 
-double dB2Normalised(double x, double theCeiling, double theFloor);
+double dB2Normalised(const double & x, const double & theCeiling, const double & theFloor);
