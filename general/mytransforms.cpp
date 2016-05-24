@@ -402,7 +402,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
   //freqPerBin = rate / 2.0 / double(size);
 
   //analysisData.maxIntensity = fabs(*std::max_element(input, input+n, absoluteLess()));
-  analysisData.setMaxIntensityDB(linear2dB(fabs(*std::max_element(curInput, curInput+n, absoluteLess<float>()))));
+  analysisData.setMaxIntensityDB(linear2dB(fabs(*std::max_element(curInput, curInput+n, absoluteLess<float>())),*gdata));
   
   //if(gdata->doingActiveFFT()) {
     //std::copy(curInput, curInput+n, dataTime);
@@ -417,7 +417,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
     //calculate the Normalised Square Difference Function
     //analysisData.rms = nsdf(dataTime, output.begin()) / double(n/*size*/);
     //analysisData.rms = nsdf(dataTime, output) / double(n/*size*/);
-    double logrms = linear2dB(nsdf(dataTime, ch->nsdfData.begin()) / double(n)); /**< Do the NSDF calculation */
+    double logrms = linear2dB(nsdf(dataTime, ch->nsdfData.begin()) / double(n),*gdata); /**< Do the NSDF calculation */
     analysisData.setLogRms(logrms);
     if(gdata->doingAutoNoiseFloor() && !analysisData.isDone()) {
       //do it for gdata. this is only here for old code. remove some stage
@@ -581,7 +581,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
       rms += sq(dataTime[j]);
     }
     //analysisData.rms = sqrt(analysisData.rms);
-    analysisData.setLogRms(linear2dB(rms / float(n)));
+    analysisData.setLogRms(linear2dB(rms / float(n),*gdata));
     analysisData.calcScores();
     analysisData.setDone(true);
   }

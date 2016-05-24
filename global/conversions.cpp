@@ -4,6 +4,8 @@
     begin                : 16/01/2006
     copyright            : (C) 2003-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,9 +19,9 @@
 #include "gdata.h"
 
 //------------------------------------------------------------------------------
-double linear2dB(const double & x)
+double linear2dB(const double & x, const GData & p_data)
 {
-  return (x > 0.0) ? bound((log10(x) * 20.0), gdata->dBFloor(), 0.0) : gdata->dBFloor();
+  return (x > 0.0) ? bound((log10(x) * 20.0), p_data.dBFloor(), 0.0) : p_data.dBFloor();
 }
 
 //------------------------------------------------------------------------------
@@ -29,15 +31,15 @@ double dB2Linear(const double & x)
 }
 
 //------------------------------------------------------------------------------
-double dB2Normalised(const double & x)
+double dB2Normalised(const double & x, const GData & p_data)
 {
-  return bound(1.0 - (x / gdata->dBFloor()), 0.0, 1.0);
+  return bound(1.0 - (x / p_data.dBFloor()), 0.0, 1.0);
 }
 
 //------------------------------------------------------------------------------
-double normalised2dB(const double & x)
+double normalised2dB(const double & x, const GData & p_data)
 {
-  return (1.0 - x) * gdata->dBFloor();
+  return (1.0 - x) * p_data.dBFloor();
 }
 //------------------------------------------------------------------------------
 double dB2ViewVal(const double & x)
@@ -46,19 +48,21 @@ double dB2ViewVal(const double & x)
 }
 
 //------------------------------------------------------------------------------
-double same(const double & x)
+double same(const double & x, const GData & p_data)
 {
+  p_data.do_nothing();
  return x;
 }
 
 //------------------------------------------------------------------------------
-double oneMinus(const double & x)
+double oneMinus(const double & x, const GData & p_data)
 {
+  p_data.do_nothing();
  return 1.0 - x;
 }
 
 //------------------------------------------------------------------------------
 double dB2Normalised(const double & x,const double & theCeiling, const double & theFloor)
 {
-  return bound(1.0 + ((x-theCeiling) / (theCeiling-theFloor)), 0.0, 1.0);
+  return bound(1.0 + ((x - theCeiling) / (theCeiling - theFloor)), 0.0, 1.0);
 }

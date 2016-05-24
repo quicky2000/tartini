@@ -223,8 +223,8 @@ bool AmplitudeWidget::calcZoomElement(ZoomElement &ze, Channel *ch, int baseElem
   std::pair<large_vector<AnalysisData>::iterator, large_vector<AnalysisData>::iterator> a =
     minMaxElement(ch->dataIteratorAtChunk(startChunk), ch->dataIteratorAtChunk(finishChunk), lessValue(mode));
   myassert(a.second != ch->dataIteratorAtChunk(finishChunk));
-  float low = (*amp_mode_func[mode])(a.first->getValue(mode));
-  float high = (*amp_mode_func[mode])(a.second->getValue(mode));
+  float low = (*amp_mode_func[mode])(a.first->getValue(mode),*gdata);
+  float high = (*amp_mode_func[mode])(a.second->getValue(mode),*gdata);
   
   ze.set(low, high, 0, ch->color, NO_NOTE, (startChunk+finishChunk)/2);
   return true;
@@ -233,14 +233,14 @@ bool AmplitudeWidget::calcZoomElement(ZoomElement &ze, Channel *ch, int baseElem
 //------------------------------------------------------------------------------
 double AmplitudeWidget::calculateElement(AnalysisData *data)
 {
-  double val = (*amp_mode_func[gdata->amplitudeMode()])(data->getValue(gdata->amplitudeMode()));
+  double val = (*amp_mode_func[gdata->amplitudeMode()])(data->getValue(gdata->amplitudeMode()),*gdata);
   return val;
 }
 
 //------------------------------------------------------------------------------
 double AmplitudeWidget::getCurrentThreshold(int index)
 {
-  return (*amp_mode_func[gdata->amplitudeMode()])(gdata->ampThreshold(gdata->amplitudeMode(), index));
+  return (*amp_mode_func[gdata->amplitudeMode()])(gdata->ampThreshold(gdata->amplitudeMode(), index),*gdata);
 }
 
 //------------------------------------------------------------------------------
@@ -256,7 +256,7 @@ void AmplitudeWidget::setCurrentThreshold(double newThreshold, int index)
       setOffset(maxOffset() - (newThreshold - range()));
     }
 
-  gdata->setAmpThreshold(gdata->amplitudeMode(), index, (*amp_mode_inv_func[gdata->amplitudeMode()])(newThreshold));
+  gdata->setAmpThreshold(gdata->amplitudeMode(), index, (*amp_mode_inv_func[gdata->amplitudeMode()])(newThreshold,*gdata));
 }
 
 //------------------------------------------------------------------------------

@@ -94,6 +94,12 @@ public:
   GData(void);
   virtual ~GData(void);
 
+  /**
+     Empty methods just defined to avoid unused parameters warning
+     assuming that will be removed at ocmpile time during optimisation
+     phase 
+  */
+  inline void do_nothing(void)const;
   inline bool settingsContains(const QString & p_key)const;
   inline int getSettingsValue(const QString & p_key,const int & p_default_value)const;
   inline bool getSettingsValue(const QString & p_key,const bool & p_default_value)const;

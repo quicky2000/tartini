@@ -38,7 +38,7 @@ const char *amp_display_string[NUM_AMP_MODES] =
     "Note Change Score Threshold = %0.2f, %0.2f"
   };
 
-double(*amp_mode_func[NUM_AMP_MODES])(const double &) =
+double(*amp_mode_func[NUM_AMP_MODES])(const double &, const GData &) =
 {
   &dB2Normalised,
   &dB2Normalised,
@@ -49,7 +49,7 @@ double(*amp_mode_func[NUM_AMP_MODES])(const double &) =
   &same
 };
 
-double(*amp_mode_inv_func[NUM_AMP_MODES])(const double &) =
+double(*amp_mode_inv_func[NUM_AMP_MODES])(const double &, const GData &) =
 {
   &normalised2dB,
   &normalised2dB,
@@ -99,7 +99,7 @@ void AnalysisData::calcScores(void)
   double a[NUM_AMP_MODES-2];
   for(int j = 0; j < NUM_AMP_MODES - 2 ; j++)
     {
-      a[j] = bound(((*amp_mode_func[j])(values[j]) - (*amp_mode_func[j])(gdata->ampThreshold(j,0))) / ((*amp_mode_func[j])(gdata->ampThreshold(j,1)) - (*amp_mode_func[j])(gdata->ampThreshold(j,0))), 0.0, 1.0);
+      a[j] = bound(((*amp_mode_func[j])(values[j],*gdata) - (*amp_mode_func[j])(gdata->ampThreshold(j,0),*gdata)) / ((*amp_mode_func[j])(gdata->ampThreshold(j,1),*gdata) - (*amp_mode_func[j])(gdata->ampThreshold(j,0),*gdata)), 0.0, 1.0);
     }
   values[NOTE_SCORE] = a[AMPLITUDE_RMS] * a[AMPLITUDE_CORRELATION];
   values[NOTE_CHANGE_SCORE] = (1.0 - a[FREQ_CHANGENESS]);

@@ -17,6 +17,11 @@
 */
 
 //------------------------------------------------------------------------------
+void GData::do_nothing(void)const
+{
+}
+
+//------------------------------------------------------------------------------
 bool GData::settingsContains(const QString & p_key)const
 {
   return qsettings->contains(p_key);

@@ -612,9 +612,9 @@ void AnalysisData::setDeltaFreqCentroid(float p_value)
 }
 
 //------------------------------------------------------------------------------
-float AnalysisData::getVolumeValue(void)const
+float AnalysisData::getVolumeValue(const GData & p_data)const
 {
-  return (dB2Normalised(values[AMPLITUDE_RMS]) + values[AMPLITUDE_CORRELATION] - 1.0f) * 0.2;
+  return (dB2Normalised(values[AMPLITUDE_RMS],p_data) + values[AMPLITUDE_CORRELATION] - 1.0f) * 0.2;
 }
 
 //------------------------------------------------------------------------------
