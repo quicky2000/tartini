@@ -4,6 +4,8 @@
     begin                : 2002
     copyright            : (C) 2002-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,46 +21,35 @@
 #include "array1d.h"
 #include "gdata.h"
 
-/** Returns the fractional note (from the midi scale)
-@param freq The frequency in Hz
-@return The note in fractional part semitones from the midi scale.
-*/
-/*
-inline double freq2note(double freq)
-{
-  return log10(freq/27.5) / 0.025085832972;
-}
-*/
-
-/** Converts the frequencies freq (in hertz) into their note number on the midi scale
-    i.e. the number of semi-tones above C0
-    Note: The note's pitch will contain its fractional part
-    Reference = http://www.borg.com/~jglatt/tutr/notenum.htm
-  @param freq The frequency in Hz
-  @return The pitch in fractional part semitones from the midi scale.
+/**
+   Converts the frequencies freq (in hertz) into their note number on the midi scale
+   i.e. the number of semi-tones above C0
+   Note: The note's pitch will contain its fractional part
+   Reference = http://www.borg.com/~jglatt/tutr/notenum.htm
+   @param freq The frequency in Hz
+   @return The pitch in fractional part semitones from the midi scale.
 */
 inline double freq2pitch(double freq)
 {
-	//if(gdata) freq += gdata->freqA() - 440.0;
+  //if(gdata) freq += gdata->freqA() - 440.0;
 #ifdef log2
-	//return 69 + 12*log2(freq / 440);
-	//From log rules  log(x/y) = log(x) - log(y)
-	//return 69 + 12*(log2(freq) - log2(440));
-	return -36.3763165622959152488 + 12.0*log2(freq);
+  //From log rules  log(x/y) = log(x) - log(y)
+  //return 69 + 12*(log2(freq) - log2(440));
+  return -36.3763165622959152488 + 12.0*log2(freq);
 #else
-	//From log rules  log_b(x) = log_a(x) / log_a(b)
-	//return 69 + 39.8631371386483481*log10(freq / 440);
-	return -36.3763165622959152488 + 39.8631371386483481*log10(freq);
+  //From log rules  log_b(x) = log_a(x) / log_a(b)
+  //return 69 + 39.8631371386483481 * log10(freq / 440);
+  return -36.3763165622959152488 + 39.8631371386483481*log10(freq);
 #endif
 }
 
-/** Does the opposite of the function above
+/**
+   Does the opposite of the function above
 */
 inline double pitch2freq(double note)
 {
-	double result = pow10((note + 36.3763165622959152488) / 39.8631371386483481);
-	//if(gdata) result -= (gdata->freqA() - 440.0);
-	return result;
+  double result = pow10((note + 36.3763165622959152488) / 39.8631371386483481);
+  return result;
 }
 
 const char* noteName(int pitch);
@@ -83,8 +74,8 @@ class MusicScale
  public:
   enum MusicScale_t { Chromatic, Major, NaturalMinor, HarmonicMinor, MelodicMinor };
 
-          MusicScale() { pName = NULL; _semitoneOffset = 0; }
-          ~MusicScale();
+  MusicScale() { pName = NULL; _semitoneOffset = 0; }
+  ~MusicScale();
   void    addScale(const char *theName, const int *theNotes, int length, int semitoneOffset_);
   int     size() { return pNotes.size(); }
   int     note(int j) { return pNotes[j]; }
@@ -93,18 +84,18 @@ class MusicScale
   int semitoneOffset() { return _semitoneOffset; }
 };
 
-/** This defines the notes relative to the root for 1 octave of the scale
+/**
+   This defines the notes relative to the root for 1 octave of the scale
 */
 class MusicKey
 {
   Array1d<double> noteOffsets; //ordered midi values of the notes in 1 octave
   Array1d<int> noteTypes;
   char *pName;
-  //double _offset;
 
  public:
-          MusicKey() { pName = NULL; }
-          ~MusicKey();
+  MusicKey() { pName = NULL; }
+  ~MusicKey();
 
   void    setScaleMidi(double *theNoteOffsets, int *types, int n);
   void    setScaleCents(double *theNoteOffsets, int *types, int n);
@@ -121,8 +112,6 @@ class MusicKey
 
 void initMusicStuff();
 
-//extern MusicKey EvenTempered;
-//extern MusicKey JustIntonation;
 #define NUM_MUSIC_KEYS 12
 extern std::vector<MusicKey> gMusicKeys;
 extern std::vector<MusicScale> gMusicScales;
@@ -130,8 +119,6 @@ extern std::vector<MusicScale> gMusicScales;
 extern char *gMusicKeyName[NUM_MUSIC_KEYS];
 extern int gMusicKeyRoot[NUM_MUSIC_KEYS];
 extern int gMusicKey;
-
-
 
 class TuningMode
 {
@@ -163,4 +150,5 @@ class NoteInfo
   void   setRootpitch(double pitch, int index);
 };
 
-#endif
+#endif // MUSICNOTES_H
+//EOF
