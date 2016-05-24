@@ -31,7 +31,6 @@
 */
 inline double freq2pitch(double freq)
 {
-  //if(gdata) freq += gdata->freqA() - 440.0;
 #ifdef log2
   //From log rules  log(x/y) = log(x) - log(y)
   //return 69 + 12*(log2(freq) - log2(440));
@@ -39,7 +38,7 @@ inline double freq2pitch(double freq)
 #else
   //From log rules  log_b(x) = log_a(x) / log_a(b)
   //return 69 + 39.8631371386483481 * log10(freq / 440);
-  return -36.3763165622959152488 + 39.8631371386483481*log10(freq);
+  return -36.3763165622959152488 + 39.8631371386483481 * log10(freq);
 #endif
 }
 
@@ -53,16 +52,36 @@ inline double pitch2freq(double note)
 }
 
 const char* noteName(int pitch);
-inline const char* noteName(double pitch) { return noteName(toInt(pitch)); }
+inline const char* noteName(double pitch)
+{
+  return noteName(toInt(pitch));
+}
 
+/**
+   @param note The midi note number
+   @return The note octave. Middle C (midi note 60) is defined as octave 4. Making midi note 0 in octave -1
+*/
 int noteOctave(int pitch);
-inline int noteOctave(double pitch) { return noteOctave(toInt(pitch)); }
+inline int noteOctave(double pitch)
+{
+  return noteOctave(toInt(pitch));
+}
 
+/**
+   @param pitch The midi note number
+   @return The midi note within one octave. Range = 0 to 11. Where 0=C, 1=C# ... 11 = B.
+*/
 int noteValue(int pitch);
-inline int noteValue(double pitch) { return noteValue(toInt(pitch)); }
+inline int noteValue(double pitch)
+{
+  return noteValue(toInt(pitch));
+}
 
 bool isBlackNote(int pitch);
-inline bool isBlackNote(double pitch) { return isBlackNote(toInt(pitch)); }
+inline bool isBlackNote(double pitch)
+{
+  return isBlackNote(toInt(pitch));
+}
 
 class MusicScale
 {
@@ -74,14 +93,33 @@ class MusicScale
  public:
   enum MusicScale_t { Chromatic, Major, NaturalMinor, HarmonicMinor, MelodicMinor };
 
-  MusicScale() { pName = NULL; _semitoneOffset = 0; }
-  ~MusicScale();
-  void    addScale(const char *theName, const int *theNotes, int length, int semitoneOffset_);
-  int     size() { return pNotes.size(); }
-  int     note(int j) { return pNotes[j]; }
-  bool    hasSemitone(int j) { return pSemitoneLookup[j]; }
-  const char * name() { return pName; }
-  int semitoneOffset() { return _semitoneOffset; }
+  MusicScale(void)
+    {
+      pName = NULL;
+      _semitoneOffset = 0;
+    }
+  ~MusicScale(void);
+  void addScale(const char *theName, const int *theNotes, int length, int semitoneOffset_);
+  int size(void)
+  {
+    return pNotes.size();
+  }
+  int note(int j)
+  {
+    return pNotes[j];
+  }
+  bool hasSemitone(int j)
+  {
+    return pSemitoneLookup[j];
+  }
+  const char * name(void)
+    {
+      return pName;
+    }
+  int semitoneOffset(void)
+  {
+    return _semitoneOffset;
+  }
 };
 
 /**
@@ -94,23 +132,55 @@ class MusicKey
   char *pName;
 
  public:
-  MusicKey() { pName = NULL; }
-  ~MusicKey();
+  MusicKey(void)
+    {
+      pName = NULL;
+    }
+  ~MusicKey(void);
 
-  void    setScaleMidi(double *theNoteOffsets, int *types, int n);
-  void    setScaleCents(double *theNoteOffsets, int *types, int n);
-  void    setScaleRatios(double *theNoteOffsets, int *types, int n);
-  void    setName(const char *theName);
-  const char * name() { return pName; }
-  int     size() const { return noteOffsets.size(); }
-  double  noteOffset(int j) const { return noteOffsets[j]; }
-  int     noteType(int j) const { return noteTypes[j]; }
-  int     nearestNoteIndex(double x);
-  double  nearestNote(double x);
-  double  nearestNoteDistance(double x);
+  /**
+     @param a the array of ratios
+     @param n the size of the array
+     e.g. [0.0, 1.0, 2.0, 3.0, 4.0, ... 11.0] for equal tempered
+  */
+  void setScaleMidi(double *theNoteOffsets, int *types, int n);
+
+  /**
+     @param a the array of ratios
+     @param n the size of the array
+     e.g. [0, 100, 200, 300, 400, ... 1100] for equal tempered
+  */
+  void setScaleCents(double *theNoteOffsets, int *types, int n);
+
+  /**
+      @param a the array of ratios
+      @param n the size of the array
+      e.g. [1.0, 5.0/4, 4.0/3, 3.0/2]
+  */
+  void setScaleRatios(double *theNoteOffsets, int *types, int n);
+  void setName(const char *theName);
+  const char * name(void)
+    {
+      return pName;
+    }
+  int size(void) const
+  {
+    return noteOffsets.size();
+  }
+  double noteOffset(int j) const
+  {
+    return noteOffsets[j];
+  }
+  int noteType(int j) const
+  {
+    return noteTypes[j];
+  }
+  int nearestNoteIndex(double x);
+  double nearestNote(double x);
+  double nearestNoteDistance(double x);
 };
 
-void initMusicStuff();
+void initMusicStuff(void);
 
 #define NUM_MUSIC_KEYS 12
 extern std::vector<MusicKey> gMusicKeys;
@@ -126,13 +196,13 @@ class TuningMode
   enum ModeName_t { Chromatic, Major, NaturalMinor, HarmonicMinor, MelodicMinor };
   enum TuningName_t { EvenTempered, JustIntonation, PythagoreanTuning, MeantoneTemperament };
   static TuningMode tuningMode[5][4];
-  static void initNoteModes();
+  static void initNoteModes(void);
 
   std::vector<double> pitchOffset;
 
-  void    setScaleMidi(double *theNoteOffsets, int *types, int n);
-  void    setScaleCents(double *theNoteOffsets, int *types, int n);
-  void    setScaleRatios(double *theNoteOffsets, int *types, int n);
+  void setScaleMidi(double *theNoteOffsets, int *types, int n);
+  void setScaleCents(double *theNoteOffsets, int *types, int n);
+  void setScaleRatios(double *theNoteOffsets, int *types, int n);
 };
 
 class NoteInfo
@@ -144,10 +214,10 @@ class NoteInfo
 
   double notePitch(int index);
   double nearestNotePitch(double pitch);
-  int    nearestIndex(double pitch);
+  int nearestIndex(double pitch);
 
-  void   setRootNote(int r);
-  void   setRootpitch(double pitch, int index);
+  void setRootNote(int r);
+  void setRootpitch(double pitch, int index);
 };
 
 #endif // MUSICNOTES_H
