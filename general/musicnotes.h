@@ -29,97 +29,55 @@
    @param freq The frequency in Hz
    @return The pitch in fractional part semitones from the midi scale.
 */
-inline double freq2pitch(double freq)
-{
-#ifdef log2
-  //From log rules  log(x/y) = log(x) - log(y)
-  //return 69 + 12*(log2(freq) - log2(440));
-  return -36.3763165622959152488 + 12.0*log2(freq);
-#else
-  //From log rules  log_b(x) = log_a(x) / log_a(b)
-  //return 69 + 39.8631371386483481 * log10(freq / 440);
-  return -36.3763165622959152488 + 39.8631371386483481 * log10(freq);
-#endif
-}
+inline double freq2pitch(double freq);
 
 /**
    Does the opposite of the function above
 */
-inline double pitch2freq(double note)
-{
-  double result = pow10((note + 36.3763165622959152488) / 39.8631371386483481);
-  return result;
-}
+inline double pitch2freq(double note);
 
 const char* noteName(int pitch);
-inline const char* noteName(double pitch)
-{
-  return noteName(toInt(pitch));
-}
+inline const char* noteName(double pitch);
 
 /**
    @param note The midi note number
    @return The note octave. Middle C (midi note 60) is defined as octave 4. Making midi note 0 in octave -1
 */
 int noteOctave(int pitch);
-inline int noteOctave(double pitch)
-{
-  return noteOctave(toInt(pitch));
-}
+inline int noteOctave(double pitch);
 
 /**
    @param pitch The midi note number
    @return The midi note within one octave. Range = 0 to 11. Where 0=C, 1=C# ... 11 = B.
 */
 int noteValue(int pitch);
-inline int noteValue(double pitch)
-{
-  return noteValue(toInt(pitch));
-}
+inline int noteValue(double pitch);
 
 bool isBlackNote(int pitch);
-inline bool isBlackNote(double pitch)
-{
-  return isBlackNote(toInt(pitch));
-}
+inline bool isBlackNote(double pitch);
 
 class MusicScale
 {
+ public:
+  enum MusicScale_t { Chromatic, Major, NaturalMinor, HarmonicMinor, MelodicMinor };
+
+  inline MusicScale(void);
+  ~MusicScale(void);
+
+  void addScale(const char *theName, const int *theNotes, int length, int semitoneOffset_);
+
+  inline int size(void);
+  inline int note(int j);
+  inline bool hasSemitone(int j);
+  inline const char * name(void);
+  inline int semitoneOffset(void);
+
+ private:
   Array1d<int> pNotes;
   std::vector<bool> pSemitoneLookup;
   char *pName;
   int _semitoneOffset;
 
- public:
-  enum MusicScale_t { Chromatic, Major, NaturalMinor, HarmonicMinor, MelodicMinor };
-
-  MusicScale(void)
-    {
-      pName = NULL;
-      _semitoneOffset = 0;
-    }
-  ~MusicScale(void);
-  void addScale(const char *theName, const int *theNotes, int length, int semitoneOffset_);
-  int size(void)
-  {
-    return pNotes.size();
-  }
-  int note(int j)
-  {
-    return pNotes[j];
-  }
-  bool hasSemitone(int j)
-  {
-    return pSemitoneLookup[j];
-  }
-  const char * name(void)
-    {
-      return pName;
-    }
-  int semitoneOffset(void)
-  {
-    return _semitoneOffset;
-  }
 };
 
 /**
@@ -127,15 +85,8 @@ class MusicScale
 */
 class MusicKey
 {
-  Array1d<double> noteOffsets; //ordered midi values of the notes in 1 octave
-  Array1d<int> noteTypes;
-  char *pName;
-
  public:
-  MusicKey(void)
-    {
-      pName = NULL;
-    }
+  inline MusicKey(void);
   ~MusicKey(void);
 
   /**
@@ -159,25 +110,19 @@ class MusicKey
   */
   void setScaleRatios(double *theNoteOffsets, int *types, int n);
   void setName(const char *theName);
-  const char * name(void)
-    {
-      return pName;
-    }
-  int size(void) const
-  {
-    return noteOffsets.size();
-  }
-  double noteOffset(int j) const
-  {
-    return noteOffsets[j];
-  }
-  int noteType(int j) const
-  {
-    return noteTypes[j];
-  }
+  inline const char * name(void);
+  inline int size(void) const;
+  inline double noteOffset(int j) const;
+  inline int noteType(int j) const;
   int nearestNoteIndex(double x);
   double nearestNote(double x);
   double nearestNoteDistance(double x);
+
+ private:
+  Array1d<double> noteOffsets; //ordered midi values of the notes in 1 octave
+  Array1d<int> noteTypes;
+  char *pName;
+
 };
 
 void initMusicStuff(void);
@@ -219,6 +164,8 @@ class NoteInfo
   void setRootNote(int r);
   void setRootpitch(double pitch, int index);
 };
+
+#include "musicnotes.hpp"
 
 #endif // MUSICNOTES_H
 //EOF

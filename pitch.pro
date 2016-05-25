@@ -177,6 +177,7 @@ HEADERS += main.h \
   general/mygl.h \
   general/myqt.h \
   general/musicnotes.h \
+  general/musicnotes.hpp \
   general/myalgo.h \
   include/RingBuffer.h
 
