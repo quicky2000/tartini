@@ -21,9 +21,36 @@
 #define BSPLINE          1
 #define HERMITE_CUBIC    2
 
+/**
+   a linear interpolation
+   quicker than b-spline
+*/
 float interpolate_linear(int len, const float *array, float x);
+
+/**
+   a cubic b-spline interpolation
+   NOTE: the values don't always pass through the in points
+         but it gives a nice smooth curve
+         slower than linear
+*/
 float interpolate_b_spline(int len, const float *array, float x);
+
+/**
+   Uses a Hermite curve
+*/
 float interpolate_cubic(int len, const float *data, double x);
+
+/**
+   NOTE: Only LINEAR has been optimised a little for speed. The others could be made more efficient
+   in_len & *in are the array of floats for input
+   out_len & *out are the array where the (resampled) stretched array output is stored
+   start = where the to start resampling from the *in array
+   len = the length of the resampling from the *in array
+   type = LINEAR or BSPLINE
+*/
+//------------------------------------------------------------------------------
 void stretch_array(int in_len, const float *in, int out_len, float *out, float start, float len, int type);
 
-#endif
+#endif // BSPLINE_H
+//EOF
+
