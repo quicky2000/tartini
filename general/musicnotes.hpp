@@ -17,7 +17,7 @@
 */
 
 //------------------------------------------------------------------------------
-double freq2pitch(double freq)
+double freq2pitch(const double & freq)
 {
 #ifdef log2
   //From log rules  log(x/y) = log(x) - log(y)
@@ -31,32 +31,32 @@ double freq2pitch(double freq)
 }
 
 //------------------------------------------------------------------------------
-double pitch2freq(double note)
+double pitch2freq(const double & note)
 {
   double result = pow10((note + 36.3763165622959152488) / 39.8631371386483481);
   return result;
 }
 
 //------------------------------------------------------------------------------
-const char* noteName(double pitch)
+const char* noteName(const double & pitch)
 {
   return noteName(toInt(pitch));
 }
 
 //------------------------------------------------------------------------------
-int noteOctave(double pitch)
+int noteOctave(const double & pitch)
 {
   return noteOctave(toInt(pitch));
 }
 
 //------------------------------------------------------------------------------
-int noteValue(double pitch)
+int noteValue(const double & pitch)
 {
   return noteValue(toInt(pitch));
 }
 
 //------------------------------------------------------------------------------
-bool isBlackNote(double pitch)
+bool isBlackNote(const double & pitch)
 {
   return isBlackNote(toInt(pitch));
 }
@@ -69,31 +69,39 @@ MusicScale::MusicScale(void):
 }
 
 //------------------------------------------------------------------------------
-int MusicScale::size(void)
+int MusicScale::size(void)const
 {
   return pNotes.size();
 }
 
 //------------------------------------------------------------------------------
-int MusicScale::note(int j)
+int MusicScale::note(int j)const
 {
+#ifdef MYDEBUG
+  return pNotes.at(j);
+#else
   return pNotes[j];
+#endif // MYDEBUG
 }
 
 //------------------------------------------------------------------------------
-bool MusicScale::hasSemitone(int j)
+bool MusicScale::hasSemitone(int j)const
 {
+#ifdef MYDEBUG
+  return pSemitoneLookup.at(j);
+#else
   return pSemitoneLookup[j];
+#endif // MYDEBUG
 }
 
 //------------------------------------------------------------------------------
-const char * MusicScale::name(void)
+const char * MusicScale::name(void)const
 {
   return pName;
 }
 
 //------------------------------------------------------------------------------
-int MusicScale::semitoneOffset(void)
+int MusicScale::semitoneOffset(void)const
 {
   return _semitoneOffset;
 }
@@ -105,7 +113,7 @@ MusicKey::MusicKey(void):
 }
 
 //------------------------------------------------------------------------------
-const char * MusicKey::name(void)
+const char * MusicKey::name(void)const
 {
   return pName;
 }
@@ -119,12 +127,20 @@ int MusicKey::size(void) const
 //------------------------------------------------------------------------------
 double MusicKey::noteOffset(int j) const
 {
+#ifdef MYDEBUG
+  return noteOffsets.at(j);
+#else
   return noteOffsets[j];
+#endif // MYDEBUG
 }
 
 //------------------------------------------------------------------------------
 int MusicKey::noteType(int j) const
 {
+#ifdef MYDEBUG
+  return noteTypes.at(j);
+#else
   return noteTypes[j];
+#endif // MYDEBUG
 }
 //EOF

@@ -182,7 +182,7 @@ MusicScale::~MusicScale(void)
 }
 
 //------------------------------------------------------------------------------
-void MusicScale::addScale(const char *theName, const int *theNotes, int length, int semitoneOffset_)
+void MusicScale::addScale(const char *theName, const int * theNotes, int length, int semitoneOffset_)
 {
   if(pName)
     {
@@ -256,19 +256,19 @@ void MusicKey::setName(const char *theName)
 }
 
 //------------------------------------------------------------------------------
-int MusicKey::nearestNoteIndex(double x)
+int MusicKey::nearestNoteIndex(const double & x)const
 {
   return (int)(binary_search_closest(noteOffsets.begin(), noteOffsets.end(), x) - noteOffsets.begin());
 }
 
 //------------------------------------------------------------------------------
-double MusicKey::nearestNote(double x)
+double MusicKey::nearestNote(const double & x)const
 {
   return *binary_search_closest(noteOffsets.begin(), noteOffsets.end(), x);
 }
 
 //------------------------------------------------------------------------------
-double MusicKey::nearestNoteDistance(double x)
+double MusicKey::nearestNoteDistance(const double & x)const
 {
   return fabs(*binary_search_closest(noteOffsets.begin(), noteOffsets.end(), x) - x);
 }

@@ -29,32 +29,32 @@
    @param freq The frequency in Hz
    @return The pitch in fractional part semitones from the midi scale.
 */
-inline double freq2pitch(double freq);
+inline double freq2pitch(const double & freq);
 
 /**
    Does the opposite of the function above
 */
-inline double pitch2freq(double note);
+inline double pitch2freq(const double & note);
 
 const char* noteName(int pitch);
-inline const char* noteName(double pitch);
+inline const char* noteName(const double & pitch);
 
 /**
    @param note The midi note number
    @return The note octave. Middle C (midi note 60) is defined as octave 4. Making midi note 0 in octave -1
 */
 int noteOctave(int pitch);
-inline int noteOctave(double pitch);
+inline int noteOctave(const double & pitch);
 
 /**
    @param pitch The midi note number
    @return The midi note within one octave. Range = 0 to 11. Where 0=C, 1=C# ... 11 = B.
 */
 int noteValue(int pitch);
-inline int noteValue(double pitch);
+inline int noteValue(const double & pitch);
 
 bool isBlackNote(int pitch);
-inline bool isBlackNote(double pitch);
+inline bool isBlackNote(const double & pitch);
 
 class MusicScale
 {
@@ -66,11 +66,11 @@ class MusicScale
 
   void addScale(const char *theName, const int *theNotes, int length, int semitoneOffset_);
 
-  inline int size(void);
-  inline int note(int j);
-  inline bool hasSemitone(int j);
-  inline const char * name(void);
-  inline int semitoneOffset(void);
+  inline int size(void)const;
+  inline int note(int j)const;
+  inline bool hasSemitone(int j)const;
+  inline const char * name(void)const;
+  inline int semitoneOffset(void)const;
 
  private:
   Array1d<int> pNotes;
@@ -110,13 +110,13 @@ class MusicKey
   */
   void setScaleRatios(double *theNoteOffsets, int *types, int n);
   void setName(const char *theName);
-  inline const char * name(void);
+  inline const char * name(void)const;
   inline int size(void) const;
   inline double noteOffset(int j) const;
   inline int noteType(int j) const;
-  int nearestNoteIndex(double x);
-  double nearestNote(double x);
-  double nearestNoteDistance(double x);
+  int nearestNoteIndex(const double & x)const;
+  double nearestNote(const double & x)const;
+  double nearestNoteDistance(const double & x)const;
 
  private:
   Array1d<double> noteOffsets; //ordered midi values of the notes in 1 octave
