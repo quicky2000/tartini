@@ -50,21 +50,42 @@ double loudnessTable[16][23] = { { -30, -30, -30, -30, -30, -30,    -30,-30,-25,
                                  {  89, 100, 106, 110, 113, 115,    119,120,120,120,120, 120,   122,   127, 134, 133, 128, 118,  113,      111,  109,  105,   40}, //120dB
                                  { 102, 112, 117, 120, 122, 124,    128,129,130,130,130, 130,   132,   135, 142, 140, 137, 131,  128,      121,  111,  104,   50}};//130dB
 
+//------------------------------------------------------------------------------
 double lookupLoudnessTable(double row, double col)
 {
   row += 2; //0dB is second row in table
   int irow = int(floor(row)); //floor to ensure -ve number are still rounded down
-  int irow2 = irow+1;
+  int irow2 = irow + 1;
   double rrow = row - double(irow); //fractional remainder 
-  if(irow < 0) return -30.0; //{ irow = 0; irow2 = 0; rrow = 0.0; }
-  if(irow >= 13) { irow = 13; irow2 = 13; rrow = 0.0; }
+  if(irow < 0)
+    {
+      return -30.0; //{ irow = 0; irow2 = 0; rrow = 0.0; }
+    }
+  if(irow >= 13)
+    {
+      irow = 13;
+      irow2 = 13;
+      rrow = 0.0;
+    }
   
   int icol = int(floor(col));
-  int icol2 = icol+1;
+  int icol2 = icol + 1;
   double rcol = col - double(icol); //fractional remainder 
-  //printf("rcol = %lf, %lf, %lf\n", col, double(col), rcol);
-  if(icol < 0) { icol = 0; icol2 = 0; rcol = 0.0; }
-  if(icol >= 22) { icol = 22; icol2 = 22; rcol = 0.0; }
+#ifdef DEBUG_PRINTF
+  printf("rcol = %lf, %lf, %lf\n", col, double(col), rcol);
+#endif // DEBUG_PRINTF
+  if(icol < 0)
+    {
+      icol = 0;
+      icol2 = 0;
+      rcol = 0.0;
+    }
+  if(icol >= 22)
+    {
+      icol = 22;
+      icol2 = 22;
+      rcol = 0.0;
+    }
 #ifdef DEBUG_PRINTF
   printf("icol=%d, %d, %lf\n", icol, icol2, rcol);
 #endif // DEBUG_PRINTF
@@ -82,26 +103,35 @@ double lookupLoudnessTable(double row, double col)
   return e + (f - e) * rrow;
 }
 
+//------------------------------------------------------------------------------
 double dbToPhons(const double & freq, const double & intensity)
 {
   //Todo: Finish writing this function
   double row = intensity / 10.0;
-  double *pCol = std::upper_bound(f0, f0+23, freq);
+  double *pCol = std::upper_bound(f0, f0 + 23, freq);
   int icol = int(pCol - f0);
 #ifdef DEBUG_PRINTF
   printf("%d\n", icol);
 #endif // DEBUG_PRINTF
-  if(icol <= 0) return lookupLoudnessTable(row, 0.0);
-  else if(icol >= 23) return lookupLoudnessTable(row, 23.0);
-  else {
-    int icol0 = MAX(0, icol-1);
-    double &a = f0[icol0];
-    double &b = f0[icol];
-    double col = double(icol0) + (freq - a) / (b - a);
+  if(icol <= 0) 
+    {
+      return lookupLoudnessTable(row, 0.0);
+    }
+  else if(icol >= 23)
+    {
+      return lookupLoudnessTable(row, 23.0);
+    }
+  else
+    {
+      int icol0 = MAX(0, icol-1);
+      double &a = f0[icol0];
+      double &b = f0[icol];
+      double col = double(icol0) + (freq - a) / (b - a);
 #ifdef DEBUG_PRINTF
-    printf("%lf, %lf, %lf, %lf, %lf\n", a, b, freq, (freq - a) / (b - a), col);
+      printf("%lf, %lf, %lf, %lf, %lf\n", a, b, freq, (freq - a) / (b - a), col);
 #endif // DEBUG_PRINTF
-    return lookupLoudnessTable(row, col);
-  }
+      return lookupLoudnessTable(row, col);
+    }
 }
 
+//EOF
