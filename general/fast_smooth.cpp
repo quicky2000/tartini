@@ -167,7 +167,6 @@ void fast_smooth::fast_smoothB(float *source, float *dest, int length)
       std::fill(dest, dest+length, avg);
       return;
     }
-  //int right = min(length, _size_right);
   for(j = 0; j<_size_left; j++)
     {
       cos_sum += source[0];
@@ -175,21 +174,12 @@ void fast_smooth::fast_smoothB(float *source, float *dest, int length)
       total_sum += source[0];
     }
   //FIXME: Doesn't deal with a blur bigger than the length
-  //for(j = 0; j<right; j++) {
   for(j = 0; j<_size_right; j++)
     {
       cos_sum += source[j];
       fast_complex_rotate(sin_sum, cos_sum, _sin_angle, _cos_angle);
       total_sum += source[j];
     }
-  /*
-  //for when length < _size_right
-  for(j =right; j<_size_right; j++) {
-  cos_sum += source[length-1];
-  fast_complex_rotate(sin_sum, cos_sum, _sin_angle, _cos_angle);
-  total_sum += source[length-1];
-  }
-  */
   for(j = 0; j<_size_left; j++)
     {
       dest[j] = (total_sum - cos_sum) / _sum;
@@ -215,28 +205,5 @@ void fast_smooth::fast_smoothB(float *source, float *dest, int length)
       total_sum += source[(length-1)] - source[(j - _size_left)];
     }
 }
-
-/*
-  #include "filter.h"
-
-  void testFastSmooth()
-  {
-  int n = 100;
-  float *tempIn = new float[n];
-  float *tempOut = new float[n];
-  std::fill(tempIn, tempIn+n, 0.0);
-  tempIn[50] = 1.0;
-
-  //fast_smooth fs(20);
-  //fs.fast_smoothA(tempIn, tempOut, n);
-  FastAverageFilter faf(20);
-  for(int j = 0; j<100; j+=25)
-  faf.filter(tempIn+j, tempOut+j, 25);
-  for(int j = 0; j<n; j++) printf("%5d, %10.6lf, %10.6lf\n", j, tempIn[j], tempOut[j]);
-
-  delete tempIn;
-  delete tempOut;
-  }
-*/
 
 //EOF
