@@ -135,36 +135,6 @@ extern char *gMusicKeyName[NUM_MUSIC_KEYS];
 extern int gMusicKeyRoot[NUM_MUSIC_KEYS];
 extern int gMusicKey;
 
-class TuningMode
-{
- public:
-  enum ModeName_t { Chromatic, Major, NaturalMinor, HarmonicMinor, MelodicMinor };
-  enum TuningName_t { EvenTempered, JustIntonation, PythagoreanTuning, MeantoneTemperament };
-  static TuningMode tuningMode[5][4];
-  static void initNoteModes(void);
-
-  std::vector<double> pitchOffset;
-
-  void setScaleMidi(double *theNoteOffsets, int *types, int n);
-  void setScaleCents(double *theNoteOffsets, int *types, int n);
-  void setScaleRatios(double *theNoteOffsets, int *types, int n);
-};
-
-class NoteInfo
-{
-  TuningMode::ModeName_t modeName;
-  TuningMode::TuningName_t tuningName;
-  int rootNote; //range 0 - 11 starting on C
-  double rootPitch;
-
-  double notePitch(int index);
-  double nearestNotePitch(double pitch);
-  int nearestIndex(double pitch);
-
-  void setRootNote(int r);
-  void setRootpitch(double pitch, int index);
-};
-
 #include "musicnotes.hpp"
 
 #endif // MUSICNOTES_H
