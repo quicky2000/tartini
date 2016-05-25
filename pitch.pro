@@ -155,6 +155,7 @@ HEADERS += main.h \
   widgets/mylabel.h \
   sound/notesynth.h \
   general/fast_smooth.h \
+  general/fast_smooth.hpp \
   global/conversions.h \
   widgets/debugview/debugwidget.h \
   widgets/debugview/debugview.h \
