@@ -3,17 +3,16 @@
 #include <numeric>
 
 //------------------------------------------------------------------------------
-fast_smooth::fast_smooth(int size)
+fast_smooth::fast_smooth(int size):
+  _size(size),
+  _size_left(_size / 2),
+  _size_right(_size - _size_left),
+  _angle(-2 * M_PI/double(size + 1)), 
+  _cos_angle(cos(_angle)),
+  _sin_angle(sin(_angle)),
+  _sum(0)
 {
-  _size = size;
-  _size_left = _size / 2;
-  _size_right = _size - _size_left;
-  _angle = -2*M_PI/double(size + 1); 
-  _sin_angle = sin(_angle);
-  _cos_angle = cos(_angle);
-  _sum = 0;
-  int j;
-  for(j = 0; j < size; j++)
+  for(int j = 0; j < size; j++)
     {
       _sum += 1.0 - cos((j + 1) * _angle);
     }
