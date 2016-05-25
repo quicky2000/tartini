@@ -53,4 +53,3 @@ void stretch_array(int in_len, const float *in, int out_len, float *out, float s
 
 #endif // BSPLINE_H
 //EOF
-

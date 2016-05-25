@@ -64,7 +64,7 @@ float interpolate_b_spline(int len, const float *array, float x)
       return (y_1 + 4 * y0 + y1) / 6.0f;
     }
   
-  x = float(x0)-x;
+  x = float(x0) - x;
   float xx = x * x;
   float xxx = xx * x;
   
@@ -135,15 +135,10 @@ float interpolate_cubic(int len, const float *data, double x)
 }
 
 
-//#include <fenv.h>
-//#include <algorithm>
-
 //------------------------------------------------------------------------------
 void stretch_array(int in_len, const float *in, int out_len, float *out, float start, float len, int type)
 {
   float x = start;
-  //float x = (start >= 0) ? start : 0.0f;
-  //if(floor(start + len) >= in_len-1) len = float(in_len-2) - start; //FIXME: should pad the ending, not squash up array
   float step = len / float(out_len);
   
   if(type == LINEAR)
@@ -153,28 +148,6 @@ void stretch_array(int in_len, const float *in, int out_len, float *out, float s
 	  out[j] = interpolate_linear(in_len, in, x);
 	  x += step;
 	}
-      /*
-	int prevRoundMode = fegetround();
-	fesetround(FE_DOWNWARD);
-	int j=0;
-	//while(x < 0.0f) { out[j++] = 0.0f; x+=step; }
-	//int small_out_len = std::min(lrint(start + out_len*step), in_len-2);
-	while(j<out_len) {
-	int x0 = lrint(x);
-	//assert(x0 >= 0);
-	//printf("j=%d, %d, %f, %d\n", j, x0, x, in_len-2);
-	if(x0 < 0 || x0 > len - 2) { out[j++]=0; continue;}  //{ printf("find_interpolate error\n"); exit(1); } //exit with an error
-	//assert(x0 <= in_len - 2);
-	float y0 = in[x0];
-	//float y1 = in[x0+1];
-	out[j++] = y0 + (x-(float)x0)*(in[x0+1]-y0);
-	x += step;
-	}
-	//while(j<out_len) {
-	//  out[j] = 0.0f;
-	//}
-	fesetround(prevRoundMode);
-      */
   }
   else if(type == BSPLINE)
     {
