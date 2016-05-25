@@ -7,6 +7,8 @@
     begin                : Nov 2004
     copyright            : (C) 2004-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
    
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -94,7 +96,7 @@ double lookupLoudnessTable(double row, double col)
   return e + (f - e) * rrow;
 }
 
-double dbToPhons(double freq, double intensity)
+double dbToPhons(const double & freq, const double & intensity)
 {
   //Todo: Finish writing this function
   double row = intensity / 10.0;
