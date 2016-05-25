@@ -4,7 +4,7 @@
 /**
    rotates a the complex number (sin_sum, cos_sum) by an angle.
 */
-inline void fast_complex_rotate(double &x, double &y, double sin_angle, double cos_angle);
+inline void fast_complex_rotate(double &x, double &y, const double & sin_angle, const double & cos_angle);
 
 /**
    A class to perform smoothing/bluring on data using a hanning (cos shaped) window.
