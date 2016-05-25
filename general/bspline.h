@@ -38,7 +38,7 @@ float interpolate_b_spline(int len, const float *array, float x);
 /**
    Uses a Hermite curve
 */
-float interpolate_cubic(int len, const float *data, double x);
+float interpolate_cubic(int len, const float *data, const double & x);
 
 /**
    NOTE: Only LINEAR has been optimised a little for speed. The others could be made more efficient

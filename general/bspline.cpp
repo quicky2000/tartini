@@ -76,7 +76,7 @@ float interpolate_b_spline(int len, const float *array, float x)
 
 
 //------------------------------------------------------------------------------
-float interpolate_cubic(int len, const float *data, double x)
+float interpolate_cubic(int len, const float *data, const double & x)
 {
   int inpos = int(x);
   float finpos = float(x - double(inpos));
