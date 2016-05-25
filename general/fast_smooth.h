@@ -1,11 +1,15 @@
 #ifndef _FAST_SMOOTH_H
 #define _FAST_SMOOTH_H
 
-//rotates a the complex number (sin_sum, cos_sum) by an angle.
+/**
+   rotates a the complex number (sin_sum, cos_sum) by an angle.
+*/
 inline void fast_complex_rotate(double &x, double &y, double sin_angle, double cos_angle);
 
-/*A class to perform smoothing/bluring on data using a hanning (cos shaped) window.
-This uses and fast internal rotation algorithm*/
+/**
+   A class to perform smoothing/bluring on data using a hanning (cos shaped) window.
+   This uses and fast internal rotation algorithm
+*/
 class fast_smooth
 {
     int _size, _size_left, _size_right;
@@ -14,14 +18,23 @@ class fast_smooth
     double _sum;
 
  public:
-    fast_smooth(int size); //the total width of the hanning window. To keep data centered use an odd size
+    /**
+        the total width of the hanning window. To keep data centered use an odd size
+    */
+    fast_smooth(int size);
     void fast_smoothA(float *source, float *dest, int length, int step);
     void fast_smoothA(float *source, float *dest, int length);
+
+    /**
+       treats all values off either end the same as the value at end
+    */
     void fast_smoothB(float *source, float *dest, int length, int step);
+
+    /**
+       treats all values off either end the same as the value at end
+    */
     void fast_smoothB(float *source, float *dest, int length);
 };
-
-void testFastSmooth();
 
 #include "fast_smooth.hpp"
 
