@@ -121,6 +121,7 @@ HEADERS += main.h \
   include/array1d.h \
   include/array2d.h \
   sound/channel.h \
+  sound/channel.hpp \
   sound/soundfile.h \
   global/view.h \
   global/view.hpp \

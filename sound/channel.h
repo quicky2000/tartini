@@ -80,75 +80,79 @@ public:
   ZoomLookup normalZoomLookup;
   ZoomLookup amplitudeZoomLookup;
   
-  void lock() { mutex->lock(); isLocked = true; }
-  void unlock() { isLocked = false; mutex->unlock(); }
-  bool locked() { return isLocked; } //For same thread testing of asserts only
+  inline void lock(void);
+  inline void unlock(void);
+  inline bool locked(void) const; // For same thread testing of asserts only
 
   //Channel();
   Channel(SoundFile *parent_, int size_, int k_=0);
   virtual ~Channel();
-  float *begin() { return directInput.begin(); }
-  float *end() { return directInput.end(); }
-  int size() { return directInput.size(); }
-  float &at(int pos) { return directInput.at(pos); }
-  int rate() { return parent->rate(); }
+
+  inline float * begin();
+  inline float * end();
+  inline int size();
+  inline float & at(int pos);
+  inline int rate();
+
   virtual void resize(int newSize, int k_=0);
   virtual void shift_left(int n);
-  int framesPerChunk() { return parent->framesPerChunk(); }
-  void setParent(SoundFile *parent_) { parent = parent_; }
-  SoundFile* getParent() { return parent; }
-  void setPitchMethod(int pitch_method) { _pitch_method = pitch_method; }
-  int pitchMethod() { return _pitch_method; }
+
+  inline int framesPerChunk();
+  inline void setParent(SoundFile *parent_);
+  inline SoundFile* getParent();
+  inline void setPitchMethod(int pitch_method);
+  inline int pitchMethod();
+
   void calc_last_n_coefficients(int n);
   void processNewChunk(FilterState *filterState);
   void processChunk(int chunk);
-  bool isVisible() { return visible; }
-  void setVisible(bool state=true) { visible = state; }
+  inline bool isVisible();
+  inline void setVisible(bool state=true);
   void reset();
-  double timePerChunk() { return parent->timePerChunk(); }
-  double startTime() { return parent->startTime(); }
-  void setStartTime(double newStartTime) { parent->setStartTime(newStartTime); }
+  inline double timePerChunk();
+  inline double startTime();
+  inline void setStartTime(double newStartTime);
   //int chunkNum() { return parent->chunkNum(); }
-  int totalChunks() { return lookup.size(); }
-  double finishTime() { return startTime() + totalTime(); }
+  inline int totalChunks();
+  inline double finishTime();
   //double totalTime() { return double(lookup.size()) * timePerChunk(); }
-  double totalTime() { return double(MAX(totalChunks()-1, 0)) * timePerChunk(); }
-  void jumpToTime(double t) { parent->jumpToTime(t); }
-  int chunkAtTime(double t) { return parent->chunkAtTime(t); }
-  double chunkFractionAtTime(double t) { return parent->chunkFractionAtTime(t); }
-  int chunkAtCurrentTime() { return parent->chunkAtCurrentTime(); }
+  inline double totalTime();
+  inline void jumpToTime(double t);
+  inline int chunkAtTime(double t);
+  inline double chunkFractionAtTime(double t);
+  inline int chunkAtCurrentTime();
   //int chunkOffset() { return parent->chunkOffset(); }
   //int currentChunk() { return chunkNum() - chunkOffset(); } //this one should be use to retrieve current info
-  int currentChunk() { return parent->currentChunk(); } //this one should be use to retrieve current info
-  double timeAtChunk(int chunk) { return parent->timeAtChunk(chunk); }
+  inline int currentChunk();
+  inline double timeAtChunk(int chunk);
 
   //AnalysisData &dataAtChunk(int chunk) { myassert(chunk >= 0 && chunk < int(lookup.size())); return lookup[chunk]; }
   //AnalysisData &dataAtCurrentTime() { return dataAtChunk(chunkAtCurrentTime()); }
 
-  AnalysisData *dataAtChunk(int chunk) { return (isValidChunk(chunk)) ? &lookup[chunk] : NULL; }
-  AnalysisData *dataAtCurrentChunk() { return dataAtChunk(currentChunk()); }
-  AnalysisData *dataAtTime(double t) { return dataAtChunk(chunkAtTime(t)); }
-  large_vector<AnalysisData>::iterator dataIteratorAtChunk(int chunk) { return lookup.iterator_at(chunk); }
+  inline AnalysisData *dataAtChunk(int chunk);
+  inline AnalysisData *dataAtCurrentChunk();
+  inline AnalysisData *dataAtTime(double t);
+  inline large_vector<AnalysisData>::iterator dataIteratorAtChunk(int chunk);
   static AnalysisData *getActiveChannelCurrentChunkData();
   
-  bool hasAnalysisData() { return !lookup.empty(); }
-  bool isValidChunk(int chunk) { return (chunk >= 0 && chunk < totalChunks()); }
-  bool isValidTime(double t) { return isValidChunk(chunkAtTime(t)); }
-  bool isValidCurrentTime() { return isValidChunk(chunkAtCurrentTime()); }
+  inline bool hasAnalysisData();
+  inline bool isValidChunk(int chunk);
+  inline bool isValidTime(double t);
+  inline bool isValidCurrentTime();
   
   float averagePitch(int begin, int end);
   float averageMaxCorrelation(int begin, int end);
 
-  float threshold() { return _threshold; }
+  inline float threshold();
   //void setThreshold(float threshold) { _threshold = threshold; }
-  void setIntThreshold(int thresholdPercentage) { _threshold = float(thresholdPercentage) / 100.0f; }
+  inline void setIntThreshold(int thresholdPercentage);
   void resetIntThreshold(int thresholdPercentage);
-  void setColor(QColor c) { color = c; }
+  inline void setColor(QColor c);
   //static QColor getNextColour();
 
-  bool isNotePlaying() { return noteIsPlaying; }
+  inline bool isNotePlaying();
   bool isVisibleNote(int noteIndex_);
-  bool isVisibleChunk(int chunk_) { return isVisibleChunk(dataAtChunk(chunk_)); }
+  inline bool isVisibleChunk(int chunk_);
   bool isVisibleChunk(AnalysisData *data);
   bool isChangingChunk(AnalysisData *data);
   bool isNoteChanging(int chunk);
@@ -162,7 +166,7 @@ public:
   NoteData *getLastNote();
   NoteData *getCurrentNote();
   NoteData *getNote(int noteIndex);
-  int getCurrentNoteIndex() { return int(noteData.size())-1; }
+  inline int getCurrentNoteIndex();
   void backTrackNoteChange(int chunk);
   void processNoteDecisions(int chunk, float periodDiff);
   void noteBeginning(int chunk);
@@ -176,15 +180,15 @@ public:
   void resetNSDFAggregate(float period);
   void addToNSDFAggregate(const float scaler, float periodDiff);
   float calcDetailedPitch(float *input, double period, int chunk);
-  bool firstTimeThrough() { return parent->firstTimeThrough; }
-  bool doingDetailedPitch() { return parent->doingDetailedPitch(); }
+  inline bool firstTimeThrough();
+  inline bool doingDetailedPitch();
 
   void calcVibratoData(int chunk);
   float periodOctaveEstimate(int chunk); /*< A estimate from over the whole duration of the note, to help get the correct octave */
 
   void exportChannel(int type, QString typeString);
   void doPronyFit(int chunk);
-  int pronyDelay() { return pronyWindowSize/2; }
+  inline int pronyDelay();
 };
 
 /** Create a ChannelLocker on the stack, the channel will be freed automaticly when
@@ -195,14 +199,10 @@ class ChannelLocker
   Channel *channel;
   
 public:
-  ChannelLocker(Channel *channel_) {
-    myassert(channel_);
-    channel = channel_;
-    channel->lock();
-  }
-  ~ChannelLocker() {
-    channel->unlock();
-  }
+  inline ChannelLocker(Channel *channel_);
+  inline ~ChannelLocker();
 };
+
+#include "channel.hpp"
 
 #endif
