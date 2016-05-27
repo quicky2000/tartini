@@ -152,6 +152,7 @@ HEADERS += main.h \
   widgets/cepstrum/cepstrumview.h \
   sound/notedata.h \
   general/large_vector.h \
+  general/large_vector.hpp \
   widgets/mylabel.h \
   sound/notesynth.h \
   general/fast_smooth.h \
