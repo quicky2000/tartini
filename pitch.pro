@@ -130,6 +130,8 @@ HEADERS += main.h \
   widgets/timeaxis.h \
   sound/analysisdata.h \
   sound/analysisdata.hpp \
+  sound/soundfile.h \
+  sound/soundfile.hpp \
   widgets/volumemeter/volumemeterview.h \
   widgets/volumemeter/volumemeterwidget.h \
   include/myassert.h \

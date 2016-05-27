@@ -64,7 +64,7 @@ public:
   void setFilename(const char *filename_);
   void setFilteredFilename(const char *filteredFilename_);
   QString getNextTempFilename();
-  int numChannels() { return channels.size(); }
+  inline int numChannels();
   bool openRead(const char *filename_);
   bool openWrite(const char *filename_, int rate_, int channels_, int bits_, int windowSize_, int stepSize_);
   void preProcess();
@@ -90,47 +90,49 @@ public:
   //int writeChunk(SoundStream *s=NULL);
   void processNewChunk();
   //void beginning();
-  double startTime() { return _startTime; }
-  void setStartTime(double t) { _startTime = t; }
+  inline double startTime();
+  inline void setStartTime(double t);
   //double getTime(); /**< Returns the time in seconds where the file is currently at */
   //int chunkNum() { return _chunkNum; }
-  int currentStreamChunk() { return (stream->pos() - offset()) / framesPerChunk(); }
-  int currentRawChunk() { return _chunkNum; }
+  inline int currentStreamChunk();
+  inline int currentRawChunk();
   //int currentChunk() { return bound(_chunkNum, 0, totalChunks()-1); }
-  int currentChunk() { return _chunkNum; }
-  void setCurrentChunk(int x) { _chunkNum = x; }
-  void incrementChunkNum() { _chunkNum++; }
+  inline int currentChunk();
+  inline void setCurrentChunk(int x);
+  inline void incrementChunkNum();
 
-  int offset() { return _offset; }
+  inline int offset();
   //int chunkOffset() { return (bufferSize() / framesPerChunk()) / 2; }
-  double timePerChunk() { return double(framesPerChunk()) / double(rate()); }
-  int chunkAtTime(double t) { return toInt(chunkFractionAtTime(t)); } //this is not bounded
+  inline double timePerChunk();
+  inline int chunkAtTime(double t);
   //double chunkFractionAtTime(double t) { return (t / timePerChunk()) + chunkOffset(); } //this is not bounded
-  double chunkFractionAtTime(double t) { return t / timePerChunk(); } //this is not bounded
+  inline double chunkFractionAtTime(double t);
   //double timeAtChunk(int chunk) { return double(chunk - chunkOffset()) * timePerChunk(); }
-  double timeAtChunk(int chunk) { return double(chunk) * timePerChunk(); }
-  double timeAtCurrentChunk() { return timeAtChunk(currentChunk()); }
-  int chunkAtCurrentTime() { return chunkAtTime(gdata->getView().currentTime()); }
+  inline double timeAtChunk(int chunk);
+  inline double timeAtCurrentChunk();
+  inline int chunkAtCurrentTime();
   void shift_left(int n);
   //void nextChunk();
   void jumpToChunk(int chunk);
-  void jumpToTime(double t) { jumpToChunk(chunkAtTime(t)); }
+  inline void jumpToTime(double t);
   
   //int read_n(int n, SoundStream *s);
-  int rate() { myassert(stream != NULL); return stream->freq; }
-  int bits() { myassert(stream != NULL); return stream->bits; }
-  int framesPerChunk() { return _framesPerChunk; }
-  void setFramesPerChunk(int stepSize) { _framesPerChunk = stepSize; }
+  inline int rate();
+  inline int bits() ;
+  inline int framesPerChunk();
+  inline void setFramesPerChunk(int stepSize);
   int bufferSize();
   int totalChunks();
   bool inFile(); /**< Returns false if past end of file */
 
-  bool saved() { return _saved; }
-  void setSaved(bool newState) { _saved = newState; }
-  bool equalLoudness() { return myTransforms.equalLoudness; }
-  bool doingDetailedPitch() { return _doingDetailedPitch; }
+  inline bool saved();
+  inline void setSaved(bool newState);
+  inline bool equalLoudness();
+  inline bool doingDetailedPitch();
 
   friend bool playRecordChunk(SoundFile *playSoundFile, SoundFile *recSoundFile, int n);
 };
+
+#include "soundfile.hpp"
 
 #endif
