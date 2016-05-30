@@ -28,13 +28,13 @@ SoundStream::~SoundStream(void)
 }
 
 //------------------------------------------------------------------------------
-int SoundStream::sample_size(void)
+int SoundStream::sample_size(void) const
 {
  return (bits + 7) / 8;
 }
 
 //------------------------------------------------------------------------------
-int SoundStream::frame_size(void)
+int SoundStream::frame_size(void) const
 {
   return sample_size() * channels;
 }

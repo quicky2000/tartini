@@ -36,8 +36,8 @@ class SoundStream
   inline SoundStream(void);
   virtual inline ~SoundStream(void);
 
-  inline int sample_size(void);
-  inline int frame_size(void);
+  inline int sample_size(void) const;
+  inline int frame_size(void) const;
 
   virtual long read_bytes(void *data, long length) = 0;
   virtual long read_frames(void *data, long length) = 0;
