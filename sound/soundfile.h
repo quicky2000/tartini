@@ -28,6 +28,120 @@ extern const double v8, v16, v32;
 
 class SoundFile
 {
+public:
+  char *filename;
+  char *filteredFilename;
+  SoundFileStream *stream; /**< Pointer to the file's SoundFileStream */
+  SoundFileStream *filteredStream; /**< Pointer to the file's filtered SoundFileStream */
+  Array1d<Channel*> channels; /**< The actual sound data is stored seperately for each channel */
+  MyTransforms myTransforms;
+  bool firstTimeThrough;
+  
+  SoundFile(void);
+  ~SoundFile(void);
+
+  /**
+     free up all the memory of everything used
+  */
+  void uninit(void);
+  void setFilename(const char *filename_);
+  void setFilteredFilename(const char *filteredFilename_);
+  QString getNextTempFilename(void);
+  inline int numChannels(void);
+  bool openRead(const char *filename_);
+  bool openWrite(const char *filename_, int rate_, int channels_, int bits_, int windowSize_, int stepSize_);
+
+  /**
+     Preprocess the whole sound file,
+     by looping through and processing every chunk in the file.
+     A progress bar is displayed in the toolbar, because this can
+     be time consuming.
+  */
+  void preProcess(void);
+  void rec2play(void);
+  void close(void);
+
+  /**
+     Lock the mutex's of all the channels
+  */
+  void lock(void);
+
+  /**
+     Unlock the mutex's of all the channels
+  */
+  void unlock(void);
+  
+  int readN(int n);
+
+  /**
+     Plays one chunk of sound to the associated stream
+     @return true on success. false for end of file or error
+  */
+  bool playChunk(void);
+  bool setupPlayChunk(void);
+  void recordChunk(int n);
+  void finishRecordChunk(int n);
+  /**
+     Plays one chunk of sound to the associated stream
+     @return true on success. false for end of file or error
+  */
+  static bool playRecordChunk(SoundFile *playSoundFile, SoundFile *recSoundFile);
+  void applyEqualLoudnessFilter(int n);
+
+  /**
+     Reads framesPerChunk frames from the SoundStream s
+     into the end of the channel buffers. I.e losing framesPerChunk
+     frames from the beginning of the channel buffers.
+     If s is NULL (the defult) the the file stream is used
+     @param s The SoundStream to read from or NULL (the default) the current file stream is used    
+     @return The number of frames actually read ( <= framesPerChunk() )
+  */
+  int readChunk(int n);
+
+  /**
+     Process the chunks for all the channels
+     Increment the chunkNum.
+  */
+  void processNewChunk(void);
+  inline double startTime(void);
+  inline void setStartTime(double t);
+  inline int currentStreamChunk(void);
+  inline int currentRawChunk(void);
+  inline int currentChunk(void);
+  inline void setCurrentChunk(int x);
+  inline void incrementChunkNum(void);
+
+  inline int offset(void);
+  inline double timePerChunk(void);
+  inline int chunkAtTime(double t);
+  inline double chunkFractionAtTime(double t);
+  inline double timeAtChunk(int chunk);
+  inline double timeAtCurrentChunk(void);
+  inline int chunkAtCurrentTime(void);
+
+  /**
+     shift all the channels data left by n frames
+  */
+  void shift_left(int n);
+  void jumpToChunk(int chunk);
+  inline void jumpToTime(double t);
+  
+  inline int rate(void);
+  inline int bits(void) ;
+  inline int framesPerChunk(void);
+  inline void setFramesPerChunk(int stepSize);
+  int bufferSize(void);
+  int totalChunks(void);
+  bool inFile(void); /**< Returns false if past end of file */
+
+  inline bool saved(void);
+  inline void setSaved(bool newState);
+  inline bool equalLoudness(void);
+  inline bool doingDetailedPitch(void);
+
+
+  friend bool playRecordChunk(SoundFile *playSoundFile, SoundFile *recSoundFile, int n);
+
 protected:
   int _chunkNum;
   int _framesPerChunk; /**< The number of samples to move every chunk */
@@ -41,80 +155,47 @@ protected:
   QMutex *mutex;
   bool _doingDetailedPitch;
 
+  /**
+     Waits until there is n frames of data to read from s,
+     Then puts the data in buffer.
+     @param s The SoundStream to read from
+     @param buffer The chunk buffer to put the data into. (s->channels of at least n length)
+     This is padded with zeros (up to n) if there is less than n frames read.
+     @param n The number of frames to read
+     @return The number of frames read.
+  */
   int blockingRead(SoundStream *s, float **buffer, int n); //low level
+
+  /**
+     Writes n frames of data to s from buffer.
+     @param s The SoundStream to write to
+     @param buffer The chunk buffer data to use. (s->channels of at least n length)
+     @param n The number of frames to write
+     @return The number of frames written.
+  */
   int blockingWrite(SoundStream *s, float **buffer, int n); //low level
+
+  /**
+     Writes n frames of data to s and reads n frames of data from s
+     If less than n frams are read, the remaining buffer is filled with zeros
+     @param s The SoundStream to write to then read from
+     @param writeBuffer The data that is to be written to the stream
+     @param readBuffer The data that is read back from the stream
+     @param n The amount of data in each of the buffers. Note: They must be the same size
+     @param ch The number of channels
+  */
   static int blockingWriteRead(SoundStream *s, float **writeBuffer, int writeCh, float **readBuffer, int readCh, int n);
   void toChannelBuffers(int n); //low level
+
+  /**
+     @param c Channel number
+     @param n Number of frames to copy from tempWindowBuffer into channel
+  */
   void toChannelBuffer(int c, int n);
-public:
-  char *filename;
-  char *filteredFilename;
-  SoundFileStream *stream; /**< Pointer to the file's SoundFileStream */
-  SoundFileStream *filteredStream; /**< Pointer to the file's filtered SoundFileStream */
-  Array1d<Channel*> channels; /**< The actual sound data is stored seperately for each channel */
-  MyTransforms myTransforms;
-  bool firstTimeThrough;
-  
-  SoundFile();
-  ~SoundFile();
-  void uninit();
-  void setFilename(const char *filename_);
-  void setFilteredFilename(const char *filteredFilename_);
-  QString getNextTempFilename();
-  inline int numChannels();
-  bool openRead(const char *filename_);
-  bool openWrite(const char *filename_, int rate_, int channels_, int bits_, int windowSize_, int stepSize_);
-  void preProcess();
-  void rec2play();
-  void close();
-
-  void lock();
-  void unlock();
-  
-  int readN(int n);
-  bool playChunk();
-  bool setupPlayChunk();
-  void recordChunk(int n);
-  void finishRecordChunk(int n);
-  static bool playRecordChunk(SoundFile *playSoundFile, SoundFile *recSoundFile);
-  void applyEqualLoudnessFilter(int n);
-  int readChunk(int n);
-  void processNewChunk();
-  inline double startTime();
-  inline void setStartTime(double t);
-  inline int currentStreamChunk();
-  inline int currentRawChunk();
-  inline int currentChunk();
-  inline void setCurrentChunk(int x);
-  inline void incrementChunkNum();
-
-  inline int offset();
-  inline double timePerChunk();
-  inline int chunkAtTime(double t);
-  inline double chunkFractionAtTime(double t);
-  inline double timeAtChunk(int chunk);
-  inline double timeAtCurrentChunk();
-  inline int chunkAtCurrentTime();
-  void shift_left(int n);
-  void jumpToChunk(int chunk);
-  inline void jumpToTime(double t);
-  
-  inline int rate();
-  inline int bits() ;
-  inline int framesPerChunk();
-  inline void setFramesPerChunk(int stepSize);
-  int bufferSize();
-  int totalChunks();
-  bool inFile(); /**< Returns false if past end of file */
-
-  inline bool saved();
-  inline void setSaved(bool newState);
-  inline bool equalLoudness();
-  inline bool doingDetailedPitch();
-
-  friend bool playRecordChunk(SoundFile *playSoundFile, SoundFile *recSoundFile, int n);
 };
 
 #include "soundfile.hpp"
 
-#endif
+#endif // SOUND_FILE
+//EOF
+
