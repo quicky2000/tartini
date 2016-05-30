@@ -20,7 +20,6 @@
 #include "array2d.h"
 #include "qcolor.h"
 #include <vector>
-//#include "myqmutex.h"
 #include "analysisdata.h"
 #include "zoomlookup.h"
 #include "soundfile.h"
@@ -28,18 +27,14 @@
 #include "large_vector.h"
 #include "Filter.h"
 
-class Channel/* : public Array1d<float>*/
+class Channel
 {
 private:
   SoundFile *parent;
   float freq; /**< Channel's frequency */
-  //float estimate;
-  //int frame_num;
   int _pitch_method;
   bool visible;
   bool noteIsPlaying;
-  //double timeOffset; /**< Where the file starts in absolute time (in seconds) */
-  //std::vector<AnalysisData> lookup;
   large_vector<AnalysisData> lookup;
   float _threshold;
   QMutex *mutex;
@@ -52,7 +47,6 @@ public:
   large_vector<float> pitchLookup;
   large_vector<float> pitchLookupSmoothed;
   QColor color;
-  //large_vector<float> filteredData;
   Array1d<float> directInput;
   Array1d<float> filteredInput;
   Array1d<float> coefficients_table;
@@ -66,13 +60,10 @@ public:
   Array1d<float> cepstrumData;
   Array1d<float> detailedPitchData;
   Array1d<float> detailedPitchDataSmoothed;
-  //std::vector<NoteData> noteData;
   large_vector<NoteData> noteData;
   Filter *highPassFilter;
   Filter *pitchSmallSmoothingFilter;
   Filter *pitchBigSmoothingFilter;
-  //double filterStateX1, filterStateX2;
-  //double filterStateY1, filterStateY2;
   double rmsFloor; //in dB
   double rmsCeiling; //in dB
   
@@ -112,22 +103,15 @@ public:
   inline double timePerChunk();
   inline double startTime();
   inline void setStartTime(double newStartTime);
-  //int chunkNum() { return parent->chunkNum(); }
   inline int totalChunks();
   inline double finishTime();
-  //double totalTime() { return double(lookup.size()) * timePerChunk(); }
   inline double totalTime();
   inline void jumpToTime(double t);
   inline int chunkAtTime(double t);
   inline double chunkFractionAtTime(double t);
   inline int chunkAtCurrentTime();
-  //int chunkOffset() { return parent->chunkOffset(); }
-  //int currentChunk() { return chunkNum() - chunkOffset(); } //this one should be use to retrieve current info
   inline int currentChunk();
   inline double timeAtChunk(int chunk);
-
-  //AnalysisData &dataAtChunk(int chunk) { myassert(chunk >= 0 && chunk < int(lookup.size())); return lookup[chunk]; }
-  //AnalysisData &dataAtCurrentTime() { return dataAtChunk(chunkAtCurrentTime()); }
 
   inline AnalysisData *dataAtChunk(int chunk);
   inline AnalysisData *dataAtCurrentChunk();
@@ -144,11 +128,9 @@ public:
   float averageMaxCorrelation(int begin, int end);
 
   inline float threshold();
-  //void setThreshold(float threshold) { _threshold = threshold; }
   inline void setIntThreshold(int thresholdPercentage);
   void resetIntThreshold(int thresholdPercentage);
   inline void setColor(QColor c);
-  //static QColor getNextColour();
 
   inline bool isNotePlaying();
   bool isVisibleNote(int noteIndex_);
