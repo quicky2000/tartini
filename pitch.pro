@@ -77,6 +77,7 @@ HEADERS += main.h \
   sound/sound_stream.h \
   sound/wave_stream.h \
   sound/sound_file_stream.h \
+  sound/sound_file_stream.hpp \
   sound/audio_thread.h \
   general/myio.h \
   general/useful.h \
