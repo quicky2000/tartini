@@ -22,14 +22,12 @@
 #include "mytransforms.h"
 #include "mainwindow.h"
 
-//#include "channel.h"
 class Channel;
 
 extern const double v8, v16, v32;
 
 class SoundFile
 {
-//private:
 protected:
   int _chunkNum;
   int _framesPerChunk; /**< The number of samples to move every chunk */
@@ -58,7 +56,6 @@ public:
   bool firstTimeThrough;
   
   SoundFile();
-  //SoundFile(const char *filename_);
   ~SoundFile();
   void uninit();
   void setFilename(const char *filename_);
@@ -74,49 +71,34 @@ public:
   void lock();
   void unlock();
   
-  //int readN(SoundStream *s, int n);
   int readN(int n);
   bool playChunk();
   bool setupPlayChunk();
-  //bool recordChunk();
   void recordChunk(int n);
   void finishRecordChunk(int n);
   static bool playRecordChunk(SoundFile *playSoundFile, SoundFile *recSoundFile);
-  //void initRecordingChunk();
   void applyEqualLoudnessFilter(int n);
-  //int readChunk(SoundStream *s=NULL);
-  //int readChunk(int n, SoundStream *s=NULL);
   int readChunk(int n);
-  //int writeChunk(SoundStream *s=NULL);
   void processNewChunk();
-  //void beginning();
   inline double startTime();
   inline void setStartTime(double t);
-  //double getTime(); /**< Returns the time in seconds where the file is currently at */
-  //int chunkNum() { return _chunkNum; }
   inline int currentStreamChunk();
   inline int currentRawChunk();
-  //int currentChunk() { return bound(_chunkNum, 0, totalChunks()-1); }
   inline int currentChunk();
   inline void setCurrentChunk(int x);
   inline void incrementChunkNum();
 
   inline int offset();
-  //int chunkOffset() { return (bufferSize() / framesPerChunk()) / 2; }
   inline double timePerChunk();
   inline int chunkAtTime(double t);
-  //double chunkFractionAtTime(double t) { return (t / timePerChunk()) + chunkOffset(); } //this is not bounded
   inline double chunkFractionAtTime(double t);
-  //double timeAtChunk(int chunk) { return double(chunk - chunkOffset()) * timePerChunk(); }
   inline double timeAtChunk(int chunk);
   inline double timeAtCurrentChunk();
   inline int chunkAtCurrentTime();
   void shift_left(int n);
-  //void nextChunk();
   void jumpToChunk(int chunk);
   inline void jumpToTime(double t);
   
-  //int read_n(int n, SoundStream *s);
   inline int rate();
   inline int bits() ;
   inline int framesPerChunk();

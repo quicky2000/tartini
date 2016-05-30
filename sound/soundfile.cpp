@@ -18,7 +18,6 @@
 #include "mystring.h"
 #include "array1d.h"
 #include "useful.h"
-//#include "gdata.h"
 #include <algorithm>
 #include "channel.h"
 
@@ -39,8 +38,6 @@
 #endif
 
 #include "QMessageBox"
-
-//const double v8=0x7F, v16=0x7FFF, v32=0x7FFFFFFF;
 
 typedef unsigned char byte;
 
@@ -64,21 +61,6 @@ SoundFile::SoundFile()
   _doingDetailedPitch = false;
 }
 
-/*
-SoundFile::SoundFile(const char *filename_)
-{
-  filename = NULL;
-  stream = NULL;
-  openRead(filename_);
-  _framesPerChunk = 0;
-  //channelInsertPtrs = NULL;
-  tempChunkBuffer = NULL;
-  tempWindowBuffer = NULL;
-  _startTime = 0.0;
-  _chunkNum = 0;
-}
-*/
-
 SoundFile::~SoundFile()
 {
   uninit();
@@ -100,7 +82,6 @@ void SoundFile::uninit()
   }
   setFilename(NULL);
   setFilteredFilename(NULL);
-  //if(channelInsertPtrs) { delete channelInsertPtrs; channelInsertPtrs = NULL; }
   for(int j=0; j<numChannels(); j++) {
     delete channels(j);
     delete[] (tempWindowBuffer[j]-16);
@@ -134,7 +115,6 @@ void SoundFile::setFilteredFilename(const char *filteredFilename_)
 
 QString SoundFile::getNextTempFilename()
 {
-  //QString tempFileFolder = gdata->settings.getString("General", "tempFilesFolder");
   QString tempFileFolder = gdata->getSettingsValue("General/tempFilesFolder", QDir::convertSeparators(QDir::currentDirPath()));
   QDir dir = QDir(tempFileFolder);
   QFileInfo fileInfo;
@@ -144,7 +124,9 @@ QString SoundFile::getNextTempFilename()
   do {
     fileExists = false;
     fileName.sprintf("temp%03d.wav", index);
-    //printf("trying %s\n", fileName.latin1());
+#ifdef PRINTF_DEBUG
+    printf("trying %s\n", fileName.latin1());
+#endif // PRINTF_DEBUG
     fileInfo.setFile(dir, fileName);
     if(fileInfo.exists()) {
       fileExists = true;
@@ -160,32 +142,21 @@ bool SoundFile::openRead(const char *filename_)
   setSaved(true);
 
   setFilename(filename_);
-  //setFilteredFilename((QString(filename)+QString("~")).ascii());
   setFilteredFilename(getNextTempFilename());
   fprintf(stderr, "Opening file: %s\n(FilteredFilename: %s)\n", filename, filteredFilename);
-//#ifdef USE_SOX
-//  stream = new SoxStream;
-//#else
   if(str_case_cmp(getFileExtension(filename), "wav") == 0) {
 	  stream = new WaveStream;
     filteredStream = new WaveStream;
   }
-//#ifdef USE_OGG
-//  else if(str_case_cmp(getFileExtension(filename), "ogg") == 0) {
-//	  stream = new OggStream;
-//  }
-//#endif
   else {
     fprintf(stderr, "Cannot open file of this type. %s\n", filename);
     return false;
   }
-//#endif
 
   if(stream->open_read(filename)) {
     fprintf(stderr, "Error opening %s\n", filename);
     return false;
   }
-  //if(filteredStream->open_read((QString(filename) + QString("~")).ascii())) {
   if(filteredStream->open_write(filteredFilename, stream->freq, stream->channels, stream->bits)) {
     fprintf(stderr, "Error opening %s\n", filteredFilename);
     delete stream; stream = NULL;
@@ -200,16 +171,13 @@ bool SoundFile::openRead(const char *filename_)
   fprintf(stderr, "channels = %d\n", numChannels());
 
   int stepSize_ = gdata->getAnalysisStepSize(stream->freq);
-  //_offset = (windowSize_ / stepSize_) / 2;
   _offset = windowSize_ / 2;
   setFramesPerChunk(stepSize_); // The user needs to be able to set this
 
   for(int j=0; j<numChannels(); j++) {
     channels(j) = new Channel(this, windowSize_);
     fprintf(stderr, "channel size = %d\n", channels(j)->size());
-    //channels(j)->setParent(this);
     channels(j)->setColor(gdata->getNextColor());
-    //channels(j)->setPitchMethod(gdata->pitch_method[0]);
   }
   myTransforms.init(windowSize_, 0, stream->freq, gdata->doingEqualLoudness());
 
@@ -244,7 +212,6 @@ bool SoundFile::openWrite(const char *filename_, int rate_, int channels_, int b
   uninit();
   setSaved(false);
 
-  //_offset = (windowSize_ / stepSize_) / 2;
   _offset = windowSize_ / 2;
   fprintf(stderr, "--------Recording------------\n");
   fprintf(stderr, "filename = %s\n", filename_);
@@ -258,7 +225,6 @@ bool SoundFile::openWrite(const char *filename_, int rate_, int channels_, int b
   setFramesPerChunk(stepSize_);
 
   setFilename(filename_);
-  //setFilteredFilename((QString(filename)+QString("~")).ascii());
   setFilteredFilename(getNextTempFilename());
   
   stream = new WaveStream;
@@ -281,17 +247,17 @@ bool SoundFile::openWrite(const char *filename_, int rate_, int channels_, int b
     mainWindow->menuPreferences();
     return false;
   }
-  //printf("in_channels = %d\n", gdata->in_channels);
-  //printf("stream->channels=%d\n", stream->channels);
+#ifdef PRINTF_DEBUG
+  printf("in_channels = %d\n", gdata->in_channels);
+  printf("stream->channels=%d\n", stream->channels);
+#endif // PRINTF_DEBUG
 
   channels.resize(stream->channels);
   fprintf(stderr, "channels = %d\n", numChannels());
   for(int j=0; j<numChannels(); j++) {
     channels(j) = new Channel(this, windowSize_);
     fprintf(stderr, "channel size = %d\n", channels(j)->size());
-    //channels(j)->setParent(this);
     channels(j)->setColor(gdata->getNextColor());
-    //channels(j)->setPitchMethod(gdata->pitch_method[0]);
   }
   myTransforms.init(windowSize_, 0, stream->freq, gdata->doingEqualLoudness());
 
@@ -318,7 +284,6 @@ void SoundFile::rec2play()
   stream->open_read(filename);
   filteredStream->close();
   filteredStream->open_read(filteredFilename);
-  //beginning();
   jumpToChunk(totalChunks());
   fprintf(stderr, "filteredFilename = %s\n", filteredFilename);
   fprintf(stderr, "totalChunks = %d\n", totalChunks());
@@ -326,7 +291,6 @@ void SoundFile::rec2play()
 
 void SoundFile::close()
 {
-  //stream->close();
   uninit();
 }
   
@@ -351,145 +315,30 @@ void SoundFile::unlock()
 */
 bool SoundFile::playChunk()
 {
-/*
-  int c;
-  int ret = blockingRead(stream, tempWindowBuffer, framesPerChunk());
-  if(equalLoudness()) ret = blockingRead(filteredStream, tempWindowBufferFiltered, framesPerChunk());
-  if(ret < framesPerChunk()) return false;
-  ret = blockingWrite(gdata->audio_stream, tempWindowBuffer, framesPerChunk());
-  if(ret < framesPerChunk()) {
-    fprintf(stderr, "Error writing to audio device\n");
-  }
-  
-  lock();
-  for(c=0; c<numChannels(); c++) {
-    channels(c)->shift_left(framesPerChunk());
-    toChannelBuffer(c, framesPerChunk());
-	  if(gdata->doingActive() && channels(c) == gdata->getActiveChannel()) {
-      channels(c)->processChunk(currentChunk()+1);
-	  }
-  }
-  setCurrentChunk(currentStreamChunk());
-  unlock();
-  return true;
-*/
   if(!setupPlayChunk()) return false;
   int ret = blockingWrite(gdata->getAudioStream(), tempWindowBuffer, framesPerChunk());
   if(ret < framesPerChunk()) {
     fprintf(stderr, "Error writing to audio device\n");
   }
-  //setCurrentChunk(currentStreamChunk());
   return true;
 }
-
-/*
-bool SoundFile::recordChunk()
-{
-  int c;
-  int ret = blockingRead(gdata->audio_stream, tempWindowBuffer, framesPerChunk());
-  if(ret < framesPerChunk()) {
-    fprintf(stderr, "Data lost in reading from audio device\n");
-  }
-
-  //static uint prevTime = 0;
-  //uint time0 = clock();
-  //if(mutex->locked()) {
-	//printf("Waiting for mutex\n");
-  //}
-
-  FilterState filterState;
-  
-  lock();
-  for(c=0; c<numChannels(); c++) {
-    channels(c)->shift_left(framesPerChunk());
-    std::copy(tempWindowBuffer[c], tempWindowBuffer[c]+framesPerChunk(), channels(c)->end() - framesPerChunk());
-    channels(c)->highPassFilter->getState(&filterState);
-    for(int j=channels(c)->size()-framesPerChunk(); j<channels(c)->size(); j++) {
-      channels(c)->filteredInput.at(j) = bound(channels(c)->at(j), -1.0f, 1.0f);
-    }
-    //if(channels(c) == gdata->getActiveChannel())
-    channels(c)->processNewChunk(&filterState);
-  }
-  unlock();
-
-  //uint time1 = clock();
-
-  ret = blockingWrite(stream, tempWindowBuffer, framesPerChunk());
-  //ret = framesPerChunk();
-  if(ret < framesPerChunk()) {
-    fprintf(stderr, "Error writing to disk\n");
-  }
-  setCurrentChunk(currentStreamChunk());
-  //clock_t time2 = clock();
-  //printf("t=%d,%d\n", time1-time0, time2-time1);
-  //prevTime = curTime;
-
-  return true;
-}
-*/
 
 void SoundFile::applyEqualLoudnessFilter(int n)
 {
   int c, j;
   for(c=0; c<numChannels(); c++) {
-    //printf("before: %f == %f\n", channels(c)->filterStateX1, channels(c)->highPassFilter->_x[0]);
-    //printf("before: %f == %f\n", channels(c)->filterStateX2, channels(c)->highPassFilter->_x[1]);
-    //printf("before: %f == %f\n", channels(c)->filterStateY1, channels(c)->highPassFilter->_y[0]);
-    //printf("before: %f == %f\n", channels(c)->filterStateY2, channels(c)->highPassFilter->_y[1]);
-/*
-    tempWindowBufferDouble[c][-2] = channels(c)->filterStateX1;
-    tempWindowBufferDouble[c][-1] = channels(c)->filterStateX2;
-    tempWindowBufferFilteredDouble[c][-2] = channels(c)->filterStateY1;
-    tempWindowBufferFilteredDouble[c][-1] = channels(c)->filterStateY2;
-    double *b = &*(channels(c)->highPassFilter->_b.begin());
-    double *a = &*(channels(c)->highPassFilter->_a.begin());
-    //printf("%lf, %lf, %lf, %lf, %lf\n", b[0], b[1], b[2], a[0], a[1]);
-    //channels(c)->highPassFilter->print();
-    
-    //convert all the tempWindowBuffer from floats to doubles in one go
-    float *xFloat = tempWindowBuffer[c];
-    double *x = tempWindowBufferDouble[c];
-    float *xFloatEnd = xFloat + n;
-    while(xFloat != xFloatEnd)
-      *x++ = double(*xFloat++);
-    
-    x = tempWindowBufferDouble[c];
-    float *yFloat = tempWindowBufferFiltered[c];
-    double *y = tempWindowBufferFilteredDouble[c];
-    
-    for(j=0; j<n; j++) {
-      *y = b[0]*x[0] + b[1]*x[-1] + b[2]*x[-2] - a[0]*y[-1] - a[1]*y[-2];
-      // *y = y[-1];
-      // *y = b[0]*x[-2] + b[1]*x[-1] + b[2]*x[0] - a[0]*y[-2] - a[1]*y[-1];
-      // *y = (y[-2] + y[-1] + x[0]) / 3.0f;
-      *yFloat = bound(*y, -1.0, 1.0);
-      y++;
-      x++;
-      yFloat++;
-      //tempWindowBuffer2[c][j] = bound(double(tempWindowBuffer[c][j]), -1.0, 1.0);
-      //tempWindowBuffer2[c][j] = bound(filter->apply(tempWindowBuffer[c][j]), -1.0, 1.0);
-    }
-    channels(c)->filterStateX1 = tempWindowBufferDouble[c][n-2];
-    channels(c)->filterStateX2 = tempWindowBufferDouble[c][n-1];
-    channels(c)->filterStateY1 = tempWindowBufferFilteredDouble[c][n-2];
-    channels(c)->filterStateY2 = tempWindowBufferFilteredDouble[c][n-1];
-*/
+#ifdef PRINTF_DEBUG
+    printf("before: %f == %f\n", channels(c)->filterStateX1, channels(c)->highPassFilter->_x[0]);
+    printf("before: %f == %f\n", channels(c)->filterStateX2, channels(c)->highPassFilter->_x[1]);
+    printf("before: %f == %f\n", channels(c)->filterStateY1, channels(c)->highPassFilter->_y[0]);
+    printf("before: %f == %f\n", channels(c)->filterStateY2, channels(c)->highPassFilter->_y[1]);
+#endif // PRINTF_DEBUG
 
-    //float *tempTest = (float*)malloc(n*sizeof(float));
-    //channels(c)->highPassFilter->apply(tempWindowBuffer[c], tempTest, n);
     channels(c)->highPassFilter->filter(tempWindowBuffer[c], tempWindowBufferFiltered[c], n);
     for(j=0; j<n; j++) tempWindowBufferFiltered[c][j] = bound(tempWindowBufferFiltered[c][j], -1.0f, 1.0f);
-    //for(j=0; j<n; j++)
-    //  if(tempWindowBufferFiltered[c][j] != tempTest[j]) printf("Filter Diff %d : %f, %f, %f\n", j, tempWindowBuffer[c][j], tempWindowBufferFiltered[c][j], tempTest[j]);
-    //printf("after: %f == %f\n", channels(c)->filterStateX1, channels(c)->highPassFilter->_x[0]);
-    //printf("after: %f == %f\n", channels(c)->filterStateX2, channels(c)->highPassFilter->_x[1]);
-    //printf("after: %f == %f\n", channels(c)->filterStateY1, channels(c)->highPassFilter->_y[0]);
-    //printf("after: %f == %f\n", channels(c)->filterStateY2, channels(c)->highPassFilter->_y[1]);
-    //free(tempTest);
   }
 }
 
-//void SoundFile::initRecordingChunk()
 void SoundFile::recordChunk(int n)
 {
   //int n = offset();
@@ -498,28 +347,6 @@ void SoundFile::recordChunk(int n)
     fprintf(stderr, "Data lost in reading from audio device\n");
   }
   
-/*  if(equalLoudness()) applyEqualLoudnessFilter(n);
-  
-  FilterState filterState;
-  
-  lock(); 
-  for(c=0; c<numChannels(); c++) {
-    channels(c)->shift_left(n);
-    //std::copy(tempWindowBuffer[c], tempWindowBuffer[c]+n, channels(c)->end() - n);
-    //channels(c)->highPassFilter->getState(&filterState);
-    toChannelBuffer(c, n);
-    //if(channels(c) == gdata->getActiveChannel())
-    channels(c)->processNewChunk(&filterState);
-  }
-  unlock();
-  
-  ret = blockingWrite(stream, tempWindowBuffer, n);
-  if(ret < n) fprintf(stderr, "Error writing to disk\n");
-  if(equalLoudness()) ret = blockingWrite(filteredStream, tempWindowBufferFiltered, n);
-  if(ret < n) fprintf(stderr, "Error writing to disk\n");
-  
-  setCurrentChunk(currentStreamChunk());
-*/
   finishRecordChunk(n);
 }
 
@@ -532,10 +359,7 @@ void SoundFile::finishRecordChunk(int n)
   lock(); 
   for(int c=0; c<numChannels(); c++) {
     channels(c)->shift_left(n);
-    //std::copy(tempWindowBuffer[c], tempWindowBuffer[c]+n, channels(c)->end() - n);
-    //channels(c)->highPassFilter->getState(&filterState);
     toChannelBuffer(c, n);
-    //if(channels(c) == gdata->getActiveChannel())
     channels(c)->processNewChunk(&filterState);
   }
   unlock();
@@ -576,11 +400,9 @@ bool SoundFile::playRecordChunk(SoundFile *play, SoundFile *rec)
 {
   int n = rec->framesPerChunk();
   myassert(n == play->framesPerChunk());
-  //int ch = rec->numChannels();
   myassert(rec->numChannels() == play->numChannels());
 
   play->setupPlayChunk();
-  //if(!play->setupPlayChunk()) return false;
 
   int ret = blockingWriteRead(gdata->getAudioStream(), play->tempWindowBuffer, play->numChannels(), rec->tempWindowBuffer, rec->numChannels(), n);
   if(ret < n) {
@@ -602,7 +424,6 @@ bool SoundFile::playRecordChunk(SoundFile *play, SoundFile *rec)
 int SoundFile::readChunk(int n)
 {
   int c;
-  //if(!s) s = stream;
   
   int ret = blockingRead(stream, tempWindowBuffer, n);
   if(equalLoudness()) {
@@ -615,14 +436,11 @@ int SoundFile::readChunk(int n)
   
   lock();
 
-  //nextChunk();
   for(c=0; c<numChannels(); c++) {
     channels(c)->shift_left(n);
-    //channels(c)->highPassFilter->getState(&filterState);
     toChannelBuffer(c, n);
     channels(c)->processNewChunk(&filterState);
   }
-  //incrementChunkNum();
   setCurrentChunk(currentStreamChunk());
   unlock();
   return ret;
@@ -644,7 +462,6 @@ int SoundFile::blockingRead(SoundStream *s, float **buffer, int n)
   int ret = s->readFloats(buffer, n, numChannels());
   if(ret < n) { //if not all bytes are read
     for(c=0; c<numChannels(); c++) { //set remaining bytes to zeros
-      //memset(buffer[c]+ret, 0, (n-ret) * sizeof(float)); 
       std::fill(buffer[c]+ret, buffer[c]+n, 0.0f);
     }
   }
@@ -676,11 +493,9 @@ int SoundFile::blockingWriteRead(SoundStream *s, float **writeBuffer, int writeC
 {
   int c;
   myassert(s);
-  //myassert(n >= 0 && n <= bufferSize());
   int ret = s->writeReadFloats(writeBuffer, writeCh, readBuffer, readCh, n);
   if(ret < n) { //if not all bytes are read
     for(c=0; c<readCh; c++) { //set remaining bytes to zeros
-      //memset(buffer[c]+ret, 0, (n-ret) * sizeof(float)); 
       std::fill(readBuffer[c]+ret, readBuffer[c]+n, 0.0f);
     }
   }
@@ -697,12 +512,6 @@ void SoundFile::toChannelBuffer(int c, int n)
   if(equalLoudness()) {
     std::copy(tempWindowBufferFiltered[c], tempWindowBufferFiltered[c]+n, channels(c)->filteredInput.end() - n);
   
-/*
-    for(int j=channels(c)->size()-n; j<channels(c)->size(); j++) {
-      channels(c)->filteredInput.at(j) = bound(channels(c)->highPassFilter->apply(channels(c)->at(j)), -1.0, 1.0);
-    }
-    //channels(c)->filteredData.push_back(channels(c)->filteredInput.end()-n, n);
-*/
   }
 }
 
@@ -718,7 +527,6 @@ void SoundFile::toChannelBuffers(int n)
   unlock();
 }
 
-//int SoundFile::readN(SoundStream *s,int n)
 int SoundFile::readN(int n)
 {
   myassert(n >= 0 && n <= bufferSize());
@@ -727,26 +535,6 @@ int SoundFile::readN(int n)
   toChannelBuffers(n);
   return ret;
 }
-
-/** Writes framesPerChunk frames into the SoundStream s
-    from end of the channel buffers.
-    If s is NULL (the defult) then the file stream is used
-  @param s The SoundStream to write to, or NULL (the default) the current file stream is used    
-  @return The number of frames actually written ( <= framesPerChunk() )
-*/
-/*
-int SoundFile::writeChunk(SoundStream *s)
-{
-  if(!s) s = stream;
-  //myassert(numChannels() == s->channels);
-  lock();
-  for(int c=0; c<numChannels(); c++)
-    std::copy(channels(c)->end() - framesPerChunk(), channels(c)->end(), tempWindowBuffer[c]);
-  unlock();
-  int ret = s->writeFloats(tempWindowBuffer, framesPerChunk(), numChannels());
-  return ret;
-}
-*/
 
 /** Process the chunks for all the channels
    Increment the chunkNum.
@@ -757,7 +545,6 @@ void SoundFile::processNewChunk()
   FilterState filterState;
   for(int j=0; j<numChannels(); j++) {
     channels(j)->lock();
-    //channels(j)->highPassFilter->getState(&filterState);
     channels(j)->processNewChunk(&filterState);
     channels(j)->unlock();
   }
@@ -771,23 +558,15 @@ void SoundFile::processNewChunk()
 */
 void SoundFile::preProcess()
 {
-  //jumpToChunk(0);
   gdata->setDoingActiveAnalysis(true);
   myassert(firstTimeThrough == true);
   readChunk(bufferSize() - offset());
-  //readChunk(framesPerChunk());
-  //processNewChunk();
-  //printf("preProcessing\n");
-  //for(int j=0; j<numChannels(); j++)
-  //  channels(j)->setframesPerChunk(toRead);
 
   // Create a progress bar in the status bar to tell the user we're preprocessing
   MainWindow *theMainWindow = (MainWindow*) qApp->mainWidget();
   QStatusBar *theStatusBar = theMainWindow->statusBar();
   QLabel *message = new QLabel("Preprocessing data:", theStatusBar, "message");
-  //QLabel *message = new QLabel("Preprocessing data:", theMainWindow, "message");
 
-  //QProgressBar *progress = new QProgressBar(stream->totalFrames() / framesPerChunk(), theMainWindow, "progress bar");
   Q3ProgressBar *progress = new Q3ProgressBar(stream->totalFrames() / framesPerChunk(), theStatusBar, "progress bar");
   progress->setProgress(0);
   progress->setMaximumHeight(16);
@@ -802,11 +581,10 @@ void SoundFile::preProcess()
   int frameCount = 1;
   int updateInterval = MAX(1, progress->totalSteps() / 50); // We'll update 50 times only
 
-  //while(read_n(toRead, stream) == toRead) { // put data in channels
   while(readChunk(framesPerChunk()) == framesPerChunk()) { // put data in channels
-    //printf("pos = %d\n", stream->pos);
-    //processNewChunk();
-    //incrementChunkNum();
+#ifdef PRINTF_DEBUG
+    printf("pos = %d\n", stream->pos);
+#endif // PRINTF_DEBUG
     frameCount++;
 
     if (frameCount % updateInterval == 0) {
@@ -815,8 +593,10 @@ void SoundFile::preProcess()
          frameCount = 1;
     }
   }
-  //printf("totalChunks=%d\n", totalChunks());
-  //printf("currentChunks=%d\n", currentChunk());
+#ifdef PRINTF_DEBUG
+  printf("totalChunks=%d\n", totalChunks());
+  printf("currentChunks=%d\n", currentChunk());
+#endif // PRINTF_DEBUG
   filteredStream->close();
   filteredStream->open_read(filteredFilename);
   jumpToChunk(0);
@@ -830,7 +610,9 @@ void SoundFile::preProcess()
 
   gdata->setDoingActiveAnalysis(false);
   firstTimeThrough = false;
-  //printf("freqLookup.size()=%d\n", channels(0)->freqLookup.size());
+#ifdef PRINTF_DEBUG
+  printf("freqLookup.size()=%d\n", channels(0)->freqLookup.size());
+#endif // PRINTF_DEBUG
 }
 
 //shift all the channels data left by n frames
@@ -841,26 +623,8 @@ void SoundFile::shift_left(int n)
   }
 }
 
-/** Resets the file back to the start and
-    clearing the channel buffers */
-/*
-void SoundFile::beginning()
-{
-  jumpToChunk(0);
-}
-*/
-
-/*
-void SoundFile::nextChunk()
-{
-  shift_left(framesPerChunk());
-  incrementChunkNum();
-}
-*/
-
 void SoundFile::jumpToChunk(int chunk)
 {
-  //if(chunk == currentChunk()) return;
   int c;
   lock();
   int pos = chunk * framesPerChunk() - offset();
@@ -869,7 +633,6 @@ void SoundFile::jumpToChunk(int chunk)
     if(equalLoudness()) filteredStream->jump_to_frame(0);
     for(c=0; c<numChannels(); c++)
       channels(c)->reset();
-    //readN(stream, bufferSize() + pos);
     readN(bufferSize() + pos);
   } else {
     stream->jump_to_frame(pos);
@@ -877,27 +640,8 @@ void SoundFile::jumpToChunk(int chunk)
     //readN(stream, bufferSize());
     readN(bufferSize());
   }
-/*  int n = bufferSize() / framesPerChunk();
-  if(chunk+offset() < n) {
-    stream->jump_to_frame(0);
-    for(c=0; c<numChannels(); c++)
-      channels(c)->reset();
-    if(chunk+offset() >= 0) {
-      for(int j=0; j<chunk+offset(); j++)
-        readChunk();
-    }
-  } else {
-    //if(chunk == currentChunk()+1) { readChunk(); return; }
-    stream->jump_to_frame((chunk+offset()-n) * framesPerChunk());
-    for(int j=0; j<n; j++)
-      readChunk();
-  }
-*/
   setCurrentChunk(chunk);
   
-  //for(c=0; c<numChannels(); c++) {
-  //  if(channels(c) == gdata->getActiveChannel()) channels(c)->processChunk(currentChunk());
-  //}
   unlock();
 }
 
