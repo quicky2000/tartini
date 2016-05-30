@@ -29,12 +29,12 @@ protected:
   inline void setPos(int newPos);
 public:
 
-  inline SoundFileStream();
-  virtual inline ~SoundFileStream();
+  inline SoundFileStream(void);
+  virtual inline ~SoundFileStream(void);
 
-  inline int data_length();
-  inline int totalFrames();
-  inline int pos();
+  inline int data_length(void) const;
+  inline int totalFrames(void) const;
+  inline int pos(void) const;
   
   virtual inline int open_read(const char * /*filename*/);
   virtual inline long read_bytes(void * /*data*/, long /*length*/);
@@ -44,7 +44,7 @@ public:
   virtual inline long write_bytes(void * /*data*/, long /*length*/);
   virtual inline long write_frames(void * /*data*/, long /*length*/);
 
-  virtual inline void close();
+  virtual inline void close(void);
 
   virtual inline void jump_to_frame(int /*frame*/);
   virtual inline void jump_back(int /*frames*/);

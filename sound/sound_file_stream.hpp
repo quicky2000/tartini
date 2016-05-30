@@ -17,10 +17,10 @@
 */
 
 //------------------------------------------------------------------------------
-SoundFileStream::SoundFileStream(void)
+SoundFileStream::SoundFileStream(void):
+  _total_frames(-1),
+  _pos(0)
 {
-  _total_frames=-1;
-  _pos=0;
 }
 
 //------------------------------------------------------------------------------
@@ -29,19 +29,19 @@ SoundFileStream::~SoundFileStream(void)
 }
 
 //------------------------------------------------------------------------------
-int SoundFileStream::data_length(void)
+int SoundFileStream::data_length(void) const
 {
   return totalFrames() * frame_size();
 }
 
 //------------------------------------------------------------------------------
-int SoundFileStream::totalFrames(void)
+int SoundFileStream::totalFrames(void) const
 {
   return _total_frames;
 }
 
 //------------------------------------------------------------------------------
-int SoundFileStream::pos(void)
+int SoundFileStream::pos(void) const
 {
   return _pos;
 }
