@@ -75,6 +75,7 @@ DISTFILES += INSTALL.txt \
 HEADERS += main.h \
   widgets/application.h \
   sound/sound_stream.h \
+  sound/sound_stream.hpp \
   sound/wave_stream.h \
   sound/sound_file_stream.h \
   sound/sound_file_stream.hpp \

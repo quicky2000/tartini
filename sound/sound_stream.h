@@ -33,24 +33,24 @@ class SoundStream
   int bits;
   int mode;
 
-  SoundStream() { mode=F_NONE; }
-  virtual ~SoundStream() {}
+  inline SoundStream(void);
+  virtual inline ~SoundStream(void);
 
-  int sample_size() { return (bits+7) / 8; }
-  int frame_size() { return sample_size() * channels; }
+  inline int sample_size(void);
+  inline int frame_size(void);
 
   virtual long read_bytes(void *data, long length) = 0;
   virtual long read_frames(void *data, long length) = 0;
   virtual long write_bytes(void *data, long length) = 0;
   virtual long write_frames(void *data, long length) = 0;
-  //virtual long write_buffer(FBuffer/*<float>*/ & /*buffer*/, unsigned long /*length*/) { return 0; }
-  //virtual long read_buffer(FBuffer/*<float>*/ & /*buffer*/, unsigned long /*length*/) { return 0; }
-  virtual long wait_bytes(long /*length*/) { return 0; };
-  virtual long wait_frames(long /*length*/) { return 0; };
+  inline virtual long wait_bytes(long /*length*/);
+  inline virtual long wait_frames(long /*length*/);
 
   virtual int writeFloats(float **channelData, int length, int ch);
   virtual int readFloats(float **channelData, int length, int ch);
   virtual int writeReadFloats(float **outChannelData, int outCh, float **inChannelData, int inCh, int length);
 };
+
+#include "sound_stream.hpp"
 
 #endif
