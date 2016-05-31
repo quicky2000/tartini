@@ -95,7 +95,7 @@ void AudioThread::run()
   if((gdata->getSoundMode() & SOUND_REC))
     {
       gdata->setDoingActiveAnalysis(true);
-      myassert(_recSoundFile->firstTimeThrough == true);
+      myassert(_recSoundFile->isFirstTimeThrough() == true);
       //_soundFile->initRecordingChunk();
       _recSoundFile->recordChunk(_recSoundFile->offset());
     }
@@ -120,7 +120,7 @@ void AudioThread::run()
 
   if((gdata->getSoundMode() & SOUND_REC)) {
     gdata->setDoingActiveAnalysis(false);
-    _recSoundFile->firstTimeThrough = false;
+    _recSoundFile->setFirstTimeThrough(false);
    _recSoundFile->rec2play();
    gdata->setSoundMode(SOUND_PLAY);
   }

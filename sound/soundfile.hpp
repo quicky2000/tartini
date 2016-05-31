@@ -163,9 +163,21 @@ bool SoundFile::doingDetailedPitch(void) const
 }
 
 //------------------------------------------------------------------------------
+bool SoundFile::isFirstTimeThrough(void) const
+{
+  return firstTimeThrough;
+}
+
+//------------------------------------------------------------------------------
 const char * SoundFile::getFileName(void) const
 {
   return filename;
+}
+
+//------------------------------------------------------------------------------
+void SoundFile::setFirstTimeThrough(bool p_firstTimeThrough)
+{
+  firstTimeThrough = p_firstTimeThrough;
 }
 
 //------------------------------------------------------------------------------

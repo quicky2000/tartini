@@ -295,7 +295,7 @@ int Channel::getCurrentNoteIndex(void)
 //------------------------------------------------------------------------------
 bool Channel::firstTimeThrough(void)
 {
-  return parent->firstTimeThrough;
+  return parent->isFirstTimeThrough();
 }
 
 //------------------------------------------------------------------------------

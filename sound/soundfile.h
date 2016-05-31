@@ -134,6 +134,8 @@ class SoundFile
 
   friend bool playRecordChunk(SoundFile *playSoundFile, SoundFile *recSoundFile, int n);
 
+  inline bool isFirstTimeThrough(void) const;
+  inline void setFirstTimeThrough(bool);
   inline const char * getFileName(void) const;
 
   inline void calculateAnalysisData(int chunk, Channel *ch);
@@ -194,11 +196,11 @@ protected:
   SoundFileStream *stream; /**< Pointer to the file's SoundFileStream */
   SoundFileStream *filteredStream; /**< Pointer to the file's filtered SoundFileStream */
   Array1d<Channel*> channels; /**< The actual sound data is stored seperately for each channel */
-  bool firstTimeThrough;
 
  private:
   char *filename;
   MyTransforms myTransforms;
+  bool firstTimeThrough;
 
 };
 
