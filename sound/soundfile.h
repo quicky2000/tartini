@@ -143,18 +143,7 @@ class SoundFile
   inline Channel & getChannel(int p_index);
   inline SoundFileStream & getStream(void);
 
-protected:
-  int _chunkNum;
-  int _framesPerChunk; /**< The number of samples to move every chunk */
-  float **tempWindowBuffer; //array is indexed from -16 !!
-  double **tempWindowBufferDouble; //array is indexed from -16 !!
-  float **tempWindowBufferFiltered; //array is indexed from -16 !!
-  double **tempWindowBufferFilteredDouble; //array is indexed from -16 !!
-  double _startTime;
-  int _offset;
-  bool _saved;
-  QMutex *mutex;
-  bool _doingDetailedPitch;
+private:
 
   /**
      Waits until there is n frames of data to read from s,
@@ -203,6 +192,17 @@ protected:
   MyTransforms myTransforms;
   bool firstTimeThrough;
 
+  int _chunkNum;
+  int _framesPerChunk; /**< The number of samples to move every chunk */
+  float **tempWindowBuffer; //array is indexed from -16 !!
+  double **tempWindowBufferDouble; //array is indexed from -16 !!
+  float **tempWindowBufferFiltered; //array is indexed from -16 !!
+  double **tempWindowBufferFilteredDouble; //array is indexed from -16 !!
+  double _startTime;
+  int _offset;
+  bool _saved;
+  QMutex *mutex;
+  bool _doingDetailedPitch;
 };
 
 #include "soundfile.hpp"
