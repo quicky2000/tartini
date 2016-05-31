@@ -194,13 +194,11 @@ protected:
   */
   void toChannelBuffer(int c, int n);
 
- public:
-  SoundFileStream *filteredStream; /**< Pointer to the file's filtered SoundFileStream */
-
  private:
   char *filename;
   char *filteredFilename;
   SoundFileStream *stream; /**< Pointer to the file's SoundFileStream */
+  SoundFileStream *filteredStream; /**< Pointer to the file's filtered SoundFileStream */
   Array1d<Channel*> channels; /**< The actual sound data is stored seperately for each channel */
   MyTransforms myTransforms;
   bool firstTimeThrough;
