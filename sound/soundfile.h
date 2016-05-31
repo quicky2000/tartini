@@ -32,13 +32,7 @@ class SoundFile
   SoundFile(void);
   ~SoundFile(void);
 
-  /**
-     free up all the memory of everything used
-  */
-  void uninit(void);
   void setFilename(const char *filename_);
-  void setFilteredFilename(const char *filteredFilename_);
-  QString getNextTempFilename(void) const;
   inline int numChannels(void) const;
   bool openRead(const char *filename_);
   bool openWrite(const char *filename_, int rate_, int channels_, int bits_, int windowSize_, int stepSize_);
@@ -51,7 +45,6 @@ class SoundFile
   */
   void preProcess(void);
   void rec2play(void);
-  void close(void);
 
   /**
      Lock the mutex's of all the channels
@@ -62,33 +55,20 @@ class SoundFile
      Unlock the mutex's of all the channels
   */
   void unlock(void);
-  
-  int readN(int n);
 
   /**
      Plays one chunk of sound to the associated stream
      @return true on success. false for end of file or error
   */
   bool playChunk(void);
-  bool setupPlayChunk(void);
+
   void recordChunk(int n);
-  void finishRecordChunk(int n);
+
   /**
      Plays one chunk of sound to the associated stream
      @return true on success. false for end of file or error
   */
   static bool playRecordChunk(SoundFile *playSoundFile, SoundFile *recSoundFile);
-  void applyEqualLoudnessFilter(int n);
-
-  /**
-     Reads framesPerChunk frames from the SoundStream s
-     into the end of the channel buffers. I.e losing framesPerChunk
-     frames from the beginning of the channel buffers.
-     If s is NULL (the defult) the the file stream is used
-     @param s The SoundStream to read from or NULL (the default) the current file stream is used    
-     @return The number of frames actually read ( <= framesPerChunk() )
-  */
-  int readChunk(int n);
 
   /**
      Process the chunks for all the channels
@@ -100,8 +80,6 @@ class SoundFile
   inline int currentStreamChunk(void) const;
   inline int currentRawChunk(void) const;
   inline int currentChunk(void) const;
-  inline void setCurrentChunk(int x);
-  inline void incrementChunkNum(void);
 
   inline int offset(void) const;
   inline double timePerChunk(void) const;
@@ -110,27 +88,18 @@ class SoundFile
   inline double timeAtChunk(int chunk) const;
   inline double timeAtCurrentChunk(void) const;
   inline int chunkAtCurrentTime(void) const;
-
-  /**
-     shift all the channels data left by n frames
-  */
-  void shift_left(int n);
   void jumpToChunk(int chunk);
   inline void jumpToTime(const double & t);
   
   inline int rate(void) const;
   inline int bits(void) const;
   inline int framesPerChunk(void) const;
-  inline void setFramesPerChunk(int stepSize);
   int bufferSize(void) const;
   int totalChunks(void) const;
-  bool inFile(void) const; /**< Returns false if past end of file */
 
   inline bool saved(void) const;
   inline void setSaved(bool newState);
-  inline bool equalLoudness(void) const;
   inline bool doingDetailedPitch(void) const;
-
 
   friend bool playRecordChunk(SoundFile *playSoundFile, SoundFile *recSoundFile, int n);
 
@@ -143,7 +112,40 @@ class SoundFile
   inline Channel & getChannel(int p_index);
   inline SoundFileStream & getStream(void);
 
-private:
+ private:
+  /**
+     free up all the memory of everything used
+  */
+  void uninit(void);
+  void setFilteredFilename(const char *filteredFilename_);
+  QString getNextTempFilename(void) const;
+  void close(void);
+  int readN(int n);
+  bool setupPlayChunk(void);
+  void finishRecordChunk(int n);
+  void applyEqualLoudnessFilter(int n);
+
+  /**
+     Reads framesPerChunk frames from the SoundStream s
+     into the end of the channel buffers. I.e losing framesPerChunk
+     frames from the beginning of the channel buffers.
+     If s is NULL (the defult) the the file stream is used
+     @param s The SoundStream to read from or NULL (the default) the current file stream is used    
+     @return The number of frames actually read ( <= framesPerChunk() )
+  */
+  int readChunk(int n);
+
+  inline void setCurrentChunk(int x);
+  inline void incrementChunkNum(void);
+
+  /**
+     shift all the channels data left by n frames
+  */
+  void shift_left(int n);
+
+  inline void setFramesPerChunk(int stepSize);
+  bool inFile(void) const; /**< Returns false if past end of file */
+  inline bool equalLoudness(void) const;
 
   /**
      Waits until there is n frames of data to read from s,
@@ -183,7 +185,6 @@ private:
   */
   void toChannelBuffer(int c, int n);
 
- private:
   char *filename;
   char *filteredFilename;
   SoundFileStream *stream; /**< Pointer to the file's SoundFileStream */
