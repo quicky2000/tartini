@@ -121,6 +121,7 @@ HEADERS += main.h \
   sound/filters/GrowingAveragingFilter.h \
   sound/filters/FastSmoothedAveragingFilter.h \
   include/array1d.h \
+  include/array1d.hpp \
   include/array2d.h \
   sound/channel.h \
   sound/channel.hpp \
