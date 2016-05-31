@@ -208,4 +208,11 @@ Channel & SoundFile::getChannel(int p_index)
   return *(channels.at(p_index));
 }
 
+//------------------------------------------------------------------------------
+SoundFileStream & SoundFile::getStream(void)
+{
+  assert(stream);
+  return *stream;
+}
+
 //EOF

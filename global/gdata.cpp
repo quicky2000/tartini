@@ -704,21 +704,21 @@ int GData::saveFile(SoundFile *s, QString newFilename)
     }
   QString oldFilename(s->getFileName());
   oldFilename = QDir::convertSeparators(oldFilename);
-  int pos = s->stream->pos();
-  s->stream->close();
+  int pos = s->getStream().pos();
+  s->getStream().close();
   
   int ret = (moveFile(oldFilename.latin1(), newFilename.latin1())) ? 0 : -1;
   if(ret == 0)
     {
-      s->stream->open_read(newFilename.latin1());
-      s->stream->jump_to_frame(pos);
+      s->getStream().open_read(newFilename.latin1());
+      s->getStream().jump_to_frame(pos);
       s->setSaved(true);
       s->setFilename(newFilename.latin1());
     }
   else
     {
-      s->stream->open_read(oldFilename.latin1());
-      s->stream->jump_to_frame(pos);
+      s->getStream().open_read(oldFilename.latin1());
+      s->getStream().jump_to_frame(pos);
     }
   return ret;
 }

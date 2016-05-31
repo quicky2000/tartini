@@ -141,6 +141,7 @@ class SoundFile
   inline void calculateAnalysisData(int chunk, Channel *ch);
   inline int getChannelIndex(const Channel &)const;
   inline Channel & getChannel(int p_index);
+  inline SoundFileStream & getStream(void);
 
 protected:
   int _chunkNum;
@@ -194,12 +195,12 @@ protected:
   void toChannelBuffer(int c, int n);
 
  public:
-  SoundFileStream *stream; /**< Pointer to the file's SoundFileStream */
   SoundFileStream *filteredStream; /**< Pointer to the file's filtered SoundFileStream */
 
  private:
   char *filename;
   char *filteredFilename;
+  SoundFileStream *stream; /**< Pointer to the file's SoundFileStream */
   Array1d<Channel*> channels; /**< The actual sound data is stored seperately for each channel */
   MyTransforms myTransforms;
   bool firstTimeThrough;
