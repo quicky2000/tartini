@@ -28,15 +28,7 @@ extern const double v8, v16, v32;
 
 class SoundFile
 {
-public:
-  char *filename;
-  char *filteredFilename;
-  SoundFileStream *stream; /**< Pointer to the file's SoundFileStream */
-  SoundFileStream *filteredStream; /**< Pointer to the file's filtered SoundFileStream */
-  Array1d<Channel*> channels; /**< The actual sound data is stored seperately for each channel */
-  MyTransforms myTransforms;
-  bool firstTimeThrough;
-  
+ public:
   SoundFile(void);
   ~SoundFile(void);
 
@@ -142,6 +134,8 @@ public:
 
   friend bool playRecordChunk(SoundFile *playSoundFile, SoundFile *recSoundFile, int n);
 
+  inline const char * getFileName(void) const;
+
 protected:
   int _chunkNum;
   int _framesPerChunk; /**< The number of samples to move every chunk */
@@ -192,6 +186,18 @@ protected:
      @param n Number of frames to copy from tempWindowBuffer into channel
   */
   void toChannelBuffer(int c, int n);
+
+ public:
+  char *filteredFilename;
+  SoundFileStream *stream; /**< Pointer to the file's SoundFileStream */
+  SoundFileStream *filteredStream; /**< Pointer to the file's filtered SoundFileStream */
+  Array1d<Channel*> channels; /**< The actual sound data is stored seperately for each channel */
+  MyTransforms myTransforms;
+  bool firstTimeThrough;
+
+ private:
+  char *filename;
+
 };
 
 #include "soundfile.hpp"

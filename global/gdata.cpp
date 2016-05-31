@@ -660,7 +660,7 @@ void GData::saveActiveFile(void)
     {
       stop();
     }
-  int val = saveFile(s, saveFileAsk(s->filename));
+  int val = saveFile(s, saveFileAsk(s->getFileName()));
   if(val == 0)
     {
       //success
@@ -668,7 +668,7 @@ void GData::saveActiveFile(void)
     }
   else if(val == -1)
     {
-      QMessageBox::warning(mainWindow, "Error", QString("Error saving file '") + QString(s->filename) + QString("'"), QMessageBox::Ok, Qt::NoButton);
+      QMessageBox::warning(mainWindow, "Error", QString("Error saving file '") + QString(s->getFileName()) + QString("'"), QMessageBox::Ok, Qt::NoButton);
     }
 }
 
@@ -702,7 +702,7 @@ int GData::saveFile(SoundFile *s, QString newFilename)
     {
       return 1;
     }
-  QString oldFilename(s->filename);
+  QString oldFilename(s->getFileName());
   oldFilename = QDir::convertSeparators(oldFilename);
   int pos = s->stream->pos();
   s->stream->close();
@@ -763,7 +763,7 @@ int GData::closeFile(SoundFile *s, int theSavingMode)
       return -1;
     }
   QString newFilename;
-  QString oldFilename(s->filename);
+  QString oldFilename(s->getFileName());
   oldFilename = QDir::convertSeparators(oldFilename);
 
   if(gdata->audioThread.playSoundFile() == s || gdata->audioThread.recSoundFile() == s)

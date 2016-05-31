@@ -161,4 +161,11 @@ bool SoundFile::doingDetailedPitch(void) const
 {
   return _doingDetailedPitch;
 }
+
+//------------------------------------------------------------------------------
+const char * SoundFile::getFileName(void) const
+{
+  return filename;
+}
+
 //EOF

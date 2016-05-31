@@ -50,8 +50,8 @@ void AudioThread::start() {
 
 void AudioThread::start(SoundFile *sPlay, SoundFile *sRec) {
   fprintf(stderr, "Audio thread created for\n");
-  if(sPlay) fprintf(stderr, "Playing file %s\n", sPlay->filename); fflush(stdout);
-  if(sRec) fprintf(stderr, "Recording file %s\n", sRec->filename); fflush(stdout);
+  if(sPlay) fprintf(stderr, "Playing file %s\n", sPlay->getFileName()); fflush(stdout);
+  if(sRec) fprintf(stderr, "Recording file %s\n", sRec->getFileName()); fflush(stdout);
   _playSoundFile = sPlay;
   _recSoundFile = sRec;
   stopping = false;
