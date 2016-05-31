@@ -77,6 +77,8 @@ template<class T> class Array1d
 
   T & operator()(int x);
 
+  const T & operator()(int x) const;
+
   T & operator[](int x);
 
   const T & operator[](int x) const;

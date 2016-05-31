@@ -98,6 +98,13 @@ T & Array1d<T>::operator()(int x)
 
 //------------------------------------------------------------------------------
 template<class T>
+const T & Array1d<T>::operator()(int x) const
+{
+  return at(x);
+}
+
+//------------------------------------------------------------------------------
+template<class T>
 T & Array1d<T>::operator[](int x)
 {
   return at(x);
