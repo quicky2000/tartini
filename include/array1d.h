@@ -38,22 +38,22 @@ template<class T> class Array1d
   /**
      Construct an empty Array1d
   */
-  Array1d(void)
+  Array1d(void):
+    dataSize(0),
+    allocatedSize(0),
+    data(NULL)
     {
-      dataSize = 0;
-      allocatedSize = 0;
-      data = NULL;
     }
 
   /**
      Construct an Array1d of size length. The values are uninitialised
      @param length The size of the new Array1d
   */
-  Array1d(int length)
+  Array1d(int length):
+    dataSize(length),
+    allocatedSize(nextPowerOf2(dataSize)),
+    data((T*)malloc(allocatedSize * sizeof(T)))
     {
-      dataSize = length;
-      allocatedSize = nextPowerOf2(dataSize);
-      data = (T*)malloc(allocatedSize * sizeof(T));
       myassert(data != NULL);
     }
 
@@ -62,11 +62,11 @@ template<class T> class Array1d
      @param length The size of the new Array1d
      @param val Values will initialied to this
   */
-  Array1d(int length, const T &val)
+  Array1d(int length, const T &val):
+    dataSize(length),
+    allocatedSize(nextPowerOf2(dataSize)),
+    data((T*)malloc(allocatedSize * sizeof(T)))
     {
-      dataSize = length;
-      allocatedSize = nextPowerOf2(dataSize);
-      data = (T*)malloc(allocatedSize * sizeof(T));
       myassert(data != NULL);
       fill(val);
     }
@@ -78,10 +78,10 @@ template<class T> class Array1d
      @param length The amount of data to copy and the new size of this array.
   */
   Array1d(const T *src, int length)
+    dataSize(length),
+    allocatedSize(nextPowerOf2(dataSize)),
+    data((T*)malloc(allocatedSize * sizeof(T)))
     {
-      dataSize = length;
-      allocatedSize = nextPowerOf2(dataSize);
-      data = (T*)malloc(allocatedSize * sizeof(T));
       myassert(data != NULL);
       for(T *p = data; p != end();)
 	{
@@ -94,10 +94,11 @@ template<class T> class Array1d
      @param r The Array1d to (deep) copy
   */
   Array1d(Array1d<T> const &r)
+    dataSize(r.size()),
+    allocatedSize(nextPowerOf2(dataSize)),
+    data((T*)malloc(allocatedSize * sizeof(T)))
     {
-      dataSize = r.size();
-      allocatedSize = nextPowerOf2(dataSize);
-      data = (T*)malloc(allocatedSize * sizeof(T));
+      myassert(data != NULL);
       copy_raw(r.begin());
     }
 
@@ -370,10 +371,9 @@ template<class T> class Array1d
   }
 
  private:
-  T* data;
   int dataSize;
   int allocatedSize;
-
+  T* data;
 };
 
 template<class T>
