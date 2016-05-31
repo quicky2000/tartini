@@ -151,7 +151,7 @@ T * Array1d<T>::end(void) const
 
 //------------------------------------------------------------------------------
 template<class T>
-bool Array1d<T>::isEmpty(void)
+bool Array1d<T>::isEmpty(void) const
 {
   return (data==NULL);
 }
@@ -172,14 +172,14 @@ T & Array1d<T>::back(void) const
 
 //------------------------------------------------------------------------------
 template<class T>
-int Array1d<T>::capacity(void)
+int Array1d<T>::capacity(void) const
 {
   return allocatedSize;
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-int Array1d<T>::getIndex(T *element)
+int Array1d<T>::getIndex(T *element) const
 {
   return element - data;
 }

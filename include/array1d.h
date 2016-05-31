@@ -91,15 +91,15 @@ template<class T> class Array1d
 
   T * end(void) const;
 
-  bool isEmpty(void);
+  bool isEmpty(void) const;
 
   T & front(void) const;
 
   T & back(void) const;
 
-  int capacity(void);
+  int capacity(void) const;
 
-  int getIndex(T *element);
+  int getIndex(T *element) const;
 
   /**
      Resizes this to newSize, making all data uninitized
