@@ -17,37 +17,37 @@
 */
 
 //------------------------------------------------------------------------------
-int SoundFile::numChannels(void)
+int SoundFile::numChannels(void) const
 {
   return channels.size();
 }
 
 //------------------------------------------------------------------------------
-double SoundFile::startTime(void)
+const double & SoundFile::startTime(void) const
 {
   return _startTime;
 }
 
 //------------------------------------------------------------------------------
-void SoundFile::setStartTime(double t)
+void SoundFile::setStartTime(const double & t)
 {
   _startTime = t;
 }
 
 //------------------------------------------------------------------------------
-int SoundFile::currentStreamChunk(void)
+int SoundFile::currentStreamChunk(void) const
 {
   return (stream->pos() - offset()) / framesPerChunk();
 }
 
 //------------------------------------------------------------------------------
-int SoundFile::currentRawChunk(void)
+int SoundFile::currentRawChunk(void) const
 {
   return _chunkNum;
 }
 
 //------------------------------------------------------------------------------
-int SoundFile::currentChunk(void)
+int SoundFile::currentChunk(void) const
 {
   return _chunkNum;
 }
@@ -65,69 +65,69 @@ void SoundFile::incrementChunkNum(void)
 }
 
 //------------------------------------------------------------------------------
-int SoundFile::offset(void)
+int SoundFile::offset(void) const
 {
   return _offset;
 }
 
 //------------------------------------------------------------------------------
-double SoundFile::timePerChunk(void)
+double SoundFile::timePerChunk(void) const
 {
   return double(framesPerChunk()) / double(rate());
 }
 
 //------------------------------------------------------------------------------
-int SoundFile::chunkAtTime(double t)
+int SoundFile::chunkAtTime(const double & t) const
 {
   return toInt(chunkFractionAtTime(t));
 } //this is not bounded
 
 //------------------------------------------------------------------------------
-double SoundFile::chunkFractionAtTime(double t)
+double SoundFile::chunkFractionAtTime(const double & t) const
 {
   return t / timePerChunk();
 } //this is not bounded
 
 //------------------------------------------------------------------------------
-double SoundFile::timeAtChunk(int chunk)
+double SoundFile::timeAtChunk(int chunk) const
 {
   return double(chunk) * timePerChunk();
 }
 
 //------------------------------------------------------------------------------
-double SoundFile::timeAtCurrentChunk(void)
+double SoundFile::timeAtCurrentChunk(void) const
 {
   return timeAtChunk(currentChunk());
 }
 
 //------------------------------------------------------------------------------
-int SoundFile::chunkAtCurrentTime(void)
+int SoundFile::chunkAtCurrentTime(void) const
 {
   return chunkAtTime(gdata->getView().currentTime());
 }
 
 //------------------------------------------------------------------------------
-void SoundFile::jumpToTime(double t)
+void SoundFile::jumpToTime(const double & t)
 {
   jumpToChunk(chunkAtTime(t));
 }
 
 //------------------------------------------------------------------------------
-int SoundFile::rate(void)
+int SoundFile::rate(void) const
 {
   myassert(stream != NULL);
   return stream->freq;
 }
 
 //------------------------------------------------------------------------------
-int SoundFile::bits(void)
+int SoundFile::bits(void) const
 {
   myassert(stream != NULL);
   return stream->bits;
 }
 
 //------------------------------------------------------------------------------
-int SoundFile::framesPerChunk(void)
+int SoundFile::framesPerChunk(void) const
 {
   return _framesPerChunk;
 }
@@ -139,7 +139,7 @@ void SoundFile::setFramesPerChunk(int stepSize)
 }
 
 //------------------------------------------------------------------------------
-bool SoundFile::saved(void)
+bool SoundFile::saved(void) const
 {
   return _saved;
 }
@@ -151,13 +151,13 @@ void SoundFile::setSaved(bool newState)
 }
 
 //------------------------------------------------------------------------------
-bool SoundFile::equalLoudness(void)
+bool SoundFile::equalLoudness(void) const
 {
   return myTransforms.equalLoudness;
 }
 
 //------------------------------------------------------------------------------
-bool SoundFile::doingDetailedPitch(void)
+bool SoundFile::doingDetailedPitch(void) const
 {
   return _doingDetailedPitch;
 }

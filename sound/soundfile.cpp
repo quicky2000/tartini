@@ -1,4 +1,4 @@
- /***************************************************************************
+/***************************************************************************
                            soundfile.cpp  -  description
                               -------------------
      begin                : Sat Jul 10 2004
@@ -141,7 +141,7 @@ void SoundFile::setFilteredFilename(const char *filteredFilename_)
 }
 
 //------------------------------------------------------------------------------
-QString SoundFile::getNextTempFilename(void)
+QString SoundFile::getNextTempFilename(void) const
 {
   QString tempFileFolder = gdata->getSettingsValue("General/tempFilesFolder", QDir::convertSeparators(QDir::currentDirPath()));
   QDir dir = QDir(tempFileFolder);
@@ -716,21 +716,21 @@ void SoundFile::jumpToChunk(int chunk)
 }
 
 //------------------------------------------------------------------------------
-int SoundFile::bufferSize(void)
+int SoundFile::bufferSize(void) const
 {
   myassert(!channels.isEmpty());
   return channels(0)->size();
 }
 
 //------------------------------------------------------------------------------
-int SoundFile::totalChunks(void)
+int SoundFile::totalChunks(void) const
 {
   myassert(!channels.isEmpty());
   return channels(0)->totalChunks();
 }
 
 //------------------------------------------------------------------------------
-bool SoundFile::inFile(void)
+bool SoundFile::inFile(void) const
 {
   int c = currentChunk();
   return (c >= 0 && c < totalChunks());

@@ -46,8 +46,8 @@ public:
   void uninit(void);
   void setFilename(const char *filename_);
   void setFilteredFilename(const char *filteredFilename_);
-  QString getNextTempFilename(void);
-  inline int numChannels(void);
+  QString getNextTempFilename(void) const;
+  inline int numChannels(void) const;
   bool openRead(const char *filename_);
   bool openWrite(const char *filename_, int rate_, int channels_, int bits_, int windowSize_, int stepSize_);
 
@@ -103,41 +103,41 @@ public:
      Increment the chunkNum.
   */
   void processNewChunk(void);
-  inline double startTime(void);
-  inline void setStartTime(double t);
-  inline int currentStreamChunk(void);
-  inline int currentRawChunk(void);
-  inline int currentChunk(void);
+  inline const double & startTime(void) const;
+  inline void setStartTime(const double & t);
+  inline int currentStreamChunk(void) const;
+  inline int currentRawChunk(void) const;
+  inline int currentChunk(void) const;
   inline void setCurrentChunk(int x);
   inline void incrementChunkNum(void);
 
-  inline int offset(void);
-  inline double timePerChunk(void);
-  inline int chunkAtTime(double t);
-  inline double chunkFractionAtTime(double t);
-  inline double timeAtChunk(int chunk);
-  inline double timeAtCurrentChunk(void);
-  inline int chunkAtCurrentTime(void);
+  inline int offset(void) const;
+  inline double timePerChunk(void) const;
+  inline int chunkAtTime(const double & t) const;
+  inline double chunkFractionAtTime(const double & t) const;
+  inline double timeAtChunk(int chunk) const;
+  inline double timeAtCurrentChunk(void) const;
+  inline int chunkAtCurrentTime(void) const;
 
   /**
      shift all the channels data left by n frames
   */
   void shift_left(int n);
   void jumpToChunk(int chunk);
-  inline void jumpToTime(double t);
+  inline void jumpToTime(const double & t);
   
-  inline int rate(void);
-  inline int bits(void) ;
-  inline int framesPerChunk(void);
+  inline int rate(void) const;
+  inline int bits(void) const;
+  inline int framesPerChunk(void) const;
   inline void setFramesPerChunk(int stepSize);
-  int bufferSize(void);
-  int totalChunks(void);
-  bool inFile(void); /**< Returns false if past end of file */
+  int bufferSize(void) const;
+  int totalChunks(void) const;
+  bool inFile(void) const; /**< Returns false if past end of file */
 
-  inline bool saved(void);
+  inline bool saved(void) const;
   inline void setSaved(bool newState);
-  inline bool equalLoudness(void);
-  inline bool doingDetailedPitch(void);
+  inline bool equalLoudness(void) const;
+  inline bool doingDetailedPitch(void) const;
 
 
   friend bool playRecordChunk(SoundFile *playSoundFile, SoundFile *recSoundFile, int n);
