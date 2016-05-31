@@ -168,4 +168,10 @@ const char * SoundFile::getFileName(void) const
   return filename;
 }
 
+//------------------------------------------------------------------------------
+void SoundFile::calculateAnalysisData(int chunk, Channel *ch)
+{
+  myTransforms.calculateAnalysisData(chunk,ch);
+}
+
 //EOF

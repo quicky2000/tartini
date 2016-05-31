@@ -136,6 +136,8 @@ class SoundFile
 
   inline const char * getFileName(void) const;
 
+  inline void calculateAnalysisData(int chunk, Channel *ch);
+
 protected:
   int _chunkNum;
   int _framesPerChunk; /**< The number of samples to move every chunk */
@@ -192,11 +194,11 @@ protected:
   SoundFileStream *stream; /**< Pointer to the file's SoundFileStream */
   SoundFileStream *filteredStream; /**< Pointer to the file's filtered SoundFileStream */
   Array1d<Channel*> channels; /**< The actual sound data is stored seperately for each channel */
-  MyTransforms myTransforms;
   bool firstTimeThrough;
 
  private:
   char *filename;
+  MyTransforms myTransforms;
 
 };
 

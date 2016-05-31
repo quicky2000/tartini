@@ -318,7 +318,7 @@ void Channel::processNewChunk(FilterState *filterState)
 #ifdef DEBUG_PRINTF
   printf("lookup=%d\n", lookup.capacity());
 #endif // DEBUG_PRINTF
-  parent->myTransforms.calculateAnalysisData(/*begin(), */int(lookup.size())-1, this/*, threshold()*/);
+  parent->calculateAnalysisData(/*begin(), */int(lookup.size())-1, this/*, threshold()*/);
 }
 
 //------------------------------------------------------------------------------
@@ -327,7 +327,7 @@ void Channel::processChunk(int chunk)
   myassert(locked());
   if(chunk >= 0 && chunk < totalChunks())
     {
-      parent->myTransforms.calculateAnalysisData(/*begin(), */chunk, this/*, threshold()*/);
+      parent->calculateAnalysisData(/*begin(), */chunk, this/*, threshold()*/);
     }
 }
 
