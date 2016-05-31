@@ -186,4 +186,26 @@ void SoundFile::calculateAnalysisData(int chunk, Channel *ch)
   myTransforms.calculateAnalysisData(chunk,ch);
 }
 
+//------------------------------------------------------------------------------
+int SoundFile::getChannelIndex(const Channel & p_channel)const
+{
+  for(int i = 0; i < channels.size(); ++i)
+    {
+      if(&p_channel == channels.at(i))
+	{
+	  return i;
+	}
+    }
+  // If we're here, we didn't find the channel
+  // This should never happen!
+  myassert(false);
+  return -1;
+ }
+
+//------------------------------------------------------------------------------
+Channel & SoundFile::getChannel(int p_index)
+{
+  return *(channels.at(p_index));
+}
+
 //EOF

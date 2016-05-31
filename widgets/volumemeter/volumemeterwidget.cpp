@@ -137,8 +137,8 @@ void VolumeMeterWidget::paintEvent( QPaintEvent * )
   if (active != NULL && active->isValidChunk(active->currentChunk())) {
     int chunk = active->currentChunk();
     if(active->getParent()->numChannels() > 1) {
-      theVal[0] = active->getParent()->channels(0)->dataAtChunk(chunk)->getMaxIntensityDB();
-      theVal[1] = active->getParent()->channels(1)->dataAtChunk(chunk)->getMaxIntensityDB();
+      theVal[0] = active->getParent()->getChannel(0).dataAtChunk(chunk)->getMaxIntensityDB();
+      theVal[1] = active->getParent()->getChannel(1).dataAtChunk(chunk)->getMaxIntensityDB();
     } else {
       theVal[0] = theVal[1] = active->dataAtChunk(chunk)->getMaxIntensityDB();
     }

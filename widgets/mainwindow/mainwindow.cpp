@@ -761,7 +761,7 @@ void MainWindow::openFile(const char *filename)
   gdata->updateViewLeftRightTimes();
   
   gdata->addFileToList(newSoundFile);
-  gdata->setActiveChannel(newSoundFile->channels(0));
+  gdata->setActiveChannel(&(newSoundFile->getChannel(0)));
   //gdata->getView().setCurrentTime(0.0);
   QApplication::postEvent(mainWindow, new QCustomEvent(UPDATE_SLOW));
   //gdata->getView().doFastUpdate();
@@ -858,7 +858,7 @@ void MainWindow::openRecord(bool andPlay)
   }
   gdata->addFileToList(newSoundFile);
   gdata->getView().setCurrentTime(0.0);
-  gdata->setActiveChannel(newSoundFile->channels(0));
+  gdata->setActiveChannel(&(newSoundFile->getChannel(0)));
 
   //int fileGeneratingNumber = gdata->settings.getInt("General", "fileGeneratingNumber");
   int fileGeneratingNumber = gdata->getSettingsValue("General/fileGeneratingNumber", 1);

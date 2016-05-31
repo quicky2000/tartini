@@ -344,19 +344,14 @@ QString Channel::getUniqueFilename(void)
 {
   QString endingStar = (parent->saved()) ? QString("") : QString("*");
 
-  if (getParent()->channels.size() == 1)
+  if (getParent()->numChannels() == 1)
     {
       return QString(getFilenamePart(getParent()->getFileName())) + endingStar;
     }
   else
     {
-      for (int i = 0; i < getParent()->channels.size(); i++)
-	{
-	  if ( getParent()->channels.at(i) == this )
-	    {
-	      return QString(getFilenamePart(getParent()->getFileName())) + " (" + QString::number(i+1) + ")" + endingStar;
-	    }
-	}
+      int l_index = getParent()->getChannelIndex(*this);
+      return QString(getFilenamePart(getParent()->getFileName())) + " (" + QString::number(l_index + 1) + ")" + endingStar;
     }
 
   // If we're here, we didn't find the channel in the parent's channels array.

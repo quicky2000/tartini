@@ -597,7 +597,7 @@ void GData::addFileToList(SoundFile *s)
   soundFiles.push_back(s);
   for(c=0; c<s->numChannels(); c++)
     {
-      channels.push_back(s->channels(c));
+      channels.push_back(&(s->getChannel(c)));
     }
   emit channelsChanged();
 }
@@ -611,7 +611,7 @@ void GData::removeFileFromList(SoundFile *s)
   //remove all the channels in s from the channels list
   for(j=0; j<s->numChannels(); j++)
     {
-      Channel *c = s->channels(j);
+      Channel *c = &(s->getChannel(j));
       curPos = prevPos = 0;
       for(std::vector<Channel*>::iterator it1=channels.begin(); it1 != channels.end(); it1++, curPos++)
 	{
