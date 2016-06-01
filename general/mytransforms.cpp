@@ -32,14 +32,6 @@
 #include <numeric>
 #include <float.h>
 
-//#ifdef WINDOWS
-//#define isnan _isnan
-//#endif
-
-//#ifdef MACX
-//#define isnan(x) (x != x)
-//#endif
-
 #include <complex>
 
 MyTransforms::MyTransforms()
@@ -61,8 +53,6 @@ MyTransforms::~MyTransforms()
 void MyTransforms::init(int n_, int k_, double rate_, /*float threshold_, */bool equalLoudness_, int numHarmonics_)
 {
   const int myFFTMode = FFTW_ESTIMATE;
-  //const int myFFTMode = FFTW_MEASURE;
-  //const int myFFTMode = FFTW_PATIENT;
   uninit();
   if(k_ == 0) k_ = (n_ + 1) / 2;
   
@@ -70,7 +60,6 @@ void MyTransforms::init(int n_, int k_, double rate_, /*float threshold_, */bool
   k = k_;
   size = n + k;
   rate = rate_;
-  //_threshold = threshold_;
   equalLoudness = equalLoudness_;
   numHarmonics = numHarmonics_;
 
@@ -79,8 +68,6 @@ void MyTransforms::init(int n_, int k_, double rate_, /*float threshold_, */bool
   dataFFT  =  (float*)fftwf_malloc(sizeof(float) * n);
   autocorrTime = (float*)fftwf_malloc(sizeof(float) * size);
   autocorrFFT  = (float*)fftwf_malloc(sizeof(float) * size);
-  //storeFFT  = (float*)fftwf_malloc(sizeof(float) * size);
-  //equalLoudnessTable = (float*)fftwf_malloc(sizeof(float) * n);
   hanningCoeff  = (float*)fftwf_malloc(sizeof(float) * n);
 
   planAutocorrTime2FFT = fftwf_plan_r2r_1d(size, autocorrTime, autocorrFFT, FFTW_R2HC, myFFTMode);
@@ -95,11 +82,8 @@ void MyTransforms::init(int n_, int k_, double rate_, /*float threshold_, */bool
   harmonicsPhaseCenter = (float*)fftwf_malloc(numHarmonics * sizeof(float));
   harmonicsAmpRight = (float*)fftwf_malloc(numHarmonics * sizeof(float));
   harmonicsPhaseRight = (float*)fftwf_malloc(numHarmonics * sizeof(float));
-  //storeFFTAmp1 = (float*)malloc(n/2 * sizeof(float));
-  //storeFFTAmp2 = (float*)malloc(n/2 * sizeof(float));
   
   freqPerBin = rate / double(size);
-  //buildEqualLoudnessTable(50.0);
   //init hanningCoeff. The hanning windowing function
   hanningScalar = 0;
   for(int j=0; j<n; j++) {
@@ -109,15 +93,15 @@ void MyTransforms::init(int n_, int k_, double rate_, /*float threshold_, */bool
   hanningScalar /= 2; //to normalise the FFT coefficients we divide by the sum of the hanning window / 2
 
   fastSmooth = new fast_smooth(n/8);
-  //printf("fast_smooth size = %d\n", n/8);
+#ifdef PRINTF_DEBUG
+  printf("fast_smooth size = %d\n", n/8);
+#endif // PRINTF_DEBUG
   beenInit = true;
 }
 
 void MyTransforms::uninit()
 {
   if(beenInit) {
-    //free(storeFFTAmp2);
-    //free(storeFFTAmp1);
     fftwf_free(harmonicsAmpLeft);
     fftwf_free(harmonicsPhaseLeft);
     fftwf_free(harmonicsAmpCenter);
@@ -128,8 +112,6 @@ void MyTransforms::uninit()
     fftwf_destroy_plan(planDataTime2FFT);
     fftwf_destroy_plan(planAutocorrFFT2Time);
     fftwf_destroy_plan(planAutocorrTime2FFT);
-    //fftwf_free(equalLoudnessTable);
-    //fftwf_free(storeFFT);
     fftwf_free(autocorrFFT);
     fftwf_free(autocorrTime);
     fftwf_free(dataFFT);
@@ -160,43 +142,6 @@ double MyTransforms::autocorr(float *input, float *output)
   //Do a forward FFT
   fftwf_execute(planAutocorrTime2FFT);
 
-  //std::copy(autocorrFFT, autocorrFFT+size, storeFFT); //keep a copy of the fft for later use
-/*
-  if(equalLoudness) { //use equal-loudness curves
-    double radius, ratio, dB, phons, newRadius;
-    double speakerLoudness = 100; //in dB
-    //double maxDB = -99999999.0;
-    for(int j=1; j<size/2; j++) {
-      radius = sqrt(sq(autocorrFFT[j]) + sq(autocorrFFT[size-j])) / fsize;
-      if(!(radius > 0.0)) continue; //includes NAN
-      dB = 50.0; //20.0 * log10(radius) + speakerLoudness;
-      phons = dbToPhons(double(j) * freqPerBin, dB);
-      //newRadius = pow10((phons-90.0) / 20.0);
-      //ratio = newRadius / radius;
-      ratio = pow10((phons - dB) / 20.0);
-      autocorrFFT[j] *= ratio;
-      autocorrFFT[size-j] *= ratio;
-      //if(newRadius > maxDB) maxDB = newRadius;
-    }
-    autocorrFFT[0] = 0;
-    autocorrFFT[size/2] = 0;
-    //printf("maxNewRadius = %lf\n", maxDB); 
-       
-    //Do an inverse FFT
-    fftwf_execute(planAutocorrFFT2Time);
-    //normalize
-    for(int x=0; x<n; x++)
-      autocorrTime[x] /= fsize;
-    
-    //fix up the zero padding again
-    std::fill(autocorrTime+n, autocorrTime+size, 0.0f);
-    //copy back to the input array so other calculation can be done on this
-    std::copy(autocorrTime, autocorrTime+n, input);
-    
-    //Do a forward FFT
-    fftwf_execute(planAutocorrTime2FFT);
-  }
-*/
   //calculate the (real*real + ima*imag) for each coefficient
   //Note: The numbers are packed in half_complex form (refer fftw)
   //ie. R[0], R[1], R[2], ... R[size/2], I[(size+1)/2+1], ... I[3], I[2], I[1]
@@ -211,8 +156,6 @@ double MyTransforms::autocorr(float *input, float *output)
   fftwf_execute(planAutocorrFFT2Time);
 
   //extract the wanted elements out, and normalise
-  //for(int x=0; x<k; x++)
-  //  output[x] = autocorrTime[x+1] / fsize;
   for(float *p1=output, *p2=autocorrTime+1; p1<output+k;)
     *p1++ = *p2++ / fsize;
     
@@ -277,17 +220,10 @@ double MyTransforms::nsdf(float *input, float *output)
 {
   myassert(beenInit);
   double sumSq = autocorr(input, output); //the sum of squares of the input
-  //double sumSq = autoLogCorr(input, output); //the sum of squares of the input
 
-  //double sumRightSq = sumSq, sumLeftSq = sumSq;
   double totalSumSq = sumSq * 2.0;
   if(gdata->analysisType() == MPM || gdata->analysisType() == MPM_MODIFIED_CEPSTRUM) { //nsdf
     for(int j=0; j<k; j++) {
-      //sumLeftSq  -= sq(input[n-1-j]);
-      //sumRightSq -= sq(input[j]);
-      ////output[j] = 1.0 - (sumLeftSq + sumRightSq - 2*output[j]) / (sumLeftSq + sumRightSq);
-      ////output[j] = 2.0 * output[j] / (sumLeftSq + sumRightSq);
-      //output[j] *= 2.0 / (sumLeftSq + sumRightSq);
       totalSumSq  -= sq(input[n-1-j]) + sq(input[j]);
       //dividing by zero is very slow, so deal with it seperately
       if(totalSumSq > 0.0) output[j] *= 2.0 / totalSumSq;
@@ -295,8 +231,6 @@ double MyTransforms::nsdf(float *input, float *output)
     }
   } else { //autocorr
     for(int j=0; j<k; j++) {
-      //output[j] = output[j] * float(n) / float(n-1 - j) / sumSq;
-      //output[j] = output[j] / sumSq;
       //dividing by zero is very slow, so deal with it seperately
       if(totalSumSq > 0.0) output[j] /= sumSq;
       else output[j] = 0.0;
@@ -391,32 +325,17 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
   myassert(ch->dataAtChunk(chunk));
   AnalysisData &analysisData = *ch->dataAtChunk(chunk);
   AnalysisData *prevAnalysisData = ch->dataAtChunk(chunk-1);
-  //Array1d<float> output(k);
   float *output = ch->nsdfData.begin();
   float *curInput = (equalLoudness) ? ch->filteredInput.begin() : ch->directInput.begin();
 
   std::vector<int> nsdfMaxPositions;
-  //int pos = 0;
-  //int curMaxPos = 0;
-  //float corrError = 0.0f;
-  //freqPerBin = rate / 2.0 / double(size);
-
-  //analysisData.maxIntensity = fabs(*std::max_element(input, input+n, absoluteLess()));
   analysisData.setMaxIntensityDB(linear2dB(fabs(*std::max_element(curInput, curInput+n, absoluteLess<float>())),*gdata));
   
-  //if(gdata->doingActiveFFT()) {
-    //std::copy(curInput, curInput+n, dataTime);
   doChannelDataFFT(ch, curInput, chunk);
-    //std::copy(dataTemp, dataTemp+n, dataTime);
-  //}
   std::copy(curInput, curInput+n, dataTime);
   
-  //if(!gdata->doingActiveAnalysis()) return;
-  //if(gdata->doingFreqAnalysis()) {
   if(gdata->doingFreqAnalysis() && (ch->firstTimeThrough() || gdata->doingActiveAnalysis())) {
     //calculate the Normalised Square Difference Function
-    //analysisData.rms = nsdf(dataTime, output.begin()) / double(n/*size*/);
-    //analysisData.rms = nsdf(dataTime, output) / double(n/*size*/);
     double logrms = linear2dB(nsdf(dataTime, ch->nsdfData.begin()) / double(n),*gdata); /**< Do the NSDF calculation */
     analysisData.setLogRms(logrms);
     if(gdata->doingAutoNoiseFloor() && !analysisData.isDone()) {
@@ -430,13 +349,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
       if(logrms+15 < ch->rmsFloor) ch->rmsFloor = logrms+15;
       if(logrms > ch->rmsCeiling) ch->rmsCeiling = logrms;
     }
-    //if(!analysisData.done) {
-      //analysisData.notePlaying = ch->isNotePlaying();
-      //if(ch->isNotePlaying()) 
-      //  addTo(ch->nsdfData.begin(), ch->nsdfData.end(), ch->nsdfAggregateData.begin());
-    //}
 
-    //analysisData.freqCentroid() = calcFreqCentroid(storeFFT, size);
     analysisData.setFreqCentroid(calcFreqCentroidFromLogMagnitudes(ch->fftData1.begin(), ch->fftData1.size()));
     if(prevAnalysisData)
       analysisData.setDeltaFreqCentroid(bound(fabs(analysisData.getFreqCentroid() - prevAnalysisData->getFreqCentroid()) * 20.0, 0.0, 1.0));
@@ -444,39 +357,16 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
       analysisData.setDeltaFreqCentroid(0.0);
     
     findNSDFMaxima(ch->nsdfData.begin(), k, nsdfMaxPositions);
-    if(!analysisData.isDone()) {
-      //if(ch->isNotePlaying()) {
-        //analysisData.periodOctaveEstimate = ch->calcOctaveEstimate(chunk, threshold);
-/*
-        findNSDFMaxima(ch->nsdfAggregateData.begin(), k, nsdfAggregateMaxPositions);
-        myassert(!nsdfAggregateMaxPositions.empty());
-  
-        //get the highest nsdfAggregateMaxPosition
-        uint j;
-        int nsdfAggregateMaxIndex = 0;
-        int nsdfAggregateChoosenIndex = 0;
-        for(j=1; j<nsdfAggregateMaxPositions.size(); j++) {
-          if(ch->nsdfAggregateData[nsdfAggregateMaxPositions[j]] > ch->nsdfAggregateData[nsdfAggregateMaxPositions[nsdfAggregateMaxIndex]]) nsdfAggregateMaxIndex = j;
-        }
-        //get the choosen nsdfAggregateMaxPosition
-        float nsdfAggregateCutoff = ch->nsdfAggregateData[nsdfAggregateMaxPositions[nsdfAggregateMaxIndex]] * threshold;
-        for(j=0; j<nsdfAggregateMaxPositions.size(); j++) {
-          if(ch->nsdfAggregateData[nsdfAggregateMaxPositions[j]] >= nsdfAggregateCutoff) { nsdfAggregateChoosenIndex = j; break; }
-        }
-        analysisData.periodOctaveEstimate = float(nsdfAggregateMaxPositions[nsdfAggregateChoosenIndex]+1); //add 1 for index offset, ie position 0 = 1 period
-*/
-    }
+    if(!analysisData.isDone())
+      {
+      }
 
     //store some of the best period estimates
     analysisData.clearPeriodEstimates();
     analysisData.clearPeriodEstimatesAmp();
-    //float smallThreshold = 0.7f;
-    //float smallCutoff = output[overallMaxIndex] * smallThreshold;
     float smallCutoff = 0.4f;
     for(std::vector<int>::iterator iter = nsdfMaxPositions.begin(); iter < nsdfMaxPositions.end(); iter++) {
       if(output[*iter] >= smallCutoff) {
-        //analysisData.periodEstimates.push_back(double(*iter + 1) + parabolaTurningPoint(output[*iter-1], output[*iter], output[*iter+1]));
-        //analysisData.periodEstimatesAmp.push_back(output[*iter]); //TODO: These should be calculated more accurately
         float x, y;
         //do a parabola fit to find the maximum
         parabolaTurningPoint2(output[*iter-1], output[*iter], output[*iter+1], float(*iter + 1), &x, &y);
@@ -487,21 +377,14 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
     }
     
     float periodDiff = 0.0f;
-    //if(maxPositions.empty()) { //no period found
     if(analysisData.isPeriodEstimatesEmpty()) { //no period found
-      //analysisData.correlation() = 0.0f;
       analysisData.calcScores();
       analysisData.setDone(true);
-      //goto finished; //return;
     } else {
       //calc the periodDiff
-      if(chunk > 0
-// && prevAnalysisData->highestCorrelationIndex!=-1
-) {
+      if(chunk > 0) {
         float prevPeriod = prevAnalysisData->getHighestCorrelationIndex() != -1 ? prevAnalysisData->getPeriodEstimatesAt(prevAnalysisData->getHighestCorrelationIndex()) : 0;
 
-	//        std::vector<float>::iterator closestIter = binary_search_closest(analysisData.getPeriodEstimates().begin(), analysisData.getPeriodEstimates().end(), prevPeriod);
-	//        periodDiff = *closestIter - prevPeriod;
         periodDiff = analysisData.searchClosestPeriodEstimates(prevPeriod) - prevPeriod;
         if(absolute(periodDiff) > 8.0f) periodDiff = 0.0f;
       }
@@ -510,18 +393,14 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
       analysisData.setHighestCorrelationIndex(nsdfMaxIndex);
 
       if(!analysisData.isDone()) {
-        //if(gdata->doingActiveCepstrum()) {
         if(gdata->analysisType() == MPM_MODIFIED_CEPSTRUM) {
 	  ch->chooseCorrelationIndex(chunk, float(analysisData.getCepstrumIndex())); //calculate pitch
         } else {
           if(ch->isNotePlaying() && chunk > 0) {
-            //ch->chooseCorrelationIndex(chunk, ch->getLastNote()->periodOctaveEstimate()); //calculate pitch
-            //ch->chooseCorrelationIndex(chunk, ch->periodOctaveEstimate(std::max(0, chunk-1))); //calculate pitch
             ch->chooseCorrelationIndex(chunk, ch->periodOctaveEstimate(chunk-1)); //calculate pitch
           } else {
             ch->chooseCorrelationIndex1(chunk); //calculate pitch
           }
-          //ch->chooseCorrelationIndex(chunk, (float)ch->rate() / 440.0f); //calculate pitch
         }
         ch->calcDeviation(chunk);
 
@@ -529,32 +408,21 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
       }
 
       analysisData.setChangeness(0.0f);
-      //analysisData.changeness() = get_max_note_change(dataTime, analysisData.period);
 
       if(gdata->doingHarmonicAnalysis()) {
         std::copy(dataTime, dataTime+n, dataTemp);
         if(analysisData.getChosenCorrelationIndex() >= 0)
           doHarmonicAnalysis(dataTemp, analysisData, analysisData.getPeriodEstimatesAt(analysisData.getChosenCorrelationIndex())/*period*/);
-        //doHarmonicAnalysis(input, analysisData, period);
       }
 
-      //analysisData.volumeValue = (dB2Normalised(analysisData.logrms) + (analysisData.correlation-1.0f)) * 0.2;
     }
 
-    //float periodDiff = 0.0f;
     if(gdata->doingFreqAnalysis() && ch->doingDetailedPitch() && ch->firstTimeThrough()) {
-      //periodDiff = ch->calcDetailedPitch(curInput, analysisData.period, chunk);
       float periodDiff2 = ch->calcDetailedPitch(curInput, analysisData.getPeriod(), chunk);
-      //printf("chunk=%d, %f, %f\n", chunk, periodDiff, periodDiff2);
       periodDiff = periodDiff2;
 
       ch->pitchLookup.push_back(ch->detailedPitchData.begin(), ch->detailedPitchData.size());
       ch->pitchLookupSmoothed.push_back(ch->detailedPitchDataSmoothed.begin(), ch->detailedPitchDataSmoothed.size());
-/*      float periodDiff1 = (rate / pitch2freq(ch->detailedPitchData.back()));
-      float periodDiff2 = (rate / pitch2freq(ch->detailedPitchData.front()));
-      periodDiff = periodDiff1 - periodDiff2;
-      printf("%f, %f, %f\n", periodDiff1, periodDiff2, periodDiff);
-*/
     }
 
     if(!analysisData.isDone()) {
@@ -580,7 +448,6 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
     for(j=0; j<n; j++) {
       rms += sq(dataTime[j]);
     }
-    //analysisData.rms = sqrt(analysisData.rms);
     analysisData.setLogRms(linear2dB(rms / float(n),*gdata));
     analysisData.calcScores();
     analysisData.setDone(true);
@@ -588,58 +455,15 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
 
 }
 
-/*
-void MyTransforms::chooseCorrelationIndex(AnalysisData &analysisData, float threshold, float periodOctaveEstimate)
-{    
-  uint iterPos;
-  int choosenMaxIndex = 0;
-  if(analysisData.periodEstimates.empty()) return; //no period found
-  if(gdata->analysisType() == MPM || gdata->analysisType() == MPM_MODIFIED_CEPSTRUM) {
-
-    //choose a cutoff value based on the highest value and a relative threshold
-    //float cutoff = analysisData.periodEstimatesAmp[analysisData.highestCorrelationIndex] * threshold;
-    //find the first of the maxPositions which is above the cutoff
-    //for(iterPos = 0; iterPos < analysisData.periodEstimatesAmp.size(); iterPos++) {
-    //  if(analysisData.periodEstimatesAmp[iterPos] >= cutoff) { choosenMaxIndex = iterPos; break; }
-    //}
-
-    //choose the periodEstimate which is closest to the periodOctaveEstimate
-    float minDist = fabs(analysisData.periodEstimates[0] - periodOctaveEstimate);
-    float dist;
-    for(iterPos = 1; iterPos < analysisData.periodEstimates.size(); iterPos++) {
-      dist = fabs(analysisData.periodEstimates[iterPos] - periodOctaveEstimate);
-      if(dist < minDist) { minDist = dist; choosenMaxIndex = iterPos; }
-    }
-
-    //myassert(wantedMaxPos > 0);
-  } else {
-    choosenMaxIndex = analysisData.highestCorrelationIndex;
-  }
-  analysisData.chosenCorrelationIndex = choosenMaxIndex;
-  analysisData.correlation() = analysisData.periodEstimatesAmp[choosenMaxIndex];
-  
-  //double period = analysisData.periodEstimates[choosenMaxIndex];
-  analysisData.period = analysisData.periodEstimates[choosenMaxIndex];
-
-  //float clarityMin = get_fine_clarity_measure(period);
-  
-  //double freq = rate / period;
-  double freq = rate / analysisData.period;
-  analysisData.fundamentalFreq = float(freq);
-  analysisData.note = bound(freq2note(freq), 0.0, gdata->topNote());
-  analysisData.mean = 0.0f;
-  analysisData.standard_deviation = 0.0f;
-  //if(isnan(analysisData.note)) analysisData.note = 0.0f;
-}
-*/
-
 /* using the given fractional period, constructs a smaller subwindow
 which slide through the window. The smallest clarity measure of this
 moving sub window is returned.*/
 float MyTransforms::get_fine_clarity_measure(double period)
 {
-    //printf("%f, ", analysisData.periodEstimates[choosenMaxIndex]);
-//    printf("%f, ", analysisData.periodEstimatesAmp[choosenMaxIndex]);
+#ifdef PRINTF_DEBUG
+  printf("%f, ", analysisData.periodEstimates[choosenMaxIndex]);
+  printf("%f, ", analysisData.periodEstimatesAmp[choosenMaxIndex]);
+#endif // PRINTF_DEBUG
     int tempN = n - int(ceil(period));
     float *tempData = new float[tempN];
     float bigSum=0, corrSum=0, matchVal, matchMin=1.0;
@@ -651,7 +475,9 @@ float MyTransforms::get_fine_clarity_measure(double period)
       corrSum += dataTime[j] * tempData[j];
     }
     matchMin = (2.0*corrSum) / bigSum;
-//    printf("%f, ", matchMin);
+#ifdef PRINTF_DEBUG
+    printf("%f, ", matchMin);
+#endif // PRINTF_DEBUG
     for(int j=0; j<tempN - dN; j++) {
       bigSum -= sq(dataTime[j]) + sq(tempData[j]);
       corrSum -= dataTime[j] * tempData[j];
@@ -660,7 +486,9 @@ float MyTransforms::get_fine_clarity_measure(double period)
       matchVal = (2.0*corrSum) / bigSum;
       if(matchVal < matchMin) matchMin = matchVal;
     }
-//    printf("%f\n", matchMin);
+#ifdef PRINTF_DEBUG
+    printf("%f\n", matchMin);
+#endif // PRINTF_DEBUG
     delete[] tempData;
 
   return matchMin;
@@ -729,7 +557,9 @@ end
       err[i] += sq(input[j] - input[j2]);
     }
   }
-  //printf("subwindow_size=%d, num=%d, period=%lf\n", subwindow_size, num, period);
+#ifdef PRINTF_DEBUG
+  printf("subwindow_size=%d, num=%d, period=%lf\n", subwindow_size, num, period);
+#endif // PRINTF_DEBUG
 /*matlab code
 for j = 1:(num-1)
     for i = 1:ln
@@ -780,83 +610,17 @@ end*/
   int max_pos = 0;
   for(j=0; j<num-2; j++) {
     smoothed_diff[j] = fabs(smoothed[j+1] - smoothed[j]);
-    //printf("%f ", smoothed[j]);
+#ifdef PRINTF_DEBUG
+    printf("%f ", smoothed[j]);
+#endif // PRINTF_DEBUG
     if(smoothed_diff[j] > smoothed_diff[max_pos]) max_pos = j;
   }
-  //printf("\nsmooted_diff=%f\n", smoothed_diff[max_pos]);
-  //return smoothed_diff[max_pos] / period * double(rate) * double(n) / 40000.0;
+#ifdef PRINTF_DEBUG
+  printf("\nsmooted_diff=%f\n", smoothed_diff[max_pos]);
+#endif // PRINTF_DEBUG
   double ret = smoothed_diff[max_pos] / period * double(rate) * double(subwindow_size) / 10000.0;
-  //ret = (ret < 0.19) ? 0.0 : 1.0;
   return ret;
 }
-
-/** Builds a lookup table for use in doEqualLoudness
-  @param dB The decibel level of at which the human ear filter should be simulated (default 50dB)
-*/
-/*
-void MyTransforms::buildEqualLoudnessTable(double dB)
-{
-  double phons;
-  float maxLoudness = 0.00000001f;
-  equalLoudnessTable[0] = 0.0;
-  for(int k=1; k<n/2; k++) {
-    phons = dbToPhons(double(k) * freqPerBin, dB);
-    equalLoudnessTable[k] = pow10((phons - dB) / 20.0);
-    if(equalLoudnessTable[k] > maxLoudness) maxLoudness = equalLoudnessTable[k];
-  }
-  //normalise
-  for(int y=1; y<n/2; y++) {
-    equalLoudnessTable[y] /= maxLoudness;
-    //printf("[%d] = %f\n", j, equalLoudnessTable[j]);
-  }
-}
-*/
-
-/** Modify the coefficients in Fourier space to give approximate the human ear filter.
-*/
-/*
-//void MyTransforms::doEqualLoudness(Channel *ch)
-void MyTransforms::doEqualLoudness()
-{
-  fftwf_execute(planDataTime2FFT);
-  
-  //double logSize = log10(double(ch->fftData1.size()));
-  //Adjust the coefficents, both real and imaginary part by same amount
-  for(int j=1; j<n/2; j++) {
-    //LOG RULES: log(sqrt(x)) = log(x) / 2.0
-    //LOG RULES: log(a * b) = log(a) + log(b)
-    //storeFFTAmp1[j] = sqrt(sq(dataFFT[j]) + sq(dataFFT[n-j]));
-    //ch->fftData1[j] = sqrt(sq(dataFFT[j]) + sq(dataFFT[n-j]));
-    //ch->fftData1[j] = log10(sqrt(sq(dataFFT[j]) + sq(dataFFT[n-j])) / ds);
-    //ch->fftData1[j] = log10(sq(dataFFT[j]) + sq(dataFFT[n-j])) / 2.0 - logSize;
-    dataFFT[j] *= equalLoudnessTable[j]; //real part
-    dataFFT[n-j] *= equalLoudnessTable[j]; //imaginary part
-    //storeFFTAmp2[j] = sqrt(sq(dataFFT[j]) + sq(dataFFT[n-j]));
-    //ch->fftData2[j] = sqrt(sq(dataFFT[j]) + sq(dataFFT[n-j]));
-    //ch->fftData2[j] = log10(sqrt(sq(dataFFT[j]) + sq(dataFFT[n-j])) / ds );
-    //ch->fftData2[j] = log10(sq(dataFFT[j]) + sq(dataFFT[n-j])) / 2.0 - logSize;
-  }
-  //storeFFTAmp1[0] = sqrt(sq(dataFFT[0]) + sq(dataFFT[n/2]));
-  //ch->fftData1[0] = sqrt(sq(dataFFT[0]) + sq(dataFFT[n/2]));
-  //ch->fftData1[0] = log10(sqrt(sq(dataFFT[0]) + sq(dataFFT[n/2])) / ds);
-  //ch->fftData1[0] = log10(sq(dataFFT[0]) + sq(dataFFT[n/2])) / 2.0 - logSize;
-  dataFFT[0] = 0; //remove the mean/DC component
-  dataFFT[n/2] = 0;
-  //storeFFTAmp2[0] = sqrt(sq(dataFFT[0]) + sq(dataFFT[n/2]));
-  //ch->fftData2[0] = sqrt(sq(dataFFT[0]) + sq(dataFFT[n/2]));
-  //ch->fftData2[0] = log10(sqrt(sq(dataFFT[0]) + sq(dataFFT[n/2])) / ds);
-  //ch->fftData2[0] = log10(sq(dataFFT[0]) + sq(dataFFT[n/2])) / 2.0 - logSize;
-
-  fftwf_execute(planDataFFT2Time);
-
-  float fn = float(n);
-  //normalize
-  //for(int x=0; x<n; x++)
-  //  dataTime[x] /= fn;
-  for(float *ptr=dataTime; ptr<dataTime+n;)
-    *ptr++ /= fn;
-}
-*/
 
 /** Find the index of the first maxima above the threshold times the overall maximum.
   @param threshold A value between 0.0 and 1.0
@@ -902,51 +666,29 @@ void MyTransforms::doChannelDataFFT(Channel *ch, float *curInput, int chunk)
   const double logBase = 100.0;
   for(int j=1; j<nDiv2; j++) {
     sqValue = sq(dataFFT[j]) + sq(dataFFT[n-j]);
-    //ch->fftData1[j] = log10(sqrt(sq(dataFFT[j]) + sq(dataFFT[n-j])) / ds);
-    //ch->fftData2[j] = log10(1.0 + sqrt(sqValue));
-    //ch->fftData2[j] = log10(0.1 + 2.0*sqrt(sqValue) / double(nDiv2) * 9.9) / 2.0 + 0.5;
     ch->fftData2[j] = logBaseN(logBase, 1.0 + 2.0*sqrt(sqValue) / double(nDiv2) * (logBase-1.0));
     if(sqValue > 0.0)
       ch->fftData1[j] = bound(log10(sqValue) / 2.0 - logSize, gdata->dBFloor(), 0.0);
     else ch->fftData1[j] = gdata->dBFloor();
   }
-  //ch->fftData1[0] = log10(sqrt(sq(dataFFT[0]) + sq(dataFFT[n/2])) / ds);
   sqValue = sq(dataFFT[0]) + sq(dataFFT[nDiv2]);
-  //ch->fftData2[0] = log10(1.0 + sqrt(sqValue));
-  //ch->fftData2[0] = log10(0.1 + 2.0*sqrt(sqValue) / double(nDiv2) * 9.9) / 2.0 + 0.5;
   ch->fftData2[0] = logBaseN(logBase, 1.0 + 2.0*sqrt(sqValue) / double(nDiv2) * (logBase-1.0));
   if(sqValue > 0.0)
     ch->fftData1[0] = bound(log10(sqValue) / 2.0 - logSize, gdata->dBFloor(), 0.0);
   else ch->fftData1[0] = gdata->dBFloor();
 
-  //printf("n = %d, fff = %f\n", nDiv2, *std::max_element(ch->fftData2.begin(), ch->fftData2.end()));
+#ifdef PRINTF_DEBUG
+  printf("n = %d, fff = %f\n", nDiv2, *std::max_element(ch->fftData2.begin(), ch->fftData2.end()));
+#endif // PRINTF_DEBUG
 
-  //if(gdata->doingActiveCepstrum()) {
   if(gdata->analysisType() == MPM_MODIFIED_CEPSTRUM) {
-    //std::complex<float> z, y;
     for(int j=1; j<nDiv2; j++) {
-      //z = std::complex<float>(dataFFT[j], dataFFT[n-j]);
-      //z = std::polar(std::abs(z)+1.0f, std::arg(z));
-      //y = std::log(z);
-      //dataFFT[j] = y.real();
-      //dataFFT[n-j] = y.imag();
-      //dataFFT[j] = ch->fftData1[j];
-      //dataFFT[j] = log10(1 + sq(dataFFT[j]) + sq(dataFFT[n-j])) * 2;
-      //dataFFT[j] = log10(1.0 + sqrt(sq(dataFFT[j]) + sq(dataFFT[n-j])));
       dataFFT[j] = ch->fftData2[j];
       dataFFT[n-j] = 0.0;
     }
-    //dataFFT[0] = ch->fftData1[0];
-    //dataFFT[0] = log10(1 + sq(dataFFT[0]) + sq(dataFFT[nDiv2])) * 2;
-    //dataFFT[0] = log10(1.0 + sqrt(sq(dataFFT[0]) + sq(dataFFT[nDiv2])));
-    //dataFFT[0] = log10(1.0 + sqrt(sq(dataFFT[0]) + sq(dataFFT[nDiv2])));
     dataFFT[0] = ch->fftData2[0];
-    //dataFFT[0] = 0.0;
     dataFFT[nDiv2] = 0.0;
     fftwf_execute(planDataFFT2Time);
-    //std::copy(dataTime, dataTime + nDiv2, ch->cepstrumData.begin());
-    //float theMax = *std::max_element(dataTime, dataTime+nDiv2);
-    //printf("theMax = %f\n", dataTime[0]);
 
     for(int j=1; j<n; j++) {
       dataTime[j] /= dataTime[0];
@@ -954,24 +696,8 @@ void MyTransforms::doChannelDataFFT(Channel *ch, float *curInput, int chunk)
     dataTime[0] = 1.0;
     for(int j=0; j<nDiv2; j++) ch->cepstrumData[j] = dataTime[j];
     AnalysisData &analysisData = *ch->dataAtChunk(chunk);
-    //analysisData.cepstrumIndex = findCepstrumMaximum(dataTime, nDiv2, 0.8f);
     analysisData.setCepstrumIndex(findNSDFsubMaximum(dataTime, nDiv2, 0.6f));
     analysisData.setCepstrumPitch(freq2pitch(double(analysisData.getCepstrumIndex()) / ch->rate()));
-/*
-    //Take out everything above the pitch and reverse the cepstrum to get the frequency curve
-    int maxIndex = int(std::max_element(dataTime+10, dataTime+nDiv2) - dataTime) - 3;
-    maxIndex /= 2;
-    //maxIndex = 8;
-    if(maxIndex < 0) maxIndex = 0;
-    //printf("maxIndex = %d\n", maxIndex);
-    for(int j=maxIndex; j<n-maxIndex; j++) dataTime[j] = 0.0;
-
-    //for(int j=0; j<nDiv2; j++) ch->cepstrumData[j] = dataTime[j];
-
-    fftwf_execute(planDataTime2FFT);
-
-    for(int j=0; j<nDiv2; j++) ch->fftData3[j] = sqrt(sq(dataFFT[j])+sq(dataFFT[n-j]))/2;
-*/
   }
 }
 
@@ -996,46 +722,48 @@ void MyTransforms::doHarmonicAnalysis(float *input, AnalysisData &analysisData, 
   double numPeriodsUse = numPeriodsFit - 1.0;
   int iNumPeriodsUse = int(numPeriodsUse);
   double centerX = float(n) / 2.0;
-  //printf("iNumPeriodsUse = %d\n", iNumPeriodsUse);
+#ifdef PRINTF_DEBUG
+  printf("iNumPeriodsUse = %d\n", iNumPeriodsUse);
+#endif // PRINTF_DEBUG
   //do left
-  //stretch_array(n, input, n, dataTime, (float(n) / 2.0) - period, period, LINEAR);
   double start = centerX - (numPeriodsFit / 2.0) * period;
   double length = (numPeriodsUse) * period;
   stretch_array(n, input, n, dataTime, start, length, LINEAR);
   applyHanningWindow(dataTime);
   fftwf_execute(planDataTime2FFT);
   calcHarmonicAmpPhase(harmonicsAmpLeft, harmonicsPhaseLeft, iNumPeriodsUse);
-  //printf("left\n");
-  //for(int jj=0; jj < 6; jj++)
-  //  printf("[%d %lf %lf]", jj, harmonicsAmpLeft[jj], harmonicsPhaseLeft[jj]);
-  //printf("\n");
+#ifdef PRINTF_DEBUG
+  printf("left\n");
+  for(int jj=0; jj < 6; jj++)
+    printf("[%d %lf %lf]", jj, harmonicsAmpLeft[jj], harmonicsPhaseLeft[jj]);
+  printf("\n");
+#endif // PRINTF_DEBUG
   
   //do center
-  //float start = (float(n) - period) / 2.0;
-  //stretch_array(n, input, n, dataTime, start, period, LINEAR);
-  //start = centerX - ((numPeriodsUse) / 2.0) * period;
   start += period / 2.0;
   stretch_array(n, input, n, dataTime, start, length, LINEAR);
   applyHanningWindow(dataTime);
   fftwf_execute(planDataTime2FFT);
   calcHarmonicAmpPhase(harmonicsAmpCenter, harmonicsPhaseCenter, iNumPeriodsUse);
-  //printf("centre\n");
-  //for(int jj=0; jj < 6; jj++)
-  //  printf("[%d %lf %lf]", jj, harmonicsAmpCenter[jj], harmonicsPhaseCenter[jj]);
-  //printf("\n");
+#ifdef PRINTF_DEBUG
+  printf("centre\n");
+  for(int jj=0; jj < 6; jj++)
+    printf("[%d %lf %lf]", jj, harmonicsAmpCenter[jj], harmonicsPhaseCenter[jj]);
+  printf("\n");
+#endif // PRINTF_DEBUG
   
   //do right
-  //stretch_array(n, input, n, dataTime, float(n)/2.0, period, LINEAR);
-  //start = centerX - ((numPeriodsFit / 2.0) - 1) * period;
   start += period / 2.0;
   stretch_array(n, input, n, dataTime, start, length, LINEAR);
   applyHanningWindow(dataTime);
   fftwf_execute(planDataTime2FFT);
   calcHarmonicAmpPhase(harmonicsAmpRight, harmonicsPhaseRight, iNumPeriodsUse);
-  //printf("right\n");
-  //for(int jj=0; jj < 6; jj++)
-  //  printf("[%d %lf %lf]", jj, harmonicsAmpRight[jj], harmonicsPhaseRight[jj]);
-  //printf("\n");
+#ifdef PRINTF_DEBUG
+  printf("right\n");
+  for(int jj=0; jj < 6; jj++)
+    printf("[%d %lf %lf]", jj, harmonicsAmpRight[jj], harmonicsPhaseRight[jj]);
+  printf("\n");
+#endif // PRINTF_DEBUG
   
   double freq = rate / period;
   
@@ -1045,41 +773,22 @@ void MyTransforms::doHarmonicAnalysis(float *input, AnalysisData &analysisData, 
   analysisData.resizeHarmonicNoise(numHarmonics);
 
   for(int j=0; j<numHarmonics; j++) {
-    //analysisData.harmonicAmp[j] = float(analysisData.correlation / double(j+1));
-    //analysisData.harmonicFreq[j] = float(freq * double(j+1));
-    //analysisData.harmonicAmp[j] = log10(sqrt(sq(dataFFT[j+1]) + sq(dataFFT[n-(j+1)]))) / 10.0;
-    //analysisData.harmonicAmpNoCutOff[j] = analysisData.harmonicAmp[j] = log10(harmonicsAmpCenter[j]) / 5.0;
-    //analysisData.harmonicAmpNoCutOff[j] = analysisData.harmonicAmp[j] = log10(harmonicsAmpCenter[j] / hanningScalar);
-    //analysisData.harmonicAmpNoCutOff[j] = analysisData.harmonicAmp[j] = log10(harmonicsAmpCenter[j]/(double) n)* 20;
     analysisData.setHarmonicAmpAt(j, log10(harmonicsAmpCenter[j] / hanningScalar) * 20);
     analysisData.setHarmonicAmpNoCutOffAt(j,analysisData.getHarmonicAmpAt(j));
-    //analysisData.harmonicAmpNoCutOff[j] = analysisData.harmonicAmp[j] = log10(harmonicsAmpCenter[j]);
-    //analysisData.harmonicAmp[j] = (analysisData.harmonicAmp[j] - gdata->noiseThresholdDB()) / (-gdata->noiseThresholdDB());
     analysisData.setHarmonicAmpAt(j, 1.0 - (analysisData.getHarmonicAmpAt(j) / gdata->ampThreshold(AMPLITUDE_RMS, 0)));
     if(analysisData.getHarmonicAmpAt(j) < 0.0) analysisData.setHarmonicAmpAt(j,0.0);
     //should be 1 whole period between left and right. i.e. the same freq give 0 phase difference
     double diffAngle = (harmonicsPhaseRight[j] - harmonicsPhaseLeft[j]) / twoPI;
-    //if(diffAngle < 0) diffAngle++;
-    //if(diffAngle > 0.5) diffAngle--;
     diffAngle = cycle(diffAngle + 0.5, 1.0) - 0.5;
     double diffAngle2 = (harmonicsPhaseCenter[j] - harmonicsPhaseLeft[j]) / twoPI;
     //if an odd harmonic the phase will be 180 degrees out. So correct for this
     if(j % 2 == 0) diffAngle2 += 0.5;
-    //if(diffAngle2 < 0) diffAngle2++;
-    //while(diffAngle2 > 0.5) diffAngle2--;
     diffAngle2 = cycle(diffAngle2 + 0.5, 1.0) - 0.5;
     analysisData.setHarmonicNoiseAt(j, fabs(diffAngle2 - diffAngle));
     analysisData.setHarmonicFreqAt(j, float(freq * double(j+1)) + (freq*diffAngle));
   }
 }
-/*
-void MyTransforms::applyHighPassFilter(float *input, float *output)
-{
-  int j;
-  highPassFilter->clear();
-  for(j=0; j<n; j++) output[j] = bound(highPassFilter->apply(input[j]), -1.0, 1.0);
-}
-*/
+
 void MyTransforms::applyHanningWindow(float *d)
 {
   for(int j=0; j<n; j++) d[j] *= hanningCoeff[j];
@@ -1097,7 +806,6 @@ double MyTransforms::calcFreqCentroid(float *buffer, int len)
   double absValue;
   for(int j=1; j<len/2; j++) { //ignore the end freq bins, ie j=0
     //calculate centroid
-    //absValue = sqrt(sq(dataFFT[j]) + sq(dataFFT[len-j]));
     absValue = sqrt(sq(buffer[j]) + sq(buffer[len-j]));
     centroid += double(j)*absValue;
     totalWeight += absValue;
@@ -1121,6 +829,4 @@ double MyTransforms::calcFreqCentroidFromLogMagnitudes(float *buffer, int len)
     totalWeight += buffer[j];
   }
   return centroid;
-  //if(centroid == 0.0) return 0.0;
-  //return centroid / (totalWeight * double(len));
 }
