@@ -4,6 +4,8 @@
     begin                : 2002
     copyright            : (C) 2002-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,7 +19,15 @@
 
 #include "array1d.h"
 
-void bresenham1d(const Array1d<float> &input, Array1d<float> &output);
-void maxAbsDecimate1d(const Array1d<float> &input, Array1d<float> &output);
+/**
+   Decimates input into the output, using a fast pick every n'th value idea.
+*/
+void bresenham1d(const Array1d<float> & input, Array1d<float> & output);
 
-#endif
+/**
+   Decimates input into the output, using a 'find the max of every n values' idea.
+*/
+void maxAbsDecimate1d(const Array1d<float> & input, Array1d<float> & output);
+
+#endif // MYALGO_H
+//EOF
