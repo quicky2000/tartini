@@ -47,7 +47,7 @@ MyTransforms::~MyTransforms(void)
 }
 
 //------------------------------------------------------------------------------
-void MyTransforms::init(int n_, int k_, double rate_, /*float threshold_, */bool equalLoudness_, int numHarmonics_)
+void MyTransforms::init(int n_, int k_, double rate_, bool equalLoudness_, int numHarmonics_)
 {
   const int myFFTMode = FFTW_ESTIMATE;
   uninit();

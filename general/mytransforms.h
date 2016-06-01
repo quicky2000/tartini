@@ -36,7 +36,7 @@ class MyTransforms
      @param rate_ The sampling rate of the incoming signal to process
      @param threshold_ The ratio of highest peak to the first peak allowed to be chosen
   */
-  void init(int n_, int k_, double rate_, /*float threshold_=0.9, */bool equalLoudness_=false, int numHarmonics_=40);
+  void init(int n_, int k_, double rate_, bool equalLoudness_=false, int numHarmonics_=40);
 
   void uninit(void);
 
