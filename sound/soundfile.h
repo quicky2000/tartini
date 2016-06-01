@@ -44,6 +44,7 @@ class SoundFile
      be time consuming.
   */
   void preProcess(void);
+
   void rec2play(void);
 
   /**
@@ -101,16 +102,17 @@ class SoundFile
   inline void setSaved(bool newState);
   inline bool doingDetailedPitch(void) const;
 
-  friend bool playRecordChunk(SoundFile *playSoundFile, SoundFile *recSoundFile, int n);
-
   inline bool isFirstTimeThrough(void) const;
   inline void setFirstTimeThrough(bool);
   inline const char * getFileName(void) const;
-
   inline void calculateAnalysisData(int chunk, Channel *ch);
   inline int getChannelIndex(const Channel &)const;
   inline Channel & getChannel(int p_index);
   inline SoundFileStream & getStream(void);
+
+ protected:
+
+  friend bool playRecordChunk(SoundFile *playSoundFile, SoundFile *recSoundFile, int n);
 
  private:
   /**
