@@ -26,8 +26,6 @@ class Filter;
 class MyTransforms
 {  
  public:
-  bool equalLoudness;
-  
   MyTransforms(void);
   virtual ~MyTransforms(void);
 
@@ -136,7 +134,11 @@ class MyTransforms
   */
   static double calcFreqCentroidFromLogMagnitudes(float *buffer, int len);
 
+  inline bool getEqualLoudness(void) const;
  private:
+
+  bool equalLoudness;
+
   /**
      n = size of data
   */
@@ -176,6 +178,8 @@ class MyTransforms
   fast_smooth *fastSmooth;
 
 };
+
+#include "mytransforms.hpp"
   
 #endif // MYTRANSFORMS_H
 //EOF

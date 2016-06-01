@@ -130,6 +130,7 @@ HEADERS += main.h \
   global/view.hpp \
   include/myqmutex.h \
   general/mytransforms.h \
+  general/mytransforms.hpp \
   widgets/timeaxis.h \
   sound/analysisdata.h \
   sound/analysisdata.hpp \

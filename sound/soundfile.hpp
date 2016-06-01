@@ -153,7 +153,7 @@ void SoundFile::setSaved(bool newState)
 //------------------------------------------------------------------------------
 bool SoundFile::equalLoudness(void) const
 {
-  return myTransforms.equalLoudness;
+  return myTransforms.getEqualLoudness();
 }
 
 //------------------------------------------------------------------------------
