@@ -75,9 +75,15 @@ class SoundFile
      Process the chunks for all the channels
      Increment the chunkNum.
   */
+  // Check if really used
   void processNewChunk(void);
+  // End of check
+
   inline const double & startTime(void) const;
+  // Check if really used
   inline void setStartTime(const double & t);
+  // End of check
+
   inline int currentStreamChunk(void) const;
   inline int currentRawChunk(void) const;
   inline int currentChunk(void) const;
@@ -121,7 +127,11 @@ class SoundFile
   void uninit(void);
   void setFilteredFilename(const char *filteredFilename_);
   QString getNextTempFilename(void) const;
+
+  // Check if really used
   void close(void);
+  // End of check
+
   int readN(int n);
   bool setupPlayChunk(void);
   void finishRecordChunk(int n);
@@ -138,15 +148,23 @@ class SoundFile
   int readChunk(int n);
 
   inline void setCurrentChunk(int x);
+  // Check if really used
   inline void incrementChunkNum(void);
+  // End of check
 
   /**
      shift all the channels data left by n frames
   */
+  // Check if really used
   void shift_left(int n);
+  // End of check
 
   inline void setFramesPerChunk(int stepSize);
+
+  // Check if really used
   bool inFile(void) const; /**< Returns false if past end of file */
+  // End of check
+
   inline bool equalLoudness(void) const;
 
   /**

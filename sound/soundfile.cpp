@@ -334,12 +334,6 @@ void SoundFile::rec2play(void)
 }
 
 //------------------------------------------------------------------------------
-void SoundFile::close(void)
-{
-  uninit();
-}
-  
-//------------------------------------------------------------------------------
 void SoundFile::lock(void)
 {
   mutex->lock();
@@ -601,18 +595,6 @@ int SoundFile::readN(int n)
 }
 
 //------------------------------------------------------------------------------
-void SoundFile::processNewChunk(void)
-{
-  FilterState filterState;
-  for(int j=0; j<numChannels(); j++)
-    {
-      channels(j)->lock();
-      channels(j)->processNewChunk(&filterState);
-      channels(j)->unlock();
-    }
-}
-
-//------------------------------------------------------------------------------
 void SoundFile::preProcess(void)
 {
   gdata->setDoingActiveAnalysis(true);
@@ -675,15 +657,6 @@ void SoundFile::preProcess(void)
 }
 
 //------------------------------------------------------------------------------
-void SoundFile::shift_left(int n)
-{
-  for(int j=0; j<numChannels(); j++)
-    {
-      channels(j)->shift_left(n);
-    }
-}
-
-//------------------------------------------------------------------------------
 void SoundFile::jumpToChunk(int chunk)
 {
   int c;
@@ -734,5 +707,32 @@ bool SoundFile::inFile(void) const
 {
   int c = currentChunk();
   return (c >= 0 && c < totalChunks());
+}
+
+//------------------------------------------------------------------------------
+void SoundFile::close(void)
+{
+  uninit();
+}
+
+//------------------------------------------------------------------------------
+void SoundFile::processNewChunk(void)
+{
+  FilterState filterState;
+  for(int j=0; j<numChannels(); j++)
+    {
+      channels(j)->lock();
+      channels(j)->processNewChunk(&filterState);
+      channels(j)->unlock();
+    }
+}
+
+//------------------------------------------------------------------------------
+void SoundFile::shift_left(int n)
+{
+  for(int j=0; j<numChannels(); j++)
+    {
+      channels(j)->shift_left(n);
+    }
 }
 //EOF
