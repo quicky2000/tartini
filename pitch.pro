@@ -185,6 +185,7 @@ HEADERS += main.h \
   general/myglfonts.h \
   general/myglfonts.hpp \
   general/mygl.h \
+  general/mygl.hpp \
   general/myqt.h \
   general/musicnotes.h \
   general/musicnotes.hpp \

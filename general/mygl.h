@@ -1,3 +1,19 @@
+/***************************************************************************
+                          mygl.h
+                             -------------------
+    begin                : 2002
+    copyright            : (C) 2002-2005 by Philip McLeod
+    email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   Please read LICENSE.txt for details.
+ ***************************************************************************/
 #ifndef MYGL_H
 #define MYGL_H
 
@@ -5,58 +21,22 @@
 #include <glu.h>
 #include <gl.h>
 
-struct MyGLfloat2d {
-  GLfloat x, y;
-  MyGLfloat2d(GLfloat _x, GLfloat _y) : x(_x), y(_y) { }
-  void set(GLfloat _x, GLfloat _y) { x=_x; y=_y; }
+struct MyGLfloat2d
+{
+  GLfloat x;
+  GLfloat y;
+  inline MyGLfloat2d(GLfloat _x, GLfloat _y);
+  inline void set(GLfloat _x, GLfloat _y);
 };
 
-inline void mygl_line(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2)
-{
-  glBegin(GL_LINES);
-  glVertex2f(x1, y1);
-  glVertex2f(x2, y2);
-  glEnd();
-}
+inline void mygl_line(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2);
+inline void mygl_rect(GLfloat x, GLfloat y, GLfloat w, GLfloat h);
+inline void mygl_rect(const MyGLfloat2d & v1, const MyGLfloat2d & v2);
+inline void mygl_resize2d(int w, int h);
+inline GLushort my_wrap_left(GLushort x, int offset);
+inline GLushort my_wrap_right(GLushort x, int offset);
 
-inline void mygl_rect(GLfloat x, GLfloat y, GLfloat w, GLfloat h)
-{
-  glBegin(GL_QUADS);
-  glVertex2f(x, y);
-  glVertex2f(x+w, y);
-  glVertex2f(x+w, y+h);
-  glVertex2f(x, y+h);
-  glEnd();
-}
+#include "mygl.hpp"
 
-inline void mygl_rect(const MyGLfloat2d &v1, const MyGLfloat2d &v2)
-{
-  glBegin(GL_QUADS);
-  glVertex2f(v1.x, v1.y);
-  glVertex2f(v2.x, v1.y);
-  glVertex2f(v2.x, v2.y);
-  glVertex2f(v1.x, v2.y);
-  glEnd();
-}
-
-inline void mygl_resize2d(int w, int h)
-{
-  glViewport(0, 0, (GLint)w, (GLint)h);
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  gluOrtho2D(0, w, h, 0);
-}
-
-inline GLushort my_wrap_left(GLushort x, int offset)
-{
-  offset %= 16;
-  return (x << offset) + (x >> (16-offset));
-}
-
-inline GLushort my_wrap_right(GLushort x, int offset)
-{
-  offset %= 16;
-  return (x >> offset) + (x << (16-offset));
-}
-
-#endif
+#endif // MYGL_H
+// EOF
