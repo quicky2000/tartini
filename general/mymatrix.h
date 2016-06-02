@@ -78,10 +78,7 @@ bool pinv(const float * x1, const float * x2, const float * x3, const float * y,
    [a b]
    [c d]
 */
-inline double determinant2x2(double a, double b, double c, double d)
-{
-  return a * d - b * c;
-}
+inline double determinant2x2(double a, double b, double c, double d);
 
 /**
    Finds the determinant of a 3x3 matrix
@@ -89,10 +86,9 @@ inline double determinant2x2(double a, double b, double c, double d)
    [3 4 5]
    [6 7 8]
 */
-inline double determinant3x3(const double *x)
-{
-  return x[0] * x[4] * x[8] - x[0] * x[5] * x[7] - x[1] * x[3] * x[8] + x[1] * x[5] * x[6] + x[2] * x[3] * x[7] - x[2] * x[4] * x[6];
-}
+inline double determinant3x3(const double *x);
+
+#include "mymatrix.hpp"
 
 #endif // MYMATRIX_H
 //EOF

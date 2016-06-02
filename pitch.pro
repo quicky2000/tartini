@@ -182,6 +182,7 @@ HEADERS += main.h \
   include/SmartPtr.h \
   general/prony.h \
   general/mymatrix.h \
+  general/mymatrix.hpp \
   general/myglfonts.h \
   general/myglfonts.hpp \
   general/mygl.h \
