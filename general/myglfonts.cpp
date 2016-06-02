@@ -23,7 +23,6 @@ void MyGLFont::init(const QFont f)
       w_raw = w + 3;
       w_raw -= (w_raw % 4); //round length up to multiple of 4
       data = (GLubyte*)malloc(w_raw * h * sizeof(GLubyte));
-      //p.drawRect(image.rect());
       for(int y = 0; y < h; y++)
 	{
 	  for(int x = 0; x < w_raw; x++)
@@ -80,7 +79,6 @@ void MyGLFont::drawGLtextRaw(float x, float y, QString s)
 //------------------------------------------------------------------------------
 void MyGLFont::beginGLtext(int w, int h)
 {
-  //makeCurrent();
   glPushAttrib(GL_ALL_ATTRIB_BITS);
 
   glDisable(GL_TEXTURE_1D);
@@ -92,20 +90,12 @@ void MyGLFont::beginGLtext(int w, int h)
   glPushMatrix();
   glLoadIdentity();
   gluOrtho2D(0, w, 0, h);
-  //glOrtho(0, w, h, 0, -1, 1);
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
   glLoadIdentity();
 
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glEnable(GL_BLEND);
-  //glRasterPos2i(0, 0);
-  //glBitmap(0, 0, 0, 0, x, -y, NULL);
-  //glListBase(fontDisplayListBase(fnt, listBase));
-  //glCallLists(str.length(), GL_UNSIGNED_BYTE, str.toLocal8Bit());
-
-  //if (fnt.underline() || fnt.strikeOut() || fnt.overline())
-  //    qt_drawFontLining(x, y, str, fnt);
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 }
 
