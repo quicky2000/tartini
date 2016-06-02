@@ -26,33 +26,33 @@ MyGLChar::MyGLChar(int width, int height, GLubyte *theData, int width_raw):
 }
 
 //------------------------------------------------------------------------------
-GLubyte * MyGLChar::data(void)
+const GLubyte * MyGLChar::data(void) const
 {
   return _data;
 }
 
 //------------------------------------------------------------------------------
-int MyGLChar::w(void)
+int MyGLChar::w(void) const
 {
   return _w;
 }
 
 //------------------------------------------------------------------------------
-int MyGLChar::h(void)
+int MyGLChar::h(void) const
 {
   return _h;
 }
 
 //------------------------------------------------------------------------------
-int MyGLChar::w_raw(void)
+int MyGLChar::w_raw(void) const
 {
   return _w_raw;
 }
 
 //------------------------------------------------------------------------------
-MyGLFont::MyGLFont(void)
+MyGLFont::MyGLFont(void):
+  beenInit(false)
 {
-  beenInit = false;
 }
 
 //------------------------------------------------------------------------------

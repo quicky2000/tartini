@@ -47,10 +47,10 @@ class MyGLChar
 {
 public:
   inline MyGLChar(int width, int height, GLubyte *theData, int width_raw);
-  inline GLubyte *data(void);
-  inline int w(void);
-  inline int h(void);
-  inline int w_raw(void);
+  inline const GLubyte * data(void) const;
+  inline int w(void) const;
+  inline int h(void) const;
+  inline int w_raw(void) const;
 
  private:
   int _w;
@@ -65,14 +65,17 @@ class MyGLFont
   inline MyGLFont(void);
   inline MyGLFont(const QFont f);
   ~MyGLFont(void);
-  void init(const QFont f);
-  void drawGLtext(float x, float y, QString s, int w, int h);
-  void beginGLtext(int w, int h);
-  void drawGLtextRaw(float x, float y, QString s);
-  void endGLtext(void);
+
+  void beginGLtext(int w, int h) const;
+  void drawGLtextRaw(float x, float y, QString s) const;
+  void endGLtext(void) const;
 
  private:
-  MyGLChar *c[256];
+  void init(const QFont f);
+  void drawGLtext(float x, float y, QString s, int w, int h) const;
+
+ private:
+  MyGLChar * c[256];
   bool beenInit;
 };
 

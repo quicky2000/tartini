@@ -56,7 +56,7 @@ MyGLFont::~MyGLFont(void)
 }
 
 //------------------------------------------------------------------------------
-void MyGLFont::drawGLtext(float x, float y, QString s, int w, int h)
+void MyGLFont::drawGLtext(float x, float y, QString s, int w, int h) const
 {
   beginGLtext(w, h);
   drawGLtextRaw(x, y, s);
@@ -64,7 +64,7 @@ void MyGLFont::drawGLtext(float x, float y, QString s, int w, int h)
 }
 
 //------------------------------------------------------------------------------
-void MyGLFont::drawGLtextRaw(float x, float y, QString s)
+void MyGLFont::drawGLtextRaw(float x, float y, QString s) const
 {
   unsigned char ch;
   for(int j = 0; j < s.size(); ++j)
@@ -77,7 +77,7 @@ void MyGLFont::drawGLtextRaw(float x, float y, QString s)
 }
 
 //------------------------------------------------------------------------------
-void MyGLFont::beginGLtext(int w, int h)
+void MyGLFont::beginGLtext(int w, int h) const
 {
   glPushAttrib(GL_ALL_ATTRIB_BITS);
 
@@ -100,7 +100,7 @@ void MyGLFont::beginGLtext(int w, int h)
 }
 
 //------------------------------------------------------------------------------
-void MyGLFont::endGLtext(void)
+void MyGLFont::endGLtext(void) const
 {
   glMatrixMode(GL_MODELVIEW);
   glPopMatrix();
