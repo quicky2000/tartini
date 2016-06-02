@@ -183,6 +183,7 @@ HEADERS += main.h \
   general/prony.h \
   general/mymatrix.h \
   general/myglfonts.h \
+  general/myglfonts.hpp \
   general/mygl.h \
   general/myqt.h \
   general/musicnotes.h \
