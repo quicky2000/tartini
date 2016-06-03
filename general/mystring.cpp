@@ -63,11 +63,15 @@ int str_case_cmp(const char *s1, const char *s2)
 #endif
 }
 
-//converts string to lower case
-//returns the string
+// converts string to lower case
+// returns the string
+//------------------------------------------------------------------------------
 char *to_lower_case(char *s)
 {
-    for(char *a=s; *a!='\0'; a++) *a = tolower(*a);
+    for(char *a=s; *a!='\0'; a++)
+      {
+	*a = tolower(*a);
+      }
     return s;
 }
 
@@ -106,8 +110,14 @@ char * strip_space(char * s)
 const char * getFileExtension(const char * filename)
 {
   const char *ext;
-  if(filename && (ext = strrchr(filename, '.')) != NULL) return ext+1;
-  else return NULL;
+  if(filename && (ext = strrchr(filename, '.')) != NULL)
+    {
+      return ext + 1;
+    }
+  else
+    {
+      return NULL;
+    }
 }
 
 //returns a pointer to the filename part of a full path name
@@ -131,36 +141,6 @@ const char * getFilenamePart(const char * filename)
   return filename;
 }
 
-//retuns a malloced string which contains only the folder name part of the string.
-//if no folder name is found it return "."
-//NOTE: The value return needs to be freed with free when done with
-/*
-char *getFolderPart(char *filename)
-{
-    char *folder;
-    if(!filename) {
-	folder = (char *)malloc(sizeof(char) * 2);
-	folder[0] = '.';
-	folder[1] = '\0';
-	return folder;
-    }
-    int len = strlen(filename);
-    for(; len > 0; len--) {
-	if(filename[len-1] == '/' || filename[len-1] == '\\') break;
-    }
-    if(len == 0) {
-	folder = (char *)malloc(sizeof(char) * 2);
-	folder[0] = '.';
-	folder[1] = '\0';
-    } else {
-	folder = (char *)malloc(sizeof(char) * (len + 1));
-	memcpy(folder, filename, sizeof(char) * len);
-	folder[len] = '\0';
-    }
-    return folder;
-}
-*/
-
 // a static string used by getFolderPart and withTrailingSlash
 char mystring_folder[2048];
 
@@ -170,7 +150,6 @@ char mystring_folder[2048];
 //------------------------------------------------------------------------------
 const char *getFolderPart(const char *filename)
 {
-  //static char mystring_folder[2048];
   if(!filename)
     {
       strcpy(mystring_folder, "./");
