@@ -23,7 +23,7 @@
 #include "useful.h"
 #include "musicnotes.h"
 
-
+//------------------------------------------------------------------------------
 NoteData::NoteData(Channel *channel_)
 {
   channel = channel_;
@@ -45,6 +45,7 @@ NoteData::NoteData(int startChunk_, int endChunk_, float logRMS_, float intensit
   maxPurity = purity_;
 }*/
 
+//------------------------------------------------------------------------------
 NoteData::NoteData(Channel *channel_, int startChunk_, AnalysisData *analysisData)
 {
   channel = channel_;
@@ -73,9 +74,11 @@ NoteData::NoteData(Channel *channel_, int startChunk_, AnalysisData *analysisDat
   _avgPitch = 0.0f;
 }
 
-NoteData::~NoteData()
+//------------------------------------------------------------------------------
+NoteData::~NoteData(void)
 {
 }
+
 /*
 void NoteData::addValues(float logRMS_, float intensityDB_, float correlation_, float purity_)
 {
@@ -85,11 +88,14 @@ void NoteData::addValues(float logRMS_, float intensityDB_, float correlation_, 
   if(purity_ > maxPurity) maxPurity = purity_;
 }
 */
-void NoteData::resetData()
+
+//------------------------------------------------------------------------------
+void NoteData::resetData(void)
 {
   _numPeriods = 0;
 }
 
+//------------------------------------------------------------------------------
 void NoteData::addData(AnalysisData *analysisData, float periods)
 {
   maxLogRMS = MAX(maxLogRMS, analysisData->getLogRms());
@@ -102,138 +108,169 @@ void NoteData::addData(AnalysisData *analysisData, float periods)
   _avgPitch = bound(freq2pitch(avgFreq()), 0.0, gdata->topPitch());
 }
 
-/** @return The length of the note (in seconds)
-*/
-double NoteData::noteLength()
+//------------------------------------------------------------------------------
+double NoteData::noteLength(void)
 {
   return double(numChunks()) * double(channel->framesPerChunk()) / double(channel->rate());
 }
 
-/** @return The average of this note, in fractions of semi-tones.
-*/
-double NoteData::avgPitch()
+//------------------------------------------------------------------------------
+double NoteData::avgPitch(void)
 {
   //return bound(freq2pitch(avgFreq()), 0.0, gdata->topPitch());
   return _avgPitch;
 }
 
+//------------------------------------------------------------------------------
 void NoteData::addVibratoData(int chunk)
 {
-  if ((channel->doingDetailedPitch()) && (channel->pitchLookupSmoothed.size() > 0)) {
-    // Detailed pitch information available, calculate maxima and minima
-    int loopLimit = ((chunk+1) * channel->framesPerChunk()) - loopStep;
-    for (int currentTime = loopStart; currentTime < loopLimit; currentTime += loopStep) {
-      myassert(currentTime + loopStep < (int)channel->pitchLookupSmoothed.size());
-      myassert(currentTime - loopStep >= 0);
-      float prevPitch = channel->pitchLookupSmoothed.at(currentTime - loopStep);
-      float currentPitch = channel->pitchLookupSmoothed.at(currentTime);
-      float nextPitch = channel->pitchLookupSmoothed.at(currentTime + loopStep);
+  if ((channel->doingDetailedPitch()) && (channel->pitchLookupSmoothed.size() > 0))
+    {
+      // Detailed pitch information available, calculate maxima and minima
+      int loopLimit = ((chunk+1) * channel->framesPerChunk()) - loopStep;
+      for (int currentTime = loopStart; currentTime < loopLimit; currentTime += loopStep)
+	{
+	  myassert(currentTime + loopStep < (int)channel->pitchLookupSmoothed.size());
+	  myassert(currentTime - loopStep >= 0);
+	  float prevPitch = channel->pitchLookupSmoothed.at(currentTime - loopStep);
+	  float currentPitch = channel->pitchLookupSmoothed.at(currentTime);
+	  float nextPitch = channel->pitchLookupSmoothed.at(currentTime + loopStep);
 
-      if ((prevPitch < currentPitch) && (currentPitch >= nextPitch)) {  // Maximum
-        if (prevExtremum == NONE) {
-          maxima->push_back(currentTime);
-          prevExtremumTime = currentTime;
-          prevExtremumPitch = currentPitch;
-          prevExtremum = FIRST_MAXIMUM;
-          continue;
-        }
-        if ((prevExtremum == FIRST_MAXIMUM) || (prevExtremum == MAXIMUM)) {
-          if (currentPitch >= prevExtremumPitch) {
-            myassert(!maxima->isEmpty());
-            maxima->pop_back();
-            maxima->push_back(currentTime);
-            prevExtremumTime = currentTime;
-            prevExtremumPitch = currentPitch;
-          }
-          continue;
-        }
-        if ((fabs(currentPitch - prevExtremumPitch) > 0.04) &&
-            (currentTime - prevExtremumTime > 42 * loopStep)) {
-          if (prevExtremum == MINIMUM) {
-            maxima->push_back(currentTime);
-            prevExtremumTime = currentTime;
-            prevExtremumPitch = currentPitch;
-            prevExtremum = MAXIMUM;
-            continue;
-          } else {
-            // prevExtremum == FIRST_MINIMUM
-            if (currentTime - minima->at(0) < loopStep * 500) {
-              // Good
-              maxima->push_back(currentTime);
-              prevExtremumTime = currentTime;
-              prevExtremumPitch = currentPitch;
-              prevExtremum = MAXIMUM;
-              continue;
-            } else {
-              // Not good
-              myassert(!minima->isEmpty());
-              minima->pop_back();
-              maxima->push_back(currentTime);
-              prevExtremumTime = currentTime;
-              prevExtremumPitch = currentPitch;
-              prevExtremum = FIRST_MAXIMUM;
-              continue;
-            }
-          }
-        }
-      } else if ((prevPitch > currentPitch) && (currentPitch <= nextPitch)) {  // Minimum
-        if (prevExtremum == NONE) {
-          minima->push_back(currentTime);
-          prevExtremumTime = currentTime;
-          prevExtremumPitch = currentPitch;
-          prevExtremum = FIRST_MINIMUM;
-          continue;
-        }
-        if ((prevExtremum == FIRST_MINIMUM) || (prevExtremum == MINIMUM)) {
-          if (currentPitch <= prevExtremumPitch) {
-            myassert(!minima->isEmpty());
-            minima->pop_back();
-            minima->push_back(currentTime);
-            prevExtremumTime = currentTime;
-            prevExtremumPitch = currentPitch;
-          }
-          continue;
-        }
-        if ((fabs(currentPitch - prevExtremumPitch) > 0.04) &&
-            (currentTime - prevExtremumTime > 42 * loopStep)) {
-          if (prevExtremum == MAXIMUM) {
-            minima->push_back(currentTime);
-            prevExtremumTime = currentTime;
-            prevExtremumPitch = currentPitch;
-            prevExtremum = MINIMUM;
-            continue;
-          } else {
-            // prevExtremum == FIRST_MAXIMUM
-            if (currentTime - maxima->at(0) < loopStep * 500) {
-              // Good
-              minima->push_back(currentTime);
-              prevExtremumTime = currentTime;
-              prevExtremumPitch = currentPitch;
-              prevExtremum = MINIMUM;
-              continue;
-            } else {
-              // Not good
-              myassert(!maxima->isEmpty());
-              maxima->pop_back();
-              minima->push_back(currentTime);
-              prevExtremumTime = currentTime;
-              prevExtremumPitch = currentPitch;
-              prevExtremum = FIRST_MINIMUM;
-              continue;
-            }
-          }
-        }
-      }
+	  if ((prevPitch < currentPitch) && (currentPitch >= nextPitch))
+	    {
+	      // Maximum
+	      if (prevExtremum == NONE)
+		{
+		  maxima->push_back(currentTime);
+		  prevExtremumTime = currentTime;
+		  prevExtremumPitch = currentPitch;
+		  prevExtremum = FIRST_MAXIMUM;
+		  continue;
+		}
+	      if ((prevExtremum == FIRST_MAXIMUM) || (prevExtremum == MAXIMUM))
+		{
+		  if (currentPitch >= prevExtremumPitch)
+		    {
+		      myassert(!maxima->isEmpty());
+		      maxima->pop_back();
+		      maxima->push_back(currentTime);
+		      prevExtremumTime = currentTime;
+		      prevExtremumPitch = currentPitch;
+		    }
+		  continue;
+		}
+	      if ((fabs(currentPitch - prevExtremumPitch) > 0.04) &&
+		  (currentTime - prevExtremumTime > 42 * loopStep))
+		{
+		  if (prevExtremum == MINIMUM)
+		    {
+		      maxima->push_back(currentTime);
+		      prevExtremumTime = currentTime;
+		      prevExtremumPitch = currentPitch;
+		      prevExtremum = MAXIMUM;
+		      continue;
+		    }
+		  else
+		    {
+		      // prevExtremum == FIRST_MINIMUM
+		      if (currentTime - minima->at(0) < loopStep * 500)
+			{
+			  // Good
+			  maxima->push_back(currentTime);
+			  prevExtremumTime = currentTime;
+			  prevExtremumPitch = currentPitch;
+			  prevExtremum = MAXIMUM;
+			  continue;
+			}
+		      else
+			{
+			  // Not good
+			  myassert(!minima->isEmpty());
+			  minima->pop_back();
+			  maxima->push_back(currentTime);
+			  prevExtremumTime = currentTime;
+			  prevExtremumPitch = currentPitch;
+			  prevExtremum = FIRST_MAXIMUM;
+			  continue;
+			}
+		    }
+		}
+	    }
+	  else if ((prevPitch > currentPitch) && (currentPitch <= nextPitch))
+	    {
+	      // Minimum
+	      if (prevExtremum == NONE)
+		{
+		  minima->push_back(currentTime);
+		  prevExtremumTime = currentTime;
+		  prevExtremumPitch = currentPitch;
+		  prevExtremum = FIRST_MINIMUM;
+		  continue;
+		}
+	      if ((prevExtremum == FIRST_MINIMUM) || (prevExtremum == MINIMUM))
+		{
+		  if (currentPitch <= prevExtremumPitch)
+		    {
+		      myassert(!minima->isEmpty());
+		      minima->pop_back();
+		      minima->push_back(currentTime);
+		      prevExtremumTime = currentTime;
+		      prevExtremumPitch = currentPitch;
+		    }
+		  continue;
+		}
+	      if ((fabs(currentPitch - prevExtremumPitch) > 0.04) &&
+		  (currentTime - prevExtremumTime > 42 * loopStep))
+		{
+		  if (prevExtremum == MAXIMUM)
+		    {
+		      minima->push_back(currentTime);
+		      prevExtremumTime = currentTime;
+		      prevExtremumPitch = currentPitch;
+		      prevExtremum = MINIMUM;
+		      continue;
+		    }
+		  else
+		    {
+		      // prevExtremum == FIRST_MAXIMUM
+		      if (currentTime - maxima->at(0) < loopStep * 500)
+			{
+			  // Good
+			  minima->push_back(currentTime);
+			  prevExtremumTime = currentTime;
+			  prevExtremumPitch = currentPitch;
+			  prevExtremum = MINIMUM;
+			  continue;
+			}
+		      else
+			{
+			  // Not good
+			  myassert(!maxima->isEmpty());
+			  maxima->pop_back();
+			  minima->push_back(currentTime);
+			  prevExtremumTime = currentTime;
+			  prevExtremumPitch = currentPitch;
+			  prevExtremum = FIRST_MINIMUM;
+			  continue;
+			}
+		    }
+		}
+	    }
+	}
+      // Calculate start of next loop
+      loopStart = loopStart + ((loopLimit - loopStart) / loopStep) * loopStep + loopStep;
     }
-    // Calculate start of next loop
-    loopStart = loopStart + ((loopLimit - loopStart) / loopStep) * loopStep + loopStep;
-  }
 }
 
-void NoteData::recalcAvgPitch() {
+//------------------------------------------------------------------------------
+void NoteData::recalcAvgPitch(void)
+{
   _numPeriods = 0.0f;
-  for(int j=startChunk(); j<endChunk(); j++) {
-    _numPeriods += float(channel->framesPerChunk()) / float(channel->dataAtChunk(j)->getPeriod());
-  }
+  for(int j = startChunk(); j < endChunk(); j++)
+    {
+      _numPeriods += float(channel->framesPerChunk()) / float(channel->dataAtChunk(j)->getPeriod());
+    }
   _avgPitch = bound(freq2pitch(avgFreq()), 0.0, gdata->topPitch());
 }
+
+// EOF
