@@ -66,3 +66,4 @@ double dB2Normalised(const double & x,const double & theCeiling, const double & 
 {
   return bound(1.0 + ((x - theCeiling) / (theCeiling - theFloor)), 0.0, 1.0);
 }
+//EOF

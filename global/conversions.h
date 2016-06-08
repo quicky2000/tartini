@@ -30,3 +30,4 @@ double same(const double & x, const GData & p_data);
 double oneMinus(const double & x, const GData & p_data);
 
 double dB2Normalised(const double & x, const double & theCeiling, const double & theFloor);
+//EOF
