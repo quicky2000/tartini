@@ -42,7 +42,6 @@ class NoteData
 
   NoteData(void) { }
   NoteData(Channel *channel_);
-  //NoteData(int startChunk_, int endChunk_, float logRMS_, float intensityDB_, float correlation_, float purity_);
   NoteData(Channel *channel_, int startChunk_, AnalysisData *analysisData);
   ~NoteData(void);
 
@@ -50,20 +49,20 @@ class NoteData
   SmartPtr<Array1d<int> > minima;
 
   void    resetData(void);
-  //int   size(void) { return _endChunk - _startChunk; }
   bool    isValid(void) { return (numChunks() > 2); }
   void    setStartChunk(int startChunk_) { _startChunk = startChunk_; }
   void    setEndChunk(int endChunk_) { _endChunk = endChunk_; }
   int     startChunk(void) { return _startChunk; }
   int     endChunk(void) { return _endChunk; }
-  //void  addValues(float logRMS_, float intensityDB_, float correlation_, float purity_);
   void    addData(AnalysisData *analysisData, float periods);
   int     numChunks(void) { return _endChunk - _startChunk; }
+
   /**
      @return The length of the note (in seconds)
   */
   double  noteLength(void);
   float   numPeriods(void) { return _numPeriods; }
+
   /**
      @return in Hertz
    */

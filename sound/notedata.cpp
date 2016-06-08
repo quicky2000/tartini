@@ -34,17 +34,6 @@ NoteData::NoteData(Channel *channel_)
   _numPeriods = 0;
 }
 
-/*
-NoteData::NoteData(int startChunk_, int endChunk_, float logRMS_, float intensityDB_, float correlation_, float purity_)
-{
-  startChunk = startChunk_;
-  endChunk = endChunk_;
-  maxLogRMS = logRMS_;
-  maxIntensityDB = intensityDB_;
-  maxCorrelation = correlation_;
-  maxPurity = purity_;
-}*/
-
 //------------------------------------------------------------------------------
 NoteData::NoteData(Channel *channel_, int startChunk_, AnalysisData *analysisData)
 {
@@ -57,7 +46,6 @@ NoteData::NoteData(Channel *channel_, int startChunk_, AnalysisData *analysisDat
   maxPurity = analysisData->getVolumeValue(*gdata);
   _volume = 0.0f;
   _numPeriods = 0.0f; //periods;
-  //_periodOctaveEstimate = analysisData->periodOctaveEstimate;
   _periodOctaveEstimate = 1.0f;
   loopStep = channel->rate() / 1000;  // stepsize = 0.001 seconds
   loopStart = _startChunk * channel->framesPerChunk() + loopStep;
@@ -79,16 +67,6 @@ NoteData::~NoteData(void)
 {
 }
 
-/*
-void NoteData::addValues(float logRMS_, float intensityDB_, float correlation_, float purity_)
-{
-  if(logRMS_ > maxLogRMS) maxLogRMS = logRMS_;
-  if(intensityDB_ > maxIntensityDB) maxIntensityDB = intensityDB_;
-  if(correlation_ > maxCorrelation) maxCorrelation = correlation_;
-  if(purity_ > maxPurity) maxPurity = purity_;
-}
-*/
-
 //------------------------------------------------------------------------------
 void NoteData::resetData(void)
 {
@@ -104,7 +82,6 @@ void NoteData::addData(AnalysisData *analysisData, float periods)
   maxPurity = MAX(maxPurity, analysisData->getVolumeValue(*gdata));
   _volume = MAX(_volume, dB2Normalised(analysisData->getLogRms(),*gdata));
   _numPeriods += periods; //sum up the periods
-  //_periodOctaveEstimate = analysisData->periodOctaveEstimate; //overwrite the old estimate
   _avgPitch = bound(freq2pitch(avgFreq()), 0.0, gdata->topPitch());
 }
 
@@ -117,7 +94,6 @@ double NoteData::noteLength(void)
 //------------------------------------------------------------------------------
 double NoteData::avgPitch(void)
 {
-  //return bound(freq2pitch(avgFreq()), 0.0, gdata->topPitch());
   return _avgPitch;
 }
 
@@ -127,7 +103,7 @@ void NoteData::addVibratoData(int chunk)
   if ((channel->doingDetailedPitch()) && (channel->pitchLookupSmoothed.size() > 0))
     {
       // Detailed pitch information available, calculate maxima and minima
-      int loopLimit = ((chunk+1) * channel->framesPerChunk()) - loopStep;
+      int loopLimit = ((chunk + 1) * channel->framesPerChunk()) - loopStep;
       for (int currentTime = loopStart; currentTime < loopLimit; currentTime += loopStep)
 	{
 	  myassert(currentTime + loopStep < (int)channel->pitchLookupSmoothed.size());
@@ -172,7 +148,6 @@ void NoteData::addVibratoData(int chunk)
 		    }
 		  else
 		    {
-		      // prevExtremum == FIRST_MINIMUM
 		      if (currentTime - minima->at(0) < loopStep * 500)
 			{
 			  // Good
@@ -232,7 +207,6 @@ void NoteData::addVibratoData(int chunk)
 		    }
 		  else
 		    {
-		      // prevExtremum == FIRST_MAXIMUM
 		      if (currentTime - maxima->at(0) < loopStep * 500)
 			{
 			  // Good
