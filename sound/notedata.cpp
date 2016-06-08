@@ -24,42 +24,42 @@
 #include "musicnotes.h"
 
 //------------------------------------------------------------------------------
-NoteData::NoteData(Channel *channel_)
+NoteData::NoteData(Channel *channel_):
+  maxima(new Array1d<int>()),
+  minima(new Array1d<int>()),
+  channel(channel_),
+  maxLogRMS(gdata->dBFloor()),
+  _numPeriods(0),
+  _periodOctaveEstimate(1.0f)
 {
-  channel = channel_;
-  maxLogRMS = gdata->dBFloor();
-  maxima = new Array1d<int>();
-  minima = new Array1d<int>();
-  _periodOctaveEstimate = 1.0f;
-  _numPeriods = 0;
 }
 
 //------------------------------------------------------------------------------
-NoteData::NoteData(Channel *channel_, int startChunk_, AnalysisData *analysisData)
+NoteData::NoteData(Channel *channel_, int startChunk_, AnalysisData *analysisData):
+  nsdfAggregateRoof(0.0),
+  firstNsdfPeriod(0.0f),
+  currentNsdfPeriod(0.0f),
+  maxima(new Array1d<int>()),
+  minima(new Array1d<int>()),
+  channel(channel_),
+  _startChunk(startChunk_),
+  _endChunk(startChunk_ + 1),
+  maxLogRMS(analysisData->getLogRms()),
+  maxIntensityDB(analysisData->getMaxIntensityDB()),
+  maxCorrelation(analysisData->getCorrelation()),
+  maxPurity(analysisData->getVolumeValue(*gdata)),
+  _numPeriods(0.0f), //periods;
+  _periodOctaveEstimate(1.0f),
+  _volume(0.0f),
+  _avgPitch(0.0f),
+  loopStep(channel->rate() / 1000),  // stepsize = 0.001 seconds
+  loopStart(_startChunk * channel->framesPerChunk() + loopStep),
+  prevExtremumTime(-1),
+  prevExtremumPitch(-1),
+  prevExtremum(NONE)
 {
-  channel = channel_;
-  _startChunk = startChunk_;
-  _endChunk = startChunk_ + 1;
-  maxLogRMS = analysisData->getLogRms();
-  maxIntensityDB = analysisData->getMaxIntensityDB();
-  maxCorrelation = analysisData->getCorrelation();
-  maxPurity = analysisData->getVolumeValue(*gdata);
-  _volume = 0.0f;
-  _numPeriods = 0.0f; //periods;
-  _periodOctaveEstimate = 1.0f;
-  loopStep = channel->rate() / 1000;  // stepsize = 0.001 seconds
-  loopStart = _startChunk * channel->framesPerChunk() + loopStep;
-  prevExtremumTime = -1;
-  prevExtremumPitch = -1;
-  prevExtremum = NONE;
-  maxima = new Array1d<int>();
-  minima = new Array1d<int>();
   nsdfAggregateData.resize(channel_->nsdfData.size(), 0.0f);
   nsdfAggregateDataScaled.resize(channel_->nsdfData.size(), 0.0f);
-  nsdfAggregateRoof = 0.0;
-  firstNsdfPeriod = 0.0f;
-  currentNsdfPeriod = 0.0f;
-  _avgPitch = 0.0f;
 }
 
 //------------------------------------------------------------------------------
