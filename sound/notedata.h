@@ -37,7 +37,6 @@ class NoteData
      keeps the sum of scalers. i.e. The highest possible aggregate value
   */
   double nsdfAggregateRoof;
-  float firstNsdfPeriod;
 
   inline NoteData(void);
   NoteData(Channel *channel_);
@@ -79,10 +78,13 @@ class NoteData
   inline const SmartPtr<Array1d<int> > get_maxima(void) const;
   inline const SmartPtr<Array1d<int> > get_minima(void) const;
 
+  inline void set_first_nsdf_period(float p_period);
+  inline float get_first_nsdf_period(void)const;
   inline void set_current_nsdf_period(float p_period);
   inline void add_current_nsdf_period(float p_period_diff);
   inline float get_current_nsdf_period(void) const;
  private:
+  float firstNsdfPeriod;
   float currentNsdfPeriod;
 
   SmartPtr<Array1d<int> > maxima;
