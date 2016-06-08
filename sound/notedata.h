@@ -40,7 +40,7 @@ class NoteData
   float firstNsdfPeriod;
   float currentNsdfPeriod;
 
-  NoteData(void) { }
+  inline NoteData(void);
   NoteData(Channel *channel_);
   NoteData(Channel *channel_, int startChunk_, AnalysisData *analysisData);
   ~NoteData(void);
@@ -48,35 +48,36 @@ class NoteData
   SmartPtr<Array1d<int> > maxima;
   SmartPtr<Array1d<int> > minima;
 
-  void    resetData(void);
-  bool    isValid(void) { return (numChunks() > 2); }
-  void    setStartChunk(int startChunk_) { _startChunk = startChunk_; }
-  void    setEndChunk(int endChunk_) { _endChunk = endChunk_; }
-  int     startChunk(void) { return _startChunk; }
-  int     endChunk(void) { return _endChunk; }
-  void    addData(AnalysisData *analysisData, float periods);
-  int     numChunks(void) { return _endChunk - _startChunk; }
+  void resetData(void);
+  inline bool isValid(void);
+  inline void setStartChunk(int startChunk_);
+  inline void setEndChunk(int endChunk_);
+  inline int startChunk(void);
+  inline int endChunk(void);
+  void addData(AnalysisData *analysisData, float periods);
+  inline int numChunks(void);
 
   /**
      @return The length of the note (in seconds)
   */
-  double  noteLength(void);
-  float   numPeriods(void) { return _numPeriods; }
+  double noteLength(void);
+
+  inline float numPeriods(void);
 
   /**
      @return in Hertz
    */
-  double  avgFreq(void) { return numPeriods() / noteLength(); }
+  inline double avgFreq(void);
 
   /**
      @return The average of this note, in fractions of semi-tones.
   */
-  double  avgPitch(void);
-  void    setPeriodOctaveEstimate(float periodOctaveEstimate_) { _periodOctaveEstimate = periodOctaveEstimate_; }
-  float   periodOctaveEstimate(void) { return _periodOctaveEstimate; }
-  void    addVibratoData(int chunk);
-  float   volume(void) { return _volume; }
-  void    recalcAvgPitch(void);
+  double avgPitch(void);
+  inline void setPeriodOctaveEstimate(float periodOctaveEstimate_);
+  inline float periodOctaveEstimate(void);
+  void addVibratoData(int chunk);
+  inline float volume(void);
+  void recalcAvgPitch(void);
 
  private:
   Channel *channel;
@@ -137,6 +138,8 @@ class NoteData
   PrevExtremum prevExtremum;
 
 };
+
+#include "notedata.hpp"
 
 #endif // NOTEDATA_H
 // EOF

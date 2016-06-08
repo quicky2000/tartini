@@ -158,6 +158,7 @@ HEADERS += main.h \
   widgets/cepstrum/cepstrumwidget.h \
   widgets/cepstrum/cepstrumview.h \
   sound/notedata.h \
+  sound/notedata.hpp \
   general/large_vector.h \
   general/large_vector.hpp \
   widgets/mylabel.h \
