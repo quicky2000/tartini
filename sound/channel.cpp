@@ -967,7 +967,8 @@ void Channel::resetNSDFAggregate(float period)
   NoteData *currentNote = getLastNote();
   myassert(currentNote);
   currentNote->nsdfAggregateRoof = 0.0;
-  currentNote->currentNsdfPeriod = currentNote->firstNsdfPeriod = period;
+  currentNote->set_current_nsdf_period(period);
+  currentNote->firstNsdfPeriod = period;
 }
 
 //------------------------------------------------------------------------------
@@ -981,8 +982,8 @@ void Channel::addToNSDFAggregate(const float scaler, float periodDiff)
   NoteData *currentNote = getLastNote();
   myassert(currentNote);
   currentNote->nsdfAggregateRoof += scaler;
-  currentNote->currentNsdfPeriod += periodDiff;
-  float periodRatio = currentNote->currentNsdfPeriod / currentNote->firstNsdfPeriod;
+  currentNote->add_current_nsdf_period(periodDiff);
+  float periodRatio = currentNote->get_current_nsdf_period() / currentNote->firstNsdfPeriod;
   analysisData.setPeriodRatio(periodRatio);
 #ifdef DEBUG_PRINTF
   printf("%f, periodDiff = %f\n", currentNote->currentNsdfPeriod, periodDiff);

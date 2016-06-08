@@ -38,7 +38,6 @@ class NoteData
   */
   double nsdfAggregateRoof;
   float firstNsdfPeriod;
-  float currentNsdfPeriod;
 
   inline NoteData(void);
   NoteData(Channel *channel_);
@@ -79,7 +78,13 @@ class NoteData
 
   inline const SmartPtr<Array1d<int> > get_maxima(void) const;
   inline const SmartPtr<Array1d<int> > get_minima(void) const;
+
+  inline void set_current_nsdf_period(float p_period);
+  inline void add_current_nsdf_period(float p_period_diff);
+  inline float get_current_nsdf_period(void) const;
  private:
+  float currentNsdfPeriod;
+
   SmartPtr<Array1d<int> > maxima;
   SmartPtr<Array1d<int> > minima;
 

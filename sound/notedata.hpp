@@ -98,4 +98,23 @@ const SmartPtr<Array1d<int> > NoteData::get_minima(void) const
 {
   return minima;
 }
+
+//------------------------------------------------------------------------------
+void NoteData::set_current_nsdf_period(float p_period)
+{
+  currentNsdfPeriod = p_period;
+}
+
+//------------------------------------------------------------------------------
+void NoteData::add_current_nsdf_period(float p_period_diff)
+{
+  currentNsdfPeriod += p_period_diff;
+}
+
+//------------------------------------------------------------------------------
+float NoteData::get_current_nsdf_period(void) const
+{
+  return currentNsdfPeriod;
+}
+
 //EOF
