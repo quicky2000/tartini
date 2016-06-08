@@ -72,7 +72,7 @@ class NoteData
   /**
      @return The average of this note, in fractions of semi-tones.
   */
-  double avgPitch(void) const;
+  float avgPitch(void) const;
   inline void setPeriodOctaveEstimate(float periodOctaveEstimate_);
   inline float periodOctaveEstimate(void) const;
   void addVibratoData(int chunk);
@@ -114,6 +114,7 @@ class NoteData
      A normalised volume between 0 and 1
   */
   float _volume;
+
   float _avgPitch;
 
   /**

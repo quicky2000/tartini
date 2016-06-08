@@ -92,7 +92,7 @@ double NoteData::noteLength(void) const
 }
 
 //------------------------------------------------------------------------------
-double NoteData::avgPitch(void) const
+float NoteData::avgPitch(void) const
 {
   return _avgPitch;
 }
