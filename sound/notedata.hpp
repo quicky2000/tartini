@@ -129,4 +129,21 @@ float NoteData::get_current_nsdf_period(void) const
   return currentNsdfPeriod;
 }
 
+//------------------------------------------------------------------------------
+void NoteData::set_nsdf_aggregate_roof(const double & p_value)
+{
+  nsdfAggregateRoof = p_value;
+}
+
+//------------------------------------------------------------------------------
+void NoteData::add_nsdf_aggregate_roof(const double & p_value)
+{
+  nsdfAggregateRoof += p_value;
+}
+
+//------------------------------------------------------------------------------
+const double & NoteData::get_nsdf_aggregate_roof(void)const
+{
+  return nsdfAggregateRoof;
+}
 //EOF

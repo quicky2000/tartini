@@ -966,7 +966,7 @@ void Channel::resetNSDFAggregate(float period)
 
   NoteData *currentNote = getLastNote();
   myassert(currentNote);
-  currentNote->nsdfAggregateRoof = 0.0;
+  currentNote->set_nsdf_aggregate_roof(0.0);
   currentNote->set_current_nsdf_period(period);
   currentNote->set_first_nsdf_period(period);
 }
@@ -981,7 +981,7 @@ void Channel::addToNSDFAggregate(const float scaler, float periodDiff)
 
   NoteData *currentNote = getLastNote();
   myassert(currentNote);
-  currentNote->nsdfAggregateRoof += scaler;
+  currentNote->add_nsdf_aggregate_roof(scaler);
   currentNote->add_current_nsdf_period(periodDiff);
   float periodRatio = currentNote->get_current_nsdf_period() / currentNote->get_first_nsdf_period();
   analysisData.setPeriodRatio(periodRatio);
@@ -997,10 +997,10 @@ void Channel::addToNSDFAggregate(const float scaler, float periodDiff)
   //the scaled version
   stretch_array(len, nsdfData.begin(), len, stretch_data.begin(), 0.0f, stretch_len, LINEAR);
   addElements(nsdfAggregateDataScaled.begin(), nsdfAggregateDataScaled.end(), stretch_data.begin(), scaler);
-  copyElementsDivide(nsdfAggregateDataScaled.begin(), nsdfAggregateDataScaled.end(), currentNote->nsdfAggregateDataScaled.begin(), currentNote->nsdfAggregateRoof);
+  copyElementsDivide(nsdfAggregateDataScaled.begin(), nsdfAggregateDataScaled.end(), currentNote->nsdfAggregateDataScaled.begin(), currentNote->get_nsdf_aggregate_roof());
 
   //the unscaled version
-  copyElementsDivide(nsdfAggregateData.begin(), nsdfAggregateData.end(), currentNote->nsdfAggregateData.begin(), currentNote->nsdfAggregateRoof);
+  copyElementsDivide(nsdfAggregateData.begin(), nsdfAggregateData.end(), currentNote->nsdfAggregateData.begin(), currentNote->get_nsdf_aggregate_roof());
 
 #ifdef DEBUG_PRINTF
   printf("chunk = %d, ", currentChunk());
