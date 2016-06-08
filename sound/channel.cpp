@@ -997,7 +997,7 @@ void Channel::addToNSDFAggregate(const float scaler, float periodDiff)
   //the scaled version
   stretch_array(len, nsdfData.begin(), len, stretch_data.begin(), 0.0f, stretch_len, LINEAR);
   addElements(nsdfAggregateDataScaled.begin(), nsdfAggregateDataScaled.end(), stretch_data.begin(), scaler);
-  copyElementsDivide(nsdfAggregateDataScaled.begin(), nsdfAggregateDataScaled.end(), currentNote->nsdfAggregateDataScaled.begin(), currentNote->get_nsdf_aggregate_roof());
+  copyElementsDivide(nsdfAggregateDataScaled.begin(), nsdfAggregateDataScaled.end(), currentNote->get_nsdf_aggregate_data_scaled().begin(), currentNote->get_nsdf_aggregate_roof());
 
   //the unscaled version
   copyElementsDivide(nsdfAggregateData.begin(), nsdfAggregateData.end(), currentNote->nsdfAggregateData.begin(), currentNote->get_nsdf_aggregate_roof());

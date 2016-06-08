@@ -31,7 +31,6 @@ class NoteData
 {
  public:
   Array1d<float> nsdfAggregateData;
-  Array1d<float> nsdfAggregateDataScaled;
 
   inline NoteData(void);
   NoteData(Channel *channel_);
@@ -84,7 +83,11 @@ class NoteData
   inline void add_current_nsdf_period(float p_period_diff);
   inline float get_current_nsdf_period(void) const;
 
+  inline const Array1d<float> & get_nsdf_aggregate_data_scaled(void)const;
+
  private:
+  Array1d<float> nsdfAggregateDataScaled;
+
   /**
      keeps the sum of scalers. i.e. The highest possible aggregate value
   */

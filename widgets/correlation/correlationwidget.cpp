@@ -105,10 +105,10 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
       if(lookup.size() != w) lookup.resize(w);
 
       NoteData *currentNote = active->getCurrentNote();
-      Array1d<float> *input = &(active->nsdfData);
+      const Array1d<float> *input = &(active->nsdfData);
       if(currentNote) {
         if(aggregateMode == 1) input = &currentNote->nsdfAggregateData;
-        else if(aggregateMode == 2) input = &currentNote->nsdfAggregateDataScaled;
+        else if(aggregateMode == 2) input = &currentNote->get_nsdf_aggregate_data_scaled();
       }
       //bresenham1d(*input, lookup);
       maxAbsDecimate1d(*input, lookup);
