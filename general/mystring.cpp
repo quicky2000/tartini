@@ -68,7 +68,7 @@ int str_case_cmp(const char *s1, const char *s2)
 //------------------------------------------------------------------------------
 char *to_lower_case(char *s)
 {
-    for(char *a=s; *a!='\0'; a++)
+    for(char * a = s; * a != '\0'; a++)
       {
 	*a = tolower(*a);
       }
@@ -109,7 +109,7 @@ char * strip_space(char * s)
 //------------------------------------------------------------------------------
 const char * getFileExtension(const char * filename)
 {
-  const char *ext;
+  const char * ext;
   if(filename && (ext = strrchr(filename, '.')) != NULL)
     {
       return ext + 1;
