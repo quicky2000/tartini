@@ -168,29 +168,29 @@ void VibratoCircleWidget::doUpdate()
 
       int currentTime = active->chunkAtCurrentTime() * active->framesPerChunk() + smoothDelay;
       int maximaSize = note->maxima->size();
-      int minimaSize = note->minima->size();
+      int minimaSize = note->get_minima()->size();
 
       // Determine which period to show: the 2 rightmost minima + the maximum in between
       if ((maximaSize >= 1 ) && (minimaSize == 2)) {
         // Only 2 minima
-        if (currentTime >= note->minima->at(1)) {
-          leftMinimumTime  = note->minima->at(0);
-          rightMinimumTime = note->minima->at(1);
+        if (currentTime >= note->get_minima()->at(1)) {
+          leftMinimumTime  = note->get_minima()->at(0);
+          rightMinimumTime = note->get_minima()->at(1);
           leftMinimumAt = 0;
         }
       } else if ((maximaSize >= 1) && (minimaSize > 2)) {
         // More than 2 minima
         for (int i = 2; i < minimaSize; i++) {
-          if ((currentTime >= note->minima->at(i-1)) && (currentTime <= note->minima->at(i))) {
-            leftMinimumTime  = note->minima->at(i-2);
-            rightMinimumTime = note->minima->at(i-1);
+          if ((currentTime >= note->get_minima()->at(i-1)) && (currentTime <= note->get_minima()->at(i))) {
+            leftMinimumTime  = note->get_minima()->at(i-2);
+            rightMinimumTime = note->get_minima()->at(i-1);
             leftMinimumAt = i-2;
             break;
           }
         }
-        if (currentTime > note->minima->at(minimaSize - 1)) {
-          leftMinimumTime  = note->minima->at(minimaSize - 2);
-          rightMinimumTime = note->minima->at(minimaSize - 1);
+        if (currentTime > note->get_minima()->at(minimaSize - 1)) {
+          leftMinimumTime  = note->get_minima()->at(minimaSize - 2);
+          rightMinimumTime = note->get_minima()->at(minimaSize - 1);
           leftMinimumAt = minimaSize - 2;
         }
       }
@@ -303,8 +303,8 @@ void VibratoCircleWidget::doUpdate()
               break;
             }
 
-            leftMinimumTime = note->minima->at(leftMinimumAt - p);
-            rightMinimumTime = note->minima->at(leftMinimumAt - (p - 1));
+            leftMinimumTime = note->get_minima()->at(leftMinimumAt - p);
+            rightMinimumTime = note->get_minima()->at(leftMinimumAt - (p - 1));
             for (int j = 0; j < note->maxima->size(); j++) {
               if ((note->maxima->at(j) >= leftMinimumTime) && (note->maxima->at(j) <= rightMinimumTime)) {
                 maximumTime = note->maxima->at(j);
@@ -476,7 +476,7 @@ void VibratoCircleWidget::doUpdate()
 
           } else if (leftMinimumAt > 0) {  // Morph from previous period to current period
 
-            const int prevLeftMinimumTime = note->minima->at(leftMinimumAt - 1);
+            const int prevLeftMinimumTime = note->get_minima()->at(leftMinimumAt - 1);
             const int prevRightMinimumTime = leftMinimumTime;
             const int prevMaximumTime = note->maxima->at(maximumAt - 1);
             const int prevPeriodDuration = prevRightMinimumTime - prevLeftMinimumTime;

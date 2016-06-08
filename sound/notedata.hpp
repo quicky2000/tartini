@@ -87,4 +87,9 @@ double NoteData::avgFreq(void)
   return numPeriods() / noteLength();
 }
 
+//------------------------------------------------------------------------------
+const SmartPtr<Array1d<int> > NoteData::get_minima(void) const
+{
+  return minima;
+}
 //EOF

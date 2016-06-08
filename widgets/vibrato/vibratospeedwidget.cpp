@@ -393,7 +393,7 @@ void VibratoSpeedWidget::doUpdate()
         int maximumTime = 0;
         int minimumTime = 0;
         int maximaSize = note->maxima->size();
-        int minimaSize = note->minima->size();
+        int minimaSize = note->get_minima()->size();
 
         // Find the most recent maximum
         for (int i = 1; i < maximaSize; i++) {
@@ -407,14 +407,14 @@ void VibratoSpeedWidget::doUpdate()
         }
 
         // Find the most recent minimum
-        for (int i = 1; i < note->minima->size(); i++) {
-          if ((currentTime > note->minima->at(i-1)) && (currentTime <= note->minima->at(i))) {
-            minimumTime = note->minima->at(i-1);
+        for (int i = 1; i < note->get_minima()->size(); i++) {
+          if ((currentTime > note->get_minima()->at(i-1)) && (currentTime <= note->get_minima()->at(i))) {
+            minimumTime = note->get_minima()->at(i-1);
             break;
           }
         }
-        if ((note->minima->size() > 0) && (currentTime > note->minima->at(minimaSize - 1))) {
-          minimumTime = note->minima->at(minimaSize - 1);
+        if ((note->get_minima()->size() > 0) && (currentTime > note->get_minima()->at(minimaSize - 1))) {
+          minimumTime = note->get_minima()->at(minimaSize - 1);
         }
 
         if ((maximumTime !=0 ) && (minimumTime != 0)) {  // The speed and width can be calculated

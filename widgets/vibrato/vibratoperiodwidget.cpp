@@ -143,29 +143,29 @@ void VibratoPeriodWidget::doUpdate()
       int smoothDelay = active->pitchBigSmoothingFilter->delay();
       int currentTime = active->chunkAtCurrentTime() * active->framesPerChunk() + smoothDelay;
       int maximaSize = note->maxima->size();
-      int minimaSize = note->minima->size();
+      int minimaSize = note->get_minima()->size();
 
       // Determine which period to show: the 2 rightmost minima + the maximum in between
       if ((maximaSize >= 1 ) && (minimaSize == 2)) {
         // Only 2 minima
-        if (currentTime >= note->minima->at(1)) {
-          leftMinimumTime  = note->minima->at(0);
-          rightMinimumTime = note->minima->at(1);
+        if (currentTime >= note->get_minima()->at(1)) {
+          leftMinimumTime  = note->get_minima()->at(0);
+          rightMinimumTime = note->get_minima()->at(1);
           leftMinimumAt = 0;
         }
       } else if ((maximaSize >= 1) && (minimaSize > 2)) {
         // More than 2 minima
         for (int i = 2; i < minimaSize; i++) {
-          if ((currentTime >= note->minima->at(i-1)) && (currentTime <= note->minima->at(i))) {
-            leftMinimumTime  = note->minima->at(i-2);
-            rightMinimumTime = note->minima->at(i-1);
+          if ((currentTime >= note->get_minima()->at(i-1)) && (currentTime <= note->get_minima()->at(i))) {
+            leftMinimumTime  = note->get_minima()->at(i-2);
+            rightMinimumTime = note->get_minima()->at(i-1);
             leftMinimumAt = i-2;
             break;
           }
         }
-        if (currentTime > note->minima->at(minimaSize - 1)) {
-          leftMinimumTime  = note->minima->at(minimaSize - 2);
-          rightMinimumTime = note->minima->at(minimaSize - 1);
+        if (currentTime > note->get_minima()->at(minimaSize - 1)) {
+          leftMinimumTime  = note->get_minima()->at(minimaSize - 2);
+          rightMinimumTime = note->get_minima()->at(minimaSize - 1);
           leftMinimumAt = minimaSize - 2;
         }
       }
@@ -310,8 +310,8 @@ void VibratoPeriodWidget::doUpdate()
 
           uint v = 0;
           uint c = 0;
-          int thisPrevLeftMinimumTime = note->minima->at(leftMinimumAt - (i+1)) - theDelay;
-          int thisPrevRightMinimumTime = note->minima->at(leftMinimumAt - i) - theDelay;
+          int thisPrevLeftMinimumTime = note->get_minima()->at(leftMinimumAt - (i+1)) - theDelay;
+          int thisPrevRightMinimumTime = note->get_minima()->at(leftMinimumAt - i) - theDelay;
           int thisPrevDuration = thisPrevRightMinimumTime - thisPrevLeftMinimumTime;
           int thisPrevMaximumTime = 0;
           for (int j = 0; j < note->maxima->size(); j++) {

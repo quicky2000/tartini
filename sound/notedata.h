@@ -46,7 +46,6 @@ class NoteData
   ~NoteData(void);
 
   SmartPtr<Array1d<int> > maxima;
-  SmartPtr<Array1d<int> > minima;
 
   void resetData(void);
   inline bool isValid(void) const;
@@ -79,7 +78,10 @@ class NoteData
   inline float volume(void) const;
   void recalcAvgPitch(void);
 
+  inline const SmartPtr<Array1d<int> > get_minima(void) const;
  private:
+  SmartPtr<Array1d<int> > minima;
+
   Channel *channel;
 
   /**

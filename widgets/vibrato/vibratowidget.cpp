@@ -199,7 +199,7 @@ void VibratoWidget::doUpdate()
       const int myCurrentChunk = active->chunkAtCurrentTime();
       const float halfHeight = 0.5 * height();
       const int maximaSize = note->maxima->size();
-      const int minimaSize = note->minima->size();
+      const int minimaSize = note->get_minima()->size();
       const float avgPitch = note->avgPitch();
       const int framesPerChunk = active->framesPerChunk();
       const float zoomFactorYx100 = zoomFactorY * 100;
@@ -238,7 +238,7 @@ void VibratoWidget::doUpdate()
 
         if (maximaSize + minimaSize >= 2) {  // There is at least one bar to calculate
           if (maximaSize == minimaSize) {
-            if (note->maxima->at(0) < note->minima->at(0)) {
+            if (note->maxima->at(0) < note->get_minima()->at(0)) {
               color1Bars = maximaSize;
               color2Bars = minimaSize - 1;
               maximumFirst = true;
@@ -272,9 +272,9 @@ void VibratoWidget::doUpdate()
           if (x1 < noteLabelOffset) { x1 = noteLabelOffset; }
           if (x1 > width() - noteLabelOffset) { break; }
           if (maximumFirst) {
-            x2 = ((((float)note->minima->at(i) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
+            x2 = ((((float)note->get_minima()->at(i) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
           } else {
-            x2 = ((((float)note->minima->at(i+1) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
+            x2 = ((((float)note->get_minima()->at(i+1) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
           }
           if (x2 < noteLabelOffset) { continue; }
           if (x2 > width() - noteLabelOffset) { x2 = width() - noteLabelOffset; }
@@ -301,7 +301,7 @@ void VibratoWidget::doUpdate()
         const char color2Blue = gdata->shading2Color().blue();
 
         for (int i = 0; i < color2Bars; i++) {
-          x1 = ((((float)note->minima->at(i) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
+          x1 = ((((float)note->get_minima()->at(i) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
           if (x1 < noteLabelOffset) { x1 = noteLabelOffset; }
           if (x1 > width() - noteLabelOffset) { break; }
           if (maximumFirst) {
@@ -365,7 +365,7 @@ void VibratoWidget::doUpdate()
 
         // Calculate the vertical separator lines through the minima
         for (int i = 0; i < minimaSize; i++) {
-          x1 = ((((float)note->minima->at(i) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
+          x1 = ((((float)note->get_minima()->at(i) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
           if (x1 < noteLabelOffset) { continue; }
           if (x1 > width() - noteLabelOffset) { break; }
 
@@ -745,10 +745,10 @@ void VibratoWidget::doUpdate()
       if ((active->doingDetailedPitch()) && (active->pitchLookupSmoothed.size() > 0)) {
         float x, y;
         for (int i = 0; i < minimaSize; i++) {
-          x = ((((float)note->minima->at(i) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
+          x = ((((float)note->get_minima()->at(i) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
           if (x < noteLabelOffset) { continue; }
           if (x > width() - noteLabelOffset) { break; }
-          y = halfHeight + ((pitchLookupUsed.at(note->minima->at(i)) - avgPitch) * zoomFactorYx100) + offsetY;
+          y = halfHeight + ((pitchLookupUsed.at(note->get_minima()->at(i)) - avgPitch) * zoomFactorYx100) + offsetY;
 
           vertices[verticesCounter++] = x;
           vertices[verticesCounter++] = y;
