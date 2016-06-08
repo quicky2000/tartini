@@ -86,13 +86,13 @@ void NoteData::addData(AnalysisData *analysisData, float periods)
 }
 
 //------------------------------------------------------------------------------
-double NoteData::noteLength(void)
+double NoteData::noteLength(void) const
 {
   return double(numChunks()) * double(channel->framesPerChunk()) / double(channel->rate());
 }
 
 //------------------------------------------------------------------------------
-double NoteData::avgPitch(void)
+double NoteData::avgPitch(void) const
 {
   return _avgPitch;
 }

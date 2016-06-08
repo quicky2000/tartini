@@ -22,7 +22,7 @@ NoteData::NoteData(void)
 }
 
 //------------------------------------------------------------------------------
-bool NoteData::isValid(void)
+bool NoteData::isValid(void) const
 {
   return (numChunks() > 2);
 }
@@ -40,25 +40,25 @@ void NoteData::setEndChunk(int endChunk_)
 }
 
 //------------------------------------------------------------------------------
-int NoteData::startChunk(void)
+int NoteData::startChunk(void) const
 {
   return _startChunk;
 }
 
 //------------------------------------------------------------------------------
-int NoteData::endChunk(void)
+int NoteData::endChunk(void) const
 {
   return _endChunk;
 }
 
 //------------------------------------------------------------------------------
-int NoteData::numChunks(void)
+int NoteData::numChunks(void) const
 {
   return _endChunk - _startChunk;
 }
 
 //------------------------------------------------------------------------------
-float NoteData::numPeriods(void)
+float NoteData::numPeriods(void) const
 {
   return _numPeriods;
 }
@@ -70,13 +70,13 @@ void NoteData::setPeriodOctaveEstimate(float periodOctaveEstimate_)
 }
 
 //------------------------------------------------------------------------------
-float NoteData::periodOctaveEstimate(void)
+float NoteData::periodOctaveEstimate(void) const
 {
   return _periodOctaveEstimate;
 }
 
 //------------------------------------------------------------------------------
-float NoteData::volume(void)
+float NoteData::volume(void) const
 {
   return _volume;
 }

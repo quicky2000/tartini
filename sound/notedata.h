@@ -49,20 +49,20 @@ class NoteData
   SmartPtr<Array1d<int> > minima;
 
   void resetData(void);
-  inline bool isValid(void);
+  inline bool isValid(void) const;
   inline void setStartChunk(int startChunk_);
   inline void setEndChunk(int endChunk_);
-  inline int startChunk(void);
-  inline int endChunk(void);
+  inline int startChunk(void) const;
+  inline int endChunk(void) const;
   void addData(AnalysisData *analysisData, float periods);
-  inline int numChunks(void);
+  inline int numChunks(void) const;
 
   /**
      @return The length of the note (in seconds)
   */
-  double noteLength(void);
+  double noteLength(void) const;
 
-  inline float numPeriods(void);
+  inline float numPeriods(void) const;
 
   /**
      @return in Hertz
@@ -72,11 +72,11 @@ class NoteData
   /**
      @return The average of this note, in fractions of semi-tones.
   */
-  double avgPitch(void);
+  double avgPitch(void) const;
   inline void setPeriodOctaveEstimate(float periodOctaveEstimate_);
-  inline float periodOctaveEstimate(void);
+  inline float periodOctaveEstimate(void) const;
   void addVibratoData(int chunk);
-  inline float volume(void);
+  inline float volume(void) const;
   void recalcAvgPitch(void);
 
  private:
