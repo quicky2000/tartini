@@ -167,7 +167,7 @@ void VibratoCircleWidget::doUpdate()
       large_vector<float> pitchLookupUsed = active->pitchLookupSmoothed;
 
       int currentTime = active->chunkAtCurrentTime() * active->framesPerChunk() + smoothDelay;
-      int maximaSize = note->maxima->size();
+      int maximaSize = note->get_maxima()->size();
       int minimaSize = note->get_minima()->size();
 
       // Determine which period to show: the 2 rightmost minima + the maximum in between
@@ -196,8 +196,8 @@ void VibratoCircleWidget::doUpdate()
       }
       // The maximum in between
       for (int i = 0; i < maximaSize; i++) {
-        if ((note->maxima->at(i) >= leftMinimumTime) && (note->maxima->at(i) <= rightMinimumTime)) {
-          maximumTime = note->maxima->at(i);
+        if ((note->get_maxima()->at(i) >= leftMinimumTime) && (note->get_maxima()->at(i) <= rightMinimumTime)) {
+          maximumTime = note->get_maxima()->at(i);
           maximumAt = i;
           break;
         }
@@ -305,9 +305,9 @@ void VibratoCircleWidget::doUpdate()
 
             leftMinimumTime = note->get_minima()->at(leftMinimumAt - p);
             rightMinimumTime = note->get_minima()->at(leftMinimumAt - (p - 1));
-            for (int j = 0; j < note->maxima->size(); j++) {
-              if ((note->maxima->at(j) >= leftMinimumTime) && (note->maxima->at(j) <= rightMinimumTime)) {
-                maximumTime = note->maxima->at(j);
+            for (int j = 0; j < note->get_maxima()->size(); j++) {
+              if ((note->get_maxima()->at(j) >= leftMinimumTime) && (note->get_maxima()->at(j) <= rightMinimumTime)) {
+                maximumTime = note->get_maxima()->at(j);
                 break;
               }
             }
@@ -478,7 +478,7 @@ void VibratoCircleWidget::doUpdate()
 
             const int prevLeftMinimumTime = note->get_minima()->at(leftMinimumAt - 1);
             const int prevRightMinimumTime = leftMinimumTime;
-            const int prevMaximumTime = note->maxima->at(maximumAt - 1);
+            const int prevMaximumTime = note->get_maxima()->at(maximumAt - 1);
             const int prevPeriodDuration = prevRightMinimumTime - prevLeftMinimumTime;
             float prevMaximumPitch = pitchLookupUsed.at(prevMaximumTime);
             const int periodDuration = rightMinimumTime - leftMinimumTime;

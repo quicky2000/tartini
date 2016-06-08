@@ -88,6 +88,12 @@ double NoteData::avgFreq(void)
 }
 
 //------------------------------------------------------------------------------
+const SmartPtr<Array1d<int> > NoteData::get_maxima(void) const
+{
+  return maxima;
+}
+
+//------------------------------------------------------------------------------
 const SmartPtr<Array1d<int> > NoteData::get_minima(void) const
 {
   return minima;

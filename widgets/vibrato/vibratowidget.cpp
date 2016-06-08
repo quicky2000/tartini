@@ -198,7 +198,7 @@ void VibratoWidget::doUpdate()
       const int myEndChunk = note->endChunk();
       const int myCurrentChunk = active->chunkAtCurrentTime();
       const float halfHeight = 0.5 * height();
-      const int maximaSize = note->maxima->size();
+      const int maximaSize = note->get_maxima()->size();
       const int minimaSize = note->get_minima()->size();
       const float avgPitch = note->avgPitch();
       const int framesPerChunk = active->framesPerChunk();
@@ -238,7 +238,7 @@ void VibratoWidget::doUpdate()
 
         if (maximaSize + minimaSize >= 2) {  // There is at least one bar to calculate
           if (maximaSize == minimaSize) {
-            if (note->maxima->at(0) < note->get_minima()->at(0)) {
+            if (note->get_maxima()->at(0) < note->get_minima()->at(0)) {
               color1Bars = maximaSize;
               color2Bars = minimaSize - 1;
               maximumFirst = true;
@@ -268,7 +268,7 @@ void VibratoWidget::doUpdate()
         colorsCounter = 0;
 
         for (int i = 0; i < color1Bars; i++) {
-          x1 = ((((float)note->maxima->at(i) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
+          x1 = ((((float)note->get_maxima()->at(i) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
           if (x1 < noteLabelOffset) { x1 = noteLabelOffset; }
           if (x1 > width() - noteLabelOffset) { break; }
           if (maximumFirst) {
@@ -305,9 +305,9 @@ void VibratoWidget::doUpdate()
           if (x1 < noteLabelOffset) { x1 = noteLabelOffset; }
           if (x1 > width() - noteLabelOffset) { break; }
           if (maximumFirst) {
-            x2 = ((((float)note->maxima->at(i+1) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
+            x2 = ((((float)note->get_maxima()->at(i+1) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
           } else {
-            x2 = ((((float)note->maxima->at(i) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
+            x2 = ((((float)note->get_maxima()->at(i) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
           }
           if (x2 < noteLabelOffset) { continue; }
           if (x2 > width() - noteLabelOffset) { x2 = width() - noteLabelOffset; }
@@ -346,7 +346,7 @@ void VibratoWidget::doUpdate()
         colorsCounter = 0;
 
         for (int i = 0; i < maximaSize; i++) {
-          x1 = ((((float)note->maxima->at(i) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
+          x1 = ((((float)note->get_maxima()->at(i) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
           if (x1 < noteLabelOffset) { continue; }
           if (x1 > width() - noteLabelOffset) { break; }
 
@@ -728,10 +728,10 @@ void VibratoWidget::doUpdate()
       if ((active->doingDetailedPitch()) && (active->pitchLookupSmoothed.size() > 0)) {
         float x, y;
         for (int i = 0; i < maximaSize; i++) {
-          x = ((((float)note->maxima->at(i) - smoothDelay)/ framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
+          x = ((((float)note->get_maxima()->at(i) - smoothDelay)/ framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
           if (x < noteLabelOffset) { continue; }
           if (x > width() - noteLabelOffset) { break; }
-          y = halfHeight + ((pitchLookupUsed.at(note->maxima->at(i)) - avgPitch) * zoomFactorYx100) + offsetY;
+          y = halfHeight + ((pitchLookupUsed.at(note->get_maxima()->at(i)) - avgPitch) * zoomFactorYx100) + offsetY;
 
           vertices[verticesCounter++] = x;
           vertices[verticesCounter++] = y;

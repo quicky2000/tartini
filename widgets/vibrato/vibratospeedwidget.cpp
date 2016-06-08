@@ -392,18 +392,18 @@ void VibratoSpeedWidget::doUpdate()
         int currentTime = active->chunkAtCurrentTime() * active->framesPerChunk() + smoothDelay;
         int maximumTime = 0;
         int minimumTime = 0;
-        int maximaSize = note->maxima->size();
+        int maximaSize = note->get_maxima()->size();
         int minimaSize = note->get_minima()->size();
 
         // Find the most recent maximum
         for (int i = 1; i < maximaSize; i++) {
-          if ((currentTime > note->maxima->at(i-1)) && (currentTime <= note->maxima->at(i))) {
-            maximumTime = note->maxima->at(i-1);
+          if ((currentTime > note->get_maxima()->at(i-1)) && (currentTime <= note->get_maxima()->at(i))) {
+            maximumTime = note->get_maxima()->at(i-1);
             break;
           }
         }
-        if ((maximaSize > 0) && (currentTime > note->maxima->at(maximaSize - 1))) {
-          maximumTime = note->maxima->at(maximaSize - 1);
+        if ((maximaSize > 0) && (currentTime > note->get_maxima()->at(maximaSize - 1))) {
+          maximumTime = note->get_maxima()->at(maximaSize - 1);
         }
 
         // Find the most recent minimum
