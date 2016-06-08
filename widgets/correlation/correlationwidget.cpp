@@ -107,7 +107,7 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
       NoteData *currentNote = active->getCurrentNote();
       const Array1d<float> *input = &(active->nsdfData);
       if(currentNote) {
-        if(aggregateMode == 1) input = &currentNote->nsdfAggregateData;
+        if(aggregateMode == 1) input = &currentNote->get_nsdf_aggregate_data();
         else if(aggregateMode == 2) input = &currentNote->get_nsdf_aggregate_data_scaled();
       }
       //bresenham1d(*input, lookup);

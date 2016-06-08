@@ -148,6 +148,12 @@ const double & NoteData::get_nsdf_aggregate_roof(void)const
 }
 
 //------------------------------------------------------------------------------
+const Array1d<float> & NoteData::get_nsdf_aggregate_data(void)const
+{
+  return nsdfAggregateData;
+}
+
+//------------------------------------------------------------------------------
 const Array1d<float> & NoteData::get_nsdf_aggregate_data_scaled(void)const
 {
   return nsdfAggregateDataScaled;

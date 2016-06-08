@@ -1000,7 +1000,7 @@ void Channel::addToNSDFAggregate(const float scaler, float periodDiff)
   copyElementsDivide(nsdfAggregateDataScaled.begin(), nsdfAggregateDataScaled.end(), currentNote->get_nsdf_aggregate_data_scaled().begin(), currentNote->get_nsdf_aggregate_roof());
 
   //the unscaled version
-  copyElementsDivide(nsdfAggregateData.begin(), nsdfAggregateData.end(), currentNote->nsdfAggregateData.begin(), currentNote->get_nsdf_aggregate_roof());
+  copyElementsDivide(nsdfAggregateData.begin(), nsdfAggregateData.end(), currentNote->get_nsdf_aggregate_data().begin(), currentNote->get_nsdf_aggregate_roof());
 
 #ifdef DEBUG_PRINTF
   printf("chunk = %d, ", currentChunk());

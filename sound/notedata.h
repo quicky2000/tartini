@@ -30,8 +30,6 @@ class Channel;
 class NoteData
 {
  public:
-  Array1d<float> nsdfAggregateData;
-
   inline NoteData(void);
   NoteData(Channel *channel_);
   NoteData(Channel *channel_, int startChunk_, AnalysisData *analysisData);
@@ -83,9 +81,11 @@ class NoteData
   inline void add_current_nsdf_period(float p_period_diff);
   inline float get_current_nsdf_period(void) const;
 
+  inline const Array1d<float> & get_nsdf_aggregate_data(void)const;
   inline const Array1d<float> & get_nsdf_aggregate_data_scaled(void)const;
 
  private:
+  Array1d<float> nsdfAggregateData;
   Array1d<float> nsdfAggregateDataScaled;
 
   /**
