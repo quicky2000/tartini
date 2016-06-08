@@ -65,9 +65,14 @@ struct PronyData
   }
 };
 
-//PronyData pronyFitOld(const float *x, int length, int gap=1, double dt=1.0);
-//PronyData pronyFit(const float *x, int length, int gap=1, double dt=1.0, bool allowOffset=false);
-//PronyData pronyFit(const float *x, int length, int gap=1, bool allowOffset=false);
+/**
+   Prony Spectral Line Extimation (see S. Kay "Spectrum Analysis - A Modern Perspective" Pro. IEEE, Vol 69, #11, Nov 1981)
+   @param result Where the results of the calculation are stored
+   @param x The data to process
+   @param length The number of elements in x
+   @param gap The number samples used as a delay size (best is around 1/4 of a cycle)
+   @return true if the prony fit was a success. else false 
+*/
 bool pronyFit(PronyData *result, const float *x, int length, int gap, bool allowOffset);
 
 #endif // PRONY_H
