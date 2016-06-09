@@ -296,7 +296,7 @@ Channel *FreqWidgetGL::channelAtPixel(int x, int y)const
       Channel * l_channel = gdata->getChannelAt(gdata->getChannelsSize() - 1 - l_index);
       if(l_channel->isVisible())
 	{
-	  AnalysisData *data = l_channel->dataAtTime(time);
+	  const AnalysisData *data = l_channel->dataAtTime(time);
 	  if(data && within(tolerance, data->getPitch(), pitch))
 	    {
 	      return l_channel;

@@ -25,6 +25,13 @@ Array1d<std::vector<T> *> & large_vector<T>::buf_ptrs(void)
 
 //------------------------------------------------------------------------------
 template<typename T>
+const Array1d<std::vector<T> *> & large_vector<T>::buf_ptrs(void) const
+{
+  return *_buf_ptrs;
+}
+
+//------------------------------------------------------------------------------
+template<typename T>
 void large_vector<T>::addBuffer(uint num)
 {
   buf_ptrs().push_back(new std::vector<T>(num));
@@ -159,6 +166,14 @@ T& large_vector<T>::at(uint pos)
 
 //------------------------------------------------------------------------------
 template<typename T>
+const T & large_vector<T>::at(uint pos) const
+{
+  myassert(empty() || pos < size());
+  return (*buf_ptrs()[pos / _buffer_size])[pos % _buffer_size];
+}
+
+//------------------------------------------------------------------------------
+template<typename T>
 T & large_vector<T>::front(void)
 {
   return at(0);
@@ -173,14 +188,14 @@ T & large_vector<T>::back(void)
 
 //------------------------------------------------------------------------------
 template<typename T>
-uint large_vector<T>::size(void)
+uint large_vector<T>::size(void) const
 {
   return (buf_ptrs().size() - 1) * _buffer_size + buf_ptrs().back()->size();
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-bool large_vector<T>::empty(void)
+bool large_vector<T>::empty(void) const
 {
   return (buf_ptrs().size()==1) ? buf_ptrs().back()->empty() : false;
 }
@@ -276,6 +291,14 @@ large_vector<T>::~large_vector(void)
 //------------------------------------------------------------------------------
 template<typename T>
 T& large_vector<T>::operator[](uint pos)
+{
+  //myassert(empty() || pos < size());
+  return (*buf_ptrs()[pos / _buffer_size])[pos % _buffer_size];
+}
+
+//------------------------------------------------------------------------------
+template<typename T>
+const T & large_vector<T>::operator[](uint pos) const
 {
   //myassert(empty() || pos < size());
   return (*buf_ptrs()[pos / _buffer_size])[pos % _buffer_size];

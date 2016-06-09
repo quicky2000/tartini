@@ -69,12 +69,14 @@ class large_vector
   ~large_vector(void);
   
   T& operator[](uint pos);
+  const T & operator[](uint pos) const;
 
   T & at(uint pos);
+  const T & at(uint pos) const;
   T & front(void);
   T & back(void);
-  uint size(void);
-  bool empty(void);
+  uint size(void) const;
+  bool empty(void) const;
   void push_back(const T &new_element);
   T pop_back(void);
   void push_back(const T *src, uint length);
@@ -103,7 +105,8 @@ class large_vector
   //std::vector<std::vector<T> *> buf_ptrs();
   SmartPtr<Array1d<std::vector<T> *> > _buf_ptrs;
 
-  Array1d<std::vector<T> *> &buf_ptrs(void);
+  Array1d<std::vector<T> *> & buf_ptrs(void);
+  const Array1d<std::vector<T> *> & buf_ptrs(void) const;
 
   void addBuffer(uint num=0);
   void removeBuffer(void);

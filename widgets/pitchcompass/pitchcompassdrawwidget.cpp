@@ -83,7 +83,7 @@ void PitchCompassDrawWidget::updateCompass(double time)
   Channel *active = gdata->getActiveChannel();
   if (active == NULL) { blank(); return; }
   
-  AnalysisData *data = active->dataAtTime(time);
+  const AnalysisData *data = active->dataAtTime(time);
 
   if(data && data->getCorrelation() >= 0.9) {
     double pitch = data->getPitch();

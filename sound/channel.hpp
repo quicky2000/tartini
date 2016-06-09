@@ -61,13 +61,13 @@ float & Channel::at(int pos)
 }
 
 //------------------------------------------------------------------------------
-int Channel::rate(void)
+int Channel::rate(void) const
 {
  return parent->rate();
 }
 
 //------------------------------------------------------------------------------
-int Channel::framesPerChunk(void)
+int Channel::framesPerChunk(void) const
 {
   return parent->framesPerChunk();
 }
@@ -130,7 +130,7 @@ void Channel::setStartTime(double newStartTime)
 
 
 //------------------------------------------------------------------------------
-int Channel::totalChunks(void)
+int Channel::totalChunks(void) const
 {
   return lookup.size();
 }
@@ -158,7 +158,7 @@ void Channel::jumpToTime(double t)
 
 
 //------------------------------------------------------------------------------
-int Channel::chunkAtTime(double t)
+int Channel::chunkAtTime(double t) const
 {
   return parent->chunkAtTime(t);
 }
@@ -179,7 +179,7 @@ int Channel::chunkAtCurrentTime(void)
 
 
 //------------------------------------------------------------------------------
-int Channel::currentChunk(void)
+int Channel::currentChunk(void) const
 {
   return parent->currentChunk();
 } //this one should be use to retrieve current info
@@ -191,8 +191,11 @@ double Channel::timeAtChunk(int chunk)
   return parent->timeAtChunk(chunk);
 }
 
-
-
+//------------------------------------------------------------------------------
+const AnalysisData * Channel::dataAtChunk(int chunk) const
+{
+  return (isValidChunk(chunk)) ? &lookup[chunk] : NULL;
+}
 
 //------------------------------------------------------------------------------
 AnalysisData * Channel::dataAtChunk(int chunk)
@@ -200,6 +203,11 @@ AnalysisData * Channel::dataAtChunk(int chunk)
   return (isValidChunk(chunk)) ? &lookup[chunk] : NULL;
 }
 
+//------------------------------------------------------------------------------
+const AnalysisData * Channel::dataAtCurrentChunk(void) const
+{
+  return dataAtChunk(currentChunk());
+}
 
 //------------------------------------------------------------------------------
 AnalysisData * Channel::dataAtCurrentChunk(void)
@@ -207,9 +215,8 @@ AnalysisData * Channel::dataAtCurrentChunk(void)
   return dataAtChunk(currentChunk());
 }
 
-
 //------------------------------------------------------------------------------
-AnalysisData * Channel::dataAtTime(double t)
+const AnalysisData * Channel::dataAtTime(double t) const
 {
   return dataAtChunk(chunkAtTime(t));
 }
@@ -230,7 +237,7 @@ bool Channel::hasAnalysisData(void)
 
 
 //------------------------------------------------------------------------------
-bool Channel::isValidChunk(int chunk)
+bool Channel::isValidChunk(int chunk) const
 {
   return (chunk >= 0 && chunk < totalChunks());
 }
@@ -299,7 +306,7 @@ bool Channel::firstTimeThrough(void)
 }
 
 //------------------------------------------------------------------------------
-bool Channel::doingDetailedPitch(void)
+bool Channel::doingDetailedPitch(void) const
 {
   return parent->doingDetailedPitch();
 }

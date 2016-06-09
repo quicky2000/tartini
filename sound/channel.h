@@ -43,12 +43,12 @@ class Channel
   inline float * end(void);
   inline int size(void);
   inline float & at(int pos);
-  inline int rate(void);
+  inline int rate(void) const;
 
   virtual void resize(int newSize, int k_=0);
   virtual void shift_left(int n);
 
-  inline int framesPerChunk(void);
+  inline int framesPerChunk(void) const;
   inline void setParent(SoundFile *parent_);
   inline SoundFile* getParent(void);
   inline void setPitchMethod(int pitch_method);
@@ -74,24 +74,26 @@ class Channel
   inline double timePerChunk(void);
   inline double startTime(void);
   inline void setStartTime(double newStartTime);
-  inline int totalChunks(void);
+  inline int totalChunks(void) const;
   inline double finishTime(void);
   inline double totalTime(void);
   inline void jumpToTime(double t);
-  inline int chunkAtTime(double t);
+  inline int chunkAtTime(double t) const;
   inline double chunkFractionAtTime(double t);
   inline int chunkAtCurrentTime(void);
-  inline int currentChunk(void);
+  inline int currentChunk(void) const;
   inline double timeAtChunk(int chunk);
 
+  inline const AnalysisData *dataAtChunk(int chunk) const;
   inline AnalysisData *dataAtChunk(int chunk);
+  inline const AnalysisData *dataAtCurrentChunk(void) const;
   inline AnalysisData *dataAtCurrentChunk(void);
-  inline AnalysisData *dataAtTime(double t);
+  inline const AnalysisData *dataAtTime(double t) const;
   inline large_vector<AnalysisData>::iterator dataIteratorAtChunk(int chunk);
-  static AnalysisData *getActiveChannelCurrentChunkData(void);
+  static const AnalysisData * getActiveChannelCurrentChunkData(void);
   
   inline bool hasAnalysisData(void);
-  inline bool isValidChunk(int chunk);
+  inline bool isValidChunk(int chunk) const;
   inline bool isValidTime(double t);
   inline bool isValidCurrentTime(void);
   
@@ -118,7 +120,7 @@ class Channel
   */
   bool isVisibleNote(int noteIndex_);
   inline bool isVisibleChunk(int chunk_);
-  bool isVisibleChunk(AnalysisData *data);
+  bool isVisibleChunk(const AnalysisData *data) const;
   bool isChangingChunk(AnalysisData *data);
 
   /**
@@ -181,7 +183,7 @@ class Channel
   */
   float calcDetailedPitch(float *input, double period, int chunk);
   inline bool firstTimeThrough(void);
-  inline bool doingDetailedPitch(void);
+  inline bool doingDetailedPitch(void) const;
 
   void calcVibratoData(int chunk);
   float periodOctaveEstimate(int chunk); /*< A estimate from over the whole duration of the note, to help get the correct octave */

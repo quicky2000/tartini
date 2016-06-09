@@ -24,7 +24,7 @@
 #include "musicnotes.h"
 
 //------------------------------------------------------------------------------
-NoteData::NoteData(Channel *channel_):
+NoteData::NoteData(const Channel *channel_):
   maxima(new Array1d<int>()),
   minima(new Array1d<int>()),
   channel(channel_),
@@ -35,7 +35,7 @@ NoteData::NoteData(Channel *channel_):
 }
 
 //------------------------------------------------------------------------------
-NoteData::NoteData(Channel *channel_, int startChunk_, AnalysisData *analysisData):
+NoteData::NoteData(const Channel *channel_, int startChunk_, const AnalysisData *analysisData):
   nsdfAggregateRoof(0.0),
   firstNsdfPeriod(0.0f),
   currentNsdfPeriod(0.0f),
@@ -74,7 +74,7 @@ void NoteData::resetData(void)
 }
 
 //------------------------------------------------------------------------------
-void NoteData::addData(AnalysisData *analysisData, float periods)
+void NoteData::addData(const AnalysisData *analysisData, float periods)
 {
   maxLogRMS = MAX(maxLogRMS, analysisData->getLogRms());
   maxIntensityDB = MAX(maxIntensityDB, analysisData->getMaxIntensityDB());

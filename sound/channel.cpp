@@ -381,7 +381,7 @@ float Channel::averagePitch(int begin, int end)
   double total = 0.0;
   double size = double(end - begin);
   double window_pos, window_weight, weight;
-  AnalysisData *data;
+  const AnalysisData *data;
   for (int i = begin; i < end; i++)
     {
       window_pos = double(i - begin) / size;
@@ -416,7 +416,7 @@ float Channel::averageMaxCorrelation(int begin, int end)
 }
 
 //------------------------------------------------------------------------------
-AnalysisData *Channel::getActiveChannelCurrentChunkData(void)
+const AnalysisData * Channel::getActiveChannelCurrentChunkData(void)
 {
   Channel *active = gdata->getActiveChannel();
   return (active) ? active->dataAtCurrentChunk() : NULL;
@@ -463,7 +463,7 @@ bool Channel::isVisibleNote(int noteIndex_)
 }
 
 //------------------------------------------------------------------------------
-bool Channel::isVisibleChunk(AnalysisData *data)
+bool Channel::isVisibleChunk(const AnalysisData *data) const
 {
   myassert(data);
   if(data->getNoteScore() >= gdata->ampThreshold(NOTE_SCORE,0))
@@ -775,7 +775,7 @@ NoteData *Channel::getLastNote(void)
 //------------------------------------------------------------------------------
 NoteData *Channel::getCurrentNote(void)
 {
-  AnalysisData *analysisData = dataAtCurrentChunk();
+  const AnalysisData *analysisData = dataAtCurrentChunk();
   if(analysisData)
     {
       int noteIndex = analysisData->getNoteIndex();
@@ -974,7 +974,7 @@ void Channel::resetNSDFAggregate(float period)
 //------------------------------------------------------------------------------
 void Channel::addToNSDFAggregate(const float scaler, float periodDiff)
 {
-  AnalysisData &analysisData = *dataAtCurrentChunk();
+  AnalysisData * analysisData = dataAtCurrentChunk();
 
   nsdfAggregateRoof += scaler;
   addElements(nsdfAggregateData.begin(), nsdfAggregateData.end(), nsdfData.begin(), scaler);
@@ -984,7 +984,7 @@ void Channel::addToNSDFAggregate(const float scaler, float periodDiff)
   currentNote->add_nsdf_aggregate_roof(scaler);
   currentNote->add_current_nsdf_period(periodDiff);
   float periodRatio = currentNote->get_current_nsdf_period() / currentNote->get_first_nsdf_period();
-  analysisData.setPeriodRatio(periodRatio);
+  analysisData->setPeriodRatio(periodRatio);
 #ifdef DEBUG_PRINTF
   printf("%f, periodDiff = %f\n", currentNote->currentNsdfPeriod, periodDiff);
   printf("currentNsdfPeriod = %f\n", currentNote->currentNsdfPeriod);

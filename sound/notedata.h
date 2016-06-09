@@ -31,8 +31,8 @@ class NoteData
 {
  public:
   inline NoteData(void);
-  NoteData(Channel *channel_);
-  NoteData(Channel *channel_, int startChunk_, AnalysisData *analysisData);
+  NoteData(const Channel *channel_);
+  NoteData(const Channel *channel_, int startChunk_, const AnalysisData *analysisData);
   ~NoteData(void);
 
 
@@ -42,7 +42,7 @@ class NoteData
   inline void setEndChunk(int endChunk_);
   inline int startChunk(void) const;
   inline int endChunk(void) const;
-  void addData(AnalysisData *analysisData, float periods);
+  void addData(const AnalysisData *analysisData, float periods);
   inline int numChunks(void) const;
 
   /**
@@ -99,7 +99,7 @@ class NoteData
   SmartPtr<Array1d<int> > maxima;
   SmartPtr<Array1d<int> > minima;
 
-  Channel *channel;
+  const Channel * channel;
 
   /**
      the chunk at which this note starts on

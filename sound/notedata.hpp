@@ -17,7 +17,8 @@
 */
 
 //------------------------------------------------------------------------------
-NoteData::NoteData(void)
+NoteData::NoteData(void):
+  channel(NULL)
 {
 }
 
