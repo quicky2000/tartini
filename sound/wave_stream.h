@@ -22,30 +22,33 @@ class QStringList;
 
 class WaveStream : public SoundFileStream
 {
-  int header_length;
  public:
   FILE *file;
 
-  WaveStream();
-  virtual ~WaveStream();
+  WaveStream(void);
+  virtual ~WaveStream(void);
 
   int open_read(const char *filename);
-  int read_header();
+  int read_header(void);
   long read_bytes(void *data, long length);
   long read_frames(void *data, long length);
 
   int open_write(const char *filename, int freq_=44100, int channels_=2, int bits_=16);
-  void write_header();
+  void write_header(void);
   long write_bytes(void *data, long length);
   long write_frames(void *data, long length);
 
-  QStringList getOutputDeviceNames();
+  QStringList getOutputDeviceNames(void);
 
-  void close();
+  void close(void);
 
   void jump_to_frame(int frame);
   void jump_back(int frames);
   void jump_forward(int frames);
+
+ private:
+  int header_length;
 };
 
-#endif
+#endif // WAVE_STREAM_H
+// EOF
