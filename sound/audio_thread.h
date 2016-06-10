@@ -20,7 +20,6 @@
 #include <qthread.h>
 
 #include <time.h>
-//#include "fbuffer.h"
 
 #ifdef _OS_WIN32_
 #include <windows.h>
@@ -40,7 +39,6 @@ class AudioThread : public QThread
 
  public:
   AudioThread(void);
-  //AudioThread(SoundFile *s);
   inline virtual ~AudioThread(void);
 
   virtual void run(void);
@@ -60,7 +58,6 @@ class AudioThread : public QThread
   int doStuff(void);
   inline SoundFile * playSoundFile(void) const;
   inline SoundFile * recSoundFile(void) const;
-  //SoundFile *curSoundFile() { return (_playSoundFile) ? _playSoundFile : _recSoundFile; }
   inline SoundFile * curSoundFile(void) const;
   
  private:
@@ -74,7 +71,6 @@ class AudioThread : public QThread
   int frame_num;
 
   bool useFile;
-  //FILE *freqFile;
 
   int sleepCount;
 };
