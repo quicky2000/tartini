@@ -83,7 +83,7 @@ float NoteData::volume(void) const
 }
 
 //------------------------------------------------------------------------------
-double NoteData::avgFreq(void)
+double NoteData::avgFreq(void) const
 {
   return numPeriods() / noteLength();
 }

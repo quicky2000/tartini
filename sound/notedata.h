@@ -55,7 +55,7 @@ class NoteData
   /**
      @return in Hertz
    */
-  inline double avgFreq(void);
+  inline double avgFreq(void) const;
 
   /**
      @return The average of this note, in fractions of semi-tones.
