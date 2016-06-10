@@ -23,8 +23,6 @@ class QStringList;
 class WaveStream : public SoundFileStream
 {
  public:
-  FILE *file;
-
   WaveStream(void);
   virtual ~WaveStream(void);
 
@@ -47,6 +45,7 @@ class WaveStream : public SoundFileStream
   void jump_forward(int frames);
 
  private:
+  FILE *file;
   int header_length;
 };
 

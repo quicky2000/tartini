@@ -21,10 +21,10 @@
 #include "useful.h"
 
 //------------------------------------------------------------------------------
-WaveStream::WaveStream(void)
+WaveStream::WaveStream(void):
+  file(NULL),
+  header_length(0)
 {
-  file = NULL;
-  header_length = 0;
 }
 
 //------------------------------------------------------------------------------
