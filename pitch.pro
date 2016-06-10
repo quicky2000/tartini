@@ -163,7 +163,6 @@ HEADERS += main.h \
   general/large_vector.h \
   general/large_vector.hpp \
   widgets/mylabel.h \
-  sound/notesynth.h \
   general/fast_smooth.h \
   general/fast_smooth.hpp \
   global/conversions.h \
@@ -261,7 +260,6 @@ SOURCES += main.cpp \
   widgets/cepstrum/cepstrumview.cpp \
   sound/notedata.cpp \
   widgets/mylabel.cpp \
-  sound/notesynth.cpp \
   general/fast_smooth.cpp \
   global/conversions.cpp \
   widgets/debugview/debugwidget.cpp \
