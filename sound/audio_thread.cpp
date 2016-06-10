@@ -31,12 +31,12 @@
 #include "channel.h"
 
 //------------------------------------------------------------------------------
-AudioThread::AudioThread(void)
+AudioThread::AudioThread(void):
+  _playSoundFile(NULL),
+  _recSoundFile(NULL),
+  sleepCount(0)
 {
   //printf("Warning - audio thread created with no sound file specified.\n");
-  _playSoundFile = NULL;
-  _recSoundFile = NULL;
-  sleepCount = 0;
 }
 
 //------------------------------------------------------------------------------
