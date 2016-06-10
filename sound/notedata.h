@@ -31,8 +31,8 @@ class NoteData
 {
  public:
   inline NoteData(void);
-  NoteData(const Channel *channel_);
-  NoteData(const Channel *channel_, int startChunk_, const AnalysisData *analysisData);
+  NoteData(const Channel & channel_);
+  NoteData(const Channel  & channel_, int startChunk_, const AnalysisData & analysisData);
   ~NoteData(void);
 
 
@@ -42,7 +42,7 @@ class NoteData
   inline void setEndChunk(int endChunk_);
   inline int startChunk(void) const;
   inline int endChunk(void) const;
-  void addData(const AnalysisData *analysisData, float periods);
+  void addData(const AnalysisData & p_analysis_data, float periods);
   inline int numChunks(void) const;
 
   /**

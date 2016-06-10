@@ -548,7 +548,7 @@ void Channel::backTrackNoteChange(int chunk)
 	{
 	  dataAtChunk(curChunk)->setNoteIndex(getCurrentNoteIndex());
 	  dataAtChunk(curChunk)->setNotePlaying(true);
-	  currentNote->addData(dataAtChunk(curChunk), float(framesPerChunk()) / float(dataAtChunk(curChunk)->getPeriod()));
+	  currentNote->addData(*dataAtChunk(curChunk), float(framesPerChunk()) / float(dataAtChunk(curChunk)->getPeriod()));
 	  curChunk++;
 	}
       resetNSDFAggregate(dataAtChunk(last-1)->getPeriod()); //just start the NSDF Aggregate from where we are now
@@ -658,7 +658,7 @@ void Channel::processNoteDecisions(int chunk, float periodDiff)
       analysisData.setNoteIndex(getCurrentNoteIndex());
       currentNote->setEndChunk(chunk+1);
 
-      currentNote->addData(&analysisData, float(framesPerChunk()) / float(analysisData.getPeriod()));
+      currentNote->addData(analysisData, float(framesPerChunk()) / float(analysisData.getPeriod()));
       currentNote->setPeriodOctaveEstimate(calcOctaveEstimate());
       if(gdata->analysisType() != MPM_MODIFIED_CEPSTRUM)
 	{
@@ -674,7 +674,7 @@ void Channel::processNoteDecisions(int chunk, float periodDiff)
 void Channel::noteBeginning(int chunk)
 {
   AnalysisData *analysisData = dataAtChunk(chunk);
-  noteData.push_back(NoteData(this, chunk, analysisData));
+  noteData.push_back(NoteData(*this, chunk, *analysisData));
   //initalise the aggregate NSDF data with the current NSDF data
   resetNSDFAggregate(analysisData->getPeriod());
 #ifdef DEBUG_PRINTF
@@ -759,7 +759,7 @@ void Channel::recalcNotePitches(int chunk)
 	numNotesChangedIndex++;
       }
       calcDeviation(curChunk);
-      currentNote->addData(dataAtChunk(curChunk), float(framesPerChunk()) / float(dataAtChunk(curChunk)->getPeriod()));
+      currentNote->addData(*dataAtChunk(curChunk), float(framesPerChunk()) / float(dataAtChunk(curChunk)->getPeriod()));
     }
 #ifdef DEBUG_PRINTF
   printf("numNotesChangedIndex=%d/%d\n", numNotesChangedIndex, last-first+1);

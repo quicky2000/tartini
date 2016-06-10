@@ -24,10 +24,10 @@
 #include "musicnotes.h"
 
 //------------------------------------------------------------------------------
-NoteData::NoteData(const Channel *channel_):
+NoteData::NoteData(const Channel & p_channel):
   maxima(new Array1d<int>()),
   minima(new Array1d<int>()),
-  channel(channel_),
+  channel(&p_channel),
   maxLogRMS(gdata->dBFloor()),
   _numPeriods(0),
   _periodOctaveEstimate(1.0f)
@@ -35,19 +35,19 @@ NoteData::NoteData(const Channel *channel_):
 }
 
 //------------------------------------------------------------------------------
-NoteData::NoteData(const Channel *channel_, int startChunk_, const AnalysisData *analysisData):
+NoteData::NoteData(const Channel & p_channel, int startChunk_, const AnalysisData & p_analysis_data):
   nsdfAggregateRoof(0.0),
   firstNsdfPeriod(0.0f),
   currentNsdfPeriod(0.0f),
   maxima(new Array1d<int>()),
   minima(new Array1d<int>()),
-  channel(channel_),
+  channel(&p_channel),
   _startChunk(startChunk_),
   _endChunk(startChunk_ + 1),
-  maxLogRMS(analysisData->getLogRms()),
-  maxIntensityDB(analysisData->getMaxIntensityDB()),
-  maxCorrelation(analysisData->getCorrelation()),
-  maxPurity(analysisData->getVolumeValue(*gdata)),
+  maxLogRMS(p_analysis_data.getLogRms()),
+  maxIntensityDB(p_analysis_data.getMaxIntensityDB()),
+  maxCorrelation(p_analysis_data.getCorrelation()),
+  maxPurity(p_analysis_data.getVolumeValue(*gdata)),
   _numPeriods(0.0f), //periods;
   _periodOctaveEstimate(1.0f),
   _volume(0.0f),
@@ -58,8 +58,8 @@ NoteData::NoteData(const Channel *channel_, int startChunk_, const AnalysisData 
   prevExtremumPitch(-1),
   prevExtremum(NONE)
 {
-  nsdfAggregateData.resize(channel_->nsdfData.size(), 0.0f);
-  nsdfAggregateDataScaled.resize(channel_->nsdfData.size(), 0.0f);
+  nsdfAggregateData.resize(p_channel.nsdfData.size(), 0.0f);
+  nsdfAggregateDataScaled.resize(p_channel.nsdfData.size(), 0.0f);
 }
 
 //------------------------------------------------------------------------------
@@ -74,13 +74,13 @@ void NoteData::resetData(void)
 }
 
 //------------------------------------------------------------------------------
-void NoteData::addData(const AnalysisData *analysisData, float periods)
+void NoteData::addData(const AnalysisData & p_analysis_data, float periods)
 {
-  maxLogRMS = MAX(maxLogRMS, analysisData->getLogRms());
-  maxIntensityDB = MAX(maxIntensityDB, analysisData->getMaxIntensityDB());
-  maxCorrelation = MAX(maxCorrelation, analysisData->getCorrelation());
-  maxPurity = MAX(maxPurity, analysisData->getVolumeValue(*gdata));
-  _volume = MAX(_volume, dB2Normalised(analysisData->getLogRms(),*gdata));
+  maxLogRMS = MAX(maxLogRMS, p_analysis_data.getLogRms());
+  maxIntensityDB = MAX(maxIntensityDB, p_analysis_data.getMaxIntensityDB());
+  maxCorrelation = MAX(maxCorrelation, p_analysis_data.getCorrelation());
+  maxPurity = MAX(maxPurity, p_analysis_data.getVolumeValue(*gdata));
+  _volume = MAX(_volume, dB2Normalised(p_analysis_data.getLogRms(),*gdata));
   _numPeriods += periods; //sum up the periods
   _avgPitch = bound(freq2pitch(avgFreq()), 0.0, gdata->topPitch());
 }
