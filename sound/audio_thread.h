@@ -70,8 +70,6 @@ class AudioThread : public QThread
   int slow_update_count;
   int frame_num;
 
-  bool useFile;
-
   int sleepCount;
 };
 
