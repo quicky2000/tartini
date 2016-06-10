@@ -13,8 +13,6 @@
    Please read LICENSE.txt for details.
  ***************************************************************************/
 #include <qglobal.h>
-//#include <stdlib.h>
-//#include <stdio.h>
 #include <string.h>
 #include "myio.h"
 #include "wave_stream.h"
@@ -25,7 +23,6 @@
 WaveStream::WaveStream()
 {
   file = NULL;
-  //_total_frames = _pos = 0;
   header_length = 0;
 }
 
@@ -177,9 +174,6 @@ void WaveStream::write_header()
   fputs("WAVE", file);                 /* WAV definition */
   fputs("fmt ", file);                 /* format chunk */
   iputl(16, file);                     /* size of format chunk */
-  //if(sampleType == paFloat32)
-  //iputw(3, file);                    /* PCM data 3=floating point*/
-  //else
   iputw(1, file);                      /* PCM data 1=two's compliment int*/
   iputw(channels, file);               /* number of channels */
   iputl(freq, file);                   /* sample frequency */
@@ -215,8 +209,6 @@ long WaveStream::write_frames(void *data, long length)
 void WaveStream::jump_to_frame(int frame)
 {
   frame = bound(frame, 0, totalFrames());
-  //if(frame < 0) frame = 0;
-  //if(frame > totalFrames()) { printf("over end, %d, %d\n", frame, totalFrames()); frame = totalFrames(); }
   if(fseek(file, header_length + frame*frame_size(), SEEK_SET)) {
     fprintf(stderr, "error seeking, %d\n", errno);
   }

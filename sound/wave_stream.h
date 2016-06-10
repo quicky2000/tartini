@@ -29,8 +29,6 @@ class WaveStream : public SoundFileStream
   WaveStream();
   virtual ~WaveStream();
 
-  //int header_size() { return header_length; }
-
   int open_read(const char *filename);
   int read_header();
   long read_bytes(void *data, long length);
@@ -42,9 +40,6 @@ class WaveStream : public SoundFileStream
   long write_frames(void *data, long length);
 
   QStringList getOutputDeviceNames();
-
-  //virtual long write_buffer(FBuffer/*<float>*/ &buffer, unsigned long length);
-  //virtual long read_buffer(FBuffer/*<float>*/ &buffer, unsigned long length);
 
   void close();
 
