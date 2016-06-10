@@ -80,6 +80,7 @@ HEADERS += main.h \
   sound/sound_file_stream.h \
   sound/sound_file_stream.hpp \
   sound/audio_thread.h \
+  sound/audio_thread.hpp \
   general/myio.h \
   general/useful.h \
   general/useful.hpp \

@@ -41,9 +41,7 @@ class AudioThread : public QThread
  public:
   AudioThread(void);
   //AudioThread(SoundFile *s);
-  virtual ~AudioThread(void)
-    {
-    }
+  inline virtual ~AudioThread(void);
 
   virtual void run(void);
   void start(void);
@@ -60,23 +58,14 @@ class AudioThread : public QThread
   void stopAndWait(void);
       
   int doStuff(void);
-  SoundFile * playSoundFile(void) const
-    {
-      return _playSoundFile;
-    }
-  SoundFile * recSoundFile(void) const
-    {
-      return _recSoundFile;
-    }
+  inline SoundFile * playSoundFile(void) const;
+  inline SoundFile * recSoundFile(void) const;
   //SoundFile *curSoundFile() { return (_playSoundFile) ? _playSoundFile : _recSoundFile; }
-  SoundFile * curSoundFile(void) const
-    {
-      return (_recSoundFile) ? _recSoundFile : _playSoundFile;
-    }
+  inline SoundFile * curSoundFile(void) const;
   
  private:
-  SoundFile *_playSoundFile;
-  SoundFile *_recSoundFile;
+  SoundFile * _playSoundFile;
+  SoundFile * _recSoundFile;
   
   bool stopping;
   bool first;
@@ -89,6 +78,8 @@ class AudioThread : public QThread
 
   int sleepCount;
 };
+
+#include "audio_thread.hpp"
 
 #endif // AUDIO_THREAD_H
 // EOF
