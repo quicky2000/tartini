@@ -205,7 +205,7 @@ void VibratoWidget::doUpdate()
       const float zoomFactorYx100 = zoomFactorY * 100;
 
       float windowOffset;
-      large_vector<float> pitchLookupUsed = active->pitchLookupSmoothed;
+      large_vector<float> pitchLookupUsed = active->get_pitch_lookup_smoothed();
       int smoothDelay = active->pitchBigSmoothingFilter->delay();
 
       if ((myEndChunk - myStartChunk) * zoomFactorX > width() - 2 * noteLabelOffset) {
@@ -231,7 +231,7 @@ void VibratoWidget::doUpdate()
       glEnableClientState(GL_COLOR_ARRAY);
 
       // Calculate the alternating vertical bars that indicate the vibrato periods
-      if ((active->doingDetailedPitch()) && (active->pitchLookupSmoothed.size() > 0)) {
+      if ((active->doingDetailedPitch()) && (active->get_pitch_lookup_smoothed().size() > 0)) {
         int color1Bars = 0;  // No. of bars with the left side at a maximum
         int color2Bars = 0;  // No. of bars with the left side at a minimum
         bool maximumFirst = true;   // The first extremum is a maximum?
@@ -725,7 +725,7 @@ void VibratoWidget::doUpdate()
       colorsCounter = 0;
 
       // Calculate the maxima
-      if ((active->doingDetailedPitch()) && (active->pitchLookupSmoothed.size() > 0)) {
+      if ((active->doingDetailedPitch()) && (active->get_pitch_lookup_smoothed().size() > 0)) {
         float x, y;
         for (int i = 0; i < maximaSize; i++) {
           x = ((((float)note->get_maxima()->at(i) - smoothDelay)/ framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
@@ -742,7 +742,7 @@ void VibratoWidget::doUpdate()
         }
       }
       // Calculate the minima
-      if ((active->doingDetailedPitch()) && (active->pitchLookupSmoothed.size() > 0)) {
+      if ((active->doingDetailedPitch()) && (active->get_pitch_lookup_smoothed().size() > 0)) {
         float x, y;
         for (int i = 0; i < minimaSize; i++) {
           x = ((((float)note->get_minima()->at(i) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;

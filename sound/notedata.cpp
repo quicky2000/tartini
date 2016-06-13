@@ -100,17 +100,17 @@ float NoteData::avgPitch(void) const
 //------------------------------------------------------------------------------
 void NoteData::addVibratoData(int chunk)
 {
-  if ((channel->doingDetailedPitch()) && (channel->pitchLookupSmoothed.size() > 0))
+  if ((channel->doingDetailedPitch()) && (channel->get_pitch_lookup_smoothed().size() > 0))
     {
       // Detailed pitch information available, calculate maxima and minima
       int loopLimit = ((chunk + 1) * channel->framesPerChunk()) - loopStep;
       for (int currentTime = loopStart; currentTime < loopLimit; currentTime += loopStep)
 	{
-	  myassert(currentTime + loopStep < (int)channel->pitchLookupSmoothed.size());
+	  myassert(currentTime + loopStep < (int)channel->get_pitch_lookup_smoothed().size());
 	  myassert(currentTime - loopStep >= 0);
-	  float prevPitch = channel->pitchLookupSmoothed.at(currentTime - loopStep);
-	  float currentPitch = channel->pitchLookupSmoothed.at(currentTime);
-	  float nextPitch = channel->pitchLookupSmoothed.at(currentTime + loopStep);
+	  float prevPitch = channel->get_pitch_lookup_smoothed().at(currentTime - loopStep);
+	  float currentPitch = channel->get_pitch_lookup_smoothed().at(currentTime);
+	  float nextPitch = channel->get_pitch_lookup_smoothed().at(currentTime + loopStep);
 
 	  if ((prevPitch < currentPitch) && (currentPitch >= nextPitch))
 	    {

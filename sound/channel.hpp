@@ -330,6 +330,18 @@ large_vector<float> & Channel::get_pitch_lookup(void)
 }
 
 //------------------------------------------------------------------------------
+const large_vector<float> & Channel::get_pitch_lookup_smoothed(void) const
+{
+  return pitchLookupSmoothed;
+}
+
+//------------------------------------------------------------------------------
+large_vector<float> & Channel::get_pitch_lookup_smoothed(void)
+{
+  return pitchLookupSmoothed;
+}
+
+//------------------------------------------------------------------------------
 ChannelLocker::ChannelLocker(Channel *channel_)
 {
   myassert(channel_);

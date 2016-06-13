@@ -134,7 +134,7 @@ void VibratoPeriodWidget::doUpdate()
   int rightMinimumTime = -1;
   int leftMinimumAt = -1;
 
-  if ((active) && (active->doingDetailedPitch()) && (active->pitchLookupSmoothed.size() > 0)) {
+  if ((active) && (active->doingDetailedPitch()) && (active->get_pitch_lookup_smoothed().size() > 0)) {
     AnalysisData *data = active->dataAtCurrentChunk();
     if(data && active->isVisibleNote(data->getNoteIndex()) && active->isLabelNote(data->getNoteIndex())) {
       NoteData *note = new NoteData();
@@ -232,7 +232,7 @@ void VibratoPeriodWidget::doUpdate()
       large_vector<float> thePitchLookup;
       int theDelay;
       if(smoothedPeriods) {
-        thePitchLookup = active->pitchLookupSmoothed;
+        thePitchLookup = active->get_pitch_lookup_smoothed();
         theDelay = 0;
       } else {
         thePitchLookup = active->get_pitch_lookup();

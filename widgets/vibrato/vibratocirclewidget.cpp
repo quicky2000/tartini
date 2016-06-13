@@ -156,7 +156,7 @@ void VibratoCircleWidget::doUpdate()
   int leftMinimumAt = -1;
   int maximumAt = -1;
 
-  if ((active) && (active->doingDetailedPitch()) && (active->pitchLookupSmoothed.size() > 0)) {
+  if ((active) && (active->doingDetailedPitch()) && (active->get_pitch_lookup_smoothed().size() > 0)) {
     AnalysisData *data = active->dataAtCurrentChunk();
     if(data && active->isVisibleNote(data->getNoteIndex()) && active->isLabelNote(data->getNoteIndex())) {
       NoteData *note = new NoteData();
@@ -164,7 +164,7 @@ void VibratoCircleWidget::doUpdate()
 
       // Determine which delay to use
       int smoothDelay = active->pitchBigSmoothingFilter->delay();
-      large_vector<float> pitchLookupUsed = active->pitchLookupSmoothed;
+      large_vector<float> pitchLookupUsed = active->get_pitch_lookup_smoothed();
 
       int currentTime = active->chunkAtCurrentTime() * active->framesPerChunk() + smoothDelay;
       int maximaSize = note->get_maxima()->size();

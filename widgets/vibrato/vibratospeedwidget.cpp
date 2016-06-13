@@ -385,8 +385,8 @@ void VibratoSpeedWidget::doUpdate()
       if (useProny) {
         vibratoSpeed = data->getVibratoSpeed();
         vibratoWidth = 200 * data->getVibratoWidth();
-      } else if((active->doingDetailedPitch()) && (active->pitchLookupSmoothed.size() > 0)) {
-        large_vector<float> pitchLookupUsed = active->pitchLookupSmoothed;
+      } else if((active->doingDetailedPitch()) && (active->get_pitch_lookup_smoothed().size() > 0)) {
+        large_vector<float> pitchLookupUsed = active->get_pitch_lookup_smoothed();
         int smoothDelay = active->pitchBigSmoothingFilter->delay();
 
         int currentTime = active->chunkAtCurrentTime() * active->framesPerChunk() + smoothDelay;
