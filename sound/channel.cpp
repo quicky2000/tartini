@@ -163,41 +163,46 @@ double lowPassFilterCoeffA[3][3] =
   };
 
 //------------------------------------------------------------------------------
-Channel::Channel(SoundFile *parent_, int size_, int k_) : lookup(0, 128)
+Channel::Channel(SoundFile *p_parent, int p_size, int p_k) :
+  parent(p_parent),
+  freq(0.0),
+  _pitch_method(2),
+  visible(true),
+  noteIsPlaying(false),
+  lookup(0, 128),
+  mutex(new QMutex(true)),
+  isLocked(false),
+  pronyWindowSize(int(ceil(0.4 / timePerChunk()))),
+  fastSmooth(new fast_smooth(p_size / 8)),
+  color(Qt::black),
+  nsdfAggregateRoof(0.0),
+  highPassFilter(NULL),
+  pitchSmallSmoothingFilter(new GrowingAverageFilter(parent->rate() / 64)),
+  pitchBigSmoothingFilter(new FastSmoothedAveragingFilter(parent->rate() / 16)),
+  rmsFloor(gdata->dBFloor()),
+  rmsCeiling(gdata->dBFloor())
 {
-  setParent(parent_);
-  int sampleRate = parent->rate();
-  if(k_ == 0)
+  if(p_k == 0)
     {
-      k_ = (size_ + 1) / 2;
+      p_k = (p_size + 1) / 2;
     }
-  directInput.resize(size_, 0.0);
-  filteredInput.resize(size_, 0.0);
-  nsdfData.resize(k_, 0.0);
-  nsdfAggregateData.resize(k_, 0.0);
-  nsdfAggregateDataScaled.resize(k_, 0.0);
-  nsdfAggregateRoof = 0.0;
-  fftData1.resize(size_ / 2, 0.0);
-  fftData2.resize(size_ / 2, 0.0);
-  fftData3.resize(size_ / 2, 0.0);
-  cepstrumData.resize(size_ / 2, 0.0);
-  detailedPitchData.resize(size_ / 2, 0.0);
-  detailedPitchDataSmoothed.resize(size_ / 2, 0.0);
-  _pitch_method = 2;
-  color = Qt::black;
-  coefficients_table.resize(size_ * 4);
-  rmsFloor = gdata->dBFloor();
-  rmsCeiling = gdata->dBFloor();
-  pronyWindowSize = int(ceil(0.4 / timePerChunk()));
+  directInput.resize(p_size, 0.0);
+  filteredInput.resize(p_size, 0.0);
+  nsdfData.resize(p_k, 0.0);
+  nsdfAggregateData.resize(p_k, 0.0);
+  nsdfAggregateDataScaled.resize(p_k, 0.0);
+  fftData1.resize(p_size / 2, 0.0);
+  fftData2.resize(p_size / 2, 0.0);
+  fftData3.resize(p_size / 2, 0.0);
+  cepstrumData.resize(p_size / 2, 0.0);
+  detailedPitchData.resize(p_size / 2, 0.0);
+  detailedPitchDataSmoothed.resize(p_size / 2, 0.0);
+  coefficients_table.resize(p_size * 4);
   pronyData.resize(pronyWindowSize);
 
-  visible = true;
-  noteIsPlaying = false;
   setIntThreshold(gdata->getSettingsValue("Analysis/thresholdValue", 93));
-  freq = 0.0;
-  mutex = new QMutex(true);
-  isLocked = false;
   int filterIndex = 2;
+  int sampleRate = parent->rate();
   if(sampleRate > (48000 + 96000) / 2)
     {
       filterIndex = 0; //96000 Hz
@@ -223,10 +228,7 @@ Channel::Channel(SoundFile *parent_, int size_, int k_) : lookup(0, 128)
       filterIndex = 5; //8000 Hz
     }
   highPassFilter = new IIR_Filter(highPassFilterCoeffB[filterIndex], highPassFilterCoeffA[filterIndex], 3);
-  pitchSmallSmoothingFilter = new GrowingAverageFilter(sampleRate/64);
-  pitchBigSmoothingFilter = new FastSmoothedAveragingFilter(sampleRate/16);
 
-  fastSmooth = new fast_smooth(size_ / 8);
 }
 
 //------------------------------------------------------------------------------
