@@ -235,7 +235,7 @@ void VibratoPeriodWidget::doUpdate()
         thePitchLookup = active->pitchLookupSmoothed;
         theDelay = 0;
       } else {
-        thePitchLookup = active->pitchLookup;
+        thePitchLookup = active->get_pitch_lookup();
         theDelay = active->pitchBigSmoothingFilter->delay() - active->pitchSmallSmoothingFilter->delay();
       }
 

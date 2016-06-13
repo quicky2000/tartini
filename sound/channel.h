@@ -194,6 +194,9 @@ class Channel
   void doPronyFit(int chunk);
   inline int pronyDelay(void) const;
 
+  inline const large_vector<float> & get_pitch_lookup(void) const;
+  inline large_vector<float> & get_pitch_lookup(void);
+
  private:
   SoundFile *parent;
   float freq; /**< Channel's frequency */
@@ -207,9 +210,9 @@ class Channel
   int pronyWindowSize;
   Array1d<float> pronyData;
   fast_smooth *fastSmooth;
+  large_vector<float> pitchLookup;
 
  public:
-  large_vector<float> pitchLookup;
   large_vector<float> pitchLookupSmoothed;
   QColor color;
   Array1d<float> directInput;

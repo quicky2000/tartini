@@ -318,6 +318,18 @@ int Channel::pronyDelay(void) const
 }
 
 //------------------------------------------------------------------------------
+const large_vector<float> & Channel::get_pitch_lookup(void) const
+{
+  return pitchLookup;
+}
+
+//------------------------------------------------------------------------------
+large_vector<float> & Channel::get_pitch_lookup(void)
+{
+  return pitchLookup;
+}
+
+//------------------------------------------------------------------------------
 ChannelLocker::ChannelLocker(Channel *channel_)
 {
   myassert(channel_);
