@@ -237,6 +237,8 @@ Channel::~Channel(void)
   delete fastSmooth;
   delete mutex;
   delete highPassFilter;
+  delete pitchSmallSmoothingFilter;
+  delete pitchBigSmoothingFilter;
 }
 
 //------------------------------------------------------------------------------
