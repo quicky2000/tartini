@@ -50,17 +50,17 @@ void large_vector<T>::removeBuffer(void)
 template<typename T>
 void large_vector<T>::copyTo(T *dest, uint start, uint length)
 {
-  myassert(start+length <= size());
-  T* ending = dest+length;
+  myassert(start + length <= size());
+  T * ending = dest+length;
   uint curBuf = start / bufferSize();
   uint offset = start % bufferSize();
   if(length <= bufferSize() - offset)
     {
-      std::copy(getBuffer(curBuf).begin()+offset, getBuffer(curBuf).begin()+offset+length, dest);
+      std::copy(getBuffer(curBuf).begin() + offset, getBuffer(curBuf).begin() + offset + length, dest);
     }
   else
     {
-      std::copy(getBuffer(curBuf).begin()+offset, getBuffer(curBuf).end(), dest);
+      std::copy(getBuffer(curBuf).begin() + offset, getBuffer(curBuf).end(), dest);
       dest += bufferSize() - offset;
       curBuf++;
       while(uint(ending - dest) > bufferSize())
@@ -69,7 +69,7 @@ void large_vector<T>::copyTo(T *dest, uint start, uint length)
 	  dest += bufferSize();
 	  curBuf++;
 	}
-      std::copy(getBuffer(curBuf).begin(), getBuffer(curBuf).begin()+(ending-dest), dest);
+      std::copy(getBuffer(curBuf).begin(), getBuffer(curBuf).begin() + (ending - dest), dest);
     }
 }
 
@@ -77,22 +77,22 @@ void large_vector<T>::copyTo(T *dest, uint start, uint length)
 template<typename T>
 void large_vector<T>::copyFrom(const T *src, uint start, uint length)
 {
-  myassert(start+length <= size());
-  const T* ending = src+length;
+  myassert(start + length <= size());
+  const T * ending = src + length;
   uint curBuf = start / bufferSize();
   uint offset = start % bufferSize();
   if(length <= bufferSize() - offset)
     {
-      std::copy(src, src+length, getBuffer(curBuf).begin()+offset);
+      std::copy(src, src + length, getBuffer(curBuf).begin() + offset);
     }
   else
     {
-      std::copy(src, src+(bufferSize()-offset), getBuffer(curBuf).begin()+offset);
+      std::copy(src, src + (bufferSize()-offset), getBuffer(curBuf).begin() + offset);
       src += bufferSize() - offset;
       curBuf++;
       while(uint(ending - src) > bufferSize())
 	{
-	  std::copy(src, src+bufferSize(), getBuffer(curBuf).begin());
+	  std::copy(src, src + bufferSize(), getBuffer(curBuf).begin());
 	  src += bufferSize();
 	  curBuf++;
 	}
@@ -104,7 +104,7 @@ void large_vector<T>::copyFrom(const T *src, uint start, uint length)
 template<typename T>
 void large_vector<T>::clear(void)
 {
-  for(int j=0; j<buf_ptrs().size();j++)
+  for(int j = 0; j < buf_ptrs().size(); j++)
     {
       delete buf_ptrs()[j];
     }
@@ -211,7 +211,7 @@ uint large_vector<T>::size(void) const
 template<typename T>
 bool large_vector<T>::empty(void) const
 {
-  return (buf_ptrs().size()==1) ? buf_ptrs().back()->empty() : false;
+  return (buf_ptrs().size() == 1) ? buf_ptrs().back()->empty() : false;
 }
 
 //------------------------------------------------------------------------------
@@ -295,7 +295,7 @@ large_vector<T>::~large_vector(void)
 {
   if(_buf_ptrs.getNumRef() == 1)
     {
-      for(int j=0; j<buf_ptrs().size();j++)
+      for(int j = 0; j < buf_ptrs().size(); j++)
 	{
 	  delete buf_ptrs()[j];
 	}
