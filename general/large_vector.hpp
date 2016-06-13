@@ -188,6 +188,20 @@ T & large_vector<T>::back(void)
 
 //------------------------------------------------------------------------------
 template<typename T>
+const T & large_vector<T>::front(void) const
+{
+  return at(0);
+}
+
+//------------------------------------------------------------------------------
+template<typename T>
+const T & large_vector<T>::back(void) const
+{
+  return at(size() - 1);
+}
+
+//------------------------------------------------------------------------------
+template<typename T>
 uint large_vector<T>::size(void) const
 {
   return (buf_ptrs().size() - 1) * _buffer_size + buf_ptrs().back()->size();

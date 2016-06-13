@@ -340,7 +340,7 @@ void Channel::reset(void)
 }
 
 //------------------------------------------------------------------------------
-QString Channel::getUniqueFilename(void)
+QString Channel::getUniqueFilename(void) const
 {
   QString endingStar = (parent->saved()) ? QString("") : QString("*");
 
@@ -361,7 +361,7 @@ QString Channel::getUniqueFilename(void)
 }
 
 //------------------------------------------------------------------------------
-float Channel::averagePitch(int begin, int end)
+float Channel::averagePitch(int begin, int end) const
 {
   if(begin < 0)
     {
@@ -395,7 +395,7 @@ float Channel::averagePitch(int begin, int end)
 }
 
 //------------------------------------------------------------------------------
-float Channel::averageMaxCorrelation(int begin, int end)
+float Channel::averageMaxCorrelation(int begin, int end) const
 {
   myassert(locked());
   if(!hasAnalysisData())
@@ -452,7 +452,7 @@ void Channel::recalcScoreThresholds(void)
 }
 
 //------------------------------------------------------------------------------
-bool Channel::isVisibleNote(int noteIndex_)
+bool Channel::isVisibleNote(int noteIndex_) const
 {
   myassert(noteIndex_ < (int)noteData.size());
   if(noteIndex_ == NO_NOTE)
@@ -474,7 +474,7 @@ bool Channel::isVisibleChunk(const AnalysisData *data) const
 }
 
 //------------------------------------------------------------------------------
-bool Channel::isChangingChunk(AnalysisData *data)
+bool Channel::isChangingChunk(AnalysisData *data) const
 {
   myassert(data);
   if(data->getNoteChangeScore() >= gdata->ampThreshold(NOTE_CHANGE_SCORE,0))
@@ -607,7 +607,7 @@ bool Channel::isNoteChanging(int chunk)
 }
 
 //------------------------------------------------------------------------------
-bool Channel::isLabelNote(int noteIndex_)
+bool Channel::isLabelNote(int noteIndex_) const
 {
   myassert(noteIndex_ < (int)noteData.size());
   if(noteIndex_ >= 0 && noteData[noteIndex_].isValid())
@@ -776,13 +776,19 @@ void Channel::recalcNotePitches(int chunk)
 }
 
 //------------------------------------------------------------------------------
-NoteData *Channel::getLastNote(void)
+const NoteData * Channel::getLastNote(void) const
 {
   return (noteData.empty()) ? NULL : &noteData.back();
 }
 
 //------------------------------------------------------------------------------
-NoteData *Channel::getCurrentNote(void)
+NoteData * Channel::getLastNote(void)
+{
+  return (noteData.empty()) ? NULL : &noteData.back();
+}
+
+//------------------------------------------------------------------------------
+const NoteData * Channel::getCurrentNote(void) const
 {
   const AnalysisData *analysisData = dataAtCurrentChunk();
   if(analysisData)
@@ -797,7 +803,7 @@ NoteData *Channel::getCurrentNote(void)
 }
 
 //------------------------------------------------------------------------------
-NoteData *Channel::getNote(int noteIndex)
+const NoteData * Channel::getNote(int noteIndex) const
 {
   if(noteIndex >= 0 && noteIndex < (int)noteData.size())
     {
@@ -954,9 +960,9 @@ void Channel::calcDeviation(int chunk)
 }
 
 //------------------------------------------------------------------------------
-bool Channel::isFirstChunkInNote(int chunk)
+bool Channel::isFirstChunkInNote(int chunk) const
 {
-  AnalysisData *analysisData = dataAtChunk(chunk);
+  const AnalysisData *analysisData = dataAtChunk(chunk);
   if(analysisData && analysisData->getNoteIndex() >= 0 && noteData[analysisData->getNoteIndex()].startChunk() == chunk)
     {
       return true;
@@ -1166,9 +1172,9 @@ void Channel::calcVibratoData(int chunk)
 }
 
 //------------------------------------------------------------------------------
-float Channel::periodOctaveEstimate(int chunk)
+float Channel::periodOctaveEstimate(int chunk) const
 {
-  AnalysisData *analysisData = dataAtChunk(chunk);
+  const AnalysisData *analysisData = dataAtChunk(chunk);
   if(analysisData && analysisData->getNoteIndex() >= 0)
     {
       return noteData[analysisData->getNoteIndex()].periodOctaveEstimate() * analysisData->getPeriodRatio();
@@ -1180,7 +1186,7 @@ float Channel::periodOctaveEstimate(int chunk)
 }
 
 //------------------------------------------------------------------------------
-void Channel::exportChannel(int type, QString typeString)
+void Channel::exportChannel(int type, QString typeString) const
 {
   QString s = QFileDialog::getSaveFileName(mainWindow, "Choose a filename to save under", ".", typeString);
 #ifdef DEBUG_PRINTF

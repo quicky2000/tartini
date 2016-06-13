@@ -41,8 +41,8 @@ class Channel
 
   inline float * begin(void);
   inline float * end(void);
-  inline int size(void);
-  inline float & at(int pos);
+  inline int size(void) const;
+  inline const float & at(int pos) const;
   inline int rate(void) const;
 
   virtual void resize(int newSize, int k_=0);
@@ -50,9 +50,9 @@ class Channel
 
   inline int framesPerChunk(void) const;
   inline void setParent(SoundFile *parent_);
-  inline SoundFile* getParent(void);
+  inline SoundFile* getParent(void) const;
   inline void setPitchMethod(int pitch_method);
-  inline int pitchMethod(void);
+  inline int pitchMethod(void) const;
 
   void calc_last_n_coefficients(int n);
 
@@ -68,21 +68,21 @@ class Channel
      @param chunk The chunk number to store the data at
   */
   void processChunk(int chunk);
-  inline bool isVisible(void);
+  inline bool isVisible(void) const;
   inline void setVisible(bool state=true);
   void reset(void);
-  inline double timePerChunk(void);
-  inline double startTime(void);
+  inline double timePerChunk(void) const;
+  inline double startTime(void) const;
   inline void setStartTime(double newStartTime);
   inline int totalChunks(void) const;
-  inline double finishTime(void);
-  inline double totalTime(void);
+  inline double finishTime(void) const;
+  inline double totalTime(void) const;
   inline void jumpToTime(double t);
   inline int chunkAtTime(double t) const;
-  inline double chunkFractionAtTime(double t);
-  inline int chunkAtCurrentTime(void);
+  inline double chunkFractionAtTime(double t) const;
+  inline int chunkAtCurrentTime(void) const;
   inline int currentChunk(void) const;
-  inline double timeAtChunk(int chunk);
+  inline double timeAtChunk(int chunk) const;
 
   inline const AnalysisData *dataAtChunk(int chunk) const;
   inline AnalysisData *dataAtChunk(int chunk);
@@ -92,10 +92,10 @@ class Channel
   inline large_vector<AnalysisData>::iterator dataIteratorAtChunk(int chunk);
   static const AnalysisData * getActiveChannelCurrentChunkData(void);
   
-  inline bool hasAnalysisData(void);
+  inline bool hasAnalysisData(void) const;
   inline bool isValidChunk(int chunk) const;
-  inline bool isValidTime(double t);
-  inline bool isValidCurrentTime(void);
+  inline bool isValidTime(double t) const;
+  inline bool isValidCurrentTime(void) const;
   
   /**
      Returns the average pitch for a given channel between two frames.
@@ -104,24 +104,24 @@ class Channel
      @param end   the ending frame number.
      @return the average pitch, or -1 if there were no valid pitches.
   */
-  float averagePitch(int begin, int end);
-  float averageMaxCorrelation(int begin, int end);
+  float averagePitch(int begin, int end) const;
+  float averageMaxCorrelation(int begin, int end) const;
 
-  inline float threshold(void);
+  inline float threshold(void) const;
   inline void setIntThreshold(int thresholdPercentage);
   void resetIntThreshold(int thresholdPercentage);
   inline void setColor(QColor c);
 
-  inline bool isNotePlaying(void);
+  inline bool isNotePlaying(void) const;
 
   /**
      @param noteIndex_ the index of the note to inquire about
      @return true if the loudest part of the note is above the noiseThreshold
   */
-  bool isVisibleNote(int noteIndex_);
-  inline bool isVisibleChunk(int chunk_);
+  bool isVisibleNote(int noteIndex_) const;
+  inline bool isVisibleChunk(int chunk_) const;
   bool isVisibleChunk(const AnalysisData *data) const;
-  bool isChangingChunk(AnalysisData *data);
+  bool isChangingChunk(AnalysisData *data) const;
 
   /**
      If the current note has shifted far enough away from the mean of the current Note
@@ -133,17 +133,19 @@ class Channel
      @param noteIndex_ the index of the note to inquire about
      @return true if the note is long enough
   */
-  bool isLabelNote(int noteIndex_);
+  bool isLabelNote(int noteIndex_) const;
   void clearFreqLookup(void);
   void clearAmplitudeLookup(void);
   void recalcScoreThresholds(void);
 
-  QString getUniqueFilename(void);
+  QString getUniqueFilename(void) const;
 
-  NoteData *getLastNote(void);
-  NoteData *getCurrentNote(void);
-  NoteData *getNote(int noteIndex);
-  inline int getCurrentNoteIndex(void);
+  const NoteData * getLastNote(void) const;
+  NoteData * getLastNote(void);
+
+  const NoteData * getCurrentNote(void) const;
+  const NoteData * getNote(int noteIndex) const;
+  inline int getCurrentNoteIndex(void) const;
   void backTrackNoteChange(int chunk);
   void processNoteDecisions(int chunk, float periodDiff);
   void noteBeginning(int chunk);
@@ -170,7 +172,7 @@ class Channel
   */
   bool chooseCorrelationIndex(int chunk, float periodOctaveEstimate);
   void calcDeviation(int chunk);
-  bool isFirstChunkInNote(int chunk);
+  bool isFirstChunkInNote(int chunk) const;
   void resetNSDFAggregate(float period);
   void addToNSDFAggregate(const float scaler, float periodDiff);
 
@@ -182,15 +184,15 @@ class Channel
      @return The change in period size
   */
   float calcDetailedPitch(float *input, double period, int chunk);
-  inline bool firstTimeThrough(void);
+  inline bool firstTimeThrough(void) const;
   inline bool doingDetailedPitch(void) const;
 
   void calcVibratoData(int chunk);
-  float periodOctaveEstimate(int chunk); /*< A estimate from over the whole duration of the note, to help get the correct octave */
+  float periodOctaveEstimate(int chunk) const; /*< A estimate from over the whole duration of the note, to help get the correct octave */
 
-  void exportChannel(int type, QString typeString);
+  void exportChannel(int type, QString typeString) const;
   void doPronyFit(int chunk);
-  inline int pronyDelay(void);
+  inline int pronyDelay(void) const;
 
  private:
   SoundFile *parent;

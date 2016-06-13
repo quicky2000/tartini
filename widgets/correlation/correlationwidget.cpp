@@ -104,7 +104,7 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
       if(int(pointArray.size()) != w) pointArray.resize(w);
       if(lookup.size() != w) lookup.resize(w);
 
-      NoteData *currentNote = active->getCurrentNote();
+      const NoteData *currentNote = active->getCurrentNote();
       const Array1d<float> *input = &(active->nsdfData);
       if(currentNote) {
         if(aggregateMode == 1) input = &currentNote->get_nsdf_aggregate_data();

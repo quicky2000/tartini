@@ -74,7 +74,9 @@ class large_vector
   T & at(uint pos);
   const T & at(uint pos) const;
   T & front(void);
+  const T & front(void) const;
   T & back(void);
+  const T & back(void) const;
   uint size(void) const;
   bool empty(void) const;
   void push_back(const T &new_element);

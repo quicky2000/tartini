@@ -49,13 +49,13 @@ float * Channel::end(void)
 }
 
 //------------------------------------------------------------------------------
-int Channel::size(void)
+int Channel::size(void) const
 {
   return directInput.size();
 }
 
 //------------------------------------------------------------------------------
-float & Channel::at(int pos)
+const float & Channel::at(int pos) const
 {
  return directInput.at(pos);
 }
@@ -79,7 +79,7 @@ void Channel::setParent(SoundFile *parent_)
 }
 
 //------------------------------------------------------------------------------
-SoundFile* Channel::getParent(void)
+SoundFile* Channel::getParent(void) const
 {
   return parent;
 }
@@ -91,13 +91,13 @@ void Channel::setPitchMethod(int pitch_method)
 }
 
 //------------------------------------------------------------------------------
-int Channel::pitchMethod(void)
+int Channel::pitchMethod(void) const
 {
   return _pitch_method;
 }
 
 //------------------------------------------------------------------------------
-bool Channel::isVisible(void)
+bool Channel::isVisible(void) const
 {
   return visible;
 }
@@ -109,14 +109,14 @@ void Channel::setVisible(bool state)
 }
 
 //------------------------------------------------------------------------------
-double Channel::timePerChunk(void)
+double Channel::timePerChunk(void) const
 {
   return parent->timePerChunk();
 }
 
 
 //------------------------------------------------------------------------------
-double Channel::startTime(void)
+double Channel::startTime(void) const
 {
   return parent->startTime();
 }
@@ -137,14 +137,14 @@ int Channel::totalChunks(void) const
 
 
 //------------------------------------------------------------------------------
-double Channel::finishTime(void)
+double Channel::finishTime(void) const
 {
   return startTime() + totalTime();
 }
 
 
 //------------------------------------------------------------------------------
-double Channel::totalTime(void)
+double Channel::totalTime(void) const
 {
   return double(MAX(totalChunks()-1, 0)) * timePerChunk();
 }
@@ -165,14 +165,14 @@ int Channel::chunkAtTime(double t) const
 
 
 //------------------------------------------------------------------------------
-double Channel::chunkFractionAtTime(double t)
+double Channel::chunkFractionAtTime(double t) const
 {
   return parent->chunkFractionAtTime(t);
 }
 
 
 //------------------------------------------------------------------------------
-int Channel::chunkAtCurrentTime(void)
+int Channel::chunkAtCurrentTime(void) const
 {
   return parent->chunkAtCurrentTime();
 }
@@ -186,7 +186,7 @@ int Channel::currentChunk(void) const
 
 
 //------------------------------------------------------------------------------
-double Channel::timeAtChunk(int chunk)
+double Channel::timeAtChunk(int chunk) const
 {
   return parent->timeAtChunk(chunk);
 }
@@ -230,7 +230,7 @@ large_vector<AnalysisData>::iterator Channel::dataIteratorAtChunk(int chunk)
 
 
 //------------------------------------------------------------------------------
-bool Channel::hasAnalysisData(void)
+bool Channel::hasAnalysisData(void) const
 {
   return !lookup.empty();
 }
@@ -244,14 +244,14 @@ bool Channel::isValidChunk(int chunk) const
 
 
 //------------------------------------------------------------------------------
-bool Channel::isValidTime(double t)
+bool Channel::isValidTime(double t) const
 {
   return isValidChunk(chunkAtTime(t));
 }
 
 
 //------------------------------------------------------------------------------
-bool Channel::isValidCurrentTime(void)
+bool Channel::isValidCurrentTime(void) const
 {
   return isValidChunk(chunkAtCurrentTime());
 }
@@ -259,7 +259,7 @@ bool Channel::isValidCurrentTime(void)
 
 
 //------------------------------------------------------------------------------
-float Channel::threshold(void)
+float Channel::threshold(void) const
 {
   return _threshold;
 }
@@ -280,27 +280,27 @@ void Channel::setColor(QColor c)
 
 
 //------------------------------------------------------------------------------
-bool Channel::isNotePlaying(void)
+bool Channel::isNotePlaying(void) const
 {
   return noteIsPlaying;
 }
 
 
 //------------------------------------------------------------------------------
-bool Channel::isVisibleChunk(int chunk_)
+bool Channel::isVisibleChunk(int chunk_) const
 {
   return isVisibleChunk(dataAtChunk(chunk_));
 }
 
 
 //------------------------------------------------------------------------------
-int Channel::getCurrentNoteIndex(void)
+int Channel::getCurrentNoteIndex(void) const
 {
-  return int(noteData.size())-1;
+  return int(noteData.size()) - 1;
 }
 
 //------------------------------------------------------------------------------
-bool Channel::firstTimeThrough(void)
+bool Channel::firstTimeThrough(void) const
 {
   return parent->isFirstTimeThrough();
 }
@@ -312,7 +312,7 @@ bool Channel::doingDetailedPitch(void) const
 }
 
 //------------------------------------------------------------------------------
-int Channel::pronyDelay(void)
+int Channel::pronyDelay(void) const
 {
   return pronyWindowSize / 2;
 }
