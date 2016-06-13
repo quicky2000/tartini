@@ -109,8 +109,6 @@ void large_vector<T>::clear(void)
       delete buf_ptrs()[j];
     }
   buf_ptrs().clear();
-  //buf_ptrs().push_back(new std::vector<T>(0));
-  //buf_ptrs().back()->reserve(_buffer_size);
   addBuffer();
 }
 
@@ -221,8 +219,6 @@ void large_vector<T>::push_back(const T &new_element)
   buf_ptrs().back()->push_back(new_element);
   if(buf_ptrs().back()->size() == _buffer_size)
     {
-      //buf_ptrs().push_back(new std::vector<T>(0));
-      //buf_ptrs().back()->reserve(_buffer_size);
       addBuffer();
     }
 }
@@ -284,8 +280,6 @@ large_vector<T>::large_vector(uint size, uint buffer_size)
       buf_ptrs().push_back(new std::vector<T>(_buffer_size));
       size-=_buffer_size;
     }
-  //buf_ptrs().push_back(new std::vector<T>(size));
-  //buf_ptrs().back()->reserve(_buffer_size);
   addBuffer(size);
 }
 
@@ -306,7 +300,6 @@ large_vector<T>::~large_vector(void)
 template<typename T>
 T& large_vector<T>::operator[](uint pos)
 {
-  //myassert(empty() || pos < size());
   return (*buf_ptrs()[pos / _buffer_size])[pos % _buffer_size];
 }
 
@@ -314,7 +307,6 @@ T& large_vector<T>::operator[](uint pos)
 template<typename T>
 const T & large_vector<T>::operator[](uint pos) const
 {
-  //myassert(empty() || pos < size());
   return (*buf_ptrs()[pos / _buffer_size])[pos % _buffer_size];
 }
 
