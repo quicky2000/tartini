@@ -224,9 +224,9 @@ class Channel
   Array1d<float> coefficients_table;
   Array1d<float> nsdfData;
   Array1d<float> nsdfAggregateData;
+  Array1d<float> nsdfAggregateDataScaled;
 
  public:
-  Array1d<float> nsdfAggregateDataScaled;
   double nsdfAggregateRoof; //keeps the sum of scalers. i.e. The highest possible aggregate value
   Array1d<float> fftData1;
   Array1d<float> fftData2;
