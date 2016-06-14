@@ -116,7 +116,7 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
         pointArray.setPoint(j, j*2, toInt(dh2 - lookup[j]*dh2));
       }
 
-      p.setPen(QPen(active->color, 0));
+      p.setPen(QPen(active->get_color(), 0));
       p.drawPolyline(pointArray);
     }
     if(data && (aggregateMode == 0)) {

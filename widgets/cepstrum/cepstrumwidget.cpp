@@ -119,7 +119,7 @@ void CepstrumWidget::paintEvent( QPaintEvent * )
       //float size = active->fftData1.size();
       //double ratio = double(height()) / 500.0; //TODO: remove magic number
       double ratio = double(height()) / 2.0; //TODO: remove magic number
-      p.setPen(QPen(active->color, 0));
+      p.setPen(QPen(active->get_color(), 0));
       for(int j=0; j<width(); j++) { //cheap hack to go faster (by drawing less points)
         myassert(int(pixelStep*j) < active->cepstrumData.size());
         pointArray.setPoint(j, j, height()/2 - toInt(active->cepstrumData.at(int(pixelStep*j))*ratio));

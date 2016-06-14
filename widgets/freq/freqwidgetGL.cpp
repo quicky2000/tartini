@@ -609,7 +609,7 @@ void FreqWidgetGL::drawChannelGL(Channel *ch,
 
   ChannelLocker channelLocker(ch);
 
-  QColor current = ch->color;
+  QColor current = ch->get_color();
   qglColor(current);
 
   int viewBottomOffset = toInt(viewBottom / zoomY);
@@ -688,16 +688,16 @@ void FreqWidgetGL::drawChannelGL(Channel *ch,
 	    {
 	      if(viewType == DRAW_VIEW_PRINT)
 		{
-		  qglColor(colorBetween(QColor(255, 255, 255), ch->color, err*vol));
+		  qglColor(colorBetween(QColor(255, 255, 255), ch->get_color(), err*vol));
 		}
 	      else
 		{
-		  qglColor(colorBetween(gdata->backgroundColor(), ch->color, err*vol));
+		  qglColor(colorBetween(gdata->backgroundColor(), ch->get_color(), err*vol));
 		}
 	    }
 	  else
 	    {
-	      qglColor(ch->color);
+	      qglColor(ch->get_color());
 	    }
       
 	  x = toInt(n);
@@ -747,7 +747,7 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch,
     
   ChannelLocker channelLocker(ch);
 
-  QColor current = ch->color;
+  QColor current = ch->get_color();
   QColor invert(255 - current.red(), 255 - current.green(), 255 - current.blue());
   qglColor(current);
 
@@ -916,11 +916,11 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch,
 
 	  if(gdata->pitchContourMode() == 0)
 	    {
-	      qglColor(colorBetween(QColor(255, 255, 255), ch->color, err * dB2ViewVal(data->getLogRms())));
+	      qglColor(colorBetween(QColor(255, 255, 255), ch->get_color(), err * dB2ViewVal(data->getLogRms())));
 	    }
 	  else
 	    {
-	      qglColor(ch->color);
+	      qglColor(ch->get_color());
 	    }
 
 	  x = toInt(n);
@@ -1047,7 +1047,7 @@ bool FreqWidgetGL::calcZoomElement(Channel *ch,
       noteIndex = NO_NOTE;
     }
   float corr = err->getCorrelation() * dB2Normalised(err->getLogRms(), ch->rmsCeiling, ch->rmsFloor);
-  QColor theColor = (gdata->pitchContourMode() == 0) ? colorBetween(gdata->backgroundColor(), ch->color, corr) : ch->color;
+  QColor theColor = (gdata->pitchContourMode() == 0) ? colorBetween(gdata->backgroundColor(), ch->get_color(), corr) : ch->get_color();
 
   ze.set(low, high, corr, theColor, noteIndex, (startChunk+finishChunk)/2);
   return true;

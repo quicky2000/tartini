@@ -342,6 +342,12 @@ large_vector<float> & Channel::get_pitch_lookup_smoothed(void)
 }
 
 //------------------------------------------------------------------------------
+const QColor & Channel::get_color(void)const
+{
+  return color;
+}
+
+//------------------------------------------------------------------------------
 ChannelLocker::ChannelLocker(Channel *channel_)
 {
   myassert(channel_);

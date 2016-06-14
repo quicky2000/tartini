@@ -149,7 +149,7 @@ void DrawWidget::drawChannel(QPaintDevice &pd, Channel *ch, QPainter &p, double 
 
   ChannelLocker channelLocker(ch);
 
-  QColor current = ch->color;
+  QColor current = ch->get_color();
  	QColor invert(255 - current.red(), 255 - current.green(), 255 - current.blue());
  	p.setPen(current);
 
@@ -235,11 +235,11 @@ void DrawWidget::drawChannel(QPaintDevice &pd, Channel *ch, QPainter &p, double 
         //p.setPen(QPen(colorBetween(colorGroup().background(), ch->color, err*2.0-1.0), lineWidth));
         //p.setPen(QPen(colorBetween(gdata->backgroundColor(),  ch->color, err*sqrt(data->rms)*10.0), lineWidth));
         if(viewType == DRAW_VIEW_PRINT)
-          p.setPen(QPen(colorBetween(QColor(255, 255, 255), ch->color, err*vol), lineWidth));
+          p.setPen(QPen(colorBetween(QColor(255, 255, 255), ch->get_color(), err*vol), lineWidth));
         else
-          p.setPen(QPen(colorBetween(gdata->backgroundColor(), ch->color, err*vol), lineWidth));
+          p.setPen(QPen(colorBetween(gdata->backgroundColor(), ch->get_color(), err*vol), lineWidth));
       else
-        p.setPen(QPen(ch->color, lineWidth));
+        p.setPen(QPen(ch->get_color(), lineWidth));
       
       x = toInt(n);
       //note = (data->isValid()) ? data->note : 0.0f;
@@ -282,7 +282,7 @@ void DrawWidget::drawChannelFilled(Channel *ch, QPainter &p, double leftTime, do
     
   ChannelLocker channelLocker(ch);
 
-  QColor current = ch->color;
+  QColor current = ch->get_color();
   QColor invert(255 - current.red(), 255 - current.green(), 255 - current.blue());
   p.setPen(current);
 
@@ -458,9 +458,9 @@ void DrawWidget::drawChannelFilled(Channel *ch, QPainter &p, double leftTime, do
       if(gdata->pitchContourMode() == 0)
         //p.setPen(QPen(colorBetween(colorGroup().background(), ch->color, err*2.0-1.0), lineWidth));
         //p.setPen(QPen(colorBetween(gdata->backgroundColor(),  ch->color, err*sqrt(data->rms)*10.0), lineWidth));
-        p.setPen(QPen(colorBetween(QColor(255, 255, 255), ch->color, err * dB2ViewVal(data->getLogRms())), lineWidth));
+        p.setPen(QPen(colorBetween(QColor(255, 255, 255), ch->get_color(), err * dB2ViewVal(data->getLogRms())), lineWidth));
       else
-        p.setPen(QPen(ch->color, lineWidth));
+        p.setPen(QPen(ch->get_color(), lineWidth));
       
       x = toInt(n);
       lastN = x;
@@ -738,7 +738,7 @@ bool DrawWidget::calcZoomElement(Channel *ch, ZoomElement &ze, int baseElement, 
   //float corr = err->correlation()*dB2ViewVal(err->logrms());
   //float corr = err->correlation()*dB2ViewVal(err->logrms(), ch->rmsCeiling, ch->rmsFloor);
   float corr = err->getCorrelation() * dB2Normalised(err->getLogRms(), ch->rmsCeiling, ch->rmsFloor);
-  QColor theColor = (gdata->pitchContourMode() == 0) ? colorBetween(gdata->backgroundColor(), ch->color, corr) : ch->color;
+  QColor theColor = (gdata->pitchContourMode() == 0) ? colorBetween(gdata->backgroundColor(), ch->get_color(), corr) : ch->get_color();
 
   ze.set(low, high, corr, theColor, noteIndex, (startChunk+finishChunk)/2);
   return true;

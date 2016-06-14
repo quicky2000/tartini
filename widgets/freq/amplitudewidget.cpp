@@ -226,7 +226,7 @@ bool AmplitudeWidget::calcZoomElement(ZoomElement &ze, Channel *ch, int baseElem
   float low = (*amp_mode_func[mode])(a.first->getValue(mode),*gdata);
   float high = (*amp_mode_func[mode])(a.second->getValue(mode),*gdata);
   
-  ze.set(low, high, 0, ch->color, NO_NOTE, (startChunk+finishChunk)/2);
+  ze.set(low, high, 0, ch->get_color(), NO_NOTE, (startChunk+finishChunk)/2);
   return true;
 }
 
@@ -328,7 +328,7 @@ void AmplitudeWidget::drawChannelAmplitudeGL(Channel *ch)
 	  vertexArray[pointIndex++] = MyGLfloat2d(n, height() - 1 - ((ze.low() - offsetInv()) * heightRatio) + halfLineWidth);
 	}
       myassert(pointIndex <= width()*2);
-      qglColor(ch->color);
+      qglColor(ch->get_color());
       glLineWidth(1.0f);
       glVertexPointer(2, GL_FLOAT, 0, vertexArray.begin());
       glDrawArrays(GL_LINES, 0, pointIndex);
@@ -368,7 +368,7 @@ void AmplitudeWidget::drawChannelAmplitudeGL(Channel *ch)
 	  vertexArray[pointIndex++] = MyGLfloat2d(x, y);
 	}
       myassert(pointIndex <= width()*2);
-      qglColor(ch->color);
+      qglColor(ch->get_color());
       glLineWidth(3.0f);
       glVertexPointer(2, GL_FLOAT, 0, vertexArray.begin());
       glDrawArrays(GL_LINE_STRIP, 0, pointIndex);
