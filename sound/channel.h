@@ -204,6 +204,8 @@ class Channel
   inline const Array1d<float> & get_nsdf_data(void) const;
   inline const Array1d<float> & get_fft_data1(void) const;
   inline Array1d<float> & get_fft_data1(void);
+  inline const Array1d<float> & get_fft_data2(void) const;
+  inline Array1d<float> & get_fft_data2(void);
 
  private:
   SoundFile *parent;
@@ -234,9 +236,9 @@ class Channel
   double nsdfAggregateRoof;
 
   Array1d<float> fftData1;
+  Array1d<float> fftData2;
 
  public:
-  Array1d<float> fftData2;
   Array1d<float> fftData3;
   Array1d<float> cepstrumData;
   Array1d<float> detailedPitchData;

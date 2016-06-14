@@ -100,11 +100,11 @@ void FFTWidget::paintEvent( QPaintEvent * )
 */
     p.setPen(QPen(Qt::red, 0));
     for(int j=0; j<width(); j++) { //cheap hack to go faster (by drawing less points)
-      myassert(int(pixelStep*j) < active->fftData2.size());
+      myassert(int(pixelStep*j) < active->get_fft_data2().size());
       //pointArray.setPoint(j, j, -toInt(log10(active->get_fft_data1().at(int(pixelStep*j))/size)*ratio));
       //pointArray.setPoint(j, j, -toInt(active->get_fft_data1().at(int(pixelStep*j))*ratio));
-      //pointArray.setPoint(j, j, height()-1-toInt(active->fftData2.at(int(pixelStep*j))*ratio));
-      pointArray.setPoint(j, j, height()-1-toInt(active->fftData2.at(int(pixelStep*j))*double(height())));
+      //pointArray.setPoint(j, j, height()-1-toInt(active->get_fft_data2().at(int(pixelStep*j))*ratio));
+      pointArray.setPoint(j, j, height()-1-toInt(active->get_fft_data2().at(int(pixelStep*j))*double(height())));
     }
     p.drawPolyline(pointArray);
 /*
@@ -113,7 +113,7 @@ void FFTWidget::paintEvent( QPaintEvent * )
       ratio = double(height()) / 2.0;
       p.setPen(QPen(Qt::blue, 0));
       for(int j=0; j<width(); j++) { //cheap hack to go faster (by drawing less points)
-        myassert(int(pixelStep*j) < active->fftData2.size());
+        myassert(int(pixelStep*j) < active->get_fft_data2().size());
         //pointArray.setPoint(j, j, -toInt(log10(active->get_fft_data1().at(int(pixelStep*j))/size)*ratio));
         pointArray.setPoint(j, j, height()-1-toInt(active->fftData3.at(int(pixelStep*j))*ratio));
       }

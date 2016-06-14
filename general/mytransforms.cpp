@@ -813,7 +813,7 @@ void MyTransforms::doChannelDataFFT(Channel *ch, float *curInput, int chunk)
   for(int j = 1; j < nDiv2; j++)
     {
       sqValue = sq(dataFFT[j]) + sq(dataFFT[n - j]);
-      ch->fftData2[j] = logBaseN(logBase, 1.0 + 2.0 * sqrt(sqValue) / double(nDiv2) * (logBase - 1.0));
+      ch->get_fft_data2()[j] = logBaseN(logBase, 1.0 + 2.0 * sqrt(sqValue) / double(nDiv2) * (logBase - 1.0));
       if(sqValue > 0.0)
 	{
 	  ch->get_fft_data1()[j] = bound(log10(sqValue) / 2.0 - logSize, gdata->dBFloor(), 0.0);
@@ -824,7 +824,7 @@ void MyTransforms::doChannelDataFFT(Channel *ch, float *curInput, int chunk)
 	}
     }
   sqValue = sq(dataFFT[0]) + sq(dataFFT[nDiv2]);
-  ch->fftData2[0] = logBaseN(logBase, 1.0 + 2.0 * sqrt(sqValue) / double(nDiv2) * (logBase - 1.0));
+  ch->get_fft_data2()[0] = logBaseN(logBase, 1.0 + 2.0 * sqrt(sqValue) / double(nDiv2) * (logBase - 1.0));
   if(sqValue > 0.0)
     {
       ch->get_fft_data1()[0] = bound(log10(sqValue) / 2.0 - logSize, gdata->dBFloor(), 0.0);
@@ -835,17 +835,17 @@ void MyTransforms::doChannelDataFFT(Channel *ch, float *curInput, int chunk)
     }
 
 #ifdef PRINTF_DEBUG
-  printf("n = %d, fff = %f\n", nDiv2, *std::max_element(ch->fftData2.begin(), ch->fftData2.end()));
+  printf("n = %d, fff = %f\n", nDiv2, *std::max_element(ch->get_fft_data2().begin(), ch->get_fft_data2().end()));
 #endif // PRINTF_DEBUG
 
   if(gdata->analysisType() == MPM_MODIFIED_CEPSTRUM)
     {
       for(int j = 1; j < nDiv2; j++)
 	{
-	  dataFFT[j] = ch->fftData2[j];
+	  dataFFT[j] = ch->get_fft_data2()[j];
 	  dataFFT[n-j] = 0.0;
 	}
-      dataFFT[0] = ch->fftData2[0];
+      dataFFT[0] = ch->get_fft_data2()[0];
       dataFFT[nDiv2] = 0.0;
       fftwf_execute(planDataFFT2Time);
 

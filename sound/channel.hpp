@@ -378,6 +378,18 @@ Array1d<float> & Channel::get_fft_data1(void)
 }
 
 //------------------------------------------------------------------------------
+const Array1d<float> & Channel::get_fft_data2(void) const
+{
+  return fftData2;
+}
+
+//------------------------------------------------------------------------------
+Array1d<float> & Channel::get_fft_data2(void)
+{
+  return fftData2;
+}
+
+//------------------------------------------------------------------------------
 ChannelLocker::ChannelLocker(Channel *channel_)
 {
   myassert(channel_);
