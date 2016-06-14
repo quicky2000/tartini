@@ -390,6 +390,12 @@ Array1d<float> & Channel::get_fft_data2(void)
 }
 
 //------------------------------------------------------------------------------
+Array1d<float> & Channel::get_cepstrum_data(void)
+{
+  return cepstrumData;
+}
+
+//------------------------------------------------------------------------------
 ChannelLocker::ChannelLocker(Channel *channel_)
 {
   myassert(channel_);

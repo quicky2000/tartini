@@ -48,7 +48,7 @@ void CepstrumWidget::paintEvent( QPaintEvent * )
   beginDrawing(false);
   
   if(active) {
-    pixelStep = double(active->cepstrumData.size()) / double(width());
+    pixelStep = double(active->get_cepstrum_data().size()) / double(width());
     if(int(pointArray.size()) != width()) pointArray.resize(width());
     
     active->lock();
@@ -121,16 +121,16 @@ void CepstrumWidget::paintEvent( QPaintEvent * )
       double ratio = double(height()) / 2.0; //TODO: remove magic number
       p.setPen(QPen(active->get_color(), 0));
       for(int j=0; j<width(); j++) { //cheap hack to go faster (by drawing less points)
-        myassert(int(pixelStep*j) < active->cepstrumData.size());
-        pointArray.setPoint(j, j, height()/2 - toInt(active->cepstrumData.at(int(pixelStep*j))*ratio));
+        myassert(int(pixelStep*j) < active->get_cepstrum_data().size());
+        pointArray.setPoint(j, j, height()/2 - toInt(active->get_cepstrum_data().at(int(pixelStep*j))*ratio));
       }
       p.drawPolyline(pointArray);
 
       if(data->getCepstrumIndex() >= 0) {
         p.setPen(Qt::blue);
         p.setBrush(Qt::blue);
-        int x1 = toInt(double(data->getCepstrumIndex()) / double(active->cepstrumData.size()) * double(width()));
-        int y1 = height()/2 - toInt(active->cepstrumData.at(data->getCepstrumIndex()) * height()/2);
+        int x1 = toInt(double(data->getCepstrumIndex()) / double(active->get_cepstrum_data().size()) * double(width()));
+        int y1 = height()/2 - toInt(active->get_cepstrum_data().at(data->getCepstrumIndex()) * height()/2);
         p.drawEllipse(x1-2, y1-2, 5, 5);
       }
 

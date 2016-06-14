@@ -856,7 +856,7 @@ void MyTransforms::doChannelDataFFT(Channel *ch, float *curInput, int chunk)
       dataTime[0] = 1.0;
       for(int j = 0; j < nDiv2; j++)
 	{
-	  ch->cepstrumData[j] = dataTime[j];
+	  ch->get_cepstrum_data()[j] = dataTime[j];
 	}
       AnalysisData &analysisData = *ch->dataAtChunk(chunk);
       analysisData.setCepstrumIndex(findNSDFsubMaximum(dataTime, nDiv2, 0.6f));

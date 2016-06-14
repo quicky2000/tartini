@@ -207,6 +207,8 @@ class Channel
   inline const Array1d<float> & get_fft_data2(void) const;
   inline Array1d<float> & get_fft_data2(void);
 
+  inline Array1d<float> & get_cepstrum_data(void);
+
  private:
   SoundFile *parent;
   float freq; /**< Channel's frequency */
@@ -243,8 +245,9 @@ class Channel
   */
   Array1d<float> fftData3;
 
- public:
   Array1d<float> cepstrumData;
+
+ public:
   Array1d<float> detailedPitchData;
   Array1d<float> detailedPitchDataSmoothed;
   large_vector<NoteData> noteData;
