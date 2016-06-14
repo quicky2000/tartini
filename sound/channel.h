@@ -239,12 +239,6 @@ class Channel
 
   Array1d<float> fftData1;
   Array1d<float> fftData2;
-
-  /**
-     To check if this variable is really used
-  */
-  Array1d<float> fftData3;
-
   Array1d<float> cepstrumData;
 
  public:

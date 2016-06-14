@@ -193,7 +193,6 @@ Channel::Channel(SoundFile *p_parent, int p_size, int p_k) :
   nsdfAggregateDataScaled.resize(p_k, 0.0);
   fftData1.resize(p_size / 2, 0.0);
   fftData2.resize(p_size / 2, 0.0);
-  fftData3.resize(p_size / 2, 0.0);
   cepstrumData.resize(p_size / 2, 0.0);
   detailedPitchData.resize(p_size / 2, 0.0);
   detailedPitchDataSmoothed.resize(p_size / 2, 0.0);
@@ -269,7 +268,6 @@ void Channel::resize(int newSize, int k_)
   nsdfAggregateDataScaled.resize(k_, 0.0);
   fftData1.resize(newSize / 2, 0.0);
   fftData2.resize(newSize / 2, 0.0);
-  fftData3.resize(newSize / 2, 0.0);
   cepstrumData.resize(newSize / 2, 0.0);
   detailedPitchData.resize(newSize / 2, 0.0);
   detailedPitchDataSmoothed.resize(newSize / 2, 0.0);
