@@ -402,6 +402,12 @@ const Array1d<float> & Channel::get_detailed_pitch_data(void) const
 }
 
 //------------------------------------------------------------------------------
+const Array1d<float> & Channel::get_detailed_pitch_data_smoothed(void) const
+{
+  return detailedPitchDataSmoothed;
+}
+
+//------------------------------------------------------------------------------
 ChannelLocker::ChannelLocker(Channel *channel_)
 {
   myassert(channel_);

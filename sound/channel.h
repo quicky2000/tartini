@@ -209,6 +209,7 @@ class Channel
 
   inline Array1d<float> & get_cepstrum_data(void);
   inline const Array1d<float> & get_detailed_pitch_data(void) const;
+  inline const Array1d<float> & get_detailed_pitch_data_smoothed(void) const;
 
  private:
   SoundFile *parent;
@@ -242,9 +243,9 @@ class Channel
   Array1d<float> fftData2;
   Array1d<float> cepstrumData;
   Array1d<float> detailedPitchData;
+  Array1d<float> detailedPitchDataSmoothed;
 
  public:
-  Array1d<float> detailedPitchDataSmoothed;
   large_vector<NoteData> noteData;
   Filter *highPassFilter;
   Filter *pitchSmallSmoothingFilter;
