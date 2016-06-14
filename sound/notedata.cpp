@@ -58,8 +58,8 @@ NoteData::NoteData(const Channel & p_channel, int startChunk_, const AnalysisDat
   prevExtremumPitch(-1),
   prevExtremum(NONE)
 {
-  nsdfAggregateData.resize(p_channel.nsdfData.size(), 0.0f);
-  nsdfAggregateDataScaled.resize(p_channel.nsdfData.size(), 0.0f);
+  nsdfAggregateData.resize(p_channel.get_nsdf_data().size(), 0.0f);
+  nsdfAggregateDataScaled.resize(p_channel.get_nsdf_data().size(), 0.0f);
 }
 
 //------------------------------------------------------------------------------

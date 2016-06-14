@@ -360,6 +360,12 @@ const Array1d<float> & Channel::get_filtered_input(void) const
 }
 
 //------------------------------------------------------------------------------
+const Array1d<float> & Channel::get_nsdf_data(void) const
+{
+  return nsdfData;
+}
+
+//------------------------------------------------------------------------------
 ChannelLocker::ChannelLocker(Channel *channel_)
 {
   myassert(channel_);

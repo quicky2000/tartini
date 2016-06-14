@@ -61,10 +61,10 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
       double freq = data->getFundamentalFreq();
       double period = double(active->rate()) / freq;
       //double numPeriods = double(active->size()) / period;
-      double scaleX = period * double(width()) / double(active->nsdfData.size()); //pixels per period
+      double scaleX = period * double(width()) / double(active->get_nsdf_data().size()); //pixels per period
       
       //draw alternating background color indicating period
-      if(gdata->getView().backgroundShading() && period > 4.0 && period < double(active->nsdfData.size())) {
+      if(gdata->getView().backgroundShading() && period > 4.0 && period < double(active->get_nsdf_data().size())) {
         int n = int(ceil(double(width()) / scaleX)); //number of colored patches
         p.setPen(Qt::NoPen);
         QColor color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), data->getCorrelation());
@@ -105,7 +105,7 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
       if(lookup.size() != w) lookup.resize(w);
 
       const NoteData *currentNote = active->getCurrentNote();
-      const Array1d<float> *input = &(active->nsdfData);
+      const Array1d<float> *input = &(active->get_nsdf_data());
       if(currentNote) {
         if(aggregateMode == 1) input = &currentNote->get_nsdf_aggregate_data();
         else if(aggregateMode == 2) input = &currentNote->get_nsdf_aggregate_data_scaled();
@@ -120,7 +120,7 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
       p.drawPolyline(pointArray);
     }
     if(data && (aggregateMode == 0)) {
-      double ratio = double(width()) / double(active->nsdfData.size()); //pixels per index
+      double ratio = double(width()) / double(active->get_nsdf_data().size()); //pixels per index
       //float highest = active->nsdfData.at(data->highestCorrelationIndex);
       //float chosen = active->nsdfData.at(data->chosenCorrelationIndex);
       

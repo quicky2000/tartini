@@ -372,7 +372,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
   myassert(ch->dataAtChunk(chunk));
   AnalysisData &analysisData = *ch->dataAtChunk(chunk);
   AnalysisData *prevAnalysisData = ch->dataAtChunk(chunk - 1);
-  float *output = ch->nsdfData.begin();
+  float *output = ch->get_nsdf_data().begin();
   float *curInput = (equalLoudness) ? ch->get_filtered_input().begin() : ch->get_direct_input().begin();
 
   std::vector<int> nsdfMaxPositions;
@@ -384,7 +384,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
   if(gdata->doingFreqAnalysis() && (ch->firstTimeThrough() || gdata->doingActiveAnalysis()))
     {
       //calculate the Normalised Square Difference Function
-      double logrms = linear2dB(nsdf(dataTime, ch->nsdfData.begin()) / double(n),*gdata); /**< Do the NSDF calculation */
+      double logrms = linear2dB(nsdf(dataTime, ch->get_nsdf_data().begin()) / double(n),*gdata); /**< Do the NSDF calculation */
       analysisData.setLogRms(logrms);
       if(gdata->doingAutoNoiseFloor() && !analysisData.isDone())
 	{
@@ -425,7 +425,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
 	analysisData.setDeltaFreqCentroid(0.0);
       }
     
-    findNSDFMaxima(ch->nsdfData.begin(), k, nsdfMaxPositions);
+    findNSDFMaxima(ch->get_nsdf_data().begin(), k, nsdfMaxPositions);
     if(!analysisData.isDone())
       {
       }

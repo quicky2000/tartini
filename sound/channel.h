@@ -201,6 +201,8 @@ class Channel
   inline const QColor & get_color(void) const;
   inline const Array1d<float> & get_direct_input(void) const;
   inline const Array1d<float> & get_filtered_input(void) const;
+  inline const Array1d<float> & get_nsdf_data(void) const;
+
  private:
   SoundFile *parent;
   float freq; /**< Channel's frequency */
@@ -220,9 +222,9 @@ class Channel
   Array1d<float> directInput;
   Array1d<float> filteredInput;
   Array1d<float> coefficients_table;
+  Array1d<float> nsdfData;
 
  public:
-  Array1d<float> nsdfData;
   Array1d<float> nsdfAggregateData;
   Array1d<float> nsdfAggregateDataScaled;
   double nsdfAggregateRoof; //keeps the sum of scalers. i.e. The highest possible aggregate value

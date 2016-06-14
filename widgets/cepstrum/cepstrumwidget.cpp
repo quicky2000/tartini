@@ -87,10 +87,10 @@ void CepstrumWidget::paintEvent( QPaintEvent * )
       double freq = data->getFundamentalFreq();
       double period = double(active->rate()) / freq;
       //double numPeriods = double(active->size()) / period;
-      double scaleX = period * double(width()) / double(active->nsdfData.size()); //pixels per period
+      double scaleX = period * double(width()) / double(active->get_nsdf_data().size()); //pixels per period
       
       //draw alternating background color indicating period
-      if(gdata->getView().backgroundShading() && period > 4.0 && period < double(active->nsdfData.size())) {
+      if(gdata->getView().backgroundShading() && period > 4.0 && period < double(active->get_nsdf_data().size())) {
         int n = int(ceil(double(width()) / scaleX)); //number of colored patches
         p.setPen(Qt::NoPen);
         QColor color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), data->getCorrelation());
