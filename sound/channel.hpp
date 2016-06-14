@@ -396,6 +396,12 @@ Array1d<float> & Channel::get_cepstrum_data(void)
 }
 
 //------------------------------------------------------------------------------
+const Array1d<float> & Channel::get_detailed_pitch_data(void) const
+{
+  return detailedPitchData;
+}
+
+//------------------------------------------------------------------------------
 ChannelLocker::ChannelLocker(Channel *channel_)
 {
   myassert(channel_);

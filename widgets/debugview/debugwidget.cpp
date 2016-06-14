@@ -78,7 +78,7 @@ void DebugWidget::paintEvent( QPaintEvent * )
     printString(s.sprintf("spread2 = %f", data.getSpread2()));
     printString(s.sprintf("logrms = %f", data.getLogRms()));
     printString(s.sprintf("normalised_logrms = %f", dB2Normalised(data.getLogRms(),*gdata)));
-    printString(s.sprintf("detailedPeriod.size() = %d", ch->detailedPitchData.size()));
+    printString(s.sprintf("detailedPeriod.size() = %d", ch->get_detailed_pitch_data().size()));
     printString(s.sprintf("vibratoPitch = %f", data.getVibratoPitch()));
     printString(s.sprintf("vibratoWidth = %f", data.getVibratoWidth()));
     printString(s.sprintf("vibratoSpeed = %f", data.getVibratoSpeed()));

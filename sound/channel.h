@@ -208,6 +208,7 @@ class Channel
   inline Array1d<float> & get_fft_data2(void);
 
   inline Array1d<float> & get_cepstrum_data(void);
+  inline const Array1d<float> & get_detailed_pitch_data(void) const;
 
  private:
   SoundFile *parent;
@@ -240,9 +241,9 @@ class Channel
   Array1d<float> fftData1;
   Array1d<float> fftData2;
   Array1d<float> cepstrumData;
+  Array1d<float> detailedPitchData;
 
  public:
-  Array1d<float> detailedPitchData;
   Array1d<float> detailedPitchDataSmoothed;
   large_vector<NoteData> noteData;
   Filter *highPassFilter;

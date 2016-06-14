@@ -517,7 +517,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
 	  float periodDiff2 = ch->calcDetailedPitch(curInput, analysisData.getPeriod(), chunk);
 	  periodDiff = periodDiff2;
 
-	  ch->get_pitch_lookup().push_back(ch->detailedPitchData.begin(), ch->detailedPitchData.size());
+	  ch->get_pitch_lookup().push_back(ch->get_detailed_pitch_data().begin(), ch->get_detailed_pitch_data().size());
 	  ch->get_pitch_lookup_smoothed().push_back(ch->detailedPitchDataSmoothed.begin(), ch->detailedPitchDataSmoothed.size());
 	}
 
@@ -536,7 +536,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
 
   if(gdata->doingFreqAnalysis() && ch->doingDetailedPitch() && (!ch->firstTimeThrough()))
     {
-      ch->get_pitch_lookup().copyTo(ch->detailedPitchData.begin(), chunk*ch->detailedPitchData.size(), ch->detailedPitchData.size());
+      ch->get_pitch_lookup().copyTo(ch->get_detailed_pitch_data().begin(), chunk*ch->get_detailed_pitch_data().size(), ch->get_detailed_pitch_data().size());
       ch->get_pitch_lookup_smoothed().copyTo(ch->detailedPitchDataSmoothed.begin(), chunk*ch->detailedPitchDataSmoothed.size(), ch->detailedPitchDataSmoothed.size());
     }
 
