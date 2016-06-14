@@ -122,7 +122,7 @@ void WaveWidget::paintEvent( QPaintEvent * )
     double scaleY = dh2 * zoomY();
 
     //Use Bresenham's algorithm in 1d to choose the points to draw
-    Array1d<float> &filteredData = active->filteredInput;
+    const Array1d<float> &filteredData = active->get_filtered_input();
 
     int intStep = int(filteredData.size() / w);
     int remainderStep = filteredData.size() - (intStep * w);

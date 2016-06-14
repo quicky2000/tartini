@@ -373,7 +373,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
   AnalysisData &analysisData = *ch->dataAtChunk(chunk);
   AnalysisData *prevAnalysisData = ch->dataAtChunk(chunk - 1);
   float *output = ch->nsdfData.begin();
-  float *curInput = (equalLoudness) ? ch->filteredInput.begin() : ch->get_direct_input().begin();
+  float *curInput = (equalLoudness) ? ch->get_filtered_input().begin() : ch->get_direct_input().begin();
 
   std::vector<int> nsdfMaxPositions;
   analysisData.setMaxIntensityDB(linear2dB(fabs(*std::max_element(curInput, curInput + n, absoluteLess<float>())),*gdata));

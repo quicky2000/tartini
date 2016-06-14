@@ -563,7 +563,7 @@ void SoundFile::toChannelBuffer(int c, int n)
   std::copy(tempWindowBuffer[c], tempWindowBuffer[c]+n, channels(c)->end() - n);
   if(equalLoudness())
     {
-      std::copy(tempWindowBufferFiltered[c], tempWindowBufferFiltered[c]+n, channels(c)->filteredInput.end() - n);
+      std::copy(tempWindowBufferFiltered[c], tempWindowBufferFiltered[c] + n, channels(c)->get_filtered_input().end() - n);
     }
 }
 

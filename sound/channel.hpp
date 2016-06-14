@@ -354,6 +354,12 @@ const Array1d<float> & Channel::get_direct_input(void) const
 }
 
 //------------------------------------------------------------------------------
+const Array1d<float> & Channel::get_filtered_input(void) const
+{
+  return filteredInput;
+}
+
+//------------------------------------------------------------------------------
 ChannelLocker::ChannelLocker(Channel *channel_)
 {
   myassert(channel_);

@@ -200,6 +200,7 @@ class Channel
   inline large_vector<float> & get_pitch_lookup_smoothed(void);
   inline const QColor & get_color(void) const;
   inline const Array1d<float> & get_direct_input(void) const;
+  inline const Array1d<float> & get_filtered_input(void) const;
  private:
   SoundFile *parent;
   float freq; /**< Channel's frequency */
@@ -217,9 +218,9 @@ class Channel
   large_vector<float> pitchLookupSmoothed;
   QColor color;
   Array1d<float> directInput;
+  Array1d<float> filteredInput;
 
  public:
-  Array1d<float> filteredInput;
   Array1d<float> coefficients_table;
   Array1d<float> nsdfData;
   Array1d<float> nsdfAggregateData;
