@@ -191,8 +191,8 @@ void VibratoWidget::doUpdate()
     ChannelLocker channelLocker(active);
     AnalysisData *data = active->dataAtCurrentChunk();
     if(data && active->isVisibleNote(data->getNoteIndex()) && active->isLabelNote(data->getNoteIndex())) {
-      NoteData *note = new NoteData();
-      note = &(active->noteData[data->getNoteIndex()]);
+      const NoteData *note = new NoteData();
+      note = &(active->get_note_data()[data->getNoteIndex()]);
 
       const int myStartChunk = note->startChunk();
       const int myEndChunk = note->endChunk();

@@ -225,17 +225,17 @@ void ScoreWidget::drawScoreSegment(Channel *ch, double leftX, int lineCenterY, d
     p.setPen(QPen(Qt::black, 2));
     ChannelLocker channelLocker(ch);
     //draw the notes
-    for(j=0; j<ch->noteData.size(); j++) {
+    for(j=0; j<ch->get_note_data().size(); j++) {
       if(ch->isVisibleNote(j) && ch->isLabelNote(j)) {
-        double noteTime = ch->timeAtChunk(ch->noteData[j].startChunk());
+        double noteTime = ch->timeAtChunk(ch->get_note_data()[j].startChunk());
         //printf("noteTime = %f\n", noteTime);
         if(between(noteTime, leftTime, rightTime)) {
           //FIXME: avgPitch is quite slow to calc
-          //printf("x=%d, y=%d, p=%d\n", left + toInt((noteTime - leftTime)*_scaleX), lineCenterY, toInt(ch->noteData[j].avgPitch()));
+          //printf("x=%d, y=%d, p=%d\n", left + toInt((noteTime - leftTime)*_scaleX), lineCenterY, toInt(ch->get_note_data()[j].avgPitch()));
           drawNoteAtPitch(toInt(leftX + (noteTime - leftTime)*_scaleX),
                    lineCenterY,
-                   toInt(ch->noteData[j].avgPitch()),
-                   ch->noteData[j].noteLength(), ch->noteData[j].volume());
+                   toInt(ch->get_note_data()[j].avgPitch()),
+                   ch->get_note_data()[j].noteLength(), ch->get_note_data()[j].volume());
         }
       }
     }
@@ -292,7 +292,7 @@ void ScoreWidget::mousePressEvent( QMouseEvent *e )
           data = ch->dataAtChunk(--chunk);
         }
         if(data && data->getNoteIndex() >= 0) {
-	  int startChunk = ch->noteData[data->getNoteIndex()].startChunk();
+	  int startChunk = ch->get_note_data()[data->getNoteIndex()].startChunk();
             gdata->updateActiveChunkTime(ch->timeAtChunk(startChunk));
             //gdata->updateActiveChunkTime(t);
             if(gdata->getRunning() == STREAM_STOP) {

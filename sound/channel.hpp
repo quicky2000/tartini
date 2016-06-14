@@ -408,6 +408,12 @@ const Array1d<float> & Channel::get_detailed_pitch_data_smoothed(void) const
 }
 
 //------------------------------------------------------------------------------
+const large_vector<NoteData> & Channel::get_note_data(void) const
+{
+  return noteData;
+}
+
+//------------------------------------------------------------------------------
 ChannelLocker::ChannelLocker(Channel *channel_)
 {
   myassert(channel_);

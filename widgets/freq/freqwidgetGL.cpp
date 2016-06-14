@@ -813,7 +813,7 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch,
 	  if(ze.noteIndex() != -1 && ch->dataAtChunk(ze.midChunk())->getNoteIndex() != -1)
 	    {
 	      myassert(ze.noteIndex() >= 0);
-	      myassert(ze.noteIndex() < int(ch->noteData.size()));
+	      myassert(ze.noteIndex() < int(ch->get_note_data().size()));
 	      myassert(ch->isValidChunk(ze.midChunk()));
 	      AnalysisData *data = ch->dataAtChunk(ze.midChunk());
 

@@ -355,7 +355,7 @@ void DrawWidget::drawChannelFilled(Channel *ch, QPainter &p, double leftTime, do
       //if(ze.noteIndex >= 0) {
       if(ze.noteIndex() != -1 && ch->dataAtChunk(ze.midChunk())->getNoteIndex() != -1) {
         myassert(ze.noteIndex() >= 0);
-        myassert(ze.noteIndex() < int(ch->noteData.size()));
+        myassert(ze.noteIndex() < int(ch->get_note_data().size()));
         myassert(ch->isValidChunk(ze.midChunk()));
         AnalysisData *data = ch->dataAtChunk(ze.midChunk());
         //double avgNote = ch->noteData[ze.noteIndex()].avgNote();

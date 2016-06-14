@@ -137,8 +137,8 @@ void VibratoPeriodWidget::doUpdate()
   if ((active) && (active->doingDetailedPitch()) && (active->get_pitch_lookup_smoothed().size() > 0)) {
     AnalysisData *data = active->dataAtCurrentChunk();
     if(data && active->isVisibleNote(data->getNoteIndex()) && active->isLabelNote(data->getNoteIndex())) {
-      NoteData *note = new NoteData();
-      note = &(active->noteData[data->getNoteIndex()]);
+      const NoteData *note = new NoteData();
+      note = &(active->get_note_data()[data->getNoteIndex()]);
 
       int smoothDelay = active->pitchBigSmoothingFilter->delay();
       int currentTime = active->chunkAtCurrentTime() * active->framesPerChunk() + smoothDelay;
@@ -226,8 +226,8 @@ void VibratoPeriodWidget::doUpdate()
       glEndList();
 
       AnalysisData *data = active->dataAtCurrentChunk();
-      NoteData *note = new NoteData();
-      note = &(active->noteData[data->getNoteIndex()]);
+      const NoteData *note = new NoteData();
+      note = &(active->get_note_data()[data->getNoteIndex()]);
 
       large_vector<float> thePitchLookup;
       int theDelay;
