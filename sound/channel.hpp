@@ -348,6 +348,12 @@ const QColor & Channel::get_color(void)const
 }
 
 //------------------------------------------------------------------------------
+const Array1d<float> & Channel::get_direct_input(void) const
+{
+  return directInput;
+}
+
+//------------------------------------------------------------------------------
 ChannelLocker::ChannelLocker(Channel *channel_)
 {
   myassert(channel_);
