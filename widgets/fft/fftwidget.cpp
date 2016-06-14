@@ -48,7 +48,7 @@ void FFTWidget::paintEvent( QPaintEvent * )
   beginDrawing(false);
   
   if(active) {
-    pixelStep = double(active->fftData1.size()) / double(width());
+    pixelStep = double(active->get_fft_data1().size()) / double(width());
     if(int(pointArray.size()) != width()) pointArray.resize(width());
     
     active->lock();
@@ -88,21 +88,21 @@ void FFTWidget::paintEvent( QPaintEvent * )
     }
 
     //draw the waveform
-    //float size = active->fftData1.size();
+    //float size = active->get_fft_data1().size();
 /*
     p.setPen(QPen(active->color, 0));
     for(int j=0; j<width(); j++) { //cheap hack to go faster (by drawing less points)
-      myassert(int(pixelStep*j) < active->fftData1.size());
-      //pointArray.setPoint(j, j, -toInt(log10(active->fftData1.at(int(pixelStep*j))/size)*ratio));
-      pointArray.setPoint(j, j, -toInt(active->fftData1.at(int(pixelStep*j))*ratio));
+      myassert(int(pixelStep*j) < active->get_fft_data1().size());
+      //pointArray.setPoint(j, j, -toInt(log10(active->get_fft_data1().at(int(pixelStep*j))/size)*ratio));
+      pointArray.setPoint(j, j, -toInt(active->get_fft_data1().at(int(pixelStep*j))*ratio));
     }
     p.drawPolyline(pointArray);
 */
     p.setPen(QPen(Qt::red, 0));
     for(int j=0; j<width(); j++) { //cheap hack to go faster (by drawing less points)
       myassert(int(pixelStep*j) < active->fftData2.size());
-      //pointArray.setPoint(j, j, -toInt(log10(active->fftData1.at(int(pixelStep*j))/size)*ratio));
-      //pointArray.setPoint(j, j, -toInt(active->fftData1.at(int(pixelStep*j))*ratio));
+      //pointArray.setPoint(j, j, -toInt(log10(active->get_fft_data1().at(int(pixelStep*j))/size)*ratio));
+      //pointArray.setPoint(j, j, -toInt(active->get_fft_data1().at(int(pixelStep*j))*ratio));
       //pointArray.setPoint(j, j, height()-1-toInt(active->fftData2.at(int(pixelStep*j))*ratio));
       pointArray.setPoint(j, j, height()-1-toInt(active->fftData2.at(int(pixelStep*j))*double(height())));
     }
@@ -114,7 +114,7 @@ void FFTWidget::paintEvent( QPaintEvent * )
       p.setPen(QPen(Qt::blue, 0));
       for(int j=0; j<width(); j++) { //cheap hack to go faster (by drawing less points)
         myassert(int(pixelStep*j) < active->fftData2.size());
-        //pointArray.setPoint(j, j, -toInt(log10(active->fftData1.at(int(pixelStep*j))/size)*ratio));
+        //pointArray.setPoint(j, j, -toInt(log10(active->get_fft_data1().at(int(pixelStep*j))/size)*ratio));
         pointArray.setPoint(j, j, height()-1-toInt(active->fftData3.at(int(pixelStep*j))*ratio));
       }
       p.drawPolyline(pointArray);

@@ -366,6 +366,18 @@ const Array1d<float> & Channel::get_nsdf_data(void) const
 }
 
 //------------------------------------------------------------------------------
+const Array1d<float> & Channel::get_fft_data1(void) const
+{
+  return fftData1;
+}
+
+//------------------------------------------------------------------------------
+Array1d<float> & Channel::get_fft_data1(void)
+{
+  return fftData1;
+}
+
+//------------------------------------------------------------------------------
 ChannelLocker::ChannelLocker(Channel *channel_)
 {
   myassert(channel_);

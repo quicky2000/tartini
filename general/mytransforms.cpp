@@ -398,138 +398,140 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
 	    {
 	      gdata->rmsFloor() = logrms + 15;
 	    }
-	  if(logrms > gdata->rmsCeiling()) gdata->rmsCeiling() = logrms;
+	  if(logrms > gdata->rmsCeiling())
+	    {
+	      gdata->rmsCeiling() = logrms;
+	    }
 
 	  //do it for the channel
-      if(chunk == 0)
-	{
-	  ch->rmsFloor = 0.0; ch->rmsCeiling = gdata->dBFloor();
+	  if(chunk == 0)
+	    {
+	      ch->rmsFloor = 0.0; ch->rmsCeiling = gdata->dBFloor();
+	    }
+	  if(logrms + 15 < ch->rmsFloor)
+	    {
+	      ch->rmsFloor = logrms + 15;
+	    }
+	  if(logrms > ch->rmsCeiling)
+	    {
+	      ch->rmsCeiling = logrms;
+	    }
 	}
-      if(logrms + 15 < ch->rmsFloor)
-	{
-	  ch->rmsFloor = logrms + 15;
-	}
-      if(logrms > ch->rmsCeiling)
-	{
-	  ch->rmsCeiling = logrms;
-	}
-    }
 
-    analysisData.setFreqCentroid(calcFreqCentroidFromLogMagnitudes(ch->fftData1.begin(), ch->fftData1.size()));
-    if(prevAnalysisData)
-      {
-	analysisData.setDeltaFreqCentroid(bound(fabs(analysisData.getFreqCentroid() - prevAnalysisData->getFreqCentroid()) * 20.0, 0.0, 1.0));
-      }
-    else
-      { 
-	analysisData.setDeltaFreqCentroid(0.0);
-      }
+      analysisData.setFreqCentroid(calcFreqCentroidFromLogMagnitudes(ch->get_fft_data1().begin(), ch->get_fft_data1().size()));
+      if(prevAnalysisData)
+	{
+	  analysisData.setDeltaFreqCentroid(bound(fabs(analysisData.getFreqCentroid() - prevAnalysisData->getFreqCentroid()) * 20.0, 0.0, 1.0));
+	}
+      else
+	{ 
+	  analysisData.setDeltaFreqCentroid(0.0);
+	}
     
-    findNSDFMaxima(ch->get_nsdf_data().begin(), k, nsdfMaxPositions);
-    if(!analysisData.isDone())
-      {
-      }
+      findNSDFMaxima(ch->get_nsdf_data().begin(), k, nsdfMaxPositions);
+      if(!analysisData.isDone())
+	{
+	}
 
-    //store some of the best period estimates
-    analysisData.clearPeriodEstimates();
-    analysisData.clearPeriodEstimatesAmp();
-    float smallCutoff = 0.4f;
-    for(std::vector<int>::iterator iter = nsdfMaxPositions.begin(); iter < nsdfMaxPositions.end(); iter++)
-      {
-	if(output[*iter] >= smallCutoff)
-	  {
-	    float x, y;
-	    //do a parabola fit to find the maximum
-	    parabolaTurningPoint2(output[*iter-1], output[*iter], output[*iter+1], float(*iter + 1), &x, &y);
-	    y = bound(y, -1.0f, 1.0f);
-	    analysisData.addPeriodEstimates(x);
-	    analysisData.addPeriodEstimatesAmp(y);
-	  }
-      }
-    
-    float periodDiff = 0.0f;
-    if(analysisData.isPeriodEstimatesEmpty())
-      {
-	//no period found
-	analysisData.calcScores();
-	analysisData.setDone(true);
-      }
-    else
-      {
-	//calc the periodDiff
-	if(chunk > 0)
-	  {
-	    float prevPeriod = prevAnalysisData->getHighestCorrelationIndex() != -1 ? prevAnalysisData->getPeriodEstimatesAt(prevAnalysisData->getHighestCorrelationIndex()) : 0;
+      //store some of the best period estimates
+      analysisData.clearPeriodEstimates();
+      analysisData.clearPeriodEstimatesAmp();
+      float smallCutoff = 0.4f;
+      for(std::vector<int>::iterator iter = nsdfMaxPositions.begin(); iter < nsdfMaxPositions.end(); iter++)
+	{
+	  if(output[*iter] >= smallCutoff)
+	    {
+	      float x, y;
+	      //do a parabola fit to find the maximum
+	      parabolaTurningPoint2(output[*iter-1], output[*iter], output[*iter+1], float(*iter + 1), &x, &y);
+	      y = bound(y, -1.0f, 1.0f);
+	      analysisData.addPeriodEstimates(x);
+	      analysisData.addPeriodEstimatesAmp(y);
+	    }
+	}
 
-	    periodDiff = analysisData.searchClosestPeriodEstimates(prevPeriod) - prevPeriod;
-	    if(absolute(periodDiff) > 8.0f)
-	      {
-		periodDiff = 0.0f;
-	      }
-	  }
+      float periodDiff = 0.0f;
+      if(analysisData.isPeriodEstimatesEmpty())
+	{
+	  //no period found
+	  analysisData.calcScores();
+	  analysisData.setDone(true);
+	}
+      else
+	{
+	  //calc the periodDiff
+	  if(chunk > 0)
+	    {
+	      float prevPeriod = prevAnalysisData->getHighestCorrelationIndex() != -1 ? prevAnalysisData->getPeriodEstimatesAt(prevAnalysisData->getHighestCorrelationIndex()) : 0;
 
-	int nsdfMaxIndex = analysisData.getPeriodEstimatesAmpMaxElementIndex();
-	analysisData.setHighestCorrelationIndex(nsdfMaxIndex);
+	      periodDiff = analysisData.searchClosestPeriodEstimates(prevPeriod) - prevPeriod;
+	      if(absolute(periodDiff) > 8.0f)
+		{
+		  periodDiff = 0.0f;
+		}
+	    }
 
-	if(!analysisData.isDone())
-	  {
-	    if(gdata->analysisType() == MPM_MODIFIED_CEPSTRUM)
-	      {
-		//calculate pitch
-		ch->chooseCorrelationIndex(chunk, float(analysisData.getCepstrumIndex()));
-	      }
-	    else
-	      {
-		if(ch->isNotePlaying() && chunk > 0)
-		  {
-		    //calculate pitch
-		    ch->chooseCorrelationIndex(chunk, ch->periodOctaveEstimate(chunk - 1));
-		  }
-		else
-		  {
-		    //calculate pitch
-		    ch->chooseCorrelationIndex1(chunk);
-		  }
-	      }
-	    ch->calcDeviation(chunk);
+	  int nsdfMaxIndex = analysisData.getPeriodEstimatesAmpMaxElementIndex();
+	  analysisData.setHighestCorrelationIndex(nsdfMaxIndex);
 
-	    //calculate vibratoPitch, vibratoWidth, vibratoSpeed
-	    ch->doPronyFit(chunk);
-	  }
+	  if(!analysisData.isDone())
+	    {
+	      if(gdata->analysisType() == MPM_MODIFIED_CEPSTRUM)
+		{
+		  //calculate pitch
+		  ch->chooseCorrelationIndex(chunk, float(analysisData.getCepstrumIndex()));
+		}
+	      else
+		{
+		  if(ch->isNotePlaying() && chunk > 0)
+		    {
+		      //calculate pitch
+		      ch->chooseCorrelationIndex(chunk, ch->periodOctaveEstimate(chunk - 1));
+		    }
+		  else
+		    {
+		      //calculate pitch
+		      ch->chooseCorrelationIndex1(chunk);
+		    }
+		}
+	      ch->calcDeviation(chunk);
 
-	analysisData.setChangeness(0.0f);
+	      //calculate vibratoPitch, vibratoWidth, vibratoSpeed
+	      ch->doPronyFit(chunk);
+	    }
 
-	if(gdata->doingHarmonicAnalysis())
-	  {
-	    std::copy(dataTime, dataTime+n, dataTemp);
-	    if(analysisData.getChosenCorrelationIndex() >= 0)
-	      {
-		doHarmonicAnalysis(dataTemp, analysisData, analysisData.getPeriodEstimatesAt(analysisData.getChosenCorrelationIndex())/*period*/);
-	      }
-	  }
+	  analysisData.setChangeness(0.0f);
 
-      }
+	  if(gdata->doingHarmonicAnalysis())
+	    {
+	      std::copy(dataTime, dataTime+n, dataTemp);
+	      if(analysisData.getChosenCorrelationIndex() >= 0)
+		{
+		  doHarmonicAnalysis(dataTemp, analysisData, analysisData.getPeriodEstimatesAt(analysisData.getChosenCorrelationIndex())/*period*/);
+		}
+	    }
+	}
 
-    if(gdata->doingFreqAnalysis() && ch->doingDetailedPitch() && ch->firstTimeThrough())
-      {
-	float periodDiff2 = ch->calcDetailedPitch(curInput, analysisData.getPeriod(), chunk);
-	periodDiff = periodDiff2;
+      if(gdata->doingFreqAnalysis() && ch->doingDetailedPitch() && ch->firstTimeThrough())
+	{
+	  float periodDiff2 = ch->calcDetailedPitch(curInput, analysisData.getPeriod(), chunk);
+	  periodDiff = periodDiff2;
 
-	ch->get_pitch_lookup().push_back(ch->detailedPitchData.begin(), ch->detailedPitchData.size());
-	ch->get_pitch_lookup_smoothed().push_back(ch->detailedPitchDataSmoothed.begin(), ch->detailedPitchDataSmoothed.size());
-      }
+	  ch->get_pitch_lookup().push_back(ch->detailedPitchData.begin(), ch->detailedPitchData.size());
+	  ch->get_pitch_lookup_smoothed().push_back(ch->detailedPitchDataSmoothed.begin(), ch->detailedPitchDataSmoothed.size());
+	}
 
-    if(!analysisData.isDone())
-      {
-	analysisData.calcScores();
-	ch->processNoteDecisions(chunk, periodDiff);
-	analysisData.setDone(true);
-      }
+      if(!analysisData.isDone())
+	{
+	  analysisData.calcScores();
+	  ch->processNoteDecisions(chunk, periodDiff);
+	  analysisData.setDone(true);
+	}
 
-    if(gdata->doingFreqAnalysis() && ch->doingDetailedPitch() && ch->firstTimeThrough())
-      {
-	ch->calcVibratoData(chunk);
-      }
+      if(gdata->doingFreqAnalysis() && ch->doingDetailedPitch() && ch->firstTimeThrough())
+	{
+	  ch->calcVibratoData(chunk);
+	}
     }
 
   if(gdata->doingFreqAnalysis() && ch->doingDetailedPitch() && (!ch->firstTimeThrough()))
@@ -803,8 +805,8 @@ void MyTransforms::doChannelDataFFT(Channel *ch, float *curInput, int chunk)
   int nDiv2 = n / 2;
   //LOG RULES: log(sqrt(x)) = log(x) / 2.0
   //LOG RULES: log(a * b) = log(a) + log(b)
-  myassert(ch->fftData1.size() == nDiv2);
-  double logSize = log10(double(ch->fftData1.size())); //0.0
+  myassert(ch->get_fft_data1().size() == nDiv2);
+  double logSize = log10(double(ch->get_fft_data1().size())); //0.0
   //Adjust the coefficents, both real and imaginary part by same amount
   double sqValue;
   const double logBase = 100.0;
@@ -814,22 +816,22 @@ void MyTransforms::doChannelDataFFT(Channel *ch, float *curInput, int chunk)
       ch->fftData2[j] = logBaseN(logBase, 1.0 + 2.0 * sqrt(sqValue) / double(nDiv2) * (logBase - 1.0));
       if(sqValue > 0.0)
 	{
-	  ch->fftData1[j] = bound(log10(sqValue) / 2.0 - logSize, gdata->dBFloor(), 0.0);
+	  ch->get_fft_data1()[j] = bound(log10(sqValue) / 2.0 - logSize, gdata->dBFloor(), 0.0);
 	}
       else
 	{
-	  ch->fftData1[j] = gdata->dBFloor();
+	  ch->get_fft_data1()[j] = gdata->dBFloor();
 	}
     }
   sqValue = sq(dataFFT[0]) + sq(dataFFT[nDiv2]);
   ch->fftData2[0] = logBaseN(logBase, 1.0 + 2.0 * sqrt(sqValue) / double(nDiv2) * (logBase - 1.0));
   if(sqValue > 0.0)
     {
-      ch->fftData1[0] = bound(log10(sqValue) / 2.0 - logSize, gdata->dBFloor(), 0.0);
+      ch->get_fft_data1()[0] = bound(log10(sqValue) / 2.0 - logSize, gdata->dBFloor(), 0.0);
     }
   else
     {
-      ch->fftData1[0] = gdata->dBFloor();
+      ch->get_fft_data1()[0] = gdata->dBFloor();
     }
 
 #ifdef PRINTF_DEBUG

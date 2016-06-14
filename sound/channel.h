@@ -202,6 +202,8 @@ class Channel
   inline const Array1d<float> & get_direct_input(void) const;
   inline const Array1d<float> & get_filtered_input(void) const;
   inline const Array1d<float> & get_nsdf_data(void) const;
+  inline const Array1d<float> & get_fft_data1(void) const;
+  inline Array1d<float> & get_fft_data1(void);
 
  private:
   SoundFile *parent;
@@ -231,8 +233,9 @@ class Channel
   */
   double nsdfAggregateRoof;
 
- public:
   Array1d<float> fftData1;
+
+ public:
   Array1d<float> fftData2;
   Array1d<float> fftData3;
   Array1d<float> cepstrumData;
