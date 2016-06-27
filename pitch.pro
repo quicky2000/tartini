@@ -141,6 +141,7 @@ HEADERS += main.h \
   widgets/volumemeter/volumemeterwidget.h \
   include/myassert.h \
   sound/zoomlookup.h \
+  sound/zoomlookup.hpp \
   dialogs/savedialog.h \
   dialogs/opendialog.h \
   general/equalloudness.h \

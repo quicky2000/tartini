@@ -26,23 +26,21 @@ class AnalysisData;
 class ZoomElement
 {
 public:
-  ZoomElement(void) { _isValid = false; }
-  float low(void) { return _low; }
-  float high(void) { return _high; }
-  float corr(void) { return _corr; }
-  QColor color(void) { return _color; }
-  int noteIndex(void) { return _noteIndex; }
-  int midChunk(void) { return _midChunk; }
-  bool isValid(void) { return _isValid; }
-  void set(float low_, float high_, float corr_, QColor color_, int noteIndex_, int midChunk_) {
-    _low = low_;
-    _high = high_;
-    _corr = corr_;
-    _color = color_;
-    _noteIndex = noteIndex_;
-    _midChunk = midChunk_;
-    _isValid = true;
-  }
+  inline ZoomElement(void);
+  inline float low(void);
+  inline float high(void);
+  inline float corr(void);
+  inline QColor color(void);
+  inline int noteIndex(void);
+  inline int midChunk(void);
+  inline bool isValid(void);
+  inline void set(float low_,
+		  float high_,
+		  float corr_,
+		  const QColor & color_,
+		  int noteIndex_,
+		  int midChunk_
+		  );
 
 private:
   float _low;
@@ -68,10 +66,12 @@ public:
 
   void clear(void);
   void setZoomLevel(double zoomLevel_);
-  int size(void) { return _size; }
+  inline int size(void);
   void setSize(int size_);
-  ZoomElement &at(int x) { myassert(x >= 0 && x < int(_table.size())); return _table[x]; }
+  inline ZoomElement &at(int x);
 };
+
+#include "zoomlookup.hpp"
 
 #endif // ZOOMLOOKUP_H
 // EOF
