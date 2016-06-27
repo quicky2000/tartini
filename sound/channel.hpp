@@ -462,6 +462,12 @@ ZoomLookup & Channel::get_summary_zoom_lookup(void)
 }
 
 //------------------------------------------------------------------------------
+ZoomLookup & Channel::get_normal_zoom_lookup(void)
+{
+  return normalZoomLookup;
+}
+
+//------------------------------------------------------------------------------
 ChannelLocker::ChannelLocker(Channel *channel_)
 {
   myassert(channel_);

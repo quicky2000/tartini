@@ -219,6 +219,7 @@ class Channel
   inline const double & get_rms_ceiling(void)const;
   inline void set_rms_ceiling(const double &);
   inline ZoomLookup & get_summary_zoom_lookup(void);
+  inline ZoomLookup & get_normal_zoom_lookup(void);
 
  private:
   SoundFile *parent;
@@ -261,9 +262,9 @@ class Channel
   double rmsCeiling; //in dB
 
   ZoomLookup summaryZoomLookup;
+  ZoomLookup normalZoomLookup;
 
  public:
-  ZoomLookup normalZoomLookup;
   ZoomLookup amplitudeZoomLookup;
 
 };

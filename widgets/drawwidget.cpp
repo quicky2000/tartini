@@ -150,7 +150,7 @@ void DrawWidget::drawChannel(QPaintDevice &pd, Channel *ch, QPainter &p, double 
     }
   else
     {
-      z = &ch->normalZoomLookup;
+      z = &ch->get_normal_zoom_lookup();
     }
   ChannelLocker channelLocker(ch);
 
@@ -288,7 +288,7 @@ void DrawWidget::drawChannelFilled(Channel *ch, QPainter &p, double leftTime, do
     }
   else
     {
-      z = &ch->normalZoomLookup;
+      z = &ch->get_normal_zoom_lookup();
     }
     
   ChannelLocker channelLocker(ch);
@@ -568,7 +568,7 @@ void DrawWidget::drawChannelFilled(Channel *ch, QPainter &p, double leftTime, do
 
 void DrawWidget::setChannelVerticalView(Channel *ch, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY)
 {
-  ZoomLookup *z = &ch->normalZoomLookup;
+  ZoomLookup *z = & ch->get_normal_zoom_lookup();
     
   ChannelLocker channelLocker(ch);
 

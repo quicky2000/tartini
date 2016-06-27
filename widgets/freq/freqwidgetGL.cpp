@@ -604,7 +604,7 @@ void FreqWidgetGL::drawChannelGL(Channel *ch,
     }
   else
     {
-      z = &ch->normalZoomLookup;
+      z = &ch->get_normal_zoom_lookup();
     }
 
   ChannelLocker channelLocker(ch);
@@ -742,7 +742,7 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch,
     }
   else
     {
-      z = &ch->normalZoomLookup;
+      z = & ch->get_normal_zoom_lookup();
     }
     
   ChannelLocker channelLocker(ch);
@@ -1061,7 +1061,7 @@ void FreqWidgetGL::setChannelVerticalView(Channel *ch,
 					  double viewBottom,
 					  const double & zoomY)
 {
-  ZoomLookup *z = &ch->normalZoomLookup;
+  ZoomLookup *z = &ch->get_normal_zoom_lookup();
     
   ChannelLocker channelLocker(ch);
 
