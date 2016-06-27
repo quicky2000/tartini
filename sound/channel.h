@@ -216,6 +216,8 @@ class Channel
   inline const Filter & get_pitch_big_smoothing_filter(void)const;
   inline const double & get_rms_floor(void)const;
   inline void set_rms_floor(const double &);
+  inline const double & get_rms_ceiling(void)const;
+  inline void set_rms_ceiling(const double &);
 
  private:
   SoundFile *parent;
@@ -255,9 +257,9 @@ class Channel
   Filter *pitchSmallSmoothingFilter;
   Filter *pitchBigSmoothingFilter;
   double rmsFloor; //in dB
+  double rmsCeiling; //in dB
 
  public:
-  double rmsCeiling; //in dB
 
   ZoomLookup summaryZoomLookup;
   ZoomLookup normalZoomLookup;

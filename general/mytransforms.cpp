@@ -407,15 +407,15 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
 	  if(chunk == 0)
 	    {
 	      ch->set_rms_floor(0.0);
-	      ch->rmsCeiling = gdata->dBFloor();
+	      ch->set_rms_ceiling(gdata->dBFloor());
 	    }
 	  if(logrms + 15 < ch->get_rms_floor())
 	    {
 	      ch->set_rms_floor(logrms + 15);
 	    }
-	  if(logrms > ch->rmsCeiling)
+	  if(logrms > ch->get_rms_ceiling())
 	    {
-	      ch->rmsCeiling = logrms;
+	      ch->set_rms_ceiling(logrms);
 	    }
 	}
 

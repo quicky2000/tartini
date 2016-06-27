@@ -444,6 +444,18 @@ void Channel::set_rms_floor(const double & p_rms_floor)
 }
 
 //------------------------------------------------------------------------------
+const double & Channel::get_rms_ceiling(void)const
+{
+  return rmsCeiling;
+}
+
+//------------------------------------------------------------------------------
+void Channel::set_rms_ceiling(const double & p_rms_ceiling)
+{
+  rmsCeiling = p_rms_ceiling;
+}
+
+//------------------------------------------------------------------------------
 ChannelLocker::ChannelLocker(Channel *channel_)
 {
   myassert(channel_);

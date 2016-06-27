@@ -682,7 +682,7 @@ void FreqWidgetGL::drawChannelGL(Channel *ch,
 	  myassert(intChunk >= 0);
 	  AnalysisData *data = ch->dataAtChunk(intChunk);
 	  err = data->getCorrelation();
-	  vol = dB2Normalised(data->getLogRms(), ch->rmsCeiling, ch->get_rms_floor());
+	  vol = dB2Normalised(data->getLogRms(), ch->get_rms_ceiling(), ch->get_rms_floor());
 	  glLineWidth(lineWidth);
 	  if(gdata->pitchContourMode() == 0)
 	    {
@@ -1046,7 +1046,7 @@ bool FreqWidgetGL::calcZoomElement(Channel *ch,
       high = 0;
       noteIndex = NO_NOTE;
     }
-  float corr = err->getCorrelation() * dB2Normalised(err->getLogRms(), ch->rmsCeiling, ch->get_rms_floor());
+  float corr = err->getCorrelation() * dB2Normalised(err->getLogRms(), ch->get_rms_ceiling(), ch->get_rms_floor());
   QColor theColor = (gdata->pitchContourMode() == 0) ? colorBetween(gdata->backgroundColor(), ch->get_color(), corr) : ch->get_color();
 
   ze.set(low, high, corr, theColor, noteIndex, (startChunk+finishChunk)/2);
