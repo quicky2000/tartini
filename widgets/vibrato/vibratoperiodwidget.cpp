@@ -140,7 +140,7 @@ void VibratoPeriodWidget::doUpdate()
       const NoteData *note = new NoteData();
       note = &(active->get_note_data()[data->getNoteIndex()]);
 
-      int smoothDelay = active->pitchBigSmoothingFilter->delay();
+      int smoothDelay = active->get_pitch_big_smoothing_filter().delay();
       int currentTime = active->chunkAtCurrentTime() * active->framesPerChunk() + smoothDelay;
       int maximaSize = note->get_maxima()->size();
       int minimaSize = note->get_minima()->size();
@@ -236,7 +236,7 @@ void VibratoPeriodWidget::doUpdate()
         theDelay = 0;
       } else {
         thePitchLookup = active->get_pitch_lookup();
-        theDelay = active->pitchBigSmoothingFilter->delay() - active->get_pitch_small_smoothing_filter().delay();
+        theDelay = active->get_pitch_big_smoothing_filter().delay() - active->get_pitch_small_smoothing_filter().delay();
       }
 
       int theLeftMinimumTime = leftMinimumTime - theDelay;

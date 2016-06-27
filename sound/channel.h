@@ -213,6 +213,7 @@ class Channel
   inline const large_vector<NoteData> & get_note_data(void) const;
   inline void apply_highpass_filter(const float *input, float *output, int n);
   inline const Filter & get_pitch_small_smoothing_filter(void)const;
+  inline const Filter & get_pitch_big_smoothing_filter(void)const;
 
  private:
   SoundFile *parent;
@@ -250,9 +251,9 @@ class Channel
   large_vector<NoteData> noteData;
   Filter *highPassFilter;
   Filter *pitchSmallSmoothingFilter;
+  Filter *pitchBigSmoothingFilter;
 
  public:
-  Filter *pitchBigSmoothingFilter;
   double rmsFloor; //in dB
   double rmsCeiling; //in dB
 

@@ -163,7 +163,7 @@ void VibratoCircleWidget::doUpdate()
       note = &(active->get_note_data()[data->getNoteIndex()]);
 
       // Determine which delay to use
-      int smoothDelay = active->pitchBigSmoothingFilter->delay();
+      int smoothDelay = active->get_pitch_big_smoothing_filter().delay();
       large_vector<float> pitchLookupUsed = active->get_pitch_lookup_smoothed();
 
       int currentTime = active->chunkAtCurrentTime() * active->framesPerChunk() + smoothDelay;

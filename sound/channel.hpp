@@ -426,6 +426,12 @@ const Filter & Channel::get_pitch_small_smoothing_filter(void)const
 }
 
 //------------------------------------------------------------------------------
+const Filter & Channel::get_pitch_big_smoothing_filter(void)const
+{
+  return *pitchBigSmoothingFilter;
+}
+
+//------------------------------------------------------------------------------
 ChannelLocker::ChannelLocker(Channel *channel_)
 {
   myassert(channel_);

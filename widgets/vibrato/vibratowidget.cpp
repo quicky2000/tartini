@@ -206,7 +206,7 @@ void VibratoWidget::doUpdate()
 
       float windowOffset;
       large_vector<float> pitchLookupUsed = active->get_pitch_lookup_smoothed();
-      int smoothDelay = active->pitchBigSmoothingFilter->delay();
+      int smoothDelay = active->get_pitch_big_smoothing_filter().delay();
 
       if ((myEndChunk - myStartChunk) * zoomFactorX > width() - 2 * noteLabelOffset) {
         // The vibrato-polyline doesn't fit in the window
