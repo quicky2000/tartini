@@ -63,12 +63,6 @@ private:
 public:
   std::vector<ZoomElement> _table;
 
-/*#ifdef MACX
-  std::bit_vector _hasValue;
-#else
-  std::vector<bool> _hasValue;
-#endif
-*/
   ZoomLookup(void);
   virtual ~ZoomLookup(void);
 
@@ -77,9 +71,6 @@ public:
   int size(void) { return _size; }
   void setSize(int size_);
   ZoomElement &at(int x) { myassert(x >= 0 && x < int(_table.size())); return _table[x]; }
-  //bool hasValue(int x) { myassert(x >= 0 && x < int(_hasValue.size())); return _hasValue[x]; }
-  //void setHasValue(int x, bool val=true) { myassert(x >= 0 && x < int(_hasValue.size())); _hasValue[x] = val; }
-  //void setValue(int x, ZoomElement *z);
 };
 
 #endif // ZOOMLOOKUP_H

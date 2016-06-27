@@ -42,16 +42,5 @@ void ZoomLookup::setSize(int size_)
 {
   _size = size_;
   _table.resize(size_);
-  //_hasValue.resize(size_, false);
 }
-
-
-/*
-void ZoomLookup::setValue(int x, ZoomElement *z)
-{
-  _table[x] = *z;
-  setHasValue(x);
-}
-*/
-
- // EOF
+// EOF
