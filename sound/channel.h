@@ -214,6 +214,8 @@ class Channel
   inline void apply_highpass_filter(const float *input, float *output, int n);
   inline const Filter & get_pitch_small_smoothing_filter(void)const;
   inline const Filter & get_pitch_big_smoothing_filter(void)const;
+  inline const double & get_rms_floor(void)const;
+  inline void set_rms_floor(const double &);
 
  private:
   SoundFile *parent;
@@ -252,9 +254,9 @@ class Channel
   Filter *highPassFilter;
   Filter *pitchSmallSmoothingFilter;
   Filter *pitchBigSmoothingFilter;
+  double rmsFloor; //in dB
 
  public:
-  double rmsFloor; //in dB
   double rmsCeiling; //in dB
 
   ZoomLookup summaryZoomLookup;

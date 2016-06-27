@@ -432,6 +432,18 @@ const Filter & Channel::get_pitch_big_smoothing_filter(void)const
 }
 
 //------------------------------------------------------------------------------
+const double & Channel::get_rms_floor(void)const
+{
+  return rmsFloor;
+}
+
+//------------------------------------------------------------------------------
+void Channel::set_rms_floor(const double & p_rms_floor)
+{
+  rmsFloor = p_rms_floor;
+}
+
+//------------------------------------------------------------------------------
 ChannelLocker::ChannelLocker(Channel *channel_)
 {
   myassert(channel_);
