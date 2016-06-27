@@ -27,13 +27,13 @@ class ZoomElement
 {
 public:
   inline ZoomElement(void);
-  inline float low(void);
-  inline float high(void);
-  inline float corr(void);
-  inline QColor color(void);
-  inline int noteIndex(void);
-  inline int midChunk(void);
-  inline bool isValid(void);
+  inline float low(void) const;
+  inline float high(void) const;
+  inline float corr(void) const;
+  inline const QColor & color(void) const;
+  inline int noteIndex(void) const;
+  inline int midChunk(void) const;
+  inline bool isValid(void) const;
   inline void set(float low_,
 		  float high_,
 		  float corr_,
@@ -66,9 +66,9 @@ public:
 
   void clear(void);
   void setZoomLevel(double zoomLevel_);
-  inline int size(void);
+  inline int size(void) const;
   void setSize(int size_);
-  inline ZoomElement &at(int x);
+  inline ZoomElement & at(int x);
 };
 
 #include "zoomlookup.hpp"

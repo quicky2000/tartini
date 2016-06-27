@@ -23,43 +23,43 @@ ZoomElement::ZoomElement(void)
 }
 
 //------------------------------------------------------------------------------
-float ZoomElement::low(void)
+float ZoomElement::low(void) const
 {
   return _low;
 }
 
 //------------------------------------------------------------------------------
-float ZoomElement::high(void)
+float ZoomElement::high(void) const
 {
   return _high;
 }
 
 //------------------------------------------------------------------------------
-float ZoomElement::corr(void)
+float ZoomElement::corr(void) const
 {
   return _corr;
 }
 
 //------------------------------------------------------------------------------
-QColor ZoomElement::color(void)
+const QColor & ZoomElement::color(void) const
 {
   return _color;
 }
 
 //------------------------------------------------------------------------------
-int ZoomElement::noteIndex(void)
+int ZoomElement::noteIndex(void) const
 {
   return _noteIndex;
 }
 
 //------------------------------------------------------------------------------
-int ZoomElement::midChunk(void)
+int ZoomElement::midChunk(void) const
 {
   return _midChunk;
 }
 
 //------------------------------------------------------------------------------
-bool ZoomElement::isValid(void)
+bool ZoomElement::isValid(void) const
 {
   return _isValid;
 }
@@ -83,7 +83,7 @@ void ZoomElement::set(float low_,
 }
 
 //------------------------------------------------------------------------------
-int ZoomLookup::size(void)
+int ZoomLookup::size(void) const
 {
   return _size;
 }
