@@ -391,16 +391,16 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
 	  //do it for gdata. this is only here for old code. remove some stage
 	  if(chunk == 0)
 	    {
-	      gdata->rmsFloor() = 0.0;
-	      gdata->rmsCeiling() = gdata->dBFloor();
+	      gdata->set_rms_floor(0.0);
+	      gdata->set_rms_ceiling(gdata->dBFloor());
 	    }
 	  if(logrms + 15 < gdata->rmsFloor())
 	    {
-	      gdata->rmsFloor() = logrms + 15;
+	      gdata->set_rms_floor(logrms + 15);
 	    }
 	  if(logrms > gdata->rmsCeiling())
 	    {
-	      gdata->rmsCeiling() = logrms;
+	      gdata->set_rms_ceiling(logrms);
 	    }
 
 	  //do it for the channel

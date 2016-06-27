@@ -229,8 +229,10 @@ public:
 
   inline const double & dBFloor(void)const;
   inline void setDBFloor(double dBFloor_);
-  inline double & rmsFloor(void);
-  inline double & rmsCeiling(void);
+  inline const double & rmsFloor(void)const;
+  inline const double & rmsCeiling(void)const;
+  inline void set_rms_floor(const double &);
+  inline void set_rms_ceiling(const double &);
 
   inline int musicKey(void)const;
   inline int musicKeyType(void)const;

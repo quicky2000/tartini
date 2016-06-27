@@ -426,15 +426,27 @@ void GData::setDBFloor(double dBFloor_)
 }
 
 //------------------------------------------------------------------------------
-double & GData::rmsFloor(void)
+const double & GData::rmsFloor(void)const
 {
   return amp_thresholds[AMPLITUDE_RMS][0];
 }
 
 //------------------------------------------------------------------------------
-double & GData::rmsCeiling(void)
+const double & GData::rmsCeiling(void)const
 {
   return amp_thresholds[AMPLITUDE_RMS][1];
+}
+
+//------------------------------------------------------------------------------
+void GData::set_rms_floor(const double & p_rms_floor)
+{
+  amp_thresholds[AMPLITUDE_RMS][0] = p_rms_floor;
+}
+
+//------------------------------------------------------------------------------
+void GData::set_rms_ceiling(const double & p_rms_ceiling)
+{
+  amp_thresholds[AMPLITUDE_RMS][1] = p_rms_ceiling;
 }
 
 //------------------------------------------------------------------------------
