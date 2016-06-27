@@ -281,7 +281,7 @@ void AmplitudeWidget::drawChannelAmplitudeGL(Channel *ch)
   View & view = gdata->getView();
   
   ChannelLocker channelLocker(ch);
-  ZoomLookup *z = &ch->amplitudeZoomLookup;
+  ZoomLookup *z = &ch->get_amplitude_zoom_lookup();
   
   // baseX is the no. of chunks a pixel must represent.
   double baseX = view.zoomX() / ch->timePerChunk();
@@ -381,7 +381,7 @@ void AmplitudeWidget::drawChannelAmplitudeFilledGL(Channel *ch)
   View & view = gdata->getView();
   
   ChannelLocker channelLocker(ch);
-  ZoomLookup *z = &ch->amplitudeZoomLookup;
+  ZoomLookup *z = &ch->get_amplitude_zoom_lookup();
   
   // baseX is the no. of chunks a pixel must represent.
   double baseX = view.zoomX() / ch->timePerChunk();
