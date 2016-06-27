@@ -381,7 +381,7 @@ void SoundFile::applyEqualLoudnessFilter(int n)
       printf("before: %f == %f\n", channels(c)->filterStateY2, channels(c)->highPassFilter->_y[1]);
 #endif // PRINTF_DEBUG
 
-      channels(c)->highPassFilter->filter(tempWindowBuffer[c], tempWindowBufferFiltered[c], n);
+      channels(c)->apply_highpass_filter(tempWindowBuffer[c], tempWindowBufferFiltered[c], n);
       for(j=0; j<n; j++)
 	{
 	  tempWindowBufferFiltered[c][j] = bound(tempWindowBufferFiltered[c][j], -1.0f, 1.0f);

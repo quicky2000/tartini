@@ -211,6 +211,7 @@ class Channel
   inline const Array1d<float> & get_detailed_pitch_data(void) const;
   inline const Array1d<float> & get_detailed_pitch_data_smoothed(void) const;
   inline const large_vector<NoteData> & get_note_data(void) const;
+  inline void apply_highpass_filter(const float *input, float *output, int n);
 
  private:
   SoundFile *parent;
@@ -246,9 +247,9 @@ class Channel
   Array1d<float> detailedPitchData;
   Array1d<float> detailedPitchDataSmoothed;
   large_vector<NoteData> noteData;
+  Filter *highPassFilter;
 
  public:
-  Filter *highPassFilter;
   Filter *pitchSmallSmoothingFilter;
   Filter *pitchBigSmoothingFilter;
   double rmsFloor; //in dB

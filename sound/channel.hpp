@@ -414,6 +414,12 @@ const large_vector<NoteData> & Channel::get_note_data(void) const
 }
 
 //------------------------------------------------------------------------------
+void Channel::apply_highpass_filter(const float *input, float *output, int n)
+{
+  highPassFilter->filter(input, output, n);
+}
+
+//------------------------------------------------------------------------------
 ChannelLocker::ChannelLocker(Channel *channel_)
 {
   myassert(channel_);
