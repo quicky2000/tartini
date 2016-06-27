@@ -132,7 +132,7 @@ int WaveStream::read_header(void)
   header_length = 36;
   
   //read though the rest of the chunk
-  for(int j=0; j<len; j++)
+  for(int j = 0; j < len; j++)
     {
       fgetc(file);
       header_length++;
@@ -166,12 +166,14 @@ int WaveStream::read_header(void)
 	    }
 	}
     }
-  //printf("header_length=%d\n", header_length);
+#ifdef PRINTF_DEBUG
+  printf("header_length=%d\n", header_length);
+#endif // PRINTF_DEBUG
   _total_frames = len / frame_size();
 
   return 0;
 
-missing_data:
+ missing_data:
   fprintf(stderr, "Error reading header\n");
   return -1;
 }
@@ -185,7 +187,7 @@ long WaveStream::read_bytes(void *data, long length)
     }
 
   long read = fread(data, 1, length, file);
-  _pos += read/frame_size();
+  _pos += read / frame_size();
   if(pos() > totalFrames())
     {
       _total_frames = pos();
@@ -218,7 +220,10 @@ int WaveStream::open_write(const char *filename, int freq_, int channels_, int b
   bits = bits_;
   _pos = _total_frames = 0;
   file = fopen(filename, "wb");
-  if(!file) return -1;
+  if(!file)
+    {
+      return -1;
+    }
   mode = F_WRITE;
   write_header();
   return 0;

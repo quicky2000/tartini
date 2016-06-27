@@ -15,16 +15,16 @@
 
 #include "zoomlookup.h"
 
-ZoomLookup::ZoomLookup()
+ZoomLookup::ZoomLookup(void)
 {
   _size = 0;
 }
 
-ZoomLookup::~ZoomLookup()
+ZoomLookup::~ZoomLookup(void)
 {
 }
 
-void ZoomLookup::clear()
+void ZoomLookup::clear(void)
 {
   _table.clear();
   //_hasValue.clear();
@@ -53,3 +53,5 @@ void ZoomLookup::setValue(int x, ZoomElement *z)
   setHasValue(x);
 }
 */
+
+ // EOF
