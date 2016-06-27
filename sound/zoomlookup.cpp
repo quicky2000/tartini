@@ -15,29 +15,36 @@
 
 #include "zoomlookup.h"
 
-ZoomLookup::ZoomLookup(void)
+//------------------------------------------------------------------------------
+ZoomLookup::ZoomLookup(void):
+  _size(0)
 {
-  _size = 0;
 }
 
+//------------------------------------------------------------------------------
 ZoomLookup::~ZoomLookup(void)
 {
 }
 
+//------------------------------------------------------------------------------
 void ZoomLookup::clear(void)
 {
   _table.clear();
-  //_hasValue.clear();
   _size = 0;
 }
 
+//------------------------------------------------------------------------------
 void ZoomLookup::setZoomLevel(double zoomLevel_)
 {
-  if(_zoomLevel == zoomLevel_) return;
+  if(_zoomLevel == zoomLevel_)
+    {
+      return;
+    }
   _zoomLevel = zoomLevel_;
   clear();
 }
 
+//------------------------------------------------------------------------------
 void ZoomLookup::setSize(int size_)
 {
   _size = size_;
