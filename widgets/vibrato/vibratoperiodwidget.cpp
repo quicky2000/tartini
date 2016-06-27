@@ -236,7 +236,7 @@ void VibratoPeriodWidget::doUpdate()
         theDelay = 0;
       } else {
         thePitchLookup = active->get_pitch_lookup();
-        theDelay = active->pitchBigSmoothingFilter->delay() - active->pitchSmallSmoothingFilter->delay();
+        theDelay = active->pitchBigSmoothingFilter->delay() - active->get_pitch_small_smoothing_filter().delay();
       }
 
       int theLeftMinimumTime = leftMinimumTime - theDelay;

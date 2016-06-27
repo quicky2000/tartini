@@ -420,6 +420,12 @@ void Channel::apply_highpass_filter(const float *input, float *output, int n)
 }
 
 //------------------------------------------------------------------------------
+const Filter & Channel::get_pitch_small_smoothing_filter(void)const
+{
+  return *pitchSmallSmoothingFilter;
+}
+
+//------------------------------------------------------------------------------
 ChannelLocker::ChannelLocker(Channel *channel_)
 {
   myassert(channel_);

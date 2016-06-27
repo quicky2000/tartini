@@ -32,7 +32,7 @@ class FixedAverageFilter : public Filter
   void init(int size);
   void filter(const float *input, float *output, int n);
   void reset();
-  int delay() { return _size/2; }
+  int delay() const { return _size/2; }
 };
 
 #endif
