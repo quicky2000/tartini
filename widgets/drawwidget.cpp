@@ -144,9 +144,14 @@ QColor DrawWidget::colorBetween(QColor a, QColor b, double ratio)
 void DrawWidget::drawChannel(QPaintDevice &pd, Channel *ch, QPainter &p, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType)
 {
   ZoomLookup *z;
-  if(viewType == DRAW_VIEW_SUMMARY) z = &ch->summaryZoomLookup;
-  else z = &ch->normalZoomLookup;
-
+  if(viewType == DRAW_VIEW_SUMMARY)
+    {
+      z = & ch->get_summary_zoom_lookup();
+    }
+  else
+    {
+      z = &ch->normalZoomLookup;
+    }
   ChannelLocker channelLocker(ch);
 
   QColor current = ch->get_color();
@@ -277,8 +282,14 @@ void DrawWidget::drawChannel(QPaintDevice &pd, Channel *ch, QPainter &p, double 
 void DrawWidget::drawChannelFilled(Channel *ch, QPainter &p, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType)
 {
   ZoomLookup *z;
-  if(viewType == DRAW_VIEW_SUMMARY) z = &ch->summaryZoomLookup;
-  else z = &ch->normalZoomLookup;
+  if(viewType == DRAW_VIEW_SUMMARY)
+    {
+      z = & ch->get_summary_zoom_lookup();
+    }
+  else
+    {
+      z = &ch->normalZoomLookup;
+    }
     
   ChannelLocker channelLocker(ch);
 

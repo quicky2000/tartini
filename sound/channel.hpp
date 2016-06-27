@@ -456,6 +456,12 @@ void Channel::set_rms_ceiling(const double & p_rms_ceiling)
 }
 
 //------------------------------------------------------------------------------
+ZoomLookup & Channel::get_summary_zoom_lookup(void)
+{
+  return summaryZoomLookup;
+}
+
+//------------------------------------------------------------------------------
 ChannelLocker::ChannelLocker(Channel *channel_)
 {
   myassert(channel_);

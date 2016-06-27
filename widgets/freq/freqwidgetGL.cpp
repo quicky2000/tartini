@@ -600,7 +600,7 @@ void FreqWidgetGL::drawChannelGL(Channel *ch,
   ZoomLookup *z;
   if(viewType == DRAW_VIEW_SUMMARY)
     {
-      z = &ch->summaryZoomLookup;
+      z = &ch->get_summary_zoom_lookup();
     }
   else
     {
@@ -738,7 +738,7 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch,
   ZoomLookup *z;
   if(viewType == DRAW_VIEW_SUMMARY)
     {
-      z = &ch->summaryZoomLookup;
+      z = & ch->get_summary_zoom_lookup();
     }
   else
     {
