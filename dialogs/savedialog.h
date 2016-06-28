@@ -26,9 +26,9 @@ class SaveDialog : public Q3FileDialog
 {
   Q_OBJECT
 public:
-  SaveDialog(/*const QString & dirName, const QString & filter = QString::null, */QWidget * parent = 0);
-  ~SaveDialog();
-  void accept();
+  SaveDialog(QWidget * parent = 0);
+  ~SaveDialog(void);
+  void accept(void);
 
   static QString getSaveWavFileName(QWidget *parent = 0);
   
@@ -36,4 +36,5 @@ public:
   QCheckBox *appendWavCheckBox;
 };
 
-#endif
+#endif // SAVE_DIALOG_H
+// EOF
