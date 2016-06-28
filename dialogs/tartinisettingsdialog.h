@@ -6,38 +6,42 @@
 ** init() function in place of a constructor, and a destroy() function in
 ** place of a destructor.
 *****************************************************************************/
+#ifndef TARTINISETTINGSDIALOG_H
+#define TARTINISETTINGSDIALOG_H
+
 #include <qcolordialog.h>
-//Added by qt3to4:
-//#include <Q3Frame>
 #include <QCustomEvent>
 #include "mainwindow.h"
 #include <QDialog>
 #include "ui_settingsdialog.h"
-//#include "settings.h"
 #include <QSettings>
 
 class GData;
 
-class TartiniSettingsDialog : public QDialog, private Ui_SettingsDialog {
+class TartiniSettingsDialog : public QDialog, private Ui_SettingsDialog
+{
   Q_OBJECT
 
 public:
   TartiniSettingsDialog(QWidget *parent = 0);
 
   void loadSetting(QObject *obj, const QString &group);
-  void init();
+  void init(void);
 
 public slots:
   QString getPath(const QString initialPath);
-  void changeTempFolder();
-  void fileNameChanged();
-  void getBackgroundColor();
-  void getShading1Color();
-  void getShading2Color();
+  void changeTempFolder(void);
+  void fileNameChanged(void);
+  void getBackgroundColor(void);
+  void getShading1Color(void);
+  void getShading2Color(void);
   void saveSetting(QObject *obj, const QString group);
-  void saveSettings();
-  void checkAnalysisEnabled();
+  void saveSettings(void);
+  void checkAnalysisEnabled(void);
   void onNoteRangeChoice(int choice);
   static void setUnknownsToDefault(GData & p_gdata);
   void resetDefaults();
 };
+
+#endif // TARTINISETTINGSDIALOG_H
+// EOF
