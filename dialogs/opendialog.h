@@ -16,7 +16,6 @@
 #ifndef OPENDIALOG_H
 #define OPENDIALOG_H
 
-//#include <q3filedialog.h>
 #include <QFileDialog>
 
 class QCheckBox;
@@ -25,13 +24,14 @@ class OpenDialog : public QFileDialog
 {
   Q_OBJECT
 public:
-  OpenDialog(/*const QString & dirName, const QString & filter, */QWidget * parent);
-  ~OpenDialog();
-  void accept();
+  OpenDialog(QWidget * parent);
+  ~OpenDialog(void);
+  void accept(void);
   
   static QString getOpenWavFileName(QWidget *parent = 0);
   
   QCheckBox *rememberFolderCheckBox;
 };
 
-#endif
+#endif // OPENDIALOG_H
+// EOF

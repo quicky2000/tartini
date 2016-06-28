@@ -23,6 +23,7 @@
 #include <QVBoxLayout>
 #include "gdata.h"
 
+//------------------------------------------------------------------------------
 OpenDialog::OpenDialog(QWidget * parent)
 // : Q3FileDialog(QDir::convertSeparators(gdata->settings.getString("Dialogs", "openFilesFolder")),
 // : QFileDialog(QDir::convertSeparators(gdata->qsettings->value("Dialogs/openFilesFolder", QDir::currentDirPath()).toString()),
@@ -43,11 +44,13 @@ OpenDialog::OpenDialog(QWidget * parent)
 */
 }
 
-OpenDialog::~OpenDialog()
+//------------------------------------------------------------------------------
+OpenDialog::~OpenDialog(void)
 {
 }
 
-void OpenDialog::accept()
+//------------------------------------------------------------------------------
+void OpenDialog::accept(void)
 {
 /*
   bool remember = rememberFolderCheckBox->isChecked();
@@ -63,9 +66,12 @@ void OpenDialog::accept()
   QFileDialog::accept();
 }
 
+//------------------------------------------------------------------------------
 QString OpenDialog::getOpenWavFileName(QWidget *parent)
 {
   OpenDialog d(parent);
   if(d.exec() != QDialog::Accepted) return QString();
   return d.selectedFile();
 }
+
+// EOF
