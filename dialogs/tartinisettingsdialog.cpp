@@ -7,8 +7,6 @@
 ** place of a destructor.
 *****************************************************************************/
 #include <qcolordialog.h>
-//Added by qt3to4:
-//#include <Q3Frame>
 #include <QCustomEvent>
 #include "mainwindow.h"
 #include "tartinisettingsdialog.h"
@@ -16,15 +14,14 @@
 #include "audio_stream.h"
 #include <QFileDialog>
 
-TartiniSettingsDialog::TartiniSettingsDialog(QWidget *parent)
-  : QDialog(parent, Qt::WDestructiveClose)
+TartiniSettingsDialog::TartiniSettingsDialog(QWidget *parent):
+  QDialog(parent, Qt::WDestructiveClose)
 {
   setupUi(this);
 
   connect(okButton, SIGNAL(clicked()), this, SLOT(saveSettings()));
   connect(cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
 
-  //connect( listBox, SIGNAL( highlighted(int) ), stack, SLOT( raiseWidget(int) ) );
   connect( backgroundButton, SIGNAL( clicked() ), this, SLOT( getBackgroundColor() ) );
   connect( shading1Button, SIGNAL( clicked() ), this, SLOT( getShading1Color() ) );
   connect( shading2Button, SIGNAL( clicked() ), this, SLOT( getShading2Color() ) );
@@ -40,37 +37,27 @@ TartiniSettingsDialog::TartiniSettingsDialog(QWidget *parent)
 
 void TartiniSettingsDialog::loadSetting(QObject *obj, const QString &group)
 {
-  //printf("loadSettings %s, %s, %s\n", obj->metaObject()->className(), obj->objectName().latin1(), group.latin1());
   QString key = obj->name();
   QString fullKey = group + "/" + key;
 
   if(obj->isA("QGroupBox")) {
     //Iterate over the groupBox's children
-    //const QObjectList *widgets = obj->children();
     const QList<QObject*> &widgets = obj->children();
-    //if(!widgets) return;
-    //QObject *childObj;
     for(QList<QObject*>::const_iterator it = widgets.begin(); it < widgets.end(); ++it) {
       loadSetting(*it, group);
     }
   } else if(obj->isA("QLineEdit")) {
-    //((QLineEdit*)obj)->setText((gdata->settings).getString(group, key));
     ((QLineEdit*)obj)->setText(gdata->getSettingsStringValue(fullKey));
   } else if(obj->isA("QComboBox")) {
-    //((QComboBox*)obj)->setCurrentText((gdata->settings).getString(group, key));
     ((QComboBox*)obj)->setCurrentText(gdata->getSettingsStringValue(fullKey));
   } else if(obj->isA("QPushButton") && ((QPushButton*)obj)->isToggleButton()) {
-    //((QPushButton*)obj)->setOn((gdata->settings).getBool(group, key));
     ((QPushButton*)obj)->setOn(gdata->getSettingsBoolValue(fullKey));
   } else if(obj->isA("QCheckBox")) {
-    //((QCheckBox*)obj)->setChecked((gdata->settings).getBool(group, key));
     ((QCheckBox*)obj)->setChecked(gdata->getSettingsBoolValue(fullKey));
   } else if(obj->isA("QSpinBox")) {
-    //((QSpinBox*)obj)->setValue((gdata->settings).getInt(group, key));
     ((QSpinBox*)obj)->setValue(gdata->getSettingsIntValue(fullKey));
   } else if(obj->isA("QFrame")) {
     QColor color;
-    //color.setNamedColor((gdata->settings).getString(group, key));
     color.setNamedColor(gdata->getSettingsStringValue(fullKey));
     ((QFrame*)obj)->setPaletteBackgroundColor(color);
   }
@@ -86,50 +73,23 @@ void TartiniSettingsDialog::init()
   soundOutput->insertStringList(AudioStream::getOutputDeviceNames());
   
   QString group;
-  //QObject *obj;
-  //const QObjectList *widgets;
   //Iterate over all groups
   for (int i = 0; i < tabWidget->count(); i++) {
     //Iterate over all widgets in the current group and load their settings
     group = tabWidget->tabText(i);
-    //const QList<QObject*> &widgets = stack->widget(i)->children();
     const QList<QObject*> &widgets = tabWidget->widget(i)->children();
     for(QList<QObject*>::const_iterator it=widgets.begin(); it < widgets.end(); ++it) {
       loadSetting(*it, group);
     }
   }
-
-/*  #ifdef LINUX
-  soundInput->setEditable(true);
-  soundOutput->setEditable(true);
-  #endif
-*/
   checkAnalysisEnabled();
 }
 
 QString TartiniSettingsDialog::getPath(const QString initialPath)
 {
-  //return Q3FileDialog::getExistingDirectory(initialPath, this, "getDirectory", "Choose a directory", true, false);
   return QFileDialog::getExistingDirectory(this, "Choose a directory", initialPath);
 }
 
-/*
-void TartiniSettingsDialog::changeOpenFolder()
-{
-  if(openFilesFolder) {
-    QString path = getPath(openFilesFolder->text());
-    if (path != "") openFilesFolder->setText(QDir::convertSeparators(path));
-  }
-}
-
-void TartiniSettingsDialog::changeSaveFolder()
-{
-  if(saveFilesFolder) {
-    QString path = getPath(saveFilesFolder->text());
-    if (path != "") saveFilesFolder->setText(QDir::convertSeparators(path));
-  }
-}
-*/
 void TartiniSettingsDialog::changeTempFolder()
 {
   if(tempFilesFolder) {
@@ -138,33 +98,6 @@ void TartiniSettingsDialog::changeTempFolder()
   }
 }
 
-/*
-void TartiniSettingsDialog::openFilesTextChanged(const QString &s)
-{
-  if(bindOpenSaveFolders->isOn() && s != saveFilesFolder->text())
-    saveFilesFolder->setText(s);
-}
-
-void TartiniSettingsDialog::saveFilesTextChanged(const QString &s)
-{
-  if(bindOpenSaveFolders->isOn() && openFilesFolder->text() != s)
-    openFilesFolder->setText(s);
-}
-
-void TartiniSettingsDialog::toggleBindFolder(bool state)
-{
-  if(state) {
-    bindOpenSaveFolders->setPixmap(QPixmap::fromMimeSource("chain_closed.png"));
-    if(openFilesFolder->text().isEmpty()) {
-      openFilesFolder->setText(saveFilesFolder->text());
-    } else {
-      saveFilesFolder->setText(openFilesFolder->text());
-    }
-  } else {
-    bindOpenSaveFolders->setPixmap(QPixmap::fromMimeSource("chain_open.png"));
-  }
-}
-*/
 void TartiniSettingsDialog::fileNameChanged()
 {
   QString filename;
@@ -208,30 +141,21 @@ void TartiniSettingsDialog::saveSetting(QObject *obj, const QString group)
 
   if(obj->isA("QGroupBox")) {
     //Iterate over the groupBox's children
-    //const QObjectList *widgets = obj->children();
     const QList<QObject*> &widgets = obj->children();
-    //if(!widgets) return;
-    //QObject *childObj;
     for(QList<QObject*>::const_iterator it=widgets.begin(); it < widgets.end(); ++it) {
       saveSetting(*it, group);
     }
   } else if(obj->isA("QLineEdit")) {
-    //(gdata->settings).setString(group, key, ((QLineEdit*)obj)->text());
     gdata->setSettingsValue(fullKey, ((QLineEdit*)obj)->text());
   } else if(obj->isA("QComboBox")) {
-    //(gdata->settings).setString(group, key, ((QComboBox*)obj)->currentText());
     gdata->setSettingsValue(fullKey, ((QComboBox*)obj)->currentText());
   } else if(obj->isA("QPushButton") && ((QPushButton*)obj)->isToggleButton()) {
-    //(gdata->settings).setBool(group, key, ((QPushButton*)obj)->isOn());
     gdata->setSettingsValue(fullKey, ((QPushButton*)obj)->isOn());
   } else if(obj->isA("QCheckBox")) {
-    //(gdata->settings).setBool(group, key, ((QCheckBox*)obj)->isChecked());
     gdata->setSettingsValue(fullKey, ((QCheckBox*)obj)->isChecked());
   } else if(obj->isA("QSpinBox")) {
-    //(gdata->settings).setInt(group, key, ((QSpinBox*)obj)->value());
     gdata->setSettingsValue(fullKey, ((QSpinBox*)obj)->value());
   } else if(obj->isA("QFrame")) {
-    //(gdata->settings).setString(group, key, ((QFrame*)obj)->paletteBackgroundColor().name());
     gdata->setSettingsValue(fullKey, ((QFrame*)obj)->paletteBackgroundColor().name());
   }
 }
@@ -241,8 +165,6 @@ void TartiniSettingsDialog::saveSettings()
   // Go through all the categories on the left, and save all the preferences we can from the fields.
   // Combo boxes must be done separately.
   QString group;
-  //QObject *obj;
-  //const QObjectList *widgets;
   //Iterate over all the groups
   for(int i = 0; i < tabWidget->count(); i++) {
     //Iterate over all widgets in the current group and save their settings
@@ -253,7 +175,6 @@ void TartiniSettingsDialog::saveSettings()
     }
   }
   
-  //(gdata->settings).save();
   gdata->syncSettings();
 	
   QApplication::postEvent(mainWindow, new QCustomEvent(SETTINGS_CHANGED));
@@ -264,19 +185,13 @@ void TartiniSettingsDialog::saveSettings()
 
 void TartiniSettingsDialog::checkAnalysisEnabled()
 {
-  //QObjectList *widgets = stack->widget(0)->queryList("QComboBox", "noteRangeChoice", false, true);
-  //QComboBox *noteRangeChoice = (QComboBox*)widgets->first();
   QComboBox *noteRangeChoice = tabWidget->widget(0)->findChild<QComboBox *>("noteRangeChoice");
   myassert(noteRangeChoice);
   
   int choice = noteRangeChoice->currentItem();
   
-  //widgets = stack->widget(2)->queryList("QGroupBox", "bufferSizeGroupBox", false, true);
-  //QGroupBox *bufferSizeGroupBox = (QGroupBox*)widgets->first();
   QGroupBox *bufferSizeGroupBox = tabWidget->widget(2)->findChild<QGroupBox*>("bufferSizeGroupBox");
   myassert(bufferSizeGroupBox);
-  //widgets = stack->widget(2)->queryList("QGroupBox", "stepSizeGroupBox", false, true);
-  //QGroupBox *stepSizeGroupBox = (QGroupBox*)widgets->first();
   QGroupBox *stepSizeGroupBox = tabWidget->widget(2)->findChild<QGroupBox*>("stepSizeGroupBox");
   myassert(stepSizeGroupBox);
   
@@ -291,28 +206,16 @@ void TartiniSettingsDialog::checkAnalysisEnabled()
 
 void TartiniSettingsDialog::onNoteRangeChoice(int choice)
 {
-  //QObjectList *widgets = stack->widget(2)->queryList("QSpinBox", "bufferSizeValue", false, true);
-  //QSpinBox *bufferSizeValue = (QSpinBox*)widgets->first();
   QSpinBox *bufferSizeValue = tabWidget->widget(2)->findChild<QSpinBox*>("bufferSizeValue");
   myassert(bufferSizeValue);
-  //widgets = stack->widget(2)->queryList("QComboBox", "bufferSizeUnit", false, true);
-  //QComboBox *bufferSizeUnit = (QComboBox*)widgets->first();
   QComboBox *bufferSizeUnit = tabWidget->widget(2)->findChild<QComboBox*>("bufferSizeUnit");
   myassert(bufferSizeUnit);
-  //widgets = stack->widget(2)->queryList("QCheckBox", "bufferSizeRound", false, true);
-  //QCheckBox *bufferSizeRound = (QCheckBox*)widgets->first();
   QCheckBox *bufferSizeRound = tabWidget->widget(2)->findChild<QCheckBox*>("bufferSizeRound");
   myassert(bufferSizeRound);
-  //widgets = stack->widget(2)->queryList("QSpinBox", "stepSizeValue", false, true);
-  //QSpinBox *stepSizeValue = (QSpinBox*)widgets->first();
   QSpinBox *stepSizeValue = tabWidget->widget(2)->findChild<QSpinBox*>("stepSizeValue");
   myassert(stepSizeValue);
-  //widgets = stack->widget(2)->queryList("QComboBox", "stepSizeUnit", false, true);
-  //QComboBox *stepSizeUnit = (QComboBox*)widgets->first();
   QComboBox *stepSizeUnit = tabWidget->widget(2)->findChild<QComboBox*>("stepSizeUnit");
   myassert(stepSizeUnit);
-  //widgets = stack->widget(2)->queryList("QCheckBox", "stepSizeRound", false, true);
-  //QCheckBox *stepSizeRound = (QCheckBox*)widgets->first();
   QCheckBox *stepSizeRound = tabWidget->widget(2)->findChild<QCheckBox*>("stepSizeRound");
   myassert(stepSizeRound);
 
@@ -343,60 +246,6 @@ void TartiniSettingsDialog::onNoteRangeChoice(int choice)
   checkAnalysisEnabled();
 }
 
-/*
-void TartiniSettingsDialog::setUnknownstToDefault(Settings *settings)
-{
-  settings->setBool("General", "bindOpenSaveFolders", true);
-  settings->setString("General", "tempFilesFolder", QDir::convertSeparators(QDir::currentDirPath()));
-  settings->setString("General", "filenameGeneratingString", "Untitled");
-  settings->setInt("General", "fileGeneratingNumber", 1);
-  settings->setInt("General", "fileNumberOfDigits", 2);
-  settings->setInt("Display", "fastUpdateSpeed", 75);
-  settings->setInt("Display", "slowUpdateSpeed", 150);
-  settings->setString("General", "noteRangeChoice", "Notes F1 and higher - Cello, Guitar, Bass Clarinet, General sounds ...");
-  
-  settings->setBool("View", "autoFollow", true);
-  settings->setBool("View", "backgroundShading", true);
-
-#ifndef LINUX
-  settings->setString("Sound", "soundInput", "Default Input Device");   // Use default device
-  settings->setString("Sound", "soundOutput", "Default Output Device"); // Use default device
-#else
-  settings->setString("Sound", "soundInput", "/dev/dsp");
-  settings->setString("Sound", "soundOutput", "/dev/dsp");
-#endif
-  settings->setString("Sound", "numberOfChannels", "Mono");
-  settings->setInt("Sound", "sampleRate", 44100);
-  settings->setInt("Sound", "bitsPerSample", 16);
-  settings->setBool("Sound", "muteOutput", true);
-  
-  settings->setInt("Analysis", "bufferSizeValue", 48);
-  settings->setString("Analysis", "bufferSizeUnit", "milli-seconds");
-  settings->setBool("Analysis", "bufferSizeRound", true);
-  
-  settings->setInt("Analysis", "stepSizeValue", 24);
-  settings->setString("Analysis", "stepSizeUnit", "milli-seconds");
-  settings->setBool("Analysis", "stepSizeRound", true);
-  settings->setBool("Analysis", "doingHarmonicAnalysis", true);
-  settings->setBool("Analysis", "doingFreqAnalysis", true);
-  settings->setBool("Analysis", "doingEqualLoudness", true);
-  settings->setBool("Analysis", "doingAutoNoiseFloor", true);
-  settings->setString("Analysis", "analysisType", "MPM");
-  settings->setInt("Analysis", "thresholdValue", 93);
-
-  settings->setString("Display", "theBackgroundColor", "#BBCDE2");
-  settings->setString("Display", "shading1Color", "#BBCDEF");
-  settings->setString("Display", "shading2Color", "#CBCDE2");
-  settings->setBool("Display", "displayBackgroundShading", true);
-  
-  settings->setBool("Dialogs", "rememberOpenFolder", true);
-  settings->setString("Dialogs", "openFilesFolder", QDir::convertSeparators(QDir::currentDirPath()));
-  settings->setBool("Dialogs", "rememberSaveFolder", true);
-  settings->setString("Dialogs", "saveFilesFolder", QDir::convertSeparators(QDir::currentDirPath()));
-  settings->setBool("Dialogs", "appendWav", true);
-}
-*/
-
 #define SetIfMissing(key, value) \
   if(!p_gdata.settingsContains(key)) p_gdata.setSettingsValue(key, value)
 
@@ -415,15 +264,6 @@ void TartiniSettingsDialog::setUnknownsToDefault(GData & p_gdata)
 
   SetIfMissing("Sound/soundInput", "Default");
   SetIfMissing("Sound/soundOutput", "Default");
-/*
-#ifndef LINUX
-  SetIfMissing("Sound/soundInput", "Default Input Device");
-  SetIfMissing("Sound/soundOutput", "Default Output Device");
-#else
-  SetIfMissing("Sound/soundInput", "/dev/dsp");
-  SetIfMissing("Sound/soundOutput", "/dev/dsp");
-#endif
-*/
   SetIfMissing("Sound/numberOfBuffers", 4);
   SetIfMissing("Sound/numberOfChannels", "Mono");
   SetIfMissing("Sound/sampleRate", 44100);
@@ -467,8 +307,6 @@ void TartiniSettingsDialog::setUnknownsToDefault(GData & p_gdata)
 void TartiniSettingsDialog::resetDefaults()
 {
   gdata->clearSettings();
-  //setDefaults(&gdata->settings);
-  //gdata->settings.save();
   setUnknownsToDefault(*gdata);
   gdata->syncSettings();
   init();
