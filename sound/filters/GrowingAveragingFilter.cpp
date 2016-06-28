@@ -18,11 +18,13 @@
 #include "myassert.h"
 #include "useful.h"
 
+//------------------------------------------------------------------------------
 GrowingAverageFilter::GrowingAverageFilter(int size)
 {
   init(size);
 }
 
+//------------------------------------------------------------------------------
 void GrowingAverageFilter::init(int size)
 {
   _size = size;
@@ -32,35 +34,54 @@ void GrowingAverageFilter::init(int size)
   reset();
 }
 
+//------------------------------------------------------------------------------
 void GrowingAverageFilter::filter(const float *input, float *output, int n)
 {
   int j;
-  if(n > _size) {
-    for(j=0; j<_size; j++) {
-      if(_count < _size) _count++;
-      total_sum += input[j] - _x[j];
-      output[j] = total_sum / _count;
+  if(n > _size)
+    {
+      for(j = 0; j < _size; j++)
+	{
+	  if(_count < _size)
+	    {
+	      _count++;
+	    }
+	  total_sum += input[j] - _x[j];
+	  output[j] = total_sum / _count;
+	}
+      for(j = _size; j < n; j++)
+	{
+	  if(_count < _size)
+	    {
+	      _count++;
+	    }
+	  total_sum += input[j] - input[j - _size];
+	  output[j] = total_sum / _count;
+	}
+      std::copy(input + n - _size, input + n, _x.begin());
     }
-    for(j=_size; j<n; j++) {
-      if(_count < _size) _count++;
-      total_sum += input[j] - input[j-_size];
-      output[j] = total_sum / _count;
+  else
+    {
+      for(j = 0; j < n; j++)
+	{
+	  if(_count < _size)
+	    {
+	      _count++;
+	    }
+	  total_sum += input[j] - _x[j];
+	  output[j] = total_sum / _count;
+	}
+      _x.shift_left(n);
+      std::copy(input, input + n, _x.end() - n);
     }
-    std::copy(input+n-_size, input+n, _x.begin());
-  } else {
-    for(j=0; j<n; j++) {
-      if(_count < _size) _count++;
-      total_sum += input[j] - _x[j];
-      output[j] = total_sum / _count;
-    }
-    _x.shift_left(n);
-    std::copy(input, input+n, _x.end()-n);
-  }
 }
 
-void GrowingAverageFilter::reset()
+//------------------------------------------------------------------------------
+void GrowingAverageFilter::reset(void)
 {
   _count = 0;
   total_sum = 0.0;
   _x.fill(0.0f);
 }
+
+// EOF

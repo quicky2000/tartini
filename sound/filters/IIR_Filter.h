@@ -16,38 +16,71 @@
 #define IIR_FILTER_H
 
 #include "Filter.h"
+#include "array1d.h"
 
 class FilterState;
 
-/** Infinite Impulse Response filter
-  */
+/**
+   Infinite Impulse Response filter
+*/
 class IIR_Filter : public Filter
 {
-  Array1d<double> bufx, bufy; //tempery buffer storage
-  Array1d<double> _a, _b; //The filter coefficient's
-  Array1d<double> _x, _y; //The current filter state (last n states of input and output)
-  //double gain;
-
 public:
 
-  IIR_Filter() { }
+  IIR_Filter(void) { }
+
+  /**
+     Create an IIR Filter from the coeff's a direct form II transposed structure
+     if a[0] is not 1.0 then all the coefficients are normalized be dividing by a[0]
+  */
   IIR_Filter(double *b, double *a, int n, int m=-1);
-  ~IIR_Filter() { }
-  //void make_FIR(double *b, uint n); //crate FIR filter with n coefficients
+  ~IIR_Filter(void) { }
+
+  /**
+     Initialise the IIR Filter from the coeff's a direct form II transposed structure
+     if a[0] is not 1.0 then all the coefficients are normalized be dividing by a[0]
+  */
   void init(double *b, double *a, int n, int m=-1);
-  void print();
-  //float filter(float input);
+  void print(void);
+
+  /**
+     Apply the filter to a block of data
+     @param input The data to be filtered
+     @param ourput Where the filtered result is stored. Note: The output is delayed by the filter size.
+     @param n The size of data
+  */
   void filter(const float *input, float *output, int n);
-  void reset();
+
+  /**
+     Resets the filter back to an initial state of zeros
+  */
+  void reset(void);
   void getState(FilterState *filterState) const;
   void setState(const FilterState *filterState);
+
+ private:
+  /**
+     tempery buffer storage
+  */
+  Array1d<double> bufx, bufy;
+
+  /**
+     The filter coefficient's
+  */
+  Array1d<double> _a, _b;
+
+  /**
+     The current filter state (last n states of input and output)
+  */
+  Array1d<double> _x, _y;
+
 };
 
 class FilterState
 {
-public:
+ public:
   Array1d<double> _x, _y;
-  //void operator=(const FilterState &fs) { _x = fs._x; _y = fs._y; }
 };
 
-#endif
+#endif // IIR_FILTER_H
+// EOF

@@ -16,31 +16,43 @@
 #define FAST_SMOOTHED_AVERAGING_FILTER_H
 
 #include "Filter.h"
+#include "array1d.h"
 
-/** A class to perform smoothing/bluring on data using a hanning (cos shaped) window.
-  * It uses and fast internal rotation algorithm
-  * O(t) = n + size. Where n is the length of data, and size is the width of the filter
-  */
+/**
+   A class to perform smoothing/bluring on data using a hanning (cos shaped) window.
+   It uses and fast internal rotation algorithm
+   O(t) = n + size. Where n is the length of data, and size is the width of the filter
+*/
 class FastSmoothedAveragingFilter : public Filter
 {
+public:
+  /**
+     Construct a FastSmoothedAverageFilter
+     @param size The total width of the hanning window. To keep data centered use an odd size
+  */
+  FastSmoothedAveragingFilter(void) { }
+  FastSmoothedAveragingFilter(int size);
+  void init(int size);
+  void filter(const float *input, float *output, int n);
+  void reset(void);
+  int delay(void) const { return _size/2; }
+
+ private:
   int _size, _size_left, _size_right;
   double _angle;
   double _cos_angle, _sin_angle;
   double _sum;
-  Array1d<float> _x; // the last size input values
+
+  /**
+     the last size input values
+  */
+  Array1d<float> _x;
 
   double cos_sum;
   double sin_sum;
   double total_sum;
 
-public:
-  FastSmoothedAveragingFilter() { }
-  FastSmoothedAveragingFilter(int size);
-  void init(int size);
-  void filter(const float *input, float *output, int n);
-  void reset();
-  int delay() const { return _size/2; }
 };
 
-
-#endif
+#endif // FAST_SMOOTHED_AVERAGING_FILTER_H
+// EOF

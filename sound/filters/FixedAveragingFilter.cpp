@@ -18,11 +18,13 @@
 #include "myassert.h"
 #include "useful.h"
 
+//------------------------------------------------------------------------------
 FixedAverageFilter::FixedAverageFilter(int size)
 {
   init(size);
 }
 
+//------------------------------------------------------------------------------
 void FixedAverageFilter::init(int size)
 {
   _size = size;
@@ -31,31 +33,41 @@ void FixedAverageFilter::init(int size)
   reset();
 }
 
+//------------------------------------------------------------------------------
 void FixedAverageFilter::filter(const float *input, float *output, int n)
 {
   int j;
-  if(n > _size) {
-    for(j=0; j<_size; j++) {
-      total_sum += input[j] - _x[j];
-      output[j] = total_sum / _size;
+  if(n > _size)
+    {
+      for(j = 0; j < _size; j++)
+	{
+	  total_sum += input[j] - _x[j];
+	  output[j] = total_sum / _size;
+	}
+      for(j = _size; j < n; j++)
+	{
+	  total_sum += input[j] - input[j - _size];
+	  output[j] = total_sum / _size;
+	}
+      std::copy(input + n - _size, input + n, _x.begin());
     }
-    for(j=_size; j<n; j++) {
-      total_sum += input[j] - input[j-_size];
-      output[j] = total_sum / _size;
+  else
+    {
+      for(j = 0; j < n; j++)
+	{
+	  total_sum += input[j] - _x[j];
+	  output[j] = total_sum / _size;
+	}
+      _x.shift_left(n);
+      std::copy(input, input + n, _x.end() - n);
     }
-    std::copy(input+n-_size, input+n, _x.begin());
-  } else {
-    for(j=0; j<n; j++) {
-      total_sum += input[j] - _x[j];
-      output[j] = total_sum / _size;
-    }
-    _x.shift_left(n);
-    std::copy(input, input+n, _x.end()-n);
-  }
 }
 
-void FixedAverageFilter::reset()
+//------------------------------------------------------------------------------
+void FixedAverageFilter::reset(void)
 {
   total_sum = 0.0;
   _x.fill(0.0f);
 }
+
+// EOF

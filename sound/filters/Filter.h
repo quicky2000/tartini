@@ -15,20 +15,16 @@
 #ifndef FILTER_H
 #define FILTER_H
 
-#include "array1d.h"
-
 typedef unsigned int uint;
 
 class Filter
 {
 public:
-  //virtual float filter(float input) = 0;
   virtual void filter(const float *input, float *output, int n) = 0;
-  virtual void reset() = 0;
-  virtual int delay() const { return 0; }
-  //virtual void getState(FilterState *filterState) const = 0;
-  //virtual void setState(const FilterState *filterState) = 0;
-  virtual ~Filter() { }
+  virtual void reset(void) = 0;
+  virtual int delay(void) const { return 0; }
+  virtual ~Filter(void) { }
 };
 
-#endif
+#endif // FILTER_H
+// EOF
