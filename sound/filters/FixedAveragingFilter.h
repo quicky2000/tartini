@@ -25,7 +25,7 @@
 class FixedAverageFilter : public Filter
 {
  public:
-  FixedAverageFilter(void) { }
+  inline FixedAverageFilter(void) { }
   FixedAverageFilter(int size);
   void init(int size);
   void filter(const float *input, float *output, int n);

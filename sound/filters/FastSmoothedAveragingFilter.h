@@ -35,7 +35,7 @@ public:
   void init(int size);
   void filter(const float *input, float *output, int n);
   void reset(void);
-  int delay(void) const { return _size/2; }
+  inline int delay(void) const { return _size / 2; }
 
  private:
   int _size, _size_left, _size_right;

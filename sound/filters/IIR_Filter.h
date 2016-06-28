@@ -27,14 +27,14 @@ class IIR_Filter : public Filter
 {
 public:
 
-  IIR_Filter(void) { }
+  inline IIR_Filter(void) { }
 
   /**
      Create an IIR Filter from the coeff's a direct form II transposed structure
      if a[0] is not 1.0 then all the coefficients are normalized be dividing by a[0]
   */
   IIR_Filter(double *b, double *a, int n, int m=-1);
-  ~IIR_Filter(void) { }
+  inline ~IIR_Filter(void) { }
 
   /**
      Initialise the IIR Filter from the coeff's a direct form II transposed structure

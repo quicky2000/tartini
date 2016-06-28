@@ -23,7 +23,7 @@ public:
   virtual void filter(const float *input, float *output, int n) = 0;
   virtual void reset(void) = 0;
   virtual int delay(void) const { return 0; }
-  virtual ~Filter(void) { }
+  virtual inline ~Filter(void) { }
 };
 
 #endif // FILTER_H
