@@ -20,6 +20,7 @@
 #include <Q3VBoxLayout>
 #include "gdata.h"
 
+//------------------------------------------------------------------------------
 SaveDialog::SaveDialog(QWidget * parent):
   Q3FileDialog(QDir::convertSeparators(gdata->getSettingsValue("Dialogs/saveFilesFolder", QDir::currentDirPath())),
                tr("Wave files (*.wav)"), parent, NULL, true)
@@ -39,11 +40,13 @@ SaveDialog::SaveDialog(QWidget * parent):
   baseLayout->addWidget(rememberFolderCheckBox);
 }
 
-SaveDialog::~SaveDialog()
+//------------------------------------------------------------------------------
+SaveDialog::~SaveDialog(void)
 {
 }
 
-void SaveDialog::accept()
+//------------------------------------------------------------------------------
+void SaveDialog::accept(void)
 {
   bool remember = rememberFolderCheckBox->isChecked();
   gdata->setSettingsValue("Dialogs/rememberSaveFolder", remember);
@@ -62,6 +65,7 @@ void SaveDialog::accept()
   Q3FileDialog::accept();
 }
 
+//------------------------------------------------------------------------------
 QString SaveDialog::getSaveWavFileName(QWidget *parent)
 {
   SaveDialog d(parent);
