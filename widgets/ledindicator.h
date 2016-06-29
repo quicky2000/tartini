@@ -4,6 +4,8 @@
     begin                : Tue Jan 11 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,7 +18,6 @@
 #define LEDINDICATOR_H
 
 #include "drawwidget.h"
-//Added by qt3to4:
 #include <QPixmap>
 #include <QPaintEvent>
 
@@ -24,30 +25,36 @@ class QColor;
 class QPainter;
 class QPixmap;
 
-class LEDIndicator : public QWidget {
+class LEDIndicator : public QWidget
+{
   Q_OBJECT
 
   public:
-    LEDIndicator(QPixmap *buffer, QWidget *parent = 0, const char *name = 0, const QColor &on = Qt::red, const QColor &off = Qt::darkRed);
+  LEDIndicator(QPixmap * buffer,
+	       QWidget * parent = 0,
+	       const char *name = 0,
+	       const QColor & on = Qt::red,
+	       const QColor & off = Qt::darkRed
+	       );
 
-    virtual ~LEDIndicator();
+  virtual ~LEDIndicator(void);
     
-    void setOn(bool on);
-    void toggle();
+  void setOn(bool on);
+  void toggle(void);
 
-    bool lit();
+  bool lit(void);
     
-    void paintEvent(QPaintEvent *);
+  void paintEvent(QPaintEvent *);
 
-    QSize sizeHint() const { return QSize(15, 25); }
+  QSize sizeHint(void) const;
 
-  private:
-    QColor on;
-    QColor off;
-    bool active;
-    bool newState;
-    QPixmap *buffer;
+ private:
+  QColor on;
+  QColor off;
+  bool active;
+  bool newState;
+  QPixmap *buffer;
 };
 
- 
-#endif
+#endif // LEDINDICATOR_H
+// EOF

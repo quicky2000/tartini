@@ -4,6 +4,8 @@
     begin                : Tue Jan 11 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,11 +18,11 @@
 #include "ledindicator.h"
 
 #include <qpixmap.h>
-//Added by qt3to4:
 #include <QPaintEvent>
 
-LEDIndicator::LEDIndicator(QPixmap *buffer, QWidget *parent, const char *name, const QColor &on, const QColor &off)
-: QWidget(parent, name)
+//------------------------------------------------------------------------------
+LEDIndicator::LEDIndicator(QPixmap *buffer, QWidget *parent, const char *name, const QColor &on, const QColor &off):
+  QWidget(parent, name)
 {
   setMinimumSize(sizeHint());
   this->on = on;
@@ -33,31 +35,41 @@ LEDIndicator::LEDIndicator(QPixmap *buffer, QWidget *parent, const char *name, c
   this->buffer = buffer;
 }
 
-LEDIndicator::~LEDIndicator()
+//------------------------------------------------------------------------------
+LEDIndicator::~LEDIndicator(void)
 {
 }
 
-void LEDIndicator::setOn(bool on) {
-	if (active != on) {
-		active = on;
-		update();
-	}
+//------------------------------------------------------------------------------
+void LEDIndicator::setOn(bool on)
+{
+  if (active != on)
+    {
+      active = on;
+      update();
+    }
 }
 
-void LEDIndicator::toggle() {
+//------------------------------------------------------------------------------
+void LEDIndicator::toggle(void)
+{
   active = !active;
 }
 
-bool LEDIndicator::lit() {
+//------------------------------------------------------------------------------
+bool LEDIndicator::lit(void)
+{
   return active;
 }
 
+//------------------------------------------------------------------------------
 void LEDIndicator::paintEvent(QPaintEvent *)
 {
   // Double buffering
-  if (buffer->size() != size()) {
+  if (buffer->size() != size())
+    {
       buffer->resize(size());
-  }
+    }
 
   buffer->fill(colorGroup().background());
   
@@ -72,9 +84,16 @@ void LEDIndicator::paintEvent(QPaintEvent *)
   int fontHeight = fm.height() / 4;
   int fontWidth = fm.width(name()) / 2;
   
-  p.drawText(QWidget::width()/2 - fontWidth, QWidget::height()/2 + fontHeight, name());
+  p.drawText(QWidget::width() / 2 - fontWidth, QWidget::height() / 2 + fontHeight, name());
   p.end();
 
   // Swap buffers
- 	bitBlt(this, 0, 0, buffer);
+  bitBlt(this, 0, 0, buffer);
 }
+
+//------------------------------------------------------------------------------
+QSize LEDIndicator::sizeHint(void) const
+{
+  return QSize(15, 25);
+}
+// EOF
