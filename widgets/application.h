@@ -16,6 +16,9 @@
       along with this program.  If not, see <http://www.gnu.org/licenses/>
 */
 
+#ifndef APPLICATION_H
+#define APPLICATION_H
+
 #include <QApplication>
 #include <iostream>
 
@@ -28,27 +31,7 @@ class application: public QApplication
   inline virtual ~application(void){}
 };
 
-//------------------------------------------------------------------------------
-application::application(int & argc, char ** argv):
-  QApplication(argc,argv)
-{
-}
+#include "application.hpp"
 
-//------------------------------------------------------------------------------
-bool application::notify(QObject * receiver, QEvent * e)
-{
-  try
-    {
-      return QApplication::notify(receiver,e);
-    }
-  catch(std::exception & e)
-    {
-      std::cout << std::endl << "!!! " << tr("FATAL EXCEPTION").toStdString() << " !!!" << std::endl ;
-      std::cout << std::string(80,'-') << std::endl ;
-      std::cout << e.what() << std::endl ;
-      std::cout << std::string(80,'-') << std::endl ;
-      std::cout << tr("The application encountered an unexpected exception please copy the message above and send it to julien_thevenon@yahoo.fr").toStdString() << std::endl;
-      emit lastWindowClosed();
-    }
-  return false;
-}
+#endif // APPLICATION_H
+// EOF
