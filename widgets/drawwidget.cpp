@@ -352,6 +352,7 @@ void DrawWidget::drawChannelFilled(Channel * p_channel,
   std::vector<QRect> l_note_rect(width() * 2);
   std::vector<QRect> l_note_rect2(width() * 2);
   std::vector<bool> l_is_note_rect_even(width() * 2);
+
   int l_point_index = 0;
   int l_even_mid_point_index = 0;
   int l_odd_mid_point_index = 0;
