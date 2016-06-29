@@ -4,6 +4,8 @@
     begin                : Fri Dec 10 2004
     copyright            : (C) 2004-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,28 +36,71 @@ class Channel;
 class QPixmap;
 class ZoomElement;
 
-class DrawWidget : public QWidget {
+class DrawWidget : public QWidget
+{
   Q_OBJECT
 
 public:
   DrawWidget(QWidget *parent, const char* name = 0, Qt::WFlags f = Qt::WDestructiveClose);
-  virtual ~DrawWidget();
+  virtual ~DrawWidget(void);
 
 
-  /* Draw the channel onto the painter using the MinMax algorithm or individual samples if the zoom is high enough */
-  static void drawChannel(QPaintDevice &pd, Channel *ch, QPainter &p, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType);
-  void drawChannelFilled(Channel *ch, QPainter &p, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType);
-  void setChannelVerticalView(Channel *ch, double leftTime, double currentTime, double zoomX, double viewBottom, double zoomY);
+  /**
+     Draw the channel onto the painter using the MinMax algorithm or individual samples if the zoom is high enough
+  */
+  static void drawChannel(QPaintDevice & pd,
+			  Channel * ch,
+			  QPainter & p,
+			  double leftTime,
+			  double currentTime,
+			  double zoomX,
+			  double viewBottom,
+			  double zoomY,
+			  int viewType
+			  );
+  void drawChannelFilled(Channel * ch,
+			 QPainter & p,
+			 double leftTime,
+			 double currentTime,
+			 double zoomX,
+			 double viewBottom,
+			 double zoomY,
+			 int viewType
+			 );
+  void setChannelVerticalView(Channel * ch,
+			      double leftTime,
+			      double currentTime,
+			      double zoomX,
+			      double viewBottom,
+			      double zoomY
+			      );
   static void setLineWidth(int width);
   
   void beginDrawing(bool clearBackground_=true);
   void endDrawing(bool drawToScreen_=true);
-  void clearBackground();
-  void fillBackground(const QColor &color);
-  void checkSize();
-  void drawToScreen();
-  static bool calcZoomElement(Channel *ch, ZoomElement &ze, int baseElement, double baseX);
-  void drawArray(float *input, int n, int sampleStep=1, double theZoomY=1.0, double offset=0);
+  void clearBackground(void);
+  void fillBackground(const QColor & color);
+  void checkSize(void);
+  void drawToScreen(void);
+
+  /**
+     calculates elements in the zoom lookup table
+     @param ch The channel we are working with
+     @param baseElement The element's index in the zoom lookup table
+     @param baseX  The number of chunks each pixel represents (can include a fraction part)
+     @return false if a zoomElement can't be calculated, else true
+  */
+  static bool calcZoomElement(Channel * ch,
+			      ZoomElement & ze,
+			      int baseElement,
+			      double baseX
+			      );
+  void drawArray(float *input,
+		 int n,
+		 int sampleStep = 1,
+		 double theZoomY = 1.0,
+		 double offset = 0
+		 );
   
 protected:
   static int lineWidth;
@@ -68,4 +113,5 @@ protected:
   QPainter p;
 };
 
-#endif
+#endif // DRAWWIDGET_H
+// EOF
