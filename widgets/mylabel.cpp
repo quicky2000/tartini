@@ -4,6 +4,8 @@
     begin                : 29/6/2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -15,24 +17,14 @@
 
 #include "mylabel.h"
 #include <qpixmap.h>
-//Added by qt3to4:
 #include <QPaintEvent>
 
 MyLabel::MyLabel(const QString &text_, QWidget *parent, const char * name) : DrawWidget(parent, name)
 {
   _text = text_;
-/*
-  p.begin(paintDevice);
-#ifndef SINGLE_DRAWING_BUFFER
-  p.initFrom(this);
-#endif
-*/
-  //QFontMetrics fm = paintDevice.fontMetrics();
   QFontMetrics fm = QFontMetrics(p.font());
   _fontHeight = fm.height();
   _textWidth = fm.width(_text);
-  //p.end();
-  //setAttribute(Qt::WA_OpaquePaintEvent, false);
 }
 
 void MyLabel::paintEvent( QPaintEvent * )
