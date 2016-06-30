@@ -14,7 +14,6 @@
  ***************************************************************************/
 
 #include <qscrollbar.h>
-//Added by qt3to4:
 #include <QResizeEvent>
 #include "myscrollbar.h"
 #include <qlayout.h>
@@ -35,28 +34,14 @@ MyScrollBar::MyScrollBar(double minValue_, double maxValue_, double lineStep_, d
   _pageStep = pageStep_;
   _value = value_;
   _step = step_;
-  //QBoxLayout *layout = new QHBoxLayout(this);
   
-  //bar = new QScrollBar(toInt(_minValue*_step), toInt(_maxValue*_step), MAX(toInt(_lineStep*_step), 1), MAX(toInt(_pageStep*_step), 1), toInt(_value*_step), orientation, this);
   bar = new QScrollBar(orientation, this);
   bar->setMinimum(toInt(_minValue*_step));
   bar->setMaximum(toInt(_maxValue*_step));
   bar->setSingleStep(MAX(toInt(_lineStep*_step), 1));
   bar->setPageStep(MAX(toInt(_pageStep*_step), 1));
   bar->setValue(toInt(_value*_step));
-  //layout->addWidget(bar);
-  //bar->setMinimumSize(100, 40);
-  //bar->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
   setSizePolicy(bar->sizePolicy());
-  //bar->show();
-/*
-  connect(bar, SIGNAL(valueChanged(int)), this, SLOT(setIntValue(int)));
-  connect(bar, SIGNAL(sliderMoved(int)), this, SLOT(sliderMoving(int)));
-  connect(bar, SIGNAL(nextPage()), this, SLOT(sliderMoving()));
-  connect(bar, SIGNAL(prevPage()), this, SLOT(sliderMoving()));
-  connect(bar, SIGNAL(nextLine()), this, SLOT(sliderMoving()));
-  connect(bar, SIGNAL(prevLine()), this, SLOT(sliderMoving()));
-*/
   connect(bar, SIGNAL(actionTriggered(int)), this, SLOT(actionTriggering(int)));
 }
 
@@ -78,14 +63,12 @@ void MyScrollBar::resizeEvent(QResizeEvent *q)
 void MyScrollBar::setMinValue(double minValue_)
 {
   _minValue = minValue_;
-  //bar->setMinValue(toInt(_minValue * _step));
   bar->setMinimum(toInt(_minValue * _step));
 }
 
 void MyScrollBar::setMaxValue(double maxValue_)
 {
   _maxValue = maxValue_;
-  //bar->setMaxValue(toInt(_maxValue * _step));
   bar->setMaximum(toInt(_maxValue * _step));
 }
 
@@ -98,7 +81,6 @@ void MyScrollBar::setRange(double minValue_, double maxValue_)
 void MyScrollBar::setLineStep(double lineStep_)
 {
   _lineStep = lineStep_;
-  //bar->setLineStep(toInt(_lineStep * _step));
   bar->setSingleStep(toInt(_lineStep * _step));
 }
 
@@ -129,20 +111,17 @@ void MyScrollBar::sliderMoving(int value_)
 {
   _value = double(value_) / _step;
   emit sliderMoved(_value);
-  //emit sliderMoved();
 }
 
 void MyScrollBar::sliderMoving()
 {
   _value = double(bar->value()) / _step;
   emit sliderMoved(_value);
-  //emit sliderMoved();
 }
 
 void MyScrollBar::actionTriggering(int /*action*/)
 {
   setIntValue(bar->sliderPosition());
   emit sliderMoved(_value);
-  //emit sliderMoved();
 }
 
