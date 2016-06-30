@@ -17,37 +17,37 @@
 */
 
 //------------------------------------------------------------------------------
-double MyScrollBar::minValue(void)
+double MyScrollBar::minValue(void) const
 {
   return _minValue;
 }
 
 //------------------------------------------------------------------------------
-double MyScrollBar::maxValue(void)
+double MyScrollBar::maxValue(void) const
 {
   return _maxValue;
 }
 
 //------------------------------------------------------------------------------
-double MyScrollBar::lineStep(void)
+double MyScrollBar::lineStep(void) const
 {
   return _lineStep;
 }
 
 //------------------------------------------------------------------------------
-double MyScrollBar::pageStep(void)
+double MyScrollBar::pageStep(void) const
 {
   return _pageStep;
 }
 
 //------------------------------------------------------------------------------
-double MyScrollBar::value(void)
+double MyScrollBar::value(void) const
 {
   return _value;
 }
 
 //------------------------------------------------------------------------------
-double MyScrollBar::step(void)
+double MyScrollBar::step(void) const
 {
   return _step;
 }

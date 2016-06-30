@@ -11,7 +11,7 @@
    (at your option) any later version.
    
    Please read LICENSE.txt for details.
- ***************************************************************************/
+***************************************************************************/
 #ifndef MYSCROLLBAR_H
 #define MYSCROLLBAR_H
 #include <qwidget.h>
@@ -24,16 +24,7 @@ class MyScrollBar : public QWidget
 {
   Q_OBJECT
 
-  double _minValue;
-  double _maxValue;
-  double _value;
-  double _lineStep;
-  double _pageStep;
-  double _step;
-  
-  QScrollBar *bar;
-  
-public:
+ public:
   MyScrollBar(Qt::Orientation orientation,
 	      QWidget * parent,
 	      const char * name = 0
@@ -53,14 +44,14 @@ public:
   QSize sizeHint(void) const;
   void resizeEvent(QResizeEvent *q);
 
-  inline double minValue(void);
-  inline double maxValue(void);
-  inline double lineStep(void);
-  inline double pageStep(void);
-  inline double value(void);
-  inline double step(void);
+  inline double minValue(void) const;
+  inline double maxValue(void) const;
+  inline double lineStep(void) const;
+  inline double pageStep(void) const;
+  inline double value(void) const;
+  inline double step(void) const;
 
-public slots:
+ public slots:
   void setMinValue(double minValue_);
   void setMaxValue(double maxValue_);
   void setRange(double minValue_, double maxValue_);
@@ -73,9 +64,21 @@ public slots:
   void setStep(double step_);
   void actionTriggering(int action);
 
-signals:
+ signals:
   void valueChanged(double value_);
   void sliderMoved(double value_);
+
+ private: 
+  double _minValue;
+  double _maxValue;
+  double _value;
+  double _lineStep;
+  double _pageStep;
+  double _step;
+  
+  QScrollBar *bar;
+  
+
 };
 
 #include "myscrollbar.hpp"
