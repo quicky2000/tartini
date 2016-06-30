@@ -21,9 +21,9 @@
 
 //------------------------------------------------------------------------------
 MyLabel::MyLabel(const QString & text_, QWidget * parent, const char * name):
-  DrawWidget(parent, name)
+  DrawWidget(parent, name),
+  _text(text_)
 {
-  _text = text_;
   QFontMetrics fm = QFontMetrics(p.font());
   _fontHeight = fm.height();
   _textWidth = fm.width(_text);

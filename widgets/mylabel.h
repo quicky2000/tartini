@@ -39,7 +39,6 @@ public:
 
  private:
   QString _text;
-  QFont _font;
   int _fontHeight;
   int _textWidth;
 
