@@ -22,24 +22,38 @@
 #include <qstring.h>
 #include <QPaintEvent>
 
-/** MyLabel uses double buffering to draw simple text.
-  So is faster (espicially on the Mac) than using QLabel.
-  It only supports 1 line of text.
+/**
+   MyLabel uses double buffering to draw simple text.
+   So is faster (espicially on the Mac) than using QLabel.
+   It only supports 1 line of text.
 */
 class MyLabel : public DrawWidget
 {
+public:
+  MyLabel(const QString & text_, QWidget * parent, const char * name = 0);
+  QString text(void)
+  {
+    return _text;
+  }
+  void setText(const QString & text_)
+  {
+    _text = text_;
+    update();
+  }
+  
+  void paintEvent( QPaintEvent * );
+  QSize sizeHint(void) const
+  {
+    return QSize(_textWidth + 8, _fontHeight + 4);
+  }
+
+ private:
   QString _text;
   QFont _font;
   int _fontHeight;
   int _textWidth;
 
-public:
-  MyLabel(const QString &text_, QWidget *parent, const char * name = 0);
-  QString text() { return _text; }
-  void setText(const QString &text_) { _text = text_; update(); }
-  
-  void paintEvent( QPaintEvent * );
-  QSize sizeHint() const { return QSize(_textWidth+8, _fontHeight+4); }
 };
 
-#endif
+#endif // MYLABEL_H
+// EOF

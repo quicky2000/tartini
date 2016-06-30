@@ -19,7 +19,9 @@
 #include <qpixmap.h>
 #include <QPaintEvent>
 
-MyLabel::MyLabel(const QString &text_, QWidget *parent, const char * name) : DrawWidget(parent, name)
+//------------------------------------------------------------------------------
+MyLabel::MyLabel(const QString & text_, QWidget * parent, const char * name):
+  DrawWidget(parent, name)
 {
   _text = text_;
   QFontMetrics fm = QFontMetrics(p.font());
@@ -27,11 +29,13 @@ MyLabel::MyLabel(const QString &text_, QWidget *parent, const char * name) : Dra
   _textWidth = fm.width(_text);
 }
 
+//------------------------------------------------------------------------------
 void MyLabel::paintEvent( QPaintEvent * )
 {
   beginDrawing(false);
   fillBackground(colorGroup().background());
-  p.drawText(4, _fontHeight-2, _text);
+  p.drawText(4, _fontHeight - 2, _text);
   endDrawing();
 }
 
+// EOF
