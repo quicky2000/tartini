@@ -53,30 +53,12 @@ public:
   QSize sizeHint(void) const;
   void resizeEvent(QResizeEvent *q);
 
-  double minValue(void)
-  {
-    return _minValue;
-  }
-  double maxValue(void)
-  {
-    return _maxValue;
-  }
-  double lineStep(void)
-  {
-    return _lineStep;
-  }
-  double pageStep(void)
-  {
-    return _pageStep;
-  }
-  double value(void)
-  {
-    return _value;
-  }
-  double step(void)
-  {
-    return _step;
-  }
+  inline double minValue(void);
+  inline double maxValue(void);
+  inline double lineStep(void);
+  inline double pageStep(void);
+  inline double value(void);
+  inline double step(void);
 
 public slots:
   void setMinValue(double minValue_);
@@ -95,6 +77,8 @@ signals:
   void valueChanged(double value_);
   void sliderMoved(double value_);
 };
+
+#include "myscrollbar.hpp"
 
 #endif // MYSCROLLBAR_H
 // EOF

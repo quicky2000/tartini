@@ -93,6 +93,7 @@ HEADERS += main.h \
   widgets/drawwidget.h \
   widgets/viewwidget.h \
   widgets/myscrollbar.h \
+  widgets/myscrollbar.hpp \
   widgets/mainwindow/mainwindow.h \
   widgets/openfiles/openfiles.h \
   widgets/freq/freqdrawwidget.h \
