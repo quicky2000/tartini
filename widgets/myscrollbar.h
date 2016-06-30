@@ -12,7 +12,8 @@
    
    Please read LICENSE.txt for details.
  ***************************************************************************/
-
+#ifndef MYSCROLLBAR_H
+#define MYSCROLLBAR_H
 #include <qwidget.h>
 #include <QResizeEvent>
 #include "useful.h"
@@ -33,19 +34,49 @@ class MyScrollBar : public QWidget
   QScrollBar *bar;
   
 public:
-  MyScrollBar(Qt::Orientation orientation, QWidget * parent, const char * name = 0);
-    MyScrollBar(double minValue_, double maxValue_, double linesPerPage_, double pageStep_, double value_, double step_, Qt::Orientation orientation, QWidget * parent, const char * name = 0);
-  virtual ~MyScrollBar();
+  MyScrollBar(Qt::Orientation orientation,
+	      QWidget * parent,
+	      const char * name = 0
+	      );
+  MyScrollBar(double minValue_,
+	      double maxValue_,
+	      double linesPerPage_,
+	      double pageStep_,
+	      double value_,
+	      double step_,
+	      Qt::Orientation orientation,
+	      QWidget * parent,
+	      const char * name = 0
+	      );
+  virtual ~MyScrollBar(void);
 
-  QSize sizeHint() const;
+  QSize sizeHint(void) const;
   void resizeEvent(QResizeEvent *q);
 
-  double minValue() { return _minValue; }
-  double maxValue() { return _maxValue; }
-  double lineStep() { return _lineStep; }
-  double pageStep() { return _pageStep; }
-  double value() { return _value; }
-  double step() { return _step; }
+  double minValue(void)
+  {
+    return _minValue;
+  }
+  double maxValue(void)
+  {
+    return _maxValue;
+  }
+  double lineStep(void)
+  {
+    return _lineStep;
+  }
+  double pageStep(void)
+  {
+    return _pageStep;
+  }
+  double value(void)
+  {
+    return _value;
+  }
+  double step(void)
+  {
+    return _step;
+  }
 
 public slots:
   void setMinValue(double minValue_);
@@ -56,7 +87,7 @@ public slots:
   void setValue(double value_);
   void setIntValue(int value);
   void sliderMoving(int value);
-  void sliderMoving();
+  void sliderMoving(void);
   void setStep(double step_);
   void actionTriggering(int action);
 
@@ -64,3 +95,6 @@ signals:
   void valueChanged(double value_);
   void sliderMoved(double value_);
 };
+
+#endif // MYSCROLLBAR_H
+// EOF

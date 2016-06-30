@@ -18,14 +18,24 @@
 #include "myscrollbar.h"
 #include <qlayout.h>
 
-MyScrollBar::MyScrollBar(Qt::Orientation orientation, QWidget *parent, const char *name) :
+//------------------------------------------------------------------------------
+MyScrollBar::MyScrollBar(Qt::Orientation orientation, QWidget *parent, const char *name):
   QWidget(parent, name)
 {
   bar = new QScrollBar(orientation, this);
   bar->show();
 }
 
-MyScrollBar::MyScrollBar(double minValue_, double maxValue_, double lineStep_, double pageStep_, double value_, double step_, Qt::Orientation orientation, QWidget *parent, const char *name) :
+//------------------------------------------------------------------------------
+MyScrollBar::MyScrollBar(double minValue_,
+			 double maxValue_,
+			 double lineStep_,
+			 double pageStep_,
+			 double value_,
+			 double step_,
+			 Qt::Orientation orientation,
+			 QWidget * parent,
+			 const char * name):
   QWidget(parent, name)
 {
   _minValue = minValue_;
@@ -45,83 +55,98 @@ MyScrollBar::MyScrollBar(double minValue_, double maxValue_, double lineStep_, d
   connect(bar, SIGNAL(actionTriggered(int)), this, SLOT(actionTriggering(int)));
 }
 
-MyScrollBar::~MyScrollBar()
+//------------------------------------------------------------------------------
+MyScrollBar::~MyScrollBar(void)
 {
   delete bar;
 }
 
-QSize MyScrollBar::sizeHint() const
+//------------------------------------------------------------------------------
+QSize MyScrollBar::sizeHint(void) const
 {
   return bar->sizeHint();
 }
 
-void MyScrollBar::resizeEvent(QResizeEvent *q)
+//------------------------------------------------------------------------------
+void MyScrollBar::resizeEvent(QResizeEvent * q)
 {
   bar->resize(q->size());
 }
 
+//------------------------------------------------------------------------------
 void MyScrollBar::setMinValue(double minValue_)
 {
   _minValue = minValue_;
   bar->setMinimum(toInt(_minValue * _step));
 }
 
+//------------------------------------------------------------------------------
 void MyScrollBar::setMaxValue(double maxValue_)
 {
   _maxValue = maxValue_;
   bar->setMaximum(toInt(_maxValue * _step));
 }
 
+//------------------------------------------------------------------------------
 void MyScrollBar::setRange(double minValue_, double maxValue_)
 {
   setMinValue(minValue_);
   setMaxValue(maxValue_);
 }
 
+//------------------------------------------------------------------------------
 void MyScrollBar::setLineStep(double lineStep_)
 {
   _lineStep = lineStep_;
   bar->setSingleStep(toInt(_lineStep * _step));
 }
 
+//------------------------------------------------------------------------------
 void MyScrollBar::setPageStep(double pageStep_)
 {
   _pageStep = pageStep_;
   bar->setPageStep(toInt(_pageStep * _step));
 }
 
+//------------------------------------------------------------------------------
 void MyScrollBar::setValue(double value_)
 {
   _value = value_;
   bar->setValue(toInt(_value * _step));
 }
 
+//------------------------------------------------------------------------------
 void MyScrollBar::setIntValue(int value_)
 {
   _value = double(value_) / _step;
   emit valueChanged(_value);
 }
 
+//------------------------------------------------------------------------------
 void MyScrollBar::setStep(double step_)
 {
   _step = step_;
 }
 
+//------------------------------------------------------------------------------
 void MyScrollBar::sliderMoving(int value_)
 {
   _value = double(value_) / _step;
   emit sliderMoved(_value);
 }
 
+//------------------------------------------------------------------------------
 void MyScrollBar::sliderMoving()
 {
   _value = double(bar->value()) / _step;
   emit sliderMoved(_value);
 }
 
+//------------------------------------------------------------------------------
 void MyScrollBar::actionTriggering(int /*action*/)
 {
   setIntValue(bar->sliderPosition());
   emit sliderMoved(_value);
 }
 
+// EOF
