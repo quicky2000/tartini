@@ -165,6 +165,7 @@ HEADERS += main.h \
   general/large_vector.h \
   general/large_vector.hpp \
   widgets/mylabel.h \
+  widgets/mylabel.hpp \
   general/fast_smooth.h \
   general/fast_smooth.hpp \
   global/conversions.h \

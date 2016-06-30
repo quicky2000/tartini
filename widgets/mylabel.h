@@ -31,21 +31,11 @@ class MyLabel : public DrawWidget
 {
 public:
   MyLabel(const QString & text_, QWidget * parent, const char * name = 0);
-  QString text(void)
-  {
-    return _text;
-  }
-  void setText(const QString & text_)
-  {
-    _text = text_;
-    update();
-  }
+  inline QString text(void) const;
+  inline void setText(const QString & text_);
   
   void paintEvent( QPaintEvent * );
-  QSize sizeHint(void) const
-  {
-    return QSize(_textWidth + 8, _fontHeight + 4);
-  }
+  inline QSize sizeHint(void) const;
 
  private:
   QString _text;
@@ -54,6 +44,8 @@ public:
   int _textWidth;
 
 };
+
+#include "mylabel.hpp"
 
 #endif // MYLABEL_H
 // EOF
