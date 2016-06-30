@@ -14,13 +14,11 @@
  ***************************************************************************/
 
 #include "timeaxis.h"
-//#include "mycolor.h"
 #include "useful.h"
 #include "gdata.h"
 
 #include <math.h>
 #include <qpainter.h>
-//Added by qt3to4:
 #include <QPaintEvent>
 
 TimeAxis::TimeAxis(QWidget *parent, bool numbersOnTop_)
@@ -83,7 +81,6 @@ void TimeAxis::paintEvent(QPaintEvent *)
     
   // Draw Ruler Numbers
   p.setBrush(Qt::black);
-  //p.setFont(QFont("AnyStyle", h / 2 - 7));
   p.setFont(_font);
   double timePos = floor(leftTime() / (timeScaleBase*largeFreq)) * (timeScaleBase*largeFreq); //calc the first one just off the left of the screen
   int x, largeCounter=-1;
@@ -115,8 +112,6 @@ void TimeAxis::paintEvent(QPaintEvent *)
     if(++largeCounter == largeFreq) {
       largeCounter = 0;
       //draw the bigger lines and the numbers
-      //QString numString = QString::number(timePos);
-
       double newTime = myround(timePos / timeScaleBase) * timeScaleBase;
       QString mins;
       double secs = fmod(newTime, 60.0);

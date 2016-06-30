@@ -42,9 +42,6 @@ public:
   QSize sizeHint() const { return QSize(700, 20); }
 
   void init();
-  //double leftTime() { return _leftTime; }
-  //double rightTime() { return _rightTime; }
-  //double timeWidth() { return rightTime() - leftTime(); }
   double leftTime() { return gdata->getView().viewLeft(); }
   double rightTime() { return gdata->getView().viewRight(); }
   double timeWidth() { return gdata->getView().viewTotalTime(); }
