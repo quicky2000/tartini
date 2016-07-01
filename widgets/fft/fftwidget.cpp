@@ -17,7 +17,6 @@
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <q3memarray.h>
-//Added by qt3to4:
 #include <QPaintEvent>
 
 #include "fftwidget.h"
@@ -41,7 +40,6 @@ void FFTWidget::paintEvent( QPaintEvent * )
   Channel *active = gdata->getActiveChannel();
 
   AnalysisData *data;
-  //double dh2 = double(height()-1) / 2.0;
   double pixelStep;
   int j, x;
     
@@ -57,7 +55,6 @@ void FFTWidget::paintEvent( QPaintEvent * )
     if(data) {
       double freq = data->getFundamentalFreq();
       double normalisedFreq = freq / double(active->rate()) * 2.0;
-      //double numPeriods = double(active->size()) / period;
       double scaleX = normalisedFreq * double(width()); //pixels per fundamental freq
       
       //draw alternating background color indicating period
@@ -88,64 +85,12 @@ void FFTWidget::paintEvent( QPaintEvent * )
     }
 
     //draw the waveform
-    //float size = active->get_fft_data1().size();
-/*
-    p.setPen(QPen(active->color, 0));
-    for(int j=0; j<width(); j++) { //cheap hack to go faster (by drawing less points)
-      myassert(int(pixelStep*j) < active->get_fft_data1().size());
-      //pointArray.setPoint(j, j, -toInt(log10(active->get_fft_data1().at(int(pixelStep*j))/size)*ratio));
-      pointArray.setPoint(j, j, -toInt(active->get_fft_data1().at(int(pixelStep*j))*ratio));
-    }
-    p.drawPolyline(pointArray);
-*/
     p.setPen(QPen(Qt::red, 0));
     for(int j=0; j<width(); j++) { //cheap hack to go faster (by drawing less points)
       myassert(int(pixelStep*j) < active->get_fft_data2().size());
-      //pointArray.setPoint(j, j, -toInt(log10(active->get_fft_data1().at(int(pixelStep*j))/size)*ratio));
-      //pointArray.setPoint(j, j, -toInt(active->get_fft_data1().at(int(pixelStep*j))*ratio));
-      //pointArray.setPoint(j, j, height()-1-toInt(active->get_fft_data2().at(int(pixelStep*j))*ratio));
       pointArray.setPoint(j, j, height()-1-toInt(active->get_fft_data2().at(int(pixelStep*j))*double(height())));
     }
     p.drawPolyline(pointArray);
-/*
-    //if(gdata->doingActiveCepstrum()) {
-    if(gdata->analysisType() == MPM_MODIFIED_CEPSTRUM) {
-      ratio = double(height()) / 2.0;
-      p.setPen(QPen(Qt::blue, 0));
-      for(int j=0; j<width(); j++) { //cheap hack to go faster (by drawing less points)
-        myassert(int(pixelStep*j) < active->get_fft_data2().size());
-        //pointArray.setPoint(j, j, -toInt(log10(active->get_fft_data1().at(int(pixelStep*j))/size)*ratio));
-        pointArray.setPoint(j, j, height()-1-toInt(active->fftData3.at(int(pixelStep*j))*ratio));
-      }
-      p.drawPolyline(pointArray);
-    }
-*/
-/*
-    if(data) {
-      double ratio = double(width()) / double(active->nsdfData.size()); //pixels per index
-      float highest = active->nsdfData.at(data->highestCorrelationIndex);
-      float chosen = active->nsdfData.at(data->chosenCorrelationIndex);
-      
-      //draw threshold line
-      p.setPen(QPen(colorBetween(colorGroup().background(), Qt::black, 0.3), 0));
-      y = toInt(dh2 - (highest * active->threshold()) * dh2);
-      p.drawLine(0, y, width(), y);
-      
-      //draw a dot at the highest correlation period
-      p.setPen(Qt::black);
-      p.setBrush(Qt::black);
-      x = toInt(double(data->highestCorrelationIndex) * ratio);
-      y = toInt(dh2 - highest * dh2);
-      p.drawEllipse(x-2, y-2, 5, 5);
-      
-      //draw a dot at the chosen correlation period
-      p.setPen(Qt::red);
-      p.setBrush(Qt::red);
-      x = toInt(double(data->chosenCorrelationIndex) * ratio);
-      y = toInt(dh2 - chosen * dh2);
-      p.drawEllipse(x-2, y-2, 5, 5);
-    }
-*/    
     active->unlock();
   } else {
     clearBackground();
