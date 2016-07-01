@@ -22,21 +22,22 @@
 
 class FFTWidget;
 
-class FFTView : public ViewWidget {
+class FFTView: public ViewWidget
+{
   Q_OBJECT
 
-  public:
-    FFTView(int viewID_, QWidget *parent = 0);
-    virtual ~FFTView();
+ public:
+  FFTView(int viewID_, QWidget *parent = 0);
+  virtual ~FFTView(void);
 
-    void resizeEvent(QResizeEvent *);
+  void resizeEvent(QResizeEvent *);
 
-    QSize sizeHint() const { return QSize(400, 128); }
+  QSize sizeHint(void) const;
 
-  private:
-    FFTWidget *fftWidget;
-
+ private:
+  FFTWidget *fftWidget;
 };
 
+#endif // FFTVIEW_H
+// EOF
 
-#endif

@@ -20,17 +20,19 @@
 #include "channel.h"
 #include <QResizeEvent>
 
-FFTView::FFTView( int viewID_, QWidget *parent )
- : ViewWidget( viewID_, parent)
+//------------------------------------------------------------------------------
+FFTView::FFTView( int viewID_, QWidget *parent ):
+  ViewWidget( viewID_, parent)
 {
   gdata->setDoingActiveFFT(true);
   
   Channel *active = gdata->getActiveChannel();
-  if(active) {
-    active->lock();
-    active->processChunk(active->currentChunk());
-    active->unlock();
-  }
+  if(active)
+    {
+      active->lock();
+      active->processChunk(active->currentChunk());
+      active->unlock();
+    }
 
   fftWidget = new FFTWidget(this);
   fftWidget->show();
@@ -39,13 +41,23 @@ FFTView::FFTView( int viewID_, QWidget *parent )
   connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), fftWidget, SLOT(update()));
 }
 
-FFTView::~FFTView()
+//------------------------------------------------------------------------------
+FFTView::~FFTView(void)
 {
   gdata->setDoingActiveFFT(false);
   delete fftWidget;
 }
 
+//------------------------------------------------------------------------------
 void FFTView::resizeEvent(QResizeEvent *)
 {
   fftWidget->resize(size());
 }
+
+//------------------------------------------------------------------------------
+  QSize FFTView::sizeHint(void) const
+{
+  return QSize(400, 128);
+}
+
+// EOF

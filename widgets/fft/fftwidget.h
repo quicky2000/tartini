@@ -24,20 +24,22 @@
 // Forward declarations of classes the h file doesn't need to know specifics about
 class Q3PointArray;
 
-class FFTWidget : public DrawWidget {
+class FFTWidget: public DrawWidget
+{
   Q_OBJECT
 
-  public:
-    FFTWidget(QWidget *parent);
-    virtual ~FFTWidget();
+public:
+  FFTWidget(QWidget *parent);
+  virtual ~FFTWidget(void);
 
-    void paintEvent( QPaintEvent * );
+  void paintEvent( QPaintEvent * );
 
-    QSize sizeHint() const { return QSize(500, 128); }
+  QSize sizeHint(void) const;
 
-  private:
-    Q3PointArray pointArray;
+ private:
+  Q3PointArray pointArray;
 };
 
+#endif // FFTWIDGET_H
+// EOF
 
-#endif
