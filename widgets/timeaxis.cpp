@@ -25,21 +25,21 @@
 
 //------------------------------------------------------------------------------
 TimeAxis::TimeAxis(QWidget *parent, bool numbersOnTop_)
-  : DrawWidget(parent)
+  : DrawWidget(parent),
+  _leftTime(0.0),
+  _rightTime(0.0),
+  _numbersOnTop(numbersOnTop_)
 {
-  _leftTime = 0.0;
-  _rightTime = 0.0;
-  _numbersOnTop = numbersOnTop_; 
   init();
 }
 
 //------------------------------------------------------------------------------
 TimeAxis::TimeAxis(QWidget *parent, const double & leftTime_, const double & rightTime_, bool numbersOnTop_):
-  DrawWidget(parent)
+  DrawWidget(parent),
+  _leftTime(leftTime_),
+  _rightTime(rightTime_),
+  _numbersOnTop(numbersOnTop_)
 {
-  _leftTime = leftTime_;
-  _rightTime = rightTime_;
-  _numbersOnTop = numbersOnTop_;
   init();
 }
 
