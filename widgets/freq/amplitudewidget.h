@@ -17,7 +17,6 @@
 #define AMPLITUDEWIDGET_H
 
 #include <QGLWidget>
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <QPixmap>
 #include <Q3PointArray>
@@ -70,13 +69,17 @@ private:
   QString getCurrentThresholdString(void)const;
   void drawChannelAmplitudeGL(Channel *ch);
   void drawChannelAmplitudeFilledGL(Channel *ch);
+
+  /**
+     This function has the side effect of changing zoom element
+  */
   bool calcZoomElement(ZoomElement &ze, Channel *ch, int baseElement, double baseX);
-  double calculateElement(AnalysisData *data);
+  double calculateElement(AnalysisData * data);
   void setCurrentThreshold(double newThreshold, int index);
 
-  void mousePressEvent( QMouseEvent *e );
-  void mouseMoveEvent( QMouseEvent *e );
-  void mouseReleaseEvent( QMouseEvent *e );
+  void mousePressEvent( QMouseEvent * e);
+  void mouseMoveEvent( QMouseEvent * e);
+  void mouseReleaseEvent( QMouseEvent * e);
   void wheelEvent(QWheelEvent * e);
 
   inline double leftTime(void)const;

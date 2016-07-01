@@ -22,7 +22,6 @@
 #include "channel.h"
 #include "zoomlookup.h"
 #include "qcursor.h"
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <Q3PointArray>
 #include <QWheelEvent>
@@ -38,7 +37,6 @@
 
 //------------------------------------------------------------------------------
 AmplitudeWidget::AmplitudeWidget(QWidget * /*parent*/, const char* /*name*/)
-//  : DrawWidget(parent, name, Qt::WDestructiveClose)
 // Replace call to setRange(0.8); and setOffset(0.0) by final value assignations
 // to avoid issue with non initialised values. We don't care about signal emissions
 // because at construction time there are still not bound to slots
@@ -156,15 +154,17 @@ void AmplitudeWidget::paintGL(void)
   mygl_line(0, y, width(), y);
 
   qglColor(Qt::black);
-  renderText(2, height()-3, getCurrentThresholdString());
+  renderText(2, height() - 3, getCurrentThresholdString());
 }
 
 //------------------------------------------------------------------------------
 void AmplitudeWidget::drawVerticalRefLines(void)
 {
   //Draw the vertical reference lines
-  double timeStep = timeWidth() / double(width()) * 150.0; //time per 150 pixels
-  double timeScaleBase = pow10(floor(log10(timeStep))); //round down to the nearest power of 10
+  //time per 150 pixels
+  double timeStep = timeWidth() / double(width()) * 150.0;
+  //round down to the nearest power of 10
+  double timeScaleBase = pow10(floor(log10(timeStep)));
 
   //choose a timeScaleStep which is a multiple of 1, 2 or 5 of timeScaleBase
   int largeFreq;
@@ -182,8 +182,9 @@ void AmplitudeWidget::drawVerticalRefLines(void)
       timeScaleBase /= 2;
     }
 
-  double timePos = floor(leftTime() / (timeScaleBase*largeFreq)) * (timeScaleBase*largeFreq); //calc the first one just off the left of the screen
-  int x, largeCounter=-1;
+  //calc the first one just off the left of the screen
+  double timePos = floor(leftTime() / (timeScaleBase * largeFreq)) * (timeScaleBase * largeFreq);
+  int x, largeCounter = -1;
   double ratio = double(width()) / timeWidth();
   double lTime = leftTime();
 
@@ -192,25 +193,25 @@ void AmplitudeWidget::drawVerticalRefLines(void)
       if(++largeCounter == largeFreq)
 	{
 	  largeCounter = 0;
-	  glColor4ub(25, 125, 170, 128); //draw the darker lines
+	  //draw the darker lines
+	  glColor4ub(25, 125, 170, 128);
 	}
       else
 	{
-	  glColor4ub(25, 125, 170, 64); //draw the lighter lines
+	  //draw the lighter lines
+	  glColor4ub(25, 125, 170, 64);
 	}
       x = toInt((timePos-lTime) * ratio);
-      mygl_line(x, 0, x, height()-1);
+      mygl_line(x, 0, x, height() - 1);
     }
 }
 
-/**
-   This function has the side effect of changing ze
-*/
+//------------------------------------------------------------------------------
 bool AmplitudeWidget::calcZoomElement(ZoomElement &ze, Channel *ch, int baseElement, double baseX)
 {
   int startChunk = int(floor(double(baseElement) * baseX));
   myassert(startChunk <= ch->totalChunks());
-  int finishChunk = int(floor(double(baseElement+1) * baseX)) + 1;
+  int finishChunk = int(floor(double(baseElement + 1) * baseX)) + 1;
   myassert(finishChunk <= ch->totalChunks());
   if(startChunk == finishChunk)
     {
@@ -223,24 +224,24 @@ bool AmplitudeWidget::calcZoomElement(ZoomElement &ze, Channel *ch, int baseElem
   std::pair<large_vector<AnalysisData>::iterator, large_vector<AnalysisData>::iterator> a =
     minMaxElement(ch->dataIteratorAtChunk(startChunk), ch->dataIteratorAtChunk(finishChunk), lessValue(mode));
   myassert(a.second != ch->dataIteratorAtChunk(finishChunk));
-  float low = (*amp_mode_func[mode])(a.first->getValue(mode),*gdata);
-  float high = (*amp_mode_func[mode])(a.second->getValue(mode),*gdata);
+  float low = (*amp_mode_func[mode])(a.first->getValue(mode), *gdata);
+  float high = (*amp_mode_func[mode])(a.second->getValue(mode), *gdata);
   
-  ze.set(low, high, 0, ch->get_color(), NO_NOTE, (startChunk+finishChunk)/2);
+  ze.set(low, high, 0, ch->get_color(), NO_NOTE, (startChunk + finishChunk) / 2);
   return true;
 }
 
 //------------------------------------------------------------------------------
 double AmplitudeWidget::calculateElement(AnalysisData *data)
 {
-  double val = (*amp_mode_func[gdata->amplitudeMode()])(data->getValue(gdata->amplitudeMode()),*gdata);
+  double val = (*amp_mode_func[gdata->amplitudeMode()])(data->getValue(gdata->amplitudeMode()), *gdata);
   return val;
 }
 
 //------------------------------------------------------------------------------
 double AmplitudeWidget::getCurrentThreshold(int index)
 {
-  return (*amp_mode_func[gdata->amplitudeMode()])(gdata->ampThreshold(gdata->amplitudeMode(), index),*gdata);
+  return (*amp_mode_func[gdata->amplitudeMode()])(gdata->ampThreshold(gdata->amplitudeMode(), index), *gdata);
 }
 
 //------------------------------------------------------------------------------
@@ -256,7 +257,7 @@ void AmplitudeWidget::setCurrentThreshold(double newThreshold, int index)
       setOffset(maxOffset() - (newThreshold - range()));
     }
 
-  gdata->setAmpThreshold(gdata->amplitudeMode(), index, (*amp_mode_inv_func[gdata->amplitudeMode()])(newThreshold,*gdata));
+  gdata->setAmpThreshold(gdata->amplitudeMode(), index, (*amp_mode_inv_func[gdata->amplitudeMode()])(newThreshold, *gdata));
 }
 
 //------------------------------------------------------------------------------
@@ -300,8 +301,7 @@ void AmplitudeWidget::drawChannelAmplitudeGL(Channel *ch)
   int lastBaseElement = int(floor(double(ch->totalChunks()) / baseX));
   double heightRatio = double(height()) / range();
   
-  //Q3PointArray pointArray(width()*2);
-  Array1d<MyGLfloat2d> vertexArray(width()*2);
+  Array1d<MyGLfloat2d> vertexArray(width() * 2);
   int pointIndex = 0;
 
   if (baseX > 1)
@@ -327,7 +327,7 @@ void AmplitudeWidget::drawChannelAmplitudeGL(Channel *ch)
 	  vertexArray[pointIndex++] = MyGLfloat2d(n, height() - 1 - ((ze.high() - offsetInv()) * heightRatio) - halfLineWidth);
 	  vertexArray[pointIndex++] = MyGLfloat2d(n, height() - 1 - ((ze.low() - offsetInv()) * heightRatio) + halfLineWidth);
 	}
-      myassert(pointIndex <= width()*2);
+      myassert(pointIndex <= width() * 2);
       qglColor(ch->get_color());
       glLineWidth(1.0f);
       glVertexPointer(2, GL_FLOAT, 0, vertexArray.begin());
@@ -337,8 +337,10 @@ void AmplitudeWidget::drawChannelAmplitudeGL(Channel *ch)
     {
       //baseX <= 1
       float val = 0.0;
-      int intChunk = (int) floor(leftFrameTime); // Integer version of frame time
-      double stepSize = 1.0 / baseX; // So we skip some pixels
+      // Integer version of frame time
+      int intChunk = (int) floor(leftFrameTime);
+      // So we skip some pixels
+      double stepSize = 1.0 / baseX;
       float x = 0.0f, y;
 
       double start = (double(intChunk) - leftFrameTime) * stepSize;
@@ -367,7 +369,7 @@ void AmplitudeWidget::drawChannelAmplitudeGL(Channel *ch)
 	  y = height() - 1 - ((val - offsetInv()) * heightRatio);
 	  vertexArray[pointIndex++] = MyGLfloat2d(x, y);
 	}
-      myassert(pointIndex <= width()*2);
+      myassert(pointIndex <= width() * 2);
       qglColor(ch->get_color());
       glLineWidth(3.0f);
       glVertexPointer(2, GL_FLOAT, 0, vertexArray.begin());
@@ -400,7 +402,7 @@ void AmplitudeWidget::drawChannelAmplitudeFilledGL(Channel *ch)
   int lastBaseElement = int(floor(double(ch->totalChunks()) / baseX));
   double heightRatio = double(height()) / range();
   
-  Array1d<MyGLfloat2d> vertexArray(width()*2);
+  Array1d<MyGLfloat2d> vertexArray(width() * 2);
   int pointIndex = 0;
 
   if (baseX > 1)
@@ -435,8 +437,10 @@ void AmplitudeWidget::drawChannelAmplitudeFilledGL(Channel *ch)
     {
       //baseX <= 1
       float val = 0.0;
-      int intChunk = (int) floor(leftFrameTime); // Integer version of frame time
-      double stepSize = 1.0 / baseX; // So we skip some pixels
+      // Integer version of frame time
+      int intChunk = (int) floor(leftFrameTime);
+      // So we skip some pixels
+      double stepSize = 1.0 / baseX;
       float x = 0.0f, y;
 
       double start = (double(intChunk) - leftFrameTime) * stepSize;
@@ -467,7 +471,7 @@ void AmplitudeWidget::drawChannelAmplitudeFilledGL(Channel *ch)
 	  vertexArray[pointIndex++] = MyGLfloat2d(x, y);
 	  vertexArray[pointIndex++] = MyGLfloat2d(x, height());
 	}
-      myassert(pointIndex <= width()*2);
+      myassert(pointIndex <= width() * 2);
       qglColor(gdata->shading2Color());
       glVertexPointer(2, GL_FLOAT, 0, vertexArray.begin());
       glDrawArrays(GL_QUAD_STRIP, 0, pointIndex);
@@ -475,7 +479,7 @@ void AmplitudeWidget::drawChannelAmplitudeFilledGL(Channel *ch)
 }
 
 //------------------------------------------------------------------------------
-void AmplitudeWidget::mousePressEvent(QMouseEvent *e)
+void AmplitudeWidget::mousePressEvent(QMouseEvent * e)
 {
   View & view = gdata->getView();
   int timeX = toInt(view.viewOffset() / view.zoomX());
@@ -490,13 +494,14 @@ void AmplitudeWidget::mousePressEvent(QMouseEvent *e)
       return;
     }
   //Check if user clicked on a threshold bar
-  for(int j=0; j<2; j++)
+  for(int j = 0; j < 2; j++)
     {
       pixelAtCurrentNoiseThresholdY = height() - 1 - toInt((getCurrentThreshold(j) - offsetInv()) / range() * double(height()));
       if(within(4, e->y(), pixelAtCurrentNoiseThresholdY))
 	{
 	  dragMode = DragNoiseThreshold;
-	  thresholdIndex = j; //remember which thresholdIndex the user clicked
+	  //remember which thresholdIndex the user clicked
+	  thresholdIndex = j;
 	  mouseY = e->y();
 	  return;
 	}
@@ -549,7 +554,7 @@ void AmplitudeWidget::mouseMoveEvent(QMouseEvent *e)
       else
 	{
 	  bool overThreshold = false;
-	  for(int j=0; j<2; j++)
+	  for(int j = 0; j < 2; j++)
 	    {
 	      pixelAtCurrentNoiseThresholdY = height() - 1 - toInt((getCurrentThreshold(j) - offsetInv()) / range() * double(height()));
 	      if(within(4, e->y(), pixelAtCurrentNoiseThresholdY))
