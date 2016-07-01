@@ -21,15 +21,18 @@
 #include "analysisdata.h"
 #include "useful.h"
 
+//------------------------------------------------------------------------------
 BaseWidget::BaseWidget(QWidget *parent)
   : DrawWidget(parent)
 {
 }
 
-BaseWidget::~BaseWidget()
+//------------------------------------------------------------------------------
+BaseWidget::~BaseWidget(void)
 {
 }
 
+//------------------------------------------------------------------------------
 void BaseWidget::paintEvent( QPaintEvent * )
 {
   Channel *active = gdata->getActiveChannel();
@@ -40,5 +43,12 @@ void BaseWidget::paintEvent( QPaintEvent * )
   p.drawLine(0, 0, width(), height());
 
   endDrawing();
-
 }
+
+//------------------------------------------------------------------------------
+QSize BaseWidget::sizeHint(void) const
+{
+  return QSize(300, 200);
+}
+
+// EOF

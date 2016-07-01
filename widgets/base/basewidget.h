@@ -17,20 +17,21 @@
 
 #include "drawwidget.h"
 
-class BaseWidget : public DrawWidget {
+class BaseWidget : public DrawWidget
+{
   Q_OBJECT
 
   public:
-    BaseWidget(QWidget *parent);
-    virtual ~BaseWidget();
+  BaseWidget(QWidget *parent);
+  virtual ~BaseWidget(void);
 
-    void paintEvent( QPaintEvent * );
+  void paintEvent( QPaintEvent * );
 
-    QSize sizeHint() const { return QSize(300, 200); }
+  QSize sizeHint(void) const;
 
   private:
     //data goes here
 };
+#endif // BASEWIDGET_H
+// EOF
 
-
-#endif

@@ -19,21 +19,20 @@
 
 class BaseWidget;
 
-class BaseView : public ViewWidget {
+class BaseView : public ViewWidget
+{
   Q_OBJECT
 
   public:
-    BaseView(int viewID_, QWidget *parent = 0);
-    virtual ~BaseView();
+  BaseView(int viewID_, QWidget *parent = 0);
+  virtual ~BaseView(void);
 
-    void resizeEvent(QResizeEvent *);
+  void resizeEvent(QResizeEvent *);
 
-    QSize sizeHint() const { return QSize(300, 200); }
+  QSize sizeHint(void) const;
 
   private:
     BaseWidget *baseWidget;
-
 };
-
-
-#endif
+#endif // BASEVIEW_H
+// EOF

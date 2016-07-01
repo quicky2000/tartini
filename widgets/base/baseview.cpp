@@ -29,8 +29,9 @@
 #include "basewidget.h"
 #include "gdata.h"
 
-BaseView::BaseView( int viewID_, QWidget *parent )
- : ViewWidget( viewID_, parent)
+//------------------------------------------------------------------------------
+BaseView::BaseView(int viewID_, QWidget *parent ):
+  ViewWidget( viewID_, parent)
 {
   //create a drawing object
   baseWidget = new BaseWidget(this);
@@ -40,12 +41,22 @@ BaseView::BaseView( int viewID_, QWidget *parent )
   connect(gdata->view, SIGNAL(onFastUpdate(double)), baseWidget, SLOT(update()));
 }
 
-BaseView::~BaseView()
+//------------------------------------------------------------------------------
+BaseView::~BaseView(void)
 {
   delete baseWidget;
 }
 
+//------------------------------------------------------------------------------
 void BaseView::resizeEvent(QResizeEvent *)
 {
   baseWidget->resize(size());
 }
+
+//------------------------------------------------------------------------------
+QSize BaseView::sizeHint(void) const
+{
+  return QSize(300, 200);
+}
+
+// EOF
