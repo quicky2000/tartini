@@ -53,7 +53,6 @@ public:
 
  private:
   double _leftTime, _rightTime;
-  QPixmap *buffer;
   bool _numbersOnTop;
   QFont _font;
   int _fontSize;
