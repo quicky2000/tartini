@@ -135,6 +135,7 @@ HEADERS += main.h \
   general/mytransforms.h \
   general/mytransforms.hpp \
   widgets/timeaxis.h \
+  widgets/timeaxis.hpp \
   sound/analysisdata.h \
   sound/analysisdata.hpp \
   sound/soundfile.h \

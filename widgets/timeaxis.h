@@ -35,43 +35,21 @@ public:
   TimeAxis(QWidget *parent, double leftTime_, double rightTime_, bool numbersOnTop_=true);
   ~TimeAxis(void);
 
-  QSize sizeHint(void) const
-  {
-    return QSize(700, 20);
-  }
+  inline QSize sizeHint(void) const;
 
   void init(void);
-  double leftTime(void)
-  {
-    return gdata->getView().viewLeft();
-  }
-  double rightTime(void)
-  {
-    return gdata->getView().viewRight();
-  }
-  double timeWidth(void)
-  {
-    return gdata->getView().viewTotalTime();
-  }
+  inline double leftTime(void);
+  inline double rightTime(void);
+  inline double timeWidth(void);
 
   void setFontSize(int fontSize);
   
   void paintEvent(QPaintEvent *);
 
   public slots:
-  void setLeftTime(double time)
-  {
-    _leftTime = time;
-  }
-  void setRightTime(double time)
-  {
-    _rightTime = time;
-  }
-  void setRange(double leftTime_, double rightTime_)
-  {
-    _leftTime = leftTime_;
-    _rightTime = rightTime_;
-  }
+  inline void setLeftTime(double time);
+  inline void setRightTime(double time);
+  inline void setRange(double leftTime_, double rightTime_);
 
  private:
   double _leftTime, _rightTime;
@@ -81,6 +59,8 @@ public:
   int _fontSize;
     
 };
+
+#include "timeaxis.hpp"
 
 #endif // TIMEAXIS_H
 // EOF
