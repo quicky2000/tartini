@@ -23,19 +23,19 @@ QSize TimeAxis::sizeHint(void) const
 }
 
 //------------------------------------------------------------------------------
-double TimeAxis::leftTime(void)
+double TimeAxis::leftTime(void) const
 {
   return gdata->getView().viewLeft();
 }
 
 //------------------------------------------------------------------------------
-double TimeAxis::rightTime(void)
+double TimeAxis::rightTime(void) const
 {
   return gdata->getView().viewRight();
 }
 
 //------------------------------------------------------------------------------
-double TimeAxis::timeWidth(void)
+double TimeAxis::timeWidth(void) const
 {
   return gdata->getView().viewTotalTime();
 }

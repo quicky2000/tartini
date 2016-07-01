@@ -38,9 +38,9 @@ public:
   inline QSize sizeHint(void) const;
 
   void init(void);
-  inline double leftTime(void);
-  inline double rightTime(void);
-  inline double timeWidth(void);
+  inline double leftTime(void) const;
+  inline double rightTime(void) const;
+  inline double timeWidth(void) const;
 
   void setFontSize(int fontSize);
   
