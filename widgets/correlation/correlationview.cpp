@@ -16,17 +16,14 @@
 #include "correlationwidget.h"
 #include "gdata.h"
 #include "channel.h"
-//Added by qt3to4:
 #include <QResizeEvent>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-//#include <QCheckBox>
 #include <QComboBox>
 
 CorrelationView::CorrelationView( int viewID_, QWidget *parent )
  : ViewWidget( viewID_, parent)
 {
-  //setCaption("Wave view");
   gdata->setDoingActiveAnalysis(true);
 
   Channel *active = gdata->getActiveChannel();
@@ -54,7 +51,6 @@ CorrelationView::CorrelationView( int viewID_, QWidget *parent )
 
 
   //make the widget get updated when the view changes
-  //connect(gdata->view, SIGNAL(onFastUpdate(double)), correlationWidget, SLOT(update()));
   connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), correlationWidget, SLOT(update()));
 }
 
@@ -64,9 +60,3 @@ CorrelationView::~CorrelationView()
   delete correlationWidget;
 }
 
-/*
-void CorrelationView::resizeEvent(QResizeEvent *)
-{
-  correlationWidget->resize(size());
-}
-*/

@@ -17,7 +17,6 @@
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <q3memarray.h>
-//Added by qt3to4:
 #include <QPaintEvent>
 
 #include "correlationwidget.h"
@@ -56,11 +55,9 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
     chunk = active->currentChunk();
     data = active->dataAtChunk(chunk);
 
-    //int centerX = width() / 2;
     if(data) {
       double freq = data->getFundamentalFreq();
       double period = double(active->rate()) / freq;
-      //double numPeriods = double(active->size()) / period;
       double scaleX = period * double(width()) / double(active->get_nsdf_data().size()); //pixels per period
       
       //draw alternating background color indicating period
@@ -110,7 +107,6 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
         if(aggregateMode == 1) input = &currentNote->get_nsdf_aggregate_data();
         else if(aggregateMode == 2) input = &currentNote->get_nsdf_aggregate_data_scaled();
       }
-      //bresenham1d(*input, lookup);
       maxAbsDecimate1d(*input, lookup);
       for(int j=0; j<w; j++) {
         pointArray.setPoint(j, j*2, toInt(dh2 - lookup[j]*dh2));
@@ -121,8 +117,6 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
     }
     if(data && (aggregateMode == 0)) {
       double ratio = double(width()) / double(active->get_nsdf_data().size()); //pixels per index
-      //float highest = active->nsdfData.at(data->highestCorrelationIndex);
-      //float chosen = active->nsdfData.at(data->chosenCorrelationIndex);
       
       //draw a dot at all the period estimates
       p.setPen(Qt::blue);
@@ -143,7 +137,6 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
         //draw a dot at the highest correlation period
         p.setPen(Qt::black);
         p.setBrush(Qt::black);
-        //x = toInt(double(data->highestCorrelationIndex) * ratio);
         x = toInt(double(data->getPeriodEstimatesAt(data->getHighestCorrelationIndex())) * ratio);
         y = toInt(dh2 - highest * dh2);
         p.drawEllipse(x-2, y-2, 5, 5);
@@ -153,8 +146,6 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
       if(data->getChosenCorrelationIndex() >= 0) {
         p.setPen(Qt::red);
         p.setBrush(Qt::red);
-        //x = toInt(double(data->chosenCorrelationIndex) * ratio);
-        //y = toInt(dh2 - chosen * dh2);
         x = toInt(double(data->getPeriodEstimatesAt(data->getChosenCorrelationIndex())) * ratio);
         y = toInt(dh2 - data->getPeriodEstimatesAmpAt(data->getChosenCorrelationIndex()) * dh2);
         p.drawEllipse(x-2, y-2, 5, 5);
@@ -164,7 +155,6 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
       if(data->getChosenCorrelationIndex() >= 0) {
         p.setPen(Qt::green);
         p.setBrush(Qt::green);
-        //x = toInt(double(data->periodOctaveEstimate) * ratio);
         x = toInt(double(active->periodOctaveEstimate(chunk)) * ratio);
         p.drawLine(x, 0, x, height());
       }
