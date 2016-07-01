@@ -32,7 +32,7 @@ class TimeAxis : public DrawWidget
 
 public:
   TimeAxis(QWidget *parent, bool numbersOnTop_=true);
-  TimeAxis(QWidget *parent, double leftTime_, double rightTime_, bool numbersOnTop_=true);
+  TimeAxis(QWidget *parent,const double & leftTime_, const double & rightTime_, bool numbersOnTop_=true);
   ~TimeAxis(void);
 
   inline QSize sizeHint(void) const;
@@ -47,9 +47,9 @@ public:
   void paintEvent(QPaintEvent *);
 
   public slots:
-  inline void setLeftTime(double time);
-  inline void setRightTime(double time);
-  inline void setRange(double leftTime_, double rightTime_);
+  inline void setLeftTime(const double & time);
+  inline void setRightTime(const double & time);
+  inline void setRange(const double & leftTime_, const double & rightTime_);
 
  private:
   double _leftTime, _rightTime;

@@ -34,7 +34,7 @@ TimeAxis::TimeAxis(QWidget *parent, bool numbersOnTop_)
 }
 
 //------------------------------------------------------------------------------
-TimeAxis::TimeAxis(QWidget *parent, double leftTime_, double rightTime_, bool numbersOnTop_):
+TimeAxis::TimeAxis(QWidget *parent, const double & leftTime_, const double & rightTime_, bool numbersOnTop_):
   DrawWidget(parent)
 {
   _leftTime = leftTime_;
