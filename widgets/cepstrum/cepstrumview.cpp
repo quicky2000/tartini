@@ -16,7 +16,6 @@
 #include "cepstrumwidget.h"
 #include "gdata.h"
 #include "channel.h"
-//Added by qt3to4:
 #include <QResizeEvent>
 
 CepstrumView::CepstrumView( int viewID_, QWidget *parent )
