@@ -25,11 +25,6 @@ class ViewWidget : public QWidget
 
  public:
   ViewWidget( int viewID_, QWidget *parent = 0, Qt::WFlags f = 0);
-  
-//  void closeEvent( QCloseEvent * e );
-  
-// signals:
-//  void aboutToClose(int viewID_);
 };
 
 #endif
