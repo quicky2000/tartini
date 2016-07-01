@@ -4,6 +4,8 @@
     begin                : Wed Feb 22 2006
     copyright            : (C) 2006 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,25 +18,25 @@
 #define DEBUGWIDGET_H
 
 #include "drawwidget.h"
-//Added by qt3to4:
 #include <QPaintEvent>
 
-class DebugWidget : public DrawWidget {
+class DebugWidget : public DrawWidget
+{
   Q_OBJECT
 
   public:
-    DebugWidget(QWidget *parent);
-    virtual ~DebugWidget();
+  DebugWidget(QWidget *parent);
+  virtual ~DebugWidget(void);
 
-    void paintEvent( QPaintEvent * );
-    void printString(const QString &s);
+  void paintEvent( QPaintEvent * );
+  void printString(const QString &s);
 
-    QSize sizeHint() const { return QSize(250, 500); }
+  QSize sizeHint(void) const;
 
-  private:
-    int textY;
-    int fontHeight;
+ private:
+  int textY;
+  int fontHeight;
 };
+#endif // DEBUGWIDGET_H
+// EOF
 
-
-#endif

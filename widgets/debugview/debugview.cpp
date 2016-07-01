@@ -4,6 +4,8 @@
     begin                : Wed Feb 22 2006
     copyright            : (C) 2006 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -15,9 +17,9 @@
 #include "debugview.h"
 #include "debugwidget.h"
 #include "gdata.h"
-//Added by qt3to4:
 #include <QResizeEvent>
 
+//------------------------------------------------------------------------------
 DebugView::DebugView( int viewID_, QWidget *parent )
  : ViewWidget( viewID_, parent)
 {
@@ -28,12 +30,21 @@ DebugView::DebugView( int viewID_, QWidget *parent )
   connect(&(gdata->getView()), SIGNAL(viewChanged()), debugWidget, SLOT(update()));
 }
 
-DebugView::~DebugView()
+//------------------------------------------------------------------------------
+DebugView::~DebugView(void)
 {
   delete debugWidget;
 }
 
+//------------------------------------------------------------------------------
 void DebugView::resizeEvent(QResizeEvent *)
 {
   debugWidget->resize(size());
 }
+
+//------------------------------------------------------------------------------
+QSize DebugView::sizeHint(void) const
+{
+  return QSize(250, 500);
+}
+// EOF
