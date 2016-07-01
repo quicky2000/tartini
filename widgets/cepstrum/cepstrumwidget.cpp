@@ -26,15 +26,18 @@
 #include "useful.h"
 #include "myqt.h"
 
-CepstrumWidget::CepstrumWidget(QWidget *parent)
-  : DrawWidget(parent)
+//------------------------------------------------------------------------------
+CepstrumWidget::CepstrumWidget(QWidget *parent):
+  DrawWidget(parent)
 {
 }
 
-CepstrumWidget::~CepstrumWidget()
+//------------------------------------------------------------------------------
+CepstrumWidget::~CepstrumWidget(void)
 {
 }
 
+//------------------------------------------------------------------------------
 void CepstrumWidget::paintEvent( QPaintEvent * )
 {
   Channel *active = gdata->getActiveChannel();
@@ -45,67 +48,91 @@ void CepstrumWidget::paintEvent( QPaintEvent * )
     
   beginDrawing(false);
   
-  if(active) {
-    pixelStep = double(active->get_cepstrum_data().size()) / double(width());
-    if(int(pointArray.size()) != width()) pointArray.resize(width());
+  if(active)
+    {
+      pixelStep = double(active->get_cepstrum_data().size()) / double(width());
+      if(int(pointArray.size()) != width())
+	{
+	  pointArray.resize(width());
+	}
     
-    active->lock();
-    data = active->dataAtCurrentChunk();
-    if(data) {
-      double freq = data->getFundamentalFreq();
-      double period = double(active->rate()) / freq;
-      double scaleX = period * double(width()) / double(active->get_nsdf_data().size()); //pixels per period
+      active->lock();
+      data = active->dataAtCurrentChunk();
+      if(data)
+	{
+	  double freq = data->getFundamentalFreq();
+	  double period = double(active->rate()) / freq;
+	  //pixels per period
+	  double scaleX = period * double(width()) / double(active->get_nsdf_data().size());
       
-      //draw alternating background color indicating period
-      if(gdata->getView().backgroundShading() && period > 4.0 && period < double(active->get_nsdf_data().size())) {
-        int n = int(ceil(double(width()) / scaleX)); //number of colored patches
-        p.setPen(Qt::NoPen);
-        QColor color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), data->getCorrelation());
-        QColor color2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), data->getCorrelation());
-        for(j = 0; j<n; j++) {
-          x = toInt(scaleX*double(j));
-          p.setBrush((j%2) ? color1 : color2);
-          p.drawRect(x, 0, toInt(scaleX*double(j+1)) - toInt(scaleX*double(j)), height());
-        }
-        p.setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3 * data->getCorrelation()));
-        for(j = 0; j<n; j++) {
-          x = toInt(scaleX*double(j));
-          p.drawLine(x, 0, x, height());
-        }
-      } else {
-        clearBackground();
-      }
-      QString numPeriodsText;
-      numPeriodsText.sprintf("Period = %lf", period);
-      p.setPen(Qt::black);
-      p.drawText(5, height() - 8, numPeriodsText);
+	  //draw alternating background color indicating period
+	  if(gdata->getView().backgroundShading() && period > 4.0 && period < double(active->get_nsdf_data().size()))
+	    {
+	      //number of colored patches
+	      int n = int(ceil(double(width()) / scaleX));
+	      p.setPen(Qt::NoPen);
+	      QColor color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), data->getCorrelation());
+	      QColor color2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), data->getCorrelation());
+	      for(j = 0; j < n; j++)
+		{
+		  x = toInt(scaleX * double(j));
+		  p.setBrush((j % 2) ? color1 : color2);
+		  p.drawRect(x, 0, toInt(scaleX * double(j + 1)) - toInt(scaleX * double(j)), height());
+		}
+	      p.setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3 * data->getCorrelation()));
+	      for(j = 0; j < n; j++)
+		{
+		  x = toInt(scaleX * double(j));
+		  p.drawLine(x, 0, x, height());
+		}
+	    }
+	  else
+	    {
+	      clearBackground();
+	    }
+	  QString numPeriodsText;
+	  numPeriodsText.sprintf("Period = %lf", period);
+	  p.setPen(Qt::black);
+	  p.drawText(5, height() - 8, numPeriodsText);
 
-      p.drawLine(0, height()/2, width(), height()/2);
+	  p.drawLine(0, height() / 2, width(), height() / 2);
 
-      //draw the waveform
-      double ratio = double(height()) / 2.0; //TODO: remove magic number
-      p.setPen(QPen(active->get_color(), 0));
-      for(int j=0; j<width(); j++) { //cheap hack to go faster (by drawing less points)
-        myassert(int(pixelStep*j) < active->get_cepstrum_data().size());
-        pointArray.setPoint(j, j, height()/2 - toInt(active->get_cepstrum_data().at(int(pixelStep*j))*ratio));
-      }
-      p.drawPolyline(pointArray);
+	  //draw the waveform
+	  double ratio = double(height()) / 2.0; //TODO: remove magic number
+	  p.setPen(QPen(active->get_color(), 0));
+	  for(int j = 0; j < width(); j++)
+	    {
+	      //cheap hack to go faster (by drawing less points)
+	      myassert(int(pixelStep*j) < active->get_cepstrum_data().size());
+	      pointArray.setPoint(j, j, height() / 2 - toInt(active->get_cepstrum_data().at(int(pixelStep * j)) * ratio));
+	    }
+	  p.drawPolyline(pointArray);
 
-      if(data->getCepstrumIndex() >= 0) {
-        p.setPen(Qt::blue);
-        p.setBrush(Qt::blue);
-        int x1 = toInt(double(data->getCepstrumIndex()) / double(active->get_cepstrum_data().size()) * double(width()));
-        int y1 = height()/2 - toInt(active->get_cepstrum_data().at(data->getCepstrumIndex()) * height()/2);
-        p.drawEllipse(x1-2, y1-2, 5, 5);
-      }
-
-    } else {
+	  if(data->getCepstrumIndex() >= 0)
+	    {
+	      p.setPen(Qt::blue);
+	      p.setBrush(Qt::blue);
+	      int x1 = toInt(double(data->getCepstrumIndex()) / double(active->get_cepstrum_data().size()) * double(width()));
+	      int y1 = height() / 2 - toInt(active->get_cepstrum_data().at(data->getCepstrumIndex()) * height() / 2);
+	      p.drawEllipse(x1 - 2, y1 - 2, 5, 5);
+	    }
+	}
+      else
+	{
+	  clearBackground();
+	}
+      active->unlock();
+    }
+  else
+    {
       clearBackground();
     }
-    active->unlock();
-  } else {
-    clearBackground();
-  }
-    
   endDrawing();
 }
+
+//------------------------------------------------------------------------------
+QSize CepstrumWidget::sizeHint(void) const
+{
+  return QSize(500, 128);
+}
+// EOF

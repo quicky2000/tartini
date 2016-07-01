@@ -4,6 +4,8 @@
     begin                : May 21 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
   
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,17 +20,19 @@
 #include "channel.h"
 #include <QResizeEvent>
 
-CepstrumView::CepstrumView( int viewID_, QWidget *parent )
- : ViewWidget( viewID_, parent)
+//------------------------------------------------------------------------------
+CepstrumView::CepstrumView( int viewID_, QWidget *parent ):
+  ViewWidget( viewID_, parent)
 {
   gdata->setDoingActiveCepstrum(true);
 
   Channel *active = gdata->getActiveChannel();
-  if(active) {
-    active->lock();
-    active->processChunk(active->currentChunk());
-    active->unlock();
-  }
+  if(active)
+    {
+      active->lock();
+      active->processChunk(active->currentChunk());
+      active->unlock();
+    }
 
   cepstrumWidget = new CepstrumWidget(this);
   cepstrumWidget->setWhatsThis("Note: The 'MPM + MODIFIED CEPSTRUM' option in the preferences needs to be seleted to see this. This is actually a kind of modified cepstrum. ");
@@ -38,13 +42,23 @@ CepstrumView::CepstrumView( int viewID_, QWidget *parent )
   connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), cepstrumWidget, SLOT(update()));
 }
 
-CepstrumView::~CepstrumView()
+//------------------------------------------------------------------------------
+CepstrumView::~CepstrumView(void)
 {
   gdata->setDoingActiveCepstrum(false);
   delete cepstrumWidget;
 }
 
+//------------------------------------------------------------------------------
 void CepstrumView::resizeEvent(QResizeEvent *)
 {
   cepstrumWidget->resize(size());
 }
+
+//------------------------------------------------------------------------------
+QSize CepstrumView::sizeHint(void) const
+{
+  return QSize(400, 128);
+}
+
+// EOF

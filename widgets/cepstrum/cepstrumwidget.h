@@ -4,6 +4,8 @@
     begin                : May 21 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,20 +24,20 @@
 // Forward declarations of classes the h file doesn't need to know specifics about
 class Q3PointArray;
 
-class CepstrumWidget : public DrawWidget {
+class CepstrumWidget : public DrawWidget
+{
   Q_OBJECT
 
-  public:
-    CepstrumWidget(QWidget *parent);
-    virtual ~CepstrumWidget();
+    public:
+  CepstrumWidget(QWidget *parent);
+  virtual ~CepstrumWidget(void);
 
-    void paintEvent( QPaintEvent * );
+  void paintEvent( QPaintEvent * );
 
-    QSize sizeHint() const { return QSize(500, 128); }
+  QSize sizeHint(void) const;
 
-  private:
-    Q3PointArray pointArray;
+ private:
+  Q3PointArray pointArray;
 };
-
-
-#endif
+#endif // CEPSTRUMWIDGET_H
+// EOF
