@@ -15,11 +15,13 @@
 #include "viewwidget.h"
 #include "mainwindow.h"
 
-ViewWidget::ViewWidget( int viewID_, QWidget * /*parent*/, Qt::WFlags f )
-  : QWidget( NULL, Qt::WDestructiveClose|f )
+//------------------------------------------------------------------------------
+ViewWidget::ViewWidget( int viewID_, QWidget * /*parent*/, Qt::WFlags f ):
+  QWidget( NULL, Qt::WDestructiveClose|f ),
+  viewID(viewID_)
 {
-  viewID = viewID_;
   setCaption(viewData[viewID].title);
-  
   setAutoFillBackground(true);
 }
+
+// EOF

@@ -20,11 +20,12 @@
 class ViewWidget : public QWidget
 {
   Q_OBJECT
-
-    int viewID;
-
  public:
   ViewWidget( int viewID_, QWidget *parent = 0, Qt::WFlags f = 0);
+
+ private:
+  int viewID;
 };
 
-#endif
+#endif // VIEWWIDGET_H
+// EOF
