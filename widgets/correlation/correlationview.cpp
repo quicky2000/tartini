@@ -4,6 +4,8 @@
     begin                : May 2 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,17 +23,19 @@
 #include <QHBoxLayout>
 #include <QComboBox>
 
+//------------------------------------------------------------------------------
 CorrelationView::CorrelationView( int viewID_, QWidget *parent )
  : ViewWidget( viewID_, parent)
 {
   gdata->setDoingActiveAnalysis(true);
 
   Channel *active = gdata->getActiveChannel();
-  if(active) {
-    active->lock();
-    active->processChunk(active->currentChunk());
-    active->unlock();
-  }
+  if(active)
+    {
+      active->lock();
+      active->processChunk(active->currentChunk());
+      active->unlock();
+    }
 
   correlationWidget = new CorrelationWidget(this);
   QStringList s;
@@ -49,14 +53,21 @@ CorrelationView::CorrelationView( int viewID_, QWidget *parent )
   mainLayout->addWidget(correlationWidget);
   mainLayout->addLayout(hLayout);
 
-
   //make the widget get updated when the view changes
   connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), correlationWidget, SLOT(update()));
 }
 
-CorrelationView::~CorrelationView()
+//------------------------------------------------------------------------------
+CorrelationView::~CorrelationView(void)
 {
   gdata->setDoingActiveAnalysis(false);
   delete correlationWidget;
 }
 
+//------------------------------------------------------------------------------
+QSize CorrelationView::sizeHint(void) const
+{
+  return QSize(400, 128);
+}
+
+// EOF

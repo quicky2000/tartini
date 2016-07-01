@@ -4,6 +4,8 @@
     begin                : May 2 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,20 +22,19 @@
 
 class CorrelationWidget;
 
-class CorrelationView : public ViewWidget {
+class CorrelationView : public ViewWidget
+{
   Q_OBJECT
 
   public:
-    CorrelationView(int viewID_, QWidget *parent = 0);
-    virtual ~CorrelationView();
+  CorrelationView(int viewID_, QWidget *parent = 0);
+  virtual ~CorrelationView(void);
 
-    //void resizeEvent(QResizeEvent *);
+  QSize sizeHint(void) const;
 
-    QSize sizeHint() const { return QSize(400, 128); }
-
-  private:
-    CorrelationWidget *correlationWidget;
-
+ private:
+  CorrelationWidget *correlationWidget;
 };
+#endif // CORRELATIONVIEW_H
+// EOF
 
-#endif

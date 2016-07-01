@@ -27,146 +27,192 @@
 #include "myqt.h"
 #include "myalgo.h"
 
-
-CorrelationWidget::CorrelationWidget(QWidget *parent)
-  : DrawWidget(parent)
+//------------------------------------------------------------------------------
+CorrelationWidget::CorrelationWidget(QWidget *parent):
+  DrawWidget(parent)
 {
   aggregateMode = 0;
 }
 
-CorrelationWidget::~CorrelationWidget()
+//------------------------------------------------------------------------------
+CorrelationWidget::~CorrelationWidget(void)
 {
 }
 
+//------------------------------------------------------------------------------
 void CorrelationWidget::paintEvent( QPaintEvent * )
 {
   Channel *active = gdata->getActiveChannel();
 
   AnalysisData *data = NULL;
   int chunk=0;
-  double dh2 = double(height()-1) / 2.0;
+  double dh2 = double(height() - 1) / 2.0;
   int j, x, y;
     
   beginDrawing(false);
     
-  if(active) {
+  if(active)
+    {
     
-    active->lock();
-    chunk = active->currentChunk();
-    data = active->dataAtChunk(chunk);
+      active->lock();
+      chunk = active->currentChunk();
+      data = active->dataAtChunk(chunk);
 
-    if(data) {
-      double freq = data->getFundamentalFreq();
-      double period = double(active->rate()) / freq;
-      double scaleX = period * double(width()) / double(active->get_nsdf_data().size()); //pixels per period
+      if(data)
+	{
+	  double freq = data->getFundamentalFreq();
+	  double period = double(active->rate()) / freq;
+	  //pixels per period
+	  double scaleX = period * double(width()) / double(active->get_nsdf_data().size());
       
-      //draw alternating background color indicating period
-      if(gdata->getView().backgroundShading() && period > 4.0 && period < double(active->get_nsdf_data().size())) {
-        int n = int(ceil(double(width()) / scaleX)); //number of colored patches
-        p.setPen(Qt::NoPen);
-        QColor color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), data->getCorrelation());
-        QColor color2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), data->getCorrelation());
-        for(j = 0; j<n; j++) {
-          x = toInt(scaleX*double(j));
-          p.setBrush((j%2) ? color1 : color2);
-          p.drawRect(x, 0, toInt(scaleX*double(j+1)) - toInt(scaleX*double(j)), height());
-        }
-        p.setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3 * data->getCorrelation()));
-        for(j = 0; j<n; j++) {
-          x = toInt(scaleX*double(j));
-          p.drawLine(x, 0, x, height());
-        }
-      } else {
-        clearBackground();
-      }
-      QString numPeriodsText;
-      numPeriodsText.sprintf("Period = %lf", period);
-      p.setPen(Qt::black);
-      p.drawText(5, height() - 8, numPeriodsText);
-    } else {
+	  //draw alternating background color indicating period
+	  if(gdata->getView().backgroundShading() && period > 4.0 && period < double(active->get_nsdf_data().size()))
+	    {
+	      //number of colored patches
+	      int n = int(ceil(double(width()) / scaleX));
+	      p.setPen(Qt::NoPen);
+	      QColor color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), data->getCorrelation());
+	      QColor color2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), data->getCorrelation());
+	      for(j = 0; j<n; j++)
+		{
+		  x = toInt(scaleX*double(j));
+		  p.setBrush((j%2) ? color1 : color2);
+		  p.drawRect(x, 0, toInt(scaleX * double(j + 1)) - toInt(scaleX * double(j)), height());
+		}
+	      p.setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3 * data->getCorrelation()));
+	      for(j = 0; j < n; j++)
+		{
+		  x = toInt(scaleX * double(j));
+		  p.drawLine(x, 0, x, height());
+		}
+	    }
+	  else
+	    {
+	      clearBackground();
+	    }
+	  QString numPeriodsText;
+	  numPeriodsText.sprintf("Period = %lf", period);
+	  p.setPen(Qt::black);
+	  p.drawText(5, height() - 8, numPeriodsText);
+	}
+      else
+	{
+	  clearBackground();
+	}
+    }
+  else
+    {
       clearBackground();
     }
-  } else {
-    clearBackground();
-  }
 
   //draw the horizontal center line
   p.setPen(QPen(colorBetween(colorGroup().background(), Qt::black, 0.3), 0));
   p.drawLine(0, toInt(dh2), width(), toInt(dh2));
 
-  if(active) { 
-    if(gdata->doingFreqAnalysis()) {
-      int w = width() / 2; //only do every second pixel (for speed)
-      //draw the waveform
-      if(int(pointArray.size()) != w) pointArray.resize(w);
-      if(lookup.size() != w) lookup.resize(w);
+  if(active)
+    { 
+      if(gdata->doingFreqAnalysis())
+	{
+	  //only do every second pixel (for speed)
+	  int w = width() / 2;
+	  //draw the waveform
+	  if(int(pointArray.size()) != w)
+	    {
+	      pointArray.resize(w);
+	    }
+	  if(lookup.size() != w)
+	    {
+	      lookup.resize(w);
+	    }
 
-      const NoteData *currentNote = active->getCurrentNote();
-      const Array1d<float> *input = &(active->get_nsdf_data());
-      if(currentNote) {
-        if(aggregateMode == 1) input = &currentNote->get_nsdf_aggregate_data();
-        else if(aggregateMode == 2) input = &currentNote->get_nsdf_aggregate_data_scaled();
-      }
-      maxAbsDecimate1d(*input, lookup);
-      for(int j=0; j<w; j++) {
-        pointArray.setPoint(j, j*2, toInt(dh2 - lookup[j]*dh2));
-      }
+	  const NoteData *currentNote = active->getCurrentNote();
+	  const Array1d<float> *input = &(active->get_nsdf_data());
+	  if(currentNote)
+	    {
+	      if(aggregateMode == 1)
+		{
+		  input = &currentNote->get_nsdf_aggregate_data();
+		}
+	      else if(aggregateMode == 2)
+		{
+		  input = &currentNote->get_nsdf_aggregate_data_scaled();
+		}
+	    }
+	  maxAbsDecimate1d(*input, lookup);
+	  for(int j = 0; j < w; j++)
+	    {
+	      pointArray.setPoint(j, j * 2, toInt(dh2 - lookup[j] * dh2));
+	    }
 
-      p.setPen(QPen(active->get_color(), 0));
-      p.drawPolyline(pointArray);
+	  p.setPen(QPen(active->get_color(), 0));
+	  p.drawPolyline(pointArray);
+	}
+      if(data && (aggregateMode == 0))
+	{
+	  //pixels per index
+	  double ratio = double(width()) / double(active->get_nsdf_data().size());
+      
+	  //draw a dot at all the period estimates
+	  p.setPen(Qt::blue);
+	  p.setBrush(Qt::blue);
+	  for(j = 0; j < int(data->getPeriodEstimatesSize()); j++)
+	    {
+	      x = toInt(double(data->getPeriodEstimatesAt(j)) * ratio);
+	      y = toInt(dh2 - data->getPeriodEstimatesAmpAt(j) * dh2);
+	      p.drawEllipse(x - 2, y - 2, 5, 5);
+	    }
+      
+	  if(data->getHighestCorrelationIndex() >= 0)
+	    {
+	      float highest = data->getPeriodEstimatesAmpAt(data->getHighestCorrelationIndex());
+	      //draw threshold line
+	      p.setPen(QPen(colorBetween(colorGroup().background(), Qt::black, 0.3), 0));
+	      y = toInt(dh2 - (highest * active->threshold()) * dh2);
+	      p.drawLine(0, y, width(), y);
+      
+	      //draw a dot at the highest correlation period
+	      p.setPen(Qt::black);
+	      p.setBrush(Qt::black);
+	      x = toInt(double(data->getPeriodEstimatesAt(data->getHighestCorrelationIndex())) * ratio);
+	      y = toInt(dh2 - highest * dh2);
+	      p.drawEllipse(x - 2, y - 2, 5, 5);
+	    }
+      
+	  //draw a dot at the chosen correlation period
+	  if(data->getChosenCorrelationIndex() >= 0)
+	    {
+	      p.setPen(Qt::red);
+	      p.setBrush(Qt::red);
+	      x = toInt(double(data->getPeriodEstimatesAt(data->getChosenCorrelationIndex())) * ratio);
+	      y = toInt(dh2 - data->getPeriodEstimatesAmpAt(data->getChosenCorrelationIndex()) * dh2);
+	      p.drawEllipse(x - 2, y - 2, 5, 5);
+	    }
+
+	  //draw a line at the chosen correlation period
+	  if(data->getChosenCorrelationIndex() >= 0)
+	    {
+	      p.setPen(Qt::green);
+	      p.setBrush(Qt::green);
+	      x = toInt(double(active->periodOctaveEstimate(chunk)) * ratio);
+	      p.drawLine(x, 0, x, height());
+	    }
+	}
+      active->unlock();
     }
-    if(data && (aggregateMode == 0)) {
-      double ratio = double(width()) / double(active->get_nsdf_data().size()); //pixels per index
-      
-      //draw a dot at all the period estimates
-      p.setPen(Qt::blue);
-      p.setBrush(Qt::blue);
-      for(j=0; j<int(data->getPeriodEstimatesSize()); j++) {
-        x = toInt(double(data->getPeriodEstimatesAt(j)) * ratio);
-        y = toInt(dh2 - data->getPeriodEstimatesAmpAt(j) * dh2);
-        p.drawEllipse(x-2, y-2, 5, 5);
-      }
-      
-      if(data->getHighestCorrelationIndex() >= 0) {
-        float highest = data->getPeriodEstimatesAmpAt(data->getHighestCorrelationIndex());
-        //draw threshold line
-        p.setPen(QPen(colorBetween(colorGroup().background(), Qt::black, 0.3), 0));
-        y = toInt(dh2 - (highest * active->threshold()) * dh2);
-        p.drawLine(0, y, width(), y);
-      
-        //draw a dot at the highest correlation period
-        p.setPen(Qt::black);
-        p.setBrush(Qt::black);
-        x = toInt(double(data->getPeriodEstimatesAt(data->getHighestCorrelationIndex())) * ratio);
-        y = toInt(dh2 - highest * dh2);
-        p.drawEllipse(x-2, y-2, 5, 5);
-      }
-      
-      //draw a dot at the chosen correlation period
-      if(data->getChosenCorrelationIndex() >= 0) {
-        p.setPen(Qt::red);
-        p.setBrush(Qt::red);
-        x = toInt(double(data->getPeriodEstimatesAt(data->getChosenCorrelationIndex())) * ratio);
-        y = toInt(dh2 - data->getPeriodEstimatesAmpAt(data->getChosenCorrelationIndex()) * dh2);
-        p.drawEllipse(x-2, y-2, 5, 5);
-      }
-
-      //draw a line at the chosen correlation period
-      if(data->getChosenCorrelationIndex() >= 0) {
-        p.setPen(Qt::green);
-        p.setBrush(Qt::green);
-        x = toInt(double(active->periodOctaveEstimate(chunk)) * ratio);
-        p.drawLine(x, 0, x, height());
-      }
-    }
-    
-    active->unlock();
-    
-  }
   endDrawing();
 }
 
-void CorrelationWidget::setAggregateMode(int mode) {
+//------------------------------------------------------------------------------
+void CorrelationWidget::setAggregateMode(int mode)
+{
   aggregateMode = mode;
   update();
 }
+
+//------------------------------------------------------------------------------
+QSize CorrelationWidget::sizeHint(void) const
+{
+  return QSize(500, 128);
+}
+
+// EOF
