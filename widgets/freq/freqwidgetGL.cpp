@@ -21,7 +21,6 @@
 #include <qpainter.h>
 #include <qcursor.h>
 #include <q3simplerichtext.h>
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <Q3PointArray>
 #include <QWheelEvent>
@@ -53,7 +52,6 @@
 
 //------------------------------------------------------------------------------
 FreqWidgetGL::FreqWidgetGL(QWidget * /*parent*/, const char* /*name*/)
-//  : DrawWidget(parent, name, Qt::WDestructiveClose)
 {
   setMouseTracking(true);
   
@@ -799,7 +797,6 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch,
 	{
 	  myassert(baseElement >= 0);
 	  ZoomElement &ze = z->at(baseElement);
-	  //if(!z->hasValue(baseElement)) {
 	  if(!ze.isValid())
 	    {
 	      if(!calcZoomElement(ch, ze, baseElement, baseX))
@@ -906,7 +903,6 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch,
   
       double start = (double(intChunk) - frameTime) * stepSize;
       double stop = width() + (2 * stepSize);
-      //bottomPoints.setPoint(pointIndex++, toInt(start), height());
       lastN = firstN = toInt(start);
       for (double n = start; n < stop && intChunk < (int)ch->totalChunks(); n += stepSize, intChunk++)
 	{

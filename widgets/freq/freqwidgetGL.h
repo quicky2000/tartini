@@ -16,8 +16,6 @@
 #ifndef FREQWIDGETGL_H
 #define FREQWIDGETGL_H
 
-//#include "drawwidget.h"
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <QPixmap>
 #include <QWheelEvent>
