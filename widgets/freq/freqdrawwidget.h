@@ -26,47 +26,88 @@
 #include <QPaintEvent>
 #include <QPaintDevice>
 
-class FreqDrawWidget : public DrawWidget {
+class FreqDrawWidget : public DrawWidget
+{
 
 Q_OBJECT
 
 public:
-  enum DragModes {
-    DragNone = 0,
-    DragChannel = 1,
-    DragBackground = 2,
-    DragTimeBar = 3
-  };
+  enum DragModes
+    {
+      DragNone = 0,
+      DragChannel = 1,
+      DragBackground = 2,
+      DragTimeBar = 3
+    };
 
 
   FreqDrawWidget(QWidget *parent, const char* name = 0);
-  virtual ~FreqDrawWidget();
+  virtual ~FreqDrawWidget(void);
 
-  static void drawReferenceLines(QPaintDevice &pd, QPainter &p, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType);
-  void paintEvent( QPaintEvent * );
-  QSize sizeHint() const { return QSize(400, 350); }
+  static void drawReferenceLines(QPaintDevice & pd,
+				 QPainter & p,
+				 double currentTime,
+				 double zoomX,
+				 double viewBottom,
+				 double zoomY,
+				 int viewType
+				 );
+  void paintEvent(QPaintEvent *);
+  QSize sizeHint(void) const;
 
-private:
-  int dragMode;
-  int mouseX, mouseY;
-  double downTime, downNote;
-  
+ private:  
+  /*
+   * Changes the cursor icon to be one of the zoom ones depending on if the control or alt keys were pressed.
+   * Otherwise, ignores the event.
+   *
+   * @param k the QKeyEvent to respond to.
+   */
   void keyPressEvent( QKeyEvent *k );
+
+  /*
+   * Unsets the cursor icon if the control or alt key was released. Otherwise, ignores the event.
+   *
+   * @param k the QKeyEvent to respond to.
+   */
   void keyReleaseEvent( QKeyEvent *k);
   void leaveEvent ( QEvent * e);
   
+  /*
+   * If control or alt is pressed, zooms. If shift is also pressed, it 'reverses' the zoom: ie ctrl+shift zooms x
+   * out, alt+shift zooms y out. Otherwise, does internal processing.
+   *
+   * @param e the QMouseEvent to respond to.
+   */
   void mousePressEvent( QMouseEvent *e );
   void mouseMoveEvent( QMouseEvent *e );
   void mouseReleaseEvent( QMouseEvent *e );
   void wheelEvent(QWheelEvent * e);
   void resizeEvent (QResizeEvent *q);
   
+  /**
+     Calculates at what time the mouse is.
+     @param x the mouse's x co-ordinate
+     @return the time the mouse is positioned at.
+  */
   double mouseTime(int x);
+
+  /**
+     Calculates at what note pitch the mouse is at.
+     @param x the mouse's y co-ordinate
+     @return the pitch the mouse is positioned at.
+  */
   double mousePitch(int y);
   Channel *channelAtPixel(int x, int y);
+
+  int dragMode;
+  int mouseX;
+  int mouseY;
+  double downTime;
+  double downNote;
   
   QPixmap *buffer;
   
 };
 
-#endif
+#endif // FREQDRAWWIDGET_H
+// EOF
