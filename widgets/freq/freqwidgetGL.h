@@ -39,7 +39,7 @@ class FreqWidgetGL : public QGLWidget
 Q_OBJECT
 
 public:
-  FreqWidgetGL(QWidget *parent, const char* name = 0);
+  FreqWidgetGL(QWidget *parent, const char* name = NULL);
   virtual ~FreqWidgetGL(void);
 
 private:  
@@ -59,41 +59,77 @@ private:
 			    const double & viewBottom,
 			    const double & zoomY,
 			    int viewType);
-  void drawChannelGL(Channel *ch,
+  void drawChannelGL(Channel * ch,
 		     const double & leftTime,
 		     const double & currentTime,
 		     const double & zoomX,
 		     double viewBottom,
 		     const double & zoomY,
 		     int viewType);
-  void drawChannelFilledGL(Channel *ch,
+  void drawChannelFilledGL(Channel * ch,
 			   const double & leftTime,
 			   const double & currentTime,
 			   const double & zoomX,
 			   double viewBottom,
 			   const double & zoomY,
 			   int viewType);
-  bool calcZoomElement(Channel *ch,
-		       ZoomElement &ze,
+
+  /** calculates elements in the zoom lookup table
+      @param ch The channel we are working with
+      @param baseElement The element's index in the zoom lookup table
+      @param baseX  The number of chunks each pixel represents (can include a fraction part)
+      @return false if a zoomElement can't be calculated, else true
+  */
+  bool calcZoomElement(Channel * ch,
+		       ZoomElement & ze,
 		       int baseElement,
 		       const double & baseX);
   void paintGL(void);
   inline QSize sizeHint(void)const;
 
-  void keyPressEvent( QKeyEvent *k );
-  void keyReleaseEvent( QKeyEvent *k);
+  /*
+   * Changes the cursor icon to be one of the zoom ones depending on if the control or alt keys were pressed.
+   * Otherwise, ignores the event.
+   *
+   * @param k the QKeyEvent to respond to.
+   */
+  void keyPressEvent( QKeyEvent * k);
+
+  /*
+   * Unsets the cursor icon if the control or alt key was released. Otherwise, ignores the event.
+   *
+   * @param k the QKeyEvent to respond to.
+   */
+  void keyReleaseEvent( QKeyEvent * k);
   void leaveEvent ( QEvent * e);
   
-  void mousePressEvent( QMouseEvent *e );
-  void mouseMoveEvent( QMouseEvent *e );
-  void mouseReleaseEvent( QMouseEvent *e );
+  /*
+   * If control or alt is pressed, zooms. If shift is also pressed, it 'reverses' the zoom: ie ctrl+shift zooms x
+   * out, alt+shift zooms y out. Otherwise, does internal processing.
+   *
+   * @param e the QMouseEvent to respond to.
+   */
+  void mousePressEvent( QMouseEvent * e);
+  void mouseMoveEvent( QMouseEvent * e);
+  void mouseReleaseEvent( QMouseEvent * e);
   void wheelEvent(QWheelEvent * e);
-  void resizeEvent (QResizeEvent *q);
+  void resizeEvent (QResizeEvent * q);
   
+  /**
+     Calculates at what time the mouse is.
+     @param x the mouse's x co-ordinate
+     @return the time the mouse is positioned at.
+  */
   double mouseTime(int x)const;
+
+  /**
+     Calculates at what note pitch the mouse is at.
+     @param x the mouse's y co-ordinate
+     @return the pitch the mouse is positioned at.
+  */
   double mousePitch(int y)const;
   Channel *channelAtPixel(int x, int y)const;
-  void setChannelVerticalView(Channel *ch,
+  void setChannelVerticalView(Channel * ch,
 			      const double & leftTime,
 			      const double & currentTime,
 			      const double & zoomX,
@@ -109,7 +145,6 @@ private:
   int mouseY;
   double downTime;
   double downNote;
-  
 };
 
 #include "freqwidgetGL.hpp"

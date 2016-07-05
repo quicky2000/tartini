@@ -119,15 +119,17 @@ void FreqWidgetGL::drawReferenceLinesGL(const double & /*leftTime*/,
   //Draw the horizontal reference lines
   for(int octave = rootOctave; octave < topOctave; ++octave)
     {
-      curRoot = double(octave*12 + rootOffset);
-      for(int j=0; j<musicKey.size(); j++)
+      curRoot = double(octave * 12 + rootOffset);
+      for(int j = 0; j < musicKey.size(); j++)
 	{
 	  if(musicScale.hasSemitone(musicKey.noteType(j)))
-	    { //draw it
+	    {
+	      //draw it
 	      curPitch = curRoot + musicKey.noteOffset(j);
-	      lineY = double(height()) - myround((curPitch - viewBottom)/zoomY);
+	      lineY = double(height()) - myround((curPitch - viewBottom) / zoomY);
 	      if(j == 0)
-		{ //root note
+		{
+		  //root note
 		  glColor4ub(0, 0, 0, 128);
 		  mygl_line(fontWidth, lineY, width() - 1, lineY);
 		}
@@ -135,7 +137,8 @@ void FreqWidgetGL::drawReferenceLinesGL(const double & /*leftTime*/,
 		{
 		  glColor4ub(25, 125, 170, 128);
 		  glEnable(GL_LINE_STIPPLE);
-		  glLineStipple(1, my_wrap_right(0xFCFC, stippleOffset));  // bitpattern 64716 = 1111110011001100
+		  // bitpattern 64716 = 1111110011001100
+		  glLineStipple(1, my_wrap_right(0xFCFC, stippleOffset));
 		  mygl_line(fontWidth, lineY, width() - 1, lineY);
 		  glDisable(GL_LINE_STIPPLE);
 		}
@@ -158,13 +161,14 @@ void FreqWidgetGL::drawReferenceLinesGL(const double & /*leftTime*/,
   //Draw the text labels down the left hand side
   for(int octave = rootOctave; octave < topOctave; ++octave)
     {
-      curRoot = double(octave*12 + rootOffset);
-      for(int j=0; j<musicKey.size(); j++)
+      curRoot = double(octave * 12 + rootOffset);
+      for(int j = 0; j < musicKey.size(); j++)
 	{
 	  if(musicScale.hasSemitone(musicKey.noteType(j)))
-	    { //draw it
+	    {
+	      //draw it
 	      curPitch = curRoot + musicKey.noteOffset(j);
-	      lineY = double(height()) - myround((curPitch - viewBottom)/zoomY);
+	      lineY = double(height()) - myround((curPitch - viewBottom) / zoomY);
 	      nameIndex = toInt(curPitch);
 	      glColor3ub(0, 0, 0);
 	      std::stringstream l_stream ;
@@ -180,8 +184,10 @@ void FreqWidgetGL::drawReferenceLinesGL(const double & /*leftTime*/,
     }
 
   //Draw the vertical reference lines
-  double timeStep = timeWidth() / double(width()) * 150.0; //time per 150 pixels
-  double timeScaleBase = pow10(floor(log10(timeStep))); //round down to the nearest power of 10
+  //time per 150 pixels
+  double timeStep = timeWidth() / double(width()) * 150.0;
+  //round down to the nearest power of 10
+  double timeScaleBase = pow10(floor(log10(timeStep)));
 
   //choose a timeScaleStep which is a multiple of 1, 2 or 5 of timeScaleBase
   int largeFreq;
@@ -199,7 +205,8 @@ void FreqWidgetGL::drawReferenceLinesGL(const double & /*leftTime*/,
       timeScaleBase /= 2;
     }
 
-  double timePos = floor(leftTime() / (timeScaleBase*largeFreq)) * (timeScaleBase*largeFreq); //calc the first one just off the left of the screen
+  //calc the first one just off the left of the screen
+  double timePos = floor(leftTime() / (timeScaleBase*largeFreq)) * (timeScaleBase*largeFreq);
   int x;
   int largeCounter = -1;
   double ratio = double(width()) / timeWidth();
@@ -210,14 +217,16 @@ void FreqWidgetGL::drawReferenceLinesGL(const double & /*leftTime*/,
       if(++largeCounter == largeFreq)
 	{
 	  largeCounter = 0;
-	  glColor4ub(25, 125, 170, 128); //draw the darker lines
+	  //draw the darker lines
+	  glColor4ub(25, 125, 170, 128);
 	}
       else
 	{
-	  glColor4ub(25, 125, 170, 64); //draw the lighter lines
+	  //draw the lighter lines
+	  glColor4ub(25, 125, 170, 64);
 	}
       x = toInt((timePos-lTime) * ratio);
-      mygl_line(x, 0, x, height()-1);
+      mygl_line(x, 0, x, height() - 1);
     }
 }
 
@@ -226,7 +235,6 @@ void FreqWidgetGL::paintGL(void)
 {
   glClear(GL_COLOR_BUFFER_BIT);
   View & view = gdata->getView();
-
 
   if(view.autoFollow() && gdata->getActiveChannel() && gdata->getRunning() == STREAM_FORWARD)
     {
@@ -269,7 +277,7 @@ void FreqWidgetGL::paintGL(void)
       int pixelLeft = view.screenPixelX(view.currentTime() - halfWindowTime);
       int pixelRight = view.screenPixelX(view.currentTime() + halfWindowTime);
       qglColor(lineColor);
-      mygl_rect(pixelLeft, 0, pixelRight-pixelLeft, height()-1);
+      mygl_rect(pixelLeft, 0, pixelRight-pixelLeft, height() - 1);
     }
 
   // Draw the current time line
@@ -283,7 +291,8 @@ Channel *FreqWidgetGL::channelAtPixel(int x, int y)const
 {
   double time = mouseTime(x);
   float pitch = mousePitch(y);
-  float tolerance = 6 * gdata->getView().zoomY(); //10 pixel tolerance
+  //10 pixel tolerance
+  float tolerance = 6 * gdata->getView().zoomY();
 
   std::vector<Channel*> channels;
 
@@ -304,12 +313,7 @@ Channel *FreqWidgetGL::channelAtPixel(int x, int y)const
   return NULL;
 }
 
-/*
- * If control or alt is pressed, zooms. If shift is also pressed, it 'reverses' the zoom: ie ctrl+shift zooms x
- * out, alt+shift zooms y out. Otherwise, does internal processing.
- *
- * @param e the QMouseEvent to respond to.
- */
+//------------------------------------------------------------------------------
 void FreqWidgetGL::mousePressEvent( QMouseEvent *e)
 {
   View & view = gdata->getView();
@@ -354,7 +358,8 @@ void FreqWidgetGL::mousePressEvent( QMouseEvent *e)
 
       Channel *ch = channelAtPixel(e->x(), e->y());
       if(ch)
-	{ //Clicked on a channel
+	{
+	  //Clicked on a channel
 	  gdata->setActiveChannel(ch);
 	  dragMode = DragChannel;
 	}
@@ -411,21 +416,13 @@ void FreqWidgetGL::mouseReleaseEvent( QMouseEvent * )
   dragMode = DragNone;
 }
 
-/**
- Calculates at what time the mouse is.
- @param x the mouse's x co-ordinate
- @return the time the mouse is positioned at.
- */
+//------------------------------------------------------------------------------
 double FreqWidgetGL::mouseTime(int x)const
 {
   return gdata->getView().viewLeft() + gdata->getView().zoomX() * x;
 }
 
-/**
- Calculates at what note pitch the mouse is at.
- @param x the mouse's y co-ordinate
- @return the pitch the mouse is positioned at.
- */
+//------------------------------------------------------------------------------
 double FreqWidgetGL::mousePitch(int y)const
 {
   return gdata->getView().viewBottom() + gdata->getView().zoomY() * (height() - y);
@@ -435,7 +432,7 @@ double FreqWidgetGL::mousePitch(int y)const
 void FreqWidgetGL::wheelEvent(QWheelEvent * e)
 {
   View & view = gdata->getView();
-  double amount = double(e->delta())/WHEEL_DELTA * 0.15;
+  double amount = double(e->delta()) / WHEEL_DELTA * 0.15;
   bool isZoom = gdata->mouseWheelZooms();
   if(e->state() & (Qt::ControlModifier | Qt::ShiftModifier))
     {
@@ -445,7 +442,8 @@ void FreqWidgetGL::wheelEvent(QWheelEvent * e)
   if(isZoom)
     {
       if(e->delta() >= 0)
-	{ //zooming in
+	{
+	  //zooming in
 	  double before = view.logZoomY();
 	  view.setZoomFactorY(view.logZoomY() + amount, height() - e->y());
 	  amount = view.logZoomY() - before;
@@ -454,14 +452,16 @@ void FreqWidgetGL::wheelEvent(QWheelEvent * e)
 	      view.setZoomFactorX(view.logZoomX() + amount);
 	    }
 	  else
-	    { //zoom toward mouse pointer
+	    {
+	      //zoom toward mouse pointer
 	      view.setZoomFactorX(view.logZoomX() + amount, e->x());
 	    }
 	}
       else
-	{ //zoom out toward center
+	{
+	  //zoom out toward center
 	  double before = view.logZoomY();
-	  view.setZoomFactorY(view.logZoomY() + amount, height()/2);
+	  view.setZoomFactorY(view.logZoomY() + amount, height() / 2);
 	  amount = view.logZoomY() - before;
 	  if(gdata->getRunning() == STREAM_FORWARD)
 	    {
@@ -469,12 +469,13 @@ void FreqWidgetGL::wheelEvent(QWheelEvent * e)
 	    }
 	  else
 	    {
-	      view.setZoomFactorX(view.logZoomX() + amount, width()/2);
+	      view.setZoomFactorX(view.logZoomX() + amount, width() / 2);
 	    }
 	}
     }
   else
-    { //mouse wheel scrolls
+    {
+      //mouse wheel scrolls
       view.setViewBottom(view.viewBottom() + amount * 0.75 * view.viewHeight());
     }
   view.doSlowUpdate();
@@ -507,12 +508,7 @@ void FreqWidgetGL::resizeEvent (QResizeEvent *q)
   v.setViewBottom(newYBottom);
 }
 
-/*
- * Changes the cursor icon to be one of the zoom ones depending on if the control or alt keys were pressed.
- * Otherwise, ignores the event.
- *
- * @param k the QKeyEvent to respond to.
- */
+//------------------------------------------------------------------------------
 void FreqWidgetGL::keyPressEvent( QKeyEvent *k )
 {
   switch (k->key())
@@ -543,16 +539,13 @@ void FreqWidgetGL::keyPressEvent( QKeyEvent *k )
     }
 }
 
-/*
- * Unsets the cursor icon if the control or alt key was released. Otherwise, ignores the event.
- *
- * @param k the QKeyEvent to respond to.
- */
+//------------------------------------------------------------------------------
 void FreqWidgetGL::keyReleaseEvent( QKeyEvent *k)
 {
   switch (k->key())
     {
-    case Qt::Key_Control: // Unset the cursor if the control or alt keys were released, ignore otherwise
+      // Unset the cursor if the control or alt keys were released, ignore otherwise
+    case Qt::Key_Control:
     case Qt::Key_Alt:
       unsetCursor();
       break;
@@ -594,7 +587,7 @@ void FreqWidgetGL::drawChannelGL(Channel *ch,
 {
   viewBottom += gdata->semitoneOffset();
   float lineWidth = 3.0f;
-  float lineHalfWidth = lineWidth/2;
+  float lineHalfWidth = lineWidth / 2;
   ZoomLookup *z;
   if(viewType == DRAW_VIEW_SUMMARY)
     {
@@ -631,7 +624,7 @@ void FreqWidgetGL::drawChannelGL(Channel *ch,
     }
   int lastBaseElement = int(floor(double(ch->totalChunks()) / baseX));
   
-  Array1d<MyGLfloat2d> indexArray(width()*2);
+  Array1d<MyGLfloat2d> indexArray(width() * 2);
       
   if (baseX > 1)
     { // More samples than pixels
@@ -643,7 +636,7 @@ void FreqWidgetGL::drawChannelGL(Channel *ch,
       for(; n < theWidth && baseElement < lastBaseElement; n++, baseElement++)
 	{
 	  myassert(baseElement >= 0);
-	  ZoomElement &ze = z->at(baseElement);
+	  ZoomElement & ze = z->at(baseElement);
 	  if(!ze.isValid())
 	    {
 	      if(!calcZoomElement(ch, ze, baseElement, baseX))
@@ -652,28 +645,35 @@ void FreqWidgetGL::drawChannelGL(Channel *ch,
 		}
 	    }
 	  if(ze.high() != 0.0f && ze.high() - ze.low() < 1.0)
-	    { //if range is closer than one semi-tone then draw a line between them
+	    {
+	      //if range is closer than one semi-tone then draw a line between them
 	      qglColor(ze.color());
 	      mygl_line(float(n), height() - lineHalfWidth - (ze.high() / zoomY) + viewBottomOffset, n, height() + lineHalfWidth - (ze.low() / zoomY) + viewBottomOffset);
 	    }
 	}
     }
   else
-    { // More pixels than samples
+    {
+      // More pixels than samples
       float err = 0.0, pitch = 0.0, prevPitch = 0.0, vol;
-      int intChunk = (int) floor(frameTime); // Integer version of frame time
+
+      // Integer version of frame time
+      int intChunk = (int) floor(frameTime);
       if(intChunk < 0)
 	{
 	  intChunk = 0;
 	}
-      double stepSize = 1.0 / baseX; // So we skip some pixels
+
+      // So we skip some pixels
+      double stepSize = 1.0 / baseX;
       int x = 0, y;
   
       double start = (double(intChunk) - frameTime) * stepSize;
       double stop = width() + (2 * stepSize);
-      int squareSize = (int(sqrt(stepSize)) / 2) * 2 + 1; //make it an odd number
+      //make it an odd number
+      int squareSize = (int(sqrt(stepSize)) / 2) * 2 + 1;
       int halfSquareSize = squareSize/2;
-      int penX=0, penY=0;
+      int penX = 0, penY = 0;
     
       for (double n = start; n < stop && intChunk < (int)ch->totalChunks(); n += stepSize, intChunk++)
 	{
@@ -686,11 +686,11 @@ void FreqWidgetGL::drawChannelGL(Channel *ch,
 	    {
 	      if(viewType == DRAW_VIEW_PRINT)
 		{
-		  qglColor(colorBetween(QColor(255, 255, 255), ch->get_color(), err*vol));
+		  qglColor(colorBetween(QColor(255, 255, 255), ch->get_color(), err * vol));
 		}
 	      else
 		{
-		  qglColor(colorBetween(gdata->backgroundColor(), ch->get_color(), err*vol));
+		  qglColor(colorBetween(gdata->backgroundColor(), ch->get_color(), err * vol));
 		}
 	    }
 	  else
@@ -705,7 +705,8 @@ void FreqWidgetGL::drawChannelGL(Channel *ch,
 	  if(pitch > 0.0f)
 	    {
 	      if(fabs(prevPitch - pitch) < 1.0 && n != start)
-		{ //if closer than one semi-tone from previous then draw a line between them
+		{
+		  //if closer than one semi-tone from previous then draw a line between them
 		  mygl_line((float)penX, (float)penY, (float)x, (float)y);
 		  penX = x; penY = y;
 		}
@@ -714,7 +715,8 @@ void FreqWidgetGL::drawChannelGL(Channel *ch,
 		  penX = x; penY = y;
 		}
 	      if(stepSize > 10)
-		{ //draw squares on the data points
+		{
+		  //draw squares on the data points
 		  mygl_rect(x - halfSquareSize, y - halfSquareSize, squareSize, squareSize);
 		}
 	    }
@@ -733,7 +735,7 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch,
 				       int viewType)
 {
   viewBottom += gdata->semitoneOffset();
-  ZoomLookup *z;
+  ZoomLookup * z;
   if(viewType == DRAW_VIEW_SUMMARY)
     {
       z = & ch->get_summary_zoom_lookup();
@@ -773,14 +775,14 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch,
   int firstN = n;
   int lastN = firstN;
   
-  Array1d<MyGLfloat2d> bottomPoints(width()*2);
-  Array1d<MyGLfloat2d> evenMidPoints(width()*2);
-  Array1d<MyGLfloat2d> oddMidPoints(width()*2);
-  Array1d<MyGLfloat2d> evenMidPoints2(width()*2);
-  Array1d<MyGLfloat2d> oddMidPoints2(width()*2);
-  Array1d<MyGLfloat2d> noteRect(width()*2);
-  Array1d<MyGLfloat2d> noteRect2(width()*2);
-  std::vector<bool> isNoteRectEven(width()*2);
+  Array1d<MyGLfloat2d> bottomPoints(width() * 2);
+  Array1d<MyGLfloat2d> evenMidPoints(width() * 2);
+  Array1d<MyGLfloat2d> oddMidPoints(width() * 2);
+  Array1d<MyGLfloat2d> evenMidPoints2(width() * 2);
+  Array1d<MyGLfloat2d> oddMidPoints2(width() * 2);
+  Array1d<MyGLfloat2d> noteRect(width() * 2);
+  Array1d<MyGLfloat2d> noteRect2(width() * 2);
+  std::vector<bool> isNoteRectEven(width() * 2);
   int pointIndex = 0;
   int evenMidPointIndex = 0;
   int oddMidPointIndex = 0;
@@ -790,7 +792,8 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch,
   int rectIndex2 = 0;
 
   if (baseX > 1)
-    { // More samples than pixels
+    {
+      // More samples than pixels
       int theWidth = width();
       if(lastBaseElement > z->size()) z->setSize(lastBaseElement);
       for(; n < theWidth && baseElement < lastBaseElement; n++, baseElement++)
@@ -812,7 +815,7 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch,
 	      myassert(ze.noteIndex() >= 0);
 	      myassert(ze.noteIndex() < int(ch->get_note_data().size()));
 	      myassert(ch->isValidChunk(ze.midChunk()));
-	      AnalysisData *data = ch->dataAtChunk(ze.midChunk());
+	      AnalysisData * data = ch->dataAtChunk(ze.midChunk());
 
 	      if(gdata->showMeanVarianceBars())
 		{
@@ -890,15 +893,18 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch,
 	}
     }
   else
-    { // More pixels than samples
+    {
+      // More pixels than samples
       float err = 0.0;
       float pitch = 0.0;
-      int intChunk = (int) floor(frameTime); // Integer version of frame time
+      // Integer version of frame time
+      int intChunk = (int) floor(frameTime);
       if(intChunk < 0)
 	{
 	  intChunk = 0;
 	}
-      double stepSize = 1.0 / baseX; // So we skip some pixels
+      // So we skip some pixels
+      double stepSize = 1.0 / baseX;
       int x = 0, y, y2, y3, x2;
   
       double start = (double(intChunk) - frameTime) * stepSize;
@@ -950,7 +956,7 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch,
 	  bottomPoints[pointIndex++].set(x, height());
 	}
 
-      myassert(pointIndex <= width()*2);
+      myassert(pointIndex <= width() * 2);
       qglColor(gdata->shading1Color());
       mygl_rect(firstN, 0, lastN, height());
       qglColor(gdata->shading2Color());
@@ -960,7 +966,7 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch,
       if(gdata->showMeanVarianceBars())
 	{
 	  //shortTermMean bars
-	  for(int j=0; j<rectIndex2; j+=2)
+	  for(int j = 0; j < rectIndex2; j += 2)
 	    {
 	      if(isNoteRectEven[j])
 		{
@@ -970,14 +976,14 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch,
 		{
 		  qglColor(Qt::yellow);
 		}
-	      mygl_rect(noteRect2[j], noteRect2[j+1]);
+	      mygl_rect(noteRect2[j], noteRect2[ j + 1]);
 	    }
 	  //longTermMean bars
 	  QColor seeThroughYellow = Qt::yellow;
 	  seeThroughYellow.setAlpha(255);
 	  QColor seeThroughGreen = Qt::green;
 	  seeThroughGreen.setAlpha(255);
-	  for(int j=0; j<rectIndex; j+=2)
+	  for(int j = 0; j < rectIndex; j += 2)
 	    {
 	      if(isNoteRectEven[j])
 		{
@@ -987,32 +993,29 @@ void FreqWidgetGL::drawChannelFilledGL(Channel *ch,
 		{
 		  qglColor(seeThroughGreen);
 		}
-	      mygl_rect(noteRect[j], noteRect[j+1]);
+	      mygl_rect(noteRect[j], noteRect[j + 1]);
 	    }
 	}
     }
 }
 
-/** calculates elements in the zoom lookup table
-  @param ch The channel we are working with
-  @param baseElement The element's index in the zoom lookup table
-  @param baseX  The number of chunks each pixel represents (can include a fraction part)
-  @return false if a zoomElement can't be calculated, else true
-*/
-bool FreqWidgetGL::calcZoomElement(Channel *ch,
-				   ZoomElement &ze,
+//------------------------------------------------------------------------------
+bool FreqWidgetGL::calcZoomElement(Channel * ch,
+				   ZoomElement & ze,
 				   int baseElement,
 				   const double & baseX)
 {
   int startChunk = toInt(double(baseElement) * baseX);
-  int finishChunk = toInt(double(baseElement+1) * baseX) + 1;
+  int finishChunk = toInt(double(baseElement + 1) * baseX) + 1;
   if(finishChunk >= (int)ch->totalChunks())
     {
-      finishChunk--; //dont go off the end
+      //dont go off the end
+      finishChunk--;
     }
   if(finishChunk >= (int)ch->totalChunks())
     {
-      return false; //that data doesn't exist yet
+      //that data doesn't exist yet
+      return false;
     }
   
   std::pair<large_vector<AnalysisData>::iterator, large_vector<AnalysisData>::iterator> a =
@@ -1045,19 +1048,19 @@ bool FreqWidgetGL::calcZoomElement(Channel *ch,
   float corr = err->getCorrelation() * dB2Normalised(err->getLogRms(), ch->get_rms_ceiling(), ch->get_rms_floor());
   QColor theColor = (gdata->pitchContourMode() == 0) ? colorBetween(gdata->backgroundColor(), ch->get_color(), corr) : ch->get_color();
 
-  ze.set(low, high, corr, theColor, noteIndex, (startChunk+finishChunk)/2);
+  ze.set(low, high, corr, theColor, noteIndex, (startChunk+finishChunk) / 2);
   return true;
 }
 
 //------------------------------------------------------------------------------
-void FreqWidgetGL::setChannelVerticalView(Channel *ch,
+void FreqWidgetGL::setChannelVerticalView(Channel * ch,
 					  const double & leftTime,
 					  const double & currentTime,
 					  const double & zoomX,
 					  double viewBottom,
 					  const double & zoomY)
 {
-  ZoomLookup *z = &ch->get_normal_zoom_lookup();
+  ZoomLookup * z = &ch->get_normal_zoom_lookup();
     
   ChannelLocker channelLocker(ch);
 
@@ -1108,7 +1111,8 @@ void FreqWidgetGL::setChannelVerticalView(Channel *ch,
 
   
   if (baseX > 1)
-    { // More samples than pixels
+    {
+      // More samples than pixels
       int theWidth = width();
       if(lastBaseElement > z->size())
 	{
@@ -1152,14 +1156,17 @@ void FreqWidgetGL::setChannelVerticalView(Channel *ch,
 	}
     }
   else
-    { // More pixels than samples
+    {
+      // More pixels than samples
       float pitch = 0.0;
-      int intChunk = (int) floor(frameTime); // Integer version of frame time
+      // Integer version of frame time
+      int intChunk = (int) floor(frameTime);
       if(intChunk < 0)
 	{
 	  intChunk = 0;
 	}
-      double stepSize = 1.0 / baseX; // So we skip some pixels
+      // So we skip some pixels
+      double stepSize = 1.0 / baseX;
       float corr;
     
       double start = (double(intChunk) - frameTime) * stepSize;
@@ -1197,14 +1204,15 @@ void FreqWidgetGL::setChannelVerticalView(Channel *ch,
       double spred = 0.0;
       myassert(ys.size() == weightings.size());
       //use a linear spred function. not a squared one like standard deviation
-      for(uint j=0; j<ys.size(); j++)
+      for(uint j = 0; j < ys.size(); j++)
 	{
 	  spred += sq(ys[j] - meanY) * weightings[j];
 	}
       spred = sqrt(spred / numY) * 4.0;
       if(spred < 12.0)
 	{
-	  spred = 12.0; //show a minimum of 12 semi-tones
+	  //show a minimum of 12 semi-tones
+	  spred = 12.0;
 	}
       gdata->getView().setViewBottomRaw(meanY - gdata->getView().viewHeight() / 2.0);
     }

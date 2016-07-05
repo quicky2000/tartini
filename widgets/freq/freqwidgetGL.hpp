@@ -17,19 +17,19 @@
 */
 
 //------------------------------------------------------------------------------
-double FreqWidgetGL::leftTime(void)const
+double FreqWidgetGL::leftTime(void) const
 {
   return gdata->getView().viewLeft();
 }
 
 //------------------------------------------------------------------------------
-double FreqWidgetGL::rightTime(void)const
+double FreqWidgetGL::rightTime(void) const
 {
   return gdata->getView().viewRight();
 }
 
 //------------------------------------------------------------------------------
-double FreqWidgetGL::timeWidth(void)const
+double FreqWidgetGL::timeWidth(void) const
 {
   return gdata->getView().viewTotalTime();
 }
