@@ -17,6 +17,7 @@
 #include "gdata.h"
 #include <QResizeEvent>
 
+//------------------------------------------------------------------------------
 HBlockView::HBlockView( int viewID_, QWidget *parent )
  : ViewWidget( viewID_, parent)
 {
@@ -27,12 +28,22 @@ HBlockView::HBlockView( int viewID_, QWidget *parent )
   connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), hBlockWidget, SLOT(update()));
 }
 
-HBlockView::~HBlockView()
+//------------------------------------------------------------------------------
+HBlockView::~HBlockView(void)
 {
   delete hBlockWidget;
 }
 
+//------------------------------------------------------------------------------
 void HBlockView::resizeEvent(QResizeEvent *)
 {
   hBlockWidget->resize(size());
 }
+
+//------------------------------------------------------------------------------
+QSize HBlockView::sizeHint(void) const
+{
+  return QSize(200, 180);
+}
+
+// EOF

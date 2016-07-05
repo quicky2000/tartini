@@ -20,21 +20,20 @@
 
 class HBlockWidget;
 
-class HBlockView : public ViewWidget {
+class HBlockView : public ViewWidget
+{
   Q_OBJECT
 
-  public:
-    HBlockView(int viewID_, QWidget *parent = 0);
-    virtual ~HBlockView();
+public:
+  HBlockView(int viewID_, QWidget *parent = NULL);
+  virtual ~HBlockView(void);
 
-    void resizeEvent(QResizeEvent *);
+  void resizeEvent(QResizeEvent *);
 
-    QSize sizeHint() const { return QSize(200, 180); }
+  QSize sizeHint(void) const;
 
-  private:
-    HBlockWidget *hBlockWidget;
-
+ private:
+  HBlockWidget *hBlockWidget;
 };
-
-
-#endif
+#endif // HBLOCKVIEW_H
+// EOF

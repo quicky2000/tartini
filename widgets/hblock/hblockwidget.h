@@ -22,21 +22,22 @@
 // Forward declarations of classes the h file doesn't need to know specifics about
 class QPixmap;
 
-class HBlockWidget : public DrawWidget {
+class HBlockWidget : public DrawWidget
+{
   Q_OBJECT
 
-  public:
-    HBlockWidget(QWidget *parent);
-    virtual ~HBlockWidget();
+ public:
+  HBlockWidget(QWidget *parent);
+  virtual ~HBlockWidget(void);
 
-    void paintEvent( QPaintEvent * );
+  void paintEvent(QPaintEvent * );
 
-    QSize sizeHint() const { return QSize(300, 200); }
+  QSize sizeHint(void) const;
 
-  private:
-    QPixmap *buffer;
-
+ private:
+  QPixmap *buffer;
 };
 
 
-#endif
+#endif // HBLOCKWIDGET_H
+// EOF
