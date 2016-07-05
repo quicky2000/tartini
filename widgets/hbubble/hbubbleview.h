@@ -4,6 +4,8 @@
     begin                : Mon Jan 10 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,18 +21,19 @@
 
 class HBubbleWidget;
 
-class HBubbleView : public ViewWidget {
+class HBubbleView : public ViewWidget
+{
   Q_OBJECT
 
   public:
-    HBubbleView(int viewID_, QWidget *parent = 0);
-    virtual ~HBubbleView();
+  HBubbleView(int viewID_, QWidget *parent = NULL);
+  virtual ~HBubbleView(void);
 
-    QSize sizeHint() const { return QSize(300, 200); }
+  QSize sizeHint(void) const;
 
   private:
     HBubbleWidget *hBubbleWidget;
 };
+#endif // HBUBBLEVIEW_H
+// EOF
 
-
-#endif

@@ -4,6 +4,8 @@
     begin                : Mon Jan 10 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,14 +31,13 @@
 #include <qcursor.h>
 #include <qcombobox.h>
 #include <qspinbox.h>
-//Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>
 #include <Q3Frame>
 
-
-HBubbleView::HBubbleView( int viewID_, QWidget *parent )
- : ViewWidget( viewID_, parent)
+//------------------------------------------------------------------------------
+HBubbleView::HBubbleView( int viewID_, QWidget *parent):
+  ViewWidget( viewID_, parent)
 {
   setCaption("Harmonic Bubbles");
 
@@ -81,7 +82,15 @@ HBubbleView::HBubbleView( int viewID_, QWidget *parent )
 
 }
 
-HBubbleView::~HBubbleView()
+//------------------------------------------------------------------------------
+HBubbleView::~HBubbleView(void)
 {
   delete hBubbleWidget;
 }
+
+//------------------------------------------------------------------------------
+QSize HBubbleView::sizeHint(void) const
+{
+  return QSize(300, 200);
+}
+// EOF

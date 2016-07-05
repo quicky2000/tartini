@@ -16,7 +16,6 @@
  ***************************************************************************/
 #include <qpixmap.h>
 #include <qpainter.h>
-//Added by qt3to4:
 #include <QPaintEvent>
 
 #include "hbubblewidget.h"
@@ -26,8 +25,9 @@
 #include "useful.h"
 #include "myqt.h"
 
-HBubbleWidget::HBubbleWidget(QWidget *parent)
-  : DrawWidget(parent)
+//------------------------------------------------------------------------------
+HBubbleWidget::HBubbleWidget(QWidget *parent):
+  DrawWidget(parent)
 {
 
   fprintf(stderr,"Initializing\n");
@@ -39,36 +39,40 @@ HBubbleWidget::HBubbleWidget(QWidget *parent)
   fprintf(stderr,"Done\n");
 }
 
-HBubbleWidget::~HBubbleWidget()
+//------------------------------------------------------------------------------
+HBubbleWidget::~HBubbleWidget(void)
 {
 } 
 
+//------------------------------------------------------------------------------
 void HBubbleWidget::setNumHarmonics(double num)
 {
-	if (numHarmonics != toInt(num))
-	{
-		numHarmonics = toInt(num);
- 		emit numHarmonicsChanged((double)num);
-	}
+  if (numHarmonics != toInt(num))
+    {
+      numHarmonics = toInt(num);
+      emit numHarmonicsChanged((double)num);
+    }
 }
 
 
+//------------------------------------------------------------------------------
 void HBubbleWidget::setHistoryChunks(double num)
 {
-	if (historyChunks != toInt(num))
-	{
-		historyChunks = toInt(num);
- 		emit historyChunksChanged((double)num);
-	}
+  if (historyChunks != toInt(num))
+    {
+      historyChunks = toInt(num);
+      emit historyChunksChanged((double)num);
+    }
 }
 
 #define min(a,b) (a > b ? b : a)
 #define max(a,b) (a > b ? a : b)
 
+//------------------------------------------------------------------------------
 void HBubbleWidget::paintEvent( QPaintEvent * )
 {
-  Channel *active = gdata->getActiveChannel();
-  AnalysisData *data;
+  Channel * active = gdata->getActiveChannel();
+  AnalysisData * data;
   int i, j;
   beginDrawing();
 
@@ -76,34 +80,45 @@ void HBubbleWidget::paintEvent( QPaintEvent * )
   if (active)
   {
     for (j = 0; j < historyChunks; j++)
-    {
+      {
         data = active->dataAtChunk(active->currentChunk() - historyChunks + j + 1);
         if (data != 0)
-        {
+	  {
 	  if (data->getHarmonicFreqSize() != 0 && data->getFundamentalFreq() != 0)
 	    {
 		for (i = 0; i < numHarmonics; i++)
 		{
-		  int radius = toInt((data->getHarmonicAmpNoCutOffAt(i)+160.0)/160.0 * (float)height()/numHarmonics/2);
+		  int radius = toInt((data->getHarmonicAmpNoCutOffAt(i) + 160.0) / 160.0 * (float)height() / numHarmonics / 2);
 			if (radius > 0)
 			{
-			  float flat_sharp = (data->getHarmonicFreqAt(i) / data->getFundamentalFreq() - (i+1))*10;
+			  float flat_sharp = (data->getHarmonicFreqAt(i) / data->getFundamentalFreq() - (i + 1)) * 10;
 				QColor c;
 				if (flat_sharp > 0)
-					c = colorBetween(qRgb(255,255,255), qRgb(255,0,0),flat_sharp);
+				  {
+				    c = colorBetween(qRgb(255,255,255), qRgb(255,0,0),flat_sharp);
+				  }
 				else
-					c = colorBetween(qRgb(255,255,255), qRgb(0,0,255),-flat_sharp);
-				p.setBrush(colorBetween(gdata->backgroundColor(),c,((j == (historyChunks-1)) ? 1.0 : (float)j/historyChunks*0.5)));
-				p.drawEllipse(toInt(width()/8*3+j * (float)width()/8/historyChunks - radius), 
-					      toInt(height() -(float) ((i+1) * height())/(numHarmonics+2) - radius), 
+				  {
+				    c = colorBetween(qRgb(255,255,255), qRgb(0,0,255),-flat_sharp);
+				  }
+				p.setBrush(colorBetween(gdata->backgroundColor(),c,((j == (historyChunks - 1)) ? 1.0 : (float)j / historyChunks * 0.5)));
+				p.drawEllipse(toInt(width() / 8 * 3 + j * (float)width() / 8 / historyChunks - radius), 
+					      toInt(height() - (float) ((i + 1) * height()) / (numHarmonics + 2) - radius), 
 					      radius * 2, 
 					      radius * 2);
-			}	
+			}
 		}
 	    }
-      	}	
+      	}
     }
-  } 
-
+  }
   endDrawing();
 }
+
+//------------------------------------------------------------------------------
+QSize HBubbleWidget::sizeHint(void) const
+{
+  return QSize(300, 200);
+}
+
+// EOF
