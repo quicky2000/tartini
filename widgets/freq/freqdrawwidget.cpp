@@ -20,7 +20,6 @@
 #include <qpainter.h>
 #include <qcursor.h>
 #include <q3simplerichtext.h>
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <Q3PointArray>
 #include <QWheelEvent>
@@ -39,7 +38,6 @@
 #include "gdata.h"
 #include "channel.h"
 #include "useful.h"
-//#include "soundfile.h" // Temporarily!!!
 #include "musicnotes.h"
 
 #ifndef WHEEL_DELTA
@@ -52,12 +50,7 @@ FreqDrawWidget::FreqDrawWidget(QWidget *parent, const char* name)
 {
   setMouseTracking(true);
   
-   //offset_y = 0.0;
-   //offset_x = 0;
    dragMode = DragNone;
-   //mouseDown = false;
-   //dragCenter = false;
-   //mouseX = mouseY = 0;
 
    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding, false);
    setSizePolicy(sizePolicy);
@@ -79,11 +72,8 @@ void FreqDrawWidget::drawReferenceLines(QPaintDevice &pd, QPainter &p, double cu
   
   double step = 1.0 / zoomY; //number of pixels to jump between each line
   int noteJump; //in semi-tones
-  //if(step > 20.0) {
   if(step > 10.0) {
     noteJump = 1;
-  //} else if(step > 10.0) {
-  //  noteJump = 2;
   } else if(step > 5.0) {
     noteJump = 6;
   } else {
@@ -92,9 +82,7 @@ void FreqDrawWidget::drawReferenceLines(QPaintDevice &pd, QPainter &p, double cu
   double remainder = cycle(viewBottom, double(noteJump));
   double toFirstNote = double(noteJump) - remainder;
   double start = toFirstNote * step;
-  //double stop = start + (view->viewHeight() * step);
   double stop = double(pd.height());
-  //int nameIndex = int(ceil(view->viewBottom() / double(noteJump)) * double(noteJump));
   int nameIndex = toInt(viewBottom + toFirstNote);
   step *= noteJump;
 
@@ -104,53 +92,28 @@ void FreqDrawWidget::drawReferenceLines(QPaintDevice &pd, QPainter &p, double cu
   for (double y = start; y < stop; y += step, nameIndex+=noteJump) {
     lineY = pd.height() - toInt(y);
     if(!isBlackNote(nameIndex)) {
-      //p.setPen(colorGroup().text());
       p.setPen(Qt::black);
       noteLabel.sprintf("%s%d", noteName(nameIndex), noteOctave(nameIndex));
       p.drawText(2, lineY + fontHeightSpace, noteLabel);
       if(noteValue(nameIndex) == 0) {
-        //p.setPen(QPen(Qt::black, 1, Qt::DashDotDotLine));
         p.setPen(QPen(Qt::black, 1, Qt::SolidLine));
       } else {
         //transperenct colors don't seem to work on the printer
         if(viewType == DRAW_VIEW_PRINT)
-          //p.setPen(QPen(QColor(144, 156, 170), 1, Qt::SolidLine));
           p.setPen(QPen(QColor(128, 128, 128), 1, Qt::SolidLine));
         else
           p.setPen(QPen(QColor(144, 156, 170), 1, Qt::DashDotDotLine));
-          //p.setPen(QPen(QColor(0, 0, 0, 64), 1, Qt::DashDotDotLine));
       }
     } else {
       if(viewType == DRAW_VIEW_PRINT)
-        //p.setPen(QPen(QColor(166, 191, 210), 1, Qt::SolidLine));
         p.setPen(QPen(QColor(196, 196, 196), 1, Qt::SolidLine));
       else
         p.setPen(QPen(QColor(136, 161, 180), 1, Qt::DotLine));
-        //p.setPen(QPen(QColor(0, 0, 0, 32), 1, Qt::DotLine));
     }
-/*#ifdef MACX //do the line stripple ourself
-    if(view->backgroundShading()) {
-      int pixelOffset = fontWidth;
-      int numLineParts = (width() - pixelOffset + 63) / 64;
-      Q3PointArray macPointArray(numLineParts*6);
-      for(int j=0; j<numLineParts*6; pixelOffset+=64) {
-        macPointArray.setPoint(j++, pixelOffset, lineY);
-        macPointArray.setPoint(j++, pixelOffset+24, lineY);
-        macPointArray.setPoint(j++, pixelOffset+32, lineY);
-        macPointArray.setPoint(j++, pixelOffset+40, lineY);
-        macPointArray.setPoint(j++, pixelOffset+48, lineY);
-        macPointArray.setPoint(j++, pixelOffset+56, lineY);
-      }
-      p.drawLineSegments(macPointArray, 0, numLineParts*3);
-    } else {
-      p.drawLine(fontWidth, lineY, width() - 1, lineY);
-    }
-#else*/
     int offset = toInt(currentTime / zoomX) % 32;
     p.setClipRect(fontWidth, 0, pd.width()-fontWidth, pd.height());
     p.drawLine(fontWidth - offset, lineY, pd.width() - 1, lineY);
     p.setClipRect(0, 0, pd.width(), pd.height());
-//#endif
   }
 }
 
@@ -161,8 +124,6 @@ void FreqDrawWidget::paintEvent(QPaintEvent *)
   if(view.autoFollow() && gdata->getActiveChannel() && gdata->getRunning() == STREAM_FORWARD)
     setChannelVerticalView(gdata->getActiveChannel(), view.viewLeft(), view.currentTime(), view.zoomX(), view.viewBottom(), view.zoomY());
     
-  //double curScreenTime = (view.currentTime() - view.viewLeft()) / view.zoomX();
-  //int curTimePixel = toInt(curScreenTime);
   int curTimePixel = view.screenPixelX(view.currentTime());
 
   beginDrawing();
@@ -249,16 +210,12 @@ void FreqDrawWidget::mousePressEvent( QMouseEvent *e)
   if (e->state() & Qt::ControlModifier) {
     // Do we zoom in or out?
     if (e->state() & Qt::ShiftModifier) {
-      //view.viewZoomOutX();
     } else {
-      //view.viewZoomInX();
     }
   } else if (e->state() & Qt::AltModifier) {
     // Do we zoom in or out?
     if (e->state() & Qt::ShiftModifier) {
-      //view.viewZoomOutY();
     } else {
-      //view.viewZoomInY();
     }
   } else {
     //mouseDown = true;
@@ -293,7 +250,6 @@ void FreqDrawWidget::mouseMoveEvent( QMouseEvent *e )
 	  }
     break;
   case DragBackground:
-    //view.setCurrentTime(downTime - (e->x() - mouseX) * view.zoomX());
     view.setViewBottom(downNote - (mouseY - e->y()) * view.zoomY());
     gdata->updateActiveChunkTime(downTime - (e->x() - mouseX) * view.zoomX());
     view.doSlowUpdate();
@@ -377,18 +333,11 @@ void FreqDrawWidget::resizeEvent (QResizeEvent *q)
     
     v.setPixelHeight(height());
     v.setPixelWidth(width());
-    //printf("resizeEvent width() = %d\n", width());
     // Work out what the times/heights of the view should be based on the zoom factors
-    //float newXTime = width() * v.zoomX();
     float newYHeight = height() * v.zoomY();
     float newYBottom = v.viewBottom() - ((newYHeight - v.viewHeight()) / 2.0);
 
-    //v.setViewWidth(newXTime);
-    //printf("1 viewOffset() = %d\n", v.viewOffset());
     v.setViewOffset(v.viewOffset() / oldViewWidth * v.viewWidth());
-    //printf("2 viewOffset() = %d\n", v.viewOffset());
-
-    //v.setViewHeight(newYHeight);
     v.setViewBottom(newYBottom);
 }
 
@@ -455,13 +404,3 @@ void FreqDrawWidget::leaveEvent ( QEvent * e) {
   QWidget::leaveEvent(e);
 }
 
-/*
-void FreqDrawWidget::ensurePolished() const
-{
-  //printf("width = %d\n", width());
-  gdata->getView().setPixelHeight(height());
-  printf("ensurePolished width() = %d\n", width());
-  gdata->getView().setPixelWidth(width());
-  gdata->getView().setViewOffset(gdata->getView().viewWidth()/2.0);
-}
-*/

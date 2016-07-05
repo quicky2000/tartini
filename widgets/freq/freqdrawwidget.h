@@ -17,7 +17,6 @@
 #define FREQDRAWWIDGET_H
 
 #include "drawwidget.h"
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <QPixmap>
 #include <QWheelEvent>
@@ -43,19 +42,11 @@ public:
   FreqDrawWidget(QWidget *parent, const char* name = 0);
   virtual ~FreqDrawWidget();
 
-  //int offset_x;
-
   static void drawReferenceLines(QPaintDevice &pd, QPainter &p, double currentTime, double zoomX, double viewBottom, double zoomY, int viewType);
   void paintEvent( QPaintEvent * );
   QSize sizeHint() const { return QSize(400, 350); }
-  //void ensurePolished() const;
-  //QSize sizeHint() const { return QSize(256, 128); }
-  //void resizeEvent( QResizeEvent * );
 
 private:
-  //float offset_y;
-  //bool mouseDown;
-  //bool dragCenter;
   int dragMode;
   int mouseX, mouseY;
   double downTime, downNote;
@@ -73,9 +64,6 @@ private:
   double mouseTime(int x);
   double mousePitch(int y);
   Channel *channelAtPixel(int x, int y);
-  
-  //MinMax getMinMax(std::vector<float> &data, double frameTime, double baseX, float lowBound, float highBound, std::map<int, MinMax> &preCalc);
-  //int calcIndex(double frameTime, double baseX, int size);
   
   QPixmap *buffer;
   
