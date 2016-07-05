@@ -15,14 +15,11 @@
 #include "hblockview.h"
 #include "hblockwidget.h"
 #include "gdata.h"
-//Added by qt3to4:
 #include <QResizeEvent>
 
 HBlockView::HBlockView( int viewID_, QWidget *parent )
  : ViewWidget( viewID_, parent)
 {
-  //setCaption("Harmonic Block");
-
   hBlockWidget = new HBlockWidget(this);
   hBlockWidget->show();
 

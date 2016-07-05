@@ -16,7 +16,6 @@
  ***************************************************************************/
 #include <qpixmap.h>
 #include <qpainter.h>
-//Added by qt3to4:
 #include <QPaintEvent>
 
 #include "hblockwidget.h"
@@ -51,7 +50,6 @@ void HBlockWidget::paintEvent( QPaintEvent * )
       active->unlock();
     
       // Get the frame's fundamental frequency
-      //float fund = active->lookup[frame].fundamentalFreq;
       float fund = data.getFundamentalFreq();
   
       // Work out the bar height for each harmonic
@@ -73,9 +71,8 @@ void HBlockWidget::paintEvent( QPaintEvent * )
         p.setBrush(colorBetween(fillColor, Qt::black, data.getHarmonicNoiseAt(i)));
         // Work out how many pixels wide the harmonic should be
         barWidth = (data.getHarmonicAmpAt(i)) * width();
-        /* Work out how many pixels the harmonic should be offset from where it would be
-        * if it were exactly (i+1)f   */
-        //diff = toInt( (data.getHarmonicFreqAt(i) - (i+1) * fund) / fund * width() / 10.0 );
+        // Work out how many pixels the harmonic should be offset from where it would be
+        // if it were exactly (i+1)f  
         diff = toInt( (data.getHarmonicFreqAt(i) - (i+1) * fund) / fund * barWidth );
         // Work out the starting position, and draw the bar
         barStart = toInt( ((width() / 2) + diff) - barWidth / 2);
