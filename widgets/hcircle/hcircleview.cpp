@@ -4,6 +4,8 @@
     begin                : Mon Jan 10 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,31 +31,30 @@
 #include <qcursor.h>
 #include <qcombobox.h>
 #include <qspinbox.h>
-//Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>
 #include <Q3Frame>
 
-
-HCircleView::HCircleView( int viewID_, QWidget *parent )
- : ViewWidget( viewID_, parent)
+//------------------------------------------------------------------------------
+HCircleView::HCircleView( int viewID_, QWidget *parent):
+  ViewWidget( viewID_, parent)
 {
   setCaption("Harmonic Circle");
 
-Q3BoxLayout *mainLayout = new Q3HBoxLayout(this);
+  Q3BoxLayout * mainLayout = new Q3HBoxLayout(this);
 
-  Q3BoxLayout *leftLayout = new Q3VBoxLayout(mainLayout);
-  Q3BoxLayout *rightLayout = new Q3VBoxLayout(mainLayout);
+  Q3BoxLayout * leftLayout = new Q3VBoxLayout(mainLayout);
+  Q3BoxLayout * rightLayout = new Q3VBoxLayout(mainLayout);
  
-  Q3Grid *waveFrame = new Q3Grid(1, this);
+  Q3Grid * waveFrame = new Q3Grid(1, this);
   waveFrame->setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
   leftLayout->addWidget(waveFrame);
 
   hCircleWidget = new HCircleWidget(waveFrame);
 
-  Q3BoxLayout *bottomLayout = new Q3HBoxLayout(leftLayout);
+  Q3BoxLayout * bottomLayout = new Q3HBoxLayout(leftLayout);
  
-  QwtWheel* ZoomWheel = new QwtWheel(this);
+  QwtWheel * ZoomWheel = new QwtWheel(this);
   ZoomWheel->setOrientation(Qt::Vertical);
   ZoomWheel->setWheelWidth(14);
   ZoomWheel->setRange(0.001, 0.1, 0.001, 1);
@@ -62,7 +63,7 @@ Q3BoxLayout *mainLayout = new Q3HBoxLayout(this);
   QToolTip::add(ZoomWheel, "Zoom in or out");
   rightLayout->addWidget(ZoomWheel);
   
-  QwtWheel* lowestValueWheel = new QwtWheel(this);
+  QwtWheel * lowestValueWheel = new QwtWheel(this);
   lowestValueWheel->setOrientation(Qt::Vertical);
   lowestValueWheel->setWheelWidth(14);
   lowestValueWheel->setRange(-160, 10, 0.01, 1);
@@ -90,10 +91,18 @@ Q3BoxLayout *mainLayout = new Q3HBoxLayout(this);
 
   connect(thresholdWheel, SIGNAL(valueChanged(double)), hCircleWidget, SLOT(setThreshold(double)));
   connect(thresholdWheel, SIGNAL(valueChanged(double)), hCircleWidget, SLOT(update()));
-
 }
 
-HCircleView::~HCircleView()
+//------------------------------------------------------------------------------
+HCircleView::~HCircleView(void)
 {
   delete hCircleWidget;
 }
+
+//------------------------------------------------------------------------------
+QSize HCircleView::sizeHint(void) const
+{
+  return QSize(300, 200);
+}
+
+// EOF

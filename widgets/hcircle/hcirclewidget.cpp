@@ -16,7 +16,6 @@
 ***************************************************************************/
 #include <qpixmap.h>
 #include <qpainter.h>
-//Added by qt3to4:
 #include <QPaintEvent>
 
 #include "hcirclewidget.h"
@@ -26,8 +25,9 @@
 #include "useful.h"
 #include "myqt.h"
 
-HCircleWidget::HCircleWidget(QWidget *parent)
-  : DrawWidget(parent)
+//------------------------------------------------------------------------------
+HCircleWidget::HCircleWidget(QWidget *parent):
+  DrawWidget(parent)
 {
   //make the widget get updated when the view changes
   zoom = 0.001;
@@ -36,51 +36,61 @@ HCircleWidget::HCircleWidget(QWidget *parent)
   connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), this, SLOT(update()));
 }
 
-HCircleWidget::~HCircleWidget()
+//------------------------------------------------------------------------------
+HCircleWidget::~HCircleWidget(void)
 {
 } 
 
+//------------------------------------------------------------------------------
 void HCircleWidget::setZoom(double num)
 {
-  if (zoom != num) 
-    zoom = num;
+  if (zoom != num)
+    {
+      zoom = num;
+    }
 }
 
+//------------------------------------------------------------------------------
 void HCircleWidget::setThreshold(double num)
 {
-  if (threshold != num) 
-    threshold = num;
+  if (threshold != num)
+    {
+      threshold = num;
+    }
 }
 
+//------------------------------------------------------------------------------
 void HCircleWidget::setLowestValue(double num)
 {
-  if (lowestValue != num) 
-    lowestValue = num;
+  if (lowestValue != num)
+    {
+      lowestValue = num;
+    }
 }
 
+//------------------------------------------------------------------------------
 void HCircleWidget::paintEvent( QPaintEvent * )
 {
-  Channel *active = gdata->getActiveChannel();
+  Channel * active = gdata->getActiveChannel();
   int numHarmonics = 40;
 
   beginDrawing();
 
   double scale;
 
-  QFont *f = new QFont(p.font());
+  QFont * f = new QFont(p.font());
   f->setPointSize(6);
   p.setFont(*f);
   QString s;
 
   if (threshold > lowestValue)
     {
-      p.setPen(QPen(colorBetween(gdata->backgroundColor(),qRgb(128,128,128),0.3),2));
-      int radius = toInt((double)height()*zoom*(threshold-lowestValue));
-      p.drawEllipse(width()/2-radius,height()/2-radius,2*radius,2*radius);
-      p.drawText(width()/2-radius+5,height()/2,s.sprintf("Threshold"));
+      p.setPen(QPen(colorBetween(gdata->backgroundColor(), qRgb(128,128,128), 0.3), 2));
+      int radius = toInt((double)height() * zoom * (threshold - lowestValue));
+      p.drawEllipse(width() / 2 - radius, height() / 2 - radius, 2 * radius, 2 * radius);
+      p.drawText(width() / 2 - radius + 5, height() / 2, s.sprintf("Threshold"));
     }
-  
-  //p.setPen(QPen(qRgb(128,128,128),1));
+
   p.setPen(QPen(QColor(128,128,128),1));
 
   double step = 10;  
@@ -89,10 +99,10 @@ void HCircleWidget::paintEvent( QPaintEvent * )
     {
       if (scale > lowestValue)
 	{
-	  int radius = toInt((double)height()*zoom*(scale-lowestValue));
-	  p.drawEllipse(width()/2-radius,height()/2-radius,2*radius,2*radius);
+	  int radius = toInt((double)height() * zoom * (scale - lowestValue));
+	  p.drawEllipse(width() / 2 - radius,height() / 2 - radius, 2 * radius, 2 * radius);
 	  
-	  p.drawText(width()/2+radius,height()/2,s.sprintf("%1.1f", scale));
+	  p.drawText(width() / 2 + radius, height() / 2, s.sprintf("%1.1f", scale));
   	}
     }
 
@@ -105,7 +115,6 @@ void HCircleWidget::paintEvent( QPaintEvent * )
     {
       AnalysisData *data = active->dataAtCurrentChunk();
 
-
       if (data)
 	{
 	  int i;
@@ -113,7 +122,7 @@ void HCircleWidget::paintEvent( QPaintEvent * )
 	  double nextoctave = octave * 2;	
 	  int dotSize = 6;
 	  int halfDotSize = dotSize / 2;
-	  p.setPen(QPen(Qt::black,2));
+	  p.setPen(QPen(Qt::black, 2));
 	  int m = MIN(data->getHarmonicAmpNoCutOffSize(), (unsigned) numHarmonics);
 	  assert(data->getHarmonicAmpNoCutOffSize() == data->getHarmonicFreqSize());
 	  for (i = 0; i < m; i++)
@@ -126,20 +135,27 @@ void HCircleWidget::paintEvent( QPaintEvent * )
 	      if (data->getHarmonicAmpNoCutOffAt(i) > MAX(threshold, lowestValue))			
 		{
 		  double angle = (data->getHarmonicFreqAt(i) - octave) / (nextoctave - octave) * 2 * PI;
-		  double size = height()*zoom*(data->getHarmonicAmpNoCutOffAt(i) - lowestValue);
-		  double size1 = height()*zoom*(MAX(threshold, lowestValue)-lowestValue);
-		  int x1 = toInt(sin(angle)*size1);
-		  int y1 = toInt(-cos(angle)*size1);
-		  int x = toInt(sin(angle)*size); 
-		  int y = toInt(-cos(angle)*size);
+		  double size = height() * zoom * (data->getHarmonicAmpNoCutOffAt(i) - lowestValue);
+		  double size1 = height() * zoom * (MAX(threshold, lowestValue) - lowestValue);
+		  int x1 = toInt(sin(angle) * size1);
+		  int y1 = toInt(-cos(angle) * size1);
+		  int x = toInt(sin(angle) * size); 
+		  int y = toInt(-cos(angle) * size);
 				
-		  p.drawLine(width()/2+x1, height()/2+y1, width()/2+x, height()/2+y);
-		  p.drawEllipse(width()/2+x-halfDotSize, height()/2+y-halfDotSize, dotSize, dotSize);
+		  p.drawLine(width() / 2 + x1, height() / 2 + y1, width() / 2 + x, height() / 2 + y);
+		  p.drawEllipse(width() / 2 + x - halfDotSize, height() / 2 + y - halfDotSize, dotSize, dotSize);
 		  QString s;
-		  p.drawText(width()/2+x+5, height()/2+y,s.sprintf("%d", i+1));
+		  p.drawText(width() / 2 + x + 5, height() / 2 + y, s.sprintf("%d", i + 1));
 		}
 	    }
 	}
     }
   endDrawing();
 }
+
+//------------------------------------------------------------------------------
+QSize HCircleWidget::sizeHint(void) const
+{
+  return QSize(300, 200);
+}
+// EOF
