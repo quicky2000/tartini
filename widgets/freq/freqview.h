@@ -25,31 +25,32 @@ class MyScrollBar;
 class TimeAxis;
 class QwtWheel;
 
-class FreqView: public ViewWidget {
+class FreqView: public ViewWidget
+{
   Q_OBJECT
 
-  public:
-    FreqView(int viewID_, QWidget *parent = 0);
-    virtual ~FreqView();
+ public:
+  FreqView(int viewID_, QWidget *parent = NULL);
+  virtual ~FreqView(void);
 
-    QSize sizeHint() const { return QSize(600, 560); }
+  QSize sizeHint(void) const;
 
-  public slots:
-    void zoomIn();
-    void zoomOut();
-    void setAmplitudeZoom(double);
+ public slots:
+  void zoomIn(void);
+  void zoomOut(void);
+  void setAmplitudeZoom(double);
   
-  private:
-    FreqWidgetGL *freqWidgetGL;
-    AmplitudeWidget *amplitudeWidget;
-    MyScrollBar *freqScrollBar;
-    MyScrollBar *amplitudeScrollBar;
-    QwtWheel *freqWheelY;
-    QwtWheel *amplitudeWheelY;
-    QwtWheel *freqWheelX;
-    
-    TimeAxis *timeAxis;
+ private:
+  FreqWidgetGL * freqWidgetGL;
+  AmplitudeWidget * amplitudeWidget;
+  MyScrollBar * freqScrollBar;
+  MyScrollBar * amplitudeScrollBar;
+  QwtWheel * freqWheelY;
+  QwtWheel * amplitudeWheelY;
+  QwtWheel * freqWheelX;
+  
+  TimeAxis * timeAxis;
 
 };
-
-#endif
+#endif // FREQVIEW_H
+// EOF

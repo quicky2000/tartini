@@ -36,13 +36,13 @@
 #include <qcursor.h>
 #include <qcombobox.h>
 #include <qspinbox.h>
-//Added by qt3to4:
 #include <Q3Frame>
 #include <Q3HBoxLayout>
 #include <Q3VBoxLayout>
 
-FreqView::FreqView(int viewID_, QWidget *parent)
-  : ViewWidget(viewID_, parent)
+//------------------------------------------------------------------------------
+FreqView::FreqView(int viewID_, QWidget *parent):
+  ViewWidget(viewID_, parent)
 {
   View & view = gdata->getView();
 
@@ -50,16 +50,16 @@ FreqView::FreqView(int viewID_, QWidget *parent)
   mainLayout->setResizeMode(QLayout::SetNoConstraint);
 
 
-  QSplitter *splitter = new QSplitter(Qt::Vertical, this);
-  QWidget *topWidget = new QWidget(splitter);
-  Q3BoxLayout *topLayout = new Q3HBoxLayout(topWidget);
-  Q3BoxLayout *topLeftLayout = new Q3VBoxLayout(topLayout);
+  QSplitter * splitter = new QSplitter(Qt::Vertical, this);
+  QWidget * topWidget = new QWidget(splitter);
+  Q3BoxLayout * topLayout = new Q3HBoxLayout(topWidget);
+  Q3BoxLayout * topLeftLayout = new Q3VBoxLayout(topLayout);
   
   timeAxis = new TimeAxis(topWidget, gdata->leftTime(), gdata->rightTime(), true);
   timeAxis->setWhatsThis("The time in seconds");
   topLeftLayout->addWidget(timeAxis);
   
-  QFrame *freqFrame = new QFrame;
+  QFrame * freqFrame = new QFrame;
   freqFrame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
   QVBoxLayout *freqFrameLayout = new QVBoxLayout;
   freqWidgetGL = new FreqWidgetGL(NULL);
@@ -75,7 +75,7 @@ FreqView::FreqView(int viewID_, QWidget *parent)
   topLeftLayout->addWidget(freqFrame);
 
 
-  QVBoxLayout *topRightLayout = new QVBoxLayout();
+  QVBoxLayout * topRightLayout = new QVBoxLayout();
   
   freqWheelY = new QwtWheel(topWidget);
   freqWheelY->setOrientation(Qt::Vertical);
@@ -87,21 +87,21 @@ FreqView::FreqView(int viewID_, QWidget *parent)
   topRightLayout->addWidget(freqWheelY, 0);
   
   //Create the vertical scrollbar
-  freqScrollBar = new MyScrollBar(0, gdata->topPitch()-view.viewHeight(), 0.5, view.viewHeight(), 0, 20, Qt::Vertical, topWidget);
-  freqScrollBar->setValue(gdata->topPitch()-view.viewHeight()-view.viewBottom());
+  freqScrollBar = new MyScrollBar(0, gdata->topPitch() - view.viewHeight(), 0.5, view.viewHeight(), 0, 20, Qt::Vertical, topWidget);
+  freqScrollBar->setValue(gdata->topPitch() - view.viewHeight() - view.viewBottom());
   topRightLayout->addWidget(freqScrollBar, 4);
 
   topLayout->addLayout(topRightLayout);
 
   //------------bottom half------------------
   
-  QWidget *bottomWidget = new QWidget(splitter);
-  Q3BoxLayout *bottomLayout = new Q3VBoxLayout(bottomWidget);
-  Q3BoxLayout *bottomTopLayout = new Q3HBoxLayout(bottomLayout);
+  QWidget * bottomWidget = new QWidget(splitter);
+  Q3BoxLayout * bottomLayout = new Q3VBoxLayout(bottomWidget);
+  Q3BoxLayout * bottomTopLayout = new Q3HBoxLayout(bottomLayout);
   
-  QFrame *amplitudeFrame = new QFrame;
+  QFrame * amplitudeFrame = new QFrame;
   amplitudeFrame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
-  QVBoxLayout *amplitudeFrameLayout = new QVBoxLayout;
+  QVBoxLayout * amplitudeFrameLayout = new QVBoxLayout;
   amplitudeWidget = new AmplitudeWidget(NULL);
   amplitudeWidget->setWhatsThis("Shows the volume (or other parameters) at time lined up with the pitch above. Note: You can move the lines to change some thresholds.");
   amplitudeFrameLayout->addWidget(amplitudeWidget);
@@ -121,21 +121,24 @@ FreqView::FreqView(int viewID_, QWidget *parent)
   bottomTopRightLayout->addWidget(amplitudeWheelY, 0);
   
   //Create the vertical scrollbar
-  amplitudeScrollBar = new MyScrollBar(0.0, 1.0-amplitudeWidget->range(), 0.20, amplitudeWidget->range(), 0, 20, Qt::Vertical, bottomWidget);
+  amplitudeScrollBar = new MyScrollBar(0.0, 1.0 - amplitudeWidget->range(), 0.20, amplitudeWidget->range(), 0, 20, Qt::Vertical, bottomWidget);
   bottomTopRightLayout->addWidget(amplitudeScrollBar, 4);
   
-  Q3BoxLayout *bottomBottomLayout = new Q3HBoxLayout(bottomLayout);
+  Q3BoxLayout * bottomBottomLayout = new Q3HBoxLayout(bottomLayout);
   
-  QComboBox *amplitudeModeComboBox = new QComboBox(bottomWidget, "amplitudeTypeModeBox");
+  QComboBox * amplitudeModeComboBox = new QComboBox(bottomWidget, "amplitudeTypeModeBox");
   amplitudeModeComboBox->setWhatsThis("Select different algorithm parameters to view in the bottom pannel");
   int j;
   QStringList s;
-  for(j=0; j<NUM_AMP_MODES; j++) s << amp_mode_names[j];
+  for(j = 0; j < NUM_AMP_MODES; j++)
+    {
+      s << amp_mode_names[j];
+    }
   amplitudeModeComboBox->addItems(s);
   connect(amplitudeModeComboBox, SIGNAL(activated(int)), gdata, SLOT(setAmplitudeMode(int)));
   connect(amplitudeModeComboBox, SIGNAL(activated(int)), amplitudeWidget, SLOT(update()));
 
-  QComboBox *pitchContourModeComboBox = new QComboBox(bottomWidget, "pitchContourModeComboBox");
+  QComboBox * pitchContourModeComboBox = new QComboBox(bottomWidget, "pitchContourModeComboBox");
   pitchContourModeComboBox->setWhatsThis("Select whether the Pitch Contour line fades in/out with clarity/loudness of the sound or is a solid dark line");
   s.clear();
   s << "Clarity fading" << "Note grouping";
@@ -159,7 +162,7 @@ FreqView::FreqView(int viewID_, QWidget *parent)
   bottomBottomLayout->addSpacing(16);
 
   //Create the resize grip. The thing in the bottom right hand corner
-  QSizeGrip *sizeGrip = new QSizeGrip(bottomWidget);
+  QSizeGrip * sizeGrip = new QSizeGrip(bottomWidget);
   sizeGrip->setFixedSize(15, 15);
   sizeGrip->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, false));
   bottomBottomLayout->addWidget(sizeGrip);
@@ -197,45 +200,60 @@ FreqView::FreqView(int viewID_, QWidget *parent)
   connect(&(gdata->getView()), SIGNAL(timeViewRangeChanged(double, double)), timeAxis, SLOT(setRange(double, double)));
 }
 
-FreqView::~FreqView()
+//------------------------------------------------------------------------------
+FreqView::~FreqView(void)
 {
   //Qt deletes the child widgets automatically
 }
 
-void FreqView::zoomIn()
+//------------------------------------------------------------------------------
+void FreqView::zoomIn(void)
 {
   bool doneIt = false;
-  if(gdata->getRunning() != STREAM_FORWARD) {
-    if(freqWidgetGL->hasMouse()) {
-      QPoint mousePos = freqWidgetGL->mapFromGlobal(QCursor::pos());
-      gdata->getView().setZoomFactorX(gdata->getView().logZoomX() + 0.1, mousePos.x());
-      gdata->getView().setZoomFactorY(gdata->getView().logZoomY() + 0.1, freqWidgetGL->height() - mousePos.y());
-      doneIt = true;
-    } else if(amplitudeWidget->hasMouse()) {
-      QPoint mousePos = amplitudeWidget->mapFromGlobal(QCursor::pos());
-      gdata->getView().setZoomFactorX(gdata->getView().logZoomX() + 0.1, mousePos.x());
+  if(gdata->getRunning() != STREAM_FORWARD)
+    {
+      if(freqWidgetGL->hasMouse())
+	{
+	  QPoint mousePos = freqWidgetGL->mapFromGlobal(QCursor::pos());
+	  gdata->getView().setZoomFactorX(gdata->getView().logZoomX() + 0.1, mousePos.x());
+	  gdata->getView().setZoomFactorY(gdata->getView().logZoomY() + 0.1, freqWidgetGL->height() - mousePos.y());
+	  doneIt = true;
+	}
+      else if(amplitudeWidget->hasMouse())
+	{
+	  QPoint mousePos = amplitudeWidget->mapFromGlobal(QCursor::pos());
+	  gdata->getView().setZoomFactorX(gdata->getView().logZoomX() + 0.1, mousePos.x());
+	  doneIt = true;
+	}
+    }
+  if(!doneIt)
+    {
+      gdata->getView().setZoomFactorX(gdata->getView().logZoomX() + 0.1);
+      gdata->getView().setZoomFactorY(gdata->getView().logZoomY() + 0.1);
       doneIt = true;
     }
-  }
-  if(!doneIt) {
-    gdata->getView().setZoomFactorX(gdata->getView().logZoomX() + 0.1);
-    gdata->getView().setZoomFactorY(gdata->getView().logZoomY() + 0.1);
-    doneIt = true;
-  }
 }
 
-void FreqView::zoomOut()
+//------------------------------------------------------------------------------
+void FreqView::zoomOut(void)
 {
   gdata->getView().setZoomFactorX(gdata->getView().logZoomX() - 0.1);
-  if(!amplitudeWidget->hasMouse()) {
-    gdata->getView().setZoomFactorY(gdata->getView().logZoomY() - 0.1);
-  }
+  if(!amplitudeWidget->hasMouse())
+    {
+      gdata->getView().setZoomFactorY(gdata->getView().logZoomY() - 0.1);
+    }
 }
 
+//------------------------------------------------------------------------------
 void FreqView::setAmplitudeZoom(double newRange)
 {
   amplitudeScrollBar->setRange(0.0, 1.0-newRange);
   amplitudeScrollBar->setPageStep(newRange);
 }
 
-
+//------------------------------------------------------------------------------
+QSize FreqView::sizeHint(void) const
+{
+  return QSize(600, 560);
+}
+// EOF
