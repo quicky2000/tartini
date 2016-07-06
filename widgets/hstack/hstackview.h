@@ -21,21 +21,18 @@
 
 class HStackWidget;
 
-class HStackView : public ViewWidget {
+class HStackView : public ViewWidget
+{
   Q_OBJECT
 
   public:
-    HStackView(int viewID_, QWidget *parent = 0);
-    virtual ~HStackView();
+  HStackView(int viewID_, QWidget * parent = NULL);
+  virtual ~HStackView(void);
 
-    QSize sizeHint() const { return QSize(300, 200); }
+  QSize sizeHint(void) const;
 
-  private:
-    HStackWidget *hStackWidget;
-
-
-
+ private:
+  HStackWidget * hStackWidget;
 };
-
-
-#endif
+#endif // HSTACKVIEW_H
+// EOF

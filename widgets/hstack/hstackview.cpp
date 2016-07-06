@@ -31,30 +31,29 @@
 #include <qcursor.h>
 #include <qcombobox.h>
 #include <qspinbox.h>
-//Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>
 #include <Q3Frame>
 
-
-HStackView::HStackView( int viewID_, QWidget *parent )
- : ViewWidget( viewID_, parent)
+//------------------------------------------------------------------------------
+HStackView::HStackView( int viewID_, QWidget * parent):
+  ViewWidget( viewID_, parent)
 {
   setCaption("Harmonic Stack");
 
-  Q3BoxLayout *mainLayout = new Q3HBoxLayout(this);
+  Q3BoxLayout * mainLayout = new Q3HBoxLayout(this);
 
-  Q3BoxLayout *leftLayout = new Q3VBoxLayout(mainLayout);
-  Q3BoxLayout *rightLayout = new Q3VBoxLayout(mainLayout);
+  Q3BoxLayout * leftLayout = new Q3VBoxLayout(mainLayout);
+  Q3BoxLayout * rightLayout = new Q3VBoxLayout(mainLayout);
 
-  Q3Grid *waveFrame = new Q3Grid(1, this);
+  Q3Grid * waveFrame = new Q3Grid(1, this);
   waveFrame->setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
   leftLayout->addWidget(waveFrame);
   hStackWidget = new HStackWidget(waveFrame);
   
-  Q3BoxLayout *bottomLayout = new Q3HBoxLayout(leftLayout);
+  Q3BoxLayout * bottomLayout = new Q3HBoxLayout(leftLayout);
 
-  QwtWheel* dbRangeWheel = new QwtWheel(this);
+  QwtWheel * dbRangeWheel = new QwtWheel(this);
   dbRangeWheel->setOrientation(Qt::Vertical);
   dbRangeWheel->setWheelWidth(14);
   dbRangeWheel->setRange(5, 160.0, 0.1, 100);
@@ -63,7 +62,7 @@ HStackView::HStackView( int viewID_, QWidget *parent )
   rightLayout->addWidget(dbRangeWheel, 0);
   rightLayout->addStretch(2);
 
-  QwtWheel* windowSizeWheel = new QwtWheel(this);
+  QwtWheel * windowSizeWheel = new QwtWheel(this);
   windowSizeWheel->setOrientation(Qt::Horizontal);
   windowSizeWheel->setWheelWidth(14);
   windowSizeWheel->setRange(32, 1024, 2, 1);
@@ -79,7 +78,16 @@ HStackView::HStackView( int viewID_, QWidget *parent )
   connect(windowSizeWheel, SIGNAL(valueChanged(double)), hStackWidget, SLOT(update()));
 }
 
-HStackView::~HStackView()
+//------------------------------------------------------------------------------
+HStackView::~HStackView(void)
 {
   delete hStackWidget;
 }
+
+//------------------------------------------------------------------------------
+QSize HStackView::sizeHint(void) const
+{
+  return QSize(300, 200);
+}
+
+// EOF
