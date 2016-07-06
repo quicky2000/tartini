@@ -4,6 +4,8 @@
     begin                : 29 Mar 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,25 +35,19 @@
 HTrackView::HTrackView( int viewID_, QWidget *parent )
  : ViewWidget( viewID_, parent)
 {
-  //setCaption("HTrack view");
   Q3GridLayout *mainLayout = new Q3GridLayout(this, 2, 2);
   mainLayout->setResizeMode(QLayout::SetNoConstraint);
-  //QBoxLayout *topLayout = new QVBoxLayout(mainLayout);
-  //QBoxLayout *rightLayout = new QVBoxLayout(mainLayout);
   Q3BoxLayout *rightLayout = new Q3VBoxLayout();
   Q3BoxLayout *bottomLayout = new Q3HBoxLayout();
 
   Q3Grid *frame = new Q3Grid(1, this);
   frame->setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
-  //frame->setLineWidth(2);
-  //frame->setMidLineWidth(2);
   QWidget *aWidget = new QWidget(frame);
   hTrackWidget = new HTrackWidget(aWidget);
   hTrackWidget->setWhatsThis("Shows a 3D keyboard with the current note coloured. "
     "Vertical columns (or tracks), each representing a harmonic (or component frequency), protrude from the back, and move further away over time. "
     "The height of each track is related to how much energy is at that frequency. "
     "Tracks alternate in colour for better visibility. It can be seen how the hamonics in a note fit into the musical scale.");
-  //hTrackWidget->show();
 
   peakThresholdSlider = new QSlider(0, 100, 10, 5, Qt::Vertical, this);
   QToolTip::add(peakThresholdSlider, "Thresholding of harmonics");
@@ -69,7 +65,6 @@ HTrackView::HTrackView( int viewID_, QWidget *parent )
   
   distanceWheel = new QwtWheel(this);
   distanceWheel->setOrientation(Qt::Vertical);
-  //distanceWheel->setWheelWidth(20);
   distanceWheel->setRange(100, 5000, 10, 20);
   distanceWheel->setTotalAngle(20*360);
   QToolTip::add(distanceWheel, "Move towards/away from piano");
@@ -78,7 +73,6 @@ HTrackView::HTrackView( int viewID_, QWidget *parent )
   QToolTip::add(homeButton, "Return to the original view");
   
   QSizeGrip *sizeGrip = new QSizeGrip(this);
-  //sizeGrip->setFixedSize(15, 15);
   
   mainLayout->addWidget(frame, 0, 0);
   mainLayout->addLayout(bottomLayout, 1, 0);
@@ -93,7 +87,6 @@ HTrackView::HTrackView( int viewID_, QWidget *parent )
   bottomLayout->addWidget(homeButton);
   bottomLayout->addSpacing(14);
   bottomLayout->addWidget(rotateXWheel);
-  //bottomLayout->addSpacing(20);
   mainLayout->addWidget(sizeGrip, 1, 1);
 
   //make the widget get updated when the view changes

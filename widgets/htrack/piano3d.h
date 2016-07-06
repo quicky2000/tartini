@@ -4,6 +4,8 @@
     begin                : 31 March 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -38,11 +40,8 @@ public:
   ~Piano3d();
   
   static void drawWhiteKey();
-  //static void drawWhiteKeyLine();
   static void drawBlackKey();
   
-  //static void drawBlackKeyAt(double x, bool isOn);
-  //static void drawWhiteKeyAt(double x, bool isOn);
   void draw();
   
   void init(int numKeys_=85, int firstKey_=21);
