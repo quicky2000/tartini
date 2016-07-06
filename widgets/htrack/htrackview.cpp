@@ -25,24 +25,24 @@
 #include <q3grid.h>
 #include <qtooltip.h>
 #include <qpushbutton.h>
-//Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>
 #include <Q3GridLayout>
 #include <Q3Frame>
 #include <QResizeEvent>
 
-HTrackView::HTrackView( int viewID_, QWidget *parent )
- : ViewWidget( viewID_, parent)
+//------------------------------------------------------------------------------
+HTrackView::HTrackView( int viewID_, QWidget *parent ):
+  ViewWidget( viewID_, parent)
 {
-  Q3GridLayout *mainLayout = new Q3GridLayout(this, 2, 2);
+  Q3GridLayout * mainLayout = new Q3GridLayout(this, 2, 2);
   mainLayout->setResizeMode(QLayout::SetNoConstraint);
-  Q3BoxLayout *rightLayout = new Q3VBoxLayout();
-  Q3BoxLayout *bottomLayout = new Q3HBoxLayout();
+  Q3BoxLayout * rightLayout = new Q3VBoxLayout();
+  Q3BoxLayout * bottomLayout = new Q3HBoxLayout();
 
-  Q3Grid *frame = new Q3Grid(1, this);
+  Q3Grid * frame = new Q3Grid(1, this);
   frame->setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
-  QWidget *aWidget = new QWidget(frame);
+  QWidget * aWidget = new QWidget(frame);
   hTrackWidget = new HTrackWidget(aWidget);
   hTrackWidget->setWhatsThis("Shows a 3D keyboard with the current note coloured. "
     "Vertical columns (or tracks), each representing a harmonic (or component frequency), protrude from the back, and move further away over time. "
@@ -69,10 +69,10 @@ HTrackView::HTrackView( int viewID_, QWidget *parent )
   distanceWheel->setTotalAngle(20*360);
   QToolTip::add(distanceWheel, "Move towards/away from piano");
   
-  QPushButton *homeButton = new QPushButton("Reset", this, "homebutton");
+  QPushButton * homeButton = new QPushButton("Reset", this, "homebutton");
   QToolTip::add(homeButton, "Return to the original view");
   
-  QSizeGrip *sizeGrip = new QSizeGrip(this);
+  QSizeGrip * sizeGrip = new QSizeGrip(this);
   
   mainLayout->addWidget(frame, 0, 0);
   mainLayout->addLayout(bottomLayout, 1, 0);
@@ -104,18 +104,22 @@ HTrackView::HTrackView( int viewID_, QWidget *parent )
   connect(homeButton, SIGNAL(clicked()), hTrackWidget, SLOT(home()));
 }
 
-HTrackView::~HTrackView()
+//------------------------------------------------------------------------------
+HTrackView::~HTrackView(void)
 {
   delete hTrackWidget;
 }
 
+//------------------------------------------------------------------------------
 void HTrackView::resizeEvent(QResizeEvent *)
 {
   hTrackWidget->resize(size());
 }
 
+//------------------------------------------------------------------------------
 void HTrackView::setPeakThreshold(int value)
 {
   hTrackWidget->setPeakThreshold(float(value) / 100.0);
   hTrackWidget->update();
 }
+// EOF

@@ -53,10 +53,10 @@ private:
   void rotateX(const double & angle);
   void rotateY(const double & angle);
   void translate(float x, float y, float z);
-  void mousePressEvent(QMouseEvent *e);
-  void mouseMoveEvent(QMouseEvent *e);
-  void mouseReleaseEvent(QMouseEvent *e);
-  void wheelEvent(QWheelEvent *e);
+  void mousePressEvent(QMouseEvent * e);
+  void mouseMoveEvent(QMouseEvent * e);
+  void mouseReleaseEvent(QMouseEvent * e);
+  void wheelEvent(QWheelEvent * e);
   
   inline float peakThreshold(void)const;
   inline const double & viewAngleHorizontal(void)const;
@@ -77,4 +77,5 @@ private:
 
 #include "htrackwidget.hpp"
 
-#endif
+#endif // HTRACK_H
+// EOF

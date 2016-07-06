@@ -33,8 +33,8 @@
 #endif
 
 //------------------------------------------------------------------------------
-HTrackWidget::HTrackWidget(QWidget *parent, const char *name)
-  : QGLWidget(parent, name)
+HTrackWidget::HTrackWidget(QWidget *parent, const char *name):
+  QGLWidget(parent, name)
 {
 }
 
@@ -108,7 +108,8 @@ void HTrackWidget::paintGL(void)
   glPushMatrix();
 
   double pianoWidth = piano3d->pianoWidth();
-  glTranslatef(-pianoWidth / 2.0, 0.0, 0.0);//set center of keyboard at origin
+  //set center of keyboard at origin
+  glTranslatef(-pianoWidth / 2.0, 0.0, 0.0);
   
   piano3d->setAllKeyStatesOff();
   if(active)
@@ -127,7 +128,8 @@ void HTrackWidget::paintGL(void)
   setLightDiffuse(0.9f, 0.9f, 0.9f);
   
   glTranslatef(-piano3d->firstKeyOffset, 0.0, 0.0);
-  glScaled(OCTAVE_WIDTH / 12.0, 200.0, 5.0); //set a scale of 1 semitime = 1 unit
+  //set a scale of 1 semitime = 1 unit
+  glScaled(OCTAVE_WIDTH / 12.0, 200.0, 5.0);
   
   glColor4f( 0.3f, 0.3f, 0.3f, 1.0f );
   glLineWidth(1.0);
@@ -151,18 +153,18 @@ void HTrackWidget::paintGL(void)
     
       //draw the time ref lines
       glBegin(GL_LINES);
-      for(j=roundUp(startChunk, 16); j<finishChunk; j += 16)
+      for(j = roundUp(startChunk, 16); j<finishChunk; j += 16)
 	{
 	  if(active->isValidChunk(j))
 	    {
-	      glVertex3f(piano3d->firstKey(), 0.0, double(j-finishChunk));
-	      glVertex3f(piano3d->firstKey()+piano3d->numKeys(), 0.0, double(j-finishChunk));
+	      glVertex3f(piano3d->firstKey(), 0.0, double(j - finishChunk));
+	      glVertex3f(piano3d->firstKey() + piano3d->numKeys(), 0.0, double(j - finishChunk));
 	    }
 	}
       glEnd();
     
       //build a table of frequencies and amplitudes for faster drawing
-      for(chunkOffset=0; chunkOffset<visibleChunks; chunkOffset++)
+      for(chunkOffset = 0; chunkOffset < visibleChunks; chunkOffset++)
 	{
 	  data = active->dataAtChunk(startChunk + chunkOffset);
 	  if(data && data->getHarmonicFreqSize() > 0)
@@ -190,11 +192,11 @@ void HTrackWidget::paintGL(void)
       setMaterialSpecular(0.0, 0.0, 0.0, 0.0);
       setMaterialColor(0.0f, 0.0f, 0.0f);
       glLineWidth(2.0);
-      for(harmonic=0; harmonic < numHarmonics; harmonic++)
+      for(harmonic = 0; harmonic < numHarmonics; harmonic++)
 	{
 	  insideLine = false;
-	  pos = -double(visibleChunks-1);
-	  for(chunkOffset=0; chunkOffset<visibleChunks; chunkOffset++, pos++)
+	  pos = -double(visibleChunks - 1);
+	  for(chunkOffset = 0; chunkOffset < visibleChunks; chunkOffset++, pos++)
 	    {
 	      curAmp = amps(harmonic, chunkOffset) - _peakThreshold;
 	      if(curAmp > 0.0)
@@ -222,7 +224,7 @@ void HTrackWidget::paintGL(void)
 		{
 		  if(insideLine)
 		    {
-		      glVertex3f(curPitch, 0, pos-1);
+		      glVertex3f(curPitch, 0, pos - 1);
 		      glEnd();
 		      insideLine = false;
 		    }
@@ -230,7 +232,7 @@ void HTrackWidget::paintGL(void)
 	    }
 	  if(insideLine)
 	    {
-	      glVertex3f(curPitch, 0, pos-1);
+	      glVertex3f(curPitch, 0, pos - 1);
 	      glEnd();
 	      insideLine = false;
 	    }
@@ -239,7 +241,7 @@ void HTrackWidget::paintGL(void)
       //draw the faces
       glShadeModel(GL_FLAT);
       glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-      for(harmonic=0; harmonic < numHarmonics; harmonic++)
+      for(harmonic = 0; harmonic < numHarmonics; harmonic++)
 	{
 	  if(harmonic % 2 == 0)
 	    {
@@ -250,8 +252,8 @@ void HTrackWidget::paintGL(void)
 	      setMaterialColor(0.5f, 0.9f, 0.5f);
 	    }
 	  insideLine = false;
-	  pos = -double(visibleChunks-1);
-	  for(chunkOffset=0; chunkOffset<visibleChunks; chunkOffset++, pos++)
+	  pos = -double(visibleChunks - 1);
+	  for(chunkOffset = 0; chunkOffset < visibleChunks; chunkOffset++, pos++)
 	    {
 	      if(amps(harmonic, chunkOffset) > _peakThreshold)
 		{

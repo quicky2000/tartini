@@ -24,16 +24,20 @@ class HTrackWidget;
 class QSlider;
 class QwtWheel;
 
-class HTrackView : public ViewWidget {
+class HTrackView : public ViewWidget
+{
   Q_OBJECT
 
   public:
-    HTrackView(int viewID_, QWidget *parent = 0);
-    virtual ~HTrackView();
+    HTrackView(int viewID_, QWidget *parent = NULL);
+    virtual ~HTrackView(void);
 
     void resizeEvent(QResizeEvent *);
 
-    QSize sizeHint() const { return QSize(500, 400); }
+    QSize sizeHint(void) const
+    {
+      return QSize(500, 400);
+    }
 
   public slots:
     void setPeakThreshold(int value);
@@ -45,6 +49,5 @@ class HTrackView : public ViewWidget {
     QwtWheel *rotateYWheel;
     QwtWheel *distanceWheel;
 };
-
-
-#endif
+#endif // HTRACKVIEW_H
+// EOF
