@@ -122,4 +122,11 @@ void HTrackView::setPeakThreshold(int value)
   hTrackWidget->setPeakThreshold(float(value) / 100.0);
   hTrackWidget->update();
 }
+
+//------------------------------------------------------------------------------
+QSize HTrackView::sizeHint(void) const
+{
+  return QSize(500, 400);
+}
+
 // EOF

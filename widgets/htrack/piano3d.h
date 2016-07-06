@@ -59,39 +59,18 @@ public:
      @return The distance the in mm away from where the 0 midi note would be
   */
   double offsetAtKey(int keyNum);
-  bool keyState(int keyNum)
-  {
-    return (keyNum >= 0 && keyNum < _numKeys) ? keyStates[keyNum] : false;
-  }
-  bool midiKeyState(int keyNum)
-  {
-    return keyState(keyNum-_firstKey);
-  }
-  void setKeyState(int keyNum, bool state)
-  {
-    if(keyNum >= 0 && keyNum < _numKeys)
-      {
-	keyStates[keyNum] = state;
-      }
-  }
-  void setMidiKeyState(int keyNum, bool state)
-  {
-    setKeyState(keyNum - _firstKey, state);
-  }
+  inline bool keyState(int keyNum);
+  inline bool midiKeyState(int keyNum);
+  inline void setKeyState(int keyNum, bool state);
+  inline void setMidiKeyState(int keyNum, bool state);
   void setAllKeyStatesOff(void);
 
   /**
      @return The width of the current piano keyboard in mm
   */
   double pianoWidth(void);
-  int numKeys(void)
-  {
-    return _numKeys;
-  }
-  int firstKey(void)
-  {
-    return _firstKey;
-  }
+  inline int numKeys(void);
+  inline int firstKey(void);
   double firstKeyOffset;
   
 private:
@@ -110,55 +89,15 @@ private:
   GLint aBlackKey;
 };
 
-//------------------------------------------------------------------------------
-inline void setMaterialColor(float r, float g, float b)
-{
-  GLfloat theColor[4] = { r, g, b, 1.0 };
-  glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, theColor);
-}
+inline void setMaterialColor(float r, float g, float b);
+inline void setMaterialSpecular(float r, float g, float b, float shiney);
+inline void setLightPosition(float x, float y, float z);
+inline void setLightDirection(float x, float y, float z);
+inline void setLightAmbient(float r, float g, float b);
+inline void setLightDiffuse(float r, float g, float b);
+inline void setLightSpecular(float r, float g, float b);
 
-//------------------------------------------------------------------------------
-inline void setMaterialSpecular(float r, float g, float b, float shiney)
-{
-  GLfloat theSpecular[4] = { r, g, b, 1.0 };
-  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, theSpecular);
-  glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shiney);
-}
-
-//------------------------------------------------------------------------------
-inline void setLightPosition(float x, float y, float z)
-{
-  GLfloat light_position[4] = { x, y, z, 1.0 };
-  glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-}
-
-//------------------------------------------------------------------------------
-inline void setLightDirection(float x, float y, float z)
-{
-  GLfloat light_position[4] = { x, y, z, 0.0 };
-  glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-}
-
-//------------------------------------------------------------------------------
-inline void setLightAmbient(float r, float g, float b)
-{
-  GLfloat theColor[4] = { r, g, b, 1.0 };
-  glLightfv(GL_LIGHT0, GL_AMBIENT, theColor);
-}
-
-//------------------------------------------------------------------------------
-inline void setLightDiffuse(float r, float g, float b)
-{
-  GLfloat theColor[4] = { r, g, b, 1.0 };
-  glLightfv(GL_LIGHT0, GL_DIFFUSE, theColor);
-}
-
-//------------------------------------------------------------------------------
-inline void setLightSpecular(float r, float g, float b)
-{
-  GLfloat theColor[4] = { r, g, b, 1.0 };
-  glLightfv(GL_LIGHT0, GL_SPECULAR, theColor);
-}
+#include "piano3d.hpp"
 
 #endif // PIANO3D_H
 // EOF

@@ -156,6 +156,7 @@ HEADERS += main.h \
   widgets/htrack/htrackwidget.h \
   widgets/htrack/htrackwidget.hpp \
   widgets/htrack/piano3d.h \
+  widgets/htrack/piano3d.hpp \
   widgets/correlation/correlationview.h \
   widgets/correlation/correlationwidget.h \
   widgets/fft/fftwidget.h \

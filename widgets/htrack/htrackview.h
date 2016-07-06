@@ -34,10 +34,7 @@ class HTrackView : public ViewWidget
 
     void resizeEvent(QResizeEvent *);
 
-    QSize sizeHint(void) const
-    {
-      return QSize(500, 400);
-    }
+    QSize sizeHint(void) const;
 
   public slots:
     void setPeakThreshold(int value);
