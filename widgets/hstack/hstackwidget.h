@@ -4,6 +4,8 @@
     begin                : Mon Jan 10 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,8 +33,6 @@ class HStackWidget : public DrawWidget {
     virtual ~HStackWidget();
 
     void paintEvent( QPaintEvent * );
-
-    //QSize sizeHint() const { return QSize(300, 200); }
 
   private:
     QPixmap *buffer;
