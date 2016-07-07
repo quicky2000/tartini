@@ -25,11 +25,11 @@
 
 #include <qwt_compass.h>
 #include <qwt_dial_needle.h>
-//Added by qt3to4:
 #include <QResizeEvent>
 
 #define INTERVAL 90
 
+//------------------------------------------------------------------------------
 PitchCompassDrawWidget::PitchCompassDrawWidget(QWidget *parent, const char* name, int mode)
   : QWidget(parent, name, Qt::WDestructiveClose)
 {
@@ -39,29 +39,35 @@ PitchCompassDrawWidget::PitchCompassDrawWidget(QWidget *parent, const char* name
     compass->setLineWidth(4);
     compass->setFrameShadow(QwtCompass::Sunken);
     
-    if (mode == 0) {
-      compass->setMode(QwtCompass::RotateNeedle);
-      compass->setScale(36, 5, 0);
-    } else if (mode == 1) {
-      compass->setMode(QwtCompass::RotateScale);
-      compass->setScale(360, 0);
-    } else if (mode == 2) {
-      QMap< double, QString > notes;
-      compass->setMode(QwtCompass::RotateNeedle);
-      compass->setScale(11, 2, 30);
-      for (int i = 0; i < 12; i++) {
-        notes[i * 30] = noteName(i);
+    if (mode == 0)
+      {
+	compass->setMode(QwtCompass::RotateNeedle);
+	compass->setScale(36, 5, 0);
       }
-      compass->setLabelMap(notes);
-    }
+    else if (mode == 1)
+      {
+	compass->setMode(QwtCompass::RotateScale);
+	compass->setScale(360, 0);
+      }
+    else if (mode == 2)
+      {
+	QMap< double, QString > notes;
+	compass->setMode(QwtCompass::RotateNeedle);
+	compass->setScale(11, 2, 30);
+	for (int i = 0; i < 12; i++)
+	  {
+	    notes[i * 30] = noteName(i);
+	  }
+	compass->setLabelMap(notes);
+      }
 
     compass->setScaleTicks(1, 1, 3);
 
-    compass->setNeedle(
-        new QwtCompassMagnetNeedle(QwtCompassMagnetNeedle::ThinStyle));
+    compass->setNeedle(new QwtCompassMagnetNeedle(QwtCompassMagnetNeedle::ThinStyle));
     compass->setValue(0.0);
 
-    blankCount = 9; // Force a blank update
+    // Force a blank update
+    blankCount = 9;
     blank();
 
     compass->setReadOnly(true);
@@ -69,76 +75,93 @@ PitchCompassDrawWidget::PitchCompassDrawWidget(QWidget *parent, const char* name
 
 }
 
-PitchCompassDrawWidget::~PitchCompassDrawWidget()
+//------------------------------------------------------------------------------
+PitchCompassDrawWidget::~PitchCompassDrawWidget(void)
 {
 }
 
+//------------------------------------------------------------------------------
 void PitchCompassDrawWidget::resizeEvent(QResizeEvent *)
 {
   compass->resize(size());
 }
 
+//------------------------------------------------------------------------------
 void PitchCompassDrawWidget::updateCompass(double time)
 {
   Channel *active = gdata->getActiveChannel();
-  if (active == NULL) { blank(); return; }
+  if (active == NULL)
+    {
+      blank();
+      return;
+    }
   
   const AnalysisData *data = active->dataAtTime(time);
 
-  if(data && data->getCorrelation() >= 0.9) {
-    double pitch = data->getPitch();
+  if(data && data->getCorrelation() >= 0.9)
+    {
+      double pitch = data->getPitch();
   
-    if (mode == 0) {
-      QMap< double, QString > notes;
-      double zeroVal = myround(pitch);
+      if (mode == 0)
+	{
+	  QMap< double, QString > notes;
+	  double zeroVal = myround(pitch);
   
-      double value = (pitch - zeroVal) * INTERVAL;
-      compass->setValue(value);
+	  double value = (pitch - zeroVal) * INTERVAL;
+	  compass->setValue(value);
   
-      notes[INTERVAL * 3] = noteName(toInt(zeroVal));
-      notes[0] = noteName(toInt(zeroVal += 2));
-      notes[INTERVAL] = noteName(toInt(zeroVal));
-      compass->setLabelMap(notes);
+	  notes[INTERVAL * 3] = noteName(toInt(zeroVal));
+	  notes[0] = noteName(toInt(zeroVal += 2));
+	  notes[INTERVAL] = noteName(toInt(zeroVal));
+	  compass->setLabelMap(notes);
+	}
+      else if (mode == 1)
+	{
+	  QMap< double, QString > notes;
+	  double closePitch = myround(pitch);
+	  double start = toInt((closePitch - pitch) * INTERVAL);
   
-    } else if (mode == 1) {
-      QMap< double, QString > notes;
-      double closePitch = myround(pitch);
-      double start = toInt((closePitch - pitch) * INTERVAL);
-  
-      if (start < 0) start += 360;
-      if (start > 360) start = fmod(start, 360.0);
+	  if (start < 0)
+	    {
+	      start += 360;
+	    }
+	  if (start > 360)
+	    {
+	      start = fmod(start, 360.0);
+	    }
       
-      notes[start] = noteName(toInt(closePitch));
-      //printf("start (%f) = %s\n", start, noteName(closeNote));
-      notes[start - INTERVAL] = noteName(toInt(closePitch - 1));
-      notes[start + INTERVAL] = noteName(toInt(closePitch + 1));
-      compass->setLabelMap(notes);
-    } else { // mode == 2
-      //double zeroVal = myround(note);
-  
-      //double value = (note - zeroVal) * 30; // So we have enough room for all 12 notes
-      double value = pitch * 30;
-      compass->setValue(value);
-  
-      //zeroVal--;
-  
+	  notes[start] = noteName(toInt(closePitch));
+	  notes[start - INTERVAL] = noteName(toInt(closePitch - 1));
+	  notes[start + INTERVAL] = noteName(toInt(closePitch + 1));
+	  compass->setLabelMap(notes);
+	}
+      else
+	{
+	  // mode == 2
+	  double value = pitch * 30;
+	  compass->setValue(value);
+	}
+
+      compass->setValid(true);
     }
-    //compass->update();
-  
-    compass->setValid(true);
-  } else {
-    blank();
-  }
+  else
+    {
+      blank();
+    }
 }
 
-void PitchCompassDrawWidget::blank()
+//------------------------------------------------------------------------------
+void PitchCompassDrawWidget::blank(void)
 {
-  if (++blankCount % 10 == 0) {
-    if (mode != 2) {
-      QMap< double, QString > notes;
-      compass->setLabelMap(notes);
+  if (++blankCount % 10 == 0)
+    {
+      if (mode != 2)
+	{
+	  QMap< double, QString > notes;
+	  compass->setLabelMap(notes);
+	}
+      compass->setValid(false);
+      blankCount = 1;
     }
-    compass->setValid(false);
-    blankCount = 1;
-  }
 }
+// EOF

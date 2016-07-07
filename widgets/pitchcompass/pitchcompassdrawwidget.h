@@ -10,30 +10,30 @@
 #define PITCHCOMPASSDRAWWIDGET_H
 
 #include "drawwidget.h"
-//Added by qt3to4:
 #include <QResizeEvent>
 
 class QwtCompass;
 
-class PitchCompassDrawWidget : public QWidget {
+class PitchCompassDrawWidget: public QWidget
+{
 
   Q_OBJECT
 
   public:
-    PitchCompassDrawWidget(QWidget *parent, const char* name = 0, int mode = 0);
-    virtual ~PitchCompassDrawWidget();
+  PitchCompassDrawWidget(QWidget * parent, const char * name = NULL, int mode = 0);
+  virtual ~PitchCompassDrawWidget(void);
 
-    void resizeEvent(QResizeEvent *);
+  void resizeEvent(QResizeEvent *);
 
   public slots:
-    void updateCompass(double time);
+  void updateCompass(double time);
 
   private:
-    QwtCompass *compass;
-    bool moveNeedle;
-    void blank();
-    int blankCount;
-    int mode;
-
+  QwtCompass * compass;
+  bool moveNeedle;
+  void blank(void);
+  int blankCount;
+  int mode;
 };
-#endif
+#endif // PITCHCOMPASSDRAWWIDGET_H
+// EOF

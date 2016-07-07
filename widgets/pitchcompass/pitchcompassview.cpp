@@ -15,30 +15,39 @@
 #include "pitchcompassview.h"
 #include "pitchcompassdrawwidget.h"
 #include "gdata.h"
-//Added by qt3to4:
 #include <QResizeEvent>
 
-PitchCompassView::PitchCompassView(int viewID_, QWidget *parent, int mode)
-  : ViewWidget(viewID_, parent)
+//------------------------------------------------------------------------------
+PitchCompassView::PitchCompassView(int viewID_, QWidget *parent, int mode):
+  ViewWidget(viewID_, parent)
 {
-  //setCaption("Pitch Compass");
   pitchCompassDrawWidget = new PitchCompassDrawWidget(this, "compass", mode);
   connect(&(gdata->getView()), SIGNAL(currentTimeChanged(double)), pitchCompassDrawWidget, SLOT(updateCompass(double)));
   pitchCompassDrawWidget->show();
 }
 
-PitchCompassView::~PitchCompassView()
+//------------------------------------------------------------------------------
+PitchCompassView::~PitchCompassView(void)
 {
 }
 
+//------------------------------------------------------------------------------
 void PitchCompassView::resizeEvent(QResizeEvent *)
 {
   pitchCompassDrawWidget->resize(size());
 }
 
+//------------------------------------------------------------------------------
 void PitchCompassView::changeMode(int mode)
 {
   delete pitchCompassDrawWidget;
   pitchCompassDrawWidget = new PitchCompassDrawWidget(this, "compass", mode);
   connect(&(gdata->getView()), SIGNAL(currentTimeChanged(double)), pitchCompassDrawWidget, SLOT(updateCompass(double)));
 }
+
+//------------------------------------------------------------------------------
+QSize PitchCompassView::sizeHint(void) const
+{
+  return QSize(200, 200);
+}
+// EOF

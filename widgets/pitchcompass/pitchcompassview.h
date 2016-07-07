@@ -17,27 +17,28 @@
 #define PITCHCOMPASSVIEW_H
 
 #include "viewwidget.h"
-//Added by qt3to4:
 #include <QResizeEvent>
 
 class PitchCompassDrawWidget;
 
-class PitchCompassView : public ViewWidget {
+class PitchCompassView: public ViewWidget
+{
   Q_OBJECT
 
   public:
-    PitchCompassView(int viewID_, QWidget *parent = 0, int mode = 2);
-    virtual ~PitchCompassView();
+  PitchCompassView(int viewID_, QWidget * parent = NULL, int mode = 2);
+  virtual ~PitchCompassView(void);
 
-    QSize sizeHint() const { return QSize(200, 200); }
+  QSize sizeHint(void) const;
 
-    void resizeEvent(QResizeEvent *);
+  void resizeEvent(QResizeEvent *);
 
 
-  private:
-    PitchCompassDrawWidget *pitchCompassDrawWidget;
-    void changeMode(int mode);
+ private:
+  PitchCompassDrawWidget * pitchCompassDrawWidget;
+  void changeMode(int mode);
 
 };
 
-#endif
+#endif // PITCHCOMPASSVIEW_H
+// EOF
