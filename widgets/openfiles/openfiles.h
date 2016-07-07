@@ -24,26 +24,41 @@ class Channel;
 class Q3ListView;
 class Q3ListViewItem;
 
-class OpenFiles : public ViewWidget {
+class OpenFiles : public ViewWidget
+{
 
   Q_OBJECT
 
   public:
-    OpenFiles(int id, QWidget *parent);
-    virtual ~OpenFiles();
+  OpenFiles(int id, QWidget *parent);
+  virtual ~OpenFiles(void);
 
   //private: // Although it should be private, really
-    Q3ListView *theListView;
+  Q3ListView *theListView;
 
-    void resizeEvent(QResizeEvent *);
+  void resizeEvent(QResizeEvent *);
 
-    QSize sizeHint() const { return QSize(200, 300); }
+  QSize sizeHint(void) const;
 
   public slots:
-    void refreshChannelList();
-    void listViewChanged(Q3ListViewItem* item);
-    void slotCurrentChanged(Q3ListViewItem* item);
-	  void slotActiveChannelChanged(Channel *active);
+  void refreshChannelList();
+
+  /**
+   * Toggles a channel on or off for a specified item.
+   *
+   * @param item the channel to toggle.
+   */
+  void listViewChanged(Q3ListViewItem * item);
+
+  /**
+   * Changes the active channel to the item.
+   *
+   * @param item the channel to toggle.
+   */
+  void slotCurrentChanged(Q3ListViewItem * item);
+  void slotActiveChannelChanged(Channel * active);
 
 };
-#endif
+#endif // OPENFILES_H
+// EOF
+

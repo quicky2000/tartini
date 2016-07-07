@@ -30,7 +30,9 @@
 #include "mainwindow.h"
 #include "soundfile.h"
 
-OpenFiles::OpenFiles(int id, QWidget *parent) : ViewWidget(id, parent)
+//------------------------------------------------------------------------------
+OpenFiles::OpenFiles(int id, QWidget *parent):
+  ViewWidget(id, parent)
 {
   //Create the list of channels down the left hand side
   theListView = new Q3ListView(this);
@@ -54,17 +56,19 @@ OpenFiles::OpenFiles(int id, QWidget *parent) : ViewWidget(id, parent)
   refreshChannelList();
 }
 
-OpenFiles::~OpenFiles()
+//------------------------------------------------------------------------------
+OpenFiles::~OpenFiles(void)
 {
 }
   
-void OpenFiles::refreshChannelList()
+//------------------------------------------------------------------------------
+void OpenFiles::refreshChannelList(void)
 {
   //put in any channel items that already exist
   theListView->clear();
   
   QString s;
-  int j=0;
+  int j = 0;
   unsigned int l_index = 0;
   for(l_index = 0 ; l_index < gdata->getChannelsSize() ; ++l_index)
     {
@@ -87,88 +91,112 @@ void OpenFiles::refreshChannelList()
 }
 
 //TODO: Tidy this method up
+//------------------------------------------------------------------------------
 void OpenFiles::slotActiveChannelChanged(Channel *active)
 {
   int index = 0;
-	bool found = false;
+  bool found = false;
 
-	// Find the index of the active channel
-	for (index = 0; index < int(gdata->getChannelsSize()); index++) {
-		if (gdata->getChannelAt(index) == active) {
-			found = true;
-			break;
-		}
+  // Find the index of the active channel
+  for (index = 0; index < int(gdata->getChannelsSize()); index++)
+    {
+      if (gdata->getChannelAt(index) == active)
+	{
+	  found = true;
+	  break;
 	}
+    }
 
-	// Set the active marker for each item on or off, depending on what it should be.
-	// This depends on them being in the same order as the channels list.
-	if (found) {
-		int pos = 0;
-		// Go through all the elements in the list view and turn the active channel 
-		// markers off, or on if we find the right index
-		Q3ListViewItem *item = theListView->firstChild();
-		while (item != NULL) {
-			if (pos == index) {
-        theListView->setSelected(item, true);
-			}
-			item = item->nextSibling();
-			pos++;
-		}
+  // Set the active marker for each item on or off, depending on what it should be.
+  // This depends on them being in the same order as the channels list.
+  if (found)
+    {
+      int pos = 0;
+      // Go through all the elements in the list view and turn the active channel 
+      // markers off, or on if we find the right index
+      Q3ListViewItem *item = theListView->firstChild();
+      while (item != NULL)
+	{
+	  if (pos == index)
+	    {
+	      theListView->setSelected(item, true);
+	    }
+	  item = item->nextSibling();
+	  pos++;
 	}
+    }
 }
 
-/**
- * Toggles a channel on or off for a specified item.
- *
- * @param item the channel to toggle.
- **/
+//------------------------------------------------------------------------------
 void OpenFiles::listViewChanged(Q3ListViewItem* item)
 {
-  if(item == NULL) return;
+  if(item == NULL)
+    {
+      return;
+    }
   int pos = 0;
   Q3ListViewItem *myChild = theListView->firstChild();
-  while(myChild) {
-    if(myChild == item) break;
-    myChild = myChild->nextSibling();
-    pos++;
-  }
+  while(myChild)
+    {
+      if(myChild == item)
+	{
+	  break;
+	}
+      myChild = myChild->nextSibling();
+      pos++;
+    }
   myassert(pos < int(gdata->getChannelsSize()));
   bool state = ((Q3CheckListItem *)item)->isOn();
-  if(gdata->getChannelAt(pos)->isVisible() != state) gdata->getChannelAt(pos)->setVisible(state);
+  if(gdata->getChannelAt(pos)->isVisible() != state)
+    {
+      gdata->getChannelAt(pos)->setVisible(state);
+    }
   gdata->getView().doUpdate();
 }
 
-/**
- * Changes the active channel to the item.
- *
- * @param item the channel to toggle.
- **/
+//------------------------------------------------------------------------------
 void OpenFiles::slotCurrentChanged(Q3ListViewItem* item)
 {
-  if(item == NULL) return;
+  if(item == NULL)
+    {
+      return;
+    }
   int pos = 0;
   // Go through the channels before the active one, and reset the markers
   Q3ListViewItem *myChild = theListView->firstChild();
-  while(myChild) {
-    if(myChild == item) break;
-    myChild->setText(1, "");
-    myChild = myChild->nextSibling();
-    pos++;
-  }
+  while(myChild)
+    {
+      if(myChild == item)
+	{
+	  break;
+	}
+      myChild->setText(1, "");
+      myChild = myChild->nextSibling();
+      pos++;
+    }
   myassert(pos < int(gdata->getChannelsSize()));
   myChild->setText(1, "A");
   gdata->setActiveChannel(gdata->getChannelAt(pos));
 
   // Go through the rest of the items and reset their active channel markers
   myChild = myChild->nextSibling();
-  while(myChild) {
-    myChild->setText(1, "");
-    myChild = myChild->nextSibling();
-  }
+  while(myChild)
+    {
+      myChild->setText(1, "");
+      myChild = myChild->nextSibling();
+    }
 }
 
+//------------------------------------------------------------------------------
 void OpenFiles::resizeEvent(QResizeEvent *)
 {
   theListView->resize(size());
 }
 
+//------------------------------------------------------------------------------
+QSize OpenFiles::sizeHint(void) const
+{
+  return QSize(200, 300);
+}
+
+// EOF
