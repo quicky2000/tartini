@@ -21,10 +21,11 @@
 
 class ScoreWidget;
 
-class ScoreSegmentIterator {
-  ScoreWidget *sw;
+class ScoreSegmentIterator
+{
+  ScoreWidget * sw;
 
-  Channel *ch;
+  Channel * ch;
   int staveHeight;
   int halfStaveHeight;
   int numRows;
@@ -55,23 +56,67 @@ class ScoreSegmentIterator {
   bool _isValid;
 
  public :
-  ScoreSegmentIterator(ScoreWidget *scoreWidget, Channel *channel) { reset(scoreWidget, channel); }
-  void reset(ScoreWidget *scoreWidget, Channel *channel);
-  bool next();
-  bool isValid() { return _isValid; }
+  ScoreSegmentIterator(ScoreWidget *scoreWidget, Channel *channel)
+    {
+      reset(scoreWidget, channel);
+    }
+  /**
+     Initalise the iterator to just before the first segment
+     @param scoreWidget The ScoreWidget to iterate through it's segments
+  */
+  void reset(ScoreWidget * scoreWidget, Channel * channel);
 
-  double leftTime() { return _leftTime; }
-  double rightTime() { return _rightTime; }
-  double leftX() { return _leftX; }
-  int lineCenterY() { return _lineCenterY; }
-  int staveTop() { return _lineCenterY - halfStaveHeight; }
-  int staveBottom() { return staveTop() + staveHeight; }
-  double widthX();
-  double curTime() { return _curTime; }
-  int curPage() { return _curPage; }
-  int numPages() { return _numPages; }
-  bool contains(double t) { return (t >= _leftTime && t <= _rightTime); }
+  /**
+     move to the next score segment
+     @return true, if their was another score segment
+  */
+  bool next(void);
+  bool isValid(void)
+  {
+    return _isValid;
+  }
+
+  double leftTime(void)
+  {
+    return _leftTime;
+  }
+  double rightTime(void)
+  {
+    return _rightTime;
+  }
+  double leftX(void)
+  {
+    return _leftX;
+  }
+  int lineCenterY(void)
+  {
+    return _lineCenterY;
+  }
+  int staveTop(void)
+  {
+    return _lineCenterY - halfStaveHeight;
+  }
+  int staveBottom(void)
+  {
+    return staveTop() + staveHeight;
+  }
+  double widthX(void);
+  double curTime(void)
+  {
+    return _curTime;
+  }
+  int curPage(void)
+  {
+    return _curPage;
+  }
+  int numPages(void)
+  {
+    return _numPages;
+  }
+  bool contains(double t)
+  {
+    return (t >= _leftTime && t <= _rightTime);
+  }
 };
-
-
-#endif
+#endif // SCORESEGMENTITERATOR_H
+// EOF

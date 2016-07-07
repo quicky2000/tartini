@@ -26,19 +26,19 @@
 #include <QToolTip>
 #include <QComboBox>
 
-ScoreView::ScoreView( int viewID_, QWidget *parent )
- : ViewWidget( viewID_, parent)
+//------------------------------------------------------------------------------
+ScoreView::ScoreView(int viewID_, QWidget * parent):
+  ViewWidget( viewID_, parent)
 {
 
-  Q3BoxLayout *mainLayout = new Q3HBoxLayout(this);
+  Q3BoxLayout * mainLayout = new Q3HBoxLayout(this);
 
-  Q3BoxLayout *leftLayout = new Q3VBoxLayout(mainLayout);
-  Q3BoxLayout *rightLayout = new Q3VBoxLayout(mainLayout);
+  Q3BoxLayout * leftLayout = new Q3VBoxLayout(mainLayout);
+  Q3BoxLayout * rightLayout = new Q3VBoxLayout(mainLayout);
 
   //create a drawing object
   scoreWidget = new ScoreWidget(this);
   leftLayout->addWidget(scoreWidget);
-  //scoreWidget->show();
   Q3BoxLayout *bottomLayout = new Q3HBoxLayout(leftLayout);
 
   //vertical scroll wheel
@@ -54,7 +54,7 @@ ScoreView::ScoreView( int viewID_, QWidget *parent )
   connect(scaleWheelY, SIGNAL(sliderMoved(double)), scoreWidget, SLOT(update()));
 
   //horizontal scroll wheel
-  QwtWheel* scaleWheelX = new QwtWheel(this);
+  QwtWheel * scaleWheelX = new QwtWheel(this);
   scaleWheelX->setOrientation(Qt::Horizontal);
   scaleWheelX->setWheelWidth(16);
   scaleWheelX->setRange(1.0, 100.0, 1.1, 1);
@@ -63,35 +63,35 @@ ScoreView::ScoreView( int viewID_, QWidget *parent )
   connect(scaleWheelX, SIGNAL(sliderMoved(double)), scoreWidget, SLOT(setScaleX(double)));
   connect(scaleWheelX, SIGNAL(sliderMoved(double)), scoreWidget, SLOT(update()));
 
-  QComboBox *sharpsModeComboBox = new QComboBox(this, tr("sharpsModeComboBox"));
+  QComboBox * sharpsModeComboBox = new QComboBox(this, tr("sharpsModeComboBox"));
   QStringList s;
   s << tr("Sharps") << tr("Flats");
   sharpsModeComboBox->addItems(s);
   connect(sharpsModeComboBox, SIGNAL(activated(int)), scoreWidget, SLOT(setSharpsMode(int)));
   connect(sharpsModeComboBox, SIGNAL(activated(int)), scoreWidget, SLOT(update()));
 
-  QComboBox *notesModeComboBox = new QComboBox(this, tr("notesModeComboBox"));
+  QComboBox * notesModeComboBox = new QComboBox(this, tr("notesModeComboBox"));
   s.clear();
   s << tr("Notes") << tr("MIDI blocks");
   notesModeComboBox->addItems(s);
   connect(notesModeComboBox, SIGNAL(activated(int)), scoreWidget, SLOT(setNotesMode(int)));
   connect(notesModeComboBox, SIGNAL(activated(int)), scoreWidget, SLOT(update()));
 
-  QComboBox *clefModeComboBox = new QComboBox(this, tr("clefModeComboBox"));
+  QComboBox * clefModeComboBox = new QComboBox(this, tr("clefModeComboBox"));
   s.clear();
   s << tr("Both clefs") << tr("Treble clef");
   clefModeComboBox->addItems(s);
   connect(clefModeComboBox, SIGNAL(activated(int)), scoreWidget, SLOT(setClefMode(int)));
   connect(clefModeComboBox, SIGNAL(activated(int)), scoreWidget, SLOT(update()));
 
-  QComboBox *opaqueModeComboBox = new QComboBox(this, tr("opaqueModeComboBox"));
+  QComboBox * opaqueModeComboBox = new QComboBox(this, tr("opaqueModeComboBox"));
   s.clear();
   s << tr("See-through notes") << tr("Opaque notes");
   opaqueModeComboBox->addItems(s);
   connect(opaqueModeComboBox, SIGNAL(activated(int)), scoreWidget, SLOT(setOpaqueMode(int)));
   connect(opaqueModeComboBox, SIGNAL(activated(int)), scoreWidget, SLOT(update()));
 
-  QComboBox *transposeComboBox = new QComboBox(this, tr("transposeComboBox"));
+  QComboBox * transposeComboBox = new QComboBox(this, tr("transposeComboBox"));
   s.clear();
   s << tr("Up 2 octaves") << tr("Up 1 octave") << tr("As played") << tr("Down 1 octave") << tr("Down 2 octaves");
   transposeComboBox->addItems(s);
@@ -99,7 +99,7 @@ ScoreView::ScoreView( int viewID_, QWidget *parent )
   connect(transposeComboBox, SIGNAL(activated(int)), scoreWidget, SLOT(setTransposeLevel(int)));
   connect(transposeComboBox, SIGNAL(activated(int)), scoreWidget, SLOT(update()));
 
-  QComboBox *showAllModeComboBox = new QComboBox(this, "showAllModeComboBox");
+  QComboBox * showAllModeComboBox = new QComboBox(this, "showAllModeComboBox");
   s.clear();
   s << tr("Hide extream notes") << tr("Show all notes");
   showAllModeComboBox->addItems(s);
@@ -125,11 +125,20 @@ ScoreView::ScoreView( int viewID_, QWidget *parent )
   connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), scoreWidget, SLOT(update()));
 }
 
-ScoreView::~ScoreView()
+//------------------------------------------------------------------------------
+ScoreView::~ScoreView(void)
 {
   delete scoreWidget;
 }
 
+//------------------------------------------------------------------------------
 void ScoreView::resizeEvent(QResizeEvent *)
 {
 }
+
+//------------------------------------------------------------------------------
+QSize ScoreView::sizeHint(void) const
+{
+  return QSize(800, 240);
+}
+// EOF

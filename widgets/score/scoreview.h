@@ -22,21 +22,21 @@
 
 class ScoreWidget;
 
-class ScoreView : public ViewWidget {
+class ScoreView: public ViewWidget
+{
   Q_OBJECT
 
   public:
-    ScoreView(int viewID_, QWidget *parent = 0);
-    virtual ~ScoreView();
+  ScoreView(int viewID_, QWidget *parent = NULL);
+  virtual ~ScoreView(void);
 
-    void resizeEvent(QResizeEvent *);
+  void resizeEvent(QResizeEvent *);
 
-    QSize sizeHint() const { return QSize(800, 240); }
+  QSize sizeHint(void) const;
 
   private:
-    ScoreWidget *scoreWidget;
+  ScoreWidget * scoreWidget;
 
 };
-
-
-#endif
+#endif // SCOREVIEW_H
+// EOF
