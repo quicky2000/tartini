@@ -22,23 +22,29 @@
 
 class PianoWidget;
 
-class PianoView : public ViewWidget {
+class PianoView : public ViewWidget
+{
   Q_OBJECT
 
   public:
-    PianoView(int viewID_, QWidget *parent = 0);
-    virtual ~PianoView();
+  PianoView(int viewID_, QWidget *parent = 0);
+  virtual ~PianoView(void);
 
-    void resizeEvent(QResizeEvent *);
+  void resizeEvent(QResizeEvent *);
 
-    QSize sizeHint() const { return QSize(200, 100); }
+  QSize sizeHint(void) const
+  {
+    return QSize(200, 100);
+  }
 
-public slots:
-	void changeKey();
-  private:
-    PianoWidget *pianoWidget;
+  public slots:
+  void changeKey(void);
+ private:
+  PianoWidget * pianoWidget;
 
 };
 
 
-#endif
+#endif // PIANOVIEW_H
+// EOF
+

@@ -22,8 +22,9 @@
 #include "channel.h"
 #include "musicnotes.h"
 
-PianoView::PianoView( int viewID_, QWidget *parent )
- : ViewWidget( viewID_, parent)
+//------------------------------------------------------------------------------
+PianoView::PianoView(int viewID_, QWidget * parent):
+  ViewWidget( viewID_, parent)
 {
   pianoWidget = new PianoWidget(this);
   pianoWidget->show();
@@ -32,30 +33,40 @@ PianoView::PianoView( int viewID_, QWidget *parent )
   connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), this, SLOT(changeKey()));
 }
 
-PianoView::~PianoView()
+//------------------------------------------------------------------------------
+PianoView::~PianoView(void)
 {
   delete pianoWidget;
 }
 
+//------------------------------------------------------------------------------
 void PianoView::resizeEvent(QResizeEvent *)
 {
   pianoWidget->resize(size());
 }
 
-void PianoView::changeKey()
+//------------------------------------------------------------------------------
+void PianoView::changeKey(void)
 {
   Channel *active = gdata->getActiveChannel();
-  //AnalysisData *data = Channel::getActiveChannelCurrentChunkData();
-  if(active) {
-    AnalysisData *data = active->dataAtCurrentChunk();
-    if(data && active->isVisibleChunk(data)) {
-      float pitch = data->getPitch();
-        pianoWidget->setCurrentNote(noteValue(pitch), data->getCorrelation());
-    } else {
+  if(active)
+    {
+      AnalysisData * data = active->dataAtCurrentChunk();
+      if(data && active->isVisibleChunk(data))
+	{
+	  float pitch = data->getPitch();
+	  pianoWidget->setCurrentNote(noteValue(pitch), data->getCorrelation());
+	}
+      else
+	{
+	  pianoWidget->setNoNote();
+	}
+    }
+  else
+    {
       pianoWidget->setNoNote();
     }
-  } else {
-    pianoWidget->setNoNote();
-  }
   pianoWidget->update();
 }
+
+// EOF
