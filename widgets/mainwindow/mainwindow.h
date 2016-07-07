@@ -4,6 +4,8 @@
     begin                : May 2002
     copyright            : (C) 2002-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
    
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,16 +21,10 @@
 #include <QMainWindow>
 #include <QWorkspace>
 #include <QDialog>
-//Added by qt3to4:
 #include <QKeyEvent>
 #include <QEvent>
 #include <QLabel>
-//#include <Q3PopupMenu>
 #include <QSignalMapper>
-//#include "audio_stream.h"
-//#include "sound_file_stream.h"
-//#include "fwinfunc.h"
-//#include "audio_thread.h"
 
 class Preferences;
 class Q3ListView;
@@ -102,9 +98,7 @@ class MainWindow : public QMainWindow
   MyScrollBar *timeScrollBar;
   QComboBox *keyTypeComboBox;
     
-  //QToolButton *playStopButton;
   QAction *playStopAction;
-  //QToolButton *recordButton;
   QAction *recordAction;
   QAction *playRecordAction;
   QIcon *playIconSet;
@@ -117,12 +111,10 @@ class MainWindow : public QMainWindow
   QSignalMapper *createSignalMapper;
   
  protected:
-  //void customEvent( QCustomEvent * e );
   bool event( QEvent * e );
 
 signals:
   void changedMusicFolder(const QString &);
-  //void fileAdded(QString);
   void zoomInPressed();
   void zoomOutPressed();
     
@@ -134,7 +126,6 @@ public slots:
   void openRecord();
   void openPlayRecord();
   void openRecord(bool andPlay);
-  //void toggleOption(int id);
   void closeAllWidgets();
   void closeEvent(QCloseEvent *event);
   void menuPreferences();
@@ -147,7 +138,6 @@ public slots:
   void setChunkLabel();
   void setNoteLabel();
   void setTimeRange(double min_, double max_);
-  //void setPageStep(double step_);
 
   void rewindPressed();
   void rewindReleased();
