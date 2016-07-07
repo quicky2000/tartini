@@ -4,6 +4,8 @@
     begin                : 17 Mar 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -15,7 +17,6 @@
 
 #include "pianowidget.h"
 #include <qpainter.h>
-//Added by qt3to4:
 #include <QPaintEvent>
 #include "drawwidget.h"
 #include "gdata.h"
@@ -47,7 +48,6 @@ void PianoWidget::paintEvent(QPaintEvent *)
   
   double scaleX = double(width()) / 1650.0; //1650mm
   double scaleY = double(height()) / 1480.0; //1480mm
-  //p.setWindow(0, 0, 1650, 1480); //measurements in 10th's of a mm from a actual piano
   
   if(isNote()) {
     int notepart = isBlackKeyArray[currentNote()];
@@ -59,8 +59,6 @@ void PianoWidget::paintEvent(QPaintEvent *)
   p.setPen(Qt::black);
   //draw the lines between the white keys
   for(j = 1; j<7; j++) {
-    //p.moveTo(toInt(double(j)*235.0*scaleX), 0);
-    //p.lineTo(toInt(double(j)*235.0*scaleX), height());
     p.drawLine(toInt(double(j)*235.0*scaleX), 0, toInt(double(j)*235.0*scaleX), height());
   }
 

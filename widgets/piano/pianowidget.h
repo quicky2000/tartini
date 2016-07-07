@@ -4,6 +4,8 @@
     begin                : 17 Mar 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,7 +20,6 @@
 
 #include <qwidget.h>
 #include <qpixmap.h>
-//Added by qt3to4:
 #include <QPaintEvent>
 #include "drawwidget.h"
 

@@ -25,8 +25,6 @@
 PianoView::PianoView( int viewID_, QWidget *parent )
  : ViewWidget( viewID_, parent)
 {
-  //setCaption("Piano view");
-
   pianoWidget = new PianoWidget(this);
   pianoWidget->show();
 
@@ -50,15 +48,9 @@ void PianoView::changeKey()
   //AnalysisData *data = Channel::getActiveChannelCurrentChunkData();
   if(active) {
     AnalysisData *data = active->dataAtCurrentChunk();
-    //if(data && active->isVisibleNote(data->noteIndex)) {
     if(data && active->isVisibleChunk(data)) {
       float pitch = data->getPitch();
-      //if (note > 0) {
-        //pianoWidget->setCurrentNote(noteValue(note), data->volumeValue);
         pianoWidget->setCurrentNote(noteValue(pitch), data->getCorrelation());
-      //} else {
-      //  pianoWidget->setNoNote();
-      //}
     } else {
       pianoWidget->setNoNote();
     }
