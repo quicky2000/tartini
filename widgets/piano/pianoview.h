@@ -32,10 +32,7 @@ class PianoView : public ViewWidget
 
   void resizeEvent(QResizeEvent *);
 
-  QSize sizeHint(void) const
-  {
-    return QSize(200, 100);
-  }
+  QSize sizeHint(void) const;
 
   public slots:
   void changeKey(void);

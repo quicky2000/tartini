@@ -69,4 +69,10 @@ void PianoView::changeKey(void)
   pianoWidget->update();
 }
 
+//------------------------------------------------------------------------------
+QSize PianoView::sizeHint(void) const
+{
+  return QSize(200, 100);
+}
+
 // EOF

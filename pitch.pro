@@ -149,6 +149,7 @@ HEADERS += main.h \
   dialogs/opendialog.h \
   general/equalloudness.h \
   widgets/piano/pianowidget.h \
+  widgets/piano/pianowidget.hpp \
   widgets/freq/amplitudewidget.h \
   widgets/freq/amplitudewidget.hpp \
   widgets/piano/pianoview.h \

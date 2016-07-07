@@ -32,32 +32,13 @@ public:
 
   void paintEvent(QPaintEvent *);
   
-  QSize sizeHint(void) const
-  {
-    return QSize(165, 100);
-  }
-
-  int currentNote(void)
-  {
-    return _currentNote;
-  }
+  inline QSize sizeHint(void) const;
+  inline int currentNote(void);
   void setCurrentNote(int n, float amountPressed = 1.0);
-  void setNoNote(void)
-  {
-    _currentNote = -1;
-  }
-  bool isNote(void)
-  {
-    return _currentNote >= 0;
-  }
-  float amountPressed(void)
-  {
-    return _amountPressed;
-  }
-  void setAmountPressed(float amountPressed)
-  {
-    _amountPressed = amountPressed;
-  }
+  inline void setNoNote(void);
+  inline bool isNote(void);
+  inline float amountPressed(void);
+  inline void setAmountPressed(float amountPressed);
   
   QPixmap * buffer;
 
@@ -66,6 +47,8 @@ public:
 
   float _amountPressed;
 };
+
+#include "pianowidget.hpp"
 
 #endif // PIANO_H
 // EOF
