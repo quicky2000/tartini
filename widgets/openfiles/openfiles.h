@@ -4,6 +4,8 @@
     begin                : Thu Dec 16 2004
     copyright            : (C) 2004-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,7 +18,6 @@
 #define OPENFILES_H
 
 #include "viewwidget.h"
-//Added by qt3to4:
 #include <QResizeEvent>
 
 class Channel;
@@ -42,7 +43,6 @@ class OpenFiles : public ViewWidget {
     void refreshChannelList();
     void listViewChanged(Q3ListViewItem* item);
     void slotCurrentChanged(Q3ListViewItem* item);
-    //void slotAddFilename(QString s);
 	  void slotActiveChannelChanged(Channel *active);
 
 };

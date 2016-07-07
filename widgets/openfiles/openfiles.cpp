@@ -4,6 +4,8 @@
     begin                : Thu Dec 16 2004
     copyright            : (C) 2004-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,7 +22,6 @@
 #include <q3header.h>
 
 #include <qpixmap.h>
-//Added by qt3to4:
 #include <QResizeEvent>
 
 #include "openfiles.h"
@@ -31,8 +32,6 @@
 
 OpenFiles::OpenFiles(int id, QWidget *parent) : ViewWidget(id, parent)
 {
-  //setCaption("Open Files");
-
   //Create the list of channels down the left hand side
   theListView = new Q3ListView(this);
   theListView->addColumn("Filename (Channel)", 178);
@@ -41,17 +40,7 @@ OpenFiles::OpenFiles(int id, QWidget *parent) : ViewWidget(id, parent)
   theListView->setWhatsThis("A list of all open channels in all open sounds. "
     "The current active channel is marked with an 'A' beside it. "
     "The tick specifies if a channel should be visible or not in the multi-channel views");
-  // Make it so the Active column magically appears if needed
-  //theListView->setColumnWidthMode(0, QListView::Manual);
-  //theListView->setColumnWidth(1, 0);
-  //theListView->setColumnWidthMode(0, QListView::Maximum);
-  //theListView->setColumnWidth(0, 178);
-  //theListView->setColumnAlignment(1, Qt::AlignRight);
-  //theListView->header()->setStretchEnabled(true);
-  //theListView->setResizeMode(QListView::LastColumn);
-  
-  //theListView->header()->hide();
-  //theListView->setAllColumnsShowFocus(true);
+
   theListView->setSelectionMode(Q3ListView::Extended);
   theListView->setSelectionMode(Q3ListView::Single);
   theListView->setSorting(-1);
@@ -59,11 +48,8 @@ OpenFiles::OpenFiles(int id, QWidget *parent) : ViewWidget(id, parent)
 
   connect(gdata, SIGNAL(channelsChanged()), this, SLOT(refreshChannelList()));
   connect(gdata, SIGNAL(activeChannelChanged(Channel*)), this, SLOT(slotActiveChannelChanged(Channel *)));
-  //connect(gdata, SIGNAL(activeChannelChanged(Channel*)), this, SLOT(refreshChannelList()));
   connect(theListView, SIGNAL(pressed(Q3ListViewItem*)), this, SLOT(listViewChanged(Q3ListViewItem*)));
-  //connect(theListView, SIGNAL(currentChanged(QListViewItem*)), this, SLOT(slotCurrentChanged(QListViewItem*)));
   connect(theListView, SIGNAL(selectionChanged(Q3ListViewItem*)), this, SLOT(slotCurrentChanged(Q3ListViewItem*)));
-  //connect(theListView, SIGNAL(pressed(QListViewItem*)), gdata->view, SLOT(doSlowUpdate()));
 
   refreshChannelList();
 }
@@ -75,7 +61,6 @@ OpenFiles::~OpenFiles()
 void OpenFiles::refreshChannelList()
 {
   //put in any channel items that already exist
-  //char s[2048];
   theListView->clear();
   
   QString s;
@@ -83,9 +68,7 @@ void OpenFiles::refreshChannelList()
   unsigned int l_index = 0;
   for(l_index = 0 ; l_index < gdata->getChannelsSize() ; ++l_index)
     {
-      //sprintf(s, "%s(%d)", getFilenamePart(gdata->getChannelAt()->getParent()->filename), j+1);
       s = gdata->getChannelAt(l_index)->getUniqueFilename();
-      //theListView->insertItem(new QListViewItem(theListView, theListView->lastItem(), " "));
 
       Q3CheckListItem *newElement = new Q3CheckListItem(theListView, theListView->lastItem(), s, Q3CheckListItem::CheckBox);
     
@@ -127,15 +110,11 @@ void OpenFiles::slotActiveChannelChanged(Channel *active)
 		while (item != NULL) {
 			if (pos == index) {
         theListView->setSelected(item, true);
-			//  item->setText(1, "A");
-			//} else {
-			//	item->setText(1, "");
 			}
 			item = item->nextSibling();
 			pos++;
 		}
 	}
-  //gdata->view->doUpdate();
 }
 
 /**
@@ -156,8 +135,6 @@ void OpenFiles::listViewChanged(Q3ListViewItem* item)
   myassert(pos < int(gdata->getChannelsSize()));
   bool state = ((Q3CheckListItem *)item)->isOn();
   if(gdata->getChannelAt(pos)->isVisible() != state) gdata->getChannelAt(pos)->setVisible(state);
-  //gdata->view->doSlowUpdate();
-  //gdata->view->doFastUpdate();
   gdata->getView().doUpdate();
 }
 
@@ -193,16 +170,5 @@ void OpenFiles::slotCurrentChanged(Q3ListViewItem* item)
 void OpenFiles::resizeEvent(QResizeEvent *)
 {
   theListView->resize(size());
-  //theListView->setColumnWidth(0, theListView->width()-40);
 }
 
-/*
-void OpenFiles::slotAddFilename(QString s)
-{
-
-	QCheckListItem *newElement = new QCheckListItem(theListView, theListView->lastItem(), s, QCheckListItem::CheckBox);
-  newElement->setOn(true);
-  theListView->setSelected(newElement, true);
-  theListView->setCurrentItem(newElement);
-}
-*/
