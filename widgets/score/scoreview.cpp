@@ -4,6 +4,8 @@
     begin                : Mar 26 2006
     copyright            : (C) 2006 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,15 +26,9 @@
 #include <QToolTip>
 #include <QComboBox>
 
-//#include "pics/background.xpm"
-
 ScoreView::ScoreView( int viewID_, QWidget *parent )
  : ViewWidget( viewID_, parent)
 {
-  //QPalette p = palette();
-  //p.setBrush(QPalette::Window, QBrush(QPixmap(background_xpm)));
-  //setPalette(p);
-  //setAutoFillBackground(true);
 
   Q3BoxLayout *mainLayout = new Q3HBoxLayout(this);
 
@@ -136,5 +132,4 @@ ScoreView::~ScoreView()
 
 void ScoreView::resizeEvent(QResizeEvent *)
 {
-  //scoreWidget->resize(size());
 }

@@ -4,6 +4,8 @@
     begin                : Mar 29 2006
     copyright            : (C) 2006 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -14,16 +16,6 @@
  ***************************************************************************/
 #include <qpixmap.h>
 #include <qpainter.h>
-
-/*
-#include "scorewidget.h"
-#include "gdata.h"
-#include "channel.h"
-#include "analysisdata.h"
-#include "useful.h"
-#include "qfontmetrics.h"
-#include "qpen.h"
-*/
 
 #include "scorewidget.h"
 #include "scoresegmentiterator.h"
@@ -55,21 +47,13 @@ void ScoreSegmentIterator::reset(ScoreWidget *scoreWidget, Channel *channel)
     endTime = ch->totalTime();
     _numPages = (int)ceil(endTime / totalPageTime);
     endOfLastPageTime = _numPages * totalPageTime;
-    //if(endOfLastPageTime > lookAheadTime) lookAheadTime = endOfLastPageTime;
     lookAheadTime2 = (_curPage == _numPages-1) ? std::min(endTime, lookAheadTime) : lookAheadTime;
     lookAheadTime2 = (_curPage == 0) ? endOfLastPageTime : lookAheadTime2;
-    //if(curPage == 0) lookAheadTime = endOfLastPageTime;
-    //double lookBehindTime2 = (curPage == numPages-1) ? startOfPageTime - _lookAheadGap*totalPageTime : lookBehindTime;
-    //double lookBehindTime2 = (curPage == numPages-1) ? lookBehindTime+totalPageTime : lookBehindTime;
-    //double lookBehindTime2 = (curPage == numPages-1) ? std::min(lookBehindTime, endTime-totalPageTime) : lookBehindTime;
     lookBehindTime2 = std::min(lookBehindTime, endTime-totalPageTime);
     //FIXME: The ending page isn't drawn correctly
     lookBehindTime2 = (_curPage == 0) ? lookBehindTime+totalPageTime : lookBehindTime2;
     lookBehindTime3 = std::min(lookBehindTime, endTime-totalPageTime);
-    //if(curPage == numPages-1) lookBehindTime = startOfPageTime - _lookAheadGap*totalPageTime;
     curRow = (int)floor(curRelPageTime / totalRowTime);
-    //QString pageString;
-    //p.drawText(_fontWidth, height()-4, pageString.sprintf("Page %d of %d", curPage+1, numPages));
   }
   rowCounter = 0;
   subRowCounter = -1;
@@ -88,7 +72,6 @@ bool ScoreSegmentIterator::next()
       int j = rowCounter;
       double startOfRowTime = startOfPageTime + j*totalRowTime;
       double endOfRowTime = startOfRowTime + totalRowTime;
-      //double curRelRowTime = _curTime - startOfRowTime;
       _lineCenterY = toInt(sw->_boarderY) + halfStaveHeight + staveHeight*j;
       while(++subRowCounter < 4) {
         switch(subRowCounter) {
@@ -97,7 +80,6 @@ bool ScoreSegmentIterator::next()
             _leftTime = startOfRowTime+totalPageTime;
             _rightTime = std::min(endOfRowTime, lookBehindTime3) + totalPageTime;
             _leftX = (double)sw->_boarderX;
-            //drawScoreRow(ch, (double)_boarderX, lineCenterY, startOfRowTime+totalPageTime, rightTime+totalPageTime);
             return (_isValid = true);
           }
           break;
@@ -106,19 +88,15 @@ bool ScoreSegmentIterator::next()
             _leftTime = std::max(startOfRowTime, lookBehindTime3 + lookAheadGapTime);
             _rightTime = std::min(startOfRowTime+totalRowTime, lookAheadTime2);
             _leftX = (double)sw->_boarderX + (_leftTime-startOfRowTime)*sw->_scaleX;
-            //printf("leftTime=%f, rightTime=%d\n", leftTime, rightTime);
-            //drawScoreRow(ch, (double)_boarderX + (leftTime-startOfRowTime)*_scaleX, lineCenterY, leftTime, rightTime);
             return (_isValid = true);
           }
           break;
         case 3:
-          //if(endOfRowTime-totalPageTime > lookBehindTime2) {
           if(endOfRowTime-totalPageTime > lookBehindTime2 + lookAheadGapTime) {
             _leftTime = std::max(startOfRowTime-totalPageTime, lookBehindTime2 + lookAheadGapTime);
             _leftTime = std::min(_leftTime, endOfRowTime-totalPageTime);
             _rightTime = endOfRowTime-totalPageTime;
             _leftX = (double)sw->_boarderX + (_leftTime-(startOfRowTime-totalPageTime))*sw->_scaleX;
-            //drawScoreRow(ch, (double)_boarderX + (leftTime-(startOfRowTime-totalPageTime))*_scaleX, lineCenterY, leftTime, rightTime);
             return (_isValid = true);
           }
         }

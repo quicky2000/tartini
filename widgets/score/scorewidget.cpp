@@ -4,6 +4,8 @@
     begin                : Mar 26 2006
     copyright            : (C) 2006 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -14,7 +16,6 @@
  ***************************************************************************/
 #include <qpixmap.h>
 #include <qpainter.h>
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <QPaintEvent>
 
@@ -77,7 +78,6 @@ void ScoreWidget::drawNote(int x, int y, StemType stemType, FillType fillType, i
 {
   double noteWidth = _scaleY; //toInt((double)_scaleY * 1.2);
   double noteHeight = _scaleY;
-  //p.drawEllipse(x - toInt(noteWidth/2), y - toInt(noteHeight/2), toInt(noteWidth), toInt(noteHeight));
   //draw the left hand side of the note on the point
   if(gdata->polish()) p.setRenderHint(QPainter::Antialiasing, true);
   if(fillType == FilledNote) {
@@ -88,14 +88,12 @@ void ScoreWidget::drawNote(int x, int y, StemType stemType, FillType fillType, i
   p.drawEllipse(x, y - toInt(noteHeight/2), toInt(noteWidth), toInt(noteHeight));
   if(gdata->polish()) p.setRenderHint(QPainter::Antialiasing, false);
   if(stemType == StemUp) {
-    //int stemX = x + toInt((noteWidth)/2); 
     int stemX = x + toInt(noteWidth); 
     p.drawLine(stemX, y - toInt(3*_scaleY), stemX, y);
     for(int j=0; j<numFlicks; j++) {
       p.drawLine(stemX, y - toInt((3.0 - 0.5*j)*_scaleY), stemX + toInt(noteWidth*0.75), y - toInt((2.5 - 0.5*j)*_scaleY));
     }
   } else if(stemType == StemDown) {
-    //int stemX = x - toInt((noteWidth)/2); 
     int stemX = x; 
     p.drawLine(stemX, y + toInt(3*_scaleY), stemX, y);
     for(int j=0; j<numFlicks; j++) {
@@ -140,7 +138,6 @@ void ScoreWidget::drawNoteAtPitch(int x, int y, int pitch, double noteLength, do
   double noteHeight = _scaleY;
   int yOffset;
   int ySteps;
-  //int accidentalOffsetX = (_showNotes) ? noteWidth/2 : 0;
   int accidentalOffsetX = (_showNotes) ? 2 : 0;
   int j;
   if(!_showNotes) p.setPen(QPen(Qt::red, 1));
@@ -170,11 +167,6 @@ void ScoreWidget::drawNoteAtPitch(int x, int y, int pitch, double noteLength, do
   QColor noteColor(Qt::black);
   if(!_showOpaqueNotes) noteColor.setAlphaF(volume);
   p.setPen(QPen(noteColor, 2));
-  /*if(noteType >= Minum) {
-    p.setBrush(Qt::NoBrush);
-  } else {
-    p.setBrush(noteColor);
-  }*/
   if(_showNotes) {
     StemType stemType = StemNone;
     if(noteType <= Minum) stemType = (ySteps < 7) ? StemUp : StemDown;
@@ -182,7 +174,6 @@ void ScoreWidget::drawNoteAtPitch(int x, int y, int pitch, double noteLength, do
     if(noteType <= Quaver) numFlicks = 1 + (Quaver - noteType);
     drawNote(x, y-yOffset, stemType, (noteType<=Crotchet) ? FilledNote : EmptyNote, numFlicks);
   } else {
-    //p.drawRoundRect(x - toInt(noteWidth/2), y - yOffset - toInt(noteHeight/2), toInt(noteWidth), toInt(noteHeight), 3, 3);
     p.drawRoundRect(x, y - yOffset - toInt(noteHeight/2), toInt(noteLength * _scaleX)-1, toInt(noteHeight), 3, 3);
   }
 }
@@ -228,10 +219,8 @@ void ScoreWidget::drawScoreSegment(Channel *ch, double leftX, int lineCenterY, d
     for(j=0; j<ch->get_note_data().size(); j++) {
       if(ch->isVisibleNote(j) && ch->isLabelNote(j)) {
         double noteTime = ch->timeAtChunk(ch->get_note_data()[j].startChunk());
-        //printf("noteTime = %f\n", noteTime);
         if(between(noteTime, leftTime, rightTime)) {
           //FIXME: avgPitch is quite slow to calc
-          //printf("x=%d, y=%d, p=%d\n", left + toInt((noteTime - leftTime)*_scaleX), lineCenterY, toInt(ch->get_note_data()[j].avgPitch()));
           drawNoteAtPitch(toInt(leftX + (noteTime - leftTime)*_scaleX),
                    lineCenterY,
                    toInt(ch->get_note_data()[j].avgPitch()),
@@ -268,8 +257,6 @@ void ScoreWidget::paintEvent( QPaintEvent * /*pe*/ )
     }
   }
 
-  //p.setBrush(Qt::NoBrush);
-  //p.drawRect(pe->rect());
   endDrawing();
 }
 
@@ -294,41 +281,20 @@ void ScoreWidget::mousePressEvent( QMouseEvent *e )
         if(data && data->getNoteIndex() >= 0) {
 	  int startChunk = ch->get_note_data()[data->getNoteIndex()].startChunk();
             gdata->updateActiveChunkTime(ch->timeAtChunk(startChunk));
-            //gdata->updateActiveChunkTime(t);
             if(gdata->getRunning() == STREAM_STOP) {
               gdata->playSound(ch->getParent());
             }
         }
       }
     }
-  }/* else {
-    while(si.next()) {
-      drawStaveSegment(si.leftX(), si.lineCenterY(), toInt(si.widthX()));
-    }
-  }*/
-}
-
-void ScoreWidget::mouseMoveEvent( QMouseEvent * /*e*/ )
-{
-/*
-  if(_mouseDown) {
-    Channel *ch = gdata->getActiveChannel();
-  
-    ScoreSegmentIterator si(this, ch);
-    if(ch) {
-      while(si.next()) {
-        if(between(e->x(), (int)si.leftX(), (int)(si.leftX()+si.widthX())) &&
-          between(e->y(), si.staveTop(), si.staveBottom())) {
-          double t = si.leftTime() + ((double)e->x() - si.leftX()) / _scaleX;
-          gdata->updateActiveChunkTime(t);
-        }
-      }
-    }
   }
-*/
 }
 
-void ScoreWidget::mouseReleaseEvent( QMouseEvent * /*e*/ )
+void ScoreWidget::mouseMoveEvent( QMouseEvent *)
+{
+}
+
+void ScoreWidget::mouseReleaseEvent( QMouseEvent *)
 {
   _mouseDown = false;
 }
