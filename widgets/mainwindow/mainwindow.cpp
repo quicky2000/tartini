@@ -96,10 +96,10 @@
 #include "wave_stream.h"
 #ifdef USE_OGG
 #include "ogg_stream.h"
-#endif
+#endif // USE_OGG
 #ifdef USE_SOX
 #include "sox_stream.h"
-#endif
+#endif // USE_SOX
 
 #include <math.h>
 #include "useful.h"
@@ -128,39 +128,40 @@
 
 #ifdef MACX
 #include "main.h"
-#endif
+#endif // MACX
 
 #include "myassert.h"
 
 MainWindow *mainWindow;
 MyGLFont *mygl_font;
 
-ViewData viewData[NUM_VIEWS] = {
-                               /*ViewData(title,               menuName,              className,           menu type);*/
-                                 ViewData(QObject::tr("File List"),         QObject::tr("&File List"),          "OpenFiles",         0),
-                                 ViewData(QObject::tr("Pitch Contour"),     QObject::tr("&Pitch Contour"),      "FreqView",          0),
-                                 ViewData(QObject::tr("Chromatic Tuner"),   QObject::tr("&Chromatic Tuner"),    "TunerView",         0),
-                                 ViewData(QObject::tr("Harmonic Track"),    QObject::tr("3D Harmonic &Track"),  "HTrackView",        0),
-                                 ViewData(QObject::tr("Vibrato View"),      QObject::tr("V&ibrato View"),       "VibratoView",       0),
-                                 ViewData(QObject::tr("Musical Score"),     QObject::tr("&Musical Score"),      "ScoreView",         0),
-                                 ViewData(QObject::tr("Oscilloscope"),      QObject::tr("&Oscilloscope"),       "WaveView",          1),
-                                 ViewData(QObject::tr("Correlation View"),  QObject::tr("Corre&lation View"),   "CorrelationView",   1),
-                                 ViewData(QObject::tr("FFT View"),          QObject::tr("FF&T View"),           "FFTView",           1),
-                                 ViewData(QObject::tr("Cepstrum View"),     QObject::tr("C&epstrum View"),      "CepstrumView",      1),
-                                 ViewData(QObject::tr("Debug View"),        QObject::tr("&Debug View"),         "DebugView",         1),
-                                 ViewData(QObject::tr("Harmonic Block"),    QObject::tr("Harmonic &Block"),     "HBlockView",        2),
-                                 ViewData(QObject::tr("Harmonic Stack"),    QObject::tr("&Harmonic Stack"),     "HStackView",        2),
-                                 ViewData(QObject::tr("Harmonic Bubbles"),  QObject::tr("H&armonic Bubbles"),   "HBubbleView",       2),
-                                 ViewData(QObject::tr("Harmonic Circle"),   QObject::tr("Ha&rmonic Circle"),    "HCircleView",       2),
-                                 ViewData(QObject::tr("Pitch Compass"),     QObject::tr("Pitch &Compass"),      "PitchCompassView",  2),
-                                 ViewData(QObject::tr("Piano Keyboard"),    QObject::tr("2D Piano &Keyboard"),  "PianoView",         3),
-                                 ViewData(QObject::tr("Summary View"),      QObject::tr("&Summary View"),       "SummaryView",       3),
-                                 ViewData(QObject::tr("Volume Meter"),      QObject::tr("&Volume Meter"),       "VolumeMeterView",   3)
-                               };
+ViewData viewData[NUM_VIEWS] =
+  {
+    // ViewData(title,                         menuName,                            className,         menu type);
+    ViewData(QObject::tr("File List"),         QObject::tr("&File List"),          "OpenFiles",         0),
+    ViewData(QObject::tr("Pitch Contour"),     QObject::tr("&Pitch Contour"),      "FreqView",          0),
+    ViewData(QObject::tr("Chromatic Tuner"),   QObject::tr("&Chromatic Tuner"),    "TunerView",         0),
+    ViewData(QObject::tr("Harmonic Track"),    QObject::tr("3D Harmonic &Track"),  "HTrackView",        0),
+    ViewData(QObject::tr("Vibrato View"),      QObject::tr("V&ibrato View"),       "VibratoView",       0),
+    ViewData(QObject::tr("Musical Score"),     QObject::tr("&Musical Score"),      "ScoreView",         0),
+    ViewData(QObject::tr("Oscilloscope"),      QObject::tr("&Oscilloscope"),       "WaveView",          1),
+    ViewData(QObject::tr("Correlation View"),  QObject::tr("Corre&lation View"),   "CorrelationView",   1),
+    ViewData(QObject::tr("FFT View"),          QObject::tr("FF&T View"),           "FFTView",           1),
+    ViewData(QObject::tr("Cepstrum View"),     QObject::tr("C&epstrum View"),      "CepstrumView",      1),
+    ViewData(QObject::tr("Debug View"),        QObject::tr("&Debug View"),         "DebugView",         1),
+    ViewData(QObject::tr("Harmonic Block"),    QObject::tr("Harmonic &Block"),     "HBlockView",        2),
+    ViewData(QObject::tr("Harmonic Stack"),    QObject::tr("&Harmonic Stack"),     "HStackView",        2),
+    ViewData(QObject::tr("Harmonic Bubbles"),  QObject::tr("H&armonic Bubbles"),   "HBubbleView",       2),
+    ViewData(QObject::tr("Harmonic Circle"),   QObject::tr("Ha&rmonic Circle"),    "HCircleView",       2),
+    ViewData(QObject::tr("Pitch Compass"),     QObject::tr("Pitch &Compass"),      "PitchCompassView",  2),
+    ViewData(QObject::tr("Piano Keyboard"),    QObject::tr("2D Piano &Keyboard"),  "PianoView",         3),
+    ViewData(QObject::tr("Summary View"),      QObject::tr("&Summary View"),       "SummaryView",       3),
+    ViewData(QObject::tr("Volume Meter"),      QObject::tr("&Volume Meter"),       "VolumeMeterView",   3)
+  };
 
-
-MainWindow::MainWindow()
-  : QMainWindow( NULL, Qt::WDestructiveClose )
+//------------------------------------------------------------------------------
+MainWindow::MainWindow(void):
+  QMainWindow( NULL, Qt::WDestructiveClose )
 {
   createSignalMapper = new QSignalMapper(this);
   connect(createSignalMapper, SIGNAL(mapped(int)), SLOT(openView(int)));
@@ -171,65 +172,67 @@ MainWindow::MainWindow()
   mygl_font = new MyGLFont(myFont);
 
 #ifndef WINDOWS
-  getitimer(ITIMER_PROF, &profiler_value); //for running multi-threaded profiling
-#endif
-  resize(1024-6, 768-6); //6 pixel boarder
+  //for running multi-threaded profiling
+  getitimer(ITIMER_PROF, &profiler_value);
+#endif // WINDOWS
+  //6 pixel boarder
+  resize(1024 - 6, 768 - 6);
 
 #ifdef MYDEBUG
   setWindowTitle("Tartini (Debug)");
-#else
+#else // MYDEBUG
   setWindowTitle("Tartini");
-#endif
+#endif // MYDEBUG
 
   //Create the main Workspace for the view widgets to go in (for MDI)
   theWorkspace = new QWorkspace(this, "TheWorkspace");
   setCentralWidget( theWorkspace );
   
   //Create the file Toolbar
-  QToolBar *fileToolBar = new QToolBar("File Actions", this);
+  QToolBar * fileToolBar = new QToolBar("File Actions", this);
   addToolBar(Qt::TopToolBarArea, fileToolBar);
   fileToolBar->setIconSize(QSize(32, 32));
 
-  QAction *openAction = new QAction(QIcon(iconOpen), tr("&Open"), this);
+  QAction * openAction = new QAction(QIcon(iconOpen), tr("&Open"), this);
   openAction->setShortcut(tr("Ctrl+O"));
   openAction->setWhatsThis(tr("Open a sound from file and process it using the current preferences"));
   fileToolBar->addAction(openAction);
   connect(openAction, SIGNAL(triggered()), this, SLOT(openFile()));
 
-  QAction *saveAction = new QAction(QIcon(save32x32_xpm), tr("&Save"), this);
+  QAction * saveAction = new QAction(QIcon(save32x32_xpm), tr("&Save"), this);
   saveAction->setShortcut(tr("Ctrl+S"));
   saveAction->setWhatsThis(tr("Save the active sound to a file"));
   fileToolBar->addAction(saveAction);
   connect(saveAction, SIGNAL(triggered()), gdata, SLOT(saveActiveFile()));
   
-  QAction *closeAction = new QAction(QIcon(close32x32_xpm), tr("&Close"), this);
+  QAction * closeAction = new QAction(QIcon(close32x32_xpm), tr("&Close"), this);
   closeAction->setShortcut(tr("Ctrl+W"));
   closeAction->setWhatsThis(tr("Close the active sound. If unsaved will ask to save. Note: Asking can be disabled in the preferences"));
   fileToolBar->addAction(closeAction);
   connect(closeAction, SIGNAL(triggered()), gdata, SLOT(closeActiveFile()));
   
-  QAction *closeAllAction = new QAction(tr("Close All"), this);
+  QAction * closeAllAction = new QAction(tr("Close All"), this);
   closeAllAction->setWhatsThis(tr("Close all the sounds. If any sounds are unsaved, it will ask to save. Note: Asking can be disabled in the preferences"));
   connect(closeAllAction, SIGNAL(triggered()), gdata, SLOT(closeAllFiles()));
   
-  QAction *printAction = new QAction(tr("Print"), this);
+  QAction * printAction = new QAction(tr("Print"), this);
   printAction->setShortcut(tr("Ctrl+P"));
   printAction->setWhatsThis(tr("Print the Pitch Contour, fitting the its current view onto a page"));
   connect(printAction, SIGNAL(triggered()), this, SLOT(printPitch()));
 
   //Create the sound Toolbar
-  QToolBar *soundToolBar = new QToolBar("Sound Actions", this);
+  QToolBar * soundToolBar = new QToolBar("Sound Actions", this);
   addToolBar(Qt::BottomToolBarArea, soundToolBar);
   soundToolBar->setIconSize(QSize(32, 32));
   
-  QToolButton *beginningButton = new QToolButton(QIcon(beginning32x32_xpm), tr("Beginning"), tr("Rewind to the beginning"), NULL, NULL, soundToolBar, tr("Beginning"));
+  QToolButton * beginningButton = new QToolButton(QIcon(beginning32x32_xpm), tr("Beginning"), tr("Rewind to the beginning"), NULL, NULL, soundToolBar, tr("Beginning"));
   beginningButton->setWhatsThis(tr("Jump to the beginning of the sound"));
   soundToolBar->addWidget(beginningButton);
   connect(beginningButton, SIGNAL(pressed()), gdata, SLOT(beginning()));
   
   rewindTimer = new QTimer(this);
   connect(rewindTimer, SIGNAL(timeout()), gdata, SLOT(rewind()));
-  QToolButton *rewindButton = new QToolButton(QIcon(rewind32x32_xpm), tr("Rewind"), tr("Rewind"), NULL, NULL, soundToolBar, tr("rewind"));
+  QToolButton * rewindButton = new QToolButton(QIcon(rewind32x32_xpm), tr("Rewind"), tr("Rewind"), NULL, NULL, soundToolBar, tr("rewind"));
   rewindButton->setWhatsThis(tr("Rewind the sound"));
   soundToolBar->addWidget(rewindButton);
   connect(rewindButton, SIGNAL(pressed()), this, SLOT(rewindPressed()));
@@ -246,13 +249,13 @@ MainWindow::MainWindow()
 
   fastforwardTimer = new QTimer(this);
   connect(fastforwardTimer, SIGNAL(timeout()), gdata, SLOT(fastforward()));
-  QToolButton *fastforwardButton = new QToolButton(QIcon(fastforward32x32_xpm), tr("Fast-forward"), tr("Fast-forward"), NULL, NULL, soundToolBar, tr("fastforward"));
+  QToolButton * fastforwardButton = new QToolButton(QIcon(fastforward32x32_xpm), tr("Fast-forward"), tr("Fast-forward"), NULL, NULL, soundToolBar, tr("fastforward"));
   fastforwardButton->setWhatsThis(tr("Fastfoward the sound"));
   soundToolBar->addWidget(fastforwardButton);
   connect(fastforwardButton, SIGNAL(pressed()), this, SLOT(fastforwardPressed()));
   connect(fastforwardButton, SIGNAL(released()), this, SLOT(fastforwardReleased()));
 
-  QAction *endAction = new QAction(QIcon(end32x32_xpm), tr("&End"), this);
+  QAction * endAction = new QAction(QIcon(end32x32_xpm), tr("&End"), this);
   endAction->setWhatsThis(tr("Jump to the end of the sound"));
   endAction->setShortcut(tr("Ctrl+E"));
   connect(endAction, SIGNAL(triggered()), gdata, SLOT(end()));
@@ -272,13 +275,13 @@ MainWindow::MainWindow()
   fileToolBar->addAction(playRecordAction);
   connect(playRecordAction, SIGNAL(triggered()), this, SLOT(openPlayRecord()));
 
-  QAction *quit = new QAction(tr("&Quit"), this);
+  QAction * quit = new QAction(tr("&Quit"), this);
   quit->setShortcut(tr("Ctrl+Q"));
   quit->setWhatsThis(tr("Quit the Tartini application"));
   connect(quit, SIGNAL(triggered()), this, SLOT( close() ));
 
   //Create the File Menu
-  QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
+  QMenu * fileMenu = menuBar()->addMenu(tr("&File"));
   fileMenu->addAction(openAction);
   fileMenu->addAction(saveAction);
   fileMenu->addAction(closeAction);
@@ -293,12 +296,12 @@ MainWindow::MainWindow()
   fileMenu->addAction(quit);
 
   //Channel Menu
-  QAction *exportAction1 = new QAction(tr("&Export to plain text"), this);
+  QAction * exportAction1 = new QAction(tr("&Export to plain text"), this);
   connect(exportAction1, SIGNAL(triggered()), this, SLOT(exportChannelPlainText()));
-  QAction *exportAction2 = new QAction(tr("&Export to matlab"), this);
+  QAction * exportAction2 = new QAction(tr("&Export to matlab"), this);
   connect(exportAction2, SIGNAL(triggered()), this, SLOT(exportChannelMatlab()));
 
-  QMenu *channelMenu = menuBar()->addMenu(tr("C&hannel"));
+  QMenu * channelMenu = menuBar()->addMenu(tr("C&hannel"));
   channelMenu->addAction(exportAction1);
   channelMenu->addAction(exportAction2);
 
@@ -316,7 +319,7 @@ MainWindow::MainWindow()
   optionsMenu = menuBar()->addMenu(tr("&Options"));
   optionsMenu->addAction(tr("&Preferences"), this, SLOT(menuPreferences()));
 
-  QAction *whatsThis = QWhatsThis::createAction(this);
+  QAction * whatsThis = QWhatsThis::createAction(this);
   whatsThis->setToolTip(tr("What's this?"));
   whatsThis->setWhatsThis(tr("Click this button, then click something to learn more about it"));
 
@@ -329,13 +332,13 @@ MainWindow::MainWindow()
   helpMenu->addAction(tr("About Qt"), this, SLOT(aboutQt()));
   
   //Create the other toolbar, which contains some option stuff
-  QToolBar *analysisToolBar = new QToolBar(tr("Analysis Toolbar"), this);
+  QToolBar * analysisToolBar = new QToolBar(tr("Analysis Toolbar"), this);
   addToolBar(analysisToolBar);
   analysisToolBar->setIconSize(QSize(32, 32));
 
-  QIcon *autoFollowIconSet = new QIcon();
+  QIcon * autoFollowIconSet = new QIcon();
   autoFollowIconSet->setPixmap(QPixmap(autofollow32x32_xpm), QIcon::Small, QIcon::Normal);
-  QToolButton *autoFollowButton = new QToolButton(*autoFollowIconSet, tr("Auto Follow"), tr("Moves the view up and down automaticlly with the active channel when playing or recording"), NULL, NULL, analysisToolBar, tr("autoFollow"));
+  QToolButton * autoFollowButton = new QToolButton(*autoFollowIconSet, tr("Auto Follow"), tr("Moves the view up and down automaticlly with the active channel when playing or recording"), NULL, NULL, analysisToolBar, tr("autoFollow"));
   analysisToolBar->addWidget(autoFollowButton);
   autoFollowButton->setToggleButton(true);
   autoFollowButton->setAutoRaise(true);
@@ -343,10 +346,10 @@ MainWindow::MainWindow()
   autoFollowButton->setWhatsThis(tr("Scrolls the Pitch Contour view up and down automaticlly with the active channel when playing or recording. Note: Manual scrolling (vertically) will be disabled during this time."));
   connect(autoFollowButton, SIGNAL(toggled(bool)), &(gdata->getView()), SLOT(setAutoFollow(bool)));
 
-  QIcon *backgroundShadingIconSet = new QIcon();
+  QIcon * backgroundShadingIconSet = new QIcon();
   backgroundShadingIconSet->setPixmap(QPixmap(shadingon32x32_xpm), QIcon::Small, QIcon::Normal, QIcon::On);
   backgroundShadingIconSet->setPixmap(QPixmap(shadingoff32x32_xpm), QIcon::Small, QIcon::Normal, QIcon::Off);
-  QToolButton *backgroundShadingButton = new QToolButton(*backgroundShadingIconSet, "Background Shading", "Toggle background shading on/off", NULL, NULL, analysisToolBar, "backgroundShading");
+  QToolButton * backgroundShadingButton = new QToolButton(*backgroundShadingIconSet, "Background Shading", "Toggle background shading on/off", NULL, NULL, analysisToolBar, "backgroundShading");
   analysisToolBar->addWidget(backgroundShadingButton);
   backgroundShadingButton->setToggleButton(true);
   backgroundShadingButton->setAutoRaise(true);
@@ -357,16 +360,16 @@ MainWindow::MainWindow()
   analysisToolBar->addAction(whatsThis);
 
   View & view = gdata->getView();
-  QToolBar *timeBarDock = new QToolBar(tr("Time-axis Slider"), this);
+  QToolBar * timeBarDock = new QToolBar(tr("Time-axis Slider"), this);
   addToolBar(Qt::BottomToolBarArea, timeBarDock);
   timeBarDock->setIconSize(QSize(32, 32));
 
 #if QWT_VERSION == 0x050000
   timeSlider = new QwtSlider(timeBarDock, Qt::Horizontal, QwtSlider::None, QwtSlider::BgBoth);
-#else
+#else // QWT_VERSION == 0x050000
   timeSlider = new QwtSlider(timeBarDock, Qt::Horizontal, QwtSlider::NoScale, QwtSlider::BgBoth);
-#endif
-  timeSlider->setRange(gdata->leftTime(), gdata->rightTime(), 1.0/10000.0, 1000);
+#endif // QWT_VERSION == 0x050000
+  timeSlider->setRange(gdata->leftTime(), gdata->rightTime(), 1.0 / 10000.0, 1000);
   timeSlider->setValue(view.currentTime());
   timeSlider->setTracking(true);
   timeSlider->setThumbWidth(20);
@@ -381,24 +384,27 @@ MainWindow::MainWindow()
   connect(gdata, SIGNAL(timeRangeChanged(double, double)), this, SLOT(setTimeRange(double, double)));
   timeBarDock->addWidget(timeSlider);
   
-  QToolBar *volumeMeterToolBar = new QToolBar(tr("Volume Meter"), this);
+  QToolBar * volumeMeterToolBar = new QToolBar(tr("Volume Meter"), this);
   addToolBar(volumeMeterToolBar);
   volumeMeterToolBar->setIconSize(QSize(32, 32));
-  VolumeMeterView *volumeMeterView = new VolumeMeterView(VIEW_VOLUME_METER, volumeMeterToolBar);
+  VolumeMeterView * volumeMeterView = new VolumeMeterView(VIEW_VOLUME_METER, volumeMeterToolBar);
   volumeMeterView->setWhatsThis(tr("Shows the volume (in dB) of the left and right channels of the active sound. Note: If a mono sound the both are the same"));
   volumeMeterToolBar->addWidget(volumeMeterView);
 
 
-  QToolBar *keyToolBar = new QToolBar(tr("Key Toolbar"), this);
+  QToolBar * keyToolBar = new QToolBar(tr("Key Toolbar"), this);
   keyToolBar->setWhatsThis(tr("Used to set which reference lines are drawn in the Pitch Contour View."));
   addToolBar(keyToolBar);
-  QLabel *keyLabel = new QLabel(tr("Key"), keyToolBar);
+  QLabel * keyLabel = new QLabel(tr("Key"), keyToolBar);
   keyToolBar->addWidget(keyLabel);
 
-  QComboBox *keyComboBox = new QComboBox(keyToolBar);
+  QComboBox * keyComboBox = new QComboBox(keyToolBar);
   keyComboBox->setWindowTitle(tr("Key"));
   QStringList s;
-  for(int j=0; j<NUM_MUSIC_KEYS; j++) s << gMusicKeyName[j];
+  for(int j = 0; j < NUM_MUSIC_KEYS; j++)
+    {
+      s << gMusicKeyName[j];
+    }
   keyComboBox->addItems(s);
   keyComboBox->setCurrentIndex(gdata->musicKey());
   keyToolBar->addWidget(keyComboBox);
@@ -409,7 +415,10 @@ MainWindow::MainWindow()
   keyTypeComboBox = new QComboBox(keyToolBar);
   keyTypeComboBox->setWindowTitle(tr("Scale type"));
   s.clear();
-  for(uint j=0; j<gMusicScales.size(); j++) s << gMusicScales[j].name();
+  for(uint j = 0; j < gMusicScales.size(); j++)
+    {
+      s << gMusicScales[j].name();
+    }
   keyTypeComboBox->addItems(s);
   keyTypeComboBox->setCurrentIndex(gdata->musicKeyType());
   keyToolBar->addWidget(keyTypeComboBox);
@@ -417,10 +426,13 @@ MainWindow::MainWindow()
   connect(gdata, SIGNAL(musicKeyTypeChanged(int)), keyTypeComboBox, SLOT(setCurrentIndex(int)));
   connect(gdata, SIGNAL(musicKeyTypeChanged(int)), &(gdata->getView()), SLOT(doUpdate()));
 
-  QComboBox *temperedComboBox = new QComboBox(keyToolBar);
+  QComboBox * temperedComboBox = new QComboBox(keyToolBar);
   temperedComboBox->setWindowTitle(tr("Tempered type"));
   s.clear();
-  for(uint j=0; j<gMusicKeys.size(); j++) s << gMusicKeys[j].name();
+  for(uint j = 0; j < gMusicKeys.size(); j++)
+    {
+      s << gMusicKeys[j].name();
+    }
   temperedComboBox->addItems(s);
   temperedComboBox->setCurrentIndex(gdata->temperedType());
   keyToolBar->addWidget(temperedComboBox);
@@ -428,12 +440,12 @@ MainWindow::MainWindow()
   connect(gdata, SIGNAL(temperedTypeChanged(int)), temperedComboBox, SLOT(setCurrentIndex(int)));
   connect(gdata, SIGNAL(temperedTypeChanged(int)), &(gdata->getView()), SLOT(doUpdate()));
 
-  QToolBar *freqAToolBar = new QToolBar(tr("Frequency Offset Toolbar"), this);
+  QToolBar * freqAToolBar = new QToolBar(tr("Frequency Offset Toolbar"), this);
   freqAToolBar->setWhatsThis(tr("The frequency of an even-tempered 'A' used for reference lines in the Pitch Contour View. Default 440 Hz."
     "Note: For other scales the root note is chosen from the even-tempered scale with that 'A'."));
   addToolBar(freqAToolBar);
 
-  QSpinBox *freqASpinBox = new QSpinBox(400, 600, 1, freqAToolBar, "freqASpinBox");
+  QSpinBox * freqASpinBox = new QSpinBox(400, 600, 1, freqAToolBar, "freqASpinBox");
   freqASpinBox->setPrefix("A=");
   freqASpinBox->setSuffix(" Hz");
   freqASpinBox->setFocusPolicy(Qt::NoFocus);
@@ -467,528 +479,672 @@ MainWindow::MainWindow()
   connect(gdata, SIGNAL(activeChannelChanged(Channel*)), this, SLOT(setTitle(Channel*)));
 }
 
-MainWindow::~MainWindow()
+//------------------------------------------------------------------------------
+MainWindow::~MainWindow(void)
 {
   delete rewindTimer;
   delete fastforwardTimer;
   fprintf(stderr, "Has pending events = %s\n", (qApp->hasPendingEvents()) ? "Yes" : "No");
 }
 
+//------------------------------------------------------------------------------
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-  if(gdata->closeAllFiles()) {
-    saveViewGeometry();
-    event->accept();
-  } else {
-    event->ignore();
-  }
-}
-
-bool MainWindow::event( QEvent * e )
-{
-  if(e->type() == UPDATE_FAST || e->type() == UPDATE_SLOW) {
-    SoundFile *soundFile = gdata->getAudioThread().curSoundFile();
-    if(soundFile) {
-      soundFile->lock();
-      gdata->getView().setCurrentTime(soundFile->timeAtCurrentChunk());
-      soundFile->unlock();
+  if(gdata->closeAllFiles())
+    {
+      saveViewGeometry();
+      event->accept();
     }
-    gdata->updateViewLeftRightTimes();
-    gdata->setNeedUpdate(false);
-	  return true;
-  } else if(e->type() == SOUND_STARTED) {
-    playStopAction->setIconSet(*stopIconSet);
-    playStopAction->setText("Stop");
-    recordAction->setIconSet(*stopIconSet);
-    recordAction->setText("Stop");
-    playRecordAction->setIconSet(*stopIconSet);
-    playRecordAction->setText("Stop");
-  } else if(e->type() == SOUND_STOPPED) {
-    playStopAction->setIconSet(*playIconSet);
-    playStopAction->setText("Play");
-    recordAction->setIconSet(*recordIconSet);
-    recordAction->setText("Record");
-    playRecordAction->setIconSet(*playRecordIconSet);
-    playRecordAction->setText("Play and Record");
-  } else if(e->type() == SETTINGS_CHANGED) {
-    gdata->updateQuickRefSettings();
-  }
-	return QMainWindow::event(e);
+  else
+    {
+      event->ignore();
+    }
 }
 
-void MainWindow::keyPressEvent ( QKeyEvent * e )
+//------------------------------------------------------------------------------
+bool MainWindow::event(QEvent * e)
+{
+  if(e->type() == UPDATE_FAST || e->type() == UPDATE_SLOW)
+    {
+      SoundFile * soundFile = gdata->getAudioThread().curSoundFile();
+      if(soundFile)
+	{
+	  soundFile->lock();
+	  gdata->getView().setCurrentTime(soundFile->timeAtCurrentChunk());
+	  soundFile->unlock();
+	}
+      gdata->updateViewLeftRightTimes();
+      gdata->setNeedUpdate(false);
+      return true;
+    }
+  else if(e->type() == SOUND_STARTED)
+    {
+      playStopAction->setIconSet(*stopIconSet);
+      playStopAction->setText("Stop");
+      recordAction->setIconSet(*stopIconSet);
+      recordAction->setText("Stop");
+      playRecordAction->setIconSet(*stopIconSet);
+      playRecordAction->setText("Stop");
+    }
+  else if(e->type() == SOUND_STOPPED)
+    {
+      playStopAction->setIconSet(*playIconSet);
+      playStopAction->setText("Play");
+      recordAction->setIconSet(*recordIconSet);
+      recordAction->setText("Record");
+      playRecordAction->setIconSet(*playRecordIconSet);
+      playRecordAction->setText("Play and Record");
+    }
+  else if(e->type() == SETTINGS_CHANGED)
+    {
+      gdata->updateQuickRefSettings();
+    }
+  return QMainWindow::event(e);
+}
+
+//------------------------------------------------------------------------------
+void MainWindow::keyPressEvent (QKeyEvent * e)
 {
   View & view = gdata->getView();
   
   double speed = 1;
-  if(e->state() & Qt::ShiftModifier) speed *= 4;
-  if(e->state() & Qt::ControlModifier) speed *= 10;
+  if(e->state() & Qt::ShiftModifier)
+    {
+      speed *= 4;
+    }
+  if(e->state() & Qt::ControlModifier)
+    {
+      speed *= 10;
+    }
   double newTime;
   
-  switch(e->key()) {
+  switch(e->key())
+    {
 #ifdef MYDEBUG
-  case Qt::Key_Escape:
-    gdata->stopAndWaitAudioThread();
-    qApp->closeAllWindows();
-    break;
-#endif
-  case Qt::Key_Left:
-    if(gdata->getRunning() == STREAM_FORWARD) {
-      gdata->rewind();
-    } else {
-      if(gdata->getActiveChannel())
-        newTime = view.currentTime() - gdata->getActiveChannel()->timePerChunk()*speed;
+    case Qt::Key_Escape:
+      gdata->stopAndWaitAudioThread();
+      qApp->closeAllWindows();
+      break;
+#endif // MYDEBUG
+    case Qt::Key_Left:
+      if(gdata->getRunning() == STREAM_FORWARD)
+	{
+	  gdata->rewind();
+	}
       else
-        newTime = view.currentTime() - 0.10*speed;  //move 1/5th of a second back
-      gdata->updateActiveChunkTime(newTime);
-    }
-    break;
-  case Qt::Key_Right:
-    if(gdata->getRunning() == STREAM_FORWARD) {
-      gdata->fastforward();
-    } else {
-      if(gdata->getActiveChannel())
-        newTime = view.currentTime() + gdata->getActiveChannel()->timePerChunk()*speed;
+	{
+	  if(gdata->getActiveChannel())
+	    {
+	      newTime = view.currentTime() - gdata->getActiveChannel()->timePerChunk() * speed;
+	    }
+	  else
+	    {
+	      //move 1/5th of a second back
+	      newTime = view.currentTime() - 0.10 * speed;
+	    }
+	  gdata->updateActiveChunkTime(newTime);
+	}
+      break;
+    case Qt::Key_Right:
+      if(gdata->getRunning() == STREAM_FORWARD)
+	{
+	  gdata->fastforward();
+	}
       else
-        newTime = view.currentTime() + 0.10*speed; //move 1/5th of a second forward
-      gdata->updateActiveChunkTime(newTime);
-    }
-    break;
-  case Qt::Key_Up:
-      view.setViewBottom(view.viewBottom() + 0.2*speed); //move 1/5 of a semi-tone
+	{
+	  if(gdata->getActiveChannel())
+	    {
+	      newTime = view.currentTime() + gdata->getActiveChannel()->timePerChunk()*speed;
+	    }
+	  else
+	    {
+	      //move 1/5th of a second forward
+	      newTime = view.currentTime() + 0.10 * speed;
+	    }
+	  gdata->updateActiveChunkTime(newTime);
+	}
+      break;
+    case Qt::Key_Up:
+      //move 1/5 of a semi-tone
+      view.setViewBottom(view.viewBottom() + 0.2 * speed);
       gdata->getView().doSlowUpdate();
-    break;
-  case Qt::Key_Down:
-      view.setViewBottom(view.viewBottom() - 0.2*speed); //move 1/5 of a semi-tone
+      break;
+    case Qt::Key_Down:
+      //move 1/5 of a semi-tone
+      view.setViewBottom(view.viewBottom() - 0.2 * speed);
       gdata->getView().doSlowUpdate();
-    break;
-  case Qt::Key_PageUp:
-      view.setViewBottom(view.viewBottom() + 1.0*speed); //move 1/5 of a semi-tone
+      break;
+    case Qt::Key_PageUp:
+      //move 1/5 of a semi-tone
+      view.setViewBottom(view.viewBottom() + 1.0 * speed);
       gdata->getView().doSlowUpdate();
-    break;
-  case Qt::Key_PageDown:
-      view.setViewBottom(view.viewBottom() - 1.0*speed); //move 1/5 of a semi-tone
+      break;
+    case Qt::Key_PageDown:
+      //move 1/5 of a semi-tone
+      view.setViewBottom(view.viewBottom() - 1.0 * speed);
       gdata->getView().doSlowUpdate();
-    break;
-  case Qt::Key_Home:
+      break;
+    case Qt::Key_Home:
       gdata->updateActiveChunkTime(gdata->leftTime());
-    break;
-  case Qt::Key_End:
+      break;
+    case Qt::Key_End:
       gdata->updateActiveChunkTime(gdata->rightTime());
-    break;
-  case Qt::Key_Comma:
+      break;
+    case Qt::Key_Comma:
       view.setViewOffset(view.viewOffset() - view.viewWidth()/20.0);
       view.doSlowUpdate();
       break;
-  case Qt::Key_Period:
+    case Qt::Key_Period:
       view.setViewOffset(view.viewOffset() + view.viewWidth()/20.0);
       view.doSlowUpdate();
       break;
-  case Qt::Key_Plus:
-  case Qt::Key_Equal:
+    case Qt::Key_Plus:
+    case Qt::Key_Equal:
       emit zoomInPressed();
       break;
-  case Qt::Key_Minus:
+    case Qt::Key_Minus:
       emit zoomOutPressed();
       break;
-  default:
-    e->ignore();
-  }
+    default:
+      e->ignore();
+    }
 }
 
-void MainWindow::openFile()
+//------------------------------------------------------------------------------
+void MainWindow::openFile(void)
 {
   QString lastFolder = QDir::convertSeparators(gdata->getSettingsValue("Dialogs/openFilesFolder", QDir::currentDirPath()));
   QString s = QFileDialog::getOpenFileName(this, "Open File", lastFolder, "Sounds (*.wav)");
-  if(s.isEmpty()) return;
+  if(s.isEmpty())
+    {
+      return;
+    }
   s = QDir::convertSeparators(s);
   gdata->setSettingsValue("Dialogs/openFilesFolder", s);
   openFile(s.latin1());
 }
 
+//------------------------------------------------------------------------------
 void MainWindow::openFile(const char *filename)
 {
-  SoundFile *newSoundFile = new SoundFile();
-  if(!newSoundFile->openRead(filename)) {
-    fprintf(stderr, "Error opening %s\n", filename);
-    delete newSoundFile;
-    return;
-  }
-  
+  SoundFile * newSoundFile = new SoundFile();
+  if(!newSoundFile->openRead(filename))
+    {
+      fprintf(stderr, "Error opening %s\n", filename);
+      delete newSoundFile;
+      return;
+    }
+
   newSoundFile->preProcess();
   gdata->updateViewLeftRightTimes();
-  
+
   gdata->addFileToList(newSoundFile);
   gdata->setActiveChannel(&(newSoundFile->getChannel(0)));
   QApplication::postEvent(mainWindow, new QCustomEvent(UPDATE_SLOW));
   gdata->getView().doUpdate();
 }
 
-void MainWindow::openRecord()
+//------------------------------------------------------------------------------
+void MainWindow::openRecord(void)
 {
   openRecord(false);
 }
 
-void MainWindow::openPlayRecord()
+//------------------------------------------------------------------------------
+void MainWindow::openPlayRecord(void)
 {
   openRecord(true);
 }
 
+//------------------------------------------------------------------------------
 void MainWindow::openRecord(bool andPlay)
 {
-  if(gdata->getRunning()) {
-    gdata->stop();
-    return;
-  }
-	
-  SoundFile *playSoundFile = (andPlay) ? gdata->getActiveSoundFile() : NULL;
+  if(gdata->getRunning())
+    {
+      gdata->stop();
+      return;
+    }
+
+  SoundFile * playSoundFile = (andPlay) ? gdata->getActiveSoundFile() : NULL;
 
   int rate = gdata->getSettingsValue("Sound/sampleRate", 44100);
   QString numberOfChannels = gdata->getSettingsValue("Sound/numberOfChannels", QString("mono"));
   int channels;
-  if(numberOfChannels.lower() == "mono") channels = 1;
-  else channels = 2;
+  if(numberOfChannels.lower() == "mono")
+    {
+      channels = 1;
+    }
+  else
+    {
+      channels = 2;
+    }
   int bits = gdata->getSettingsValue("Sound/bitsPerSample", 16);
   int windowSize = gdata->getAnalysisBufferSize(rate);
   int stepSize = gdata->getAnalysisStepSize(rate);
 
   //If playing and recording then overide the record settings to the same as the playing file
-  if(playSoundFile) {
-    rate = playSoundFile->rate();
-    channels = playSoundFile->numChannels();
-    bits = playSoundFile->bits();
-    windowSize = playSoundFile->bufferSize();
-    stepSize = playSoundFile->bufferSize()/2;
-  }
+  if(playSoundFile)
+    {
+      rate = playSoundFile->rate();
+      channels = playSoundFile->numChannels();
+      bits = playSoundFile->bits();
+      windowSize = playSoundFile->bufferSize();
+      stepSize = playSoundFile->bufferSize()/2;
+    }
 
   QString tempFileFolder = gdata->getSettingsValue("General/tempFilesFolder", QDir::convertSeparators(QDir::currentDirPath()));
   QDir dir = QDir(tempFileFolder);
   QFileInfo fileInfo;
   QString fileName;
   bool fileExists;
-  do {
-    fileExists = false;
-    fileName = gdata->getFilenameString();
-    fileInfo.setFile(dir, fileName);
-    if(fileInfo.exists()) {
-      fileExists = true;
-      int fileGeneratingNumber = gdata->getSettingsValue("General/fileGeneratingNumber", 1);
-      gdata->setSettingsValue("General/fileGeneratingNumber", fileGeneratingNumber + 1);
+  do
+    {
+      fileExists = false;
+      fileName = gdata->getFilenameString();
+      fileInfo.setFile(dir, fileName);
+      if(fileInfo.exists())
+	{
+	  fileExists = true;
+	  int fileGeneratingNumber = gdata->getSettingsValue("General/fileGeneratingNumber", 1);
+	  gdata->setSettingsValue("General/fileGeneratingNumber", fileGeneratingNumber + 1);
+	}
     }
-  } while(fileExists);
-  
-  SoundFile *newSoundFile = new SoundFile();
+  while(fileExists);
+
+  SoundFile * newSoundFile = new SoundFile();
   QString newFilename(fileInfo.absFilePath().latin1());
   newFilename = QDir::convertSeparators(newFilename);
-  if(!newSoundFile->openWrite(newFilename, rate, channels, bits, windowSize, stepSize)) {
-    delete newSoundFile; newSoundFile = NULL;
-    return;
-  }
+  if(!newSoundFile->openWrite(newFilename, rate, channels, bits, windowSize, stepSize))
+    {
+      delete newSoundFile; newSoundFile = NULL;
+      return;
+    }
   
-  if(!gdata->openPlayRecord(newSoundFile, playSoundFile)) {
-    gdata->closeFile(newSoundFile, GData::NEVER_SAVE/*, false*/);
-    QMessageBox::warning(mainWindow, "Error", QString("Error opening sound device for recording"), QMessageBox::Ok, QMessageBox::NoButton);
-    return;
-  }
+  if(!gdata->openPlayRecord(newSoundFile, playSoundFile))
+    {
+      gdata->closeFile(newSoundFile, GData::NEVER_SAVE);
+      QMessageBox::warning(mainWindow, "Error", QString("Error opening sound device for recording"), QMessageBox::Ok, QMessageBox::NoButton);
+      return;
+    }
   gdata->addFileToList(newSoundFile);
   gdata->getView().setCurrentTime(0.0);
   gdata->setActiveChannel(&(newSoundFile->getChannel(0)));
 
   int fileGeneratingNumber = gdata->getSettingsValue("General/fileGeneratingNumber", 1);
-  gdata->setSettingsValue("General/fileGeneratingNumber", fileGeneratingNumber+1);
+  gdata->setSettingsValue("General/fileGeneratingNumber", fileGeneratingNumber + 1);
 }
 
-void MainWindow::windowMenuAboutToShow()
+//------------------------------------------------------------------------------
+void MainWindow::windowMenuAboutToShow(void)
 {
   windowMenu->clear();
 
   QWidgetList windows = theWorkspace->windowList();
-  for ( int i = 0; i < int(windows.count()); ++i ) {
-  	int id = windowMenu->insertItem(windows.at(i)->caption(),
-				 this, SLOT( windowMenuActivated( int ) ) );
-  	windowMenu->setItemParameter( id, i );
-  	windowMenu->setItemChecked( id, theWorkspace->activeWindow() == windows.at(i) );
-  }
+  for(int i = 0; i < int(windows.count()); ++i )
+    {
+      int id = windowMenu->insertItem(windows.at(i)->caption(),
+				      this, SLOT( windowMenuActivated( int ) ) );
+      windowMenu->setItemParameter(id, i );
+      windowMenu->setItemChecked(id, theWorkspace->activeWindow() == windows.at(i) );
+    }
   
   windowMenu->insertSeparator();
   int cascade = windowMenu->insertItem( "&Cascade", theWorkspace, SLOT( cascade() ), 0 );
   int close = windowMenu->insertItem( "Close &All", this, SLOT( closeAllWidgets() ), 0 );
 
-  if (windows.isEmpty()) {
-    windowMenu->setItemEnabled( cascade, false );
-  	windowMenu->setItemEnabled( close, false );
-  }
+  if (windows.isEmpty())
+    {
+      windowMenu->setItemEnabled( cascade, false );
+      windowMenu->setItemEnabled( close, false );
+    }
 }
 
-void MainWindow::windowMenuActivated( int id )
+//------------------------------------------------------------------------------
+void MainWindow::windowMenuActivated(int id)
 {
-    QWidget* w = theWorkspace->windowList().at( id );
-    if ( w ) {
-    	w->showNormal();
+  QWidget * w = theWorkspace->windowList().at(id);
+  if ( w )
+    {
+      w->showNormal();
       w->setFocus();
     }
 }
 
+//------------------------------------------------------------------------------
 void MainWindow::message(QString s, int msec)
 {
   QStatusBar *sb = statusBar();
-  if(sb) sb->message(s, msec);
+  if(sb)
+    {
+      sb->message(s, msec);
+    }
 }
 
-void MainWindow::closeAllWidgets()
+//------------------------------------------------------------------------------
+void MainWindow::closeAllWidgets(void)
 {
   QWidgetList opened = theWorkspace->windowList();
   for(QWidgetList::iterator it = opened.begin(); it < opened.end(); it++)
-    (*it)->close();
+    {
+      (*it)->close();
+    }
 }
 
-void MainWindow::menuPreferences()
+//------------------------------------------------------------------------------
+void MainWindow::menuPreferences(void)
 {
   TartiniSettingsDialog *settings = new TartiniSettingsDialog(this);
-	settings->show();
+  settings->show();
 }
 
 
-/**
- * Opens a view based on a viewId (which should be #defined).
- * All widgets should be created anonymously - ie no saving pointers!
- *
- * @param viewID the view to open's ID.
- */
-QWidget *MainWindow::openView(int viewID)
+//------------------------------------------------------------------------------
+QWidget * MainWindow::openView(int viewID)
 {
-  QWidget *w = NULL;
+  QWidget * w = NULL;
   int useTopLevelWidgets = gdata->getSettingsValue("Display/useTopLevelWidgets", false);
-  QWidget *parent = (useTopLevelWidgets) ? NULL : theWorkspace;
+  QWidget * parent = (useTopLevelWidgets) ? NULL : theWorkspace;
 
-  switch(viewID) {
+  switch(viewID)
+    {
     case VIEW_OPEN_FILES:
       w = new OpenFiles(viewID, parent);
-    break;
+      break;
     case VIEW_FREQ:
-	  {
-        FreqView *freqView = new FreqView(viewID, parent);
+      {
+        FreqView * freqView = new FreqView(viewID, parent);
         connect(this, SIGNAL(zoomInPressed()), freqView, SLOT(zoomIn()));
         connect(this, SIGNAL(zoomOutPressed()), freqView, SLOT(zoomOut()));
         w = freqView;
-	  }
-	  break;
+      }
+      break;
     case VIEW_SUMMARY:
       w = new SummaryView( viewID, parent);
       break;
-   case VIEW_PITCH_COMPASS:
+    case VIEW_PITCH_COMPASS:
       w = new PitchCompassView(viewID, parent);
       break;
-   case VIEW_VOLUME_METER:
+    case VIEW_VOLUME_METER:
       w = new VolumeMeterView(viewID, parent);
       break;
-   case VIEW_TUNER:
+    case VIEW_TUNER:
       w = new TunerView(viewID, parent);
       break;
-   case VIEW_HBLOCK:
+    case VIEW_HBLOCK:
       w = new HBlockView(viewID, parent);
       break;
-   case VIEW_HSTACK:
+    case VIEW_HSTACK:
       w = new HStackView(viewID, parent);
       break;
-   case VIEW_HBUBBLE:
+    case VIEW_HBUBBLE:
       w = new HBubbleView(viewID, parent);
       break;
-   case VIEW_HCIRCLE:
+    case VIEW_HCIRCLE:
       w = new HCircleView(viewID, parent);
       break;
-   case VIEW_WAVE:
+    case VIEW_WAVE:
       w = new WaveView(viewID, parent);
       break;
-   case VIEW_PIANO:
+    case VIEW_PIANO:
       w = new PianoView(viewID, parent);
       break;
-   case VIEW_HTRACK:
+    case VIEW_HTRACK:
       w = new HTrackView(viewID, parent);
       break;
-   case VIEW_CORRELATION:
+    case VIEW_CORRELATION:
       w = new CorrelationView(viewID, parent);
       break;
-   case VIEW_FFT:
+    case VIEW_FFT:
       w = new FFTView(viewID, parent);
       break;
-   case VIEW_CEPSTRUM:
+    case VIEW_CEPSTRUM:
       w = new CepstrumView(viewID, parent);
       break;
-   case VIEW_DEBUGVIEW:
+    case VIEW_DEBUGVIEW:
       w = new DebugView(viewID, parent);
       break;
-   case VIEW_SCORE:
+    case VIEW_SCORE:
       w = new ScoreView(viewID, parent);
       break;
-   case VIEW_VIBRATO:
+    case VIEW_VIBRATO:
       w = new VibratoView(viewID, parent);
       break;
-
-  }
-  if(w) {
-    if(parent) theWorkspace->addWindow(w);
-    w->show();
-  }
+    }
+  if(w)
+    {
+      if(parent)
+	{
+	  theWorkspace->addWindow(w);
+	}
+      w->show();
+    }
   return w;
 }
 
-
-
-void MainWindow::newViewAboutToShow()
+//------------------------------------------------------------------------------
+void MainWindow::newViewAboutToShow(void)
 {
   newViewMenu->clear();
 
-  QMenu *technicalMenu = new QMenu("Technical");
-  QMenu *experimentalMenu = new QMenu("Experimental");
-  QMenu *otherMenu = new QMenu("Other");
+  QMenu * technicalMenu = new QMenu("Technical");
+  QMenu * experimentalMenu = new QMenu("Experimental");
+  QMenu * otherMenu = new QMenu("Other");
 
   QWidgetList opened = theWorkspace->windowList();
 
-  for(int j=0; j < NUM_VIEWS; j++) {
-    QAction *action;
-	if(viewData[j].menuType == 0) action = newViewMenu->addAction(viewData[j].menuName);
-	else if(viewData[j].menuType == 1) action = technicalMenu->addAction(viewData[j].menuName);
-	else if(viewData[j].menuType == 2) action = experimentalMenu->addAction(viewData[j].menuName);
-  else if(viewData[j].menuType == 3) action = otherMenu->addAction(viewData[j].menuName);
-	else continue;
-
-	connect(action, SIGNAL(triggered()), createSignalMapper, SLOT(map()));
-	createSignalMapper->setMapping(action, j);
-	for(QWidgetList::iterator it=opened.begin(); it<opened.end(); it++) {
-	  if(QString((*it)->metaObject()->className()) == viewData[j].className) {
-		action->setEnabled(false);
-		break;
-	  }
+  for(int j = 0; j < NUM_VIEWS; j++)
+    {
+      QAction *action;
+      if(viewData[j].menuType == 0)
+	{
+	  action = newViewMenu->addAction(viewData[j].menuName);
 	}
-  }
+      else if(viewData[j].menuType == 1)
+	{
+	  action = technicalMenu->addAction(viewData[j].menuName);
+	}
+      else if(viewData[j].menuType == 2)
+	{
+	  action = experimentalMenu->addAction(viewData[j].menuName);
+	}
+      else if(viewData[j].menuType == 3)
+	{
+	  action = otherMenu->addAction(viewData[j].menuName);
+	}
+      else
+	{
+	  continue;
+	}
+      
+      connect(action, SIGNAL(triggered()), createSignalMapper, SLOT(map()));
+      createSignalMapper->setMapping(action, j);
+      for(QWidgetList::iterator it=opened.begin(); it<opened.end(); it++)
+	{
+	  if(QString((*it)->metaObject()->className()) == viewData[j].className)
+	    {
+	      action->setEnabled(false);
+	      break;
+	    }
+	}
+    }
   newViewMenu->addSeparator();
   newViewMenu->addMenu(technicalMenu);
   newViewMenu->addMenu(experimentalMenu);
   newViewMenu->addMenu(otherMenu);
 }
 
+//------------------------------------------------------------------------------
 void MainWindow::setTimeLabel(double t)
 {
   char temp[128];
-  if(timeLabel) {
-    int sign = (t < 0) ? -1 : 1;
-    t = fabs(t);
-    int mins = int(floor(t)) / 60;
-    int secs = int(floor(t - double(mins * 60)));
-    int milliSecs = int(floor((t - double(mins * 60) - double(secs))*1000.0));
-    sprintf(temp, "Time: %s%02d:%02d.%03d", (sign == -1) ? "-" : " ", mins, secs, milliSecs);
-    timeLabel->setText(QString(temp));
-  }
+  if(timeLabel)
+    {
+      int sign = (t < 0) ? -1 : 1;
+      t = fabs(t);
+      int mins = int(floor(t)) / 60;
+      int secs = int(floor(t - double(mins * 60)));
+      int milliSecs = int(floor((t - double(mins * 60) - double(secs))*1000.0));
+      sprintf(temp, "Time: %s%02d:%02d.%03d", (sign == -1) ? "-" : " ", mins, secs, milliSecs);
+      timeLabel->setText(QString(temp));
+    }
 }
 
-void MainWindow::setChunkLabel()
+//------------------------------------------------------------------------------
+void MainWindow::setChunkLabel(void)
 {
   char temp[128];
   Channel *active = gdata->getActiveChannel();
-  if(active) {
-    sprintf(temp, "Chunk: %d", active->currentChunk());
-  } else {
-    sprintf(temp, "Chunk: 0");
-  }
+  if(active)
+    {
+      sprintf(temp, "Chunk: %d", active->currentChunk());
+    }
+  else
+    {
+      sprintf(temp, "Chunk: 0");
+    }
   chunkLabel->setText(QString(temp));
 }
 
-void MainWindow::setNoteLabel()
+//------------------------------------------------------------------------------
+void MainWindow::setNoteLabel(void)
 {
   char temp[128];
   Channel *active = gdata->getActiveChannel();
-  if(active) {
-    active->lock();
-    AnalysisData *data = active->dataAtCurrentChunk();
-    if(data && active->isVisibleNote(data->getNoteIndex()) && active->isLabelNote(data->getNoteIndex())) sprintf(temp, "Note: %d", data->getNoteIndex());
-    else sprintf(temp, "Note:    ");
-    active->unlock();
-  } else {
-    sprintf(temp, "Note:    ");
-  }
+  if(active)
+    {
+      active->lock();
+      AnalysisData *data = active->dataAtCurrentChunk();
+      if(data && active->isVisibleNote(data->getNoteIndex()) && active->isLabelNote(data->getNoteIndex()))
+	{
+	  sprintf(temp, "Note: %d", data->getNoteIndex());
+	}
+      else
+	{
+	  sprintf(temp, "Note:    ");
+	}
+      active->unlock();
+    }
+  else
+    {
+      sprintf(temp, "Note:    ");
+    }
   noteLabel->setText(QString(temp));
 }
 
+//------------------------------------------------------------------------------
 void MainWindow::setTimeRange(double min_, double max_)
 {
-  if(timeSlider) timeSlider->setRange(min_, max_, timeSlider->step(), 1000);
+  if(timeSlider)
+    {
+      timeSlider->setRange(min_, max_, timeSlider->step(), 1000);
+    }
 }
 
-void MainWindow::rewindPressed()
+//------------------------------------------------------------------------------
+void MainWindow::rewindPressed(void)
 {
   gdata->rewind();
-  rewindTimer->start(gdata->fastUpdateSpeed()); //every 0.2 seconds
+  //every 0.2 seconds
+  rewindTimer->start(gdata->fastUpdateSpeed());
 }
 
-void MainWindow::rewindReleased()
+//------------------------------------------------------------------------------
+void MainWindow::rewindReleased(void)
 {
-  rewindTimer->stop(); //every 0.2 seconds
+  //every 0.2 seconds
+  rewindTimer->stop();
 }
 
-void MainWindow::playStopClicked()
+//------------------------------------------------------------------------------
+void MainWindow::playStopClicked(void)
 {
-  if(gdata->getRunning()) {
-    gdata->stop();
-  } else {
-    gdata->play();
-  }  
+  if(gdata->getRunning())
+    {
+      gdata->stop();
+    }
+  else
+    {
+      gdata->play();
+    }  
 }
 
-void MainWindow::fastforwardPressed()
+//------------------------------------------------------------------------------
+void MainWindow::fastforwardPressed(void)
 {
   gdata->fastforward();
-  fastforwardTimer->start(gdata->fastUpdateSpeed()); //every 0.2 seconds
+  //every 0.2 seconds
+  fastforwardTimer->start(gdata->fastUpdateSpeed());
 }
 
-void MainWindow::fastforwardReleased()
+//------------------------------------------------------------------------------
+void MainWindow::fastforwardReleased(void)
 {
-  fastforwardTimer->stop(); //every 0.2 seconds
+  //every 0.2 seconds
+  fastforwardTimer->stop();
 }
 
+//------------------------------------------------------------------------------
 void MainWindow::setTitle(Channel *ch)
 {
 #ifdef MYDEBUG
-  if(ch) setCaption(QString("Tartini (debug) - ") + ch->getUniqueFilename());
-  else setCaption(QString("Tartini (debug)"));
-#else
-  if(ch) setCaption(QString("Tartini - ") + ch->getUniqueFilename());
-  else setCaption(QString("Tartini"));
-#endif
+  if(ch)
+    {
+      setCaption(QString("Tartini (debug) - ") + ch->getUniqueFilename());
+    }
+  else
+    {
+      setCaption(QString("Tartini (debug)"));
+    }
+#else // MYDEBUG
+  if(ch)
+    {
+      setCaption(QString("Tartini - ") + ch->getUniqueFilename());
+    }
+  else
+    {
+      setCaption(QString("Tartini"));
+    }
+#endif // MYDEBUG
 }
 
-void MainWindow::aboutTartini()
+//------------------------------------------------------------------------------
+void MainWindow::aboutTartini(void)
 {
   TartiniDialog *tartiniDialog = new TartiniDialog(this);
   tartiniDialog->exec();
   delete tartiniDialog;
 }
 
-void MainWindow::aboutGPL()
+//------------------------------------------------------------------------------
+void MainWindow::aboutGPL(void)
 {
   GPLDialog *gplDialog = new GPLDialog(this);
   gplDialog->exec();
   delete gplDialog;
 }
 
-void MainWindow::aboutQt()
+//------------------------------------------------------------------------------
+void MainWindow::aboutQt(void)
 {
   QMessageBox::aboutQt(this, "About Qt");
 }
 
-void MainWindow::showDocumentation()
+//------------------------------------------------------------------------------
+void MainWindow::showDocumentation(void)
 {
   QDesktopServices::openUrl(QUrl("http://www.tartini.net/doc"));
 }
 
-TartiniDialog::TartiniDialog(QWidget *parent) : QDialog(parent, NULL, true)
+//------------------------------------------------------------------------------
+TartiniDialog::TartiniDialog(QWidget *parent):
+  QDialog(parent, NULL, true)
 {
   setCaption("About Tartini - Version " TARTINI_VERSION_STR);
   setBackgroundColor(Qt::black);
-  Q3BoxLayout *layout = new Q3VBoxLayout(this, 6, 6);
+  Q3BoxLayout * layout = new Q3VBoxLayout(this, 6, 6);
 
-  Q3BoxLayout *topLayout = new Q3HBoxLayout(layout);
-  QLabel *tartiniPicture = new QLabel(this, "TartiniPicture");
+  Q3BoxLayout * topLayout = new Q3HBoxLayout(layout);
+  QLabel * tartiniPicture = new QLabel(this, "TartiniPicture");
   QPixmap tartiniPixmap(":/res/tartinilogo.jpg", "JPG");
   tartiniPicture->setPixmap(tartiniPixmap);
   tartiniPicture->setBackgroundColor(Qt::black);
@@ -996,7 +1152,7 @@ TartiniDialog::TartiniDialog(QWidget *parent) : QDialog(parent, NULL, true)
   topLayout->addWidget(tartiniPicture);
   topLayout->addStretch(10);
 
-  QTextBrowser *tartiniTextEdit = new QTextBrowser(this, "TartiniTextEdit");
+  QTextBrowser * tartiniTextEdit = new QTextBrowser(this, "TartiniTextEdit");
   tartiniTextEdit->setOpenExternalLinks(true);
   tartiniTextEdit->setTextFormat(Qt::RichText);
 
@@ -1065,9 +1221,9 @@ TartiniDialog::TartiniDialog(QWidget *parent) : QDialog(parent, NULL, true)
   
   layout->addWidget(tartiniTextEdit);
   
-  Q3BoxLayout *bottomLayout = new Q3HBoxLayout(layout);
-  QPushButton *okButton = new QPushButton("&Ok", this);
-  QPushButton *GPLButton = new QPushButton("&Read License", this);
+  Q3BoxLayout * bottomLayout = new Q3HBoxLayout(layout);
+  QPushButton * okButton = new QPushButton("&Ok", this);
+  QPushButton * GPLButton = new QPushButton("&Read License", this);
   bottomLayout->addStretch(10);
   bottomLayout->addWidget(okButton);
   bottomLayout->addStretch(10);
@@ -1078,12 +1234,14 @@ TartiniDialog::TartiniDialog(QWidget *parent) : QDialog(parent, NULL, true)
   connect(GPLButton, SIGNAL(clicked()), mainWindow, SLOT(aboutGPL()));
 }
 
-GPLDialog::GPLDialog(QWidget *parent) : QDialog(parent, NULL, true)
+//------------------------------------------------------------------------------
+GPLDialog::GPLDialog(QWidget *parent):
+  QDialog(parent, NULL, true)
 {
   setCaption("GPL Licence");
-  Q3BoxLayout *layout = new Q3VBoxLayout(this, 6, 6);
+  Q3BoxLayout * layout = new Q3VBoxLayout(this, 6, 6);
 
-  Q3TextEdit *GPLTextEdit = new Q3TextEdit(this, "GPLTextEdit");
+  Q3TextEdit * GPLTextEdit = new Q3TextEdit(this, "GPLTextEdit");
   GPLTextEdit->setReadOnly(true);
   GPLTextEdit->setTextFormat(Qt::PlainText);
   QString theText;
@@ -1098,8 +1256,8 @@ GPLDialog::GPLDialog(QWidget *parent) : QDialog(parent, NULL, true)
   
   layout->addWidget(GPLTextEdit);
   
-  Q3BoxLayout *bottomLayout = new Q3HBoxLayout(layout);
-  QPushButton *okButton = new QPushButton("&Ok", this);
+  Q3BoxLayout * bottomLayout = new Q3HBoxLayout(layout);
+  QPushButton * okButton = new QPushButton("&Ok", this);
   bottomLayout->addStretch(10);
   bottomLayout->addWidget(okButton);
   bottomLayout->addStretch(10);
@@ -1110,117 +1268,158 @@ GPLDialog::GPLDialog(QWidget *parent) : QDialog(parent, NULL, true)
 #include "freqdrawwidget.h"
 #include "drawwidget.h"
 
-void MainWindow::printPitch()
+//------------------------------------------------------------------------------
+void MainWindow::printPitch(void)
 {
   QPrinter printer(QPrinter::HighResolution);
   printer.setOrientation(QPrinter::Landscape);
   QPrintDialog printDialog(&printer, this);
-  if(printDialog.exec() == QDialog::Accepted) {
-    View & view = gdata->getView();
-    QPainter p;
-    p.begin(&printer);
-    int w = printer.width();
-    int h = printer.height();
-    double leftTime = view.viewLeft();
-    double rightTime = view.viewRight();
-    double viewBottom = view.viewBottom();
-    double viewTop = view.viewTop();
-    double zoomX = (rightTime-leftTime) / double(w);
-    double zoomY = (viewTop-viewBottom) / double(h);
-    FreqDrawWidget::drawReferenceLines(printer, p, 0.0, zoomX, viewBottom, zoomY, DRAW_VIEW_PRINT);
+  if(printDialog.exec() == QDialog::Accepted)
+    {
+      View & view = gdata->getView();
+      QPainter p;
+      p.begin(&printer);
+      int w = printer.width();
+      int h = printer.height();
+      double leftTime = view.viewLeft();
+      double rightTime = view.viewRight();
+      double viewBottom = view.viewBottom();
+      double viewTop = view.viewTop();
+      double zoomX = (rightTime-leftTime) / double(w);
+      double zoomY = (viewTop-viewBottom) / double(h);
+      FreqDrawWidget::drawReferenceLines(printer, p, 0.0, zoomX, viewBottom, zoomY, DRAW_VIEW_PRINT);
 
-    double dotsPerLineStepY = 1.0 / zoomY;
-    double dotsPerMM = double(printer.height()) / double(printer.heightMM());
-    DrawWidget::setLineWidth(toInt(std::min(dotsPerMM*1.0, dotsPerLineStepY*0.2))); //1mm thick line
-    //draw all the visible channels
-    for (uint i = 0; i < gdata->getChannelsSize(); i++) {
-      Channel *ch = gdata->getChannelAt(i);
-      if(!ch->isVisible()) continue;
-      DrawWidget::drawChannel(printer, ch, p, leftTime, 0.0, zoomX, viewBottom, zoomY, DRAW_VIEW_PRINT);
-      if(ch == gdata->getActiveChannel()) {
-        p.setPen(Qt::black);
-        QString s = ch->getUniqueFilename();
-        QFont f = p.font();
-        f.setPointSize(18);
-        p.setFont(f);
-        p.drawText(QRect(0, 0, printer.width(), printer.height()), Qt::AlignHCenter | Qt::AlignTop, s);
-      }
+      double dotsPerLineStepY = 1.0 / zoomY;
+      double dotsPerMM = double(printer.height()) / double(printer.heightMM());
+      //1mm thick line
+      DrawWidget::setLineWidth(toInt(std::min(dotsPerMM * 1.0, dotsPerLineStepY * 0.2)));
+      //draw all the visible channels
+      for (uint i = 0; i < gdata->getChannelsSize(); i++)
+	{
+	  Channel *ch = gdata->getChannelAt(i);
+	  if(!ch->isVisible())
+	    {
+	      continue;
+	    }
+	  DrawWidget::drawChannel(printer, ch, p, leftTime, 0.0, zoomX, viewBottom, zoomY, DRAW_VIEW_PRINT);
+	  if(ch == gdata->getActiveChannel())
+	    {
+	      p.setPen(Qt::black);
+	      QString s = ch->getUniqueFilename();
+	      QFont f = p.font();
+	      f.setPointSize(18);
+	      p.setFont(f);
+	      p.drawText(QRect(0, 0, printer.width(), printer.height()), Qt::AlignHCenter | Qt::AlignTop, s);
+	    }
+	}
+      p.end();
     }
-
-    p.end();
-  }
 }
 
+//------------------------------------------------------------------------------
 void MainWindow::exportChannel(int type, QString typeString)
 {
   Channel *ch = gdata->getActiveChannel();
-  if(ch) {
-    ch->exportChannel(type, typeString);
-  } else {
-    fprintf(stderr, "No channel to export.\n");
-  }
+  if(ch)
+    {
+      ch->exportChannel(type, typeString);
+    }
+  else
+    {
+      fprintf(stderr, "No channel to export.\n");
+    }
 }
 
-void MainWindow::exportChannelPlainText()
+//------------------------------------------------------------------------------
+void MainWindow::exportChannelPlainText(void)
 {
   exportChannel(0, "Text (*.txt)");
 }
 
-void MainWindow::exportChannelMatlab()
+//------------------------------------------------------------------------------
+void MainWindow::exportChannelMatlab(void)
 {
   exportChannel(1, "Matlab code (*.m)");
 }
 
-bool MainWindow::loadViewGeometry()
+//------------------------------------------------------------------------------
+bool MainWindow::loadViewGeometry(void)
 {
   QPoint pos;
   QSize size;
   int counter = 0;
 
-  for(int j=0; j<NUM_VIEWS; j++) {
-    QString base = QString("geometry/") + viewData[j].className;
-    if(gdata->getSettingsValue(base+"/visible", false) == true) {
-      pos = gdata->getSettingsValue(base+"/pos", QPoint(0, 0));
-      size = gdata->getSettingsValue(base+"/size", QSize(100, 100));
-      QWidget *w = openView(j);
-      QWidget *p = (QWidget*)(w->parent()); //get the subwindow frame
-      if(p) {
-        p->resize(size);
-        p->move(pos);
-      }
+  for(int j = 0; j < NUM_VIEWS; j++)
+    {
+      QString base = QString("geometry/") + viewData[j].className;
+      if(gdata->getSettingsValue(base+"/visible", false) == true)
+	{
+	  pos = gdata->getSettingsValue(base+"/pos", QPoint(0, 0));
+	  size = gdata->getSettingsValue(base+"/size", QSize(100, 100));
+	  QWidget * w = openView(j);
+	  //get the subwindow frame
+	  QWidget * p = (QWidget*)(w->parent());
+      if(p)
+	{
+	  p->resize(size);
+	  p->move(pos);
+	}
       counter++;
+	}
     }
-  }
-  if(counter == 0) {
-    openView(VIEW_OPEN_FILES);
-    openView(VIEW_FREQ);
-    openView(VIEW_TUNER);
-    openView(VIEW_VIBRATO);
-    return false;
-  }
+  if(counter == 0)
+    {
+      openView(VIEW_OPEN_FILES);
+      openView(VIEW_FREQ);
+      openView(VIEW_TUNER);
+      openView(VIEW_VIBRATO);
+      return false;
+    }
   return true;
 }
 
-void MainWindow::saveViewGeometry()
+//------------------------------------------------------------------------------
+void MainWindow::saveViewGeometry(void)
 {
   QWidgetList opened = theWorkspace->windowList();
 
-  for(int j=0; j<NUM_VIEWS; j++) {
-    QString base = QString("geometry/") + viewData[j].className;
-    bool found = false;
-    for(QWidgetList::iterator it=opened.begin(); it<opened.end(); it++) {
-      if(QString((*it)->metaObject()->className()) == viewData[j].className) {
-        QWidget *p = (QWidget*)((*it)->parent()); //get the subwindow frame
-        if(!p) break;
-        gdata->setSettingsValue(base+"/visible", true);
-        gdata->setSettingsValue(base+"/pos", p->pos());
-        gdata->setSettingsValue(base+"/size", p->size());
-        found = true;
-        break;
-      }
+  for(int j = 0; j < NUM_VIEWS; j++)
+    {
+      QString base = QString("geometry/") + viewData[j].className;
+      bool found = false;
+      for(QWidgetList::iterator it = opened.begin(); it < opened.end(); it++)
+	{
+	  if(QString((*it)->metaObject()->className()) == viewData[j].className)
+	    {
+	      //get the subwindow frame
+	      QWidget * p = (QWidget*)((*it)->parent());
+	      if(!p)
+		{
+		  break;
+		}
+	      gdata->setSettingsValue(base + "/visible", true);
+	      gdata->setSettingsValue(base + "/pos", p->pos());
+	      gdata->setSettingsValue(base + "/size", p->size());
+	      found = true;
+	      break;
+	    }
+	}
+      if(!found)
+	{
+	  gdata->setSettingsValue(base+"/visible", false);
+	}
     }
-    if(!found) {
-      gdata->setSettingsValue(base+"/visible", false);
-    }
-  }
 }
+
+//------------------------------------------------------------------------------
+QSize TartiniDialog::sizeHint(void) const
+{
+  return QSize(600, 600);
+}
+
+//------------------------------------------------------------------------------
+QSize GPLDialog::sizeHint(void) const
+{
+  return QSize(600, 480);
+}
+// EOF

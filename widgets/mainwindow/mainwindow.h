@@ -42,31 +42,48 @@ class QComboBox;
 
 struct ViewData
 {
-	ViewData(QString title_, QString menuName_, QString className_, int menuType_)
-	{
-		title = title_;
-		menuName = menuName_;
-		className = className_;
-		menuType = menuType_;
-	};
+  ViewData(QString title_, QString menuName_, QString className_, int menuType_)
+  {
+    title = title_;
+    menuName = menuName_;
+    className = className_;
+    menuType = menuType_;
+  };
   QString title;
   QString menuName;
   QString className;
   int menuType;
 };
 
-enum VIEW_MENU_TYPES {
-	MENU_TYPE_MAIN,
-	MENU_TYPE_TECHNICAL,
-	MENU_TYPE_EXPERIMENTAL
-};
+enum VIEW_MENU_TYPES
+  {
+    MENU_TYPE_MAIN,
+    MENU_TYPE_TECHNICAL,
+    MENU_TYPE_EXPERIMENTAL
+  };
 
 #define NUM_VIEWS 19
-enum VIEW_NAMES {
-  VIEW_OPEN_FILES, VIEW_FREQ, VIEW_TUNER, VIEW_HTRACK, VIEW_VIBRATO, VIEW_SCORE,
-  VIEW_WAVE, VIEW_CORRELATION, VIEW_FFT, VIEW_CEPSTRUM, VIEW_DEBUGVIEW,
-  VIEW_HBLOCK, VIEW_HSTACK, VIEW_HBUBBLE, VIEW_HCIRCLE, VIEW_PITCH_COMPASS,
-  VIEW_PIANO, VIEW_SUMMARY, VIEW_VOLUME_METER
+enum VIEW_NAMES
+  {
+    VIEW_OPEN_FILES,
+    VIEW_FREQ,
+    VIEW_TUNER,
+    VIEW_HTRACK,
+    VIEW_VIBRATO,
+    VIEW_SCORE,
+    VIEW_WAVE,
+    VIEW_CORRELATION,
+    VIEW_FFT,
+    VIEW_CEPSTRUM,
+    VIEW_DEBUGVIEW,
+    VIEW_HBLOCK,
+    VIEW_HSTACK,
+    VIEW_HBUBBLE,
+    VIEW_HCIRCLE,
+    VIEW_PITCH_COMPASS,
+    VIEW_PIANO,
+    VIEW_SUMMARY,
+    VIEW_VOLUME_METER
 };
 
 extern ViewData viewData[NUM_VIEWS];
@@ -77,107 +94,115 @@ class MainWindow : public QMainWindow
   Q_OBJECT
 
  public:
-  MainWindow();
-  virtual ~MainWindow();
+  MainWindow(void);
+  virtual ~MainWindow(void);
 
-  void keyPressEvent ( QKeyEvent * e );
+  void keyPressEvent(QKeyEvent * e);
   void message(QString s, int msec);
-  Q3ListView *theListView;
+  Q3ListView * theListView;
   
-  QWorkspace *theWorkspace;
+  QWorkspace * theWorkspace;
 
-  QMenu *newViewMenu;
-  QMenu *windowMenu;
-  QMenu *optionsMenu;
-  QMenu *helpMenu;
+  QMenu * newViewMenu;
+  QMenu * windowMenu;
+  QMenu * optionsMenu;
+  QMenu * helpMenu;
 
-  MyLabel *timeLabel;
-  MyLabel *chunkLabel;
-  MyLabel *noteLabel;
-  QwtSlider *timeSlider;
-  MyScrollBar *timeScrollBar;
-  QComboBox *keyTypeComboBox;
+  MyLabel * timeLabel;
+  MyLabel * chunkLabel;
+  MyLabel * noteLabel;
+  QwtSlider * timeSlider;
+  MyScrollBar * timeScrollBar;
+  QComboBox * keyTypeComboBox;
     
-  QAction *playStopAction;
-  QAction *recordAction;
-  QAction *playRecordAction;
-  QIcon *playIconSet;
-  QIcon *playRecordIconSet;
-  QIcon *stopIconSet;
-  QIcon *recordIconSet;
-  QTimer *rewindTimer;
-  QTimer *fastforwardTimer;
+  QAction * playStopAction;
+  QAction * recordAction;
+  QAction * playRecordAction;
+  QIcon * playIconSet;
+  QIcon * playRecordIconSet;
+  QIcon * stopIconSet;
+  QIcon * recordIconSet;
+  QTimer * rewindTimer;
+  QTimer * fastforwardTimer;
 
-  QSignalMapper *createSignalMapper;
+  QSignalMapper * createSignalMapper;
   
  protected:
-  bool event( QEvent * e );
+  bool event(QEvent * e);
 
 signals:
   void changedMusicFolder(const QString &);
-  void zoomInPressed();
-  void zoomOutPressed();
+  void zoomInPressed(void);
+  void zoomOutPressed(void);
     
 public slots:
 
-  void openFile();
+  void openFile(void);
   void openFile(const char *filename);
 
-  void openRecord();
-  void openPlayRecord();
+  void openRecord(void);
+  void openPlayRecord(void);
   void openRecord(bool andPlay);
-  void closeAllWidgets();
+  void closeAllWidgets(void);
   void closeEvent(QCloseEvent *event);
-  void menuPreferences();
+  void menuPreferences(void);
 
-  void windowMenuAboutToShow();
+  void windowMenuAboutToShow(void);
   void windowMenuActivated(int id);
-  void newViewAboutToShow();
+  void newViewAboutToShow(void);
+
+  /**
+   * Opens a view based on a viewId (which should be #defined).
+   * All widgets should be created anonymously - ie no saving pointers!
+   *
+   * @param viewID the view to open's ID.
+   */
   QWidget *openView(int viewID);
   void setTimeLabel(double t);
-  void setChunkLabel();
-  void setNoteLabel();
+  void setChunkLabel(void);
+  void setNoteLabel(void);
   void setTimeRange(double min_, double max_);
 
-  void rewindPressed();
-  void rewindReleased();
-  void playStopClicked();
-  void fastforwardPressed();
-  void fastforwardReleased();
+  void rewindPressed(void);
+  void rewindReleased(void);
+  void playStopClicked(void);
+  void fastforwardPressed(void);
+  void fastforwardReleased(void);
   void setTitle(Channel *ch);
-  void aboutTartini();
-  void aboutGPL();
-  void aboutQt();
-  void showDocumentation();
-  void printPitch();
+  void aboutTartini(void);
+  void aboutGPL(void);
+  void aboutQt(void);
+  void showDocumentation(void);
+  void printPitch(void);
   void exportChannel(int type, QString typeString);
-  void exportChannelPlainText();
-  void exportChannelMatlab();
+  void exportChannelPlainText(void);
+  void exportChannelMatlab(void);
 
-  bool loadViewGeometry();
-  void saveViewGeometry();
+  bool loadViewGeometry(void);
+  void saveViewGeometry(void);
 };
 
-class TartiniDialog : public QDialog
+class TartiniDialog :public QDialog
 {
   Q_OBJECT
  
  public:
   TartiniDialog(QWidget *parent = NULL);
-  QSize sizeHint() const { return QSize(600, 600); }
+  QSize sizeHint(void) const;
 };
 
-class GPLDialog : public QDialog
+class GPLDialog :public QDialog
 {
   Q_OBJECT
  
  public:
   GPLDialog(QWidget *parent = NULL);
-  QSize sizeHint() const { return QSize(600, 480); }
+  QSize sizeHint(void) const;
 };
 
-extern MainWindow *mainWindow;
+extern MainWindow * mainWindow;
 class MyGLFont;
-extern MyGLFont *mygl_font;
+extern MyGLFont * mygl_font;
 
-#endif
+#endif // MAINWINDOW_H
+// EOF
