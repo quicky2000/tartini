@@ -15,34 +15,57 @@
    Please read LICENSE.txt for details.
  ***************************************************************************/
 
-#ifndef PAINO_H
-#define PAINO_H
+#ifndef PIANO_H
+#define PIANO_H
 
 #include <qwidget.h>
 #include <qpixmap.h>
 #include <QPaintEvent>
 #include "drawwidget.h"
 
-class PianoWidget : public DrawWidget
+class PianoWidget:
+public DrawWidget
 {
 public:
-  PianoWidget(QWidget *parent);
-  ~PianoWidget();
+  PianoWidget(QWidget * parent);
+  ~PianoWidget(void);
 
   void paintEvent(QPaintEvent *);
   
-  QSize sizeHint() const { return QSize(165, 100); }
+  QSize sizeHint(void) const
+  {
+    return QSize(165, 100);
+  }
 
-  int currentNote() { return _currentNote; }
+  int currentNote(void)
+  {
+    return _currentNote;
+  }
   void setCurrentNote(int n, float amountPressed = 1.0);
-  void setNoNote() { _currentNote = -1; }
-  bool isNote() { return _currentNote >= 0; }
-  float amountPressed() { return _amountPressed; }
-  void setAmountPressed(float amountPressed) { _amountPressed = amountPressed; }
+  void setNoNote(void)
+  {
+    _currentNote = -1;
+  }
+  bool isNote(void)
+  {
+    return _currentNote >= 0;
+  }
+  float amountPressed(void)
+  {
+    return _amountPressed;
+  }
+  void setAmountPressed(float amountPressed)
+  {
+    _amountPressed = amountPressed;
+  }
   
-  QPixmap *buffer;
-  int _currentNote; //-1=no note, 0=C, 1=C#, 2=D ... 11=B
+  QPixmap * buffer;
+
+  //-1=no note, 0=C, 1=C#, 2=D ... 11=B
+  int _currentNote;
+
   float _amountPressed;
 };
 
-#endif
+#endif // PIANO_H
+// EOF
