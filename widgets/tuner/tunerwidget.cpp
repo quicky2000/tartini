@@ -26,17 +26,20 @@
 #include "useful.h"
 #include "myqt.h"
 
-TunerWidget::TunerWidget(QWidget *parent)
-  : DrawWidget(parent)
+//------------------------------------------------------------------------------
+TunerWidget::TunerWidget(QWidget *parent):
+  DrawWidget(parent)
 {
   value_ = 0;
 }
 
-TunerWidget::~TunerWidget()
+//------------------------------------------------------------------------------
+TunerWidget::~TunerWidget(void)
 {
 }
 
-void TunerWidget::paintEvent( QPaintEvent * )
+//------------------------------------------------------------------------------
+void TunerWidget::paintEvent(QPaintEvent *)
 {
   beginDrawing();
 
@@ -72,19 +75,22 @@ void TunerWidget::paintEvent( QPaintEvent * )
   */
 
   QPen pen(colorGroup().foreground(), 2);
-  p.setPen(pen);  // Border
+  // Border
+  p.setPen(pen);
 
   double halfWidth = double(width()) / 2.0;
-  double radius = 1.8 * MAX(height()/2, halfWidth);
+  double radius = 1.8 * MAX(height() / 2, halfWidth);
   QPoint center(toInt(halfWidth), toInt(radius));
   double theta = asin(double(width()) / (2 * radius));
-  double thetaDeg = theta *180.0 / PI;
+  double thetaDeg = theta * 180.0 / PI;
   double rho = (PI / 2.0) - theta;
 
-  {// Draw the semicircle
-    p.setBrush(Qt::white);  // Fill colour
-    p.drawPie(toInt(halfWidth - radius), 0, toInt(2.0 * radius), toInt(2.0 * radius), toInt((90 - thetaDeg) * 16), toInt(2*thetaDeg*16));
-    p.drawArc(toInt(halfWidth - (radius/2.0)), toInt(radius/2.0), toInt(radius), toInt(radius), toInt((90 - thetaDeg) * 16), toInt(2*thetaDeg*16));
+  {
+    // Draw the semicircle
+    // Fill colour
+    p.setBrush(Qt::white);
+    p.drawPie(toInt(halfWidth - radius), 0, toInt(2.0 * radius), toInt(2.0 * radius), toInt((90 - thetaDeg) * 16), toInt(2 * thetaDeg * 16));
+    p.drawArc(toInt(halfWidth - (radius / 2.0)), toInt(radius / 2.0), toInt(radius), toInt(radius), toInt((90 - thetaDeg) * 16), toInt(2 * thetaDeg * 16));
   }
  
   p.setPen(colorGroup().foreground());
@@ -94,16 +100,18 @@ void TunerWidget::paintEvent( QPaintEvent * )
   double step = (2 * theta) / 12.0;
   double stop = rho + (2 * theta) - (step / 2);
   {// Draw line markings
-    for (double i = rho + step; i < stop; i += step) {
-      int x = toInt(halfWidth + radius * cos(i));
-      int y = toInt(radius - radius * sin(i));
-      QPoint start(x, y);
-      double t = 0.05; //0.025;
-      p.drawLine(start, start + t * (center - start));
-    }
+    for (double i = rho + step; i < stop; i += step)
+      {
+	int x = toInt(halfWidth + radius * cos(i));
+	int y = toInt(radius - radius * sin(i));
+	QPoint start(x, y);
+	double t = 0.05; //0.025;
+	p.drawLine(start, start + t * (center - start));
+      }
   }
   
-  {//Draw the text labels
+  {
+    //Draw the text labels
     p.setPen(colorGroup().foreground());
   
     const char *theNames[11] = { "+50", "+40", "+30", "+20", "+10", "0", "-10", "-20", "-30", "-40", "-50" };
@@ -111,24 +119,34 @@ void TunerWidget::paintEvent( QPaintEvent * )
     int halfFontHeight = fm.height() / 2;
     int halfFontWidth;
     
-    for (int j=0; j<11;) {
-      double i = rho + step*(j+1);
-      int x = toInt(halfWidth + radius * cos(i));
-      int y = toInt(radius - radius * sin(i));
-      QPoint start(x, y);
-      double t = 0.08; //0.025;
-      QPoint pt = start + t * (center - start);
+    for (int j = 0; j < 11;)
+      {
+	double i = rho + step *(j + 1);
+	int x = toInt(halfWidth + radius * cos(i));
+	int y = toInt(radius - radius * sin(i));
+	QPoint start(x, y);
+	double t = 0.08; //0.025;
+	QPoint pt = start + t * (center - start);
       halfFontWidth = fm.width(theNames[j]) / 2;
       
       p.drawText(pt.x() - halfFontWidth, pt.y() + halfFontHeight, theNames[j]);
-      if(radius < 300) j+=2; else j++;
+      if(radius < 300)
+	{
+	  j += 2;
+	}
+      else
+	{
+	  j++;
+	}
+
     }
     halfFontWidth = fm.width("Cents") / 2;
     p.drawText(center.x() - halfFontWidth, toInt(center.y() * 0.2) + halfFontHeight, "Cents");
   }
     
-  { //draw needle
-    double centAngle = (2*theta) / 120;
+  {
+    //draw needle
+    double centAngle = (2 * theta) / 120;
     double note = rho + (fabs(value_ - 60) * centAngle);
     p.setPen(colorBetween(Qt::white, Qt::darkRed, intensity_));
   
@@ -143,37 +161,43 @@ void TunerWidget::paintEvent( QPaintEvent * )
     QPoint knobLeft = center - QPoint(halfKnobWidth, 0);
     QPoint knobRight = center + QPoint(halfKnobWidth, 0);
   
-    if(intensity_ > 0.0) {
-      p.setBrush(colorBetween(Qt::white, Qt::red, intensity_));
-      Q3PointArray points(3);
-      points.setPoint(0, noteX);
-      points.setPoint(1, knobRight);
-      points.setPoint(2, knobLeft);
-      p.drawPolygon(points);
-    }
+    if(intensity_ > 0.0)
+      {
+	p.setBrush(colorBetween(Qt::white, Qt::red, intensity_));
+	Q3PointArray points(3);
+	points.setPoint(0, noteX);
+	points.setPoint(1, knobRight);
+	points.setPoint(2, knobLeft);
+	p.drawPolygon(points);
+      }
   }
   endDrawing();
 }
 
-/*
- * Sets the value of the widget.
- *
- * @param v the value to represent (in cents). Accepts values between -60 and +60 inclusive.
- * @param intensity How sure of the note you are
- **/
+//------------------------------------------------------------------------------
 void TunerWidget::setValue(float v, float i)
 {
-	if (value_ != v && v >= -60 && v <= 60) {
-		value_ = v;
-		update();
-	}
-	if (intensity_ != i && i >= 0 && i <= 1) {
-		intensity_ = i;
-		update();
-	}
+  if (value_ != v && v >= -60 && v <= 60)
+    {
+      value_ = v;
+      update();
+    }
+  if (intensity_ != i && i >= 0 && i <= 1)
+    {
+      intensity_ = i;
+      update();
+    }
 }
 
-double TunerWidget::value()
+//------------------------------------------------------------------------------
+double TunerWidget::value(void)
 {
   return value_;
 }
+
+//------------------------------------------------------------------------------
+QSize TunerWidget::minimumSizeHint(void) const
+{
+  return QSize(100, 75);
+}
+// EOF

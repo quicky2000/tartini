@@ -24,25 +24,30 @@
 // Forward declarations of classes the h file doesn't need to know specifics about
 class QPixmap;
 
-class TunerWidget : public DrawWidget {
+class TunerWidget : public DrawWidget
+{
   Q_OBJECT
 
   public:
-    TunerWidget(QWidget *parent);
-    virtual ~TunerWidget();
+  TunerWidget(QWidget *parent);
+  virtual ~TunerWidget(void);
 
-    void paintEvent( QPaintEvent * );
-    QSize minimumSizeHint() const { return QSize(100, 75); }
+  void paintEvent(QPaintEvent *);
+  QSize minimumSizeHint(void) const;
 
+    /**
+       Sets the value of the widget.
+       
+       @param v the value to represent (in cents). Accepts values between -60 and +60 inclusive.
+       @param intensity How sure of the note you are
+    */
     void setValue(float v, float intensity);
-    double value();
+    double value(void);
 
   private:
     QPixmap *buffer;
     float value_;
     float intensity_;
-
 };
-
-
-#endif
+#endif // TUNERWIDGET_H
+// EOF

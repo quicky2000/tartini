@@ -30,13 +30,28 @@
 #include "channel.h"
 #include "musicnotes.h"
 
-int LEDLetterLookup[12] = { 2, 2, 3, 3, 4, 5, 5, 6, 6, 0, 0, 1 };
+int LEDLetterLookup[12] =
+  {
+    2,
+    2,
+    3,
+    3,
+    4,
+    5,
+    5,
+    6,
+    6,
+    0,
+    0,
+    1
+  };
 
-TunerView::TunerView( int viewID_, QWidget *parent )
- : ViewWidget( viewID_, parent)
+//------------------------------------------------------------------------------
+TunerView::TunerView(int viewID_, QWidget *parent ):
+  ViewWidget( viewID_, parent)
 {
 
-  Q3GridLayout *layout = new Q3GridLayout(this, 9, 3, 2);
+  Q3GridLayout * layout = new Q3GridLayout(this, 9, 3, 2);
   layout->setResizeMode(QLayout::SetNoConstraint);
 
   // Tuner widget goes from (0, 0) to (0, 8);
@@ -68,9 +83,10 @@ TunerView::TunerView( int viewID_, QWidget *parent )
 
 
   // Add the leds for note names into the positions (1, 0) to (1, 6)
-  for (int n = 0; n < 7; n++) {
-    layout->addWidget(leds.at(n), 2, n);
-  }
+  for (int n = 0; n < 7; n++)
+    {
+      layout->addWidget(leds.at(n), 2, n);
+    }
 
   // (1, 7) is blank
   
@@ -85,47 +101,57 @@ TunerView::TunerView( int viewID_, QWidget *parent )
   connect(tunerWidget, SIGNAL(ledSet(int, bool)), this, SLOT(setLed(int, bool)));
 }
 
-TunerView::~TunerView()
+//------------------------------------------------------------------------------
+TunerView::~TunerView(void)
 {
   delete slider;
-  for (uint i = 0; i < leds.size(); i++) {
-    delete leds[i];
-  }
+  for (uint i = 0; i < leds.size(); i++)
+    {
+      delete leds[i];
+    }
   delete ledBuffer;
   delete tunerWidget;
 }
 
+//------------------------------------------------------------------------------
 void TunerView::resizeEvent(QResizeEvent *)
 {
 }
 
-void TunerView::resetLeds()
+//------------------------------------------------------------------------------
+void TunerView::resetLeds(void)
 {
- for (uint i = 0; i < leds.size(); i++) {
-    leds[i]->setOn(false);
-  }
+  for (uint i = 0; i < leds.size(); i++)
+    {
+      leds[i]->setOn(false);
+    }
 }
 
+//------------------------------------------------------------------------------
 void TunerView::slotCurrentTimeChanged(double /*time*/)
 {
 }
 
+//------------------------------------------------------------------------------
 void TunerView::paintEvent( QPaintEvent* )
 {
 }
 
+//------------------------------------------------------------------------------
 void TunerView::setLed(int index, bool value)
 {
   leds[index]->setOn(value);
 }
 
-void TunerView::doUpdate()
+//------------------------------------------------------------------------------
+void TunerView::doUpdate(void)
 {
   Channel *active = gdata->getActiveChannel();
-  if (active == NULL || !active->hasAnalysisData()) {
-    tunerWidget->doUpdate(0.0);
-    return;
-  }
+  if (active == NULL || !active->hasAnalysisData())
+    {
+      tunerWidget->doUpdate(0.0);
+      return;
+    }
   ChannelLocker channelLocker(active);
   double time = gdata->getView().currentTime();
 
@@ -139,20 +165,30 @@ void TunerView::doUpdate()
   double sliderVal = slider->value();
 
   double pitch = 0.0;
-  if (sliderVal == 0) {
-    int chunk = active->currentChunk();
-    if(chunk >= active->totalChunks()) chunk = active->totalChunks()-1;
-    if(chunk >= 0)
-      pitch = active->dataAtChunk(chunk)->getPitch();
-  } else {
-    double startTime = time - sliderVal;
-    double stopTime = time;
+  if (sliderVal == 0)
+    {
+      int chunk = active->currentChunk();
+      if(chunk >= active->totalChunks()) chunk = active->totalChunks() - 1;
+      if(chunk >= 0)
+	{
+	  pitch = active->dataAtChunk(chunk)->getPitch();
+	}
+    }
+  else
+    {
+      double startTime = time - sliderVal;
+      double stopTime = time;
   
-    int startChunk = active->chunkAtTime(startTime);
-    int stopChunk = active->chunkAtTime(stopTime)+1;
-    pitch = active->averagePitch(startChunk, stopChunk);
-  }
-
-
+      int startChunk = active->chunkAtTime(startTime);
+      int stopChunk = active->chunkAtTime(stopTime) + 1;
+      pitch = active->averagePitch(startChunk, stopChunk);
+    }
   tunerWidget->doUpdate(pitch);
 }
+
+//------------------------------------------------------------------------------
+QSize TunerView::sizeHint(void) const
+{
+  return QSize(200, 200);
+}
+// EOF

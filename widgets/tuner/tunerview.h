@@ -31,33 +31,32 @@ class LEDIndicator;
 class QwtSlider;
 class Channel;
 
-class TunerView : public ViewWidget {
+class TunerView : public ViewWidget
+{
   Q_OBJECT
 
   public:
-    TunerView(int viewID_, QWidget *parent = 0);
-    virtual ~TunerView();
+  TunerView(int viewID_, QWidget *parent = NULL);
+  virtual ~TunerView(void);
 
-    void resizeEvent(QResizeEvent *);
-    void paintEvent( QPaintEvent* );
+  void resizeEvent(QResizeEvent *);
+  void paintEvent( QPaintEvent* );
 
-    QSize sizeHint() const { return QSize(200, 200); }
+  QSize sizeHint(void) const;
 
   public slots:
-    void slotCurrentTimeChanged(double time);
-    void setLed(int index, bool value);
-    void doUpdate();
+  void slotCurrentTimeChanged(double time);
+  void setLed(int index, bool value);
+  void doUpdate(void);
 
   private:
-    void resetLeds();
+  void resetLeds(void);
 
-    VibratoTunerWidget *tunerWidget;
-    std::vector<LEDIndicator*> leds;
-    QwtSlider *slider;
-
-    QPixmap *ledBuffer;
+  VibratoTunerWidget *tunerWidget;
+  std::vector<LEDIndicator*> leds;
+  QwtSlider * slider;
+  QPixmap * ledBuffer;
 
 };
-
-
-#endif
+#endif // TUNERVIEW_H
+// EOF
