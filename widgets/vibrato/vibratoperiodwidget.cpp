@@ -78,7 +78,6 @@ void VibratoPeriodWidget::resizeGL(int w, int h)
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   gluOrtho2D(0, w, 0, h);
-  //glMatrixMode(GL_MODELVIEW);
 
   // Calculate the horizontal reference line
   const float halfHeight = 0.5 * height();

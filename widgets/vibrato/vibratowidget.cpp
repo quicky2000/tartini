@@ -84,7 +84,6 @@ void VibratoWidget::resizeGL(int w, int h)
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   gluOrtho2D(0, w, 0, h);
-  //glMatrixMode(GL_MODELVIEW);
 
   update();
 }
@@ -143,8 +142,6 @@ void VibratoWidget::paintGL()
   mygl_font->beginGLtext(width(), height());
   glColor3ub(0,0,0);
   for (int i = 0; i < noteLabelCounter; i++) {
-    //renderText(3, noteLabels[i].y - 4, 0, noteLabels[i].label, vibratoFont);
-    //renderText(width() - noteLabelOffset + 3, noteLabels[i].y - 4, 0, noteLabels[i].label, vibratoFont);
     mygl_font->drawGLtextRaw(3, noteLabels[i].y - 4, noteLabels[i].label);
     mygl_font->drawGLtextRaw(width() - noteLabelOffset + 3, noteLabels[i].y - 4, noteLabels[i].label);
   }
@@ -601,14 +598,11 @@ void VibratoWidget::doUpdate()
               int timeAtZero = beginningOfNote + smoothDelay;
               float scaleX = (offset - timeAtZero) / float(2 * smoothDelay);
               float pitchAtZero = active->dataAtChunk(myStartChunk)->getPitch();
-              //float pitchAt2SmoothDelay = pitchLookupUsed.at(beginningOfNote + 3*smoothDelay);
               int smoothDelayPos3 = std::min(beginningOfNote + 3*smoothDelay, (int)pitchLookupUsed.size()-1);
               if(smoothDelayPos3 >= 0) {
                 float pitchAt2SmoothDelay = pitchLookupUsed.at(smoothDelayPos3);
                 y = halfHeight + (pitchAtZero + scaleX * (pitchAt2SmoothDelay - pitchAtZero) - avgPitch) * zoomFactorYx100;
               } else { y = 0; }
-            //} else if (offset > endOfNote) {
-            //  y = halfHeight + (pitchLookupUsed.at(endOfNote) - avgPitch) * zoomFactorYx100;
             } else {
               offset = std::min(offset, pitchLookupUsedSizeLimit);
               y = halfHeight + (pitchLookupUsed.at(offset) - avgPitch) * zoomFactorYx100;

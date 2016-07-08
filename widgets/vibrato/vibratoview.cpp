@@ -58,58 +58,6 @@ VibratoView::VibratoView( int viewID_, QWidget *parent )
 
   QSplitter *verticalSplitter = new QSplitter(Qt::Vertical);
 
-  // Top half
-  // First column: label + tuner + LEDs
-  //QGridLayout *tunerLayout = new QGridLayout;
-
-  // The label
-/*
-  QLabel *tunerLabel = new QLabel;
-  tunerLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-  tunerLabel->setText("Chromatic tuner");
-  tunerLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-  tunerLayout->addWidget(tunerLabel, 0, 0, 1, 9);
-  tunerLayout->setRowStretch(0, 0);
-*/
-
-  // The tuner
-/*
-  QFrame *tunerFrame = new QFrame;
-  tunerFrame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
-  QVBoxLayout *tunerFrameLayout = new QVBoxLayout;
-  vibratoTunerWidget = new VibratoTunerWidget(0);
-  tunerFrameLayout->addWidget(vibratoTunerWidget);
-  tunerFrameLayout->setMargin(0);
-  tunerFrameLayout->setSpacing(0);
-  tunerFrame->setLayout(tunerFrameLayout);
-  tunerLayout->addWidget(tunerFrame, 1, 0, 1, 9);
-  tunerLayout->setRowStretch(1, 1);
-
-  // The LEDs
-  QPixmap *ledBuffer = new QPixmap();
-  leds.push_back(new LEDIndicator(ledBuffer, 0, "A"));
-  leds.push_back(new LEDIndicator(ledBuffer, 0, "B"));
-  leds.push_back(new LEDIndicator(ledBuffer, 0, "C"));
-  leds.push_back(new LEDIndicator(ledBuffer, 0, "D"));
-  leds.push_back(new LEDIndicator(ledBuffer, 0, "E"));
-  leds.push_back(new LEDIndicator(ledBuffer, 0, "F"));
-  leds.push_back(new LEDIndicator(ledBuffer, 0, "G"));
-  leds.push_back(new LEDIndicator(ledBuffer, 0, "#"));
-  // Add the leds for note names into the positions (2, 0) to (2, 6)
-  for (int n = 0; n < 7; n++) {
-    tunerLayout->addWidget(leds.at(n), 2, n);
-  }
-  // (2, 7) is blank
-  // Add the flat led at (2, 8)
-  tunerLayout->addWidget(leds.at(7), 2, 8);
-  tunerLayout->setRowStretch(2, 0);
-
-  tunerLayout->setMargin(1);
-  tunerLayout->setSpacing(1);
-
-  QWidget *topWidget1 = new QWidget;
-  topWidget1->setLayout(tunerLayout);
-*/
 
   // Second column: Label + speedwidget + button
   QGridLayout *speedLayout = new QGridLayout;
@@ -136,17 +84,6 @@ VibratoView::VibratoView( int viewID_, QWidget *parent )
   speedLayout->setRowStretch(1, 1);
 
   // The button
-/*
-  QPushButton *usePronyButton = new QPushButton("Prony");
-  usePronyButton->setCheckable(true);
-  usePronyButton->setMinimumWidth(30);
-  usePronyButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-  usePronyButton->setFocusPolicy(Qt::NoFocus);
-  usePronyButton->click();
-  QToolTip::add(usePronyButton, "Switch between minmax values and Prony values");
-  speedLayout->addWidget(usePronyButton, 2, 0, 1, 1);
-  speedLayout->setRowStretch(0, 0);
-*/
   speedLayout->setMargin(1);
   speedLayout->setSpacing(1);
 
@@ -179,29 +116,6 @@ VibratoView::VibratoView( int viewID_, QWidget *parent )
   circleLayout->addWidget(circleFrame, 1, 0, 1, 2);
   circleLayout->setRowStretch(1, 1);
 
-  // The vertical slider (for selecting type)
-/*
-  QSlider *vibratoCircleTypeSlider = new QSlider(Qt::Vertical);
-  vibratoCircleTypeSlider->setRange(1, 5);
-  vibratoCircleTypeSlider->setValue(vibratoCircleWidget->getType());
-  vibratoCircleTypeSlider->setFocusPolicy(Qt::NoFocus);
-  vibratoCircleTypeSlider->setTickPosition(QSlider::TicksRight);
-  vibratoCircleTypeSlider->setTickInterval(1);
-  vibratoCircleTypeSlider->setInvertedAppearance(true);
-  QToolTip::add(vibratoCircleTypeSlider, "Select type of vibrato circle");
-  circleLayout->addWidget(vibratoCircleTypeSlider, 1, 1, 1, 1);
-  circleLayout->setRowStretch(0, 0);
-*/
-  // The horizontal slider (for accuracy)
-/*
-  QSlider *vibratoCircleAccuracySlider = new QSlider(Qt::Horizontal);
-  vibratoCircleAccuracySlider->setRange(1, 50);
-  vibratoCircleAccuracySlider->setValue(10);
-  vibratoCircleAccuracySlider->setFocusPolicy(Qt::NoFocus);
-  QToolTip::add(vibratoCircleAccuracySlider, "Set accuracy of vibrato circle");
-  circleLayout->addWidget(vibratoCircleAccuracySlider, 2, 0, 1, 1);
-  circleLayout->setRowStretch(0, 0);
-*/
   circleLayout->setMargin(1);
   circleLayout->setSpacing(1);
 
@@ -291,7 +205,6 @@ VibratoView::VibratoView( int viewID_, QWidget *parent )
   topWidget4->setLayout(periodLayout);
 
   QSplitter *topSplitter = new QSplitter(Qt::Horizontal);
-  //topSplitter->addWidget(topWidget1);
   topSplitter->addWidget(topWidget2);
   topSplitter->setStretchFactor(0, 10);
   topSplitter->addWidget(topWidget3);
@@ -391,15 +304,10 @@ VibratoView::VibratoView( int viewID_, QWidget *parent )
   setLayout(mainLayout);
 
   // Make signal/slot connections
-  //connect(gdata, SIGNAL(onChunkUpdate()), vibratoTunerWidget, SLOT(doUpdate()));
-  //connect(vibratoTunerWidget, SIGNAL(ledSet(int, bool)), this, SLOT(setLed(int, bool)));
 
   connect(gdata, SIGNAL(onChunkUpdate()), vibratoSpeedWidget, SLOT(doUpdate()));
-  //connect(usePronyButton, SIGNAL(toggled(bool)), vibratoSpeedWidget, SLOT(setUseProny(bool)));
 
   connect(gdata, SIGNAL(onChunkUpdate()), vibratoCircleWidget, SLOT(doUpdate()));
-  //connect(vibratoCircleAccuracySlider, SIGNAL(valueChanged(int)), vibratoCircleWidget, SLOT(setAccuracy(int)));
-  //connect(vibratoCircleTypeSlider, SIGNAL(valueChanged(int)), vibratoCircleWidget, SLOT(setType(int)));
 
   connect(gdata, SIGNAL(onChunkUpdate()), vibratoPeriodWidget, SLOT(doUpdate()));
 
@@ -430,9 +338,3 @@ VibratoView::~VibratoView()
   delete vibratoWidget;
 }
 
-/*
-void VibratoView::setLed(int index, bool value)
-{
-  leds[index]->setOn(value);
-}
-*/

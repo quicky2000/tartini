@@ -74,7 +74,6 @@ void VibratoTunerWidget::resizeGL(int w, int h)
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   gluOrtho2D(0, w, 0, h);
-  //glMatrixMode(GL_MODELVIEW);
 
   // Calculate the dial with the new width & height
   const float halfWidth = 0.5 * width();
@@ -238,32 +237,6 @@ void VibratoTunerWidget::doUpdate(double thePitch)
   if (active) {
     AnalysisData *data = active->dataAtCurrentChunk();
     if(data && active->isVisibleNote(data->getNoteIndex()) && active->isLabelNote(data->getNoteIndex())) {
-/*
-      large_vector<float> pitchLookupUsed = active->pitchLookupSmoothed;
-      int smoothDelay = active->pitchBigSmoothingFilter->delay();
-
-      float myPitch = 0.0;
-      const uint pitchLookupUsedSizeLimit = pitchLookupUsed.size() - 1;
-      const uint endOfNote = note->endChunk() * active->framesPerChunk() - 1;
-      if ((active->doingDetailedPitch()) && (active->pitchLookupSmoothed.size() > 0)) {
-        // Detailed pitch information available, determine pitch using this info
-        uint offset = active->currentChunk() * active->framesPerChunk() + smoothDelay;
-        if (offset > endOfNote) {
-          myPitch = pitchLookupUsed.at(endOfNote);
-        } else {
-          uint intTime = std::min(offset, pitchLookupUsedSizeLimit);
-          myPitch = pitchLookupUsed.at(intTime);
-        }
-      } else {
-        // No detailed pitch information available, determine pitch using the chunkdata
-        myPitch = active->dataAtCurrentChunk()->pitch;
-      }
-
-      // We can work out how many semitones from A the note is
-      closePitch = toInt(myPitch);
-      isPitchBlackNote = isBlackNote(closePitch);
-      needleValue = 100 * (myPitch - float(closePitch));
-*/
     }
   }
 

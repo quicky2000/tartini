@@ -84,7 +84,6 @@ void VibratoSpeedWidget::resizeGL(int w, int h)
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   gluOrtho2D(0, w, 0, h);
-  //glMatrixMode(GL_MODELVIEW);
 
   const float halfWidth = 0.5 * width();
   const float halfHeight = 0.5 * height();
@@ -373,7 +372,6 @@ void VibratoSpeedWidget::doUpdate()
   int currentNoteNumber = -1;
 
   if(active) {
-  //if ((active) && (active->doingDetailedPitch()) && (active->pitchLookupSmoothed.size() > 0)) {
     AnalysisData *data;
     if(gdata->getSoundMode() & SOUND_REC) data = active->dataAtChunk(active->chunkAtCurrentTime() - active->pronyDelay());
     else data = active->dataAtCurrentChunk();
