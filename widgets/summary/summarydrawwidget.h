@@ -30,30 +30,30 @@
 
 #include <map>
 
-class SummaryDrawWidget : public DrawWidget {
+class SummaryDrawWidget: public DrawWidget
+{
   Q_OBJECT
 
   public:
-    SummaryDrawWidget(QWidget *parent);
-    virtual ~SummaryDrawWidget();
+  SummaryDrawWidget(QWidget * parent);
+  virtual ~SummaryDrawWidget(void);
 
-    void paintEvent( QPaintEvent * );
+  void paintEvent(QPaintEvent *);
 
-    void mousePressEvent( QMouseEvent *e );
-    void mouseMoveEvent( QMouseEvent *e );
-    void mouseReleaseEvent( QMouseEvent *e );
-    void wheelEvent( QWheelEvent *e);
+  void mousePressEvent(QMouseEvent * e);
+  void mouseMoveEvent(QMouseEvent * e);
+  void mouseReleaseEvent(QMouseEvent * e);
+  void wheelEvent(QWheelEvent *e);
 
-  private:
-    QPixmap *buffer;
+ private:
+  QPixmap * buffer;
 
-    bool mouseDown;
-    int mouseX, mouseY;
-    double clickTime, clickNote;
-    double clickCurrentTimeDiff, clickViewBottomDiff;
-    double scaler, downScaler;
-    int clickMode;
+  bool mouseDown;
+  int mouseX, mouseY;
+  double clickTime, clickNote;
+  double clickCurrentTimeDiff, clickViewBottomDiff;
+  double scaler, downScaler;
+  int clickMode;
 };
-
-
-#endif
+#endif // SUMMARYDRAWWIDGET_H
+// EOF

@@ -19,23 +19,25 @@
 
 #include "viewwidget.h"
 #include <QResizeEvent>
+
 class SummaryDrawWidget;
 
-class SummaryView : public ViewWidget {
+class SummaryView: public ViewWidget
+{
   Q_OBJECT
 
   public:
-    SummaryView(int viewID_, QWidget *parent = 0);
-    virtual ~SummaryView();
+  SummaryView(int viewID_, QWidget *parent = NULL);
+  virtual ~SummaryView(void);
 
-    void resizeEvent(QResizeEvent *);
+  void resizeEvent(QResizeEvent *);
 
-    QSize sizeHint() const { return QSize(512, 256); }
+  QSize sizeHint(void) const;
 
   private:
-    SummaryDrawWidget *summaryDrawWidget;
+  SummaryDrawWidget * summaryDrawWidget;
 
 };
+#endif // SUMMARYVIEW_H
+// EOF
 
-
-#endif

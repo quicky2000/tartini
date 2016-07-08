@@ -19,19 +19,30 @@
 #include "summarydrawwidget.h"
 #include <QResizeEvent>
 
-SummaryView::SummaryView(int viewID_, QWidget *parent)
- : ViewWidget( viewID_, parent)
+//------------------------------------------------------------------------------
+SummaryView::SummaryView(int viewID_, QWidget *parent):
+  ViewWidget( viewID_, parent)
 {
   summaryDrawWidget = new SummaryDrawWidget(this);
   summaryDrawWidget->show();
 }
 
-SummaryView::~SummaryView()
+//------------------------------------------------------------------------------
+SummaryView::~SummaryView(void)
 {
   delete summaryDrawWidget;
 }
 
+//------------------------------------------------------------------------------
 void SummaryView::resizeEvent(QResizeEvent *)
 {
   summaryDrawWidget->resize(size());
 }
+ 
+//------------------------------------------------------------------------------
+QSize SummaryView::sizeHint(void) const
+{
+  return QSize(512, 256);
+}
+
+// EOF
