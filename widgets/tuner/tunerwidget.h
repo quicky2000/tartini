@@ -4,6 +4,8 @@
     begin                : Mon Jan 10 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,7 +18,6 @@
 #define TUNERWIDGET_H
 
 #include "drawwidget.h"
-//Added by qt3to4:
 #include <QPixmap>
 #include <QPaintEvent>
 
@@ -31,9 +32,6 @@ class TunerWidget : public DrawWidget {
     virtual ~TunerWidget();
 
     void paintEvent( QPaintEvent * );
-    //virtual int heightForWidth( int width ) const;
-
-    //QSize sizeHint() const { return QSize(100, 100); }
     QSize minimumSizeHint() const { return QSize(100, 75); }
 
     void setValue(float v, float intensity);

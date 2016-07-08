@@ -4,6 +4,8 @@
     begin                : Mon Jan 10 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -14,7 +16,6 @@
  ***************************************************************************/
 #include <qpixmap.h>
 #include <qpainter.h>
-//Added by qt3to4:
 #include <Q3PointArray>
 #include <QPaintEvent>
 
@@ -35,12 +36,6 @@ TunerWidget::~TunerWidget()
 {
 }
 
-/*
-int TunerWidget::heightForWidth( int width ) const
-{
-  return width;
-}
-*/
 void TunerWidget::paintEvent( QPaintEvent * )
 {
   beginDrawing();
@@ -88,16 +83,13 @@ void TunerWidget::paintEvent( QPaintEvent * )
 
   {// Draw the semicircle
     p.setBrush(Qt::white);  // Fill colour
-    //p.drawPie(width() / 2 - radius, 0, 2 * radius, 2 * radius, toInt((90 - thetaDeg) * 16), toInt(2*thetaDeg*16));
     p.drawPie(toInt(halfWidth - radius), 0, toInt(2.0 * radius), toInt(2.0 * radius), toInt((90 - thetaDeg) * 16), toInt(2*thetaDeg*16));
-    //p.setBrush(colorGroup().background());
     p.drawArc(toInt(halfWidth - (radius/2.0)), toInt(radius/2.0), toInt(radius), toInt(radius), toInt((90 - thetaDeg) * 16), toInt(2*thetaDeg*16));
   }
  
   p.setPen(colorGroup().foreground());
   p.setBrush(colorGroup().foreground());
   
-  //p.drawEllipse(width() / 2 - halfKnobWidth, radius- halfKnobWidth, 2*halfKnobWidth, 2*halfKnobWidth);
     
   double step = (2 * theta) / 12.0;
   double stop = rho + (2 * theta) - (step / 2);
@@ -106,7 +98,6 @@ void TunerWidget::paintEvent( QPaintEvent * )
       int x = toInt(halfWidth + radius * cos(i));
       int y = toInt(radius - radius * sin(i));
       QPoint start(x, y);
-      // p = start + center *t
       double t = 0.05; //0.025;
       p.drawLine(start, start + t * (center - start));
     }
@@ -151,7 +142,6 @@ void TunerWidget::paintEvent( QPaintEvent * )
     
     QPoint knobLeft = center - QPoint(halfKnobWidth, 0);
     QPoint knobRight = center + QPoint(halfKnobWidth, 0);
-    //QPoint knobRight(width() / 2 + halfKnobWidth, radius);
   
     if(intensity_ > 0.0) {
       p.setBrush(colorBetween(Qt::white, Qt::red, intensity_));
