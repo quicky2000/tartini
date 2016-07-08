@@ -56,10 +56,7 @@ class ScoreSegmentIterator
   bool _isValid;
 
  public :
-  ScoreSegmentIterator(ScoreWidget *scoreWidget, Channel *channel)
-    {
-      reset(scoreWidget, channel);
-    }
+  inline ScoreSegmentIterator(ScoreWidget *scoreWidget, Channel *channel);
   /**
      Initalise the iterator to just before the first segment
      @param scoreWidget The ScoreWidget to iterate through it's segments
@@ -71,52 +68,22 @@ class ScoreSegmentIterator
      @return true, if their was another score segment
   */
   bool next(void);
-  bool isValid(void)
-  {
-    return _isValid;
-  }
+  inline bool isValid(void);
 
-  double leftTime(void)
-  {
-    return _leftTime;
-  }
-  double rightTime(void)
-  {
-    return _rightTime;
-  }
-  double leftX(void)
-  {
-    return _leftX;
-  }
-  int lineCenterY(void)
-  {
-    return _lineCenterY;
-  }
-  int staveTop(void)
-  {
-    return _lineCenterY - halfStaveHeight;
-  }
-  int staveBottom(void)
-  {
-    return staveTop() + staveHeight;
-  }
+  inline double leftTime(void);
+  inline double rightTime(void);
+  inline double leftX(void);
+  inline int lineCenterY(void);
+  inline int staveTop(void);
+  inline int staveBottom(void);
   double widthX(void);
-  double curTime(void)
-  {
-    return _curTime;
-  }
-  int curPage(void)
-  {
-    return _curPage;
-  }
-  int numPages(void)
-  {
-    return _numPages;
-  }
-  bool contains(double t)
-  {
-    return (t >= _leftTime && t <= _rightTime);
-  }
+  inline double curTime(void);
+  inline int curPage(void);
+  inline int numPages(void);
+  inline bool contains(double t);
 };
+
+#include "scoresegmentiterator.hpp"
+
 #endif // SCORESEGMENTITERATOR_H
 // EOF

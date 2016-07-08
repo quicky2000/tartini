@@ -176,8 +176,10 @@ HEADERS += main.h \
   widgets/debugview/debugwidget.h \
   widgets/debugview/debugview.h \
   widgets/score/scorewidget.h \
+  widgets/score/scorewidget.hpp \
   widgets/score/scoreview.h \
   widgets/score/scoresegmentiterator.h \
+  widgets/score/scoresegmentiterator.hpp \
   dialogs/tartinisettingsdialog.h \
   widgets/vibrato/vibratowidget.h \
   widgets/vibrato/vibratoview.h \

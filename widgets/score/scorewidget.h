@@ -67,62 +67,23 @@ class ScoreWidget : public DrawWidget
    */
   void drawStaveSegment(int leftX, int lineCenterY, int widthX);
   void paintEvent(QPaintEvent * );
-  int getStaveHeight(void)
-  {
-    return toInt(_scaleY * (_showBaseClef ? 16 : 8));
-  }
-  int getStaveCenterY(void)
-  {
-    return toInt(_scaleY * (_showBaseClef ? 8 : 7));
-  }
-  QSize sizeHint(void) const
-  {
-    return QSize(300, 200);
-  }
+  inline int getStaveHeight(void);
+  inline int getStaveCenterY(void);
+  inline QSize sizeHint(void) const;
   NoteType getNoteType(double noteLength);
 
-  double scaleX(void)
-  {
-    return _scaleX;
-  }
-  double scaleY(void)
-  {
-    return _scaleY;
-  }
+  inline double scaleX(void);
+  inline double scaleY(void);
 
   public slots:
-  void setScaleX(double x)
-  {
-    _scaleX = x;
-  }
-  void setScaleY(double y)
-  {
-    _scaleY = y;
-  }
-  void setSharpsMode(int mode)
-  {
-    _useFlats = (mode!=0);
-  }
-  void setNotesMode(int mode)
-  {
-    _showNotes = (mode==0);
-  }
-  void setClefMode(int mode)
-  {
-    _showBaseClef = (mode==0);
-  }
-  void setOpaqueMode(int mode)
-  {
-    _showOpaqueNotes = (mode!=0);
-  }
-  void setTransposeLevel(int index)
-  {
-    _pitchOffset = (index - 2) * -12;
-  }
-  void setShowAllMode(int mode)
-  {
-    _showAllMode = (mode!=0);
-  }
+  inline void setScaleX(double x);
+  inline void setScaleY(double y);
+  inline void setSharpsMode(int mode);
+  inline void setNotesMode(int mode);
+  inline void setClefMode(int mode);
+  inline void setOpaqueMode(int mode);
+  inline void setTransposeLevel(int index);
+  inline void setShowAllMode(int mode);
 
  private:
   void mousePressEvent(QMouseEvent *e);
@@ -154,6 +115,8 @@ class ScoreWidget : public DrawWidget
   bool _mouseDown;
   friend class ScoreSegmentIterator;
 };
+
+#include "scorewidget.hpp"
 
 #endif // SCOREWIDGET_H
 // EOF
