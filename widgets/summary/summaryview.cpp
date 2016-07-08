@@ -4,6 +4,8 @@
     begin                : Fri Dec 10 2004
     copyright            : (C) 2004-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -14,16 +16,12 @@
  ***************************************************************************/
 
 #include "summaryview.h"
-//#include "viewwidget.h"
 #include "summarydrawwidget.h"
-//Added by qt3to4:
 #include <QResizeEvent>
 
 SummaryView::SummaryView(int viewID_, QWidget *parent)
  : ViewWidget( viewID_, parent)
 {
-  //setCaption("Summary View");
-
   summaryDrawWidget = new SummaryDrawWidget(this);
   summaryDrawWidget->show();
 }

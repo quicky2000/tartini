@@ -4,6 +4,8 @@
     begin                : Fri Dec 10 2004
     copyright            : (C) 2004-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -15,14 +17,12 @@
 
 #include "summarydrawwidget.h"
 #include "gdata.h"
-//#include "mycolor.h"
 #include "channel.h"
 
 #include <qthread.h>
 
 #include <qpainter.h>
 #include <qpixmap.h>
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <QPaintEvent>
@@ -47,10 +47,6 @@ void SummaryDrawWidget::paintEvent( QPaintEvent * )
 
   //if((right - left) <= 0) return;
   View & view = gdata->getView();
-/*  if (view->totalTime() == 0) {
-    buffer = new QPixmap(size());
-    buffer->fill(myBackgroundColor);
-    bitBlt(this, 0, 0, buffer); */
   if(gdata->totalTime() < 0) return;
 
   double timeRatio = double(width()) / gdata->totalTime();
@@ -63,7 +59,6 @@ void SummaryDrawWidget::paintEvent( QPaintEvent * )
     ch = gdata->getChannelAt(j);
     if(!ch->isVisible()) continue;
 
-    //drawChannel(ch, p, view.leftTime(), (view.totalTime() / (double) width()), 0.0f, (double) view.topNote() / (double) height(), DRAW_VIEW_SUMMARY);
     drawChannel(*this, ch, p, gdata->leftTime(), view.currentTime(), (gdata->totalTime() / (double) width()), 0.0f, (double) gdata->topPitch() / (double) height(), DRAW_VIEW_SUMMARY);
   }
 
@@ -74,8 +69,6 @@ void SummaryDrawWidget::paintEvent( QPaintEvent * )
 
   //draw the current time line
   p.setPen(QPen(colorGroup().foreground(), 1));
-  //p.moveTo(int((gdata->leftTime()+view.currentTime())*timeRatio), 0);
-  //p.lineTo(int((gdata->leftTime()+view.currentTime())*timeRatio), height()-1);
   p.drawLine(int((gdata->leftTime()+view.currentTime())*timeRatio), 0, 
              int((gdata->leftTime()+view.currentTime())*timeRatio), height()-1);
 
@@ -115,10 +108,6 @@ void SummaryDrawWidget::mouseMoveEvent( QMouseEvent *e )
 {
   if(mouseDown && clickMode == 1) {
     View & view = gdata->getView();
-  	//double newScaler = downScaler * ((double(height()) - e->y()) / (double(height()) - mouseY));
-  	//if(newScaler < 1.0) newScaler = 1.0;
-  	//if(newScaler > 1000.0) newScaler = 1000.0;
-  	//scaler = newScaler;
     double timeRatio = double(width()) / gdata->totalTime();
     double noteRatio = double(height()) / (100.0 / scaler);
 

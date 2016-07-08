@@ -4,6 +4,8 @@
     begin                : Fri Dec 10 2004
     copyright            : (C) 2004-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -22,19 +24,11 @@
 #include <qpixmap.h>
 #include <qevent.h>
 #include <qobject.h>
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <QPaintEvent>
 
 #include <map>
-
-// Forward declarations of classes the h file doesn't need to know specifics about
-/*class QPixmap;
-class QPaintEvent;
-class QMouseEvent;
-*/
-
 
 class SummaryDrawWidget : public DrawWidget {
   Q_OBJECT
