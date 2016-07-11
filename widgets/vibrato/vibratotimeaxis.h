@@ -17,37 +17,40 @@
 
 #include "drawwidget.h"
 
-class VibratoTimeAxis : public DrawWidget {
+class VibratoTimeAxis: public DrawWidget
+{
   Q_OBJECT
 
-  public:
-    VibratoTimeAxis(QWidget *parent, int nls);
-    virtual ~VibratoTimeAxis();
+ public:
+  VibratoTimeAxis(QWidget * parent, int nls);
+  virtual ~VibratoTimeAxis(void);
 
-    QSize sizeHint() const { return QSize(100, 20); }
+  QSize sizeHint(void) const;
 
-    void paintEvent( QPaintEvent * );
-    void resizeEvent( QResizeEvent * );
+  void paintEvent(QPaintEvent *);
+  void resizeEvent( QResizeEvent *);
 
-  private:
-    //data goes here
-    int noteLabelOffset; // The horizontal space in pixels a note label requires
+ private:
+  //data goes here
+  /**
+     The horizontal space in pixels a note label requires
+  */
+  int noteLabelOffset;
 
-    int startChunkToUse;
-    int currentChunkToUse;
-    int endChunkToUse;
-    double noteLengthToUse;
-    int windowOffsetToUse;
+  int startChunkToUse;
+  int currentChunkToUse;
+  int endChunkToUse;
+  double noteLengthToUse;
+  int windowOffsetToUse;
 
-    int prevCurrentChunk;
-    int prevWindowOffset;
+  int prevCurrentChunk;
+  int prevWindowOffset;
 
-    double zoomFactorX;
+  double zoomFactorX;
 
-  public slots:
-    void doUpdate();
-    void setZoomFactorX(double x);
+ public slots:
+  void doUpdate(void);
+  void setZoomFactorX(double x);
 };
-
-
-#endif
+#endif // VIBRATOTIMEAXIS_H
+// EOF

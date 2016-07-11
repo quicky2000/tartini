@@ -46,24 +46,24 @@
 #include <QSlider>
 #include <qwt_wheel.h>
 
-
-VibratoView::VibratoView( int viewID_, QWidget *parent )
- : ViewWidget( viewID_, parent)
+//------------------------------------------------------------------------------
+VibratoView::VibratoView( int viewID_, QWidget * parent):
+  ViewWidget( viewID_, parent)
 {
   int noteLabelOffset = 28;
 
   setCaption("Vibrato View");
 
-  QGridLayout *mainLayout = new QGridLayout;
+  QGridLayout * mainLayout = new QGridLayout;
 
-  QSplitter *verticalSplitter = new QSplitter(Qt::Vertical);
+  QSplitter * verticalSplitter = new QSplitter(Qt::Vertical);
 
 
   // Second column: Label + speedwidget + button
-  QGridLayout *speedLayout = new QGridLayout;
+  QGridLayout * speedLayout = new QGridLayout;
 
   // The label
-  QLabel *speedLabel = new QLabel;
+  QLabel * speedLabel = new QLabel;
   speedLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   speedLabel->setText("Vibrato speed & width");
   speedLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -71,9 +71,9 @@ VibratoView::VibratoView( int viewID_, QWidget *parent )
   speedLayout->setRowStretch(0, 0);
 
   // The speedwidget
-  QFrame *speedFrame = new QFrame;
+  QFrame * speedFrame = new QFrame;
   speedFrame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
-  QVBoxLayout *speedFrameLayout = new QVBoxLayout;
+  QVBoxLayout * speedFrameLayout = new QVBoxLayout;
   vibratoSpeedWidget = new VibratoSpeedWidget(0);
   vibratoSpeedWidget->setWhatsThis("Indicates the instantaneous speed and peek-to-peek amplitude of the vibrato. Note: 100 cents = 1 semi-tone (even tempered).");
   speedFrameLayout->addWidget(vibratoSpeedWidget);
@@ -87,14 +87,14 @@ VibratoView::VibratoView( int viewID_, QWidget *parent )
   speedLayout->setMargin(1);
   speedLayout->setSpacing(1);
 
-  QWidget *topWidget2 = new QWidget;
+  QWidget * topWidget2 = new QWidget;
   topWidget2->setLayout(speedLayout);
 
   // Third column: Label + circlewidget + horizontal slider
-  QGridLayout *circleLayout = new QGridLayout;
+  QGridLayout * circleLayout = new QGridLayout;
 
   // The label
-  QLabel *circleLabel = new QLabel;
+  QLabel * circleLabel = new QLabel;
   circleLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   circleLabel->setText("The Vibrato circle");
   circleLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -112,21 +112,20 @@ VibratoView::VibratoView( int viewID_, QWidget *parent )
   circleFrameLayout->setMargin(0);
   circleFrameLayout->setSpacing(0);
   circleFrame->setLayout(circleFrameLayout);
-  //circleLayout->addWidget(circleFrame, 1, 0, 1, 1);
   circleLayout->addWidget(circleFrame, 1, 0, 1, 2);
   circleLayout->setRowStretch(1, 1);
 
   circleLayout->setMargin(1);
   circleLayout->setSpacing(1);
 
-  QWidget *topWidget3 = new QWidget;
+  QWidget * topWidget3 = new QWidget;
   topWidget3->setLayout(circleLayout);
 
   // Fourth column: Label + periodwidget + buttons for periodwidget
   QGridLayout *periodLayout = new QGridLayout;
 
   // The label
-  QLabel *periodLabel = new QLabel;
+  QLabel * periodLabel = new QLabel;
   periodLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
   periodLabel->setText("Vibrato period view");
   periodLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -134,9 +133,9 @@ VibratoView::VibratoView( int viewID_, QWidget *parent )
   periodLayout->setRowStretch(0, 0);
 
   // The periodwidget
-  QFrame *periodFrame = new QFrame;
+  QFrame * periodFrame = new QFrame;
   periodFrame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
-  QVBoxLayout *periodFrameLayout = new QVBoxLayout;
+  QVBoxLayout * periodFrameLayout = new QVBoxLayout;
   vibratoPeriodWidget = new VibratoPeriodWidget(0);
   vibratoPeriodWidget->setWhatsThis("A detailed view of the current vibrato period. You can turn on and off some different options with the buttons. ");
   periodFrameLayout->addWidget(vibratoPeriodWidget);
@@ -147,7 +146,7 @@ VibratoView::VibratoView( int viewID_, QWidget *parent )
   periodLayout->setRowStretch(1, 1);
 
   // The buttons
-  QPushButton *smoothedPeriodsButton = new QPushButton("SP");
+  QPushButton * smoothedPeriodsButton = new QPushButton("SP");
   smoothedPeriodsButton->setCheckable(true);
   smoothedPeriodsButton->setMinimumWidth(30);
   smoothedPeriodsButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -156,7 +155,7 @@ VibratoView::VibratoView( int viewID_, QWidget *parent )
   QToolTip::add(smoothedPeriodsButton, "Use smoothed periods");
   periodLayout->addWidget(smoothedPeriodsButton, 2, 0, 1, 1);
 
-  QPushButton *drawSineReferenceButton = new QPushButton("DSR");
+  QPushButton * drawSineReferenceButton = new QPushButton("DSR");
   drawSineReferenceButton->setCheckable(true);
   drawSineReferenceButton->setMinimumWidth(30);
   drawSineReferenceButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -164,7 +163,7 @@ VibratoView::VibratoView( int viewID_, QWidget *parent )
   QToolTip::add(drawSineReferenceButton, "Draw the reference sinewave");
   periodLayout->addWidget(drawSineReferenceButton, 2, 1, 1, 1);
 
-  QPushButton *sineStyleButton = new QPushButton("SS");
+  QPushButton * sineStyleButton = new QPushButton("SS");
   sineStyleButton->setCheckable(true);
   sineStyleButton->setMinimumWidth(30);
   sineStyleButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -172,7 +171,7 @@ VibratoView::VibratoView( int viewID_, QWidget *parent )
   QToolTip::add(sineStyleButton, "Use sine style: /\\/ instead of cosine style: \\/");
   periodLayout->addWidget(sineStyleButton, 2, 2, 1, 1);
 
-  QPushButton *drawPrevPeriodsButton = new QPushButton("DPP");
+  QPushButton * drawPrevPeriodsButton = new QPushButton("DPP");
   drawPrevPeriodsButton->setCheckable(true);
   drawPrevPeriodsButton->setMinimumWidth(30);
   drawPrevPeriodsButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -180,7 +179,7 @@ VibratoView::VibratoView( int viewID_, QWidget *parent )
   QToolTip::add(drawPrevPeriodsButton, "Draw previous periods");
   periodLayout->addWidget(drawPrevPeriodsButton, 2, 3, 1, 1);
 
-  QPushButton *periodScalingButton = new QPushButton("PS");
+  QPushButton * periodScalingButton = new QPushButton("PS");
   periodScalingButton->setCheckable(true);
   periodScalingButton->setMinimumWidth(30);
   periodScalingButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -188,7 +187,7 @@ VibratoView::VibratoView( int viewID_, QWidget *parent )
   QToolTip::add(periodScalingButton, "Scale previous periods to the current period");
   periodLayout->addWidget(periodScalingButton, 2, 4, 1, 1);
 
-  QPushButton *drawComparisonButton = new QPushButton("DC");
+  QPushButton * drawComparisonButton = new QPushButton("DC");
   drawComparisonButton->setCheckable(true);
   drawComparisonButton->setMinimumWidth(30);
   drawComparisonButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -201,10 +200,10 @@ VibratoView::VibratoView( int viewID_, QWidget *parent )
   periodLayout->setMargin(1);
   periodLayout->setSpacing(1);
 
-  QWidget *topWidget4 = new QWidget;
+  QWidget * topWidget4 = new QWidget;
   topWidget4->setLayout(periodLayout);
 
-  QSplitter *topSplitter = new QSplitter(Qt::Horizontal);
+  QSplitter * topSplitter = new QSplitter(Qt::Horizontal);
   topSplitter->addWidget(topWidget2);
   topSplitter->setStretchFactor(0, 10);
   topSplitter->addWidget(topWidget3);
@@ -215,16 +214,16 @@ VibratoView::VibratoView( int viewID_, QWidget *parent )
   verticalSplitter->addWidget(topSplitter);
 
   // Bottom half
-  QWidget *bottomWidget = new QWidget;
-  QGridLayout *bottomLayout = new QGridLayout;
+  QWidget * bottomWidget = new QWidget;
+  QGridLayout * bottomLayout = new QGridLayout;
 
   // The timeaxis
   vibratoTimeAxis = new VibratoTimeAxis(0, noteLabelOffset);
 
   // The drawing object for displaying vibrato notes
-  QFrame *vibratoFrame = new QFrame;
+  QFrame * vibratoFrame = new QFrame;
   vibratoFrame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
-  QVBoxLayout *vibratoFrameLayout = new QVBoxLayout;
+  QVBoxLayout * vibratoFrameLayout = new QVBoxLayout;
   vibratoWidget = new VibratoWidget(0, noteLabelOffset);
   vibratoWidget->setWhatsThis("Shows the vibrato of the current note. "
     "Grey shading indicates the vibrato envelope. The black line indicates the center pitch. "
@@ -236,10 +235,10 @@ VibratoView::VibratoView( int viewID_, QWidget *parent )
   vibratoFrame->setLayout(vibratoFrameLayout);
 
   // The right side: vertical scrollwheel + vertical scrollbar
-  QGridLayout *bottomRightLayout = new QGridLayout;
+  QGridLayout * bottomRightLayout = new QGridLayout;
 
   // The vertical scrollwheel
-  QwtWheel *zoomWheelV = new QwtWheel;
+  QwtWheel * zoomWheelV = new QwtWheel;
   zoomWheelV->setOrientation(Qt::Vertical);
   zoomWheelV->setWheelWidth(14);
   zoomWheelV->setRange(0.3, 25.0, 0.1, 1);
@@ -249,7 +248,7 @@ VibratoView::VibratoView( int viewID_, QWidget *parent )
   bottomRightLayout->addWidget(zoomWheelV, 0, 0, 1, 1);
 
   // The vertical scrollbar
-  QScrollBar *scrollBarV = new QScrollBar(Qt::Vertical);
+  QScrollBar * scrollBarV = new QScrollBar(Qt::Vertical);
   scrollBarV->setRange(-250, 250);
   scrollBarV->setValue(0);
   scrollBarV->setPageStep(100);
@@ -261,10 +260,10 @@ VibratoView::VibratoView( int viewID_, QWidget *parent )
   bottomRightLayout->setSpacing(1);
 
   // The bottom side: dummy spacer + horizontal scrollwheel + resize grip
-  QGridLayout *bottomBottomLayout = new QGridLayout;
+  QGridLayout * bottomBottomLayout = new QGridLayout;
 
   // The dummy spacer
-  QLabel *dummyH = new QLabel;
+  QLabel * dummyH = new QLabel;
   bottomBottomLayout->addWidget(dummyH, 0, 0, 1, 4);
   bottomBottomLayout->setColumnStretch(0, 1);
 
@@ -279,7 +278,7 @@ VibratoView::VibratoView( int viewID_, QWidget *parent )
   bottomBottomLayout->addWidget(zoomWheelH, 0, 4, 1, 1);
 
   // The resize grip 
-  QSizeGrip *sizeGrip = new QSizeGrip(0);
+  QSizeGrip * sizeGrip = new QSizeGrip(0);
   sizeGrip->setFixedSize(15, 15);
   bottomBottomLayout->addWidget(sizeGrip, 0, 5, 1, 1);
 
@@ -333,8 +332,15 @@ VibratoView::VibratoView( int viewID_, QWidget *parent )
 
 }
 
-VibratoView::~VibratoView()
+//------------------------------------------------------------------------------
+VibratoView::~VibratoView(void)
 {
   delete vibratoWidget;
 }
 
+//------------------------------------------------------------------------------
+QSize VibratoView::sizeHint(void) const
+{
+  return QSize(500, 300);
+}
+// EOF

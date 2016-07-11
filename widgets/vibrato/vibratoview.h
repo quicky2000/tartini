@@ -25,25 +25,25 @@ class VibratoTimeAxis;
 class VibratoWidget;
 class LEDIndicator;
 
-class VibratoView : public ViewWidget {
+class VibratoView: public ViewWidget
+{
   Q_OBJECT
 
-  public:
-    VibratoView(int viewID_, QWidget *parent = 0);
-    virtual ~VibratoView();
+ public:
+  VibratoView(int viewID_, QWidget * parent = NULL);
+  virtual ~VibratoView(void);
 
-    QSize sizeHint() const { return QSize(500, 300); }
+  QSize sizeHint(void) const;
 
-    std::vector<LEDIndicator*> leds;
+  std::vector<LEDIndicator*> leds;
 
-  private:
-    VibratoSpeedWidget *vibratoSpeedWidget;
-    VibratoPeriodWidget *vibratoPeriodWidget;
-    VibratoCircleWidget *vibratoCircleWidget;
-    VibratoTimeAxis *vibratoTimeAxis;
-    VibratoWidget *vibratoWidget;
+ private:
+  VibratoSpeedWidget * vibratoSpeedWidget;
+  VibratoPeriodWidget * vibratoPeriodWidget;
+  VibratoCircleWidget * vibratoCircleWidget;
+  VibratoTimeAxis * vibratoTimeAxis;
+  VibratoWidget * vibratoWidget;
 
 };
-
-
-#endif
+#endif // VIBRATOVIEW_H
+// EOF

@@ -17,44 +17,45 @@
 
 #include <QGLWidget>
 
-class VibratoPeriodWidget : public QGLWidget {
+class VibratoPeriodWidget: public QGLWidget
+{
   Q_OBJECT
 
-  public:
-    VibratoPeriodWidget(QWidget *parent);
-    virtual ~VibratoPeriodWidget();
+ public:
+  VibratoPeriodWidget(QWidget * parent);
+  virtual ~VibratoPeriodWidget(void);
 
-    void initializeGL();
-    void resizeGL(int w, int h);
-    void paintGL();
+  void initializeGL(void);
+  void resizeGL(int w, int h);
+  void paintGL(void);
 
-    QSize minimumSizeHint() const { return QSize(100, 75); }
+  QSize minimumSizeHint(void) const;
 
-  private:
-    int prevLeftMinimumTime;
-    bool smoothedPeriods;
-    bool drawSineReference;
-    bool sineStyle;
-    bool drawPrevPeriods;
-    bool periodScaling;
-    bool drawComparison;
+ public slots:
+  void doUpdate(void);
+  void setSmoothedPeriods(bool value);
+  void setDrawSineReference(bool value);
+  void setSineStyle(bool value);
+  void setDrawPrevPeriods(bool value);
+  void setPeriodScaling(bool value);
+  void setDrawComparison(bool value);
 
-    GLuint sineReference;
-    GLuint previousPoly[5];
-    GLuint currentPeriod;
-    GLuint comparisonPoly;
-    GLuint comparisonReference;
+ private:
+  int prevLeftMinimumTime;
+  bool smoothedPeriods;
+  bool drawSineReference;
+  bool sineStyle;
+  bool drawPrevPeriods;
+  bool periodScaling;
+  bool drawComparison;
 
-    int lastPeriodToDraw;
+  GLuint sineReference;
+  GLuint previousPoly[5];
+  GLuint currentPeriod;
+  GLuint comparisonPoly;
+  GLuint comparisonReference;
 
-  public slots:
-    void doUpdate();
-    void setSmoothedPeriods(bool value);
-    void setDrawSineReference(bool value);
-    void setSineStyle(bool value);
-    void setDrawPrevPeriods(bool value);
-    void setPeriodScaling(bool value);
-    void setDrawComparison(bool value);
+  int lastPeriodToDraw;
 };
-
-#endif
+#endif // VIBRATOPERIODWIDGET_H
+// EOF

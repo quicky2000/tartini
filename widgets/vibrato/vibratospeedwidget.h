@@ -17,54 +17,56 @@
 
 #include <QGLWidget>
 
-class VibratoSpeedWidget : public QGLWidget {
+class VibratoSpeedWidget: public QGLWidget
+{
   Q_OBJECT
 
-  public:
-    VibratoSpeedWidget(QWidget *parent);
-    virtual ~VibratoSpeedWidget();
+ public:
+  VibratoSpeedWidget(QWidget * parent);
+  virtual ~VibratoSpeedWidget(void);
 
-    void initializeGL();
-    void resizeGL(int w, int h);
-    void paintGL();
+  void initializeGL(void);
+  void resizeGL(int w, int h);
+  void paintGL(void);
 
-    QSize minimumSizeHint() const { return QSize(100, 75); }
+  QSize minimumSizeHint(void) const;
 
-  private:
-    //data goes here
-    float speedValueToDraw, widthValueToDraw;
-    float prevVibratoSpeed, prevVibratoWidth;
+ public slots:
+  void doUpdate(void);
+  void setUseProny(bool value);
 
-    bool useProny;
+ private:
+  //data goes here
+  float speedValueToDraw, widthValueToDraw;
+  float prevVibratoSpeed, prevVibratoWidth;
 
-    QFont speedWidthFont;
+  bool useProny;
 
-    int widthLimit;
-    int prevNoteNumber;
+  QFont speedWidthFont;
 
-    float hzLabelX, hzLabelY;
-    float centsLabelX, centsLabelY;
+  int widthLimit;
+  int prevNoteNumber;
 
-    struct labelStruct {
-      QString label;
-      float x;
-      float y;
-    };
+  float hzLabelX, hzLabelY;
+  float centsLabelX, centsLabelY;
 
-    int speedLabelCounter;
-    labelStruct speedLabels[100];
+  struct labelStruct
+  {
+    QString label;
+    float x;
+    float y;
+  };
 
-    int widthLabelCounter;
-    labelStruct widthLabels[100];
+  int speedLabelCounter;
+  labelStruct speedLabels[100];
 
-    GLuint speedDial;
-    GLuint speedNeedle;
-    GLuint widthDial;
-    GLuint widthNeedle;
+  int widthLabelCounter;
+  labelStruct widthLabels[100];
 
-  public slots:
-    void doUpdate();
-    void setUseProny(bool value);
+  GLuint speedDial;
+  GLuint speedNeedle;
+  GLuint widthDial;
+  GLuint widthNeedle;
 };
-
-#endif
+#endif // VIBRATOSPEEDWIDGET_H
+// EOF

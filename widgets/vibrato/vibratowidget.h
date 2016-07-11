@@ -17,49 +17,56 @@
 
 #include <QGLWidget>
 
-class VibratoWidget : public QGLWidget {
+class VibratoWidget :public QGLWidget
+{
   Q_OBJECT
 
-  public:
-    VibratoWidget(QWidget *parent, int nls);
-    virtual ~VibratoWidget();
+ public:
+  VibratoWidget(QWidget * parent, int nls);
+  virtual ~VibratoWidget(void);
 
-    void initializeGL();
-    void resizeGL(int w, int h);
-    void paintGL();
+  void initializeGL(void);
+  void resizeGL(int w, int h);
+  void paintGL(void);
 
-    QSize sizeHint() const { return QSize(300, 100); }
+  QSize sizeHint(void) const;
 
-  private:
-    int noteLabelOffset; // The horizontal space in pixels a note label requires
-    double zoomFactorX;
-    double zoomFactorY;
-    int offsetY;
+ public slots:
+  void doUpdate(void);
+  void setZoomFactorX(double x);
+  void setZoomFactorY(double y);
+  void setOffsetY(int value);
 
-    QFont vibratoFont;
+ private:
+  /**
+     The horizontal space in pixels a note label requires
+  */
+  int noteLabelOffset;
+  double zoomFactorX;
+  double zoomFactorY;
+  int offsetY;
 
-    GLuint verticalPeriodBars;
-    GLuint verticalSeparatorLines;
-    GLuint referenceLines;
-    GLuint pronyWidthBand;
-    GLuint pronyAveragePitch;
-    GLuint vibratoPolyline;
-    GLuint currentWindowBand;
-    GLuint currentTimeLine;
-    GLuint maximaMinimaPoints;
+  QFont vibratoFont;
 
-    int noteLabelCounter;
-    struct noteLabelStruct {
-      QString label;
-      float y;
-    };
-    noteLabelStruct noteLabels[100];
+  GLuint verticalPeriodBars;
+  GLuint verticalSeparatorLines;
+  GLuint referenceLines;
+  GLuint pronyWidthBand;
+  GLuint pronyAveragePitch;
+  GLuint vibratoPolyline;
+  GLuint currentWindowBand;
+  GLuint currentTimeLine;
+  GLuint maximaMinimaPoints;
 
-  public slots:
-    void doUpdate();
-    void setZoomFactorX(double x);
-    void setZoomFactorY(double y);
-    void setOffsetY(int value);
+  int noteLabelCounter;
+  struct noteLabelStruct
+  {
+    QString label;
+    float y;
+  };
+  noteLabelStruct noteLabels[100];
+
 };
 
-#endif
+#endif // VIBRATOWIDGET_H
+// EOF

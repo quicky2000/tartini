@@ -17,51 +17,51 @@
 
 #include <QGLWidget>
 
-class VibratoTunerWidget : public QGLWidget {
+class VibratoTunerWidget: public QGLWidget
+{
   Q_OBJECT
 
-  public:
-    VibratoTunerWidget(QWidget *parent);
-    virtual ~VibratoTunerWidget();
+ public:
+  VibratoTunerWidget(QWidget *parent);
+  virtual ~VibratoTunerWidget(void);
 
-    void initializeGL();
-    void resizeGL(int w, int h);
-    void paintGL();
+  void initializeGL(void);
+  void resizeGL(int w, int h);
+  void paintGL(void);
 
-    QSize minimumSizeHint() const { return QSize(100, 75); }
+  QSize minimumSizeHint(void) const;
 
-  private:
-    //data goes here
-    float needleValueToDraw;
-    float prevNeedleValue;
-    int prevClosePitch;
-    bool prevIsPitchBlackNote;
-    double curPitch;
-
-    QFont tunerFont;
-
-    float centsLabelX, centsLabelY;
-
-    int tunerLabelCounter;
-    struct tunerLabelStruct {
-      QString label;
-      float x;
-      float y;
-    };
-    tunerLabelStruct tunerLabels[100];
-
-    void resetLeds();
-
-    GLuint dial;
-    GLuint needle;
-
-  signals:
-    void ledSet(int index, bool value);
+ signals:
+  void ledSet(int index, bool value);
 
   public slots:
-    void doUpdate(double thePitch);
+  void doUpdate(double thePitch);
 
+ private:
+  //data goes here
+  float needleValueToDraw;
+  float prevNeedleValue;
+  int prevClosePitch;
+  bool prevIsPitchBlackNote;
+  double curPitch;
+
+  QFont tunerFont;
+
+  float centsLabelX, centsLabelY;
+
+  int tunerLabelCounter;
+  struct tunerLabelStruct
+  {
+    QString label;
+    float x;
+    float y;
+  };
+  tunerLabelStruct tunerLabels[100];
+
+  void resetLeds(void);
+
+  GLuint dial;
+  GLuint needle;
 };
-
-
-#endif
+#endif // VIBRATOTUNERWIDGET_H
+// EOF
