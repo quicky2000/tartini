@@ -25,25 +25,25 @@ class QPixmap;
 class QFont;
 
 
-class VolumeMeterWidget : public DrawWidget {
+class VolumeMeterWidget: public DrawWidget
+{
   Q_OBJECT
 
-  public:
-    VolumeMeterWidget(QWidget *parent);
-    virtual ~VolumeMeterWidget();
+ public:
+  VolumeMeterWidget(QWidget *parent);
+  virtual ~VolumeMeterWidget();
 
-    void paintEvent( QPaintEvent * );
+  void paintEvent(QPaintEvent *);
 
-    QSize sizeHint() const { return QSize(256, 30); }
-    void setFontSize(int fontSize);
+  QSize sizeHint(void) const;
+  void setFontSize(int fontSize);
     
-  private:
-    QPixmap *buffer;
-    QFont _font;
-    int _fontSize;
+ private:
+  QPixmap *buffer;
+  QFont _font;
+  int _fontSize;
     
-    std::vector<int> labelNumbers;
+  std::vector<int> labelNumbers;
 };
-
-
-#endif
+#endif // VOLUMEMETERWIDGET_H
+// EOF

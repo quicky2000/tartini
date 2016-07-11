@@ -16,19 +16,28 @@
 #include "volumemeterwidget.h"
 #include <QResizeEvent>
 
-VolumeMeterView::VolumeMeterView( int viewID_, QWidget *parent )
- : ViewWidget( viewID_, parent)
+//------------------------------------------------------------------------------
+VolumeMeterView::VolumeMeterView( int viewID_, QWidget *parent ):
+  ViewWidget( viewID_, parent)
 {
   volumeMeterWidget = new VolumeMeterWidget(this);
   volumeMeterWidget->show();
 }
 
-VolumeMeterView::~VolumeMeterView()
+//------------------------------------------------------------------------------
+VolumeMeterView::~VolumeMeterView(void)
 {
   delete volumeMeterWidget;
 }
 
+//------------------------------------------------------------------------------
 void VolumeMeterView::resizeEvent(QResizeEvent *)
 {
   volumeMeterWidget->resize(size());
+}
+
+//------------------------------------------------------------------------------
+QSize VolumeMeterView::sizeHint(void) const
+{
+  return QSize(256, 30);
 }

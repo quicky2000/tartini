@@ -25,8 +25,9 @@
 #include "analysisdata.h"
 #include "useful.h"
 
-VolumeMeterWidget::VolumeMeterWidget(QWidget *parent)
-  : DrawWidget(parent)
+//------------------------------------------------------------------------------
+VolumeMeterWidget::VolumeMeterWidget(QWidget * parent):
+  DrawWidget(parent)
 {
   //make the widget get updated when the view changes
   connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), this, SLOT(update()));
@@ -42,17 +43,20 @@ VolumeMeterWidget::VolumeMeterWidget(QWidget *parent)
   setFontSize(9);
 }
 
-VolumeMeterWidget::~VolumeMeterWidget()
+//------------------------------------------------------------------------------
+VolumeMeterWidget::~VolumeMeterWidget(void)
 {
 }
 
+//------------------------------------------------------------------------------
 void VolumeMeterWidget::setFontSize(int fontSize)
 {
   _fontSize = fontSize;
   _font = QFont("AnyStyle", _fontSize);
 }
 
-void VolumeMeterWidget::paintEvent( QPaintEvent * )
+//------------------------------------------------------------------------------
+void VolumeMeterWidget::paintEvent(QPaintEvent *)
 {
   Channel *active = gdata->getActiveChannel();
 
@@ -62,84 +66,122 @@ void VolumeMeterWidget::paintEvent( QPaintEvent * )
   
   // Work out how many labels we can draw
   QFontMetrics fm = p.fontMetrics();
-  int labelWidth = fm.width("-60"); // Since we'll have two characters normally
+  // Since we'll have two characters normally
+  int labelWidth = fm.width("-60");
   int halfLabelWidth = labelWidth / 2;
   int stopWidth = fm.width("0dB") / 2;
-  int realWidth = width() - stopWidth - halfLabelWidth; // The actual width of the data
-  int places = labelNumbers[MIN(realWidth / 20, 6) - 1]; // How many labels we should have
-  int pixelStep = toInt(double(realWidth) / double(places)); // How many pixels to jump between labels/markers
+  // The actual width of the data
+  int realWidth = width() - stopWidth - halfLabelWidth;
+  // How many labels we should have
+  int places = labelNumbers[MIN(realWidth / 20, 6) - 1];
+  // How many pixels to jump between labels/markers
+  int pixelStep = toInt(double(realWidth) / double(places));
   int lineY = height() - _fontSize - 2;
 
   int labelStep = 10;
 
   // Determine how many dB we should jump by each time
-  switch (places) {
+  switch (places)
+    {
     case 1:
-    labelStep = 60;
-    break;
+      labelStep = 60;
+      break;
     case 2:
-    labelStep = 30;
-    break;
+      labelStep = 30;
+      break;
     case 3:
-    labelStep = 20;
-    break;
+      labelStep = 20;
+      break;
     case 6:
-    labelStep = 10;
-    break;
+      labelStep = 10;
+      break;
     default:
-    myassert(false); // This should never happen!
-    break;
-  }
+      // This should never happen!
+      myassert(false);
+      break;
+    }
 
 
   // Draw horizontal line
   p.setPen(Qt::black);
 
-  int y = height() - (lineY/2)- 1;
+  int y = height() - (lineY / 2) - 1;
 
-  for (int i=0; i < places; i++) {
-    int x = i * pixelStep;
-    p.drawText(x, y, QString::number(-60 + (i * labelStep)));
-  }
+  for (int i = 0; i < places; i++)
+    {
+      int x = i * pixelStep;
+      p.drawText(x, y, QString::number(-60 + (i * labelStep)));
+    }
   p.drawText(places * pixelStep - 2, y, "0dB");
 
   
   QColor colour;
   float theVal[2];
-  if (active != NULL && active->isValidChunk(active->currentChunk())) {
-    int chunk = active->currentChunk();
-    if(active->getParent()->numChannels() > 1) {
-      theVal[0] = active->getParent()->getChannel(0).dataAtChunk(chunk)->getMaxIntensityDB();
-      theVal[1] = active->getParent()->getChannel(1).dataAtChunk(chunk)->getMaxIntensityDB();
-    } else {
-      theVal[0] = theVal[1] = active->dataAtChunk(chunk)->getMaxIntensityDB();
-    }
-  } else {
-    theVal[0] = theVal[1] = 0.0;
-  }
-  
-  for(int chnl=0; chnl<2; chnl++) {
-    double decibels = theVal[chnl];
-    // We'll show 60 dB
-    int val = toInt((double(realWidth / 60.0) * decibels) + realWidth);
-
-    int barWidth = 5; // Not right - needs to be based on realWidth
-
-    for(int j=halfLabelWidth; j<=realWidth; j+=10) {
-      if(j < val) {
-        if ( j < (width() * 0.5)) colour = Qt::blue;
-        else if ( j < (width() * 0.85)) colour = QColor(255, 120, 60);
-        else colour = Qt::red;
-      } else {
-        colour = QColor(198, 198, 198);
-      }
-      
-      if(chnl == 0)
-        p.fillRect(j, 2, barWidth, lineY/2 -3, colour);
+  if (active != NULL && active->isValidChunk(active->currentChunk()))
+    {
+      int chunk = active->currentChunk();
+      if(active->getParent()->numChannels() > 1)
+	{
+	  theVal[0] = active->getParent()->getChannel(0).dataAtChunk(chunk)->getMaxIntensityDB();
+	  theVal[1] = active->getParent()->getChannel(1).dataAtChunk(chunk)->getMaxIntensityDB();
+	}
       else
-        p.fillRect(j, height() - (lineY/2) + 1, barWidth, lineY/2 -3, colour);
+	{
+	  theVal[0] = theVal[1] = active->dataAtChunk(chunk)->getMaxIntensityDB();
+	}
     }
-  }
+  else
+    {
+      theVal[0] = theVal[1] = 0.0;
+    }
 
+  for(int chnl = 0; chnl < 2; chnl++)
+    {
+      double decibels = theVal[chnl];
+      // We'll show 60 dB
+      int val = toInt((double(realWidth / 60.0) * decibels) + realWidth);
+
+      // Not right - needs to be based on realWidth
+      int barWidth = 5;
+
+      for(int j = halfLabelWidth; j <= realWidth; j += 10)
+	{
+	  if(j < val)
+	    {
+	      if( j < (width() * 0.5))
+		{
+		  colour = Qt::blue;
+		}
+	      else if( j < (width() * 0.85))
+		{
+		  colour = QColor(255, 120, 60);
+		}
+	      else
+		{
+		  colour = Qt::red;
+		}
+	    }
+	  else
+	    {
+	      colour = QColor(198, 198, 198);
+	    }
+      
+	  if(chnl == 0)
+	    {
+	      p.fillRect(j, 2, barWidth, lineY/2 -3, colour);
+	    }
+	  else
+	    {
+	      p.fillRect(j, height() - (lineY/2) + 1, barWidth, lineY/2 -3, colour);
+	    }
+	}
+    }
   endDrawing();  
 }
+
+//------------------------------------------------------------------------------
+QSize VolumeMeterWidget::sizeHint(void) const
+{
+  return QSize(256, 30);
+}
+// EOF

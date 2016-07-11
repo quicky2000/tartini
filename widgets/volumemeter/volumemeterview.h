@@ -20,21 +20,20 @@
 #include <QResizeEvent>
 class VolumeMeterWidget;
 
-class VolumeMeterView : public ViewWidget {
+class VolumeMeterView: public ViewWidget
+{
   Q_OBJECT
 
-  public:
-    VolumeMeterView(int viewID_, QWidget *parent = 0);
-    virtual ~VolumeMeterView();
+ public:
+  VolumeMeterView(int viewID_, QWidget * parent = NULL);
+  virtual ~VolumeMeterView(void);
 
-    void resizeEvent(QResizeEvent *);
+  void resizeEvent(QResizeEvent *);
 
-    QSize sizeHint() const { return QSize(256, 30); }
-
-  private:
-    VolumeMeterWidget *volumeMeterWidget;
-
+  QSize sizeHint(void) const;
+    
+ private:
+  VolumeMeterWidget *volumeMeterWidget;
 };
-
-
-#endif
+#endif // VOLUMEMETERVIEW_H
+// EOF
