@@ -4,6 +4,8 @@
     begin                : Mon Mar 14 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,29 +26,30 @@
 class QPixmap;
 class Q3PointArray;
 
-class WaveWidget : public DrawWidget {
+class WaveWidget : public DrawWidget
+{
   Q_OBJECT
 
-  public:
-    WaveWidget(QWidget *parent);
-    virtual ~WaveWidget();
+ public:
+  WaveWidget(QWidget *parent);
+  virtual ~WaveWidget(void);
 
-    void paintEvent( QPaintEvent * );
+  void paintEvent(QPaintEvent *);
 
-    QSize sizeHint() const { return QSize(500, 128); }
-    double zoomY() { return _zoomY; }
+  QSize sizeHint(void) const;
+  double zoomY(void);
         
-  private:
-    QPixmap *buffer;
-    Q3PointArray pointArray;
-    double _zoomY;
-
-  signals:
-    void zoomYChanged(double zoomY_);
+ signals:
+  void zoomYChanged(double zoomY_);
     
-  public slots:
-    void setZoomY(double zoomY_);
+ public slots:
+  void setZoomY(double zoomY_);
+
+ private:
+  QPixmap *buffer;
+  Q3PointArray pointArray;
+  double _zoomY;
+
 };
-
-
-#endif
+#endif // WAVEWIDGET_H
+// EOF
