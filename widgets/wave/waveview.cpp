@@ -19,7 +19,6 @@
 #include "qlayout.h"
 #include "q3grid.h"
 #include "qtooltip.h"
-//Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>
 #include <Q3Frame>
@@ -28,18 +27,13 @@
 WaveView::WaveView( int viewID_, QWidget *parent )
  : ViewWidget( viewID_, parent)
 {
-  //setCaption("Wave view");
-
   Q3BoxLayout *mainLayout = new Q3HBoxLayout(this);
 
   Q3Grid *waveFrame = new Q3Grid(1, this);
   waveFrame->setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
   waveWidget = new WaveWidget(waveFrame);
-  //waveWidget->show();
-  //mainLayout->addWidget(waveWidget);
   mainLayout->addWidget(waveFrame);
 
-  //QBoxLayout *leftLayout = new QVBoxLayout(mainLayout);
   Q3BoxLayout *rightLayout = new Q3VBoxLayout(mainLayout);
   
   QwtWheel *freqWheelY = new QwtWheel(this);
@@ -55,16 +49,13 @@ WaveView::WaveView( int viewID_, QWidget *parent )
   connect(waveWidget, SIGNAL(zoomYChanged(double)), waveWidget, SLOT(update()));
   
   //make the widget get updated when the view changes
-  //connect(gdata->view, SIGNAL(onFastUpdate(double)), waveWidget, SLOT(update()));
   connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), waveWidget, SLOT(update()));
 }
 
 WaveView::~WaveView()
 {
-  //delete waveWidget;
 }
 
 void WaveView::resizeEvent(QResizeEvent *)
 {
-  //waveWidget->resize(size());
 }
