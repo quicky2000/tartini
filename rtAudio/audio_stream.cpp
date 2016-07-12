@@ -4,6 +4,8 @@
     begin                : 2006
     copyright            : (C) 2006-2006 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -47,20 +49,13 @@ int AudioStream::open(int mode_, int freq_, int channels_, int /*bits_*/, int bu
   bits = 32; //bits_; //ignored, just use floats and let rtAudio do the conversion
   buffer_size = buffer_size_;
   num_buffers = 4;
-  //inDevice = outDevice = 0;
 
   QStringList inNames = getInputDeviceNames();
-  //const char *audioInput = gdata->qsettings->value("Sound/soundInput", "/dev/dsp").toString();
   const char *audioInput = gdata->getSettingsValue("Sound/soundInput", QString("Default"));
-  //inDevice = inNames.indexOf(audioInput);
-  //if(inDevice == -1) inDevice = 0;
   inDevice = getDeviceNumber(audioInput);
 
   QStringList outNames = getOutputDeviceNames();
-  //const char *audioOutput = gdata->qsettings->value("Sound/soundOutput", "/dev/dsp").toString();
   const char *audioOutput = gdata->getSettingsValue("Sound/soundOutput", QString("Default"));
-  //outDevice = outNames.indexOf(audioOutput);
-  //if(outDevice == -1) outDevice = 0;
   outDevice = getDeviceNumber(audioOutput);
 
   fprintf(stderr, "Input Device %d: %s\n", inDevice, audioInput);
@@ -68,15 +63,12 @@ int AudioStream::open(int mode_, int freq_, int channels_, int /*bits_*/, int bu
 
   try {
     if(mode == F_READ) {
-      //device_no = ::open(audioInput, O_RDONLY|O_NONBLOCK);
       audio = new RtAudio(0, 0, inDevice, channels, RTAUDIO_FLOAT32, freq, &buffer_size, num_buffers);
     }
     else if(mode == F_WRITE)  {
-      //device_no = ::open(audioOutput, O_WRONLY|O_NONBLOCK);
       audio = new RtAudio(outDevice, channels, 0, 0, RTAUDIO_FLOAT32, freq, &buffer_size, num_buffers);
     }
     else if(mode == F_RDWR) {
-      //device_no = ::open(audioInOut, O_RDWR|O_NONBLOCK);
       audio = new RtAudio(outDevice, channels, inDevice, channels, RTAUDIO_FLOAT32, freq, &buffer_size, num_buffers);
     } else {
       fprintf(stderr, "No mode selected\n");
@@ -108,7 +100,6 @@ int AudioStream::writeFloats(float **channelData, int length, int ch)
 {
   float *bufPtr = buffer;
   int c, j;
-  //printf("length=%d, buffer_size=%d, ch=%d\n", length, buffer_size, ch); fflush(stdout);
   if(length == buffer_size) {
     for(j=0; j<length; j++) {
       for(c=0; c<ch; c++) {
@@ -125,7 +116,6 @@ int AudioStream::writeFloats(float **channelData, int length, int ch)
       return 0;
     }
   } else {
-    //fprintf(stderr, "Error writing floats\n");
     for(j=0; j<length; j++) {
       for(c=0; c<ch; c++) {
         flowBuffer.put(channelData[c][j]);
@@ -144,7 +134,6 @@ int AudioStream::writeFloats(float **channelData, int length, int ch)
       }
     }
   }
-  //printf("done\n"); fflush(stdout);
   return length;
 }
 
@@ -186,7 +175,6 @@ int AudioStream::writeReadFloats(float **outChannelData, int outCh, float **inCh
 {
   float *bufPtr = buffer;
   int c, j;
-  //printf("length=%d, buffer_size=%d, ch=%d\n", length, buffer_size, ch); fflush(stdout);
 
   //put the outChannelData into the Audio buffer to be written out
   if(length == buffer_size) {
@@ -216,7 +204,6 @@ int AudioStream::writeReadFloats(float **outChannelData, int outCh, float **inCh
     fprintf(stderr, "Error: audio buffer length is a different size than the data chunk buffer\n");
     fprintf(stderr, "Not supported on Read/Write yet. Try changing the buffer size in preferences\n");
   }
-  //printf("done\n"); fflush(stdout);
   return length;
 }
 
@@ -252,7 +239,6 @@ QStringList AudioStream::getInputDeviceNames()
   }
 
   delete tempAudio; // Clean up
-  //toReturn += gdata->qsettings->value("Sound/soundInput", "/dev/dsp").toString();
   return toReturn;
 }
 
@@ -288,7 +274,6 @@ QStringList AudioStream::getOutputDeviceNames()
   }
 
   delete tempAudio; // Clean up
-  //toReturn += gdata->qsettings->value("Sound/soundOutput", "/dev/dsp").toString();
   return toReturn;
 }
 
@@ -327,6 +312,5 @@ int AudioStream::getDeviceNumber(const char *deviceName)
   }
 
   delete tempAudio; // Clean up
-  //toReturn += gdata->qsettings->value("Sound/soundOutput", "/dev/dsp").toString();
   return deviceNumber;
 }

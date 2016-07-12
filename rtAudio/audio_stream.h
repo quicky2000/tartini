@@ -4,6 +4,8 @@
     begin                : 2003
     copyright            : (C) 2003-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
  
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,8 +50,6 @@ class AudioStream : public SoundStream
   long read_frames(void * /*data*/, long /*length*/) { return 0; } //not implemented
   long write_bytes(void * /*data*/, long /*length*/) { return 0; } //not implemented
   long write_frames(void * /*data*/, long /*length*/) { return 0; } //not implemented
-  //long wait_bytes(long length) { return 0; } //not implemented
-  //long wait_frames(long length) { return 0; } //not implemented
 
   int writeFloats(float **channelData, int length, int ch);
   int readFloats(float **channelData, int length, int ch);
