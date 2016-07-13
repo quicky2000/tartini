@@ -39,18 +39,19 @@ WaveWidget::~WaveWidget(void)
 }
 
 //------------------------------------------------------------------------------
-void WaveWidget::setZoomY(double zoomY_)
+void WaveWidget::setZoomY(const double & zoomY_)
 {
-  if(_zoomY != zoomY_) {
-    _zoomY = zoomY_;
-    emit zoomYChanged(_zoomY);
-  }
+  if(_zoomY != zoomY_)
+    {
+      _zoomY = zoomY_;
+      emit zoomYChanged(_zoomY);
+    }
 }
 
 //------------------------------------------------------------------------------
 void WaveWidget::paintEvent(QPaintEvent *)
 {
-  Channel *active = gdata->getActiveChannel();
+  Channel * active = gdata->getActiveChannel();
 
   beginDrawing(false);
 
@@ -160,7 +161,7 @@ QSize WaveWidget::sizeHint(void) const
 }
 
 //------------------------------------------------------------------------------
-double WaveWidget::zoomY(void)
+const double & WaveWidget::zoomY(void) const
 {
   return _zoomY;
 }

@@ -48,7 +48,7 @@ WaveView::WaveView( int viewID_, QWidget *parent ):
   rightLayout->addWidget(freqWheelY, 1);
   rightLayout->addStretch(2);
   
-  connect(freqWheelY, SIGNAL(valueChanged(double)), waveWidget, SLOT(setZoomY(double)));
+  connect(freqWheelY, SIGNAL(valueChanged(double)), waveWidget, SLOT(setZoomY(const double &)));
   connect(waveWidget, SIGNAL(zoomYChanged(double)), waveWidget, SLOT(update()));
   
   //make the widget get updated when the view changes

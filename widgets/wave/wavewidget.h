@@ -37,13 +37,13 @@ class WaveWidget : public DrawWidget
   void paintEvent(QPaintEvent *);
 
   QSize sizeHint(void) const;
-  double zoomY(void);
+  const double & zoomY(void) const;
         
  signals:
   void zoomYChanged(double zoomY_);
     
  public slots:
-  void setZoomY(double zoomY_);
+  void setZoomY(const double & zoomY_);
 
  private:
   QPixmap *buffer;
