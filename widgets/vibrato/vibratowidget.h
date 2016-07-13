@@ -38,6 +38,8 @@ class VibratoWidget :public QGLWidget
   void setOffsetY(int value);
 
  private:
+  static void compose_note_label(QString & p_note_label, const int & p_note);
+
   /**
      The horizontal space in pixels a note label requires
   */

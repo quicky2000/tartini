@@ -24,6 +24,7 @@
 #include "musicnotes.h"
 #include <glu.h>
 #include <gl.h>
+#include <sstream>
 
 //------------------------------------------------------------------------------
 VibratoWidget::VibratoWidget(QWidget * p_parent, int p_nls):
@@ -498,14 +499,8 @@ void VibratoWidget::doUpdate(void)
 	  l_colors[l_colors_counter++] = 156;
 	  l_colors[l_colors_counter++] = 170;
       
-	  if ((noteOctave(l_nearest_note) >= 0) && (noteOctave(l_nearest_note) <= 9))
-	    {
-	      l_note_label.sprintf("%s%d", noteName(l_nearest_note), noteOctave(l_nearest_note));
-	    }
-	  else
-	    {
-	      l_note_label.sprintf("%s ", noteName(l_nearest_note));
-	    }
+	  compose_note_label(l_note_label, l_nearest_note);
+
 	  m_note_labels[m_note_label_counter].m_label = l_note_label;
 	  m_note_labels[m_note_label_counter].m_y = l_reference_line_Y;
 	  m_note_label_counter++;
@@ -531,14 +526,7 @@ void VibratoWidget::doUpdate(void)
 	      l_colors[l_colors_counter++] = 156;
 	      l_colors[l_colors_counter++] = 170;
 	
-	      if ((noteOctave(l_nearest_note + l_index) >= 0) && (noteOctave(l_nearest_note + l_index) <= 9))
-		{
-		  l_note_label.sprintf("%s%d", noteName(l_nearest_note + l_index), noteOctave(l_nearest_note + l_index));
-		}
-	      else
-		{
-		  l_note_label.sprintf("%s ", noteName(l_nearest_note + l_index));
-		}
+	      compose_note_label(l_note_label, l_nearest_note + l_index);
 	      m_note_labels[m_note_label_counter].m_label = l_note_label;
 	      m_note_labels[m_note_label_counter].m_y = l_reference_line_Y;
 	      m_note_label_counter++;
@@ -565,14 +553,7 @@ void VibratoWidget::doUpdate(void)
 	      l_colors[l_colors_counter++] = 156;
 	      l_colors[l_colors_counter++] = 170;
 
-	      if ((noteOctave(l_nearest_note + l_index) >= 0) && (noteOctave(l_nearest_note + l_index) <= 9))
-		{
-		  l_note_label.sprintf("%s%d", noteName(l_nearest_note + l_index), noteOctave(l_nearest_note + l_index));
-		}
-	      else
-		{
-		  l_note_label.sprintf("%s ", noteName(l_nearest_note + l_index));
-		}
+	      compose_note_label(l_note_label, l_nearest_note + l_index);
 	      m_note_labels[m_note_label_counter].m_label = l_note_label;
 	      m_note_labels[m_note_label_counter].m_y = l_reference_line_Y;
 	      m_note_label_counter++;
@@ -951,5 +932,20 @@ void VibratoWidget::setOffsetY(int p_value)
 QSize VibratoWidget::sizeHint(void) const
 {
   return QSize(300, 100);
+}
+
+//------------------------------------------------------------------------------
+void VibratoWidget::compose_note_label(QString & p_note_label, const int & p_note)
+{
+  std::stringstream l_composed_note_label;
+  if ((noteOctave(p_note) >= 0) && (noteOctave(p_note) <= 9))
+    {
+      l_composed_note_label << noteName(p_note) << noteOctave(p_note);
+    }
+  else
+    {
+      l_composed_note_label << noteName(p_note) << " ";
+    }
+  p_note_label = l_composed_note_label.str().c_str();
 }
 // EOF
