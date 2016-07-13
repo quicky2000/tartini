@@ -82,7 +82,8 @@ void TimeAxis::paintEvent(QPaintEvent *)
     int l_font_space = m_font_size + 2;
 
     beginDrawing(false);
-    fillBackground(colorGroup().background());
+    QPalette l_palette;
+    fillBackground(l_palette.color(QPalette::Window));
 
     //time per 150 pixels
     double l_time_step = timeWidth() / double(l_w) * 150.0;

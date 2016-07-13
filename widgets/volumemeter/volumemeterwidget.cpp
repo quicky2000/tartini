@@ -63,7 +63,9 @@ void VolumeMeterWidget::paintEvent(QPaintEvent *)
     Channel * l_active = g_data->getActiveChannel();
 
     beginDrawing(false);
-    fillBackground(colorGroup().background());
+
+    QPalette l_palette;
+    fillBackground(l_palette.color(QPalette::Window));
     get_painter().setFont(m_font);
 
     // Work out how many labels we can draw

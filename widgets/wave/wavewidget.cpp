@@ -109,7 +109,8 @@ void WaveWidget::paintEvent(QPaintEvent *)
     double l_dh2 = double(height() - 1) / 2.0;
 
     //draw the center line
-    get_painter().setPen(QPen(colorBetween(colorGroup().background(), Qt::black, 0.3), 0));
+    QPalette l_palette;
+    get_painter().setPen(QPen(colorBetween(l_palette.color(QPalette::Window), Qt::black, 0.3), 0));
     get_painter().drawLine(0, toInt(l_dh2), width(), toInt(l_dh2));
 
     if(l_active)

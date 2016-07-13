@@ -70,7 +70,8 @@ void SummaryDrawWidget::paintEvent(QPaintEvent *)
     }
 
     //draw the view rectangle
-    get_painter().setPen(QPen(colorGroup().highlight(), 1));
+    QPalette l_palette;
+    get_painter().setPen(QPen(l_palette.color(QPalette::Highlight), 1));
     get_painter().drawRect(int((g_data->leftTime() + l_view.viewLeft()) * l_time_ratio)
                           ,height() - 1 - int((l_view.viewTop()) * l_pitch_ratio)
                           ,int(l_view.viewWidth() * l_time_ratio)
@@ -78,7 +79,7 @@ void SummaryDrawWidget::paintEvent(QPaintEvent *)
                           );
 
     //draw the current time line
-    get_painter().setPen(QPen(colorGroup().foreground(), 1));
+    get_painter().setPen(QPen(l_palette.color(QPalette::WindowText), 1));
     get_painter().drawLine(int((g_data->leftTime() + l_view.currentTime()) * l_time_ratio)
                           ,0
                           ,int((g_data->leftTime() + l_view.currentTime()) * l_time_ratio)

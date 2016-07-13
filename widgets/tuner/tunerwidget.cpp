@@ -73,7 +73,9 @@ void TunerWidget::paintEvent(QPaintEvent *)
 
      */
 
-    QPen l_pen(colorGroup().foreground(), 2);
+    QPalette l_palette;
+    QColor l_color = l_palette.color(QPalette::WindowText);
+    QPen l_pen(l_color, 2);
     // Border
     get_painter().setPen(l_pen);
 
@@ -92,9 +94,9 @@ void TunerWidget::paintEvent(QPaintEvent *)
         get_painter().drawArc(toInt(l_half_width - (l_radius / 2.0)), toInt(l_radius / 2.0), toInt(l_radius), toInt(l_radius), toInt((90 - l_theta_deg) * 16), toInt(2 * l_theta_deg * 16));
     }
 
-    get_painter().setPen(colorGroup().foreground());
-    get_painter().setBrush(colorGroup().foreground());
-
+    get_painter().setPen(l_color);
+    get_painter().setBrush(l_color);
+    
     double l_step = (2 * l_theta) / 12.0;
     double l_stop = l_rho + (2 * l_theta) - (l_step / 2);
     {
@@ -111,7 +113,7 @@ void TunerWidget::paintEvent(QPaintEvent *)
 
     {
         //Draw the text labels
-        get_painter().setPen(colorGroup().foreground());
+        get_painter().setPen(l_color);
 
         const char *l_the_names[11] = { "+50", "+40", "+30", "+20", "+10", "0", "-10", "-20", "-30", "-40", "-50" };
         QFontMetrics l_font_metrics = get_painter().fontMetrics();

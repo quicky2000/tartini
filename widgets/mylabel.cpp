@@ -36,7 +36,8 @@ MyLabel::MyLabel(const QString & p_text
 void MyLabel::paintEvent( QPaintEvent * )
 {
     beginDrawing(false);
-    fillBackground(colorGroup().background());
+    QPalette l_palette;
+    fillBackground(l_palette.color(QPalette::Window));
     get_painter().drawText(4, m_font_height - 2, m_text);
     endDrawing();
 }

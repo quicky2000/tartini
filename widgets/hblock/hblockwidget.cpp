@@ -58,8 +58,10 @@ void HBlockWidget::paintEvent( QPaintEvent * )
   
             // Work out the bar height for each harmonic
             double l_bar_height = double(height()) / double(l_data.getHarmonicFreqSize());
-            QColor l_fill_color = colorBetween(colorGroup().background(), l_active_channel->get_color(), l_data.getVolumeValue(*g_data));
-            QColor l_outline_color = colorBetween(colorGroup().background(), Qt::black, l_data.getVolumeValue(*g_data));
+            QPalette l_palette;
+            QColor l_color = l_palette.color(QPalette::Window);
+            QColor l_fill_color = colorBetween(l_color, l_active_channel->get_color(), l_data.getVolumeValue(*g_data));
+            QColor l_outline_color = colorBetween(l_color, Qt::black, l_data.getVolumeValue(*g_data));
             get_painter().setBrush(l_fill_color);
   
             int l_bar_start = 0;

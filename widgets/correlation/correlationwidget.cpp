@@ -105,7 +105,9 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
     }
 
     //draw the horizontal center line
-    get_painter().setPen(QPen(colorBetween(colorGroup().background(), Qt::black, 0.3), 0));
+    QPalette l_palette;
+    QColor l_background_color = l_palette.color(QPalette::Window);
+    get_painter().setPen(QPen(colorBetween(l_background_color, Qt::black, 0.3), 0));
     get_painter().drawLine(0, toInt(l_dh2), width(), toInt(l_dh2));
 
     if(l_active_channel)
@@ -165,7 +167,7 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
             {
                 float l_highest = l_data->getPeriodEstimatesAmpAt(l_data->getHighestCorrelationIndex());
                 //draw threshold line
-                get_painter().setPen(QPen(colorBetween(colorGroup().background(), Qt::black, 0.3), 0));
+                get_painter().setPen(QPen(colorBetween(l_background_color, Qt::black, 0.3), 0));
                 l_y = toInt(l_dh2 - (l_highest * l_active_channel->threshold()) * l_dh2);
                 get_painter().drawLine(0, l_y, width(), l_y);
       

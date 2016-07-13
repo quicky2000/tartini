@@ -195,7 +195,7 @@ void VibratoWidget::doUpdate(void)
 
   if (l_active)
     {
-      ChannelLocker l_channel_locker(l_active);
+      ChannelLocker l_channelLocker(l_active);
       AnalysisData * l_data = l_active->dataAtCurrentChunk();
       if(l_data && l_active->isVisibleNote(l_data->getNoteIndex()) && l_active->isLabelNote(l_data->getNoteIndex()))
 	{
@@ -203,8 +203,8 @@ void VibratoWidget::doUpdate(void)
 	  l_note = &(l_active->get_note_data()[l_data->getNoteIndex()]);
 
 	  const int l_my_start_chunk = l_note->startChunk();
-	  const int l_my_end_chunck = l_note->endChunk();
-	  const int l_my_current_chunck = l_active->chunkAtCurrentTime();
+	  const int l_my_end_chunk = l_note->endChunk();
+	  const int l_my_current_chunk = l_active->chunkAtCurrentTime();
 	  const float l_half_height = 0.5 * height();
 	  const int l_maxima_size = l_note->get_maxima()->size();
 	  const int l_minima_size = l_note->get_minima()->size();
@@ -216,23 +216,23 @@ void VibratoWidget::doUpdate(void)
 	  large_vector<float> l_pitch_lookup_used = l_active->get_pitch_lookup_smoothed();
 	  int l_smooth_delay = l_active->get_pitch_big_smoothing_filter().delay();
 
-	  if ((l_my_end_chunck - l_my_start_chunk) * m_zoom_factor_X > width() - 2 * m_note_label_offset)
+	  if ((l_my_end_chunk - l_my_start_chunk) * m_zoom_factor_X > width() - 2 * m_note_label_offset)
 	    {
 	      // The vibrato-polyline doesn't fit in the window
-	      if ((l_my_current_chunck - l_my_start_chunk) * m_zoom_factor_X < (width() - 2 * m_note_label_offset) / 2)
+	      if ((l_my_current_chunk - l_my_start_chunk) * m_zoom_factor_X < (width() - 2 * m_note_label_offset) / 2)
 		{
 		  // We're at the left side of the vibrato-polyline
 		  l_window_offset = 0 - m_note_label_offset;
 		}
-	      else if ((l_my_end_chunck - l_my_current_chunck) * m_zoom_factor_X < (width() - 2 * m_note_label_offset) / 2)
+	      else if ((l_my_end_chunk - l_my_current_chunk) * m_zoom_factor_X < (width() - 2 * m_note_label_offset) / 2)
 		{
 		  // We're at the right side of the vibrato-polyline
-		  l_window_offset = (l_my_end_chunck - l_my_start_chunk) * m_zoom_factor_X - width() + m_note_label_offset + 1;
+		  l_window_offset = (l_my_end_chunk - l_my_start_chunk) * m_zoom_factor_X - width() + m_note_label_offset + 1;
 		}
 	      else
 		{
 		  // We're somewhere in the middle of the vibrato-polyline
-		  l_window_offset = (l_my_current_chunck - l_my_start_chunk) * m_zoom_factor_X - width() / 2;
+		  l_window_offset = (l_my_current_chunk - l_my_start_chunk) * m_zoom_factor_X - width() / 2;
 		}
 	    }
 	  else
@@ -402,6 +402,7 @@ void VibratoWidget::doUpdate(void)
 	      delete[] l_vertices;
 	      delete[] l_colors;
 
+
 	      // Calculate the vertical separator lines through the maxima
 	      l_vertices = new GLfloat[(l_maxima_size + l_minima_size) * 4];
 	      l_colors = new GLubyte[(l_maxima_size + l_minima_size) * 6];
@@ -498,9 +499,8 @@ void VibratoWidget::doUpdate(void)
 	  l_colors[l_colors_counter++] = 144;
 	  l_colors[l_colors_counter++] = 156;
 	  l_colors[l_colors_counter++] = 170;
-      
-	  compose_note_label(l_note_label, l_nearest_note);
 
+	  compose_note_label(l_note_label, l_nearest_note);
 	  m_note_labels[m_note_label_counter].m_label = l_note_label;
 	  m_note_labels[m_note_label_counter].m_y = l_reference_line_Y;
 	  m_note_label_counter++;
@@ -568,15 +568,14 @@ void VibratoWidget::doUpdate(void)
 	  delete[] l_vertices;
 	  delete[] l_colors;
 
-
 	  // Calculate the light grey band indicating the vibratowidth according to the Prony-algorithm
 	  l_vertices_counter = 0;
 	  l_colors_counter = 0;
 
-	  l_vertices = new GLfloat[(l_my_end_chunck - l_my_start_chunk) * 8];
-	  l_colors = new GLubyte[(l_my_end_chunck - l_my_start_chunk) * 16];
+	  l_vertices = new GLfloat[(l_my_end_chunk - l_my_start_chunk) * 8];
+	  l_colors = new GLubyte[(l_my_end_chunk - l_my_start_chunk) * 16];
 
-	  for(int l_chunk = l_my_start_chunk; l_chunk < l_my_end_chunck - 1; l_chunk++)
+	  for(int l_chunk = l_my_start_chunk; l_chunk < l_my_end_chunk - 1; l_chunk++)
 	    {
 	      float l_x1 = (l_chunk - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
 	      if (l_x1 < m_note_label_offset)
@@ -633,15 +632,14 @@ void VibratoWidget::doUpdate(void)
 	  delete[] l_vertices;
 	  delete[] l_colors;
 
-
 	  // Calculate the average pitch according to the Prony-algorithm
 	  l_vertices_counter = 0;
 	  l_colors_counter = 0;
 
-	  l_vertices = new GLfloat[(l_my_end_chunck - l_my_start_chunk) * 2];
-	  l_colors = new GLubyte[(l_my_end_chunck - l_my_start_chunk) * 4];
+	  l_vertices = new GLfloat[(l_my_end_chunk - l_my_start_chunk) * 2];
+	  l_colors = new GLubyte[(l_my_end_chunk - l_my_start_chunk) * 4];
 
-	  for(int l_chunk = l_my_start_chunk; l_chunk < l_my_end_chunck; l_chunk++)
+	  for(int l_chunk = l_my_start_chunk; l_chunk < l_my_end_chunk; l_chunk++)
 	    {
 	      float l_x = (l_chunk - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
 	      if (l_x < m_note_label_offset)
@@ -672,7 +670,6 @@ void VibratoWidget::doUpdate(void)
 	  delete[] l_vertices;
 	  delete[] l_colors;
 
-
 	  // Calculate the vibrato-polyline
 	  l_vertices_counter = 0;
 	  l_colors_counter = 0;
@@ -685,14 +682,14 @@ void VibratoWidget::doUpdate(void)
 
 	      const int l_pitch_lookup_used_size_limit = l_pitch_lookup_used.size() - 1;
 	      const int l_beginning_of_note = l_my_start_chunk * l_frames_per_chunk;
-	      const int l_end_of_note = l_my_end_chunck * l_frames_per_chunk - 1;
+	      const int l_end_of_note = l_my_end_chunk * l_frames_per_chunk - 1;
 	      float l_chunk;
 	      float l_y;
 	      int l_offset;
 	      for(int l_x = m_note_label_offset; l_x < width() - m_note_label_offset; l_x++)
 		{
 		  l_chunk = ((l_x + l_window_offset) / m_zoom_factor_X + l_my_start_chunk);
-		  if ((l_chunk >= l_my_start_chunk) && (l_chunk <= l_my_end_chunck))
+		  if ((l_chunk >= l_my_start_chunk) && (l_chunk <= l_my_end_chunk))
 		    {
 		      l_offset = toInt(l_chunk * l_frames_per_chunk + l_smooth_delay);
 		      if(l_offset > l_end_of_note)
@@ -736,11 +733,11 @@ void VibratoWidget::doUpdate(void)
 	  else
 	    {
 	      // No detailed pitch information available, calculate polyline using the chunkdata
-	      l_vertices = new GLfloat[(l_my_end_chunck - l_my_start_chunk) * 2];
-	      l_colors = new GLubyte[(l_my_end_chunck - l_my_start_chunk) * 3];
+	      l_vertices = new GLfloat[(l_my_end_chunk - l_my_start_chunk) * 2];
+	      l_colors = new GLubyte[(l_my_end_chunk - l_my_start_chunk) * 3];
 
 	      float l_x, l_y;
-	      for(int l_chunk = l_my_start_chunk; l_chunk < l_my_end_chunck; l_chunk++)
+	      for(int l_chunk = l_my_start_chunk; l_chunk < l_my_end_chunk; l_chunk++)
 		{
 		  l_x = (l_chunk - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
 		  if (l_x < m_note_label_offset)
@@ -791,11 +788,13 @@ void VibratoWidget::doUpdate(void)
 	  l_vertices[l_vertices_counter++] = l_pixel_left;
 	  l_vertices[l_vertices_counter++] = height();
 
+	  QPalette l_palette;
+	  QColor l_foreground = l_palette.color(QPalette::WindowText);
 	  for(int l_j = 1; l_j <= 4; l_j++)
 	    {
-	      l_colors[l_colors_counter++] = colorGroup().foreground().red();
-	      l_colors[l_colors_counter++] = colorGroup().foreground().green();
-	      l_colors[l_colors_counter++] = colorGroup().foreground().blue();
+	      l_colors[l_colors_counter++] = l_foreground.red();
+	      l_colors[l_colors_counter++] = l_foreground.green();
+	      l_colors[l_colors_counter++] = l_foreground.blue();
 	      l_colors[l_colors_counter++] = 64;
 	    }
 
@@ -815,7 +814,7 @@ void VibratoWidget::doUpdate(void)
 
 	  l_vertices_counter = 0;
 
-	  const float l_time_line_X = toInt((l_my_current_chunck - l_my_start_chunk) * m_zoom_factor_X - l_window_offset);
+	  const float l_time_line_X = toInt((l_my_current_chunk - l_my_start_chunk) * m_zoom_factor_X - l_window_offset);
 
 	  l_vertices[l_vertices_counter++] = l_time_line_X;
 	  l_vertices[l_vertices_counter++] = 0;
@@ -894,7 +893,7 @@ void VibratoWidget::doUpdate(void)
 		  l_colors[l_colors_counter++] = 0;
 		}
 	    }
-      
+
 	  glVertexPointer(2, GL_FLOAT, 0, l_vertices);
 	  glColorPointer(3, GL_UNSIGNED_BYTE, 0, l_colors);
 	  glNewList(m_maxima_minima_points, GL_COMPILE);
