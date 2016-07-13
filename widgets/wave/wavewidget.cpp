@@ -41,62 +41,61 @@ WaveWidget::~WaveWidget(void)
 //------------------------------------------------------------------------------
 void WaveWidget::setZoomY(const double & zoomY_)
 {
-  if(_zoomY != zoomY_)
+  if(m_zoom_Y != zoomY_)
     {
-      _zoomY = zoomY_;
-      emit zoomYChanged(_zoomY);
+      m_zoom_Y = zoomY_;
+      emit zoomYChanged(m_zoom_Y);
     }
 }
 
 //------------------------------------------------------------------------------
 void WaveWidget::paintEvent(QPaintEvent *)
 {
-  Channel * active = gdata->getActiveChannel();
+  Channel * l_active = gdata->getActiveChannel();
 
   beginDrawing(false);
 
-  if(active)
+  if(l_active)
     {
-      active->lock();
-      AnalysisData * data = active->dataAtCurrentChunk();
-      int centerX = width() / 2;
-      if(data)
+      l_active->lock();
+      AnalysisData * l_data = l_active->dataAtCurrentChunk();
+      int l_center_X = width() / 2;
+      if(l_data)
 	{
-	  double freq = data->getFundamentalFreq();
-	  double period = double(active->rate()) / freq;
-	  double numPeriods = double(active->size()) / period;
+	  double l_freq = l_data->getFundamentalFreq();
+	  double l_period = double(l_active->rate()) / l_freq;
+	  double l_num_periods = double(l_active->size()) / l_period;
 	  //pixels per period
-	  double scaleX = period * double(width()) / double(active->size());
+	  double l_scale_X = l_period * double(width()) / double(l_active->size());
       
 	  //draw altinating background color indicating period
-	  if(gdata->getView().backgroundShading() && period > 4.0 && period < double(active->get_nsdf_data().size()))
+	  if(gdata->getView().backgroundShading() && l_period > 4.0 && l_period < double(l_active->get_nsdf_data().size()))
 	    {
-	      int n = int(ceil(double(centerX) / scaleX));
-	      int j, x;
+	      int l_n = int(ceil(double(l_center_X) / l_scale_X));
 	      p.setPen(Qt::NoPen);
-	      QColor color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), data->getCorrelation());
-	      QColor color2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), data->getCorrelation());
-	      for(j = -n; j < n; j++)
+	      QColor l_color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), l_data->getCorrelation());
+	      QColor l_color2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), l_data->getCorrelation());
+	      for(int l_j = -l_n; l_j < l_n; l_j++)
 		{
-		  x = centerX + toInt(scaleX * double(j));
-		  p.setBrush((j % 2) ? color1 : color2);
-		  p.drawRect(x, 0, toInt(scaleX * double(j + 1)) - toInt(scaleX * double(j)), height());
+		  int l_x = l_center_X + toInt(l_scale_X * double(l_j));
+		  p.setBrush((l_j % 2) ? l_color1 : l_color2);
+		  p.drawRect(l_x, 0, toInt(l_scale_X * double(l_j + 1)) - toInt(l_scale_X * double(l_j)), height());
 		}
-	      p.setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3 * data->getCorrelation()));
-	      for(j = -n; j < n; j++)
+	      p.setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3 * l_data->getCorrelation()));
+	      for(int l_j = -l_n; l_j < l_n; l_j++)
 		{
-		  x = centerX + toInt(scaleX * j);
-		  p.drawLine(x, 0, x, height());
+		  int l_x = l_center_X + toInt(l_scale_X * l_j);
+		  p.drawLine(l_x, 0, l_x, height());
 		}
 	    }
 	  else
 	    {
 	      clearBackground();
 	    }
-	  QString numPeriodsText;
-	  numPeriodsText.sprintf("# Periods = %lf", numPeriods);
+	  QString l_num_periods_text;
+	  l_num_periods_text.sprintf("# Periods = %lf", l_num_periods);
 	  p.setPen(Qt::black);
-	  p.drawText(5, 15, numPeriodsText);
+	  p.drawText(5, 15, l_num_periods_text);
 	}
       else
 	{
@@ -108,48 +107,48 @@ void WaveWidget::paintEvent(QPaintEvent *)
       clearBackground();
     }
 
-  double dh2 = double(height() - 1) / 2.0;
+  double l_dh2 = double(height() - 1) / 2.0;
     
   //draw the center line
   p.setPen(QPen(colorBetween(colorGroup().background(), Qt::black, 0.3), 0));
-  p.drawLine(0, toInt(dh2), width(), toInt(dh2));
+  p.drawLine(0, toInt(l_dh2), width(), toInt(l_dh2));
 
     
-  if(active)
+  if(l_active)
     {
       //draw the waveform
       //only do every second pixel (for speed)
-      int w = width() / 2;
-      if(int(pointArray.size()) != w)
+      int l_w = width() / 2;
+      if(int(m_point_array.size()) != l_w)
 	{
-	  pointArray.resize(w);
+	  m_point_array.resize(l_w);
 	}
-      double scaleY = dh2 * zoomY();
+      double l_scale_Y = l_dh2 * zoomY();
 
       //Use Bresenham's algorithm in 1d to choose the points to draw
-      const Array1d<float> &filteredData = active->get_filtered_input();
+      const Array1d<float> & l_filtered_data = l_active->get_filtered_input();
 
-      int intStep = int(filteredData.size() / w);
-      int remainderStep = filteredData.size() - (intStep * w);
-      int pos = 0;
-      int remainder = 0;
-      for(int j = 0; j < w; j++, pos += intStep, remainder += remainderStep)
+      int l_int_step = int(l_filtered_data.size() / l_w);
+      int l_remainder_step = l_filtered_data.size() - (l_int_step * l_w);
+      int l_pos = 0;
+      int l_remainder = 0;
+      for(int l_j = 0; l_j < l_w; l_j++, l_pos += l_int_step, l_remainder += l_remainder_step)
 	{
-	  if(remainder >= w)
+	  if(l_remainder >= l_w)
 	    {
-	      pos++;
-	      remainder -= w;
+	      l_pos++;
+	      l_remainder -= l_w;
 	    }
-	  myassert(pos < filteredData.size());
-	  if(pos >= filteredData.size())
+	  myassert(l_pos < l_filtered_data.size());
+	  if(l_pos >= l_filtered_data.size())
 	    {
-	      printf("pos = %d, filteredData.size()=%d\n", pos, filteredData.size());
+	      printf("pos = %d, l_filtered_data.size()=%d\n", l_pos, l_filtered_data.size());
 	    }
-	  pointArray.setPoint(j, j*2, toInt(dh2 - (filteredData.at(pos))*scaleY));
+	  m_point_array.setPoint(l_j, l_j * 2, toInt(l_dh2 - (l_filtered_data.at(l_pos)) * l_scale_Y));
 	}
-      p.setPen(QPen(active->get_color(), 0));
-      p.drawPolyline(pointArray);
-      active->unlock();
+      p.setPen(QPen(l_active->get_color(), 0));
+      p.drawPolyline(m_point_array);
+      l_active->unlock();
     }
   endDrawing();
 }
@@ -163,7 +162,7 @@ QSize WaveWidget::sizeHint(void) const
 //------------------------------------------------------------------------------
 const double & WaveWidget::zoomY(void) const
 {
-  return _zoomY;
+  return m_zoom_Y;
 }
 
 // EOF

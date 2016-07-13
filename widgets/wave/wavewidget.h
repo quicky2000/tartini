@@ -46,9 +46,8 @@ class WaveWidget : public DrawWidget
   void setZoomY(const double & zoomY_);
 
  private:
-  QPixmap *buffer;
-  Q3PointArray pointArray;
-  double _zoomY;
+  Q3PointArray m_point_array;
+  double m_zoom_Y;
 
 };
 #endif // WAVEWIDGET_H

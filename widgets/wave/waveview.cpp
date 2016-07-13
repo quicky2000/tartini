@@ -30,29 +30,29 @@
 WaveView::WaveView( int viewID_, QWidget *parent ):
   ViewWidget( viewID_, parent)
 {
-  Q3BoxLayout * mainLayout = new Q3HBoxLayout(this);
+  Q3BoxLayout * l_main_layout = new Q3HBoxLayout(this);
 
-  Q3Grid * waveFrame = new Q3Grid(1, this);
-  waveFrame->setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
-  waveWidget = new WaveWidget(waveFrame);
-  mainLayout->addWidget(waveFrame);
+  Q3Grid * l_wave_frame = new Q3Grid(1, this);
+  l_wave_frame->setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
+  m_wave_widget = new WaveWidget(l_wave_frame);
+  l_main_layout->addWidget(l_wave_frame);
 
-  Q3BoxLayout * rightLayout = new Q3VBoxLayout(mainLayout);
+  Q3BoxLayout * l_right_layout = new Q3VBoxLayout(l_main_layout);
   
-  QwtWheel * freqWheelY = new QwtWheel(this);
-  freqWheelY->setOrientation(Qt::Vertical);
-  freqWheelY->setWheelWidth(14);
-  freqWheelY->setRange(1.0, 20.0, 0.1, 1);
-  freqWheelY->setValue(1.0);
-  QToolTip::add(freqWheelY, "Zoom oscilloscope vertically");
-  rightLayout->addWidget(freqWheelY, 1);
-  rightLayout->addStretch(2);
+  QwtWheel * l_freq_wheel_Y = new QwtWheel(this);
+  l_freq_wheel_Y->setOrientation(Qt::Vertical);
+  l_freq_wheel_Y->setWheelWidth(14);
+  l_freq_wheel_Y->setRange(1.0, 20.0, 0.1, 1);
+  l_freq_wheel_Y->setValue(1.0);
+  QToolTip::add(l_freq_wheel_Y, "Zoom oscilloscope vertically");
+  l_right_layout->addWidget(l_freq_wheel_Y, 1);
+  l_right_layout->addStretch(2);
   
-  connect(freqWheelY, SIGNAL(valueChanged(double)), waveWidget, SLOT(setZoomY(const double &)));
-  connect(waveWidget, SIGNAL(zoomYChanged(double)), waveWidget, SLOT(update()));
+  connect(l_freq_wheel_Y, SIGNAL(valueChanged(double)), m_wave_widget, SLOT(setZoomY(const double &)));
+  connect(m_wave_widget, SIGNAL(zoomYChanged(double)), m_wave_widget, SLOT(update()));
   
   //make the widget get updated when the view changes
-  connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), waveWidget, SLOT(update()));
+  connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), m_wave_widget, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------

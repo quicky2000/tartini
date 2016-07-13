@@ -35,7 +35,7 @@ class WaveView: public ViewWidget
   QSize sizeHint(void) const;
 
  private:
-  WaveWidget * waveWidget;
+  WaveWidget * m_wave_widget;
 };
 #endif // WAVEVIEW_H
 // EOF
