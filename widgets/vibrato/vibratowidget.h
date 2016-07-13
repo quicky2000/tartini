@@ -41,30 +41,30 @@ class VibratoWidget :public QGLWidget
   /**
      The horizontal space in pixels a note label requires
   */
-  int noteLabelOffset;
-  double zoomFactorX;
-  double zoomFactorY;
-  int offsetY;
+  int m_note_label_offset;
+  double m_zoom_factor_X;
+  double m_zoom_factor_Y;
+  int m_offset_Y;
 
-  QFont vibratoFont;
+  QFont m_vibrato_font;
 
-  GLuint verticalPeriodBars;
-  GLuint verticalSeparatorLines;
-  GLuint referenceLines;
-  GLuint pronyWidthBand;
-  GLuint pronyAveragePitch;
-  GLuint vibratoPolyline;
-  GLuint currentWindowBand;
-  GLuint currentTimeLine;
-  GLuint maximaMinimaPoints;
+  GLuint m_vertical_period_bars;
+  GLuint m_vertical_separator_lines;
+  GLuint m_reference_lines;
+  GLuint m_prony_width_band;
+  GLuint m_prony_average_pitch;
+  GLuint m_vibrato_polyline;
+  GLuint m_current_window_band;
+  GLuint m_current_time_line;
+  GLuint m_maxima_minima_points;
 
-  int noteLabelCounter;
+  int m_note_label_counter;
   struct noteLabelStruct
   {
-    QString label;
-    float y;
+    QString m_label;
+    float m_y;
   };
-  noteLabelStruct noteLabels[100];
+  noteLabelStruct m_note_labels[100];
 
 };
 

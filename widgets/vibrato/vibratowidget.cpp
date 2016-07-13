@@ -26,22 +26,22 @@
 #include <gl.h>
 
 //------------------------------------------------------------------------------
-VibratoWidget::VibratoWidget(QWidget *parent, int nls):
-  QGLWidget(parent)
+VibratoWidget::VibratoWidget(QWidget * p_parent, int p_nls):
+  QGLWidget(p_parent)
 {
   // The horizontal space in pixels a note label requires
-  noteLabelOffset = nls;
-  zoomFactorX = 2.0;
-  zoomFactorY = 1.0;
-  offsetY = 0;
-  noteLabelCounter = 0;
-  for (int i = 0; i < 100; i++)
+  m_note_label_offset = p_nls;
+  m_zoom_factor_X = 2.0;
+  m_zoom_factor_Y = 1.0;
+  m_offset_Y = 0;
+  m_note_label_counter = 0;
+  for(int l_index = 0; l_index < 100; l_index++)
     {
-      noteLabels[i].label = QString(8,' ');
-      noteLabels[i].y = 0.0f;
+      m_note_labels[l_index].m_label = QString(8,' ');
+      m_note_labels[l_index].m_y = 0.0f;
     }
-  vibratoFont = QFont();
-  vibratoFont.setPointSize(9);
+  m_vibrato_font = QFont();
+  m_vibrato_font.setPointSize(9);
 }
 
 //------------------------------------------------------------------------------
@@ -50,15 +50,15 @@ VibratoWidget::~VibratoWidget(void)
   // Remove display lists
   makeCurrent();
 
-  glDeleteLists(verticalPeriodBars, 1);
-  glDeleteLists(verticalSeparatorLines, 1);
-  glDeleteLists(referenceLines, 1);
-  glDeleteLists(pronyWidthBand, 1);
-  glDeleteLists(pronyAveragePitch, 1);
-  glDeleteLists(vibratoPolyline, 1);
-  glDeleteLists(currentWindowBand, 1);
-  glDeleteLists(currentTimeLine, 1);
-  glDeleteLists(maximaMinimaPoints, 1);
+  glDeleteLists(m_vertical_period_bars, 1);
+  glDeleteLists(m_vertical_separator_lines, 1);
+  glDeleteLists(m_reference_lines, 1);
+  glDeleteLists(m_prony_width_band, 1);
+  glDeleteLists(m_prony_average_pitch, 1);
+  glDeleteLists(m_vibrato_polyline, 1);
+  glDeleteLists(m_current_window_band, 1);
+  glDeleteLists(m_current_time_line, 1);
+  glDeleteLists(m_maxima_minima_points, 1);
 }
 
 //------------------------------------------------------------------------------
@@ -71,15 +71,15 @@ void VibratoWidget::initializeGL(void)
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-  verticalPeriodBars = glGenLists(1);
-  verticalSeparatorLines = glGenLists(1);
-  referenceLines = glGenLists(1);
-  pronyWidthBand = glGenLists(1);
-  pronyAveragePitch = glGenLists(1);
-  vibratoPolyline = glGenLists(1);
-  currentWindowBand = glGenLists(1);
-  currentTimeLine = glGenLists(1);
-  maximaMinimaPoints = glGenLists(1);
+  m_vertical_period_bars = glGenLists(1);
+  m_vertical_separator_lines = glGenLists(1);
+  m_reference_lines = glGenLists(1);
+  m_prony_width_band = glGenLists(1);
+  m_prony_average_pitch = glGenLists(1);
+  m_vibrato_polyline = glGenLists(1);
+  m_current_window_band = glGenLists(1);
+  m_current_time_line = glGenLists(1);
+  m_maxima_minima_points = glGenLists(1);
 }
 
 //------------------------------------------------------------------------------
@@ -104,54 +104,54 @@ void VibratoWidget::paintGL(void)
   glClear(GL_COLOR_BUFFER_BIT);
 
   // Draw the vertical bars that indicate the vibrato periods
-  glCallList(verticalPeriodBars);
+  glCallList(m_vertical_period_bars);
 
   // Draw the vertical separator lines through the extrema
   glDisable(GL_LINE_SMOOTH);
   glLineWidth(1.0);
-  glCallList(verticalSeparatorLines);
+  glCallList(m_vertical_separator_lines);
 
   // Draw the horizontal reference lines
   glDisable(GL_LINE_SMOOTH);
   glEnable(GL_LINE_STIPPLE);
   glLineWidth(1.0);
   glLineStipple(1, 64716);  // bitpattern 64716 = 1111110011001100
-  glCallList(referenceLines);
+  glCallList(m_reference_lines);
   glDisable(GL_LINE_STIPPLE);
 
   // Draw the light grey band indicating the vibratowidth according to the Prony-algorithm
-  glCallList(pronyWidthBand);
+  glCallList(m_prony_width_band);
 
   // Draw the average pitch according to the Prony-algorithm
   glEnable(GL_LINE_SMOOTH);
   glLineWidth(1.0);
-  glCallList(pronyAveragePitch);
+  glCallList(m_prony_average_pitch);
 
   // Draw the vibrato-polyline
   glEnable(GL_LINE_SMOOTH);
   glLineWidth(2.0);
-  glCallList(vibratoPolyline);
+  glCallList(m_vibrato_polyline);
 
   // Draw the light grey band indicating which time is being used in the current window
-  glCallList(currentWindowBand);
+  glCallList(m_current_window_band);
 
   // Draw the current timeline
   glDisable(GL_LINE_SMOOTH);
   glLineWidth(1.0);
-  glCallList(currentTimeLine);
+  glCallList(m_current_time_line);
 
   // Draw the maxima & minima
   glEnable(GL_POINT_SMOOTH);
   glPointSize(3.0);
-  glCallList(maximaMinimaPoints);
+  glCallList(m_maxima_minima_points);
 
   // Draw the note labels
   mygl_font->beginGLtext(width(), height());
   glColor3ub(0,0,0);
-  for (int i = 0; i < noteLabelCounter; i++)
+  for(int l_index = 0; l_index < m_note_label_counter; l_index++)
     {
-      mygl_font->drawGLtextRaw(3, noteLabels[i].y - 4, noteLabels[i].label);
-      mygl_font->drawGLtextRaw(width() - noteLabelOffset + 3, noteLabels[i].y - 4, noteLabels[i].label);
+      mygl_font->drawGLtextRaw(3, m_note_labels[l_index].m_y - 4, m_note_labels[l_index].m_label);
+      mygl_font->drawGLtextRaw(width() - m_note_label_offset + 3, m_note_labels[l_index].m_y - 4, m_note_labels[l_index].m_label);
     }
   mygl_font->endGLtext();
 }
@@ -159,790 +159,791 @@ void VibratoWidget::paintGL(void)
 //------------------------------------------------------------------------------
 void VibratoWidget::doUpdate(void)
 {
-  noteLabelCounter = 0;
+  m_note_label_counter = 0;
 
   makeCurrent();
 
-  glNewList(verticalPeriodBars, GL_COMPILE);
+  glNewList(m_vertical_period_bars, GL_COMPILE);
   glEndList();
 
-  glNewList(verticalSeparatorLines, GL_COMPILE);
+  glNewList(m_vertical_separator_lines, GL_COMPILE);
   glEndList();
 
-  glNewList(referenceLines, GL_COMPILE);
+  glNewList(m_reference_lines, GL_COMPILE);
   glEndList();
 
-  glNewList(pronyWidthBand, GL_COMPILE);
+  glNewList(m_prony_width_band, GL_COMPILE);
   glEndList();
 
-  glNewList(pronyAveragePitch, GL_COMPILE);
+  glNewList(m_prony_average_pitch, GL_COMPILE);
   glEndList();
 
-  glNewList(vibratoPolyline, GL_COMPILE);
+  glNewList(m_vibrato_polyline, GL_COMPILE);
   glEndList();
 
-  glNewList(currentWindowBand, GL_COMPILE);
+  glNewList(m_current_window_band, GL_COMPILE);
   glEndList();
 
-  glNewList(currentTimeLine, GL_COMPILE);
+  glNewList(m_current_time_line, GL_COMPILE);
   glEndList();
 
-  glNewList(maximaMinimaPoints, GL_COMPILE);
+  glNewList(m_maxima_minima_points, GL_COMPILE);
   glEndList();
 
-  Channel * active = gdata->getActiveChannel();
+  Channel * l_active = gdata->getActiveChannel();
 
-  if (active)
+  if (l_active)
     {
-      ChannelLocker channelLocker(active);
-      AnalysisData *data = active->dataAtCurrentChunk();
-      if(data && active->isVisibleNote(data->getNoteIndex()) && active->isLabelNote(data->getNoteIndex()))
+      ChannelLocker l_channel_locker(l_active);
+      AnalysisData * l_data = l_active->dataAtCurrentChunk();
+      if(l_data && l_active->isVisibleNote(l_data->getNoteIndex()) && l_active->isLabelNote(l_data->getNoteIndex()))
 	{
-	  const NoteData *note = new NoteData();
-	  note = &(active->get_note_data()[data->getNoteIndex()]);
+	  const NoteData * l_note = new NoteData();
+	  l_note = &(l_active->get_note_data()[l_data->getNoteIndex()]);
 
-	  const int myStartChunk = note->startChunk();
-	  const int myEndChunk = note->endChunk();
-	  const int myCurrentChunk = active->chunkAtCurrentTime();
-	  const float halfHeight = 0.5 * height();
-	  const int maximaSize = note->get_maxima()->size();
-	  const int minimaSize = note->get_minima()->size();
-	  const float avgPitch = note->avgPitch();
-	  const int framesPerChunk = active->framesPerChunk();
-	  const float zoomFactorYx100 = zoomFactorY * 100;
+	  const int l_my_start_chunk = l_note->startChunk();
+	  const int l_my_end_chunck = l_note->endChunk();
+	  const int l_my_current_chunck = l_active->chunkAtCurrentTime();
+	  const float l_half_height = 0.5 * height();
+	  const int l_maxima_size = l_note->get_maxima()->size();
+	  const int l_minima_size = l_note->get_minima()->size();
+	  const float l_avg_pitch = l_note->avgPitch();
+	  const int l_frames_per_chunk = l_active->framesPerChunk();
+	  const float l_zoom_factor_Y_x_100 = m_zoom_factor_Y * 100;
 
-	  float windowOffset;
-	  large_vector<float> pitchLookupUsed = active->get_pitch_lookup_smoothed();
-	  int smoothDelay = active->get_pitch_big_smoothing_filter().delay();
+	  float l_window_offset;
+	  large_vector<float> l_pitch_lookup_used = l_active->get_pitch_lookup_smoothed();
+	  int l_smooth_delay = l_active->get_pitch_big_smoothing_filter().delay();
 
-	  if ((myEndChunk - myStartChunk) * zoomFactorX > width() - 2 * noteLabelOffset)
+	  if ((l_my_end_chunck - l_my_start_chunk) * m_zoom_factor_X > width() - 2 * m_note_label_offset)
 	    {
 	      // The vibrato-polyline doesn't fit in the window
-	      if ((myCurrentChunk - myStartChunk) * zoomFactorX < (width() - 2 * noteLabelOffset) / 2)
+	      if ((l_my_current_chunck - l_my_start_chunk) * m_zoom_factor_X < (width() - 2 * m_note_label_offset) / 2)
 		{
 		  // We're at the left side of the vibrato-polyline
-		  windowOffset = 0 - noteLabelOffset;
+		  l_window_offset = 0 - m_note_label_offset;
 		}
-	      else if ((myEndChunk - myCurrentChunk) * zoomFactorX < (width() - 2 * noteLabelOffset) / 2)
+	      else if ((l_my_end_chunck - l_my_current_chunck) * m_zoom_factor_X < (width() - 2 * m_note_label_offset) / 2)
 		{
 		  // We're at the right side of the vibrato-polyline
-		  windowOffset = (myEndChunk - myStartChunk) * zoomFactorX - width() + noteLabelOffset + 1;
+		  l_window_offset = (l_my_end_chunck - l_my_start_chunk) * m_zoom_factor_X - width() + m_note_label_offset + 1;
 		}
 	      else
 		{
 		  // We're somewhere in the middle of the vibrato-polyline
-		  windowOffset = (myCurrentChunk - myStartChunk) * zoomFactorX - width() / 2;
+		  l_window_offset = (l_my_current_chunck - l_my_start_chunk) * m_zoom_factor_X - width() / 2;
 		}
 	    }
 	  else
 	    {
 	      // The vibrato-polyline does fit in the window
-	      windowOffset = 0 - noteLabelOffset;
+	      l_window_offset = 0 - m_note_label_offset;
 	    }
 
-	  GLfloat * vertices;
-	  GLubyte * colors;
-	  uint verticesCounter, colorsCounter;
+	  GLfloat * l_vertices;
+	  GLubyte * l_colors;
+	  uint l_vertices_counter = 0;
+	  uint l_colors_counter = 0;
 
 	  glEnableClientState(GL_VERTEX_ARRAY);
 	  glEnableClientState(GL_COLOR_ARRAY);
 
 	  // Calculate the alternating vertical bars that indicate the vibrato periods
-	  if ((active->doingDetailedPitch()) && (active->get_pitch_lookup_smoothed().size() > 0))
+	  if ((l_active->doingDetailedPitch()) && (l_active->get_pitch_lookup_smoothed().size() > 0))
 	    {
 	      // No. of bars with the left side at a maximum
-	      int color1Bars = 0;
+	      int l_color1_bars = 0;
 	      // No. of bars with the left side at a minimum
-	      int color2Bars = 0;
+	      int l_color2_bars = 0;
 	      // The first extremum is a maximum?
-	      bool maximumFirst = true;
+	      bool l_maximum_first = true;
 
-	      if (maximaSize + minimaSize >= 2)
+	      if (l_maxima_size + l_minima_size >= 2)
 		{
 		  // There is at least one bar to calculate
-		  if (maximaSize == minimaSize)
+		  if (l_maxima_size == l_minima_size)
 		    {
-		      if (note->get_maxima()->at(0) < note->get_minima()->at(0))
+		      if (l_note->get_maxima()->at(0) < l_note->get_minima()->at(0))
 			{
-			  color1Bars = maximaSize;
-			  color2Bars = minimaSize - 1;
-			  maximumFirst = true;
+			  l_color1_bars = l_maxima_size;
+			  l_color2_bars = l_minima_size - 1;
+			  l_maximum_first = true;
 			}
 		      else
 			{
-			  color1Bars = maximaSize - 1;
-			  color2Bars = minimaSize;
-			  maximumFirst = false;
+			  l_color1_bars = l_maxima_size - 1;
+			  l_color2_bars = l_minima_size;
+			  l_maximum_first = false;
 			}
 		    }
 		  else
 		    {
-		      color1Bars = maximaSize > minimaSize ? minimaSize : maximaSize;
-		      color2Bars = maximaSize > minimaSize ? minimaSize : maximaSize;
-		      maximumFirst = maximaSize > minimaSize;
+		      l_color1_bars = l_maxima_size > l_minima_size ? l_minima_size : l_maxima_size;
+		      l_color2_bars = l_maxima_size > l_minima_size ? l_minima_size : l_maxima_size;
+		      l_maximum_first = l_maxima_size > l_minima_size;
 		    }
 		}
 
-	      float x1, x2;
+	      float l_x1, l_x2;
 
 	      // Calculate the bars with the left side at a maximum
-	      vertices = new GLfloat[(color1Bars + color2Bars) * 8];
-	      colors = new GLubyte[(color1Bars + color2Bars) * 12];
+	      l_vertices = new GLfloat[(l_color1_bars + l_color2_bars) * 8];
+	      l_colors = new GLubyte[(l_color1_bars + l_color2_bars) * 12];
 
-	      const char color1Red = gdata->shading1Color().red();
-	      const char color1Green = gdata->shading1Color().green();
-	      const char color1Blue = gdata->shading1Color().blue();
+	      const char l_color1_red = gdata->shading1Color().red();
+	      const char l_color1_green = gdata->shading1Color().green();
+	      const char l_color1_blue = gdata->shading1Color().blue();
 
-	      verticesCounter = 0;
-	      colorsCounter = 0;
+	      l_vertices_counter = 0;
+	      l_colors_counter = 0;
 
-	      for (int i = 0; i < color1Bars; i++)
+	      for(int l_index = 0; l_index < l_color1_bars; l_index++)
 		{
-		  x1 = ((((float)note->get_maxima()->at(i) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
-		  if (x1 < noteLabelOffset)
+		  l_x1 = ((((float)l_note->get_maxima()->at(l_index) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
+		  if (l_x1 < m_note_label_offset)
 		    {
-		      x1 = noteLabelOffset;
+		      l_x1 = m_note_label_offset;
 		    }
-		  if (x1 > width() - noteLabelOffset)
+		  if (l_x1 > width() - m_note_label_offset)
 		    {
 		      break;
 		    }
-		  if (maximumFirst)
+		  if (l_maximum_first)
 		    {
-		      x2 = ((((float)note->get_minima()->at(i) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
+		      l_x2 = ((((float)l_note->get_minima()->at(l_index) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
 		    }
 		  else
 		    {
-		      x2 = ((((float)note->get_minima()->at(i+1) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
+		      l_x2 = ((((float)l_note->get_minima()->at(l_index + 1) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
 		    }
-		  if (x2 < noteLabelOffset)
+		  if (l_x2 < m_note_label_offset)
 		    {
 		      continue;
 		    }
-		  if (x2 > width() - noteLabelOffset)
+		  if (l_x2 > width() - m_note_label_offset)
 		    {
-		      x2 = width() - noteLabelOffset;
+		      l_x2 = width() - m_note_label_offset;
 		    }
 
-		  vertices[verticesCounter++] = x1;
-		  vertices[verticesCounter++] = 0;
-		  vertices[verticesCounter++] = x2;
-		  vertices[verticesCounter++] = 0;
-		  vertices[verticesCounter++] = x2;
-		  vertices[verticesCounter++] = height();
-		  vertices[verticesCounter++] = x1;
-		  vertices[verticesCounter++] = height();
+		  l_vertices[l_vertices_counter++] = l_x1;
+		  l_vertices[l_vertices_counter++] = 0;
+		  l_vertices[l_vertices_counter++] = l_x2;
+		  l_vertices[l_vertices_counter++] = 0;
+		  l_vertices[l_vertices_counter++] = l_x2;
+		  l_vertices[l_vertices_counter++] = height();
+		  l_vertices[l_vertices_counter++] = l_x1;
+		  l_vertices[l_vertices_counter++] = height();
 
-		  for (int j = 1; j <= 4; j++)
+		  for(int l_j = 1; l_j <= 4; l_j++)
 		    {
-		      colors[colorsCounter++] = color1Red;
-		      colors[colorsCounter++] = color1Green;
-		      colors[colorsCounter++] = color1Blue;
+		      l_colors[l_colors_counter++] = l_color1_red;
+		      l_colors[l_colors_counter++] = l_color1_green;
+		      l_colors[l_colors_counter++] = l_color1_blue;
 		    }
 		}
 
 	      // Calculate the bars with the left side at a minimum
-	      const char color2Red = gdata->shading2Color().red();
-	      const char color2Green = gdata->shading2Color().green();
-	      const char color2Blue = gdata->shading2Color().blue();
+	      const char l_color2_red = gdata->shading2Color().red();
+	      const char l_color2_green = gdata->shading2Color().green();
+	      const char l_color2_blue = gdata->shading2Color().blue();
 
-	      for (int i = 0; i < color2Bars; i++)
+	      for(int l_index = 0; l_index < l_color2_bars; l_index++)
 		{
-		  x1 = ((((float)note->get_minima()->at(i) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
-		  if (x1 < noteLabelOffset)
+		  l_x1 = ((((float)l_note->get_minima()->at(l_index) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
+		  if (l_x1 < m_note_label_offset)
 		    {
-		      x1 = noteLabelOffset;
+		      l_x1 = m_note_label_offset;
 		    }
-		  if (x1 > width() - noteLabelOffset)
+		  if (l_x1 > width() - m_note_label_offset)
 		    {
 		      break;
 		    }
-		  if (maximumFirst)
+		  if (l_maximum_first)
 		    {
-		      x2 = ((((float)note->get_maxima()->at(i+1) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
+		      l_x2 = ((((float)l_note->get_maxima()->at(l_index + 1) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
 		    }
 		  else
 		    {
-		      x2 = ((((float)note->get_maxima()->at(i) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
+		      l_x2 = ((((float)l_note->get_maxima()->at(l_index) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
 		    }
-		  if (x2 < noteLabelOffset)
+		  if (l_x2 < m_note_label_offset)
 		    {
 		      continue;
 		    }
-		  if (x2 > width() - noteLabelOffset)
+		  if (l_x2 > width() - m_note_label_offset)
 		    {
-		      x2 = width() - noteLabelOffset;
+		      l_x2 = width() - m_note_label_offset;
 		    }
 
-		  vertices[verticesCounter++] = x1;
-		  vertices[verticesCounter++] = 0;
-		  vertices[verticesCounter++] = x2;
-		  vertices[verticesCounter++] = 0;
-		  vertices[verticesCounter++] = x2;
-		  vertices[verticesCounter++] = height();
-		  vertices[verticesCounter++] = x1;
-		  vertices[verticesCounter++] = height();
+		  l_vertices[l_vertices_counter++] = l_x1;
+		  l_vertices[l_vertices_counter++] = 0;
+		  l_vertices[l_vertices_counter++] = l_x2;
+		  l_vertices[l_vertices_counter++] = 0;
+		  l_vertices[l_vertices_counter++] = l_x2;
+		  l_vertices[l_vertices_counter++] = height();
+		  l_vertices[l_vertices_counter++] = l_x1;
+		  l_vertices[l_vertices_counter++] = height();
 
-		  for (int j = 1; j <= 4; j++)
+		  for(int l_j = 1; l_j <= 4; l_j++)
 		    {
-		      colors[colorsCounter++] = color2Red;
-		      colors[colorsCounter++] = color2Green;
-		      colors[colorsCounter++] = color2Blue;
+		      l_colors[l_colors_counter++] = l_color2_red;
+		      l_colors[l_colors_counter++] = l_color2_green;
+		      l_colors[l_colors_counter++] = l_color2_blue;
 		    }
 		}
 
-	      glVertexPointer(2, GL_FLOAT, 0, vertices);
-	      glColorPointer(3, GL_UNSIGNED_BYTE, 0, colors);
-	      glNewList(verticalPeriodBars, GL_COMPILE);
-	      glDrawArrays(GL_QUADS, 0, verticesCounter/2);
+	      glVertexPointer(2, GL_FLOAT, 0, l_vertices);
+	      glColorPointer(3, GL_UNSIGNED_BYTE, 0, l_colors);
+	      glNewList(m_vertical_period_bars, GL_COMPILE);
+	      glDrawArrays(GL_QUADS, 0, l_vertices_counter / 2);
 	      glEndList();
 
-	      delete[] vertices;
-	      delete[] colors;
+	      delete[] l_vertices;
+	      delete[] l_colors;
 
 	      // Calculate the vertical separator lines through the maxima
-	      vertices = new GLfloat[(maximaSize + minimaSize) * 4];
-	      colors = new GLubyte[(maximaSize + minimaSize) * 6];
+	      l_vertices = new GLfloat[(l_maxima_size + l_minima_size) * 4];
+	      l_colors = new GLubyte[(l_maxima_size + l_minima_size) * 6];
 
-	      verticesCounter = 0;
-	      colorsCounter = 0;
+	      l_vertices_counter = 0;
+	      l_colors_counter = 0;
 
-	      for (int i = 0; i < maximaSize; i++)
+	      for(int l_index = 0; l_index < l_maxima_size; l_index++)
 		{
-		  x1 = ((((float)note->get_maxima()->at(i) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
-		  if (x1 < noteLabelOffset)
+		  l_x1 = ((((float)l_note->get_maxima()->at(l_index) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
+		  if (l_x1 < m_note_label_offset)
 		    {
 		      continue;
 		    }
-		  if (x1 > width() - noteLabelOffset)
+		  if (l_x1 > width() - m_note_label_offset)
 		    {
 		      break;
 		    }
 
-		  vertices[verticesCounter++] = x1;
-		  vertices[verticesCounter++] = 0;
-		  vertices[verticesCounter++] = x1;
-		  vertices[verticesCounter++] = height();
+		  l_vertices[l_vertices_counter++] = l_x1;
+		  l_vertices[l_vertices_counter++] = 0;
+		  l_vertices[l_vertices_counter++] = l_x1;
+		  l_vertices[l_vertices_counter++] = height();
 
-		  colors[colorsCounter++] = 131;
-		  colors[colorsCounter++] = 144;
-		  colors[colorsCounter++] = 159;
-		  colors[colorsCounter++] = 131;
-		  colors[colorsCounter++] = 144;
-		  colors[colorsCounter++] = 159;
+		  l_colors[l_colors_counter++] = 131;
+		  l_colors[l_colors_counter++] = 144;
+		  l_colors[l_colors_counter++] = 159;
+		  l_colors[l_colors_counter++] = 131;
+		  l_colors[l_colors_counter++] = 144;
+		  l_colors[l_colors_counter++] = 159;
 		}
 
 	      // Calculate the vertical separator lines through the minima
-	      for (int i = 0; i < minimaSize; i++)
+	      for(int l_index = 0; l_index < l_minima_size; l_index++)
 		{
-		  x1 = ((((float)note->get_minima()->at(i) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
-		  if (x1 < noteLabelOffset)
+		  l_x1 = ((((float)l_note->get_minima()->at(l_index) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
+		  if (l_x1 < m_note_label_offset)
 		    {
 		      continue;
 		    }
-		  if (x1 > width() - noteLabelOffset)
+		  if (l_x1 > width() - m_note_label_offset)
 		    {
 		      break;
 		    }
 
-		  vertices[verticesCounter++] = x1;
-		  vertices[verticesCounter++] = 0;
-		  vertices[verticesCounter++] = x1;
-		  vertices[verticesCounter++] = height();
+		  l_vertices[l_vertices_counter++] = l_x1;
+		  l_vertices[l_vertices_counter++] = 0;
+		  l_vertices[l_vertices_counter++] = l_x1;
+		  l_vertices[l_vertices_counter++] = height();
 
-		  colors[colorsCounter++] = 131;
-		  colors[colorsCounter++] = 144;
-		  colors[colorsCounter++] = 159;
-		  colors[colorsCounter++] = 131;
-		  colors[colorsCounter++] = 144;
-		  colors[colorsCounter++] = 159;
+		  l_colors[l_colors_counter++] = 131;
+		  l_colors[l_colors_counter++] = 144;
+		  l_colors[l_colors_counter++] = 159;
+		  l_colors[l_colors_counter++] = 131;
+		  l_colors[l_colors_counter++] = 144;
+		  l_colors[l_colors_counter++] = 159;
 		}
 
-	      glVertexPointer(2, GL_FLOAT, 0, vertices);
-	      glColorPointer(3, GL_UNSIGNED_BYTE, 0, colors);
-	      glNewList(verticalSeparatorLines, GL_COMPILE);
-	      glDrawArrays(GL_LINES, 0, verticesCounter/2);
+	      glVertexPointer(2, GL_FLOAT, 0, l_vertices);
+	      glColorPointer(3, GL_UNSIGNED_BYTE, 0, l_colors);
+	      glNewList(m_vertical_separator_lines, GL_COMPILE);
+	      glDrawArrays(GL_LINES, 0, l_vertices_counter / 2);
 	      glEndList();
 
-	      delete[] vertices;
-	      delete[] colors;
+	      delete[] l_vertices;
+	      delete[] l_colors;
 	    }
 
 
 	  // Calculate the horizontal reference lines + note labels
-	  vertices = new GLfloat[100 * 4];
-	  colors = new GLubyte[100 * 6];
+	  l_vertices = new GLfloat[100 * 4];
+	  l_colors = new GLubyte[100 * 6];
 
-	  verticesCounter = 0;
-	  colorsCounter = 0;
+	  l_vertices_counter = 0;
+	  l_colors_counter = 0;
 
-	  const int nearestNote = toInt(avgPitch);
-	  QString noteLabel;
-	  const float referenceLineX1 = noteLabelOffset;
-	  const float referenceLineX2 = width() - noteLabelOffset;
-	  float referenceLineY;
+	  const int l_nearest_note = toInt(l_avg_pitch);
+	  QString l_note_label;
+	  const float l_reference_line_X1 = m_note_label_offset;
+	  const float l_reference_line_X2 = width() - m_note_label_offset;
+	  float l_reference_line_Y;
 
 	  // Calculate the nearest reference line + note label
-	  referenceLineY = halfHeight + ((nearestNote - avgPitch) * zoomFactorYx100) + offsetY;
+	  l_reference_line_Y = l_half_height + ((l_nearest_note - l_avg_pitch) * l_zoom_factor_Y_x_100) + m_offset_Y;
 
-	  vertices[verticesCounter++] = referenceLineX1;
-	  vertices[verticesCounter++] = referenceLineY;
-	  vertices[verticesCounter++] = referenceLineX2;
-	  vertices[verticesCounter++] = referenceLineY;
+	  l_vertices[l_vertices_counter++] = l_reference_line_X1;
+	  l_vertices[l_vertices_counter++] = l_reference_line_Y;
+	  l_vertices[l_vertices_counter++] = l_reference_line_X2;
+	  l_vertices[l_vertices_counter++] = l_reference_line_Y;
 
-	  colors[colorsCounter++] = 144;
-	  colors[colorsCounter++] = 156;
-	  colors[colorsCounter++] = 170;
-	  colors[colorsCounter++] = 144;
-	  colors[colorsCounter++] = 156;
-	  colors[colorsCounter++] = 170;
+	  l_colors[l_colors_counter++] = 144;
+	  l_colors[l_colors_counter++] = 156;
+	  l_colors[l_colors_counter++] = 170;
+	  l_colors[l_colors_counter++] = 144;
+	  l_colors[l_colors_counter++] = 156;
+	  l_colors[l_colors_counter++] = 170;
       
-	  if ((noteOctave(nearestNote) >= 0) && (noteOctave(nearestNote) <= 9))
+	  if ((noteOctave(l_nearest_note) >= 0) && (noteOctave(l_nearest_note) <= 9))
 	    {
-	      noteLabel.sprintf("%s%d", noteName(nearestNote), noteOctave(nearestNote));
+	      l_note_label.sprintf("%s%d", noteName(l_nearest_note), noteOctave(l_nearest_note));
 	    }
 	  else
 	    {
-	      noteLabel.sprintf("%s ", noteName(nearestNote));
+	      l_note_label.sprintf("%s ", noteName(l_nearest_note));
 	    }
-	  noteLabels[noteLabelCounter].label = noteLabel;
-	  noteLabels[noteLabelCounter].y = referenceLineY;
-	  noteLabelCounter++;
+	  m_note_labels[m_note_label_counter].m_label = l_note_label;
+	  m_note_labels[m_note_label_counter].m_y = l_reference_line_Y;
+	  m_note_label_counter++;
 
 	  // Calculate as many reference lines + note labels above the note as can be seen
-	  for (int i = 1; ; i++)
+	  for(int l_index = 1; ; l_index++)
 	    {
-	      referenceLineY = halfHeight + ((nearestNote + i - avgPitch) * zoomFactorYx100) + offsetY;
-	      if (referenceLineY > height())
+	      l_reference_line_Y = l_half_height + ((l_nearest_note + l_index - l_avg_pitch) * l_zoom_factor_Y_x_100) + m_offset_Y;
+	      if (l_reference_line_Y > height())
 		{
 		  break;
 		}
 
-	      vertices[verticesCounter++] = referenceLineX1;
-	      vertices[verticesCounter++] = referenceLineY;
-	      vertices[verticesCounter++] = referenceLineX2;
-	      vertices[verticesCounter++] = referenceLineY;
+	      l_vertices[l_vertices_counter++] = l_reference_line_X1;
+	      l_vertices[l_vertices_counter++] = l_reference_line_Y;
+	      l_vertices[l_vertices_counter++] = l_reference_line_X2;
+	      l_vertices[l_vertices_counter++] = l_reference_line_Y;
 
-	      colors[colorsCounter++] = 144;
-	      colors[colorsCounter++] = 156;
-	      colors[colorsCounter++] = 170;
-	      colors[colorsCounter++] = 144;
-	      colors[colorsCounter++] = 156;
-	      colors[colorsCounter++] = 170;
+	      l_colors[l_colors_counter++] = 144;
+	      l_colors[l_colors_counter++] = 156;
+	      l_colors[l_colors_counter++] = 170;
+	      l_colors[l_colors_counter++] = 144;
+	      l_colors[l_colors_counter++] = 156;
+	      l_colors[l_colors_counter++] = 170;
 	
-	      if ((noteOctave(nearestNote + i) >= 0) && (noteOctave(nearestNote + i) <= 9))
+	      if ((noteOctave(l_nearest_note + l_index) >= 0) && (noteOctave(l_nearest_note + l_index) <= 9))
 		{
-		  noteLabel.sprintf("%s%d", noteName(nearestNote + i), noteOctave(nearestNote + i));
+		  l_note_label.sprintf("%s%d", noteName(l_nearest_note + l_index), noteOctave(l_nearest_note + l_index));
 		}
 	      else
 		{
-		  noteLabel.sprintf("%s ", noteName(nearestNote + i));
+		  l_note_label.sprintf("%s ", noteName(l_nearest_note + l_index));
 		}
-	      noteLabels[noteLabelCounter].label = noteLabel;
-	      noteLabels[noteLabelCounter].y = referenceLineY;
-	      noteLabelCounter++;
+	      m_note_labels[m_note_label_counter].m_label = l_note_label;
+	      m_note_labels[m_note_label_counter].m_y = l_reference_line_Y;
+	      m_note_label_counter++;
 	    }
 
 	  // Calculate as many reference lines + note labels below the note as can be seen
-	  for (int i = -1; ; i--)
+	  for(int l_index = -1; ; l_index--)
 	    {
-	      referenceLineY = halfHeight + ((nearestNote + i - avgPitch) * zoomFactorYx100) + offsetY;
-	      if (referenceLineY < 0)
+	      l_reference_line_Y = l_half_height + ((l_nearest_note + l_index - l_avg_pitch) * l_zoom_factor_Y_x_100) + m_offset_Y;
+	      if (l_reference_line_Y < 0)
 		{
 		  break;
 		}
 
-	      vertices[verticesCounter++] = referenceLineX1;
-	      vertices[verticesCounter++] = referenceLineY;
-	      vertices[verticesCounter++] = referenceLineX2;
-	      vertices[verticesCounter++] = referenceLineY;
+	      l_vertices[l_vertices_counter++] = l_reference_line_X1;
+	      l_vertices[l_vertices_counter++] = l_reference_line_Y;
+	      l_vertices[l_vertices_counter++] = l_reference_line_X2;
+	      l_vertices[l_vertices_counter++] = l_reference_line_Y;
 
-	      colors[colorsCounter++] = 144;
-	      colors[colorsCounter++] = 156;
-	      colors[colorsCounter++] = 170;
-	      colors[colorsCounter++] = 144;
-	      colors[colorsCounter++] = 156;
-	      colors[colorsCounter++] = 170;
+	      l_colors[l_colors_counter++] = 144;
+	      l_colors[l_colors_counter++] = 156;
+	      l_colors[l_colors_counter++] = 170;
+	      l_colors[l_colors_counter++] = 144;
+	      l_colors[l_colors_counter++] = 156;
+	      l_colors[l_colors_counter++] = 170;
 
-	      if ((noteOctave(nearestNote + i) >= 0) && (noteOctave(nearestNote + i) <= 9))
+	      if ((noteOctave(l_nearest_note + l_index) >= 0) && (noteOctave(l_nearest_note + l_index) <= 9))
 		{
-		  noteLabel.sprintf("%s%d", noteName(nearestNote + i), noteOctave(nearestNote + i));
+		  l_note_label.sprintf("%s%d", noteName(l_nearest_note + l_index), noteOctave(l_nearest_note + l_index));
 		}
 	      else
 		{
-		  noteLabel.sprintf("%s ", noteName(nearestNote + i));
+		  l_note_label.sprintf("%s ", noteName(l_nearest_note + l_index));
 		}
-	      noteLabels[noteLabelCounter].label = noteLabel;
-	      noteLabels[noteLabelCounter].y = referenceLineY;
-	      noteLabelCounter++;
+	      m_note_labels[m_note_label_counter].m_label = l_note_label;
+	      m_note_labels[m_note_label_counter].m_y = l_reference_line_Y;
+	      m_note_label_counter++;
 	    }
 
-	  glVertexPointer(2, GL_FLOAT, 0, vertices);
-	  glColorPointer(3, GL_UNSIGNED_BYTE, 0, colors);
-	  glNewList(referenceLines, GL_COMPILE);
-	  glDrawArrays(GL_LINES, 0, verticesCounter/2);
+	  glVertexPointer(2, GL_FLOAT, 0, l_vertices);
+	  glColorPointer(3, GL_UNSIGNED_BYTE, 0, l_colors);
+	  glNewList(m_reference_lines, GL_COMPILE);
+	  glDrawArrays(GL_LINES, 0, l_vertices_counter / 2);
 	  glEndList();
 
-	  delete[] vertices;
-	  delete[] colors;
+	  delete[] l_vertices;
+	  delete[] l_colors;
 
 
 	  // Calculate the light grey band indicating the vibratowidth according to the Prony-algorithm
-	  verticesCounter = 0;
-	  colorsCounter = 0;
+	  l_vertices_counter = 0;
+	  l_colors_counter = 0;
 
-	  vertices = new GLfloat[(myEndChunk - myStartChunk) * 8];
-	  colors = new GLubyte[(myEndChunk - myStartChunk) * 16];
+	  l_vertices = new GLfloat[(l_my_end_chunck - l_my_start_chunk) * 8];
+	  l_colors = new GLubyte[(l_my_end_chunck - l_my_start_chunk) * 16];
 
-	  for (int chunk = myStartChunk; chunk < myEndChunk - 1; chunk++)
+	  for(int l_chunk = l_my_start_chunk; l_chunk < l_my_end_chunck - 1; l_chunk++)
 	    {
-	      float x1 = (chunk - myStartChunk) * zoomFactorX - windowOffset;
-	      if (x1 < noteLabelOffset)
+	      float l_x1 = (l_chunk - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
+	      if (l_x1 < m_note_label_offset)
 		{
-		  x1 = noteLabelOffset;
+		  l_x1 = m_note_label_offset;
 		}
-	      if (x1 > width() - noteLabelOffset)
+	      if (l_x1 > width() - m_note_label_offset)
 		{
 		  break;
 		}
-	      float x2 = (chunk + 1 - myStartChunk) * zoomFactorX - windowOffset;
-	      if (x2 < noteLabelOffset)
+	      float l_x2 = (l_chunk + 1 - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
+	      if (l_x2 < m_note_label_offset)
 		{
 		  continue;
 		}
-	      if (x2 > width() - noteLabelOffset)
+	      if (l_x2 > width() - m_note_label_offset)
 		{
-		  x2 = width() - noteLabelOffset;
+		  l_x2 = width() - m_note_label_offset;
 		}
 
-	      float vibratoPitch1 = active->dataAtChunk(chunk)->getVibratoPitch();
-	      float vibratoWidth1 = active->dataAtChunk(chunk)->getVibratoWidth();
-	      float vibratoPitch2 = active->dataAtChunk(chunk + 1)->getVibratoPitch();
-	      float vibratoWidth2 = active->dataAtChunk(chunk + 1)->getVibratoWidth();
-	      float y1 = halfHeight + ((vibratoPitch1 + vibratoWidth1 - avgPitch) * zoomFactorYx100) + offsetY;
-	      float y2 = halfHeight + ((vibratoPitch1 - vibratoWidth1 - avgPitch) * zoomFactorYx100) + offsetY;
-	      float y3 = halfHeight + ((vibratoPitch2 - vibratoWidth2 - avgPitch) * zoomFactorYx100) + offsetY;
-	      float y4 = halfHeight + ((vibratoPitch2 + vibratoWidth2 - avgPitch) * zoomFactorYx100) + offsetY;
+	      float l_vibrato_pitch1 = l_active->dataAtChunk(l_chunk)->getVibratoPitch();
+	      float l_vibrato_width1 = l_active->dataAtChunk(l_chunk)->getVibratoWidth();
+	      float l_vibrato_pitch2 = l_active->dataAtChunk(l_chunk + 1)->getVibratoPitch();
+	      float l_vibrato_width2 = l_active->dataAtChunk(l_chunk + 1)->getVibratoWidth();
+	      float l_y1 = l_half_height + ((l_vibrato_pitch1 + l_vibrato_width1 - l_avg_pitch) * l_zoom_factor_Y_x_100) + m_offset_Y;
+	      float l_y2 = l_half_height + ((l_vibrato_pitch1 - l_vibrato_width1 - l_avg_pitch) * l_zoom_factor_Y_x_100) + m_offset_Y;
+	      float l_y3 = l_half_height + ((l_vibrato_pitch2 - l_vibrato_width2 - l_avg_pitch) * l_zoom_factor_Y_x_100) + m_offset_Y;
+	      float l_y4 = l_half_height + ((l_vibrato_pitch2 + l_vibrato_width2 - l_avg_pitch) * l_zoom_factor_Y_x_100) + m_offset_Y;
 
-	      vertices[verticesCounter++] = x1;
-	      vertices[verticesCounter++] = y1;
-	      vertices[verticesCounter++] = x1;
-	      vertices[verticesCounter++] = y2;
-	      vertices[verticesCounter++] = x2;
-	      vertices[verticesCounter++] = y3;
-	      vertices[verticesCounter++] = x2;
-	      vertices[verticesCounter++] = y4;
+	      l_vertices[l_vertices_counter++] = l_x1;
+	      l_vertices[l_vertices_counter++] = l_y1;
+	      l_vertices[l_vertices_counter++] = l_x1;
+	      l_vertices[l_vertices_counter++] = l_y2;
+	      l_vertices[l_vertices_counter++] = l_x2;
+	      l_vertices[l_vertices_counter++] = l_y3;
+	      l_vertices[l_vertices_counter++] = l_x2;
+	      l_vertices[l_vertices_counter++] = l_y4;
 
-	      for (int j = 1; j <= 4; j++)
+	      for(int l_j = 1; l_j <= 4; l_j++)
 		{
-		  colors[colorsCounter++] = 0;
-		  colors[colorsCounter++] = 0;
-		  colors[colorsCounter++] = 0;
-		  colors[colorsCounter++] = 64;
+		  l_colors[l_colors_counter++] = 0;
+		  l_colors[l_colors_counter++] = 0;
+		  l_colors[l_colors_counter++] = 0;
+		  l_colors[l_colors_counter++] = 64;
 		}
 	    }
 
-	  glVertexPointer(2, GL_FLOAT, 0, vertices);
-	  glColorPointer(4, GL_UNSIGNED_BYTE, 0, colors);
-	  glNewList(pronyWidthBand, GL_COMPILE);
-	  glDrawArrays(GL_QUADS, 0, verticesCounter/2);
+	  glVertexPointer(2, GL_FLOAT, 0, l_vertices);
+	  glColorPointer(4, GL_UNSIGNED_BYTE, 0, l_colors);
+	  glNewList(m_prony_width_band, GL_COMPILE);
+	  glDrawArrays(GL_QUADS, 0, l_vertices_counter / 2);
 	  glEndList();
 
-	  delete[] vertices;
-	  delete[] colors;
+	  delete[] l_vertices;
+	  delete[] l_colors;
 
 
 	  // Calculate the average pitch according to the Prony-algorithm
-	  verticesCounter = 0;
-	  colorsCounter = 0;
+	  l_vertices_counter = 0;
+	  l_colors_counter = 0;
 
-	  vertices = new GLfloat[(myEndChunk - myStartChunk) * 2];
-	  colors = new GLubyte[(myEndChunk - myStartChunk) * 4];
+	  l_vertices = new GLfloat[(l_my_end_chunck - l_my_start_chunk) * 2];
+	  l_colors = new GLubyte[(l_my_end_chunck - l_my_start_chunk) * 4];
 
-	  for (int chunk = myStartChunk; chunk < myEndChunk; chunk++)
+	  for(int l_chunk = l_my_start_chunk; l_chunk < l_my_end_chunck; l_chunk++)
 	    {
-	      float x = (chunk - myStartChunk) * zoomFactorX - windowOffset;
-	      if (x < noteLabelOffset)
+	      float l_x = (l_chunk - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
+	      if (l_x < m_note_label_offset)
 		{
 		  continue;
 		}
-	      if (x > width() - noteLabelOffset)
+	      if (l_x > width() - m_note_label_offset)
 		{
 		  break;
 		}
-	      float y = halfHeight + ((active->dataAtChunk(chunk)->getVibratoPitch() - avgPitch) * zoomFactorYx100) + offsetY;
+	      float l_y = l_half_height + ((l_active->dataAtChunk(l_chunk)->getVibratoPitch() - l_avg_pitch) * l_zoom_factor_Y_x_100) + m_offset_Y;
 
-	      vertices[verticesCounter++] = x;
-	      vertices[verticesCounter++] = y;
+	      l_vertices[l_vertices_counter++] = l_x;
+	      l_vertices[l_vertices_counter++] = l_y;
 
-	      colors[colorsCounter++] = 0;
-	      colors[colorsCounter++] = 0;
-	      colors[colorsCounter++] = 0;
-	      colors[colorsCounter++] = 127;
+	      l_colors[l_colors_counter++] = 0;
+	      l_colors[l_colors_counter++] = 0;
+	      l_colors[l_colors_counter++] = 0;
+	      l_colors[l_colors_counter++] = 127;
 	    }
 
-	  glVertexPointer(2, GL_FLOAT, 0, vertices);
-	  glColorPointer(4, GL_UNSIGNED_BYTE, 0, colors);
-	  glNewList(pronyAveragePitch, GL_COMPILE);
-	  glDrawArrays(GL_LINE_STRIP, 0, verticesCounter/2);
+	  glVertexPointer(2, GL_FLOAT, 0, l_vertices);
+	  glColorPointer(4, GL_UNSIGNED_BYTE, 0, l_colors);
+	  glNewList(m_prony_average_pitch, GL_COMPILE);
+	  glDrawArrays(GL_LINE_STRIP, 0, l_vertices_counter / 2);
 	  glEndList();
 
-	  delete[] vertices;
-	  delete[] colors;
+	  delete[] l_vertices;
+	  delete[] l_colors;
 
 
 	  // Calculate the vibrato-polyline
-	  verticesCounter = 0;
-	  colorsCounter = 0;
+	  l_vertices_counter = 0;
+	  l_colors_counter = 0;
 
-	  if ((active->doingDetailedPitch()) && (pitchLookupUsed.size() > 0))
+	  if ((l_active->doingDetailedPitch()) && (l_pitch_lookup_used.size() > 0))
 	    {
 	      // Detailed pitch information available, calculate polyline using this info
-	      vertices = new GLfloat[(width() + 1) * 2];
-	      colors = new GLubyte[(width() + 1) * 3];
+	      l_vertices = new GLfloat[(width() + 1) * 2];
+	      l_colors = new GLubyte[(width() + 1) * 3];
 
-	      const int pitchLookupUsedSizeLimit = pitchLookupUsed.size() - 1;
-	      const int beginningOfNote = myStartChunk * framesPerChunk;
-	      const int endOfNote = myEndChunk * framesPerChunk - 1;
-	      float chunk;
-	      float y;
-	      int offset;
-	      for (int x = noteLabelOffset; x < width() - noteLabelOffset; x++)
+	      const int l_pitch_lookup_used_size_limit = l_pitch_lookup_used.size() - 1;
+	      const int l_beginning_of_note = l_my_start_chunk * l_frames_per_chunk;
+	      const int l_end_of_note = l_my_end_chunck * l_frames_per_chunk - 1;
+	      float l_chunk;
+	      float l_y;
+	      int l_offset;
+	      for(int l_x = m_note_label_offset; l_x < width() - m_note_label_offset; l_x++)
 		{
-		  chunk = ((x + windowOffset) / zoomFactorX + myStartChunk);
-		  if ((chunk >= myStartChunk) && (chunk <= myEndChunk))
+		  l_chunk = ((l_x + l_window_offset) / m_zoom_factor_X + l_my_start_chunk);
+		  if ((l_chunk >= l_my_start_chunk) && (l_chunk <= l_my_end_chunck))
 		    {
-		      offset = toInt(chunk * framesPerChunk + smoothDelay);
-		      if(offset > endOfNote)
+		      l_offset = toInt(l_chunk * l_frames_per_chunk + l_smooth_delay);
+		      if(l_offset > l_end_of_note)
 			{
-			  offset = endOfNote;
+			  l_offset = l_end_of_note;
 			}
-		      if (offset < beginningOfNote + 3*smoothDelay)
+		      if (l_offset < l_beginning_of_note + 3 * l_smooth_delay)
 			{
-			  int timeAtZero = beginningOfNote + smoothDelay;
-			  float scaleX = (offset - timeAtZero) / float(2 * smoothDelay);
-			  float pitchAtZero = active->dataAtChunk(myStartChunk)->getPitch();
-			  int smoothDelayPos3 = std::min(beginningOfNote + 3 * smoothDelay, (int)pitchLookupUsed.size() - 1);
-			  if(smoothDelayPos3 >= 0)
+			  int l_time_at_zero = l_beginning_of_note + l_smooth_delay;
+			  float l_scale_X = (l_offset - l_time_at_zero) / float(2 * l_smooth_delay);
+			  float l_pitch_at_zero = l_active->dataAtChunk(l_my_start_chunk)->getPitch();
+			  int l_smooth_delay_pos3 = std::min(l_beginning_of_note + 3 * l_smooth_delay, (int)l_pitch_lookup_used.size() - 1);
+			  if(l_smooth_delay_pos3 >= 0)
 			    {
-			      float pitchAt2SmoothDelay = pitchLookupUsed.at(smoothDelayPos3);
-			      y = halfHeight + (pitchAtZero + scaleX * (pitchAt2SmoothDelay - pitchAtZero) - avgPitch) * zoomFactorYx100;
+			      float l_pitch_at_2_smooth_delay = l_pitch_lookup_used.at(l_smooth_delay_pos3);
+			      l_y = l_half_height + (l_pitch_at_zero + l_scale_X * (l_pitch_at_2_smooth_delay - l_pitch_at_zero) - l_avg_pitch) * l_zoom_factor_Y_x_100;
 			    }
 			  else
 			    {
-			      y = 0;
+			      l_y = 0;
 			    }
 			}
 		      else
 			{
-			  offset = std::min(offset, pitchLookupUsedSizeLimit);
-			  y = halfHeight + (pitchLookupUsed.at(offset) - avgPitch) * zoomFactorYx100;
+			  l_offset = std::min(l_offset, l_pitch_lookup_used_size_limit);
+			  l_y = l_half_height + (l_pitch_lookup_used.at(l_offset) - l_avg_pitch) * l_zoom_factor_Y_x_100;
 			}
 
 		      // Vertical scrollbar offset
-		      y += offsetY;
+		      l_y += m_offset_Y;
 
-		      vertices[verticesCounter++] = x;
-		      vertices[verticesCounter++] = y;
+		      l_vertices[l_vertices_counter++] = l_x;
+		      l_vertices[l_vertices_counter++] = l_y;
 
-		      colors[colorsCounter++] = 127;
-		      colors[colorsCounter++] = 0;
-		      colors[colorsCounter++] = 0;
+		      l_colors[l_colors_counter++] = 127;
+		      l_colors[l_colors_counter++] = 0;
+		      l_colors[l_colors_counter++] = 0;
 		    }
 		}
 	    }
 	  else
 	    {
 	      // No detailed pitch information available, calculate polyline using the chunkdata
-	      vertices = new GLfloat[(myEndChunk - myStartChunk) * 2];
-	      colors = new GLubyte[(myEndChunk - myStartChunk) * 3];
+	      l_vertices = new GLfloat[(l_my_end_chunck - l_my_start_chunk) * 2];
+	      l_colors = new GLubyte[(l_my_end_chunck - l_my_start_chunk) * 3];
 
-	      float x, y;
-	      for (int chunk = myStartChunk; chunk < myEndChunk; chunk++)
+	      float l_x, l_y;
+	      for(int l_chunk = l_my_start_chunk; l_chunk < l_my_end_chunck; l_chunk++)
 		{
-		  x = (chunk - myStartChunk) * zoomFactorX - windowOffset;
-		  if (x < noteLabelOffset)
+		  l_x = (l_chunk - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
+		  if (l_x < m_note_label_offset)
 		    {
 		      continue;
 		    }
-		  if (x > width() - noteLabelOffset)
+		  if (l_x > width() - m_note_label_offset)
 		    {
 		      break;
 		    }
-		  y = halfHeight + ((active->dataAtChunk(chunk)->getPitch() - avgPitch) * zoomFactorYx100) + offsetY;
+		  l_y = l_half_height + ((l_active->dataAtChunk(l_chunk)->getPitch() - l_avg_pitch) * l_zoom_factor_Y_x_100) + m_offset_Y;
 
-		  vertices[verticesCounter++] = x;
-		  vertices[verticesCounter++] = y;
+		  l_vertices[l_vertices_counter++] = l_x;
+		  l_vertices[l_vertices_counter++] = l_y;
 
-		  colors[colorsCounter++] = 127;
-		  colors[colorsCounter++] = 0;
-		  colors[colorsCounter++] = 0;
+		  l_colors[l_colors_counter++] = 127;
+		  l_colors[l_colors_counter++] = 0;
+		  l_colors[l_colors_counter++] = 0;
 		}
 	    }
-	  glVertexPointer(2, GL_FLOAT, 0, vertices);
-	  glColorPointer(3, GL_UNSIGNED_BYTE, 0, colors);
-	  glNewList(vibratoPolyline, GL_COMPILE);
-	  glDrawArrays(GL_LINE_STRIP, 0, verticesCounter/2);
+	  glVertexPointer(2, GL_FLOAT, 0, l_vertices);
+	  glColorPointer(3, GL_UNSIGNED_BYTE, 0, l_colors);
+	  glNewList(m_vibrato_polyline, GL_COMPILE);
+	  glDrawArrays(GL_LINE_STRIP, 0, l_vertices_counter / 2);
 	  glEndList();
 
-	  delete[] vertices;
-	  delete[] colors;
+	  delete[] l_vertices;
+	  delete[] l_colors;
 
 
 	  // Calculate a light grey band indicating which time is being used in the current window
-	  vertices = new GLfloat[8];
-	  colors = new GLubyte[16];
+	  l_vertices = new GLfloat[8];
+	  l_colors = new GLubyte[16];
 
-	  verticesCounter = 0;
-	  colorsCounter = 0;
+	  l_vertices_counter = 0;
+	  l_colors_counter = 0;
 
-	  const double halfWindowTime = (double)active->size() / (double)(active->rate() * 2);
-	  int pixelLeft = toInt((active->chunkAtTime(gdata->getView().currentTime() - halfWindowTime) - myStartChunk) * zoomFactorX - windowOffset);
-	  int pixelRight = toInt((active->chunkAtTime(gdata->getView().currentTime() + halfWindowTime) - myStartChunk) * zoomFactorX - windowOffset);
+	  const double l_half_window_time = (double)l_active->size() / (double)(l_active->rate() * 2);
+	  int l_pixel_left = toInt((l_active->chunkAtTime(gdata->getView().currentTime() - l_half_window_time) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset);
+	  int l_pixel_right = toInt((l_active->chunkAtTime(gdata->getView().currentTime() + l_half_window_time) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset);
 
-	  vertices[verticesCounter++] = pixelLeft;
-	  vertices[verticesCounter++] = 0;
-	  vertices[verticesCounter++] = pixelRight;
-	  vertices[verticesCounter++] = 0;
-	  vertices[verticesCounter++] = pixelRight;
-	  vertices[verticesCounter++] = height();
-	  vertices[verticesCounter++] = pixelLeft;
-	  vertices[verticesCounter++] = height();
+	  l_vertices[l_vertices_counter++] = l_pixel_left;
+	  l_vertices[l_vertices_counter++] = 0;
+	  l_vertices[l_vertices_counter++] = l_pixel_right;
+	  l_vertices[l_vertices_counter++] = 0;
+	  l_vertices[l_vertices_counter++] = l_pixel_right;
+	  l_vertices[l_vertices_counter++] = height();
+	  l_vertices[l_vertices_counter++] = l_pixel_left;
+	  l_vertices[l_vertices_counter++] = height();
 
-	  for (int j = 1; j <= 4; j++)
+	  for(int l_j = 1; l_j <= 4; l_j++)
 	    {
-	      colors[colorsCounter++] = colorGroup().foreground().red();
-	      colors[colorsCounter++] = colorGroup().foreground().green();
-	      colors[colorsCounter++] = colorGroup().foreground().blue();
-	      colors[colorsCounter++] = 64;
+	      l_colors[l_colors_counter++] = colorGroup().foreground().red();
+	      l_colors[l_colors_counter++] = colorGroup().foreground().green();
+	      l_colors[l_colors_counter++] = colorGroup().foreground().blue();
+	      l_colors[l_colors_counter++] = 64;
 	    }
 
-	  glVertexPointer(2, GL_FLOAT, 0, vertices);
-	  glColorPointer(4, GL_UNSIGNED_BYTE, 0, colors);
-	  glNewList(currentWindowBand, GL_COMPILE);
-	  glDrawArrays(GL_QUADS, 0, verticesCounter/2);
+	  glVertexPointer(2, GL_FLOAT, 0, l_vertices);
+	  glColorPointer(4, GL_UNSIGNED_BYTE, 0, l_colors);
+	  glNewList(m_current_window_band, GL_COMPILE);
+	  glDrawArrays(GL_QUADS, 0, l_vertices_counter / 2);
 	  glEndList();
 
-	  delete[] vertices;
-	  delete[] colors;
+	  delete[] l_vertices;
+	  delete[] l_colors;
 
 
 	  // Calculate the current timeline
-	  vertices = new GLfloat[4];
-	  colors = new GLubyte[6];
+	  l_vertices = new GLfloat[4];
+	  l_colors = new GLubyte[6];
 
-	  verticesCounter = 0;
+	  l_vertices_counter = 0;
 
-	  const float timeLineX = toInt((myCurrentChunk - myStartChunk) * zoomFactorX - windowOffset);
+	  const float l_time_line_X = toInt((l_my_current_chunck - l_my_start_chunk) * m_zoom_factor_X - l_window_offset);
 
-	  vertices[verticesCounter++] = timeLineX;
-	  vertices[verticesCounter++] = 0;
-	  vertices[verticesCounter++] = timeLineX;
-	  vertices[verticesCounter++] = height();
+	  l_vertices[l_vertices_counter++] = l_time_line_X;
+	  l_vertices[l_vertices_counter++] = 0;
+	  l_vertices[l_vertices_counter++] = l_time_line_X;
+	  l_vertices[l_vertices_counter++] = height();
 
-	  for (colorsCounter = 0; colorsCounter < 6; colorsCounter++)
+	  for(l_colors_counter = 0; l_colors_counter < 6; l_colors_counter++)
 	    {
-	      colors[colorsCounter] = 0;
+	      l_colors[l_colors_counter] = 0;
 	    }
 
-	  glVertexPointer(2, GL_FLOAT, 0, vertices);
-	  glColorPointer(3, GL_UNSIGNED_BYTE, 0, colors);
-	  glNewList(currentTimeLine, GL_COMPILE);
-	  glDrawArrays(GL_LINES, 0, verticesCounter/2);
+	  glVertexPointer(2, GL_FLOAT, 0, l_vertices);
+	  glColorPointer(3, GL_UNSIGNED_BYTE, 0, l_colors);
+	  glNewList(m_current_time_line, GL_COMPILE);
+	  glDrawArrays(GL_LINES, 0, l_vertices_counter / 2);
 	  glEndList();
 
-	  delete[] vertices;
-	  delete[] colors;
+	  delete[] l_vertices;
+	  delete[] l_colors;
 
 
 	  // Calculate the points of maxima and minima
-	  vertices = new GLfloat[(maximaSize + minimaSize) * 2];
-	  colors = new GLubyte[(maximaSize + minimaSize) * 3];
+	  l_vertices = new GLfloat[(l_maxima_size + l_minima_size) * 2];
+	  l_colors = new GLubyte[(l_maxima_size + l_minima_size) * 3];
 
-	  verticesCounter = 0;
-	  colorsCounter = 0;
+	  l_vertices_counter = 0;
+	  l_colors_counter = 0;
 
 	  // Calculate the maxima
-	  if ((active->doingDetailedPitch()) && (active->get_pitch_lookup_smoothed().size() > 0))
+	  if ((l_active->doingDetailedPitch()) && (l_active->get_pitch_lookup_smoothed().size() > 0))
 	    {
-	      float x, y;
-	      for (int i = 0; i < maximaSize; i++)
+	      float l_x, l_y;
+	      for(int l_index = 0; l_index < l_maxima_size; l_index++)
 		{
-		  x = ((((float)note->get_maxima()->at(i) - smoothDelay)/ framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
-		  if (x < noteLabelOffset)
+		  l_x = ((((float)l_note->get_maxima()->at(l_index) - l_smooth_delay)/ l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
+		  if (l_x < m_note_label_offset)
 		    {
 		      continue;
 		    }
-		  if (x > width() - noteLabelOffset)
+		  if (l_x > width() - m_note_label_offset)
 		    {
 		      break;
 		    }
-		  y = halfHeight + ((pitchLookupUsed.at(note->get_maxima()->at(i)) - avgPitch) * zoomFactorYx100) + offsetY;
+		  l_y = l_half_height + ((l_pitch_lookup_used.at(l_note->get_maxima()->at(l_index)) - l_avg_pitch) * l_zoom_factor_Y_x_100) + m_offset_Y;
 
-		  vertices[verticesCounter++] = x;
-		  vertices[verticesCounter++] = y;
+		  l_vertices[l_vertices_counter++] = l_x;
+		  l_vertices[l_vertices_counter++] = l_y;
 
-		  colors[colorsCounter++] = 255;
-		  colors[colorsCounter++] = 255;
-		  colors[colorsCounter++] = 0;
+		  l_colors[l_colors_counter++] = 255;
+		  l_colors[l_colors_counter++] = 255;
+		  l_colors[l_colors_counter++] = 0;
 		}
 	    }
 	  // Calculate the minima
-	  if ((active->doingDetailedPitch()) && (active->get_pitch_lookup_smoothed().size() > 0))
+	  if ((l_active->doingDetailedPitch()) && (l_active->get_pitch_lookup_smoothed().size() > 0))
 	    {
-	      float x, y;
-	      for (int i = 0; i < minimaSize; i++)
+	      float l_x, l_y;
+	      for(int l_index = 0; l_index < l_minima_size; l_index++)
 		{
-		  x = ((((float)note->get_minima()->at(i) - smoothDelay) / framesPerChunk) - myStartChunk) * zoomFactorX - windowOffset;
-		  if (x < noteLabelOffset)
+		  l_x = ((((float)l_note->get_minima()->at(l_index) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
+		  if (l_x < m_note_label_offset)
 		    {
 		      continue;
 		    }
-		  if (x > width() - noteLabelOffset)
+		  if (l_x > width() - m_note_label_offset)
 		    {
 		      break;
 		    }
-		  y = halfHeight + ((pitchLookupUsed.at(note->get_minima()->at(i)) - avgPitch) * zoomFactorYx100) + offsetY;
+		  l_y = l_half_height + ((l_pitch_lookup_used.at(l_note->get_minima()->at(l_index)) - l_avg_pitch) * l_zoom_factor_Y_x_100) + m_offset_Y;
 
-		  vertices[verticesCounter++] = x;
-		  vertices[verticesCounter++] = y;
+		  l_vertices[l_vertices_counter++] = l_x;
+		  l_vertices[l_vertices_counter++] = l_y;
 
-		  colors[colorsCounter++] = 0;
-		  colors[colorsCounter++] = 255;
-		  colors[colorsCounter++] = 0;
+		  l_colors[l_colors_counter++] = 0;
+		  l_colors[l_colors_counter++] = 255;
+		  l_colors[l_colors_counter++] = 0;
 		}
 	    }
       
-	  glVertexPointer(2, GL_FLOAT, 0, vertices);
-	  glColorPointer(3, GL_UNSIGNED_BYTE, 0, colors);
-	  glNewList(maximaMinimaPoints, GL_COMPILE);
-	  glDrawArrays(GL_POINTS, 0, verticesCounter/2);
+	  glVertexPointer(2, GL_FLOAT, 0, l_vertices);
+	  glColorPointer(3, GL_UNSIGNED_BYTE, 0, l_colors);
+	  glNewList(m_maxima_minima_points, GL_COMPILE);
+	  glDrawArrays(GL_POINTS, 0, l_vertices_counter / 2);
 	  glEndList();
       
-	  delete[] vertices;
-	  delete[] colors;
+	  delete[] l_vertices;
+	  delete[] l_colors;
 	}
     }
 }
 
 //------------------------------------------------------------------------------
-void VibratoWidget::setZoomFactorX(double x)
+void VibratoWidget::setZoomFactorX(double p_x)
 {
-  zoomFactorX = 2 * pow10(log2(x / 25));
+  m_zoom_factor_X = 2 * pow10(log2(p_x / 25));
   update();
 }
 
 //------------------------------------------------------------------------------
-void VibratoWidget::setZoomFactorY(double y)
+void VibratoWidget::setZoomFactorY(double p_y)
 {
-  zoomFactorY = y;
+  m_zoom_factor_Y = p_y;
   update();
 }
 
 //------------------------------------------------------------------------------
-void VibratoWidget::setOffsetY(int value)
+void VibratoWidget::setOffsetY(int p_value)
 {
-  offsetY = value;
+  m_offset_Y = p_value;
   update();
 }
 
