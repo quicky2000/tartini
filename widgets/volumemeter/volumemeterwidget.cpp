@@ -26,19 +26,19 @@
 #include "useful.h"
 
 //------------------------------------------------------------------------------
-VolumeMeterWidget::VolumeMeterWidget(QWidget * parent):
-  DrawWidget(parent)
+VolumeMeterWidget::VolumeMeterWidget(QWidget * p_parent):
+  DrawWidget(p_parent)
 {
   //make the widget get updated when the view changes
   connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), this, SLOT(update()));
 
   // Define the number of labels to use for available places
-  labelNumbers.push_back(1);
-  labelNumbers.push_back(2);
-  labelNumbers.push_back(3);
-  labelNumbers.push_back(3);
-  labelNumbers.push_back(3);
-  labelNumbers.push_back(6);
+  m_label_numbers.push_back(1);
+  m_label_numbers.push_back(2);
+  m_label_numbers.push_back(3);
+  m_label_numbers.push_back(3);
+  m_label_numbers.push_back(3);
+  m_label_numbers.push_back(6);
 
   setFontSize(9);
 }
@@ -49,51 +49,51 @@ VolumeMeterWidget::~VolumeMeterWidget(void)
 }
 
 //------------------------------------------------------------------------------
-void VolumeMeterWidget::setFontSize(int fontSize)
+void VolumeMeterWidget::setFontSize(int p_font_size)
 {
-  _fontSize = fontSize;
-  _font = QFont("AnyStyle", _fontSize);
+  m_font_size = p_font_size;
+  m_font = QFont("AnyStyle", m_font_size);
 }
 
 //------------------------------------------------------------------------------
 void VolumeMeterWidget::paintEvent(QPaintEvent *)
 {
-  Channel *active = gdata->getActiveChannel();
+  Channel * l_active = gdata->getActiveChannel();
 
   beginDrawing(false);
   fillBackground(colorGroup().background());
-  p.setFont(_font);
+  p.setFont(m_font);
   
   // Work out how many labels we can draw
-  QFontMetrics fm = p.fontMetrics();
+  QFontMetrics l_font_metric = p.fontMetrics();
   // Since we'll have two characters normally
-  int labelWidth = fm.width("-60");
-  int halfLabelWidth = labelWidth / 2;
-  int stopWidth = fm.width("0dB") / 2;
+  int l_label_width = l_font_metric.width("-60");
+  int l_half_label_width = l_label_width / 2;
+  int l_stopWidth = l_font_metric.width("0dB") / 2;
   // The actual width of the data
-  int realWidth = width() - stopWidth - halfLabelWidth;
+  int l_real_width = width() - l_stopWidth - l_half_label_width;
   // How many labels we should have
-  int places = labelNumbers[MIN(realWidth / 20, 6) - 1];
+  int l_places = m_label_numbers[MIN(l_real_width / 20, 6) - 1];
   // How many pixels to jump between labels/markers
-  int pixelStep = toInt(double(realWidth) / double(places));
-  int lineY = height() - _fontSize - 2;
+  int l_pixel_step = toInt(double(l_real_width) / double(l_places));
+  int l_line_Y = height() - m_font_size - 2;
 
-  int labelStep = 10;
+  int l_label_step = 10;
 
   // Determine how many dB we should jump by each time
-  switch (places)
+  switch (l_places)
     {
     case 1:
-      labelStep = 60;
+      l_label_step = 60;
       break;
     case 2:
-      labelStep = 30;
+      l_label_step = 30;
       break;
     case 3:
-      labelStep = 20;
+      l_label_step = 20;
       break;
     case 6:
-      labelStep = 10;
+      l_label_step = 10;
       break;
     default:
       // This should never happen!
@@ -105,74 +105,74 @@ void VolumeMeterWidget::paintEvent(QPaintEvent *)
   // Draw horizontal line
   p.setPen(Qt::black);
 
-  int y = height() - (lineY / 2) - 1;
+  int l_y = height() - (l_line_Y / 2) - 1;
 
-  for (int i = 0; i < places; i++)
+  for (int l_index = 0; l_index < l_places; l_index++)
     {
-      int x = i * pixelStep;
-      p.drawText(x, y, QString::number(-60 + (i * labelStep)));
+      int l_x = l_index * l_pixel_step;
+      p.drawText(l_x, l_y, QString::number(-60 + (l_index * l_label_step)));
     }
-  p.drawText(places * pixelStep - 2, y, "0dB");
+  p.drawText(l_places * l_pixel_step - 2, l_y, "0dB");
 
   
-  QColor colour;
-  float theVal[2];
-  if (active != NULL && active->isValidChunk(active->currentChunk()))
+  QColor l_colour;
+  float l_the_val[2];
+  if (l_active != NULL && l_active->isValidChunk(l_active->currentChunk()))
     {
-      int chunk = active->currentChunk();
-      if(active->getParent()->numChannels() > 1)
+      int l_chunk = l_active->currentChunk();
+      if(l_active->getParent()->numChannels() > 1)
 	{
-	  theVal[0] = active->getParent()->getChannel(0).dataAtChunk(chunk)->getMaxIntensityDB();
-	  theVal[1] = active->getParent()->getChannel(1).dataAtChunk(chunk)->getMaxIntensityDB();
+	  l_the_val[0] = l_active->getParent()->getChannel(0).dataAtChunk(l_chunk)->getMaxIntensityDB();
+	  l_the_val[1] = l_active->getParent()->getChannel(1).dataAtChunk(l_chunk)->getMaxIntensityDB();
 	}
       else
 	{
-	  theVal[0] = theVal[1] = active->dataAtChunk(chunk)->getMaxIntensityDB();
+	  l_the_val[0] = l_the_val[1] = l_active->dataAtChunk(l_chunk)->getMaxIntensityDB();
 	}
     }
   else
     {
-      theVal[0] = theVal[1] = 0.0;
+      l_the_val[0] = l_the_val[1] = 0.0;
     }
 
-  for(int chnl = 0; chnl < 2; chnl++)
+  for(int l_channel = 0; l_channel < 2; l_channel++)
     {
-      double decibels = theVal[chnl];
+      double l_decibels = l_the_val[l_channel];
       // We'll show 60 dB
-      int val = toInt((double(realWidth / 60.0) * decibels) + realWidth);
+      int l_val = toInt((double(l_real_width / 60.0) * l_decibels) + l_real_width);
 
-      // Not right - needs to be based on realWidth
-      int barWidth = 5;
+      // Not right - needs to be based on l_real_width
+      int l_bar_width = 5;
 
-      for(int j = halfLabelWidth; j <= realWidth; j += 10)
+      for(int l_j = l_half_label_width; l_j <= l_real_width; l_j += 10)
 	{
-	  if(j < val)
+	  if(l_j < l_val)
 	    {
-	      if( j < (width() * 0.5))
+	      if( l_j < (width() * 0.5))
 		{
-		  colour = Qt::blue;
+		  l_colour = Qt::blue;
 		}
-	      else if( j < (width() * 0.85))
+	      else if( l_j < (width() * 0.85))
 		{
-		  colour = QColor(255, 120, 60);
+		  l_colour = QColor(255, 120, 60);
 		}
 	      else
 		{
-		  colour = Qt::red;
+		  l_colour = Qt::red;
 		}
 	    }
 	  else
 	    {
-	      colour = QColor(198, 198, 198);
+	      l_colour = QColor(198, 198, 198);
 	    }
       
-	  if(chnl == 0)
+	  if(l_channel == 0)
 	    {
-	      p.fillRect(j, 2, barWidth, lineY/2 -3, colour);
+	      p.fillRect(l_j, 2, l_bar_width, l_line_Y / 2 - 3, l_colour);
 	    }
 	  else
 	    {
-	      p.fillRect(j, height() - (lineY/2) + 1, barWidth, lineY/2 -3, colour);
+	      p.fillRect(l_j, height() - (l_line_Y / 2) + 1, l_bar_width, l_line_Y / 2 - 3, l_colour);
 	    }
 	}
     }

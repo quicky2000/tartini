@@ -33,7 +33,7 @@ class VolumeMeterView: public ViewWidget
   QSize sizeHint(void) const;
     
  private:
-  VolumeMeterWidget *volumeMeterWidget;
+  VolumeMeterWidget *m_volume_meter_widget;
 };
 #endif // VOLUMEMETERVIEW_H
 // EOF

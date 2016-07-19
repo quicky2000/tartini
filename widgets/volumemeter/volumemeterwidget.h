@@ -31,7 +31,7 @@ class VolumeMeterWidget: public DrawWidget
 
  public:
   VolumeMeterWidget(QWidget *parent);
-  virtual ~VolumeMeterWidget();
+  virtual ~VolumeMeterWidget(void);
 
   void paintEvent(QPaintEvent *);
 
@@ -39,11 +39,10 @@ class VolumeMeterWidget: public DrawWidget
   void setFontSize(int fontSize);
     
  private:
-  QPixmap *buffer;
-  QFont _font;
-  int _fontSize;
+  QFont m_font;
+  int m_font_size;
     
-  std::vector<int> labelNumbers;
+  std::vector<int> m_label_numbers;
 };
 #endif // VOLUMEMETERWIDGET_H
 // EOF

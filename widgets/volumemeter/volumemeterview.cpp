@@ -17,23 +17,23 @@
 #include <QResizeEvent>
 
 //------------------------------------------------------------------------------
-VolumeMeterView::VolumeMeterView( int viewID_, QWidget *parent ):
-  ViewWidget( viewID_, parent)
+VolumeMeterView::VolumeMeterView( int p_view_ID, QWidget * p_parent ):
+  ViewWidget( p_view_ID, p_parent)
 {
-  volumeMeterWidget = new VolumeMeterWidget(this);
-  volumeMeterWidget->show();
+  m_volume_meter_widget = new VolumeMeterWidget(this);
+  m_volume_meter_widget->show();
 }
 
 //------------------------------------------------------------------------------
 VolumeMeterView::~VolumeMeterView(void)
 {
-  delete volumeMeterWidget;
+  delete m_volume_meter_widget;
 }
 
 //------------------------------------------------------------------------------
 void VolumeMeterView::resizeEvent(QResizeEvent *)
 {
-  volumeMeterWidget->resize(size());
+  m_volume_meter_widget->resize(size());
 }
 
 //------------------------------------------------------------------------------
