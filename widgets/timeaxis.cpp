@@ -24,21 +24,21 @@
 #include <QPaintEvent>
 
 //------------------------------------------------------------------------------
-TimeAxis::TimeAxis(QWidget *parent, bool numbersOnTop_)
-  : DrawWidget(parent),
-  _leftTime(0.0),
-  _rightTime(0.0),
-  _numbersOnTop(numbersOnTop_)
+TimeAxis::TimeAxis(QWidget * p_parent, bool p_numbers_on_top):
+  DrawWidget(p_parent),
+  m_left_time(0.0),
+  m_right_time(0.0),
+  m_numbers_on_top(p_numbers_on_top)
 {
   init();
 }
 
 //------------------------------------------------------------------------------
-TimeAxis::TimeAxis(QWidget *parent, const double & leftTime_, const double & rightTime_, bool numbersOnTop_):
-  DrawWidget(parent),
-  _leftTime(leftTime_),
-  _rightTime(rightTime_),
-  _numbersOnTop(numbersOnTop_)
+TimeAxis::TimeAxis(QWidget * p_parent, const double & p_left_time, const double & p_right_time, bool p_numbers_on_top):
+  DrawWidget(p_parent),
+  m_left_time(p_left_time),
+  m_right_time(p_right_time),
+  m_numbers_on_top(p_numbers_on_top)
 {
   init();
 }
@@ -61,129 +61,129 @@ TimeAxis::~TimeAxis(void)
 }
 
 //------------------------------------------------------------------------------
-void TimeAxis::setFontSize(int fontSize)
+void TimeAxis::setFontSize(int p_font_size)
 {
-  _fontSize = fontSize;
-  _font = QFont("AnyStyle", _fontSize);
+  m_font_size = p_font_size;
+  m_font = QFont("AnyStyle", m_font_size);
 }
 
 //------------------------------------------------------------------------------
 void TimeAxis::paintEvent(QPaintEvent *)
 {
-  int frameWidth = 2;
-  const int h = height();
-  const int w = width() - 2 * frameWidth;
-  int fontSpace = _fontSize + 2;
+  int l_frame_width = 2;
+  const int l_h = height();
+  const int l_w = width() - 2 * l_frame_width;
+  int l_font_space = m_font_size + 2;
   
   beginDrawing(false);
   fillBackground(colorGroup().background());
 
   //time per 150 pixels
-  double timeStep = timeWidth() / double(w) * 150.0;
+  double l_time_step = timeWidth() / double(l_w) * 150.0;
 
   //round down to the nearest power of 10
-  double timeScaleBase = pow10(floor(log10(timeStep)));
+  double l_time_scale_base = pow10(floor(log10(l_time_step)));
 
-  //choose a timeScaleStep which is a multiple of 1, 2 or 5 of timeScaleBase
-  int largeFreq;
-  if(timeScaleBase * 5.0 < timeStep)
+  //choose a timeScaleStep which is a multiple of 1, 2 or 5 of l_time_scale_base
+  int l_large_freq;
+  if(l_time_scale_base * 5.0 < l_time_step)
     {
-      largeFreq = 5;
+      l_large_freq = 5;
     }
-  else if (timeScaleBase * 2.0 < timeStep)
+  else if (l_time_scale_base * 2.0 < l_time_step)
     {
-      largeFreq = 2;
+      l_large_freq = 2;
     }
   else
     {
-      largeFreq = 2;
-      timeScaleBase /= 2;
+      l_large_freq = 2;
+      l_time_scale_base /= 2;
     }
     
   // Draw Ruler Numbers
   m_painter.setBrush(Qt::black);
-  m_painter.setFont(_font);
+  m_painter.setFont(m_font);
   //calc the first one just off the left of the screen
-  double timePos = floor(leftTime() / (timeScaleBase * largeFreq)) * (timeScaleBase * largeFreq);
-  int x, largeCounter = -1;
+  double l_time_pos = floor(leftTime() / (l_time_scale_base * l_large_freq)) * (l_time_scale_base * l_large_freq);
+  int l_x, l_large_counter = -1;
   
   //precalculate line sizes (for efficiency)
-  int smallLineTop = 0;
-  int smallLineBottom = 0;
-  if(_numbersOnTop)
+  int l_small_line_top = 0;
+  int l_small_line_bottom = 0;
+  if(m_numbers_on_top)
     {
-      smallLineTop = h - 1 - (h - 1 - fontSpace)/2;
-      smallLineBottom = h - 1;
+      l_small_line_top = l_h - 1 - (l_h - 1 - l_font_space) / 2;
+      l_small_line_bottom = l_h - 1;
     }
   else
     {
-      smallLineTop = 0;
-      smallLineBottom = (h - 1 - fontSpace) / 2;
+      l_small_line_top = 0;
+      l_small_line_bottom = (l_h - 1 - l_font_space) / 2;
     }
-  int bigLineTop = 0;
-  int bigLineBottom = 0;
-  if(_numbersOnTop)
+  int l_big_line_top = 0;
+  int l_big_line_bottom = 0;
+  if(m_numbers_on_top)
     {
-      bigLineTop = fontSpace;
-      bigLineBottom = h - 1;
-    }
-  else
-    {
-      bigLineTop = 0;
-      bigLineBottom = h - 1 - fontSpace;
-    }
-  int textBottom = 0;
-  if(_numbersOnTop)
-    {
-      textBottom = _fontSize;
+      l_big_line_top = l_font_space;
+      l_big_line_bottom = l_h - 1;
     }
   else
     {
-      textBottom = h - 1;
+      l_big_line_top = 0;
+      l_big_line_bottom = l_h - 1 - l_font_space;
+    }
+  int l_text_bottom = 0;
+  if(m_numbers_on_top)
+    {
+      l_text_bottom = m_font_size;
+    }
+  else
+    {
+      l_text_bottom = l_h - 1;
     }
     
-  for(; timePos <= rightTime(); timePos += timeScaleBase)
+  for(; l_time_pos <= rightTime(); l_time_pos += l_time_scale_base)
     {
-      if(++largeCounter == largeFreq)
+      if(++l_large_counter == l_large_freq)
 	{
-	  largeCounter = 0;
+	  l_large_counter = 0;
 	  //draw the bigger lines and the numbers
-	  double newTime = myround(timePos / timeScaleBase) * timeScaleBase;
-	  QString mins;
-	  double secs = fmod(newTime, 60.0);
+	  double l_new_time = myround(l_time_pos / l_time_scale_base) * l_time_scale_base;
+	  QString l_mins;
+	  double l_secs = fmod(l_new_time, 60.0);
 
-	  if (timePos < 0)
+	  if (l_time_pos < 0)
 	    {
-	      mins = "-" + QString::number(int(ceil(newTime / 60)));
-	      secs *= -1;
+	      l_mins = "-" + QString::number(int(ceil(l_new_time / 60)));
+	      l_secs *= -1;
 	    }
 	  else
 	    {
-	      mins = QString::number(int(floor(newTime / 60)));
+	      l_mins = QString::number(int(floor(l_new_time / 60)));
 	    }
 
-	  QString seconds = QString::number(secs);
-	  if (secs < 10 && secs > -10)
+	  QString l_seconds = QString::number(l_secs);
+	  if (l_secs < 10 && l_secs > -10)
 	    {
-	      seconds = "0" + seconds;
+	      l_seconds = "0" + l_seconds;
 	    }
       
-	  QString numString = mins + ":" + seconds;
-	  x = frameWidth + toInt((timePos-leftTime()) / (timeWidth() / double(w)));
-	  m_painter.drawText(x - (m_painter.fontMetrics().width(numString) / 2), textBottom, numString);
-	  m_painter.drawLine(x, bigLineTop, x, bigLineBottom);
+	  QString l_num_string = l_mins + ":" + l_seconds;
+	  l_x = l_frame_width + toInt((l_time_pos - leftTime()) / (timeWidth() / double(l_w)));
+	  m_painter.drawText(l_x - (m_painter.fontMetrics().width(l_num_string) / 2), l_text_bottom, l_num_string);
+	  m_painter.drawLine(l_x, l_big_line_top, l_x, l_big_line_bottom);
 	}
       else
 	{
 	  //draw the smaller lines
-	  x = frameWidth + toInt((timePos - leftTime()) / (timeWidth() / double(w)));
-	  m_painter.drawLine(x, smallLineTop, x, smallLineBottom);
+	  l_x = l_frame_width + toInt((l_time_pos - leftTime()) / (timeWidth() / double(l_w)));
+	  m_painter.drawLine(l_x, l_small_line_top, l_x, l_small_line_bottom);
 	}
     }
   //draw the horizontal line
-  if(_numbersOnTop)
+  if(m_numbers_on_top)
     {
-      m_painter.drawLine(0, h - 1, width(), h - 1);
+      m_painter.drawLine(0, l_h - 1, width(), l_h - 1);
     }
   else
     {

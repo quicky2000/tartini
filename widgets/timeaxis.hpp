@@ -41,22 +41,22 @@ double TimeAxis::timeWidth(void) const
 }
 
 //------------------------------------------------------------------------------
-void TimeAxis::setLeftTime(const double & time)
+void TimeAxis::setLeftTime(const double & p_time)
 {
-  _leftTime = time;
+  m_left_time = p_time;
 }
 
 //------------------------------------------------------------------------------
-void TimeAxis::setRightTime(const double & time)
+void TimeAxis::setRightTime(const double & p_time)
 {
-  _rightTime = time;
+  m_right_time = p_time;
 }
 
 //------------------------------------------------------------------------------
-void TimeAxis::setRange(const double & leftTime_, const double & rightTime_)
+void TimeAxis::setRange(const double & p_left_time, const double & p_right_time)
 {
-  _leftTime = leftTime_;
-  _rightTime = rightTime_;
+  m_left_time = p_left_time;
+  m_right_time = p_right_time;
 }
 
 // EOF

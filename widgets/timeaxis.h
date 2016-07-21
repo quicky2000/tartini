@@ -31,8 +31,8 @@ class TimeAxis : public DrawWidget
   Q_OBJECT
 
 public:
-  TimeAxis(QWidget *parent, bool numbersOnTop_=true);
-  TimeAxis(QWidget *parent,const double & leftTime_, const double & rightTime_, bool numbersOnTop_=true);
+  TimeAxis(QWidget * p_parent, bool p_numbers_on_top = true);
+  TimeAxis(QWidget * p_parent,const double & p_left_time, const double & p_right_time, bool p_numbers_on_top = true);
   ~TimeAxis(void);
 
   inline QSize sizeHint(void) const;
@@ -42,20 +42,21 @@ public:
   inline double rightTime(void) const;
   inline double timeWidth(void) const;
 
-  void setFontSize(int fontSize);
+  void setFontSize(int p_font_size);
   
   void paintEvent(QPaintEvent *);
 
   public slots:
-  inline void setLeftTime(const double & time);
-  inline void setRightTime(const double & time);
-  inline void setRange(const double & leftTime_, const double & rightTime_);
+  inline void setLeftTime(const double & p_time);
+  inline void setRightTime(const double & p_time);
+  inline void setRange(const double & p_left_time, const double & p_right_time);
 
  private:
-  double _leftTime, _rightTime;
-  bool _numbersOnTop;
-  QFont _font;
-  int _fontSize;
+  double m_left_time;
+  double m_right_time;
+  bool m_numbers_on_top;
+  QFont m_font;
+  int m_font_size;
     
 };
 
