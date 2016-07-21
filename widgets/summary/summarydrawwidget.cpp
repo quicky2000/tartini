@@ -66,18 +66,18 @@ void SummaryDrawWidget::paintEvent(QPaintEvent *)
 	{
 	  continue;
 	}
-      drawChannel(*this, ch, p, gdata->leftTime(), view.currentTime(), (gdata->totalTime() / (double) width()), 0.0f, (double) gdata->topPitch() / (double) height(), DRAW_VIEW_SUMMARY);
+      drawChannel(*this, ch, m_painter, gdata->leftTime(), view.currentTime(), (gdata->totalTime() / (double) width()), 0.0f, (double) gdata->topPitch() / (double) height(), DRAW_VIEW_SUMMARY);
     }
 
   //draw the view rectangle 
-  p.setPen(QPen(colorGroup().highlight(), 1));
-  p.drawRect(int((gdata->leftTime() + view.viewLeft()) * timeRatio), height() - 1 - int((view.viewTop()) * pitchRatio),
-             int(view.viewWidth() * timeRatio), int(view.viewHeight() * pitchRatio));
+  m_painter.setPen(QPen(colorGroup().highlight(), 1));
+  m_painter.drawRect(int((gdata->leftTime() + view.viewLeft()) * timeRatio), height() - 1 - int((view.viewTop()) * pitchRatio),
+		     int(view.viewWidth() * timeRatio), int(view.viewHeight() * pitchRatio));
 
   //draw the current time line
-  p.setPen(QPen(colorGroup().foreground(), 1));
-  p.drawLine(int((gdata->leftTime() + view.currentTime()) * timeRatio), 0, 
-             int((gdata->leftTime() + view.currentTime()) * timeRatio), height() - 1);
+  m_painter.setPen(QPen(colorGroup().foreground(), 1));
+  m_painter.drawLine(int((gdata->leftTime() + view.currentTime()) * timeRatio), 0, 
+		      int((gdata->leftTime() + view.currentTime()) * timeRatio), height() - 1);
 
   endDrawing();
 }

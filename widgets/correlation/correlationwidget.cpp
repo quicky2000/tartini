@@ -70,20 +70,20 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
 	    {
 	      //number of colored patches
 	      int n = int(ceil(double(width()) / scaleX));
-	      p.setPen(Qt::NoPen);
+	      m_painter.setPen(Qt::NoPen);
 	      QColor color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), data->getCorrelation());
 	      QColor color2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), data->getCorrelation());
 	      for(j = 0; j<n; j++)
 		{
 		  x = toInt(scaleX*double(j));
-		  p.setBrush((j%2) ? color1 : color2);
-		  p.drawRect(x, 0, toInt(scaleX * double(j + 1)) - toInt(scaleX * double(j)), height());
+		  m_painter.setBrush((j%2) ? color1 : color2);
+		  m_painter.drawRect(x, 0, toInt(scaleX * double(j + 1)) - toInt(scaleX * double(j)), height());
 		}
-	      p.setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3 * data->getCorrelation()));
+	      m_painter.setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3 * data->getCorrelation()));
 	      for(j = 0; j < n; j++)
 		{
 		  x = toInt(scaleX * double(j));
-		  p.drawLine(x, 0, x, height());
+		  m_painter.drawLine(x, 0, x, height());
 		}
 	    }
 	  else
@@ -92,8 +92,8 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
 	    }
 	  QString numPeriodsText;
 	  numPeriodsText.sprintf("Period = %lf", period);
-	  p.setPen(Qt::black);
-	  p.drawText(5, height() - 8, numPeriodsText);
+	  m_painter.setPen(Qt::black);
+	  m_painter.drawText(5, height() - 8, numPeriodsText);
 	}
       else
 	{
@@ -106,8 +106,8 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
     }
 
   //draw the horizontal center line
-  p.setPen(QPen(colorBetween(colorGroup().background(), Qt::black, 0.3), 0));
-  p.drawLine(0, toInt(dh2), width(), toInt(dh2));
+  m_painter.setPen(QPen(colorBetween(colorGroup().background(), Qt::black, 0.3), 0));
+  m_painter.drawLine(0, toInt(dh2), width(), toInt(dh2));
 
   if(active)
     { 
@@ -144,8 +144,8 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
 	      pointArray.setPoint(j, j * 2, toInt(dh2 - lookup[j] * dh2));
 	    }
 
-	  p.setPen(QPen(active->get_color(), 0));
-	  p.drawPolyline(pointArray);
+	  m_painter.setPen(QPen(active->get_color(), 0));
+	  m_painter.drawPolyline(pointArray);
 	}
       if(data && (aggregateMode == 0))
 	{
@@ -153,48 +153,48 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
 	  double ratio = double(width()) / double(active->get_nsdf_data().size());
       
 	  //draw a dot at all the period estimates
-	  p.setPen(Qt::blue);
-	  p.setBrush(Qt::blue);
+	  m_painter.setPen(Qt::blue);
+	  m_painter.setBrush(Qt::blue);
 	  for(j = 0; j < int(data->getPeriodEstimatesSize()); j++)
 	    {
 	      x = toInt(double(data->getPeriodEstimatesAt(j)) * ratio);
 	      y = toInt(dh2 - data->getPeriodEstimatesAmpAt(j) * dh2);
-	      p.drawEllipse(x - 2, y - 2, 5, 5);
+	      m_painter.drawEllipse(x - 2, y - 2, 5, 5);
 	    }
       
 	  if(data->getHighestCorrelationIndex() >= 0)
 	    {
 	      float highest = data->getPeriodEstimatesAmpAt(data->getHighestCorrelationIndex());
 	      //draw threshold line
-	      p.setPen(QPen(colorBetween(colorGroup().background(), Qt::black, 0.3), 0));
+	      m_painter.setPen(QPen(colorBetween(colorGroup().background(), Qt::black, 0.3), 0));
 	      y = toInt(dh2 - (highest * active->threshold()) * dh2);
-	      p.drawLine(0, y, width(), y);
+	      m_painter.drawLine(0, y, width(), y);
       
 	      //draw a dot at the highest correlation period
-	      p.setPen(Qt::black);
-	      p.setBrush(Qt::black);
+	      m_painter.setPen(Qt::black);
+	      m_painter.setBrush(Qt::black);
 	      x = toInt(double(data->getPeriodEstimatesAt(data->getHighestCorrelationIndex())) * ratio);
 	      y = toInt(dh2 - highest * dh2);
-	      p.drawEllipse(x - 2, y - 2, 5, 5);
+	      m_painter.drawEllipse(x - 2, y - 2, 5, 5);
 	    }
       
 	  //draw a dot at the chosen correlation period
 	  if(data->getChosenCorrelationIndex() >= 0)
 	    {
-	      p.setPen(Qt::red);
-	      p.setBrush(Qt::red);
+	      m_painter.setPen(Qt::red);
+	      m_painter.setBrush(Qt::red);
 	      x = toInt(double(data->getPeriodEstimatesAt(data->getChosenCorrelationIndex())) * ratio);
 	      y = toInt(dh2 - data->getPeriodEstimatesAmpAt(data->getChosenCorrelationIndex()) * dh2);
-	      p.drawEllipse(x - 2, y - 2, 5, 5);
+	      m_painter.drawEllipse(x - 2, y - 2, 5, 5);
 	    }
 
 	  //draw a line at the chosen correlation period
 	  if(data->getChosenCorrelationIndex() >= 0)
 	    {
-	      p.setPen(Qt::green);
-	      p.setBrush(Qt::green);
+	      m_painter.setPen(Qt::green);
+	      m_painter.setBrush(Qt::green);
 	      x = toInt(double(active->periodOctaveEstimate(chunk)) * ratio);
-	      p.drawLine(x, 0, x, height());
+	      m_painter.drawLine(x, 0, x, height());
 	    }
 	}
       active->unlock();

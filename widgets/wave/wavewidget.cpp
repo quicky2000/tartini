@@ -72,20 +72,20 @@ void WaveWidget::paintEvent(QPaintEvent *)
 	  if(gdata->getView().backgroundShading() && l_period > 4.0 && l_period < double(l_active->get_nsdf_data().size()))
 	    {
 	      int l_n = int(ceil(double(l_center_X) / l_scale_X));
-	      p.setPen(Qt::NoPen);
+	      m_painter.setPen(Qt::NoPen);
 	      QColor l_color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), l_data->getCorrelation());
 	      QColor l_color2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), l_data->getCorrelation());
 	      for(int l_j = -l_n; l_j < l_n; l_j++)
 		{
 		  int l_x = l_center_X + toInt(l_scale_X * double(l_j));
-		  p.setBrush((l_j % 2) ? l_color1 : l_color2);
-		  p.drawRect(l_x, 0, toInt(l_scale_X * double(l_j + 1)) - toInt(l_scale_X * double(l_j)), height());
+		  m_painter.setBrush((l_j % 2) ? l_color1 : l_color2);
+		  m_painter.drawRect(l_x, 0, toInt(l_scale_X * double(l_j + 1)) - toInt(l_scale_X * double(l_j)), height());
 		}
-	      p.setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3 * l_data->getCorrelation()));
+	      m_painter.setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3 * l_data->getCorrelation()));
 	      for(int l_j = -l_n; l_j < l_n; l_j++)
 		{
 		  int l_x = l_center_X + toInt(l_scale_X * l_j);
-		  p.drawLine(l_x, 0, l_x, height());
+		  m_painter.drawLine(l_x, 0, l_x, height());
 		}
 	    }
 	  else
@@ -94,8 +94,8 @@ void WaveWidget::paintEvent(QPaintEvent *)
 	    }
 	  QString l_num_periods_text;
 	  l_num_periods_text.sprintf("# Periods = %lf", l_num_periods);
-	  p.setPen(Qt::black);
-	  p.drawText(5, 15, l_num_periods_text);
+	  m_painter.setPen(Qt::black);
+	  m_painter.drawText(5, 15, l_num_periods_text);
 	}
       else
 	{
@@ -110,8 +110,8 @@ void WaveWidget::paintEvent(QPaintEvent *)
   double l_dh2 = double(height() - 1) / 2.0;
     
   //draw the center line
-  p.setPen(QPen(colorBetween(colorGroup().background(), Qt::black, 0.3), 0));
-  p.drawLine(0, toInt(l_dh2), width(), toInt(l_dh2));
+  m_painter.setPen(QPen(colorBetween(colorGroup().background(), Qt::black, 0.3), 0));
+  m_painter.drawLine(0, toInt(l_dh2), width(), toInt(l_dh2));
 
     
   if(l_active)
@@ -146,8 +146,8 @@ void WaveWidget::paintEvent(QPaintEvent *)
 	    }
 	  m_point_array.setPoint(l_j, l_j * 2, toInt(l_dh2 - (l_filtered_data.at(l_pos)) * l_scale_Y));
 	}
-      p.setPen(QPen(l_active->get_color(), 0));
-      p.drawPolyline(m_point_array);
+      m_painter.setPen(QPen(l_active->get_color(), 0));
+      m_painter.drawPolyline(m_point_array);
       l_active->unlock();
     }
   endDrawing();

@@ -41,76 +41,76 @@ class DrawWidget : public QWidget
   Q_OBJECT
 
 public:
-  DrawWidget(QWidget *parent, const char* name = 0, Qt::WFlags f = Qt::WDestructiveClose);
+  DrawWidget(QWidget * p_parent, const char* p_name = 0, Qt::WFlags p_flags = Qt::WDestructiveClose);
   virtual ~DrawWidget(void);
 
 
   /**
      Draw the channel onto the painter using the MinMax algorithm or individual samples if the zoom is high enough
   */
-  static void drawChannel(QPaintDevice & pd,
-			  Channel * ch,
-			  QPainter & p,
-			  double leftTime,
-			  double currentTime,
-			  double zoomX,
-			  double viewBottom,
-			  double zoomY,
-			  int viewType
+  static void drawChannel(QPaintDevice & p_paint_device,
+			  Channel * p_channel,
+			  QPainter & p_painter,
+			  double p_left_time,
+			  double p_current_time,
+			  double p_zoom_X,
+			  double p_view_bottom,
+			  double p_zoom_Y,
+			  int p_view_type
 			  );
-  void drawChannelFilled(Channel * ch,
-			 QPainter & p,
-			 double leftTime,
-			 double currentTime,
-			 double zoomX,
-			 double viewBottom,
-			 double zoomY,
-			 int viewType
+  void drawChannelFilled(Channel * p_channel,
+			 QPainter & p_painter,
+			 double p_left_time,
+			 double p_current_time,
+			 double p_zoom_X,
+			 double p_view_bottom,
+			 double p_zoom_Y,
+			 int p_view_type
 			 );
-  void setChannelVerticalView(Channel * ch,
-			      double leftTime,
-			      double currentTime,
-			      double zoomX,
-			      double viewBottom,
-			      double zoomY
+  void setChannelVerticalView(Channel * p_channel,
+			      double p_left_time,
+			      double p_current_time,
+			      double p_zoom_X,
+			      double p_view_bottom,
+			      double p_zoom_Y
 			      );
-  static void setLineWidth(int width);
+  static void setLineWidth(int p_width);
   
-  void beginDrawing(bool clearBackground_=true);
-  void endDrawing(bool drawToScreen_=true);
+  void beginDrawing(bool p_clear_background_=true);
+  void endDrawing(bool p_draw_to_screen_=true);
   void clearBackground(void);
-  void fillBackground(const QColor & color);
+  void fillBackground(const QColor & p_color);
   void checkSize(void);
   void drawToScreen(void);
 
   /**
      calculates elements in the zoom lookup table
-     @param ch The channel we are working with
-     @param baseElement The element's index in the zoom lookup table
-     @param baseX  The number of chunks each pixel represents (can include a fraction part)
+     @param p_channel The channel we are working with
+     @param p_base_element The element's index in the zoom lookup table
+     @param p_base_X  The number of chunks each pixel represents (can include a fraction part)
      @return false if a zoomElement can't be calculated, else true
   */
-  static bool calcZoomElement(Channel * ch,
-			      ZoomElement & ze,
-			      int baseElement,
-			      double baseX
+  static bool calcZoomElement(Channel * p_channel,
+			      ZoomElement & p_zoom_element,
+			      int p_base_element,
+			      double p_base_X
 			      );
-  void drawArray(float *input,
-		 int n,
-		 int sampleStep = 1,
-		 double theZoomY = 1.0,
-		 double offset = 0
+  void drawArray(float * p_input,
+		 int p_n,
+		 int p_sample_step = 1,
+		 double p_the_zoom_Y = 1.0,
+		 double p_offset = 0
 		 );
   
 protected:
-  static int lineWidth;
-  static int lineTopHalfWidth;
-  static int lineBottomHalfWidth;
+  static int m_line_width;
+  static int m_line_top_half_width;
+  static int m_line_bottom_half_width;
 
-  QPixmap *_buffer;
-  QPaintDevice *paintDevice;
+  QPixmap * m_buffer;
+  QPaintDevice * m_paint_device;
 
-  QPainter p;
+  QPainter m_painter;
 };
 
 #endif // DRAWWIDGET_H

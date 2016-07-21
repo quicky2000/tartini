@@ -76,7 +76,7 @@ void TunerWidget::paintEvent(QPaintEvent *)
 
   QPen pen(colorGroup().foreground(), 2);
   // Border
-  p.setPen(pen);
+  m_painter.setPen(pen);
 
   double halfWidth = double(width()) / 2.0;
   double radius = 1.8 * MAX(height() / 2, halfWidth);
@@ -88,13 +88,13 @@ void TunerWidget::paintEvent(QPaintEvent *)
   {
     // Draw the semicircle
     // Fill colour
-    p.setBrush(Qt::white);
-    p.drawPie(toInt(halfWidth - radius), 0, toInt(2.0 * radius), toInt(2.0 * radius), toInt((90 - thetaDeg) * 16), toInt(2 * thetaDeg * 16));
-    p.drawArc(toInt(halfWidth - (radius / 2.0)), toInt(radius / 2.0), toInt(radius), toInt(radius), toInt((90 - thetaDeg) * 16), toInt(2 * thetaDeg * 16));
+    m_painter.setBrush(Qt::white);
+    m_painter.drawPie(toInt(halfWidth - radius), 0, toInt(2.0 * radius), toInt(2.0 * radius), toInt((90 - thetaDeg) * 16), toInt(2 * thetaDeg * 16));
+    m_painter.drawArc(toInt(halfWidth - (radius / 2.0)), toInt(radius / 2.0), toInt(radius), toInt(radius), toInt((90 - thetaDeg) * 16), toInt(2 * thetaDeg * 16));
   }
  
-  p.setPen(colorGroup().foreground());
-  p.setBrush(colorGroup().foreground());
+  m_painter.setPen(colorGroup().foreground());
+  m_painter.setBrush(colorGroup().foreground());
   
     
   double step = (2 * theta) / 12.0;
@@ -106,16 +106,16 @@ void TunerWidget::paintEvent(QPaintEvent *)
 	int y = toInt(radius - radius * sin(i));
 	QPoint start(x, y);
 	double t = 0.05; //0.025;
-	p.drawLine(start, start + t * (center - start));
+	m_painter.drawLine(start, start + t * (center - start));
       }
   }
   
   {
     //Draw the text labels
-    p.setPen(colorGroup().foreground());
+    m_painter.setPen(colorGroup().foreground());
   
     const char *theNames[11] = { "+50", "+40", "+30", "+20", "+10", "0", "-10", "-20", "-30", "-40", "-50" };
-    QFontMetrics fm = p.fontMetrics();
+    QFontMetrics fm = m_painter.fontMetrics();
     int halfFontHeight = fm.height() / 2;
     int halfFontWidth;
     
@@ -129,7 +129,7 @@ void TunerWidget::paintEvent(QPaintEvent *)
 	QPoint pt = start + t * (center - start);
       halfFontWidth = fm.width(theNames[j]) / 2;
       
-      p.drawText(pt.x() - halfFontWidth, pt.y() + halfFontHeight, theNames[j]);
+      m_painter.drawText(pt.x() - halfFontWidth, pt.y() + halfFontHeight, theNames[j]);
       if(radius < 300)
 	{
 	  j += 2;
@@ -141,14 +141,14 @@ void TunerWidget::paintEvent(QPaintEvent *)
 
     }
     halfFontWidth = fm.width("Cents") / 2;
-    p.drawText(center.x() - halfFontWidth, toInt(center.y() * 0.2) + halfFontHeight, "Cents");
+    m_painter.drawText(center.x() - halfFontWidth, toInt(center.y() * 0.2) + halfFontHeight, "Cents");
   }
     
   {
     //draw needle
     double centAngle = (2 * theta) / 120;
     double note = rho + (fabs(value_ - 60) * centAngle);
-    p.setPen(colorBetween(Qt::white, Qt::darkRed, intensity_));
+    m_painter.setPen(colorBetween(Qt::white, Qt::darkRed, intensity_));
   
     int halfKnobWidth = MAX(toInt(radius * 0.02), 1);
     
@@ -163,12 +163,12 @@ void TunerWidget::paintEvent(QPaintEvent *)
   
     if(intensity_ > 0.0)
       {
-	p.setBrush(colorBetween(Qt::white, Qt::red, intensity_));
+	m_painter.setBrush(colorBetween(Qt::white, Qt::red, intensity_));
 	Q3PointArray points(3);
 	points.setPoint(0, noteX);
 	points.setPoint(1, knobRight);
 	points.setPoint(2, knobLeft);
-	p.drawPolygon(points);
+	m_painter.drawPolygon(points);
       }
   }
   endDrawing();

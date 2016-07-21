@@ -71,20 +71,20 @@ void FFTWidget::paintEvent( QPaintEvent * )
 	    {
 	      //number of colored patches
 	      int n = int(ceil(double(width()) / scaleX));
-	      p.setPen(Qt::NoPen);
+	      m_painter.setPen(Qt::NoPen);
 	      QColor color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), data->getCorrelation());
 	      QColor color2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), data->getCorrelation());
 	      for(j = 0; j < n; j++)
 		{
 		  x = toInt(scaleX * double(j));
-		  p.setBrush((j % 2) ? color1 : color2);
-		  p.drawRect(x, 0, toInt(scaleX * double(j + 1)) - toInt(scaleX * double(j)), height());
+		  m_painter.setBrush((j % 2) ? color1 : color2);
+		  m_painter.drawRect(x, 0, toInt(scaleX * double(j + 1)) - toInt(scaleX * double(j)), height());
 		}
-	      p.setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3 * data->getCorrelation()));
+	      m_painter.setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3 * data->getCorrelation()));
 	      for(j = 0; j < n; j++)
 		{
 		  x = toInt(scaleX * double(j));
-		  p.drawLine(x, 0, x, height());
+		  m_painter.drawLine(x, 0, x, height());
 		}
 	    }
 	  else
@@ -93,8 +93,8 @@ void FFTWidget::paintEvent( QPaintEvent * )
 	    }
 	  QString fundFreqText;
 	  fundFreqText.sprintf("Fundamental Frequency = %lf", freq);
-	  p.setPen(Qt::black);
-	  p.drawText(5, 15, fundFreqText);
+	  m_painter.setPen(Qt::black);
+	  m_painter.drawText(5, 15, fundFreqText);
 	}
       else
 	{
@@ -102,14 +102,14 @@ void FFTWidget::paintEvent( QPaintEvent * )
 	}
 
       //draw the waveform
-      p.setPen(QPen(Qt::red, 0));
+      m_painter.setPen(QPen(Qt::red, 0));
       for(int j = 0; j < width(); j++)
 	{
 	  //cheap hack to go faster (by drawing less points)
 	  myassert(int(pixelStep * j) < active->get_fft_data2().size());
 	  pointArray.setPoint(j, j, height() - 1 - toInt(active->get_fft_data2().at(int(pixelStep * j))*double(height())));
 	}
-      p.drawPolyline(pointArray);
+      m_painter.drawPolyline(pointArray);
       active->unlock();
     }
   else

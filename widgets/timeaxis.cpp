@@ -101,8 +101,8 @@ void TimeAxis::paintEvent(QPaintEvent *)
     }
     
   // Draw Ruler Numbers
-  p.setBrush(Qt::black);
-  p.setFont(_font);
+  m_painter.setBrush(Qt::black);
+  m_painter.setFont(_font);
   //calc the first one just off the left of the screen
   double timePos = floor(leftTime() / (timeScaleBase * largeFreq)) * (timeScaleBase * largeFreq);
   int x, largeCounter = -1;
@@ -170,24 +170,24 @@ void TimeAxis::paintEvent(QPaintEvent *)
       
 	  QString numString = mins + ":" + seconds;
 	  x = frameWidth + toInt((timePos-leftTime()) / (timeWidth() / double(w)));
-	  p.drawText(x - (p.fontMetrics().width(numString) / 2), textBottom, numString);
-	  p.drawLine(x, bigLineTop, x, bigLineBottom);
+	  m_painter.drawText(x - (m_painter.fontMetrics().width(numString) / 2), textBottom, numString);
+	  m_painter.drawLine(x, bigLineTop, x, bigLineBottom);
 	}
       else
 	{
 	  //draw the smaller lines
 	  x = frameWidth + toInt((timePos - leftTime()) / (timeWidth() / double(w)));
-	  p.drawLine(x, smallLineTop, x, smallLineBottom);
+	  m_painter.drawLine(x, smallLineTop, x, smallLineBottom);
 	}
     }
   //draw the horizontal line
   if(_numbersOnTop)
     {
-      p.drawLine(0, h - 1, width(), h - 1);
+      m_painter.drawLine(0, h - 1, width(), h - 1);
     }
   else
     {
-      p.drawLine(0, 0, width(), 0);
+      m_painter.drawLine(0, 0, width(), 0);
     }
   endDrawing();
 }

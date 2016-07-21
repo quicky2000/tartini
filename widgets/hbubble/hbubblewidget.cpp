@@ -76,7 +76,7 @@ void HBubbleWidget::paintEvent( QPaintEvent * )
   int i, j;
   beginDrawing();
 
-  p.setPen(Qt::NoPen);
+  m_painter.setPen(Qt::NoPen);
   if (active)
   {
     for (j = 0; j < historyChunks; j++)
@@ -101,11 +101,11 @@ void HBubbleWidget::paintEvent( QPaintEvent * )
 				  {
 				    c = colorBetween(qRgb(255,255,255), qRgb(0,0,255),-flat_sharp);
 				  }
-				p.setBrush(colorBetween(gdata->backgroundColor(),c,((j == (historyChunks - 1)) ? 1.0 : (float)j / historyChunks * 0.5)));
-				p.drawEllipse(toInt(width() / 8 * 3 + j * (float)width() / 8 / historyChunks - radius), 
-					      toInt(height() - (float) ((i + 1) * height()) / (numHarmonics + 2) - radius), 
-					      radius * 2, 
-					      radius * 2);
+				m_painter.setBrush(colorBetween(gdata->backgroundColor(),c,((j == (historyChunks - 1)) ? 1.0 : (float)j / historyChunks * 0.5)));
+				m_painter.drawEllipse(toInt(width() / 8 * 3 + j * (float)width() / 8 / historyChunks - radius), 
+						      toInt(height() - (float) ((i + 1) * height()) / (numHarmonics + 2) - radius), 
+						      radius * 2, 
+						      radius * 2);
 			}
 		}
 	    }

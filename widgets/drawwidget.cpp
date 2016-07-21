@@ -34,23 +34,23 @@
 #define CERTAIN_THRESHOLD 0.9
 #endif
 
-int DrawWidget::lineWidth = 3;
-int DrawWidget::lineTopHalfWidth = 2;
-int DrawWidget::lineBottomHalfWidth = 1;
+int DrawWidget::m_line_width = 3;
+int DrawWidget::m_line_top_half_width = 2;
+int DrawWidget::m_line_bottom_half_width = 1;
 
 //------------------------------------------------------------------------------
-DrawWidget::DrawWidget(QWidget *parent, const char* /*name*/, Qt::WFlags f):
-  QWidget(parent, NULL/*name*/, f)
+DrawWidget::DrawWidget(QWidget * p_parent, const char* /*p_name*/, Qt::WFlags p_flags):
+  QWidget(p_parent, NULL/*p_name*/, p_flags)
 {
 #ifdef SHARED_DRAWING_BUFFER
-  _buffer = gdata->drawingBuffer();
-  _buffer->resize(_buffer->size().expandedTo(size()));
-  paintDevice = _buffer;
+  m_buffer = gdata->drawingBuffer();
+  m_buffer->resize(m_buffer->size().expandedTo(size()));
+  m_paint_device = m_buffer;
 #elif SINGLE_DRAWING_BUFFER
-  paintDevice = this;
+  m_paint_device = this;
 #else // SINGLE_DRAWING_BUFFER
-  _buffer = new QPixmap(size());
-  paintDevice = _buffer;
+  m_buffer = new QPixmap(size());
+  m_paint_device = m_buffer;
 #endif // SHARED_DRAWING_BUFFER
   
   setLineWidth(3);
@@ -65,29 +65,29 @@ DrawWidget::~DrawWidget(void)
 #ifdef SHARED_DRAWING_BUFFER
 #elif SINGLE_DRAWING_BUFFER
 #else // SINGLE_DRAWING_BUFFER
-  delete _buffer;
+  delete m_buffer;
 #endif // SHARED_DRAWING_BUFFER
 }
 
 //------------------------------------------------------------------------------
-void DrawWidget::beginDrawing(bool clearBackground_)
+void DrawWidget::beginDrawing(bool p_clear_background)
 {
   checkSize();
-  p.begin(paintDevice);
+  m_painter.begin(m_paint_device);
 #ifndef SINGLE_DRAWING_BUFFER
-  p.initFrom(this);
+  m_painter.initFrom(this);
 #endif // SINGLE_DRAWING_BUFFER
-  if(clearBackground_)
+  if(p_clear_background)
     {
       clearBackground();
     }
 }
 
 //------------------------------------------------------------------------------
-void DrawWidget::endDrawing(bool drawToScreen_)
+void DrawWidget::endDrawing(bool p_draw_to_screen)
 {
-  p.end();
-  if(drawToScreen_)
+  m_painter.end();
+  if(p_draw_to_screen)
     {
       drawToScreen();
     }
@@ -97,527 +97,525 @@ void DrawWidget::endDrawing(bool drawToScreen_)
 void DrawWidget::drawToScreen(void)
 {
 #ifndef SINGLE_DRAWING_BUFFER
-  bitBlt(this, 0, 0, _buffer, 0, 0, width(), height());
+  bitBlt(this, 0, 0, m_buffer, 0, 0, width(), height());
 #endif // SINGLE_DRAWING_BUFFER
 }
 
 //------------------------------------------------------------------------------
 void DrawWidget::clearBackground(void)
 {
-  p.fillRect(0, 0, width(), height(), gdata->backgroundColor());
+  m_painter.fillRect(0, 0, width(), height(), gdata->backgroundColor());
 }
 
 //------------------------------------------------------------------------------
-void DrawWidget::fillBackground(const QColor & color)
+void DrawWidget::fillBackground(const QColor & p_color)
 {
-  p.fillRect(0, 0, width(), height(), color);
+  m_painter.fillRect(0, 0, width(), height(), p_color);
 }
 
 //------------------------------------------------------------------------------
 void DrawWidget::checkSize(void)
 {
 #ifdef SHARED_DRAWING_BUFFER
-  if(width() > _buffer->width() || height() > _buffer->height())
+  if(width() > m_buffer->width() || height() > m_buffer->height())
     {
-      _buffer->resize(_buffer->size().expandedTo(size()));
+      m_buffer->resize(m_buffer->size().expandedTo(size()));
     }
 #elif SINGLE_DRAWING_BUFFER
 #else // SINGLE_DRAWING_BUFFER
-  if(_buffer->size() != size())
+  if(m_buffer->size() != size())
     {
       //resize the local double buffer
-      _buffer->resize(size());
+      m_buffer->resize(size());
     }
 #endif // SHARED_DRAWING_BUFFER
 }
 
 //------------------------------------------------------------------------------
-void DrawWidget::setLineWidth(int width)
+void DrawWidget::setLineWidth(int p_width)
 {
-  lineWidth = width;
-  lineTopHalfWidth = lineWidth / 2 + (lineWidth % 2);
-  lineBottomHalfWidth = lineWidth / 2;
+  m_line_width = p_width;
+  m_line_top_half_width = m_line_width / 2 + (m_line_width % 2);
+  m_line_bottom_half_width = m_line_width / 2;
 }
 
 //------------------------------------------------------------------------------
-void DrawWidget::drawChannel(QPaintDevice & pd,
-			     Channel * ch,
-			     QPainter & p,
-			     double leftTime,
-			     double currentTime,
-			     double zoomX,
-			     double viewBottom,
-			     double zoomY,
-			     int viewType
+void DrawWidget::drawChannel(QPaintDevice & p_paint_device,
+			     Channel * p_channel,
+			     QPainter & p_painter,
+			     double p_left_time,
+			     double p_current_time,
+			     double p_zoom_X,
+			     double p_view_bottom,
+			     double p_zoom_Y,
+			     int p_view_type
 			     )
 {
-  ZoomLookup *z;
-  if(viewType == DRAW_VIEW_SUMMARY)
+  ZoomLookup * l_zoom_lookup;
+  if(p_view_type == DRAW_VIEW_SUMMARY)
     {
-      z = & ch->get_summary_zoom_lookup();
+      l_zoom_lookup = & p_channel->get_summary_zoom_lookup();
     }
   else
     {
-      z = &ch->get_normal_zoom_lookup();
+      l_zoom_lookup = & p_channel->get_normal_zoom_lookup();
     }
-  ChannelLocker channelLocker(ch);
+  ChannelLocker l_channel_locker(p_channel);
 
-  QColor current = ch->get_color();
-  QColor invert(255 - current.red(), 255 - current.green(), 255 - current.blue());
-  p.setPen(current);
+  QColor l_current_color = p_channel->get_color();
+  p_painter.setPen(l_current_color);
 
-  int viewBottomOffset = toInt(viewBottom / zoomY);
-  printf("viewBottomOffset=%d, %f, %f\n", viewBottomOffset, viewBottom, zoomY);
-  viewBottom = double(viewBottomOffset) * zoomY;
+  int l_view_bottom_offset = toInt(p_view_bottom / p_zoom_Y);
+  printf("l_view_bottom_offset=%d, %f, %f\n", l_view_bottom_offset, p_view_bottom, p_zoom_Y);
+  p_view_bottom = double(l_view_bottom_offset) * p_zoom_Y;
   
-  // baseX is the no. of chunks a pixel must represent.
-  double baseX = zoomX / ch->timePerChunk();
+  // l_base_X is the no. of chunks a pixel must represent.
+  double l_base_X = p_zoom_X / p_channel->timePerChunk();
 
-  z->setZoomLevel(baseX);
-  
-  double currentChunk = ch->chunkFractionAtTime(currentTime);
-  double leftFrameTime = currentChunk - ((currentTime - leftTime) / ch->timePerChunk());
+  l_zoom_lookup->setZoomLevel(l_base_X); 
+  double l_current_chunk = p_channel->chunkFractionAtTime(p_current_time);
+  double l_left_frame_time = l_current_chunk - ((p_current_time - p_left_time) / p_channel->timePerChunk());
   
 
-  double frameTime = leftFrameTime;
-  int n = 0;
-  int baseElement = int(floor(frameTime / baseX));
-  if(baseElement < 0)
+  double l_frame_time = l_left_frame_time;
+  int l_n = 0;
+  int l_base_element = int(floor(l_frame_time / l_base_X));
+  if(l_base_element < 0)
     {
-      n -= baseElement;
-      baseElement = 0;
+      l_n -= l_base_element;
+      l_base_element = 0;
     }
-  int lastBaseElement = int(floor(double(ch->totalChunks()) / baseX));
+  int l_last_base_element = int(floor(double(p_channel->totalChunks()) / l_base_X));
   
-  Q3PointArray pointArray(pd.width() * 2);
+  Q3PointArray l_point_array(p_paint_device.width() * 2);
       
-  if (baseX > 1)
+  if (l_base_X > 1)
     {
       // More samples than pixels
-      int theWidth = pd.width();
-      if(lastBaseElement > z->size())
+      int l_the_width = p_paint_device.width();
+      if(l_last_base_element > l_zoom_lookup->size())
 	{
-	  z->setSize(lastBaseElement);
+	  l_zoom_lookup->setSize(l_last_base_element);
 	}
-      for(; n < theWidth && baseElement < lastBaseElement; n++, baseElement++)
+      for(; l_n < l_the_width && l_base_element < l_last_base_element; l_n++, l_base_element++)
 	{
-	  myassert(baseElement >= 0);
-	  ZoomElement &ze = z->at(baseElement);
-	  if(!ze.isValid())
+	  myassert(l_base_element >= 0);
+	  ZoomElement & l_zoom_element = l_zoom_lookup->at(l_base_element);
+	  if(!l_zoom_element.isValid())
 	    {
-	      if(calcZoomElement(ch, ze, baseElement, baseX))
+	      if(calcZoomElement(p_channel, l_zoom_element, l_base_element, l_base_X))
 		{
 		  continue;
 		}
 	    }
      
-	  if(ze.high() != 0.0f && ze.high() - ze.low() < 1.0)
+	  if(l_zoom_element.high() != 0.0f && l_zoom_element.high() - l_zoom_element.low() < 1.0)
 	    {
 	      //if range is closer than one semi-tone then draw a line between them
-	      p.setPen(ze.color());
-	      p.drawLine(n, pd.height() - lineTopHalfWidth - toInt(ze.high() / zoomY) + viewBottomOffset, n, pd.height() + lineBottomHalfWidth - toInt(ze.low() / zoomY) + viewBottomOffset);
+	      p_painter.setPen(l_zoom_element.color());
+	      p_painter.drawLine(l_n, p_paint_device.height() - m_line_top_half_width - toInt(l_zoom_element.high() / p_zoom_Y) + l_view_bottom_offset, l_n, p_paint_device.height() + m_line_bottom_half_width - toInt(l_zoom_element.low() / p_zoom_Y) + l_view_bottom_offset);
 	    }
 	}
     }
   else
     {
       // More pixels than samples
-      float err = 0.0, pitch = 0.0, prevPitch = 0.0, vol;
+      float l_err = 0.0, l_pitch = 0.0, l_prev_pitch = 0.0, vol;
 
       // Integer version of frame time
-      int intChunk = (int) floor(frameTime);
-      if(intChunk < 0)
+      int l_int_chunk = (int) floor(l_frame_time);
+      if(l_int_chunk < 0)
 	{
-	  intChunk = 0;
+	  l_int_chunk = 0;
 	}
 
       // So we skip some pixels
-      double stepSize = 1.0 / baseX;
-      int x = 0, y;
+      double l_step_size = 1.0 / l_base_X;
+      int l_x = 0, l_y;
 
-      double start = (double(intChunk) - frameTime) * stepSize;
-      double stop = pd.width() + (2 * stepSize);
+      double l_start = (double(l_int_chunk) - l_frame_time) * l_step_size;
+      double l_stop = p_paint_device.width() + (2 * l_step_size);
 
       //make it an odd number
-      int squareSize = (int(sqrt(stepSize)) / 2) * 2 + 1;
-      int halfSquareSize = squareSize/2;
-      int penX=0, penY=0;
+      int l_square_size = (int(sqrt(l_step_size)) / 2) * 2 + 1;
+      int l_half_square_size = l_square_size / 2;
+      int l_pen_X = 0, l_pen_Y = 0;
 
-      for (double n = start; n < stop && intChunk < (int)ch->totalChunks(); n += stepSize, intChunk++)
+      for (double l_n = l_start; l_n < l_stop && l_int_chunk < (int)p_channel->totalChunks(); l_n += l_step_size, l_int_chunk++)
 	{
-	  myassert(intChunk >= 0);
-	  AnalysisData *data = ch->dataAtChunk(intChunk);
-	  err = data->getCorrelation();
-	  vol = dB2Normalised(data->getLogRms(), ch->get_rms_ceiling(), ch->get_rms_floor());
+	  myassert(l_int_chunk >= 0);
+	  AnalysisData * l_data = p_channel->dataAtChunk(l_int_chunk);
+	  l_err = l_data->getCorrelation();
+	  vol = dB2Normalised(l_data->getLogRms(), p_channel->get_rms_ceiling(), p_channel->get_rms_floor());
 	  if(gdata->pitchContourMode() == 0)
 	    {
-	      if(viewType == DRAW_VIEW_PRINT)
+	      if(p_view_type == DRAW_VIEW_PRINT)
 		{
-		  p.setPen(QPen(colorBetween(QColor(255, 255, 255), ch->get_color(), err*vol), lineWidth));
+		  p_painter.setPen(QPen(colorBetween(QColor(255, 255, 255), p_channel->get_color(), l_err * vol), m_line_width));
 		}
 	      else
 		{
-		  p.setPen(QPen(colorBetween(gdata->backgroundColor(), ch->get_color(), err*vol), lineWidth));
+		  p_painter.setPen(QPen(colorBetween(gdata->backgroundColor(), p_channel->get_color(), l_err * vol), m_line_width));
 		}
 	    }
 	  else
 	    {
-	      p.setPen(QPen(ch->get_color(), lineWidth));
+	      p_painter.setPen(QPen(p_channel->get_color(), m_line_width));
 	    }
       
-	  x = toInt(n);
-	  pitch = (ch->isVisibleChunk(data)) ? data->getPitch() : 0.0f;
-	  myassert(pitch >= 0.0 && pitch <= gdata->topPitch());
-	  y = pd.height() - 1 - toInt(pitch / zoomY) + viewBottomOffset;
-	  if(pitch > 0.0f)
+	  l_x = toInt(l_n);
+	  l_pitch = (p_channel->isVisibleChunk(l_data)) ? l_data->getPitch() : 0.0f;
+	  myassert(l_pitch >= 0.0 && l_pitch <= gdata->topPitch());
+	  l_y = p_paint_device.height() - 1 - toInt(l_pitch / p_zoom_Y) + l_view_bottom_offset;
+	  if(l_pitch > 0.0f)
 	    {
-	      if(fabs(prevPitch - pitch) < 1.0 && n != start)
+	      if(fabs(l_prev_pitch - l_pitch) < 1.0 && l_n != l_start)
 		{
 		  //if closer than one semi-tone from previous then draw a line between them
-		  p.drawLine(penX, penY, x, y);
-		  penX = x;
-		  penY = y;
+		  p_painter.drawLine(l_pen_X, l_pen_Y, l_x, l_y);
+		  l_pen_X = l_x;
+		  l_pen_Y = l_y;
 		}
 	      else
 		{
-		  p.drawPoint(x, y);
-		  penX = x;
-		  penY = y;
+		  p_painter.drawPoint(l_x, l_y);
+		  l_pen_X = l_x;
+		  l_pen_Y = l_y;
 		}
-	      if(stepSize > 10)
+	      if(l_step_size > 10)
 		{
 		  //draw squares on the data points
-		  p.setBrush(Qt::NoBrush);
-		  p.drawRect(x - halfSquareSize, y - halfSquareSize, squareSize, squareSize);
+		  p_painter.setBrush(Qt::NoBrush);
+		  p_painter.drawRect(l_x - l_half_square_size, l_y - l_half_square_size, l_square_size, l_square_size);
 		}
 	    }
-	  prevPitch = pitch;
+	  l_prev_pitch = l_pitch;
 	}
     }
 }
 
 //------------------------------------------------------------------------------
-void DrawWidget::drawChannelFilled(Channel * ch,
-				   QPainter & p,
-				   double leftTime,
-				   double currentTime,
-				   double zoomX,
-				   double viewBottom,
-				   double zoomY,
-				   int viewType
+void DrawWidget::drawChannelFilled(Channel * p_channel,
+				   QPainter & p_painter,
+				   double p_left_time,
+				   double p_current_time,
+				   double p_zoom_X,
+				   double p_view_bottom,
+				   double p_zoom_Y,
+				   int p_view_type
 				   )
 {
-  ZoomLookup *z;
-  if(viewType == DRAW_VIEW_SUMMARY)
+  ZoomLookup * l_zoom_lookup;
+  if(p_view_type == DRAW_VIEW_SUMMARY)
     {
-      z = & ch->get_summary_zoom_lookup();
+      l_zoom_lookup = & p_channel->get_summary_zoom_lookup();
     }
   else
     {
-      z = &ch->get_normal_zoom_lookup();
+      l_zoom_lookup = &p_channel->get_normal_zoom_lookup();
     }
 
-  ChannelLocker channelLocker(ch);
+  ChannelLocker l_channel_locker(p_channel);
 
-  QColor current = ch->get_color();
-  QColor invert(255 - current.red(), 255 - current.green(), 255 - current.blue());
-  p.setPen(current);
+  QColor l_current = p_channel->get_color();
+  p_painter.setPen(l_current);
 
-  int viewBottomOffset = toInt(viewBottom / zoomY);
-  viewBottom = double(viewBottomOffset) * zoomY;
+  int l_view_bottom_offset = toInt(p_view_bottom / p_zoom_Y);
+  p_view_bottom = double(l_view_bottom_offset) * p_zoom_Y;
 
-  // baseX is the no. of chunks a pixel must represent.
-  double baseX = zoomX / ch->timePerChunk();
+  // l_base_X is the no. of chunks a pixel must represent.
+  double l_base_X = p_zoom_X / p_channel->timePerChunk();
 
-  z->setZoomLevel(baseX);
+  l_zoom_lookup->setZoomLevel(l_base_X);
 
-  double currentChunk = ch->chunkFractionAtTime(currentTime);
-  double leftFrameTime = currentChunk - ((currentTime - leftTime) / ch->timePerChunk());
+  double l_current_chunk = p_channel->chunkFractionAtTime(p_current_time);
+  double l_left_frame_time = l_current_chunk - ((p_current_time - p_left_time) / p_channel->timePerChunk());
 
-  double frameTime = leftFrameTime;
-  int n = 0;
-  int baseElement = int(floor(frameTime / baseX));
-  if(baseElement < 0)
+  double l_frame_time = l_left_frame_time;
+  int l_n = 0;
+  int l_base_element = int(floor(l_frame_time / l_base_X));
+  if(l_base_element < 0)
     {
-      n -= baseElement;
-      baseElement = 0;
+      l_n -= l_base_element;
+      l_base_element = 0;
     }
-  int lastBaseElement = int(floor(double(ch->totalChunks()) / baseX));
+  int l_last_base_element = int(floor(double(p_channel->totalChunks()) / l_base_X));
   
-  int firstN = n;
-  int lastN = firstN;
+  int l_first_N = l_n;
+  int l_last_N = l_first_N;
 
-  QPolygon bottomPoints(width() * 2);
-  QPolygon evenMidPoints(width() * 2);
-  QPolygon oddMidPoints(width() * 2);
-  QPolygon evenMidPoints2(width() * 2);
-  QPolygon oddMidPoints2(width() * 2);
-  std::vector<QRect> noteRect(width() * 2);
-  std::vector<QRect> noteRect2(width() * 2);
-  std::vector<bool> isNoteRectEven(width() * 2);
-  int pointIndex = 0;
-  int evenMidPointIndex = 0;
-  int oddMidPointIndex = 0;
-  int evenMidPointIndex2 = 0;
-  int oddMidPointIndex2 = 0;
-  int rectIndex = 0;
-  int rectIndex2 = 0;
+  QPolygon l_bottom_points(width() * 2);
+  QPolygon l_even_mid_points(width() * 2);
+  QPolygon l_odd_mid_points(width() * 2);
+  QPolygon l_even_mid_points2(width() * 2);
+  QPolygon l_odd_mid_points2(width() * 2);
+  std::vector<QRect> l_note_rect(width() * 2);
+  std::vector<QRect> l_note_rect2(width() * 2);
+  std::vector<bool> l_is_note_rect_even(width() * 2);
+  int l_point_index = 0;
+  int l_even_mid_point_index = 0;
+  int l_odd_mid_point_index = 0;
+  int l_even_mid_point_index2 = 0;
+  int l_odd_mid_point_index2 = 0;
+  int l_rect_index = 0;
+  int l_rect_index2 = 0;
 
-  if (baseX > 1)
+  if (l_base_X > 1)
     {
       // More samples than pixels
-      int theWidth = width();
-      if(lastBaseElement > z->size())
+      int l_the_width = width();
+      if(l_last_base_element > l_zoom_lookup->size())
 	{
-	  z->setSize(lastBaseElement);
+	  l_zoom_lookup->setSize(l_last_base_element);
 	}
-      for(; n < theWidth && baseElement < lastBaseElement; n++, baseElement++)
+      for(; l_n < l_the_width && l_base_element < l_last_base_element; l_n++, l_base_element++)
 	{
-	  myassert(baseElement >= 0);
-	  ZoomElement &ze = z->at(baseElement);
-	  if(!ze.isValid())
+	  myassert(l_base_element >= 0);
+	  ZoomElement & l_zoom_element = l_zoom_lookup->at(l_base_element);
+	  if(!l_zoom_element.isValid())
 	    {
-	      if(!calcZoomElement(ch, ze, baseElement, baseX))
+	      if(!calcZoomElement(p_channel, l_zoom_element, l_base_element, l_base_X))
 		{
 		  continue;
 		}
 	    }
      
-	  int y = height() - 1 - toInt(ze.high() / zoomY) + viewBottomOffset;
-	  int y2, y3;
-	  if(ze.noteIndex() != -1 && ch->dataAtChunk(ze.midChunk())->getNoteIndex() != -1)
+	  int l_y = height() - 1 - toInt(l_zoom_element.high() / p_zoom_Y) + l_view_bottom_offset;
+	  int l_y2, l_y3;
+	  if(l_zoom_element.noteIndex() != -1 && p_channel->dataAtChunk(l_zoom_element.midChunk())->getNoteIndex() != -1)
 	    {
-	      myassert(ze.noteIndex() >= 0);
-	      myassert(ze.noteIndex() < int(ch->get_note_data().size()));
-	      myassert(ch->isValidChunk(ze.midChunk()));
-	      AnalysisData *data = ch->dataAtChunk(ze.midChunk());
+	      myassert(l_zoom_element.noteIndex() >= 0);
+	      myassert(l_zoom_element.noteIndex() < int(p_channel->get_note_data().size()));
+	      myassert(p_channel->isValidChunk(l_zoom_element.midChunk()));
+	      AnalysisData * l_data = p_channel->dataAtChunk(l_zoom_element.midChunk());
 
 	      if(gdata->showMeanVarianceBars())
 		{
 		  //longTermMean bars
-		  y2 = height() - 1 - toInt((data->getLongTermMean() + data->getLongTermDeviation()) / zoomY) + viewBottomOffset;
-		  y3 = height() - 1 - toInt((data->getLongTermMean() - data->getLongTermDeviation()) / zoomY) + viewBottomOffset;
-		  if(ze.noteIndex() % 2 == 0)
+		  l_y2 = height() - 1 - toInt((l_data->getLongTermMean() + l_data->getLongTermDeviation()) / p_zoom_Y) + l_view_bottom_offset;
+		  l_y3 = height() - 1 - toInt((l_data->getLongTermMean() - l_data->getLongTermDeviation()) / p_zoom_Y) + l_view_bottom_offset;
+		  if(l_zoom_element.noteIndex() % 2 == 0)
 		    {
-		      evenMidPoints.setPoint(evenMidPointIndex++, n, y2);
-		      evenMidPoints.setPoint(evenMidPointIndex++, n, y3);
+		      l_even_mid_points.setPoint(l_even_mid_point_index++, l_n, l_y2);
+		      l_even_mid_points.setPoint(l_even_mid_point_index++, l_n, l_y3);
 		    }
 		  else
 		    {
-		      oddMidPoints.setPoint(oddMidPointIndex++, n, y2);
-		      oddMidPoints.setPoint(oddMidPointIndex++, n, y3);
+		      l_odd_mid_points.setPoint(l_odd_mid_point_index++, l_n, l_y2);
+		      l_odd_mid_points.setPoint(l_odd_mid_point_index++, l_n, l_y3);
 		    }
   
 		  //shortTermMean bars
-		  y2 = height() - 1 - toInt((data->getShortTermMean() + data->getShortTermDeviation()) / zoomY) + viewBottomOffset;
-		  y3 = height() - 1 - toInt((data->getShortTermMean() - data->getShortTermDeviation()) / zoomY) + viewBottomOffset;
-		  if(ze.noteIndex() % 2 == 0)
+		  l_y2 = height() - 1 - toInt((l_data->getShortTermMean() + l_data->getShortTermDeviation()) / p_zoom_Y) + l_view_bottom_offset;
+		  l_y3 = height() - 1 - toInt((l_data->getShortTermMean() - l_data->getShortTermDeviation()) / p_zoom_Y) + l_view_bottom_offset;
+		  if(l_zoom_element.noteIndex() % 2 == 0)
 		    {
-		      evenMidPoints2.setPoint(evenMidPointIndex2++, n, y2);
-		      evenMidPoints2.setPoint(evenMidPointIndex2++, n, y3);
+		      l_even_mid_points2.setPoint(l_even_mid_point_index2++, l_n, l_y2);
+		      l_even_mid_points2.setPoint(l_even_mid_point_index2++, l_n, l_y3);
 		    }
 		  else
 		    {
-		      oddMidPoints2.setPoint(oddMidPointIndex2++, n, y2);
-		      oddMidPoints2.setPoint(oddMidPointIndex2++, n, y3);
+		      l_odd_mid_points2.setPoint(l_odd_mid_point_index2++, l_n, l_y2);
+		      l_odd_mid_points2.setPoint(l_odd_mid_point_index2++, l_n, l_y3);
 		    }
 		}
 	    }
-	  bottomPoints.setPoint(pointIndex++, n, y);
-	  bottomPoints.setPoint(pointIndex++, n, height());
-	  lastN = n;
+	  l_bottom_points.setPoint(l_point_index++, l_n, l_y);
+	  l_bottom_points.setPoint(l_point_index++, l_n, height());
+	  l_last_N = l_n;
 	}
-      p.setPen(Qt::NoPen);
-      p.setBrush(gdata->shading1Color());
-      p.drawRect(firstN, 0, lastN, height());
-      p.setPen(gdata->shading2Color());
-      if(pointIndex > 1)
+      p_painter.setPen(Qt::NoPen);
+      p_painter.setBrush(gdata->shading1Color());
+      p_painter.drawRect(l_first_N, 0, l_last_N, height());
+      p_painter.setPen(gdata->shading2Color());
+      if(l_point_index > 1)
 	{
-	  p.drawLines(bottomPoints.constData(), pointIndex/2);
+	  p_painter.drawLines(l_bottom_points.constData(), l_point_index / 2);
 	}
 
       if(gdata->showMeanVarianceBars())
 	{
 	  //shortTermMean bars
-	  p.setPen(Qt::green);
-	  if(evenMidPointIndex2 > 1)
+	  p_painter.setPen(Qt::green);
+	  if(l_even_mid_point_index2 > 1)
 	    {
-	      p.drawLines(evenMidPoints2.constData(), evenMidPointIndex2/2);
+	      p_painter.drawLines(l_even_mid_points2.constData(), l_even_mid_point_index2 / 2);
 	    }
-	  p.setPen(Qt::yellow);
-	  if(oddMidPointIndex2 > 1)
+	  p_painter.setPen(Qt::yellow);
+	  if(l_odd_mid_point_index2 > 1)
 	    {
-	      p.drawLines(oddMidPoints2.constData(), oddMidPointIndex2/2);
+	      p_painter.drawLines(l_odd_mid_points2.constData(), l_odd_mid_point_index2 / 2);
 	    }
 
 	  //longTermMean bars
-	  p.setPen(Qt::yellow);
-	  if(evenMidPointIndex > 1)
+	  p_painter.setPen(Qt::yellow);
+	  if(l_even_mid_point_index > 1)
 	    {
-	      p.drawLines(evenMidPoints.constData(), evenMidPointIndex/2);
+	      p_painter.drawLines(l_even_mid_points.constData(), l_even_mid_point_index / 2);
 	    }
-	  p.setPen(Qt::green);
-	  if(oddMidPointIndex > 1)
+	  p_painter.setPen(Qt::green);
+	  if(l_odd_mid_point_index > 1)
 	    {
-	      p.drawLines(oddMidPoints.constData(), oddMidPointIndex/2);
+	      p_painter.drawLines(l_odd_mid_points.constData(), l_odd_mid_point_index / 2);
 	    }
 	}
     }
   else
     {
       // More pixels than samples
-      float err = 0.0;
-      float pitch = 0.0;
+      float l_err = 0.0;
+      float l_pitch = 0.0;
       // Integer version of frame time
-      int intChunk = (int) floor(frameTime);
-      if(intChunk < 0)
+      int l_int_chunk = (int) floor(l_frame_time);
+      if(l_int_chunk < 0)
 	{
-	  intChunk = 0;
+	  l_int_chunk = 0;
 	}
       // So we skip some pixels
-      double stepSize = 1.0 / baseX;
-      int x = 0, y, y2, y3;
+      double l_step_size = 1.0 / l_base_X;
+      int l_x = 0, l_y, l_y2, l_y3;
   
-      double start = (double(intChunk) - frameTime) * stepSize;
-      double stop = width() + (2 * stepSize);
-      bottomPoints.setPoint(pointIndex++, toInt(start), height());
-      lastN = firstN = toInt(start);
-      for (double n = start; n < stop && intChunk < (int)ch->totalChunks(); n += stepSize, intChunk++)
+      double l_start = (double(l_int_chunk) - l_frame_time) * l_step_size;
+      double l_stop = width() + (2 * l_step_size);
+      l_bottom_points.setPoint(l_point_index++, toInt(l_start), height());
+      l_last_N = l_first_N = toInt(l_start);
+      for (double l_n = l_start; l_n < l_stop && l_int_chunk < (int)p_channel->totalChunks(); l_n += l_step_size, l_int_chunk++)
 	{
-	  myassert(intChunk >= 0);
-	  AnalysisData *data = ch->dataAtChunk(intChunk);
-	  err = data->getCorrelation();
+	  myassert(l_int_chunk >= 0);
+	  AnalysisData * l_data = p_channel->dataAtChunk(l_int_chunk);
+	  l_err = l_data->getCorrelation();
       
 	  if(gdata->pitchContourMode() == 0)
 	    {
-	      p.setPen(QPen(colorBetween(QColor(255, 255, 255), ch->get_color(), err * dB2ViewVal(data->getLogRms())), lineWidth));
+	      p_painter.setPen(QPen(colorBetween(QColor(255, 255, 255), p_channel->get_color(), l_err * dB2ViewVal(l_data->getLogRms())), m_line_width));
 	    }
 	  else
 	    {
-	      p.setPen(QPen(ch->get_color(), lineWidth));
+	      p_painter.setPen(QPen(p_channel->get_color(), m_line_width));
 	    }
 
-	  x = toInt(n);
-	  lastN = x;
-	  pitch = (ch->isVisibleChunk(data)) ? data->getPitch() : 0.0f;
-	  if(data->getNoteIndex() >= 0)
+	  l_x = toInt(l_n);
+	  l_last_N = l_x;
+	  l_pitch = (p_channel->isVisibleChunk(l_data)) ? l_data->getPitch() : 0.0f;
+	  if(l_data->getNoteIndex() >= 0)
 	    {
-	      isNoteRectEven[rectIndex] = (data->getNoteIndex() % 2) == 0;
+	      l_is_note_rect_even[l_rect_index] = (l_data->getNoteIndex() % 2) == 0;
 
 	      if(gdata->showMeanVarianceBars())
 		{
 		  //longTermMean bars
-		  y2 = height() - 1 - toInt((data->getLongTermMean() + data->getLongTermDeviation()) / zoomY) + viewBottomOffset;
-		  y3 = height() - 1 - toInt((data->getLongTermMean() - data->getLongTermDeviation()) / zoomY) + viewBottomOffset;
-		  noteRect[rectIndex].setLeft(x);
-		  noteRect[rectIndex].setRight(toInt(n+stepSize));
-		  noteRect[rectIndex].setTop(y2);
-		  noteRect[rectIndex++].setBottom(y3);
+		  l_y2 = height() - 1 - toInt((l_data->getLongTermMean() + l_data->getLongTermDeviation()) / p_zoom_Y) + l_view_bottom_offset;
+		  l_y3 = height() - 1 - toInt((l_data->getLongTermMean() - l_data->getLongTermDeviation()) / p_zoom_Y) + l_view_bottom_offset;
+		  l_note_rect[l_rect_index].setLeft(l_x);
+		  l_note_rect[l_rect_index].setRight(toInt(l_n + l_step_size));
+		  l_note_rect[l_rect_index].setTop(l_y2);
+		  l_note_rect[l_rect_index++].setBottom(l_y3);
   
 		  //shortTermMean bars
-		  y2 = height() - 1 - toInt((data->getShortTermMean() + data->getShortTermDeviation()) / zoomY) + viewBottomOffset;
-		  y3 = height() - 1 - toInt((data->getShortTermMean() - data->getShortTermDeviation()) / zoomY) + viewBottomOffset;
-		  noteRect2[rectIndex2].setLeft(x);
-		  noteRect2[rectIndex2].setRight(toInt(n+stepSize));
-		  noteRect2[rectIndex2].setTop(y2);
-		  noteRect2[rectIndex2++].setBottom(y3);
+		  l_y2 = height() - 1 - toInt((l_data->getShortTermMean() + l_data->getShortTermDeviation()) / p_zoom_Y) + l_view_bottom_offset;
+		  l_y3 = height() - 1 - toInt((l_data->getShortTermMean() - l_data->getShortTermDeviation()) / p_zoom_Y) + l_view_bottom_offset;
+		  l_note_rect2[l_rect_index2].setLeft(l_x);
+		  l_note_rect2[l_rect_index2].setRight(toInt(l_n + l_step_size));
+		  l_note_rect2[l_rect_index2].setTop(l_y2);
+		  l_note_rect2[l_rect_index2++].setBottom(l_y3);
 		}
 	    }
-	  myassert(pitch >= 0.0 && pitch <= gdata->topPitch());
-	  y = height() - 1 - toInt(pitch / zoomY) + viewBottomOffset;
-	  bottomPoints.setPoint(pointIndex++, x, y);
+	  myassert(l_pitch >= 0.0 && l_pitch <= gdata->topPitch());
+	  l_y = height() - 1 - toInt(l_pitch / p_zoom_Y) + l_view_bottom_offset;
+	  l_bottom_points.setPoint(l_point_index++, l_x, l_y);
 	}
-      bottomPoints.setPoint(pointIndex, bottomPoints.point(pointIndex-1).x(), height());
-      pointIndex++;
+      l_bottom_points.setPoint(l_point_index, l_bottom_points.point(l_point_index - 1).x(), height());
+      l_point_index++;
 
-      myassert(pointIndex <= width() * 2);
-      p.setPen(Qt::NoPen);
-      p.setBrush(gdata->shading1Color());
-      p.drawRect(firstN, 0, lastN, height());
-      p.setBrush(gdata->shading2Color());
-      p.drawPolygon(bottomPoints.constData(), pointIndex, Qt::OddEvenFill);
+      myassert(l_point_index <= width() * 2);
+      p_painter.setPen(Qt::NoPen);
+      p_painter.setBrush(gdata->shading1Color());
+      p_painter.drawRect(l_first_N, 0, l_last_N, height());
+      p_painter.setBrush(gdata->shading2Color());
+      p_painter.drawPolygon(l_bottom_points.constData(), l_point_index, Qt::OddEvenFill);
 
       if(gdata->showMeanVarianceBars())
 	{
 	  //shortTermMean bars
-	  for(int j = 0; j < rectIndex2; j++)
+	  for(int l_j = 0; l_j < l_rect_index2; l_j++)
 	    {
-	      if(isNoteRectEven[j])
+	      if(l_is_note_rect_even[l_j])
 		{
-		  p.setBrush(Qt::green);
+		  p_painter.setBrush(Qt::green);
 		}
 	      else
 		{
-		  p.setBrush(Qt::yellow);
+		  p_painter.setBrush(Qt::yellow);
 		}
-	      p.drawRect(noteRect2[j]);
+	      p_painter.drawRect(l_note_rect2[l_j]);
 	    }
 	  //longTermMean bars
-	  QColor seeThroughYellow = Qt::yellow;
-	  seeThroughYellow.setAlpha(255);
-	  QColor seeThroughGreen = Qt::green;
-	  seeThroughGreen.setAlpha(255);
-	  for(int j = 0; j < rectIndex; j++)
+	  QColor l_see_through_yellow = Qt::yellow;
+	  l_see_through_yellow.setAlpha(255);
+	  QColor l_see_through_green = Qt::green;
+	  l_see_through_green.setAlpha(255);
+	  for(int l_j = 0; l_j < l_rect_index; l_j++)
 	    {
-	      if(isNoteRectEven[j])
+	      if(l_is_note_rect_even[l_j])
 		{
-		  p.setBrush(seeThroughYellow);
+		  p_painter.setBrush(l_see_through_yellow);
 		}
 	      else
 		{
-		  p.setBrush(seeThroughGreen);
+		  p_painter.setBrush(l_see_through_green);
 		}
-	      p.drawRect(noteRect[j]);
+	      p_painter.drawRect(l_note_rect[l_j]);
 	    }
 	}
     }
 }
 
 //------------------------------------------------------------------------------
-void DrawWidget::setChannelVerticalView(Channel * ch,
-					double leftTime,
-					double currentTime,
-					double zoomX,
-					double viewBottom,
-					double zoomY
+void DrawWidget::setChannelVerticalView(Channel * p_channel,
+					double p_left_time,
+					double p_current_time,
+					double p_zoom_X,
+					double p_view_bottom,
+					double p_zoom_Y
 					)
 {
-  ZoomLookup *z = & ch->get_normal_zoom_lookup();
+  ZoomLookup * l_zoom_lookup = & p_channel->get_normal_zoom_lookup();
     
-  ChannelLocker channelLocker(ch);
+  ChannelLocker l_channel_locker(p_channel);
 
-  int viewBottomOffset = toInt(viewBottom / zoomY);
-  viewBottom = double(viewBottomOffset) * zoomY;
+  int l_view_bottom_offset = toInt(p_view_bottom / p_zoom_Y);
+  p_view_bottom = double(l_view_bottom_offset) * p_zoom_Y;
 
-  std::vector<float> ys;
-  ys.reserve(width());
-  std::vector<float> weightings;
-  weightings.reserve(width());
-  float maxY = 0.0f, minY = gdata->topPitch();
-  float totalY = 0.0f;
-  float numY = 0.0f;
+  std::vector<float> l_ys;
+  l_ys.reserve(width());
+  std::vector<float> l_weightings;
+  l_weightings.reserve(width());
+  float l_max_Y = 0.0f;
+  float l_min_Y = gdata->topPitch();
+  float l_total_Y = 0.0f;
+  float l_num_Y = 0.0f;
   
-  // baseX is the no. of chunks a pixel must represent.
-  double baseX = zoomX / ch->timePerChunk();
+  // l_base_X is the no. of chunks a pixel must represent.
+  double l_base_X = p_zoom_X / p_channel->timePerChunk();
 
-  z->setZoomLevel(baseX);
+  l_zoom_lookup->setZoomLevel(l_base_X);
   
-  double currentChunk = ch->chunkFractionAtTime(currentTime);
-  double leftFrameTime = currentChunk - ((currentTime - leftTime) / ch->timePerChunk());
+  double l_current_chunk = p_channel->chunkFractionAtTime(p_current_time);
+  double l_left_frame_time = l_current_chunk - ((p_current_time - p_left_time) / p_channel->timePerChunk());
   
-  double frameTime = leftFrameTime;
-  int n = 0;
-  int currentBaseElement = int(floor(currentChunk / baseX));
-  int firstBaseElement = int(floor(frameTime / baseX));
-  int baseElement = firstBaseElement;
-  if(baseElement < 0)
+  double l_frame_time = l_left_frame_time;
+  int l_n = 0;
+  int l_current_base_element = int(floor(l_current_chunk / l_base_X));
+  int l_first_base_element = int(floor(l_frame_time / l_base_X));
+  int l_base_element = l_first_base_element;
+  if(l_base_element < 0)
     {
-      n -= baseElement;
-      baseElement = 0;
+      l_n -= l_base_element;
+      l_base_element = 0;
     }
-  int lastBaseElement = int(floor(double(ch->totalChunks()) / baseX));
-  double leftBaseWidth = MAX(1.0, double(currentBaseElement - firstBaseElement));
-  double rightBaseWidth = MAX(1.0, double(lastBaseElement - currentBaseElement));
+  int l_last_base_element = int(floor(double(p_channel->totalChunks()) / l_base_X));
+  double l_left_base_width = MAX(1.0, double(l_current_base_element - l_first_base_element));
+  double l_right_base_width = MAX(1.0, double(l_last_base_element - l_current_base_element));
   
   /*
     We calculate the auto follow and scale by averaging all the note elements in view.
@@ -628,198 +626,200 @@ void DrawWidget::setChannelVerticalView(Channel * ch,
            /  |  \
           /   |   \
             ^   ^
- leftBaseWidth rightBaseWidth
+ l_left_base_width l_right_base_width
 */
 
   
-  if (baseX > 1)
+  if (l_base_X > 1)
     {
       // More samples than pixels
-      int theWidth = width();
-      if(lastBaseElement > z->size())
+      int l_the_width = width();
+      if(l_last_base_element > l_zoom_lookup->size())
 	{
-	  z->setSize(lastBaseElement);
+	  l_zoom_lookup->setSize(l_last_base_element);
 	}
-      for(; n < theWidth && baseElement < lastBaseElement; n++, baseElement++)
+      for(; l_n < l_the_width && l_base_element < l_last_base_element; l_n++, l_base_element++)
 	{
-	  myassert(baseElement >= 0);
-	  ZoomElement &ze = z->at(baseElement);
-	  if(!ze.isValid())
+	  myassert(l_base_element >= 0);
+	  ZoomElement & l_zoom_element = l_zoom_lookup->at(l_base_element);
+	  if(!l_zoom_element.isValid())
 	    {
-	      if(!calcZoomElement(ch, ze, baseElement, baseX))
+	      if(!calcZoomElement(p_channel, l_zoom_element, l_base_element, l_base_X))
 		{
 		  continue;
 		}
 	    }
-	  if(ze.low() > 0.0f && ze.high() > 0.0f)
+	  if(l_zoom_element.low() > 0.0f && l_zoom_element.high() > 0.0f)
 	    {
-	      float weight = ze.corr();
-	      if(baseElement < currentBaseElement)
+	      float l_weight = l_zoom_element.corr();
+	      if(l_base_element < l_current_base_element)
 		{
-		  weight *= double(currentBaseElement - baseElement) / leftBaseWidth;
+		  l_weight *= double(l_current_base_element - l_base_element) / l_left_base_width;
 		}
-	      else if(baseElement > currentBaseElement)
+	      else if(l_base_element > l_current_base_element)
 		{
-		  weight *= double(baseElement - currentBaseElement) / rightBaseWidth;
+		  l_weight *= double(l_base_element - l_current_base_element) / l_right_base_width;
 		}
-	      if(ze.low() < minY)
+	      if(l_zoom_element.low() < l_min_Y)
 		{
-		  minY = ze.low();
+		  l_min_Y = l_zoom_element.low();
 		}
-	      if(ze.high() > maxY)
+	      if(l_zoom_element.high() > l_max_Y)
 		{
-		  maxY = ze.high();
+		  l_max_Y = l_zoom_element.high();
 		}
-	      totalY += (ze.low() + ze.high()) / 2.0f * weight;
-	      numY += weight;
-	      ys.push_back((ze.low() + ze.high()) / 2.0f);
-	      weightings.push_back(weight);
+	      l_total_Y += (l_zoom_element.low() + l_zoom_element.high()) / 2.0f * l_weight;
+	      l_num_Y += l_weight;
+	      l_ys.push_back((l_zoom_element.low() + l_zoom_element.high()) / 2.0f);
+	      l_weightings.push_back(l_weight);
 	    }
 	}
     }
   else
     {
       // More pixels than samples
-    float pitch = 0.0;
-    int intChunk = (int) floor(frameTime); // Integer version of frame time
-    if(intChunk < 0)
+    float l_pitch = 0.0;
+    // Integer version of frame time
+    int l_int_chunk = (int) floor(l_frame_time);
+    if(l_int_chunk < 0)
       {
-	intChunk = 0;
+	l_int_chunk = 0;
       }
-    double stepSize = 1.0 / baseX; // So we skip some pixels
-    float corr;
+    // So we skip some pixels
+    double l_step_size = 1.0 / l_base_X;
+    float l_corr;
     
-    double start = (double(intChunk) - frameTime) * stepSize;
-    double stop = width() + (2 * stepSize);
-    for (double n = start; n < stop && intChunk < (int)ch->totalChunks(); n += stepSize, intChunk++)
+    double l_start = (double(l_int_chunk) - l_frame_time) * l_step_size;
+    double l_stop = width() + (2 * l_step_size);
+    for (double l_current_value = l_start; l_current_value < l_stop && l_int_chunk < (int)p_channel->totalChunks(); l_current_value += l_step_size, l_int_chunk++)
       {
-	myassert(intChunk >= 0);
-	AnalysisData *data = ch->dataAtChunk(intChunk);
+	myassert(l_int_chunk >= 0);
+	AnalysisData * l_data = p_channel->dataAtChunk(l_int_chunk);
       
-	pitch = (ch->isVisibleChunk(data)) ? data->getPitch() : 0.0f;
-	myassert(pitch >= 0.0 && pitch <= gdata->topPitch());
-	corr = data->getCorrelation() * dB2ViewVal(data->getLogRms());
-	if(pitch > 0.0f)
+	l_pitch = (p_channel->isVisibleChunk(l_data)) ? l_data->getPitch() : 0.0f;
+	myassert(l_pitch >= 0.0 && l_pitch <= gdata->topPitch());
+	l_corr = l_data->getCorrelation() * dB2ViewVal(l_data->getLogRms());
+	if(l_pitch > 0.0f)
 	  {
-	    float weight = corr;
-	    if(minY < pitch)
+	    float l_weight = l_corr;
+	    if(l_min_Y < l_pitch)
 	      {
-		minY = pitch;
+		l_min_Y = l_pitch;
 	      }
-	    if(maxY > pitch)
+	    if(l_max_Y > l_pitch)
 	      {
-		maxY = pitch;
+		l_max_Y = l_pitch;
 	      }
-	    totalY += pitch * weight;
-	    numY += weight;
-	    ys.push_back(pitch);
-	    weightings.push_back(weight);
+	    l_total_Y += l_pitch * l_weight;
+	    l_num_Y += l_weight;
+	    l_ys.push_back(l_pitch);
+	    l_weightings.push_back(l_weight);
 	  }
       }
     }
   
-  if(!ys.empty() > 0)
+  if(!l_ys.empty() > 0)
     {
-      float meanY = totalY / numY;
-      double spred = 0.0;
-      myassert(ys.size() == weightings.size());
+      float l_mean_Y = l_total_Y / l_num_Y;
+      double l_spred = 0.0;
+      myassert(l_ys.size() == l_weightings.size());
       //use a linear spred function. not a squared one like standard deviation
-      for(uint j = 0; j < ys.size(); j++)
+      for(uint l_j = 0; l_j < l_ys.size(); l_j++)
 	{
-	  spred += sq(ys[j] - meanY) * weightings[j];
+	  l_spred += sq(l_ys[l_j] - l_mean_Y) * l_weightings[l_j];
 	}
-      spred = sqrt(spred / numY) * 4.0;
-      if(spred < 12.0)
+      l_spred = sqrt(l_spred / l_num_Y) * 4.0;
+      if(l_spred < 12.0)
 	{
 	  //show a minimum of 12 semi-tones
-	  spred = 12.0;
+	  l_spred = 12.0;
 	}
-      gdata->getView().setViewBottomRaw(meanY - gdata->getView().viewHeight() / 2.0);
+      gdata->getView().setViewBottomRaw(l_mean_Y - gdata->getView().viewHeight() / 2.0);
     }
 }
 
 //------------------------------------------------------------------------------
-bool DrawWidget::calcZoomElement(Channel * ch,
-				 ZoomElement & ze,
-				 int baseElement,
-				 double baseX
+bool DrawWidget::calcZoomElement(Channel * p_channel,
+				 ZoomElement & p_zoom_element,
+				 int p_base_element,
+				 double p_base_X
 				 )
 {
-  int startChunk = toInt(double(baseElement) * baseX);
-  int finishChunk = toInt(double(baseElement + 1) * baseX) + 1;
-  if(finishChunk >= (int)ch->totalChunks())
+  int l_start_chunk = toInt(double(p_base_element) * p_base_X);
+  int l_finish_chunk = toInt(double(p_base_element + 1) * p_base_X) + 1;
+  if(l_finish_chunk >= (int)p_channel->totalChunks())
     {
       //dont go off the end
-      finishChunk--;
+      l_finish_chunk--;
     }
-  if(finishChunk >= (int)ch->totalChunks())
+  if(l_finish_chunk >= (int)p_channel->totalChunks())
     {
       //that data doesn't exist yet
       return false;
     }
   
-  std::pair<large_vector<AnalysisData>::iterator, large_vector<AnalysisData>::iterator> a =
-    minMaxElement(ch->dataIteratorAtChunk(startChunk), ch->dataIteratorAtChunk(finishChunk), lessPitch());
-  if(a.second == ch->dataIteratorAtChunk(finishChunk))
+  std::pair<large_vector<AnalysisData>::iterator, large_vector<AnalysisData>::iterator> l_iter =
+    minMaxElement(p_channel->dataIteratorAtChunk(l_start_chunk), p_channel->dataIteratorAtChunk(l_finish_chunk), lessPitch());
+  if(l_iter.second == p_channel->dataIteratorAtChunk(l_finish_chunk))
     {
       return false;
     }
   
-  large_vector<AnalysisData>::iterator err = std::max_element(ch->dataIteratorAtChunk(startChunk), ch->dataIteratorAtChunk(finishChunk), lessValue(0));
-  if(err == ch->dataIteratorAtChunk(finishChunk))
+  large_vector<AnalysisData>::iterator l_err = std::max_element(p_channel->dataIteratorAtChunk(l_start_chunk), p_channel->dataIteratorAtChunk(l_finish_chunk), lessValue(0));
+  if(l_err == p_channel->dataIteratorAtChunk(l_finish_chunk))
     {
       return false;
     }
   
-  float low, high;
-  int noteIndex;
-  if(ch->isVisibleChunk(&*err))
+  float l_low, l_high;
+  int l_note_index;
+  if(p_channel->isVisibleChunk(&*l_err))
     {
-      low = a.first->getPitch();
-      high = a.second->getPitch();
-      noteIndex = a.first->getNoteIndex();
+      l_low = l_iter.first->getPitch();
+      l_high = l_iter.second->getPitch();
+      l_note_index = l_iter.first->getNoteIndex();
     }
   else
     {
-      low = 0;
-      high = 0;
-      noteIndex = NO_NOTE;
+      l_low = 0;
+      l_high = 0;
+      l_note_index = NO_NOTE;
     }
-  float corr = err->getCorrelation() * dB2Normalised(err->getLogRms(), ch->get_rms_ceiling(), ch->get_rms_floor());
-  QColor theColor = (gdata->pitchContourMode() == 0) ? colorBetween(gdata->backgroundColor(), ch->get_color(), corr) : ch->get_color();
+  float l_corr = l_err->getCorrelation() * dB2Normalised(l_err->getLogRms(), p_channel->get_rms_ceiling(), p_channel->get_rms_floor());
+  QColor l_the_color = (gdata->pitchContourMode() == 0) ? colorBetween(gdata->backgroundColor(), p_channel->get_color(), l_corr) : p_channel->get_color();
 
-  ze.set(low, high, corr, theColor, noteIndex, (startChunk+finishChunk)/2);
+  p_zoom_element.set(l_low, l_high, l_corr, l_the_color, l_note_index, (l_start_chunk + l_finish_chunk) / 2);
   return true;
 }
 
 //------------------------------------------------------------------------------
-void DrawWidget::drawArray(float *input,
-			   int n,
-			   int sampleStep,
-			   double theZoomY,
-			   double offset
+void DrawWidget::drawArray(float * p_input,
+			   int p_n,
+			   int p_sample_step,
+			   double p_the_zoom_Y,
+			   double p_offset
 			   )
 {
-  double dh2 = double(height() - 1) / 2.0;
-  double scaleY = dh2 * theZoomY;
-  int w = width() / sampleStep;
-  Q3PointArray pointArray(w);
-  int intStep = int(n / w);
-  int remainderStep = n - (intStep * w);
-  int pos = 0;
-  int remainder = 0;
+  double l_dh2 = double(height() - 1) / 2.0;
+  double l_scale_Y = l_dh2 * p_the_zoom_Y;
+  int l_w = width() / p_sample_step;
+  Q3PointArray l_point_array(l_w);
+  int l_int_step = int(p_n / l_w);
+  int l_remainder_step = p_n - (l_int_step * l_w);
+  int l_pos = 0;
+  int l_remainder = 0;
 
-  for(int j = 0; j < w; j++, pos += intStep, remainder += remainderStep)
+  for(int l_j = 0; l_j < l_w; l_j++, l_pos += l_int_step, l_remainder += l_remainder_step)
     {
-      if(remainder >= w)
+      if(l_remainder >= l_w)
 	{
-	  pos++;
-	  remainder -= w;
+	  l_pos++;
+	  l_remainder -= l_w;
 	}
-      myassert(pos < n);
-      pointArray.setPoint(j, j*sampleStep, toInt(dh2 - (input[pos] + offset)*scaleY));
+      myassert(l_pos < p_n);
+      l_point_array.setPoint(l_j, l_j * p_sample_step, toInt(l_dh2 - (p_input[l_pos] + p_offset) * l_scale_Y));
     }
-  p.drawPolyline(pointArray);
+  m_painter.drawPolyline(l_point_array);
 }
 
 // EOF
