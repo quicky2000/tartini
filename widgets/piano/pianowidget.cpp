@@ -82,15 +82,15 @@ void PianoWidget::paintEvent(QPaintEvent *)
       if(notepart >= 0)
 	{
 	  //it's a white key
-	  m_painter.fillRect(toInt((notepart - 1) * 235.0 * scaleX), 0, toInt(234.0 * scaleX) + 1, height(), colorBetween(Qt::white, Qt::red, _amountPressed));
+	  get_painter().fillRect(toInt((notepart - 1) * 235.0 * scaleX), 0, toInt(234.0 * scaleX) + 1, height(), colorBetween(Qt::white, Qt::red, _amountPressed));
 	}
     }
   
-  m_painter.setPen(Qt::black);
+  get_painter().setPen(Qt::black);
   //draw the lines between the white keys
   for(j = 1; j < 7; j++)
     {
-      m_painter.drawLine(toInt(double(j) * 235.0 * scaleX), 0, toInt(double(j) * 235.0 * scaleX), height());
+      get_painter().drawLine(toInt(double(j) * 235.0 * scaleX), 0, toInt(double(j) * 235.0 * scaleX), height());
     }
 
   //draw the black keys
@@ -105,7 +105,7 @@ void PianoWidget::paintEvent(QPaintEvent *)
 
   for(j = 0; j < 5; j++)
     {
-      m_painter.fillRect(toInt(blackKeyOffset[j]*scaleX), 0, toInt(110.0 * scaleX), toInt(1000.0 * scaleY), Qt::black);
+      get_painter().fillRect(toInt(blackKeyOffset[j]*scaleX), 0, toInt(110.0 * scaleX), toInt(1000.0 * scaleY), Qt::black);
     }
   
   if(isNote())
@@ -114,7 +114,7 @@ void PianoWidget::paintEvent(QPaintEvent *)
       if(notepart < 0)
 	{
 	  //it's a black key
-	  m_painter.fillRect(toInt(blackKeyOffset[-notepart - 1] * scaleX), 0, toInt(110.0 * scaleX), toInt(1000.0 * scaleY), colorBetween(Qt::black, Qt::red, _amountPressed));
+	  get_painter().fillRect(toInt(blackKeyOffset[-notepart - 1] * scaleX), 0, toInt(110.0 * scaleX), toInt(1000.0 * scaleY), colorBetween(Qt::black, Qt::red, _amountPressed));
 	}
     }
   endDrawing();

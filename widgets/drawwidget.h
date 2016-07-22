@@ -102,7 +102,9 @@ public:
 		 double p_offset = 0
 		 );
   
-protected:
+ protected:
+  inline QPainter & get_painter(void);
+ private:
   static int m_line_width;
   static int m_line_top_half_width;
   static int m_line_bottom_half_width;
@@ -112,6 +114,8 @@ protected:
 
   QPainter m_painter;
 };
+
+#include "drawwidget.hpp"
 
 #endif // DRAWWIDGET_H
 // EOF

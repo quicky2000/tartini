@@ -84,37 +84,37 @@ void ScoreWidget::drawNote(int x, int y, StemType stemType, FillType fillType, i
   //draw the left hand side of the note on the point
   if(gdata->polish())
     {
-      m_painter.setRenderHint(QPainter::Antialiasing, true);
+      get_painter().setRenderHint(QPainter::Antialiasing, true);
     }
   if(fillType == FilledNote)
     {
-      m_painter.setBrush(m_painter.pen().color());
+      get_painter().setBrush(get_painter().pen().color());
     }
   else
     {
-      m_painter.setBrush(Qt::NoBrush);
+      get_painter().setBrush(Qt::NoBrush);
     }
-  m_painter.drawEllipse(x, y - toInt(noteHeight / 2), toInt(noteWidth), toInt(noteHeight));
+  get_painter().drawEllipse(x, y - toInt(noteHeight / 2), toInt(noteWidth), toInt(noteHeight));
   if(gdata->polish())
     {
-      m_painter.setRenderHint(QPainter::Antialiasing, false);
+      get_painter().setRenderHint(QPainter::Antialiasing, false);
     }
   if(stemType == StemUp)
     {
       int stemX = x + toInt(noteWidth); 
-      m_painter.drawLine(stemX, y - toInt(3 * _scaleY), stemX, y);
+      get_painter().drawLine(stemX, y - toInt(3 * _scaleY), stemX, y);
       for(int j = 0; j < numFlicks; j++)
 	{
-	  m_painter.drawLine(stemX, y - toInt((3.0 - 0.5 * j) * _scaleY), stemX + toInt(noteWidth * 0.75), y - toInt((2.5 - 0.5 * j) * _scaleY));
+	  get_painter().drawLine(stemX, y - toInt((3.0 - 0.5 * j) * _scaleY), stemX + toInt(noteWidth * 0.75), y - toInt((2.5 - 0.5 * j) * _scaleY));
 	}
     }
   else if(stemType == StemDown)
     {
       int stemX = x; 
-      m_painter.drawLine(stemX, y + toInt(3 * _scaleY), stemX, y);
+      get_painter().drawLine(stemX, y + toInt(3 * _scaleY), stemX, y);
       for(int j = 0; j < numFlicks; j++)
 	{
-	  m_painter.drawLine(stemX, y + toInt((3.0 - 0.5 * j ) * _scaleY), stemX + toInt(noteWidth * 0.75), y + toInt((2.5 - 0.5 * j) * _scaleY));
+	  get_painter().drawLine(stemX, y + toInt((3.0 - 0.5 * j ) * _scaleY), stemX + toInt(noteWidth * 0.75), y + toInt((2.5 - 0.5 * j) * _scaleY));
 	}
     }
 }
@@ -190,7 +190,7 @@ void ScoreWidget::drawNoteAtPitch(int x, int y, int pitch, double noteLength, do
   int j;
   if(!_showNotes)
     {
-      m_painter.setPen(QPen(Qt::red, 1));
+      get_painter().setPen(QPen(Qt::red, 1));
     }
   if(_useFlats)
     {
@@ -198,7 +198,7 @@ void ScoreWidget::drawNoteAtPitch(int x, int y, int pitch, double noteLength, do
       yOffset = toInt(_scaleY * (double)ySteps * 0.5);
       if(isBlackNote(pitch))
 	{
-	  m_painter.drawText(x - accidentalOffsetX - _fontWidth, y - yOffset + _fontHeight / 2, "b");
+	  get_painter().drawText(x - accidentalOffsetX - _fontWidth, y - yOffset + _fontHeight / 2, "b");
 	}
     }
   else
@@ -207,27 +207,27 @@ void ScoreWidget::drawNoteAtPitch(int x, int y, int pitch, double noteLength, do
       yOffset = toInt(_scaleY * (double)ySteps * 0.5);
       if(isBlackNote(pitch))
 	{
-	  m_painter.drawText(x - accidentalOffsetX - _fontWidth, y - yOffset + _fontHeight/2, "#");
+	  get_painter().drawText(x - accidentalOffsetX - _fontWidth, y - yOffset + _fontHeight/2, "#");
 	}
     }
   //draw any ledger lines
-  m_painter.setPen(QPen(Qt::black, 1));
+  get_painter().setPen(QPen(Qt::black, 1));
   int legerLeftX = x - toInt(noteWidth / 2);
   int legerRightX = x + toInt(noteWidth + noteWidth / 2);
   if(ySteps == 0)
     {
       //Middle C ledger line
-      m_painter.drawLine(legerLeftX, y, legerRightX, y);
+      get_painter().drawLine(legerLeftX, y, legerRightX, y);
     }
   for(j = 6; j <= ySteps / 2; j++)
     {
       //top ledger lines
-      m_painter.drawLine(legerLeftX, y - toInt(_scaleY*j), legerRightX, y - toInt(_scaleY*j));
+      get_painter().drawLine(legerLeftX, y - toInt(_scaleY*j), legerRightX, y - toInt(_scaleY*j));
     }
   for(j = (_showBaseClef) ? -6 : 0; j >= ySteps / 2; j--)
     {
       //bottom ledger lines
-      m_painter.drawLine(legerLeftX, y - toInt(_scaleY*j), legerRightX, y - toInt(_scaleY*j));
+      get_painter().drawLine(legerLeftX, y - toInt(_scaleY*j), legerRightX, y - toInt(_scaleY*j));
     }
 
   NoteType noteType = getNoteType(noteLength);
@@ -236,7 +236,7 @@ void ScoreWidget::drawNoteAtPitch(int x, int y, int pitch, double noteLength, do
     {
       noteColor.setAlphaF(volume);
     }
-  m_painter.setPen(QPen(noteColor, 2));
+  get_painter().setPen(QPen(noteColor, 2));
   if(_showNotes)
     {
       StemType stemType = StemNone;
@@ -253,7 +253,7 @@ void ScoreWidget::drawNoteAtPitch(int x, int y, int pitch, double noteLength, do
     }
   else
     {
-      m_painter.drawRoundRect(x, y - yOffset - toInt(noteHeight/2), toInt(noteLength * _scaleX)-1, toInt(noteHeight), 3, 3);
+      get_painter().drawRoundRect(x, y - yOffset - toInt(noteHeight/2), toInt(noteLength * _scaleX)-1, toInt(noteHeight), 3, 3);
     }
 }
 
@@ -261,23 +261,23 @@ void ScoreWidget::drawNoteAtPitch(int x, int y, int pitch, double noteLength, do
 void ScoreWidget::drawStaveSegment(int leftX, int lineCenterY, int widthX)
 {
   int j;
-  m_painter.setPen(QPen(Qt::blue, 1));
+  get_painter().setPen(QPen(Qt::blue, 1));
   for(j = 1; j <= 5; j++)
     {
-      m_painter.drawLine(leftX, lineCenterY - toInt(j*_scaleY), leftX+widthX, lineCenterY - toInt(j*_scaleY));
+      get_painter().drawLine(leftX, lineCenterY - toInt(j*_scaleY), leftX+widthX, lineCenterY - toInt(j*_scaleY));
     }
 
   if(_showBaseClef)
     {
-      m_painter.drawLine(leftX, lineCenterY - toInt(5*_scaleY), leftX, lineCenterY+toInt(5*_scaleY));
+      get_painter().drawLine(leftX, lineCenterY - toInt(5*_scaleY), leftX, lineCenterY+toInt(5*_scaleY));
       for(j = 1; j <= 5; j++) 
 	{
-	  m_painter.drawLine(leftX, lineCenterY + toInt(j*_scaleY), leftX+widthX, lineCenterY + toInt(j*_scaleY));
+	  get_painter().drawLine(leftX, lineCenterY + toInt(j*_scaleY), leftX+widthX, lineCenterY + toInt(j*_scaleY));
 	}
     }
   else
     {
-      m_painter.drawLine(leftX, lineCenterY - toInt(5*_scaleY), leftX, lineCenterY-toInt(1*_scaleY));
+      get_painter().drawLine(leftX, lineCenterY - toInt(5*_scaleY), leftX, lineCenterY-toInt(1*_scaleY));
     }
 }
 
@@ -291,7 +291,7 @@ void ScoreWidget::drawScoreSegment(Channel *ch, double leftX, int lineCenterY, d
 
   if(ch)
     {
-      m_painter.setPen(QPen(Qt::black, 2));
+      get_painter().setPen(QPen(Qt::black, 2));
       ChannelLocker channelLocker(ch);
       //draw the notes
       for(j = 0; j < ch->get_note_data().size(); j++)
@@ -320,22 +320,22 @@ void ScoreWidget::paintEvent(QPaintEvent *)
   Channel * ch = gdata->getActiveChannel();
 
   beginDrawing();
-  m_painter.setFont(_font);
-  m_painter.setBrush(Qt::black);
+  get_painter().setFont(_font);
+  get_painter().setBrush(Qt::black);
 
   ScoreSegmentIterator si(this, ch);
   if(ch)
     {
       QString pageString;
-      m_painter.drawText(_fontWidth, height() - 4, pageString.sprintf(tr("Page %d of %d"), si.curPage() + 1, si.numPages()));
+      get_painter().drawText(_fontWidth, height() - 4, pageString.sprintf(tr("Page %d of %d"), si.curPage() + 1, si.numPages()));
       while(si.next())
 	{
 	  drawScoreSegment(ch, si.leftX(), si.lineCenterY(), si.leftTime(), si.rightTime());
 	  if(si.contains(si.curTime()))
 	    {
 	      int pixelX = toInt(si.leftX() + (si.curTime() - si.leftTime()) * _scaleX);
-	      m_painter.setPen(QPen(Qt::black));
-	      m_painter.drawLine(pixelX, si.staveTop(), pixelX, si.staveBottom());
+	      get_painter().setPen(QPen(Qt::black));
+	      get_painter().drawLine(pixelX, si.staveTop(), pixelX, si.staveBottom());
 	    }
 	}
     }

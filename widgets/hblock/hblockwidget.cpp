@@ -60,7 +60,7 @@ void HBlockWidget::paintEvent( QPaintEvent * )
 	  double barHeight = double(height()) / double(data.getHarmonicFreqSize());
 	  QColor fillColor = colorBetween(colorGroup().background(), active->get_color(), data.getVolumeValue(*gdata));
 	  QColor outlineColor = colorBetween(colorGroup().background(), Qt::black, data.getVolumeValue(*gdata));
-	  m_painter.setBrush(fillColor);
+	  get_painter().setBrush(fillColor);
   
 	  int barStart = 0;
 	  float barWidth = 0;
@@ -72,8 +72,8 @@ void HBlockWidget::paintEvent( QPaintEvent * )
 	   */
 	  for (uint i = 0; i < data.getHarmonicFreqSize(); i++)
 	    {
-	      m_painter.setPen(outlineColor);
-	      m_painter.setBrush(colorBetween(fillColor, Qt::black, data.getHarmonicNoiseAt(i)));
+	      get_painter().setPen(outlineColor);
+	      get_painter().setBrush(colorBetween(fillColor, Qt::black, data.getHarmonicNoiseAt(i)));
 	      // Work out how many pixels wide the harmonic should be
 	      barWidth = (data.getHarmonicAmpAt(i)) * width();
 	      // Work out how many pixels the harmonic should be offset from where it would be
@@ -82,14 +82,14 @@ void HBlockWidget::paintEvent( QPaintEvent * )
 	      // Work out the starting position, and draw the bar
 	      barStart = toInt( ((width() / 2) + diff) - barWidth / 2);
 	      int barBottom = height() - toInt(barHeight * i);
-	      m_painter.drawRect(barStart, barBottom, toInt(barWidth), -toInt(barHeight));
+	      get_painter().drawRect(barStart, barBottom, toInt(barWidth), -toInt(barHeight));
 	      // Draw the centre line on the bar
-	      m_painter.setPen(Qt::white);
-	      m_painter.drawLine((width() / 2) + diff, barBottom, (width() / 2) + diff, barBottom - toInt(barHeight));
+	      get_painter().setPen(Qt::white);
+	      get_painter().drawLine((width() / 2) + diff, barBottom, (width() / 2) + diff, barBottom - toInt(barHeight));
 	    }
 	  // Draw the exact line (f, 2f, 3f...)
-	  m_painter.setPen(Qt::white);
-	  m_painter.drawLine(width() / 2, 0, width() / 2, height());
+	  get_painter().setPen(Qt::white);
+	  get_painter().drawLine(width() / 2, 0, width() / 2, height());
 	}
     }
   endDrawing();

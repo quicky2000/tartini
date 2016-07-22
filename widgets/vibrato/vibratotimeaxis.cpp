@@ -50,10 +50,10 @@ void VibratoTimeAxis::paintEvent(QPaintEvent *)
 
   if (currentChunkToUse >= 0)
     {
-      QFontMetrics fm = m_painter.fontMetrics();
+      QFontMetrics fm = get_painter().fontMetrics();
       QString s;
-      m_painter.setBrush(Qt::black);
-      m_painter.setFont(QFont("AnyStyle", 12));
+      get_painter().setBrush(Qt::black);
+      get_painter().setFont(QFont("AnyStyle", 12));
 
       int polyLengthInPixels = toInt((endChunkToUse - startChunkToUse) * zoomFactorX);
       float pixelsPerSecond = polyLengthInPixels / noteLengthToUse;
@@ -100,7 +100,7 @@ void VibratoTimeAxis::paintEvent(QPaintEvent *)
 	      if (i % notchesDivider == 0)
 		{
 		  // Even: bigger notch + label
-		  m_painter.drawLine(x, height() - 6, x, height() - 1);
+		  get_painter().drawLine(x, height() - 6, x, height() - 1);
 		  // The 1.000001 factors in the following statements prevent freaky rounding/floor errors...
 		  int minutes = intFloor(i * secondsPerNotch * 1.000001) / 60;
 		  int seconds = intFloor(i * secondsPerNotch * 1.000001) % 60;
@@ -125,18 +125,18 @@ void VibratoTimeAxis::paintEvent(QPaintEvent *)
 		      // Label: m:ss.hhh
 		      s.sprintf("%1d:%02d.%03d", minutes, seconds, thousandthseconds);
 		    }
-		  m_painter.drawText(x - fm.width(s) / 2, 12, s);
+		  get_painter().drawText(x - fm.width(s) / 2, 12, s);
 		}
 	      else
 		{
 		  // Odd: smaller notch
-		  m_painter.drawLine(x, height() - 3, x, height() - 1);
+		  get_painter().drawLine(x, height() - 3, x, height() - 1);
 		}
 	    }
 	}
 
       // Draw the horizontal line at the bottom of the axis
-      m_painter.drawLine(0, height() - 1, width(), height() - 1);
+      get_painter().drawLine(0, height() - 1, width(), height() - 1);
     }
   endDrawing();
 }

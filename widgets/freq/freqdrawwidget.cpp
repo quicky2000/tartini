@@ -167,11 +167,11 @@ void FreqDrawWidget::paintEvent(QPaintEvent *)
   //draw the red/blue background color shading if needed
   if(view.backgroundShading() && gdata->getActiveChannel())
     {
-      drawChannelFilled(gdata->getActiveChannel(), m_painter, view.viewLeft(), view.currentTime(), view.zoomX(), view.viewBottom(), view.zoomY(), DRAW_VIEW_NORMAL);
+      drawChannelFilled(gdata->getActiveChannel(), get_painter(), view.viewLeft(), view.currentTime(), view.zoomX(), view.viewBottom(), view.zoomY(), DRAW_VIEW_NORMAL);
     }
   
 
-  drawReferenceLines(*this, m_painter, view.currentTime(), view.zoomX(), view.viewBottom(), view.zoomY(), DRAW_VIEW_NORMAL);
+  drawReferenceLines(*this, get_painter(), view.currentTime(), view.zoomX(), view.viewBottom(), view.zoomY(), DRAW_VIEW_NORMAL);
 
   //draw all the visible channels
   for (uint i = 0; i < gdata->getChannelsSize(); i++)
@@ -181,7 +181,7 @@ void FreqDrawWidget::paintEvent(QPaintEvent *)
 	{
 	  continue;
 	}
-      drawChannel(*this, ch, m_painter, view.viewLeft(), view.currentTime(), view.zoomX(), view.viewBottom(), view.zoomY(), DRAW_VIEW_NORMAL);
+      drawChannel(*this, ch, get_painter(), view.viewLeft(), view.currentTime(), view.zoomX(), view.viewBottom(), view.zoomY(), DRAW_VIEW_NORMAL);
     }
 
   // Draw a light grey band indicating which time is being used in the current window
@@ -193,12 +193,12 @@ void FreqDrawWidget::paintEvent(QPaintEvent *)
       double halfWindowTime = (double)ch->size() / (double)(ch->rate() * 2);
       int pixelLeft = view.screenPixelX(view.currentTime() - halfWindowTime);
       int pixelRight = view.screenPixelX(view.currentTime() + halfWindowTime);
-      m_painter.fillRect(pixelLeft, 0, pixelRight - pixelLeft, height() - 1, lineColor);
+      get_painter().fillRect(pixelLeft, 0, pixelRight - pixelLeft, height() - 1, lineColor);
     }
 
   // Draw the current time line
-  m_painter.setPen(QPen(colorGroup().foreground(), 1));
-  m_painter.drawLine(curTimePixel, 0, curTimePixel, height() - 1);
+  get_painter().setPen(QPen(colorGroup().foreground(), 1));
+  get_painter().drawLine(curTimePixel, 0, curTimePixel, height() - 1);
 
   endDrawing();
 }

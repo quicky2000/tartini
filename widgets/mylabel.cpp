@@ -24,7 +24,7 @@ MyLabel::MyLabel(const QString & text_, QWidget * parent, const char * name):
   DrawWidget(parent, name),
   _text(text_)
 {
-  QFontMetrics fm = QFontMetrics(m_painter.font());
+  QFontMetrics fm = QFontMetrics(get_painter().font());
   _fontHeight = fm.height();
   _textWidth = fm.width(_text);
 }
@@ -34,7 +34,7 @@ void MyLabel::paintEvent( QPaintEvent * )
 {
   beginDrawing(false);
   fillBackground(colorGroup().background());
-  m_painter.drawText(4, _fontHeight - 2, _text);
+  get_painter().drawText(4, _fontHeight - 2, _text);
   endDrawing();
 }
 

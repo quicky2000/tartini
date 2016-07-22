@@ -40,7 +40,7 @@ DebugWidget::~DebugWidget(void)
 void DebugWidget::printString(const QString &s)
 {
   textY += fontHeight;
-  m_painter.drawText(0, textY, s);
+  get_painter().drawText(0, textY, s);
 }
 
 //------------------------------------------------------------------------------
@@ -51,7 +51,7 @@ void DebugWidget::paintEvent( QPaintEvent * )
   beginDrawing();
 
   // Drawing code goes here
-  QFontMetrics fm = m_painter.fontMetrics();
+  QFontMetrics fm = get_painter().fontMetrics();
   fontHeight = fm.height();
 
   if (ch != NULL && ch->isValidChunk(ch->currentChunk()))

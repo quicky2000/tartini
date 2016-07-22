@@ -94,7 +94,7 @@ void HStackWidget::paintEvent(QPaintEvent *)
     }
 
     QString s;
-    m_painter.setPen(qRgb(128,128,128));
+    get_painter().setPen(qRgb(128,128,128));
 
     float lbl;
 
@@ -113,11 +113,11 @@ void HStackWidget::paintEvent(QPaintEvent *)
 
     for (lbl = 0; lbl < viewheight; lbl += increase)
     {
-      m_painter.drawLine(0, -toInt((-top + lbl) * scaleY), width(), -toInt((-top + lbl) * scaleY));
-      m_painter.drawText(0, -toInt((-top + lbl) * scaleY), s.sprintf(txt, lbl));
+      get_painter().drawLine(0, -toInt((-top + lbl) * scaleY), width(), -toInt((-top + lbl) * scaleY));
+      get_painter().drawText(0, -toInt((-top + lbl) * scaleY), s.sprintf(txt, lbl));
 
-      m_painter.drawLine(0, -toInt((-top - lbl) * scaleY), width(), -toInt((-top - lbl) * scaleY));
-      m_painter.drawText(0, -toInt((-top - lbl) * scaleY), s.sprintf(txt, -lbl));
+      get_painter().drawLine(0, -toInt((-top - lbl) * scaleY), width(), -toInt((-top - lbl) * scaleY));
+      get_painter().drawText(0, -toInt((-top - lbl) * scaleY), s.sprintf(txt, -lbl));
     }
 
     for (i = -1; i <= windowSize + 1; i++)
@@ -155,13 +155,13 @@ void HStackWidget::paintEvent(QPaintEvent *)
     {
       points[i].setPoint(0, -1, notOnGraph);
       points[i].setPoint(windowSize + 4, width() + 1, notOnGraph);
-      m_painter.setBrush(colorBetween(qRgb(255,255,255), qRgb(0, 255, 0), float(i) / numHarmonics));
-      m_painter.setPen(colorBetween(qRgb(128,128,128), qRgb(0, 128, 0), float(i) / numHarmonics));
-      m_painter.drawPolygon(points[i]);
+      get_painter().setBrush(colorBetween(qRgb(255,255,255), qRgb(0, 255, 0), float(i) / numHarmonics));
+      get_painter().setPen(colorBetween(qRgb(128,128,128), qRgb(0, 128, 0), float(i) / numHarmonics));
+      get_painter().drawPolygon(points[i]);
     }
 
-    m_painter.drawLine(width() / 2, 0, width() / 2, height());
-    m_painter.drawLine(width() - 1, 0, width() - 1, height());
+    get_painter().drawLine(width() / 2, 0, width() / 2, height());
+    get_painter().drawLine(width() - 1, 0, width() - 1, height());
 
     active->unlock();
   } 

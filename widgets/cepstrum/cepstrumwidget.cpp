@@ -70,20 +70,20 @@ void CepstrumWidget::paintEvent( QPaintEvent * )
 	    {
 	      //number of colored patches
 	      int n = int(ceil(double(width()) / scaleX));
-	      m_painter.setPen(Qt::NoPen);
+	      get_painter().setPen(Qt::NoPen);
 	      QColor color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), data->getCorrelation());
 	      QColor color2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), data->getCorrelation());
 	      for(j = 0; j < n; j++)
 		{
 		  x = toInt(scaleX * double(j));
-		  m_painter.setBrush((j % 2) ? color1 : color2);
-		  m_painter.drawRect(x, 0, toInt(scaleX * double(j + 1)) - toInt(scaleX * double(j)), height());
+		  get_painter().setBrush((j % 2) ? color1 : color2);
+		  get_painter().drawRect(x, 0, toInt(scaleX * double(j + 1)) - toInt(scaleX * double(j)), height());
 		}
-	      m_painter.setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3 * data->getCorrelation()));
+	      get_painter().setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3 * data->getCorrelation()));
 	      for(j = 0; j < n; j++)
 		{
 		  x = toInt(scaleX * double(j));
-		  m_painter.drawLine(x, 0, x, height());
+		  get_painter().drawLine(x, 0, x, height());
 		}
 	    }
 	  else
@@ -92,29 +92,29 @@ void CepstrumWidget::paintEvent( QPaintEvent * )
 	    }
 	  QString numPeriodsText;
 	  numPeriodsText.sprintf("Period = %lf", period);
-	  m_painter.setPen(Qt::black);
-	  m_painter.drawText(5, height() - 8, numPeriodsText);
+	  get_painter().setPen(Qt::black);
+	  get_painter().drawText(5, height() - 8, numPeriodsText);
 
-	  m_painter.drawLine(0, height() / 2, width(), height() / 2);
+	  get_painter().drawLine(0, height() / 2, width(), height() / 2);
 
 	  //draw the waveform
 	  double ratio = double(height()) / 2.0; //TODO: remove magic number
-	  m_painter.setPen(QPen(active->get_color(), 0));
+	  get_painter().setPen(QPen(active->get_color(), 0));
 	  for(int j = 0; j < width(); j++)
 	    {
 	      //cheap hack to go faster (by drawing less points)
 	      myassert(int(pixelStep*j) < active->get_cepstrum_data().size());
 	      pointArray.setPoint(j, j, height() / 2 - toInt(active->get_cepstrum_data().at(int(pixelStep * j)) * ratio));
 	    }
-	  m_painter.drawPolyline(pointArray);
+	  get_painter().drawPolyline(pointArray);
 
 	  if(data->getCepstrumIndex() >= 0)
 	    {
-	      m_painter.setPen(Qt::blue);
-	      m_painter.setBrush(Qt::blue);
+	      get_painter().setPen(Qt::blue);
+	      get_painter().setBrush(Qt::blue);
 	      int x1 = toInt(double(data->getCepstrumIndex()) / double(active->get_cepstrum_data().size()) * double(width()));
 	      int y1 = height() / 2 - toInt(active->get_cepstrum_data().at(data->getCepstrumIndex()) * height() / 2);
-	      m_painter.drawEllipse(x1 - 2, y1 - 2, 5, 5);
+	      get_painter().drawEllipse(x1 - 2, y1 - 2, 5, 5);
 	    }
 	}
       else

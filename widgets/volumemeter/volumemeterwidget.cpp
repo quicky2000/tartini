@@ -62,10 +62,10 @@ void VolumeMeterWidget::paintEvent(QPaintEvent *)
 
   beginDrawing(false);
   fillBackground(colorGroup().background());
-  m_painter.setFont(m_font);
+  get_painter().setFont(m_font);
   
   // Work out how many labels we can draw
-  QFontMetrics l_font_metric = m_painter.fontMetrics();
+  QFontMetrics l_font_metric = get_painter().fontMetrics();
   // Since we'll have two characters normally
   int l_label_width = l_font_metric.width("-60");
   int l_half_label_width = l_label_width / 2;
@@ -103,16 +103,16 @@ void VolumeMeterWidget::paintEvent(QPaintEvent *)
 
 
   // Draw horizontal line
-  m_painter.setPen(Qt::black);
+  get_painter().setPen(Qt::black);
 
   int l_y = height() - (l_line_Y / 2) - 1;
 
   for (int l_index = 0; l_index < l_places; l_index++)
     {
       int l_x = l_index * l_pixel_step;
-      m_painter.drawText(l_x, l_y, QString::number(-60 + (l_index * l_label_step)));
+      get_painter().drawText(l_x, l_y, QString::number(-60 + (l_index * l_label_step)));
     }
-  m_painter.drawText(l_places * l_pixel_step - 2, l_y, "0dB");
+  get_painter().drawText(l_places * l_pixel_step - 2, l_y, "0dB");
 
   
   QColor l_colour;
@@ -168,11 +168,11 @@ void VolumeMeterWidget::paintEvent(QPaintEvent *)
       
 	  if(l_channel == 0)
 	    {
-	      m_painter.fillRect(l_j, 2, l_bar_width, l_line_Y / 2 - 3, l_colour);
+	      get_painter().fillRect(l_j, 2, l_bar_width, l_line_Y / 2 - 3, l_colour);
 	    }
 	  else
 	    {
-	      m_painter.fillRect(l_j, height() - (l_line_Y / 2) + 1, l_bar_width, l_line_Y / 2 - 3, l_colour);
+	      get_painter().fillRect(l_j, height() - (l_line_Y / 2) + 1, l_bar_width, l_line_Y / 2 - 3, l_colour);
 	    }
 	}
     }
