@@ -109,7 +109,6 @@ public:
   static int m_line_top_half_width;
   static int m_line_bottom_half_width;
 
-  QPixmap * m_buffer;
   QPaintDevice * m_paint_device;
 
   QPainter m_painter;
