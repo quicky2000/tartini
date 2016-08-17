@@ -17,23 +17,23 @@
 */
 
 //------------------------------------------------------------------------------
-application::application(int & argc, char ** argv):
-  QApplication(argc,argv)
+application::application(int & p_argc, char ** p_argv):
+  QApplication(p_argc, p_argv)
 {
 }
 
 //------------------------------------------------------------------------------
-bool application::notify(QObject * receiver, QEvent * e)
+bool application::notify(QObject * p_receiver, QEvent * p_event)
 {
   try
     {
-      return QApplication::notify(receiver,e);
+      return QApplication::notify(p_receiver,p_event);
     }
-  catch(std::exception & e)
+  catch(std::exception & p_exception)
     {
       std::cout << std::endl << "!!! " << tr("FATAL EXCEPTION").toStdString() << " !!!" << std::endl ;
       std::cout << std::string(80,'-') << std::endl ;
-      std::cout << e.what() << std::endl ;
+      std::cout << p_exception.what() << std::endl ;
       std::cout << std::string(80,'-') << std::endl ;
       std::cout << tr("The application encountered an unexpected exception please copy the message above and send it to julien_thevenon@yahoo.fr").toStdString() << std::endl;
       emit lastWindowClosed();

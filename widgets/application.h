@@ -26,8 +26,8 @@ class application: public QApplication
 {
   Q_OBJECT
  public:
-  inline application(int & argc, char ** argv);
-  inline bool notify(QObject * receiver, QEvent * e);
+  inline application(int & p_argc, char ** p_argv);
+  inline bool notify(QObject * p_receiver, QEvent * p_event);
   inline virtual ~application(void){}
 };
 
