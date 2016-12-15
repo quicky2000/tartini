@@ -1352,7 +1352,8 @@ bool MainWindow::loadViewGeometry(void)
   for(int j = 0; j < NUM_VIEWS; j++)
     {
       QString base = QString("geometry/") + viewData[j].className;
-      if(gdata->getSettingsValue(base+"/visible", false) == true)
+      QString l_key = base+"/visible";
+      if(gdata->settingsContains(l_key) && gdata->getSettingsValue(l_key, false) == true)
 	{
 	  pos = gdata->getSettingsValue(base+"/pos", QPoint(0, 0));
 	  size = gdata->getSettingsValue(base+"/size", QSize(100, 100));
