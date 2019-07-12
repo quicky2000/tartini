@@ -282,9 +282,6 @@ set(MY_INCLUDE_DIRECTORIES
 
     #Qwt
     /usr/include/qwt-qt4/
-
-    #for glu.h
-    /usr/include/GL
    )
 
 # Next lines needed for building all Qt projects
@@ -311,10 +308,17 @@ set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 find_package(Threads REQUIRED)
 
+find_package(OpenGL REQUIRED OpenGL)
+if(NOT ${OPENGL_GLU_FOUND})
+    message(SEND_ERROR "OpenGL::GLU not found")
+endif(NOT ${OPENGL_GLU_FOUND})
+set(MY_INCLUDE_DIRECTORIES
+    ${MY_INCLUDE_DIRECTORIES}
+    ${OPENGL_INCLUDE_DIR}/GL
+   )
 
 add_executable(${PROJECT_NAME} ${MY_SOURCE_FILES} ${DEPENDANCY_OBJECTS})
-target_compile_definitions(${PROJECT_NAME} PRIVATE -D$<UPPER_CASE:${PROJECT_NAME}>_SELF_TEST)
-target_link_libraries(${PROJECT_NAME} ${LINKED_LIBRARIES} ${QT_LIBRARIES} -lfftw3f -lqwt-qt4 -lasound -lGLU -lGL Threads::Threads)
+target_link_libraries(${PROJECT_NAME} ${LINKED_LIBRARIES} ${QT_LIBRARIES} -lfftw3f -lqwt-qt4 -lasound OpenGL::GLU OpenGL::GL Threads::Threads)
 target_compile_options(${PROJECT_NAME} PUBLIC -Wall -O0 -D_REENTRANT -DSINGLE_DRAWING_BUFFER -D__LINUX_OSS__ -D__LINUX_ALSA__ -DMYDEBUG -DLINUX)
 target_include_directories(${PROJECT_NAME} PUBLIC ${MY_INCLUDE_DIRECTORIES})
 
