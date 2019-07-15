@@ -228,26 +228,6 @@ set(MY_SOURCE_FILES
     general/myalgo.cpp
    )
 
-# Specific to Linux
-set(MY_HEADER_FILES
-    ${MY_HEADER_FILES}
-    rtAudio/audio_stream.h
-    rtAudio/RtAudio.h
-    rtAudio/RtError.h
-   )
-set(MY_SOURCE_FILES
-    ${MY_SOURCE_FILES}
-    rtAudio/audio_stream.cpp
-    rtAudio/RtAudio.cpp
-   )
-
-# Precompiled header in qmake
-foreach(src_file ${MY_SOURCE_FILES})
-    set_source_files_properties(${src_file} PROPERTIES COMPILE_FLAGS "-include include/static.h")
-endforeach(src_file ${MY_SOURCE_FILES})
-
-set(MY_SOURCE_FILES ${MY_SOURCE_FILES} ${MY_HEADER_FILES})
-
 # List header directories in project
 set(MY_INCLUDE_DIRECTORIES
     .
@@ -278,10 +258,43 @@ set(MY_INCLUDE_DIRECTORIES
     widgets/score
     widgets/vibrato
     sound/filters
-    rtAudio
+    )
+
+set(MY_CPP_FLAGS -Wall -O0 -D_REENTRANT -DSINGLE_DRAWING_BUFFER -DMYDEBUG)
+
+# Specific to Linux
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+    set(MY_HEADER_FILES
+        ${MY_HEADER_FILES}
+        rtAudio/audio_stream.h
+        rtAudio/RtAudio.h
+        rtAudio/RtError.h
+       )
+    set(MY_SOURCE_FILES
+        ${MY_SOURCE_FILES}
+        rtAudio/audio_stream.cpp
+        rtAudio/RtAudio.cpp
+       )
+    set(MY_INCLUDE_DIRECTORIES
+        ${MY_INCLUDE_DIRECTORIES}
+        rtAudio
+       )
+    set(MY_CPP_FLAGS
+        ${MY_CPP_FLAGS}
+        -D__LINUX_OSS__ -D__LINUX_ALSA__ -DLINUX
+       )
+endif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+
+# Precompiled header in qmake
+foreach(src_file ${MY_SOURCE_FILES})
+    set_source_files_properties(${src_file} PROPERTIES COMPILE_FLAGS "-include include/static.h")
+endforeach(src_file ${MY_SOURCE_FILES})
+
+set(MY_SOURCE_FILES ${MY_SOURCE_FILES} ${MY_HEADER_FILES})
 
 
-# Next lines needed for building all Qt projects
+# Qt Manangement
+#-----------------
 find_package( Qt4 REQUIRED QtCore QtGui QtOpenGL Qt3Support)
 include( ${QT_USE_FILE} )
 add_definitions( ${QT_DEFINITIONS} )
@@ -301,10 +314,14 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
+# Pthread Manangement
+#-----------------
 set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 find_package(Threads REQUIRED)
 
+# OpenGL Manangement
+#-----------------
 find_package(OpenGL REQUIRED OpenGL)
 if(NOT ${OPENGL_GLU_FOUND})
     message(SEND_ERROR "OpenGL::GLU not found")
@@ -325,7 +342,7 @@ set(MY_INCLUDE_DIRECTORIES
 
 add_executable(${PROJECT_NAME} ${MY_SOURCE_FILES} ${DEPENDANCY_OBJECTS})
 target_link_libraries(${PROJECT_NAME} ${LINKED_LIBRARIES} ${QT_LIBRARIES} -lfftw3f Qwt::Qwt -lasound OpenGL::GLU OpenGL::GL Threads::Threads)
-target_compile_options(${PROJECT_NAME} PUBLIC -Wall -O0 -D_REENTRANT -DSINGLE_DRAWING_BUFFER -D__LINUX_OSS__ -D__LINUX_ALSA__ -DMYDEBUG -DLINUX)
+target_compile_options(${PROJECT_NAME} PUBLIC ${MY_CPP_FLAGS})
 target_include_directories(${PROJECT_NAME} PUBLIC ${MY_INCLUDE_DIRECTORIES})
 
 #Force use of -std=c++11 instead of -std=gnu++11
