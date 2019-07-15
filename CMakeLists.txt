@@ -280,9 +280,6 @@ set(MY_INCLUDE_DIRECTORIES
     sound/filters
     rtAudio
 
-    #Qwt
-    /usr/include/qwt-qt4/
-   )
 
 # Next lines needed for building all Qt projects
 find_package( Qt4 REQUIRED QtCore QtGui QtOpenGL Qt3Support)
@@ -317,8 +314,17 @@ set(MY_INCLUDE_DIRECTORIES
     ${OPENGL_INCLUDE_DIR}/GL
    )
 
+# Qwt Manangement
+#-----------------
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
+find_package(Qwt REQUIRED)
+set(MY_INCLUDE_DIRECTORIES
+    ${MY_INCLUDE_DIRECTORIES}
+    ${Qwt_INCLUDE_DIR}
+   )
+
 add_executable(${PROJECT_NAME} ${MY_SOURCE_FILES} ${DEPENDANCY_OBJECTS})
-target_link_libraries(${PROJECT_NAME} ${LINKED_LIBRARIES} ${QT_LIBRARIES} -lfftw3f -lqwt-qt4 -lasound OpenGL::GLU OpenGL::GL Threads::Threads)
+target_link_libraries(${PROJECT_NAME} ${LINKED_LIBRARIES} ${QT_LIBRARIES} -lfftw3f Qwt::Qwt -lasound OpenGL::GLU OpenGL::GL Threads::Threads)
 target_compile_options(${PROJECT_NAME} PUBLIC -Wall -O0 -D_REENTRANT -DSINGLE_DRAWING_BUFFER -D__LINUX_OSS__ -D__LINUX_ALSA__ -DMYDEBUG -DLINUX)
 target_include_directories(${PROJECT_NAME} PUBLIC ${MY_INCLUDE_DIRECTORIES})
 
