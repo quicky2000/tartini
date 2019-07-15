@@ -13,4 +13,7 @@ before_install:
 script:
   - qmake pitch.pro
   - make
+  - mkdir cmake-build; cd cmake-build
+  - cmake ..
+  - make
 #EOF
