@@ -12,6 +12,8 @@
    
    Please read LICENSE.txt for details.
  ***************************************************************************/
+#ifndef MAIN_H
+#define MAIN_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,28 +28,7 @@
 #ifdef MACX
 #include <qstring.h>
 extern QString macxPathString;
-#endif
+#endif // MACX
 
-//extern QColor stdcol[19];
-//extern MainWindow *mainWindow;
-
-/*
-class PhilApp : public QApplication
-{
-  Q_OBJECT
-
-public:
-  PhilApp();
-  PhilApp(int argc, char **argv) : QApplication(argc, argv) {}
-
-protected:
-  //void customEvent( QCustomEvent * e ) {
-    bool event( QEvent * e ) {
-    //if(e->type() == QEvent::User+1) {
-    //    m->doStuff();
-    //    return true;
-    //} else
-    return QApplication::event(e);
-    }
-};
-*/
+#endif // MAIN_H
+// EOF

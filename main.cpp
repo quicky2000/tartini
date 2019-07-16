@@ -21,7 +21,7 @@
 #ifdef MACX
 #include <CoreFoundation/CoreFoundation.h>
 QString macxPathString;
-#endif
+#endif // MACX
 
 #include "gdata.h"
 #include "myassert.h"
@@ -33,9 +33,9 @@ int main( int argc, char **argv )
 #ifdef WINDOWS
   freopen("stdout.txt", "w", stdout);
   freopen("stderr.txt", "w", stderr);
-#endif
+#endif // WINDOWS
 	
-#ifdef MACX  
+#ifdef MACX
   CFURLRef pluginRef = CFBundleCopyBundleURL(CFBundleGetMainBundle());
   CFStringRef macPath = CFURLCopyFileSystemPath(pluginRef, kCFURLPOSIXPathStyle);
   const char *pathPtr = CFStringGetCStringPtr(macPath, CFStringGetSystemEncoding());
@@ -43,7 +43,7 @@ int main( int argc, char **argv )
   if(!macxPathString.endsWith("/")) macxPathString.append('/');
   CFRelease(pluginRef);
   CFRelease(macPath);
-#endif
+#endif // MACX
 	
   application a( argc, argv );
   QString locale = QLocale::system().name();
