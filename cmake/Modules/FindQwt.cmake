@@ -37,6 +37,10 @@ if("${PC_QWT}" STREQUAL "")
         /usr/local/share/
         /usr/share/
        )
+    if(NOT ${QWT_HINTS} STREQUAL "")
+        set(QWT_PATHS ${QWT_HINTS})
+    endif(NOT ${QWT_HINTS} STREQUAL "")
+
     find_path(Qwt_INCLUDE_DIR
               NAMES qwt.h
               PATHS ${QWT_PATHS}
@@ -44,7 +48,8 @@ if("${PC_QWT}" STREQUAL "")
               PATH_SUFFIXES include qwt-qt4 qwt-qt5
               DOC "Variable storing the location of Qwt header"
              )
-    set(ARCH_SUFFIX "x86_64-linux-gnu")
+
+    set(ARCH_SUFFIX "lib")
     if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
       set(ARCH_SUFFIX "")
     endif("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
@@ -53,10 +58,11 @@ if("${PC_QWT}" STREQUAL "")
                  NAMES qwt qwt-qt4 qwt-qt5
                  PATHS ${QWT_PATHS}
                  HINTS ${QWT_HINTS}
-                 PATH_SUFFIXES "${ARCH_SUFFIX}"
+                 PATH_SUFFIXES ${ARCH_SUFFIX}
                  DOC "Variable storing the location of Qwt library"
+                 NO_DEFAULT_PATH
+                 NO_CMAKE_PATH
                 )
-
 
     set(Qwt_VERSION ${Qwt_FIND_VERSION})
     include(FindPackageHandleStandardArgs)
