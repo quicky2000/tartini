@@ -27,7 +27,7 @@ QString macxPathString;
 #include "myassert.h"
 #include "myglfonts.h"
 
-int main( int argc, char **argv )
+int main(int p_argc, char **p_argv)
 {
 
 #ifdef WINDOWS
@@ -45,12 +45,12 @@ int main( int argc, char **argv )
   CFRelease(macPath);
 #endif // MACX
 	
-  application a( argc, argv );
-  QString locale = QLocale::system().name();
+  application l_app(p_argc, p_argv);
+  QString l_locale = QLocale::system().name();
 
-  QTranslator translator;
-  translator.load(QString("tartini_") + locale);
-  a.installTranslator(&translator);
+  QTranslator l_translator;
+  l_translator.load(QString("tartini_") + l_locale);
+  l_app.installTranslator(&l_translator);
 
   Q_INIT_RESOURCE(pitch);
 
@@ -75,10 +75,10 @@ int main( int argc, char **argv )
 
   mainWindow->showMaximized();
     
-  a.setMainWidget(mainWindow);
+  l_app.setMainWidget(mainWindow);
   mainWindow->show();
 
-  a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
+  l_app.connect(&l_app, SIGNAL(lastWindowClosed()), &l_app, SLOT(quit()));
 
   if(!mainWindow->loadViewGeometry())
     {
@@ -86,19 +86,19 @@ int main( int argc, char **argv )
     }
 
   //open any files on the command line
-  if(argc >= 2)
+  if(p_argc >= 2)
     {
-      for(int j=1; j<argc; j++)
+      for(int l_index = 1; l_index < p_argc; l_index++)
 	{
-	  mainWindow->openFile(argv[j]);
+	  mainWindow->openFile(p_argv[l_index]);
 	}
     }
   
-  int ret = a.exec();
+  int l_ret_value = l_app.exec();
 
   delete & (gdata->getView());
   delete gdata;
   
-  return ret;
+  return l_ret_value;
 }
 //EOF
