@@ -16,6 +16,7 @@ before_install:
   - qmake qwt.pro
   - make
   - sudo make install
+  - QWT_INSTALL=/usr/local/qwt-6.1.2
   - cd ..
 
 script:
