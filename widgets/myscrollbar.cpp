@@ -4,7 +4,9 @@
     begin                : Tue Jul 20 2004
     copyright            : (C) 2004-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
- 
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2 of the License, or
@@ -19,133 +21,137 @@
 #include <qlayout.h>
 
 //------------------------------------------------------------------------------
-MyScrollBar::MyScrollBar(Qt::Orientation orientation, QWidget *parent, const char *name):
-  QWidget(parent, name),
-  bar(new QScrollBar(orientation, this))
+MyScrollBar::MyScrollBar(Qt::Orientation p_orientation
+                        ,QWidget * p_parent
+                        ,const char * p_name
+                        )
+: QWidget(p_parent, p_name)
+, m_bar(new QScrollBar(p_orientation, this))
 {
-  bar->show();
+    m_bar->show();
 }
 
 //------------------------------------------------------------------------------
-MyScrollBar::MyScrollBar(double minValue_,
-			 double maxValue_,
-			 double lineStep_,
-			 double pageStep_,
-			 double value_,
-			 double step_,
-			 Qt::Orientation orientation,
-			 QWidget * parent,
-			 const char * name):
-  QWidget(parent, name),
-  _minValue(minValue_),
-  _maxValue(maxValue_),
-  _value(value_),
-  _lineStep(lineStep_),
-  _pageStep(pageStep_),
-  _step(step_),
-  bar(new QScrollBar(orientation, this))
+MyScrollBar::MyScrollBar(double p_min_value
+                        ,double p_max_value
+                        ,double p_line_step
+                        ,double p_page_step
+                        ,double p_value
+                        ,double p_step
+                        ,Qt::Orientation p_orientation
+                        ,QWidget * p_parent
+                        ,const char * p_name
+                        )
+: QWidget(p_parent, p_name)
+, m_min_value(p_min_value)
+, m_max_value(p_max_value)
+, m_value(p_value)
+, m_line_step(p_line_step),
+  m_page_step(p_page_step),
+  m_step(p_step),
+  m_bar(new QScrollBar(p_orientation, this))
 {
-  bar->setMinimum(toInt(_minValue*_step));
-  bar->setMaximum(toInt(_maxValue*_step));
-  bar->setSingleStep(MAX(toInt(_lineStep*_step), 1));
-  bar->setPageStep(MAX(toInt(_pageStep*_step), 1));
-  bar->setValue(toInt(_value*_step));
-  setSizePolicy(bar->sizePolicy());
-  connect(bar, SIGNAL(actionTriggered(int)), this, SLOT(actionTriggering(int)));
+    m_bar->setMinimum(toInt(m_min_value * m_step));
+    m_bar->setMaximum(toInt(m_max_value * m_step));
+    m_bar->setSingleStep(MAX(toInt(m_line_step * m_step), 1));
+    m_bar->setPageStep(MAX(toInt(m_page_step * m_step), 1));
+    m_bar->setValue(toInt(m_value * m_step));
+    setSizePolicy(m_bar->sizePolicy());
+    connect(m_bar, SIGNAL(actionTriggered(int)), this, SLOT(actionTriggering(int)));
 }
 
 //------------------------------------------------------------------------------
 MyScrollBar::~MyScrollBar(void)
 {
-  delete bar;
+    delete m_bar;
 }
 
 //------------------------------------------------------------------------------
 QSize MyScrollBar::sizeHint(void) const
 {
-  return bar->sizeHint();
+    return m_bar->sizeHint();
 }
 
 //------------------------------------------------------------------------------
 void MyScrollBar::resizeEvent(QResizeEvent * q)
 {
-  bar->resize(q->size());
+    m_bar->resize(q->size());
 }
 
 //------------------------------------------------------------------------------
-void MyScrollBar::setMinValue(double minValue_)
+void MyScrollBar::setMinValue(double p_min_value)
 {
-  _minValue = minValue_;
-  bar->setMinimum(toInt(_minValue * _step));
+    m_min_value = p_min_value;
+    m_bar->setMinimum(toInt(m_min_value * m_step));
 }
 
 //------------------------------------------------------------------------------
-void MyScrollBar::setMaxValue(double maxValue_)
+void MyScrollBar::setMaxValue(double p_max_value_)
 {
-  _maxValue = maxValue_;
-  bar->setMaximum(toInt(_maxValue * _step));
+    m_max_value = p_max_value_;
+    m_bar->setMaximum(toInt(m_max_value * m_step));
 }
 
 //------------------------------------------------------------------------------
-void MyScrollBar::setRange(double minValue_, double maxValue_)
+void MyScrollBar::setRange(double p_min_value, double p_max_value)
 {
-  setMinValue(minValue_);
-  setMaxValue(maxValue_);
+    setMinValue(p_min_value);
+    setMaxValue(p_max_value);
 }
 
 //------------------------------------------------------------------------------
-void MyScrollBar::setLineStep(double lineStep_)
+void MyScrollBar::setLineStep(double p_line_step)
 {
-  _lineStep = lineStep_;
-  bar->setSingleStep(toInt(_lineStep * _step));
+    m_line_step = p_line_step;
+    m_bar->setSingleStep(toInt(m_line_step * m_step));
 }
 
 //------------------------------------------------------------------------------
-void MyScrollBar::setPageStep(double pageStep_)
+void MyScrollBar::setPageStep(double p_page_step)
 {
-  _pageStep = pageStep_;
-  bar->setPageStep(toInt(_pageStep * _step));
+    m_page_step = p_page_step;
+    m_bar->setPageStep(toInt(m_page_step * m_step));
 }
 
 //------------------------------------------------------------------------------
-void MyScrollBar::setValue(double value_)
+void MyScrollBar::setValue(double p_value)
 {
-  _value = value_;
-  bar->setValue(toInt(_value * _step));
+    m_value = p_value;
+    m_bar->setValue(toInt(m_value * m_step));
 }
 
 //------------------------------------------------------------------------------
-void MyScrollBar::setIntValue(int value_)
+void MyScrollBar::setIntValue(int p_value)
 {
-  _value = double(value_) / _step;
-  emit valueChanged(_value);
+    m_value = double(p_value) / m_step;
+    emit valueChanged(m_value);
 }
 
 //------------------------------------------------------------------------------
-void MyScrollBar::setStep(double step_)
+void MyScrollBar::setStep(double p_step)
 {
-  _step = step_;
+    m_step = p_step;
 }
 
 //------------------------------------------------------------------------------
-void MyScrollBar::sliderMoving(int value_)
+void MyScrollBar::sliderMoving(int p_value)
 {
-  _value = double(value_) / _step;
-  emit sliderMoved(_value);
+    m_value = double(p_value) / m_step;
+    emit sliderMoved(m_value);
 }
 
 //------------------------------------------------------------------------------
 void MyScrollBar::sliderMoving()
 {
-  _value = double(bar->value()) / _step;
-  emit sliderMoved(_value);
+    m_value = double(m_bar->value()) / m_step;
+    emit sliderMoved(m_value);
 }
 
 //------------------------------------------------------------------------------
 void MyScrollBar::actionTriggering(int /*action*/)
 {
-  setIntValue(bar->sliderPosition());
-  emit sliderMoved(_value);
+    setIntValue(m_bar->sliderPosition());
+    emit sliderMoved(m_value);
 }
 
 // EOF

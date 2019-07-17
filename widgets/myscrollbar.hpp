@@ -19,37 +19,37 @@
 //------------------------------------------------------------------------------
 double MyScrollBar::minValue(void) const
 {
-  return _minValue;
+  return m_min_value;
 }
 
 //------------------------------------------------------------------------------
 double MyScrollBar::maxValue(void) const
 {
-  return _maxValue;
+  return m_max_value;
 }
 
 //------------------------------------------------------------------------------
 double MyScrollBar::lineStep(void) const
 {
-  return _lineStep;
+  return m_line_step;
 }
 
 //------------------------------------------------------------------------------
 double MyScrollBar::pageStep(void) const
 {
-  return _pageStep;
+  return m_page_step;
 }
 
 //------------------------------------------------------------------------------
 double MyScrollBar::value(void) const
 {
-  return _value;
+  return m_value;
 }
 
 //------------------------------------------------------------------------------
 double MyScrollBar::step(void) const
 {
-  return _step;
+  return m_step;
 }
 
 // EOF
