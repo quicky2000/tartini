@@ -29,19 +29,27 @@
 */
 class MyLabel : public DrawWidget
 {
-public:
-  MyLabel(const QString & text_, QWidget * parent, const char * name = 0);
-  inline QString text(void) const;
-  inline void setText(const QString & text_);
-  
-  void paintEvent( QPaintEvent * );
-  inline QSize sizeHint(void) const;
+  public:
+    MyLabel(const QString & p_text
+           ,QWidget * p_parent
+           ,const char * p_name = 0
+           );
 
- private:
-  QString _text;
-  int _fontHeight;
-  int _textWidth;
+    inline
+    QString text(void) const;
 
+    inline
+    void setText(const QString & p_text);
+
+    void paintEvent( QPaintEvent * );
+
+    inline
+    QSize sizeHint(void) const;
+
+  private:
+    QString m_text;
+    int m_font_height;
+    int m_text_width;
 };
 
 #include "mylabel.hpp"

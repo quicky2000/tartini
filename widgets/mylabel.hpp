@@ -19,20 +19,20 @@
 //------------------------------------------------------------------------------
 QString MyLabel::text(void) const
 {
-  return _text;
+    return m_text;
 }
 
 //------------------------------------------------------------------------------
-void MyLabel::setText(const QString & text_)
+void MyLabel::setText(const QString & p_text)
 {
-  _text = text_;
-  update();
+    m_text = p_text;
+    update();
 }
   
 //------------------------------------------------------------------------------
 QSize MyLabel::sizeHint(void) const
 {
-  return QSize(_textWidth + 8, _fontHeight + 4);
+    return QSize(m_text_width + 8, m_font_height + 4);
 }
 
 // EOF
