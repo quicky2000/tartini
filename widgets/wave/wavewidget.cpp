@@ -27,10 +27,10 @@
 #include "myqt.h"
 
 //------------------------------------------------------------------------------
-WaveWidget::WaveWidget(QWidget *parent):
-  DrawWidget(parent)
+WaveWidget::WaveWidget(QWidget *parent)
+: DrawWidget(parent)
 {
-  setZoomY(1.0);
+    setZoomY(1.0);
 }
 
 //------------------------------------------------------------------------------
@@ -39,130 +39,129 @@ WaveWidget::~WaveWidget(void)
 }
 
 //------------------------------------------------------------------------------
-void WaveWidget::setZoomY(const double & zoomY_)
+void WaveWidget::setZoomY(const double & p_zoom_Y)
 {
-  if(m_zoom_Y != zoomY_)
+    if(m_zoom_Y != p_zoom_Y)
     {
-      m_zoom_Y = zoomY_;
-      emit zoomYChanged(m_zoom_Y);
+        m_zoom_Y = p_zoom_Y;
+        emit zoomYChanged(m_zoom_Y);
     }
 }
 
 //------------------------------------------------------------------------------
 void WaveWidget::paintEvent(QPaintEvent *)
 {
-  Channel * l_active = gdata->getActiveChannel();
+    Channel * l_active = gdata->getActiveChannel();
 
-  beginDrawing(false);
+    beginDrawing(false);
 
-  if(l_active)
+    if(l_active)
     {
-      l_active->lock();
-      AnalysisData * l_data = l_active->dataAtCurrentChunk();
-      int l_center_X = width() / 2;
-      if(l_data)
-	{
-	  double l_freq = l_data->getFundamentalFreq();
-	  double l_period = double(l_active->rate()) / l_freq;
-	  double l_num_periods = double(l_active->size()) / l_period;
-	  //pixels per period
-	  double l_scale_X = l_period * double(width()) / double(l_active->size());
-      
-	  //draw altinating background color indicating period
-	  if(gdata->getView().backgroundShading() && l_period > 4.0 && l_period < double(l_active->get_nsdf_data().size()))
-	    {
-	      int l_n = int(ceil(double(l_center_X) / l_scale_X));
-	      get_painter().setPen(Qt::NoPen);
-	      QColor l_color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), l_data->getCorrelation());
-	      QColor l_color2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), l_data->getCorrelation());
-	      for(int l_j = -l_n; l_j < l_n; l_j++)
-		{
-		  int l_x = l_center_X + toInt(l_scale_X * double(l_j));
-		  get_painter().setBrush((l_j % 2) ? l_color1 : l_color2);
-		  get_painter().drawRect(l_x, 0, toInt(l_scale_X * double(l_j + 1)) - toInt(l_scale_X * double(l_j)), height());
-		}
-	      get_painter().setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3 * l_data->getCorrelation()));
-	      for(int l_j = -l_n; l_j < l_n; l_j++)
-		{
-		  int l_x = l_center_X + toInt(l_scale_X * l_j);
-		  get_painter().drawLine(l_x, 0, l_x, height());
-		}
-	    }
-	  else
-	    {
-	      clearBackground();
-	    }
-	  QString l_num_periods_text;
-	  l_num_periods_text.sprintf("# Periods = %lf", l_num_periods);
-	  get_painter().setPen(Qt::black);
-	  get_painter().drawText(5, 15, l_num_periods_text);
-	}
-      else
-	{
-	  clearBackground();
-	}
+        l_active->lock();
+        AnalysisData * l_data = l_active->dataAtCurrentChunk();
+        int l_center_X = width() / 2;
+        if(l_data)
+        {
+            double l_freq = l_data->getFundamentalFreq();
+            double l_period = double(l_active->rate()) / l_freq;
+            double l_num_periods = double(l_active->size()) / l_period;
+            //pixels per period
+            double l_scale_X = l_period * double(width()) / double(l_active->size());
+
+            //draw altinating background color indicating period
+            if(gdata->getView().backgroundShading() && l_period > 4.0 && l_period < double(l_active->get_nsdf_data().size()))
+            {
+                int l_n = int(ceil(double(l_center_X) / l_scale_X));
+                get_painter().setPen(Qt::NoPen);
+                QColor l_color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), l_data->getCorrelation());
+                QColor l_color2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), l_data->getCorrelation());
+                for(int l_j = -l_n; l_j < l_n; l_j++)
+                {
+                    int l_x = l_center_X + toInt(l_scale_X * double(l_j));
+                    get_painter().setBrush((l_j % 2) ? l_color1 : l_color2);
+                    get_painter().drawRect(l_x, 0, toInt(l_scale_X * double(l_j + 1)) - toInt(l_scale_X * double(l_j)), height());
+                }
+                get_painter().setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3 * l_data->getCorrelation()));
+                for(int l_j = -l_n; l_j < l_n; l_j++)
+                {
+                    int l_x = l_center_X + toInt(l_scale_X * l_j);
+                    get_painter().drawLine(l_x, 0, l_x, height());
+                }
+            }
+            else
+            {
+                clearBackground();
+            }
+            QString l_num_periods_text;
+            l_num_periods_text.sprintf("# Periods = %lf", l_num_periods);
+            get_painter().setPen(Qt::black);
+            get_painter().drawText(5, 15, l_num_periods_text);
+        }
+        else
+        {
+            clearBackground();
+        }
     }
-  else
+    else
     {
-      clearBackground();
+        clearBackground();
     }
 
-  double l_dh2 = double(height() - 1) / 2.0;
-    
-  //draw the center line
-  get_painter().setPen(QPen(colorBetween(colorGroup().background(), Qt::black, 0.3), 0));
-  get_painter().drawLine(0, toInt(l_dh2), width(), toInt(l_dh2));
+    double l_dh2 = double(height() - 1) / 2.0;
 
-    
-  if(l_active)
+    //draw the center line
+    get_painter().setPen(QPen(colorBetween(colorGroup().background(), Qt::black, 0.3), 0));
+    get_painter().drawLine(0, toInt(l_dh2), width(), toInt(l_dh2));
+
+    if(l_active)
     {
-      //draw the waveform
-      //only do every second pixel (for speed)
-      int l_w = width() / 2;
-      if(int(m_point_array.size()) != l_w)
-	{
-	  m_point_array.resize(l_w);
-	}
-      double l_scale_Y = l_dh2 * zoomY();
+        //draw the waveform
+        // only do every second pixel (for speed)
+        int l_w = width() / 2;
+        if(int(m_point_array.size()) != l_w)
+        {
+            m_point_array.resize(l_w);
+        }
+        double l_scale_Y = l_dh2 * zoomY();
 
-      //Use Bresenham's algorithm in 1d to choose the points to draw
-      const Array1d<float> & l_filtered_data = l_active->get_filtered_input();
+        //Use Bresenham's algorithm in 1d to choose the points to draw
+        const Array1d<float> & l_filtered_data = l_active->get_filtered_input();
 
-      int l_int_step = int(l_filtered_data.size() / l_w);
-      int l_remainder_step = l_filtered_data.size() - (l_int_step * l_w);
-      int l_pos = 0;
-      int l_remainder = 0;
-      for(int l_j = 0; l_j < l_w; l_j++, l_pos += l_int_step, l_remainder += l_remainder_step)
-	{
-	  if(l_remainder >= l_w)
-	    {
-	      l_pos++;
-	      l_remainder -= l_w;
-	    }
-	  myassert(l_pos < l_filtered_data.size());
-	  if(l_pos >= l_filtered_data.size())
-	    {
-	      printf("pos = %d, l_filtered_data.size()=%d\n", l_pos, l_filtered_data.size());
-	    }
-	  m_point_array.setPoint(l_j, l_j * 2, toInt(l_dh2 - (l_filtered_data.at(l_pos)) * l_scale_Y));
-	}
-      get_painter().setPen(QPen(l_active->get_color(), 0));
-      get_painter().drawPolyline(m_point_array);
-      l_active->unlock();
+        int l_int_step = int(l_filtered_data.size() / l_w);
+        int l_remainder_step = l_filtered_data.size() - (l_int_step * l_w);
+        int l_pos = 0;
+        int l_remainder = 0;
+        for(int l_j = 0; l_j < l_w; l_j++, l_pos += l_int_step, l_remainder += l_remainder_step)
+        {
+            if(l_remainder >= l_w)
+            {
+                l_pos++;
+                l_remainder -= l_w;
+            }
+            myassert(l_pos < l_filtered_data.size());
+            if(l_pos >= l_filtered_data.size())
+            {
+                printf("pos = %d, l_filtered_data.size()=%d\n", l_pos, l_filtered_data.size());
+            }
+            m_point_array.setPoint(l_j, l_j * 2, toInt(l_dh2 - (l_filtered_data.at(l_pos)) * l_scale_Y));
+        }
+        get_painter().setPen(QPen(l_active->get_color(), 0));
+        get_painter().drawPolyline(m_point_array);
+        l_active->unlock();
     }
-  endDrawing();
+    endDrawing();
 }
 
 //------------------------------------------------------------------------------
 QSize WaveWidget::sizeHint(void) const
 {
-  return QSize(500, 128);
+    return QSize(500, 128);
 }
 
 //------------------------------------------------------------------------------
 const double & WaveWidget::zoomY(void) const
 {
-  return m_zoom_Y;
+    return m_zoom_Y;
 }
 
 // EOF

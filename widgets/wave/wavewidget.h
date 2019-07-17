@@ -30,25 +30,25 @@ class WaveWidget : public DrawWidget
 {
   Q_OBJECT
 
- public:
-  WaveWidget(QWidget *parent);
-  virtual ~WaveWidget(void);
+  public:
+    WaveWidget(QWidget *parent);
 
-  void paintEvent(QPaintEvent *);
+    virtual ~WaveWidget(void);
 
-  QSize sizeHint(void) const;
-  const double & zoomY(void) const;
-        
- signals:
-  void zoomYChanged(double zoomY_);
-    
- public slots:
-  void setZoomY(const double & zoomY_);
+    void paintEvent(QPaintEvent *);
 
- private:
-  Q3PointArray m_point_array;
-  double m_zoom_Y;
+    QSize sizeHint(void) const;
+    const double & zoomY(void) const;
 
+  signals:
+    void zoomYChanged(double p_zoom_Y);
+
+  public slots:
+    void setZoomY(const double & p_zoom_Y);
+
+  private:
+    Q3PointArray m_point_array;
+    double m_zoom_Y;
 };
 #endif // WAVEWIDGET_H
 // EOF
