@@ -30,30 +30,30 @@ class LEDIndicator : public QWidget
   Q_OBJECT
 
   public:
-  LEDIndicator(QPixmap * buffer,
-	       QWidget * parent = 0,
-	       const char *name = 0,
-	       const QColor & on = Qt::red,
-	       const QColor & off = Qt::darkRed
-	       );
+    LEDIndicator(QPixmap * p_buffer
+                ,QWidget * p_parent = 0
+                ,const char *p_name = 0
+                ,const QColor & p_on = Qt::red
+                ,const QColor & p_off = Qt::darkRed
+                );
 
-  virtual ~LEDIndicator(void);
-    
-  void setOn(bool on);
-  void toggle(void);
+    virtual ~LEDIndicator(void);
 
-  bool lit(void);
-    
-  void paintEvent(QPaintEvent *);
+    void setOn(bool p_on);
+    void toggle(void);
 
-  QSize sizeHint(void) const;
+    bool lit(void);
 
- private:
-  QColor on;
-  QColor off;
-  bool active;
-  bool newState;
-  QPixmap *buffer;
+    void paintEvent(QPaintEvent *);
+
+    QSize sizeHint(void) const;
+
+  private:
+    QColor m_on;
+    QColor m_off;
+    bool m_active;
+    bool m_newState;
+    QPixmap *m_buffer;
 };
 
 #endif // LEDINDICATOR_H

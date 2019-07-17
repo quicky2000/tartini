@@ -21,18 +21,23 @@
 #include <QPaintEvent>
 
 //------------------------------------------------------------------------------
-LEDIndicator::LEDIndicator(QPixmap *buffer, QWidget *parent, const char *name, const QColor &on, const QColor &off):
-  QWidget(parent, name)
+LEDIndicator::LEDIndicator(QPixmap *p_buffer
+                          ,QWidget *p_parent
+                          ,const char *p_name
+                          ,const QColor & p_on
+                          ,const QColor &p_off
+                          )
+: QWidget(p_parent, p_name)
 {
-  setMinimumSize(sizeHint());
-  this->on = on;
-  this->off = off;
+    setMinimumSize(sizeHint());
+    m_on = p_on;
+    m_off = p_off;
 
-  active = false;
+    m_active = false;
 
-  // Stop QT from erasing the background all the time
-  setBackgroundMode(Qt::NoBackground);
-  this->buffer = buffer;
+    // Stop QT from erasing the background all the time
+    setBackgroundMode(Qt::NoBackground);
+    m_buffer = p_buffer;
 }
 
 //------------------------------------------------------------------------------
@@ -41,59 +46,59 @@ LEDIndicator::~LEDIndicator(void)
 }
 
 //------------------------------------------------------------------------------
-void LEDIndicator::setOn(bool on)
+void LEDIndicator::setOn(bool p_on)
 {
-  if (active != on)
+    if(m_active != p_on)
     {
-      active = on;
-      update();
+        m_active = p_on;
+        update();
     }
 }
 
 //------------------------------------------------------------------------------
 void LEDIndicator::toggle(void)
 {
-  active = !active;
+    m_active = !m_active;
 }
 
 //------------------------------------------------------------------------------
 bool LEDIndicator::lit(void)
 {
-  return active;
+    return m_active;
 }
 
 //------------------------------------------------------------------------------
 void LEDIndicator::paintEvent(QPaintEvent *)
 {
-  // Double buffering
-  if (buffer->size() != size())
+    // Double buffering
+    if (m_buffer->size() != size())
     {
-      buffer->resize(size());
+        m_buffer->resize(size());
     }
 
-  buffer->fill(colorGroup().background());
-  
-  QPainter p;
-  p.begin(buffer, this);
+    m_buffer->fill(colorGroup().background());
 
-  p.fillRect(0, 0, QWidget::width(), QWidget::height(), (active) ? on : off);
+    QPainter l_painter;
+    l_painter.begin(m_buffer, this);
 
-  p.setPen(colorGroup().brightText());
+    l_painter.fillRect(0, 0, QWidget::width(), QWidget::height(), (m_active) ? m_on : m_off);
 
-  QFontMetrics fm = p.fontMetrics();
-  int fontHeight = fm.height() / 4;
-  int fontWidth = fm.width(name()) / 2;
-  
-  p.drawText(QWidget::width() / 2 - fontWidth, QWidget::height() / 2 + fontHeight, name());
-  p.end();
+    l_painter.setPen(colorGroup().brightText());
 
-  // Swap buffers
-  bitBlt(this, 0, 0, buffer);
+    QFontMetrics l_font_metric = l_painter.fontMetrics();
+    int l_font_Height = l_font_metric.height() / 4;
+    int l_font_width = l_font_metric.width(name()) / 2;
+
+    l_painter.drawText(QWidget::width() / 2 - l_font_width, QWidget::height() / 2 + l_font_Height, name());
+    l_painter.end();
+
+    // Swap buffers
+    bitBlt(this, 0, 0, m_buffer);
 }
 
 //------------------------------------------------------------------------------
 QSize LEDIndicator::sizeHint(void) const
 {
-  return QSize(15, 25);
+    return QSize(15, 25);
 }
 // EOF
