@@ -27,32 +27,34 @@
 #include <QResizeEvent>
 
 //------------------------------------------------------------------------------
-WaveView::WaveView( int viewID_, QWidget *parent ):
-  ViewWidget( viewID_, parent)
+WaveView::WaveView(int p_view_ID
+                  ,QWidget * p_parent
+                  )
+: ViewWidget(p_view_ID, p_parent)
 {
-  Q3BoxLayout * l_main_layout = new Q3HBoxLayout(this);
+    Q3BoxLayout * l_main_layout = new Q3HBoxLayout(this);
 
-  Q3Grid * l_wave_frame = new Q3Grid(1, this);
-  l_wave_frame->setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
-  m_wave_widget = new WaveWidget(l_wave_frame);
-  l_main_layout->addWidget(l_wave_frame);
+    Q3Grid * l_wave_frame = new Q3Grid(1, this);
+    l_wave_frame->setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
+    m_wave_widget = new WaveWidget(l_wave_frame);
+    l_main_layout->addWidget(l_wave_frame);
 
-  Q3BoxLayout * l_right_layout = new Q3VBoxLayout(l_main_layout);
-  
-  QwtWheel * l_freq_wheel_Y = new QwtWheel(this);
-  l_freq_wheel_Y->setOrientation(Qt::Vertical);
-  l_freq_wheel_Y->setWheelWidth(14);
-  l_freq_wheel_Y->setRange(1.0, 20.0, 0.1, 1);
-  l_freq_wheel_Y->setValue(1.0);
-  QToolTip::add(l_freq_wheel_Y, "Zoom oscilloscope vertically");
-  l_right_layout->addWidget(l_freq_wheel_Y, 1);
-  l_right_layout->addStretch(2);
-  
-  connect(l_freq_wheel_Y, SIGNAL(valueChanged(double)), m_wave_widget, SLOT(setZoomY(const double &)));
-  connect(m_wave_widget, SIGNAL(zoomYChanged(double)), m_wave_widget, SLOT(update()));
-  
-  //make the widget get updated when the view changes
-  connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), m_wave_widget, SLOT(update()));
+    Q3BoxLayout * l_right_layout = new Q3VBoxLayout(l_main_layout);
+
+    QwtWheel * l_freq_wheel_Y = new QwtWheel(this);
+    l_freq_wheel_Y->setOrientation(Qt::Vertical);
+    l_freq_wheel_Y->setWheelWidth(14);
+    l_freq_wheel_Y->setRange(1.0, 20.0, 0.1, 1);
+    l_freq_wheel_Y->setValue(1.0);
+    QToolTip::add(l_freq_wheel_Y, "Zoom oscilloscope vertically");
+    l_right_layout->addWidget(l_freq_wheel_Y, 1);
+    l_right_layout->addStretch(2);
+
+    connect(l_freq_wheel_Y, SIGNAL(valueChanged(double)), m_wave_widget, SLOT(setZoomY(const double &)));
+    connect(m_wave_widget, SIGNAL(zoomYChanged(double)), m_wave_widget, SLOT(update()));
+
+    //make the widget get updated when the view changes
+    connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), m_wave_widget, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------
@@ -68,7 +70,7 @@ void WaveView::resizeEvent(QResizeEvent *)
 //------------------------------------------------------------------------------
 QSize WaveView::sizeHint(void) const
 {
-  return QSize(400, 128);
+    return QSize(400, 128);
 }
 
 // EOF

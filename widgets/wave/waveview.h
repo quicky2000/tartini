@@ -26,16 +26,19 @@ class WaveView: public ViewWidget
 {
   Q_OBJECT
 
- public:
-  WaveView(int viewID_, QWidget *parent = NULL);
-  virtual ~WaveView(void);
+  public:
+    WaveView(int p_view_ID
+            ,QWidget * p_parent = NULL
+            );
 
-  void resizeEvent(QResizeEvent *);
+    virtual ~WaveView(void);
 
-  QSize sizeHint(void) const;
+    void resizeEvent(QResizeEvent *);
 
- private:
-  WaveWidget * m_wave_widget;
+    QSize sizeHint(void) const;
+
+  private:
+    WaveWidget * m_wave_widget;
 };
 #endif // WAVEVIEW_H
 // EOF
