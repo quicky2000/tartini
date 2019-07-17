@@ -30,34 +30,57 @@ class TimeAxis : public DrawWidget
 {
   Q_OBJECT
 
-public:
-  TimeAxis(QWidget * p_parent, bool p_numbers_on_top = true);
-  TimeAxis(QWidget * p_parent,const double & p_left_time, const double & p_right_time, bool p_numbers_on_top = true);
-  ~TimeAxis(void);
+  public:
+    TimeAxis(QWidget * p_parent
+            ,bool p_numbers_on_top = true
+            );
 
-  inline QSize sizeHint(void) const;
+    TimeAxis(QWidget * p_parent
+            ,const double & p_left_time
+            ,const double & p_right_time
+            ,bool p_numbers_on_top = true
+            );
 
-  void init(void);
-  inline double leftTime(void) const;
-  inline double rightTime(void) const;
-  inline double timeWidth(void) const;
+    ~TimeAxis(void);
 
-  void setFontSize(int p_font_size);
-  
-  void paintEvent(QPaintEvent *);
+    inline
+    QSize sizeHint(void) const;
+
+    void init(void);
+
+    inline
+    double leftTime(void) const;
+
+    inline
+    double rightTime(void) const;
+
+    inline
+    double timeWidth(void) const;
+
+    void setFontSize(int p_font_size);
+
+    void paintEvent(QPaintEvent *);
 
   public slots:
-  inline void setLeftTime(const double & p_time);
-  inline void setRightTime(const double & p_time);
-  inline void setRange(const double & p_left_time, const double & p_right_time);
 
- private:
-  double m_left_time;
-  double m_right_time;
-  bool m_numbers_on_top;
-  QFont m_font;
-  int m_font_size;
-    
+    inline
+    void setLeftTime(const double & p_time);
+
+    inline
+    void setRightTime(const double & p_time);
+
+    inline
+    void setRange(const double & p_left_time
+                 ,const double & p_right_time
+                 );
+
+  private:
+
+    double m_left_time;
+    double m_right_time;
+    bool m_numbers_on_top;
+    QFont m_font;
+    int m_font_size;
 };
 
 #include "timeaxis.hpp"
