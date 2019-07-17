@@ -52,7 +52,6 @@ class LEDIndicator : public QWidget
     QColor m_on;
     QColor m_off;
     bool m_active;
-    bool m_newState;
     QPixmap *m_buffer;
 };
 
