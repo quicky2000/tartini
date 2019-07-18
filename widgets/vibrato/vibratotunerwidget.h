@@ -4,7 +4,9 @@
     begin                : May 18 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
- 
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2 of the License, or
@@ -21,47 +23,53 @@ class VibratoTunerWidget: public QGLWidget
 {
   Q_OBJECT
 
- public:
-  VibratoTunerWidget(QWidget *parent);
-  virtual ~VibratoTunerWidget(void);
+  public:
+    VibratoTunerWidget(QWidget *p_parent);
 
-  void initializeGL(void);
-  void resizeGL(int w, int h);
-  void paintGL(void);
+    virtual ~VibratoTunerWidget(void);
 
-  QSize minimumSizeHint(void) const;
+    void initializeGL(void);
+    void resizeGL(int p_width, int p_height);
+    void paintGL(void);
 
- signals:
-  void ledSet(int index, bool value);
+    QSize minimumSizeHint(void) const;
+
+  signals:
+
+    void ledSet(int index, bool value);
 
   public slots:
-  void doUpdate(double thePitch);
 
- private:
-  //data goes here
-  float needleValueToDraw;
-  float prevNeedleValue;
-  int prevClosePitch;
-  bool prevIsPitchBlackNote;
-  double curPitch;
+    void doUpdate(double p_pitch);
 
-  QFont tunerFont;
+  private:
 
-  float centsLabelX, centsLabelY;
+    //data goes here
 
-  int tunerLabelCounter;
-  struct tunerLabelStruct
-  {
-    QString label;
-    float x;
-    float y;
-  };
-  tunerLabelStruct tunerLabels[100];
+    float m_needle_value_to_draw;
+    float m_prev_needle_value;
+    int m_prev_close_pitch;
+    bool m_prev_is_pitch_black_note;
+    double m_cur_pitch;
 
-  void resetLeds(void);
+    QFont m_tuner_font;
 
-  GLuint dial;
-  GLuint needle;
+    float m_cents_label_X;
+    float m_cents_label_Y;
+
+    int m_tuner_label_counter;
+    struct tunerLabelStruct
+    {
+        QString m_label;
+        float m_x;
+        float m_y;
+    };
+    tunerLabelStruct tunerLabels[100];
+
+    void resetLeds(void);
+
+    GLuint m_dial;
+    GLuint m_needle;
 };
 #endif // VIBRATOTUNERWIDGET_H
 // EOF
