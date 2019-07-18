@@ -4,7 +4,9 @@
     begin                : May 18 2005
     copyright            : (C) 2005-2007 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
- 
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2 of the License, or
@@ -29,20 +31,23 @@ class VibratoView: public ViewWidget
 {
   Q_OBJECT
 
- public:
-  VibratoView(int viewID_, QWidget * parent = NULL);
-  virtual ~VibratoView(void);
+  public:
+    VibratoView(int p_view_ID
+               ,QWidget * p_parent = NULL
+               );
 
-  QSize sizeHint(void) const;
+    virtual ~VibratoView(void);
 
-  std::vector<LEDIndicator*> leds;
+    QSize sizeHint(void) const;
 
- private:
-  VibratoSpeedWidget * vibratoSpeedWidget;
-  VibratoPeriodWidget * vibratoPeriodWidget;
-  VibratoCircleWidget * vibratoCircleWidget;
-  VibratoTimeAxis * vibratoTimeAxis;
-  VibratoWidget * vibratoWidget;
+    std::vector<LEDIndicator*> m_leds;
+
+  private:
+    VibratoSpeedWidget * m_vibrato_speed_widget;
+    VibratoPeriodWidget * m_vibrato_period_widget;
+    VibratoCircleWidget * m_vibrato_circle_widget;
+    VibratoTimeAxis * m_vibrato_time_axis;
+    VibratoWidget * m_vibrato_widget;
 
 };
 #endif // VIBRATOVIEW_H

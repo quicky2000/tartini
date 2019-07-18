@@ -4,7 +4,9 @@
     begin                : May 18 2005
     copyright            : (C) 2005-2007 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
- 
+    copyright            : (C) 2016 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2 of the License, or
@@ -47,300 +49,295 @@
 #include <qwt_wheel.h>
 
 //------------------------------------------------------------------------------
-VibratoView::VibratoView( int viewID_, QWidget * parent):
-  ViewWidget( viewID_, parent)
+VibratoView::VibratoView(int p_view_ID
+                        ,QWidget * p_parent
+                        )
+: ViewWidget(p_view_ID, p_parent)
 {
-  int noteLabelOffset = 28;
+    int l_note_label_offset = 28;
 
-  setCaption("Vibrato View");
+    setCaption("Vibrato View");
 
-  QGridLayout * mainLayout = new QGridLayout;
+    QGridLayout * l_main_layout = new QGridLayout;
 
-  QSplitter * verticalSplitter = new QSplitter(Qt::Vertical);
+    QSplitter * l_vertical_splitter = new QSplitter(Qt::Vertical);
 
+    // Second column: Label + speedwidget + button
+    QGridLayout * l_speed_layout = new QGridLayout;
 
-  // Second column: Label + speedwidget + button
-  QGridLayout * speedLayout = new QGridLayout;
+    // The label
+    QLabel * l_speed_label = new QLabel;
+    l_speed_label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    l_speed_label->setText("Vibrato speed & width");
+    l_speed_label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    l_speed_layout->addWidget(l_speed_label, 0, 0, 1, 1);
+    l_speed_layout->setRowStretch(0, 0);
 
-  // The label
-  QLabel * speedLabel = new QLabel;
-  speedLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-  speedLabel->setText("Vibrato speed & width");
-  speedLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-  speedLayout->addWidget(speedLabel, 0, 0, 1, 1);
-  speedLayout->setRowStretch(0, 0);
+    // The speedwidget
+    QFrame * l_speed_frame = new QFrame;
+    l_speed_frame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
+    QVBoxLayout * l_speed_frame_layout = new QVBoxLayout;
+    m_vibrato_speed_widget = new VibratoSpeedWidget(0);
+    m_vibrato_speed_widget->setWhatsThis("Indicates the instantaneous speed and peek-to-peek amplitude of the vibrato. Note: 100 cents = 1 semi-tone (even tempered).");
+    l_speed_frame_layout->addWidget(m_vibrato_speed_widget);
+    l_speed_frame_layout->setMargin(0);
+    l_speed_frame_layout->setSpacing(0);
+    l_speed_frame->setLayout(l_speed_frame_layout);
+    l_speed_layout->addWidget(l_speed_frame, 1, 0, 1, 1);
+    l_speed_layout->setRowStretch(1, 1);
 
-  // The speedwidget
-  QFrame * speedFrame = new QFrame;
-  speedFrame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
-  QVBoxLayout * speedFrameLayout = new QVBoxLayout;
-  vibratoSpeedWidget = new VibratoSpeedWidget(0);
-  vibratoSpeedWidget->setWhatsThis("Indicates the instantaneous speed and peek-to-peek amplitude of the vibrato. Note: 100 cents = 1 semi-tone (even tempered).");
-  speedFrameLayout->addWidget(vibratoSpeedWidget);
-  speedFrameLayout->setMargin(0);
-  speedFrameLayout->setSpacing(0);
-  speedFrame->setLayout(speedFrameLayout);
-  speedLayout->addWidget(speedFrame, 1, 0, 1, 1);
-  speedLayout->setRowStretch(1, 1);
+    // The button
+    l_speed_layout->setMargin(1);
+    l_speed_layout->setSpacing(1);
 
-  // The button
-  speedLayout->setMargin(1);
-  speedLayout->setSpacing(1);
+    QWidget * l_top_widget2 = new QWidget;
+    l_top_widget2->setLayout(l_speed_layout);
 
-  QWidget * topWidget2 = new QWidget;
-  topWidget2->setLayout(speedLayout);
+    // Third column: Label + circlewidget + horizontal slider
+    QGridLayout * l_circle_layout = new QGridLayout;
 
-  // Third column: Label + circlewidget + horizontal slider
-  QGridLayout * circleLayout = new QGridLayout;
+    // The label
+    QLabel * l_circle_label = new QLabel;
+    l_circle_label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    l_circle_label->setText("The Vibrato circle");
+    l_circle_label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    l_circle_layout->addWidget(l_circle_label, 0, 0, 1, 2);
+    l_circle_layout->setRowStretch(0, 0);
 
-  // The label
-  QLabel * circleLabel = new QLabel;
-  circleLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-  circleLabel->setText("The Vibrato circle");
-  circleLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-  circleLayout->addWidget(circleLabel, 0, 0, 1, 2);
-  circleLayout->setRowStretch(0, 0);
-
-  // The circlewidget
-  QFrame *circleFrame = new QFrame;
-  circleFrame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
-  QVBoxLayout *circleFrameLayout = new QVBoxLayout;
-  vibratoCircleWidget = new VibratoCircleWidget(0);
-  vibratoCircleWidget->setWhatsThis("Each cycle of your vibrato is represented by a 2D shape. A current cycle produces a circle if it has a perfect sine wave shape. "
+    // The circlewidget
+    QFrame * l_circle_frame = new QFrame;
+    l_circle_frame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
+    QVBoxLayout *l_circle_frame_layout = new QVBoxLayout;
+    m_vibrato_circle_widget = new VibratoCircleWidget(0);
+    m_vibrato_circle_widget->setWhatsThis("Each cycle of your vibrato is represented by a 2D shape. A current cycle produces a circle if it has a perfect sine wave shape. "
     "Going outside the line indicates your phase is ahead of a sine-wave, and inside the line slower. Note: The shape of one cycle is blended into the next.");
-  circleFrameLayout->addWidget(vibratoCircleWidget);
-  circleFrameLayout->setMargin(0);
-  circleFrameLayout->setSpacing(0);
-  circleFrame->setLayout(circleFrameLayout);
-  circleLayout->addWidget(circleFrame, 1, 0, 1, 2);
-  circleLayout->setRowStretch(1, 1);
+    l_circle_frame_layout->addWidget(m_vibrato_circle_widget);
+    l_circle_frame_layout->setMargin(0);
+    l_circle_frame_layout->setSpacing(0);
+    l_circle_frame->setLayout(l_circle_frame_layout);
+    l_circle_layout->addWidget(l_circle_frame, 1, 0, 1, 2);
+    l_circle_layout->setRowStretch(1, 1);
 
-  circleLayout->setMargin(1);
-  circleLayout->setSpacing(1);
+    l_circle_layout->setMargin(1);
+    l_circle_layout->setSpacing(1);
 
-  QWidget * topWidget3 = new QWidget;
-  topWidget3->setLayout(circleLayout);
+    QWidget * l_top_widget3 = new QWidget;
+    l_top_widget3->setLayout(l_circle_layout);
 
-  // Fourth column: Label + periodwidget + buttons for periodwidget
-  QGridLayout *periodLayout = new QGridLayout;
+    // Fourth column: Label + periodwidget + buttons for periodwidget
+    QGridLayout *l_period_layout = new QGridLayout;
 
-  // The label
-  QLabel * periodLabel = new QLabel;
-  periodLabel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-  periodLabel->setText("Vibrato period view");
-  periodLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-  periodLayout->addWidget(periodLabel, 0, 0, 1, 6);
-  periodLayout->setRowStretch(0, 0);
+    // The label
+    QLabel * l_period_label = new QLabel;
+    l_period_label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    l_period_label->setText("Vibrato period view");
+    l_period_label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    l_period_layout->addWidget(l_period_label, 0, 0, 1, 6);
+    l_period_layout->setRowStretch(0, 0);
 
-  // The periodwidget
-  QFrame * periodFrame = new QFrame;
-  periodFrame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
-  QVBoxLayout * periodFrameLayout = new QVBoxLayout;
-  vibratoPeriodWidget = new VibratoPeriodWidget(0);
-  vibratoPeriodWidget->setWhatsThis("A detailed view of the current vibrato period. You can turn on and off some different options with the buttons. ");
-  periodFrameLayout->addWidget(vibratoPeriodWidget);
-  periodFrameLayout->setMargin(0);
-  periodFrameLayout->setSpacing(0);
-  periodFrame->setLayout(periodFrameLayout);
-  periodLayout->addWidget(periodFrame, 1, 0, 1, 6);
-  periodLayout->setRowStretch(1, 1);
+    // The periodwidget
+    QFrame * l_period_frame = new QFrame;
+    l_period_frame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
+    QVBoxLayout * l_period_frame_layout = new QVBoxLayout;
+    m_vibrato_period_widget = new VibratoPeriodWidget(0);
+    m_vibrato_period_widget->setWhatsThis("A detailed view of the current vibrato period. You can turn on and off some different options with the buttons. ");
+    l_period_frame_layout->addWidget(m_vibrato_period_widget);
+    l_period_frame_layout->setMargin(0);
+    l_period_frame_layout->setSpacing(0);
+    l_period_frame->setLayout(l_period_frame_layout);
+    l_period_layout->addWidget(l_period_frame, 1, 0, 1, 6);
+    l_period_layout->setRowStretch(1, 1);
 
-  // The buttons
-  QPushButton * smoothedPeriodsButton = new QPushButton("SP");
-  smoothedPeriodsButton->setCheckable(true);
-  smoothedPeriodsButton->setMinimumWidth(30);
-  smoothedPeriodsButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-  smoothedPeriodsButton->setFocusPolicy(Qt::NoFocus);
-  smoothedPeriodsButton->setDown(true);
-  QToolTip::add(smoothedPeriodsButton, "Use smoothed periods");
-  periodLayout->addWidget(smoothedPeriodsButton, 2, 0, 1, 1);
+    // The buttons
+    QPushButton * l_smoothed_periods_button = new QPushButton("SP");
+    l_smoothed_periods_button->setCheckable(true);
+    l_smoothed_periods_button->setMinimumWidth(30);
+    l_smoothed_periods_button->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+    l_smoothed_periods_button->setFocusPolicy(Qt::NoFocus);
+    l_smoothed_periods_button->setDown(true);
+    QToolTip::add(l_smoothed_periods_button, "Use smoothed periods");
+    l_period_layout->addWidget(l_smoothed_periods_button, 2, 0, 1, 1);
 
-  QPushButton * drawSineReferenceButton = new QPushButton("DSR");
-  drawSineReferenceButton->setCheckable(true);
-  drawSineReferenceButton->setMinimumWidth(30);
-  drawSineReferenceButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-  drawSineReferenceButton->setFocusPolicy(Qt::NoFocus);
-  QToolTip::add(drawSineReferenceButton, "Draw the reference sinewave");
-  periodLayout->addWidget(drawSineReferenceButton, 2, 1, 1, 1);
+    QPushButton * l_draw_sine_reference_button = new QPushButton("DSR");
+    l_draw_sine_reference_button->setCheckable(true);
+    l_draw_sine_reference_button->setMinimumWidth(30);
+    l_draw_sine_reference_button->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+    l_draw_sine_reference_button->setFocusPolicy(Qt::NoFocus);
+    QToolTip::add(l_draw_sine_reference_button, "Draw the reference sinewave");
+    l_period_layout->addWidget(l_draw_sine_reference_button, 2, 1, 1, 1);
 
-  QPushButton * sineStyleButton = new QPushButton("SS");
-  sineStyleButton->setCheckable(true);
-  sineStyleButton->setMinimumWidth(30);
-  sineStyleButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-  sineStyleButton->setFocusPolicy(Qt::NoFocus);
-  QToolTip::add(sineStyleButton, "Use sine style: /\\/ instead of cosine style: \\/");
-  periodLayout->addWidget(sineStyleButton, 2, 2, 1, 1);
+    QPushButton * l_sine_style_button = new QPushButton("SS");
+    l_sine_style_button->setCheckable(true);
+    l_sine_style_button->setMinimumWidth(30);
+    l_sine_style_button->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+    l_sine_style_button->setFocusPolicy(Qt::NoFocus);
+    QToolTip::add(l_sine_style_button, "Use sine style: /\\/ instead of cosine style: \\/");
+    l_period_layout->addWidget(l_sine_style_button, 2, 2, 1, 1);
 
-  QPushButton * drawPrevPeriodsButton = new QPushButton("DPP");
-  drawPrevPeriodsButton->setCheckable(true);
-  drawPrevPeriodsButton->setMinimumWidth(30);
-  drawPrevPeriodsButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-  drawPrevPeriodsButton->setFocusPolicy(Qt::NoFocus);
-  QToolTip::add(drawPrevPeriodsButton, "Draw previous periods");
-  periodLayout->addWidget(drawPrevPeriodsButton, 2, 3, 1, 1);
+    QPushButton * l_draw_prev_periods_button = new QPushButton("DPP");
+    l_draw_prev_periods_button->setCheckable(true);
+    l_draw_prev_periods_button->setMinimumWidth(30);
+    l_draw_prev_periods_button->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+    l_draw_prev_periods_button->setFocusPolicy(Qt::NoFocus);
+    QToolTip::add(l_draw_prev_periods_button, "Draw previous periods");
+    l_period_layout->addWidget(l_draw_prev_periods_button, 2, 3, 1, 1);
 
-  QPushButton * periodScalingButton = new QPushButton("PS");
-  periodScalingButton->setCheckable(true);
-  periodScalingButton->setMinimumWidth(30);
-  periodScalingButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-  periodScalingButton->setFocusPolicy(Qt::NoFocus);
-  QToolTip::add(periodScalingButton, "Scale previous periods to the current period");
-  periodLayout->addWidget(periodScalingButton, 2, 4, 1, 1);
+    QPushButton * l_period_scaling_button = new QPushButton("PS");
+    l_period_scaling_button->setCheckable(true);
+    l_period_scaling_button->setMinimumWidth(30);
+    l_period_scaling_button->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+    l_period_scaling_button->setFocusPolicy(Qt::NoFocus);
+    QToolTip::add(l_period_scaling_button, "Scale previous periods to the current period");
+    l_period_layout->addWidget(l_period_scaling_button, 2, 4, 1, 1);
 
-  QPushButton * drawComparisonButton = new QPushButton("DC");
-  drawComparisonButton->setCheckable(true);
-  drawComparisonButton->setMinimumWidth(30);
-  drawComparisonButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-  drawComparisonButton->setFocusPolicy(Qt::NoFocus);
-  QToolTip::add(drawComparisonButton, "Draw comparison between period and sinewave");
-  periodLayout->addWidget(drawComparisonButton, 2, 5, 1, 1);
+    QPushButton * l_draw_comparison_button = new QPushButton("DC");
+    l_draw_comparison_button->setCheckable(true);
+    l_draw_comparison_button->setMinimumWidth(30);
+    l_draw_comparison_button->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+    l_draw_comparison_button->setFocusPolicy(Qt::NoFocus);
+    QToolTip::add(l_draw_comparison_button, "Draw comparison between period and sinewave");
+    l_period_layout->addWidget(l_draw_comparison_button, 2, 5, 1, 1);
 
-  periodLayout->setRowStretch(2, 0);
+    l_period_layout->setRowStretch(2, 0);
 
-  periodLayout->setMargin(1);
-  periodLayout->setSpacing(1);
+    l_period_layout->setMargin(1);
+    l_period_layout->setSpacing(1);
 
-  QWidget * topWidget4 = new QWidget;
-  topWidget4->setLayout(periodLayout);
+    QWidget * l_top_widget4 = new QWidget;
+    l_top_widget4->setLayout(l_period_layout);
 
-  QSplitter * topSplitter = new QSplitter(Qt::Horizontal);
-  topSplitter->addWidget(topWidget2);
-  topSplitter->setStretchFactor(0, 10);
-  topSplitter->addWidget(topWidget3);
-  topSplitter->setStretchFactor(1, 10);
-  topSplitter->addWidget(topWidget4);
-  topSplitter->setStretchFactor(2, 5);
+    QSplitter * l_top_splitter = new QSplitter(Qt::Horizontal);
+    l_top_splitter->addWidget(l_top_widget2);
+    l_top_splitter->setStretchFactor(0, 10);
+    l_top_splitter->addWidget(l_top_widget3);
+    l_top_splitter->setStretchFactor(1, 10);
+    l_top_splitter->addWidget(l_top_widget4);
+    l_top_splitter->setStretchFactor(2, 5);
 
-  verticalSplitter->addWidget(topSplitter);
+    l_vertical_splitter->addWidget(l_top_splitter);
 
-  // Bottom half
-  QWidget * bottomWidget = new QWidget;
-  QGridLayout * bottomLayout = new QGridLayout;
+    // Bottom half
+    QWidget * l_bottom_widget = new QWidget;
+    QGridLayout * l_bottom_layout = new QGridLayout;
 
-  // The timeaxis
-  vibratoTimeAxis = new VibratoTimeAxis(0, noteLabelOffset);
+    // The timeaxis
+    m_vibrato_time_axis = new VibratoTimeAxis(0, l_note_label_offset);
 
-  // The drawing object for displaying vibrato notes
-  QFrame * vibratoFrame = new QFrame;
-  vibratoFrame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
-  QVBoxLayout * vibratoFrameLayout = new QVBoxLayout;
-  vibratoWidget = new VibratoWidget(0, noteLabelOffset);
-  vibratoWidget->setWhatsThis("Shows the vibrato of the current note. "
+    // The drawing object for displaying vibrato notes
+    QFrame * l_vibrato_frame = new QFrame;
+    l_vibrato_frame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
+    QVBoxLayout * l_vibrato_frame_layout = new QVBoxLayout;
+    m_vibrato_widget = new VibratoWidget(0, l_note_label_offset);
+    m_vibrato_widget->setWhatsThis("Shows the vibrato of the current note. "
     "Grey shading indicates the vibrato envelope. The black line indicates the center pitch. "
     "Other shading indicates half period times. "
     "If there is no vibrato (i.e. no wobbling frequency) it will probably just look a mess. ");
-  vibratoFrameLayout->addWidget(vibratoWidget);
-  vibratoFrameLayout->setMargin(0);
-  vibratoFrameLayout->setSpacing(0);
-  vibratoFrame->setLayout(vibratoFrameLayout);
+    l_vibrato_frame_layout->addWidget(m_vibrato_widget);
+    l_vibrato_frame_layout->setMargin(0);
+    l_vibrato_frame_layout->setSpacing(0);
+    l_vibrato_frame->setLayout(l_vibrato_frame_layout);
 
-  // The right side: vertical scrollwheel + vertical scrollbar
-  QGridLayout * bottomRightLayout = new QGridLayout;
+    // The right side: vertical scrollwheel + vertical scrollbar
+    QGridLayout * l_bottom_right_layout = new QGridLayout;
 
-  // The vertical scrollwheel
-  QwtWheel * zoomWheelV = new QwtWheel;
-  zoomWheelV->setOrientation(Qt::Vertical);
-  zoomWheelV->setWheelWidth(14);
-  zoomWheelV->setRange(0.3, 25.0, 0.1, 1);
-  zoomWheelV->setValue(1.0);
-  zoomWheelV->setFocusPolicy(Qt::NoFocus);
-  QToolTip::add(zoomWheelV, "Zoom vibrato view vertically");
-  bottomRightLayout->addWidget(zoomWheelV, 0, 0, 1, 1);
+    // The vertical scrollwheel
+    QwtWheel * l_zoom_wheel_V = new QwtWheel;
+    l_zoom_wheel_V->setOrientation(Qt::Vertical);
+    l_zoom_wheel_V->setWheelWidth(14);
+    l_zoom_wheel_V->setRange(0.3, 25.0, 0.1, 1);
+    l_zoom_wheel_V->setValue(1.0);
+    l_zoom_wheel_V->setFocusPolicy(Qt::NoFocus);
+    QToolTip::add(l_zoom_wheel_V, "Zoom vibrato view vertically");
+    l_bottom_right_layout->addWidget(l_zoom_wheel_V, 0, 0, 1, 1);
 
-  // The vertical scrollbar
-  QScrollBar * scrollBarV = new QScrollBar(Qt::Vertical);
-  scrollBarV->setRange(-250, 250);
-  scrollBarV->setValue(0);
-  scrollBarV->setPageStep(100);
-  QToolTip::add(scrollBarV, "Scroll vibrato view vertically");
-  bottomRightLayout->addWidget(scrollBarV, 1, 0, 4, 1);
-  bottomRightLayout->setRowStretch(1, 1);
+    // The vertical scrollbar
+    QScrollBar * l_scroll_bar_V = new QScrollBar(Qt::Vertical);
+    l_scroll_bar_V->setRange(-250, 250);
+    l_scroll_bar_V->setValue(0);
+    l_scroll_bar_V->setPageStep(100);
+    QToolTip::add(l_scroll_bar_V, "Scroll vibrato view vertically");
+    l_bottom_right_layout->addWidget(l_scroll_bar_V, 1, 0, 4, 1);
+    l_bottom_right_layout->setRowStretch(1, 1);
 
-  bottomRightLayout->setMargin(1);
-  bottomRightLayout->setSpacing(1);
+    l_bottom_right_layout->setMargin(1);
+    l_bottom_right_layout->setSpacing(1);
 
-  // The bottom side: dummy spacer + horizontal scrollwheel + resize grip
-  QGridLayout * bottomBottomLayout = new QGridLayout;
+    // The bottom side: dummy spacer + horizontal scrollwheel + resize grip
+    QGridLayout * l_bottom_bottom_layout = new QGridLayout;
 
-  // The dummy spacer
-  QLabel * dummyH = new QLabel;
-  bottomBottomLayout->addWidget(dummyH, 0, 0, 1, 4);
-  bottomBottomLayout->setColumnStretch(0, 1);
+    // The dummy spacer
+    QLabel * l_dummy_H = new QLabel;
+    l_bottom_bottom_layout->addWidget(l_dummy_H, 0, 0, 1, 4);
+    l_bottom_bottom_layout->setColumnStretch(0, 1);
 
-  // The horizontal scrollwheel
-  QwtWheel *zoomWheelH = new QwtWheel;
-  zoomWheelH->setOrientation(Qt::Horizontal);
-  zoomWheelH->setWheelWidth(14);
-  zoomWheelH->setRange(1, 100, 1, 1);
-  zoomWheelH->setValue(25);
-  zoomWheelH->setFocusPolicy(Qt::NoFocus);
-  QToolTip::add(zoomWheelH, "Zoom vibrato view horizontally");
-  bottomBottomLayout->addWidget(zoomWheelH, 0, 4, 1, 1);
+    // The horizontal scrollwheel
+    QwtWheel *l_zoom_wheel_H = new QwtWheel;
+    l_zoom_wheel_H->setOrientation(Qt::Horizontal);
+    l_zoom_wheel_H->setWheelWidth(14);
+    l_zoom_wheel_H->setRange(1, 100, 1, 1);
+    l_zoom_wheel_H->setValue(25);
+    l_zoom_wheel_H->setFocusPolicy(Qt::NoFocus);
+    QToolTip::add(l_zoom_wheel_H, "Zoom vibrato view horizontally");
+    l_bottom_bottom_layout->addWidget(l_zoom_wheel_H, 0, 4, 1, 1);
 
-  // The resize grip 
-  QSizeGrip * sizeGrip = new QSizeGrip(0);
-  sizeGrip->setFixedSize(15, 15);
-  bottomBottomLayout->addWidget(sizeGrip, 0, 5, 1, 1);
+    // The resize grip
+    QSizeGrip * l_size_grip = new QSizeGrip(0);
+    l_size_grip->setFixedSize(15, 15);
+    l_bottom_bottom_layout->addWidget(l_size_grip, 0, 5, 1, 1);
 
-  bottomBottomLayout->setMargin(1);
-  bottomBottomLayout->setSpacing(1);
+    l_bottom_bottom_layout->setMargin(1);
+    l_bottom_bottom_layout->setSpacing(1);
 
-  bottomLayout->addWidget(vibratoTimeAxis, 0, 0, 1, 1);
-  bottomLayout->addWidget(vibratoFrame, 1, 0, 1, 1);
-  bottomLayout->addLayout(bottomRightLayout, 1, 1, 1, 1);
-  bottomLayout->addLayout(bottomBottomLayout, 2, 0, 1, 2);
-  bottomLayout->setMargin(1);
-  bottomLayout->setSpacing(1);
+    l_bottom_layout->addWidget(m_vibrato_time_axis, 0, 0, 1, 1);
+    l_bottom_layout->addWidget(l_vibrato_frame, 1, 0, 1, 1);
+    l_bottom_layout->addLayout(l_bottom_right_layout, 1, 1, 1, 1);
+    l_bottom_layout->addLayout(l_bottom_bottom_layout, 2, 0, 1, 2);
+    l_bottom_layout->setMargin(1);
+    l_bottom_layout->setSpacing(1);
 
-  bottomWidget->setLayout(bottomLayout);
-  verticalSplitter->addWidget(bottomWidget);
+    l_bottom_widget->setLayout(l_bottom_layout);
+    l_vertical_splitter->addWidget(l_bottom_widget);
 
-  mainLayout->addWidget(verticalSplitter);
+    l_main_layout->addWidget(l_vertical_splitter);
 
-  mainLayout->setMargin(1);
-  mainLayout->setSpacing(1);
+    l_main_layout->setMargin(1);
+    l_main_layout->setSpacing(1);
 
-  setLayout(mainLayout);
+    setLayout(l_main_layout);
 
-  // Make signal/slot connections
+    // Make signal/slot connections
+    connect(gdata, SIGNAL(onChunkUpdate()), m_vibrato_speed_widget, SLOT(doUpdate()));
+    connect(gdata, SIGNAL(onChunkUpdate()), m_vibrato_circle_widget, SLOT(doUpdate()));
+    connect(gdata, SIGNAL(onChunkUpdate()), m_vibrato_period_widget, SLOT(doUpdate()));
+    connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), m_vibrato_time_axis, SLOT(update()));
+    connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), m_vibrato_widget, SLOT(updateGL()));
 
-  connect(gdata, SIGNAL(onChunkUpdate()), vibratoSpeedWidget, SLOT(doUpdate()));
+    // The vertical scrollbar
+    connect(l_scroll_bar_V, SIGNAL(valueChanged(int)), m_vibrato_widget, SLOT(setOffsetY(int)));
 
-  connect(gdata, SIGNAL(onChunkUpdate()), vibratoCircleWidget, SLOT(doUpdate()));
+    // The zoomwheels
+    connect(l_zoom_wheel_H, SIGNAL(valueChanged(double)), m_vibrato_widget, SLOT(setZoomFactorX(double)));
+    connect(l_zoom_wheel_H, SIGNAL(valueChanged(double)), m_vibrato_time_axis, SLOT(setZoomFactorX(double)));
+    connect(l_zoom_wheel_V, SIGNAL(valueChanged(double)), m_vibrato_widget, SLOT(setZoomFactorY(double)));
 
-  connect(gdata, SIGNAL(onChunkUpdate()), vibratoPeriodWidget, SLOT(doUpdate()));
-
-  connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), vibratoTimeAxis, SLOT(update()));
-
-  connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), vibratoWidget, SLOT(updateGL()));
-
-  // The vertical scrollbar
-  connect(scrollBarV, SIGNAL(valueChanged(int)), vibratoWidget, SLOT(setOffsetY(int)));
-
-  // The zoomwheels
-  connect(zoomWheelH, SIGNAL(valueChanged(double)), vibratoWidget, SLOT(setZoomFactorX(double)));
-  connect(zoomWheelH, SIGNAL(valueChanged(double)), vibratoTimeAxis, SLOT(setZoomFactorX(double)));
-  connect(zoomWheelV, SIGNAL(valueChanged(double)), vibratoWidget, SLOT(setZoomFactorY(double)));
-
-  // The buttons for the period view
-  connect(smoothedPeriodsButton, SIGNAL(toggled(bool)), vibratoPeriodWidget, SLOT(setSmoothedPeriods(bool)));
-  connect(drawSineReferenceButton, SIGNAL(toggled(bool)), vibratoPeriodWidget, SLOT(setDrawSineReference(bool)));
-  connect(sineStyleButton, SIGNAL(toggled(bool)), vibratoPeriodWidget, SLOT(setSineStyle(bool)));
-  connect(drawPrevPeriodsButton, SIGNAL(toggled(bool)), vibratoPeriodWidget, SLOT(setDrawPrevPeriods(bool)));
-  connect(periodScalingButton, SIGNAL(toggled(bool)), vibratoPeriodWidget, SLOT(setPeriodScaling(bool)));
-  connect(drawComparisonButton, SIGNAL(toggled(bool)), vibratoPeriodWidget, SLOT(setDrawComparison(bool)));
-
+    // The buttons for the period view
+    connect(l_smoothed_periods_button, SIGNAL(toggled(bool)), m_vibrato_period_widget, SLOT(setSmoothedPeriods(bool)));
+    connect(l_draw_sine_reference_button, SIGNAL(toggled(bool)), m_vibrato_period_widget, SLOT(setDrawSineReference(bool)));
+    connect(l_sine_style_button, SIGNAL(toggled(bool)), m_vibrato_period_widget, SLOT(setSineStyle(bool)));
+    connect(l_draw_prev_periods_button, SIGNAL(toggled(bool)), m_vibrato_period_widget, SLOT(setDrawPrevPeriods(bool)));
+    connect(l_period_scaling_button, SIGNAL(toggled(bool)), m_vibrato_period_widget, SLOT(setPeriodScaling(bool)));
+    connect(l_draw_comparison_button, SIGNAL(toggled(bool)), m_vibrato_period_widget, SLOT(setDrawComparison(bool)));
 }
 
 //------------------------------------------------------------------------------
 VibratoView::~VibratoView(void)
 {
-  delete vibratoWidget;
+    delete m_vibrato_widget;
 }
 
 //------------------------------------------------------------------------------
 QSize VibratoView::sizeHint(void) const
 {
-  return QSize(500, 300);
+    return QSize(500, 300);
 }
 // EOF
