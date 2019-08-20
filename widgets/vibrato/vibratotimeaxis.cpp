@@ -4,7 +4,9 @@
     begin                : May 18 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
- 
+    copyright            : (C) 2019 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2 of the License, or
@@ -18,20 +20,20 @@
 #include "analysisdata.h"
 
 //------------------------------------------------------------------------------
-VibratoTimeAxis::VibratoTimeAxis(QWidget *parent, int nls):
-  DrawWidget(parent)
+VibratoTimeAxis::VibratoTimeAxis(QWidget *p_parent, int p_nls):
+  DrawWidget(p_parent)
 {
   setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed, false));
 
   // The horizontal space in pixels a note label requires + 2 for the border of the VibratoWidget
-  noteLabelOffset = nls + 2;
-  startChunkToUse = -1;
-  currentChunkToUse = -1;
-  endChunkToUse = -1;
-  noteLengthToUse = 0.0;
-  prevCurrentChunk = -1;
-  prevWindowOffset = -999999;
-  zoomFactorX = 2.0;
+  m_note_label_offset = p_nls + 2;
+  m_start_chunk_to_use = -1;
+  m_current_chunk_to_use = -1;
+  m_end_chunk_to_use = -1;
+  m_note_length_to_use = 0.0;
+  m_prev_current_chunk = -1;
+  m_prev_window_offset = -999999;
+  m_zoom_factor_X = 2.0;
 }
 
 //------------------------------------------------------------------------------
@@ -48,89 +50,89 @@ void VibratoTimeAxis::paintEvent(QPaintEvent *)
 
   doUpdate();
 
-  if (currentChunkToUse >= 0)
+  if (m_current_chunk_to_use >= 0)
     {
-      QFontMetrics fm = get_painter().fontMetrics();
-      QString s;
+      QFontMetrics l_font_metrics = get_painter().fontMetrics();
+      QString l_string;
       get_painter().setBrush(Qt::black);
       get_painter().setFont(QFont("AnyStyle", 12));
 
-      int polyLengthInPixels = toInt((endChunkToUse - startChunkToUse) * zoomFactorX);
-      float pixelsPerSecond = polyLengthInPixels / noteLengthToUse;
-      int notchesDivider = 2;
-      double secondsPerNotch = 5;
-      int calculationStep = 1;
+      int l_poly_length_in_pixels = toInt((m_end_chunk_to_use - m_start_chunk_to_use) * m_zoom_factor_X);
+      float l_pixels_per_second = l_poly_length_in_pixels / m_note_length_to_use;
+      int l_notches_divider = 2;
+      double l_seconds_per_notch = 5;
+      int l_calculation_step = 1;
 
       // Calculate which notches and labels to draw
-      for (int pixelsPerSecondThreshold = 25; ; pixelsPerSecondThreshold *= 2)
+      for (int l_pixels_per_second_threshold = 25; ; l_pixels_per_second_threshold *= 2)
 	{
-	  if (pixelsPerSecond < pixelsPerSecondThreshold)
+	  if (l_pixels_per_second < l_pixels_per_second_threshold)
 	    {
 	      break;
 	    }
 	  else
 	    {
-	      switch (calculationStep)
+	      switch (l_calculation_step)
 		{
 		case 1:
-		  notchesDivider = 5;
-		  secondsPerNotch /= 5;
-		  calculationStep = 2;
+		  l_notches_divider = 5;
+		  l_seconds_per_notch /= 5;
+		  l_calculation_step = 2;
 		  break;
 		case 2:
-		  notchesDivider = 2;
-		  secondsPerNotch = secondsPerNotch;
-		  calculationStep = 3;
+		  l_notches_divider = 2;
+		  l_seconds_per_notch = l_seconds_per_notch;
+		  l_calculation_step = 3;
 		  break;
 		case 3:
-		  notchesDivider = 2;
-		  secondsPerNotch /= 2;
-		  calculationStep = 1;
+		  l_notches_divider = 2;
+		  l_seconds_per_notch /= 2;
+		  l_calculation_step = 1;
 		  break;
 		}
 	    }
 	}
 
       // Draw the notches + labels
-      for (int i = 0; i < (noteLengthToUse / secondsPerNotch); i++)
+      for (int l_index = 0; l_index < (m_note_length_to_use / l_seconds_per_notch); l_index++)
 	{
-	  int x = toInt((((endChunkToUse - startChunkToUse) * zoomFactorX) / noteLengthToUse) * i * secondsPerNotch - windowOffsetToUse);
-	  if ((x >= 0) && (x < width()))
+	  int l_x = toInt((((m_end_chunk_to_use - m_start_chunk_to_use) * m_zoom_factor_X) / m_note_length_to_use) * l_index * l_seconds_per_notch - m_window_offset_to_use);
+	  if ((l_x >= 0) && (l_x < width()))
 	    {
-	      if (i % notchesDivider == 0)
+	      if (l_index % l_notches_divider == 0)
 		{
 		  // Even: bigger notch + label
-		  get_painter().drawLine(x, height() - 6, x, height() - 1);
+		  get_painter().drawLine(l_x, height() - 6, l_x, height() - 1);
 		  // The 1.000001 factors in the following statements prevent freaky rounding/floor errors...
-		  int minutes = intFloor(i * secondsPerNotch * 1.000001) / 60;
-		  int seconds = intFloor(i * secondsPerNotch * 1.000001) % 60;
-		  int thousandthseconds = intFloor(1000 * i *secondsPerNotch * 1.000001) % 1000;
-		  if (thousandthseconds == 0)
+		  int l_minutes = intFloor(l_index * l_seconds_per_notch * 1.000001) / 60;
+		  int l_seconds = intFloor(l_index * l_seconds_per_notch * 1.000001) % 60;
+		  int l_thousandth_seconds = intFloor(1000 * l_index *l_seconds_per_notch * 1.000001) % 1000;
+		  if (l_thousandth_seconds == 0)
 		    {
 		      // Label: m:ss
-		      s.sprintf("%1d:%02d", minutes, seconds);
+		      l_string.sprintf("%1d:%02d", l_minutes, l_seconds);
 		    }
-		  else if (thousandthseconds % 100 == 0)
+		  else if (l_thousandth_seconds % 100 == 0)
 		    {
 		      // Label: m:ss.h
-		      s.sprintf("%1d:%02d.%01d", minutes, seconds, thousandthseconds / 100);
+		      l_string.sprintf("%1d:%02d.%01d", l_minutes, l_seconds, l_thousandth_seconds / 100);
 		    }
-		  else if (thousandthseconds % 10 == 0)
+		  else if (l_thousandth_seconds % 10 == 0)
 		    {
 		      // Label: m:ss.hh
-		      s.sprintf("%1d:%02d.%02d", minutes, seconds, thousandthseconds / 10);
+		      l_string.sprintf("%1d:%02d.%02d", l_minutes, l_seconds, l_thousandth_seconds / 10);
 		    }
 		  else
 		    {
 		      // Label: m:ss.hhh
-		      s.sprintf("%1d:%02d.%03d", minutes, seconds, thousandthseconds);
+		      l_string.sprintf("%1d:%02d.%03d", l_minutes, l_seconds, l_thousandth_seconds);
 		    }
-		  get_painter().drawText(x - fm.width(s) / 2, 12, s);
+		  get_painter().drawText(l_x - l_font_metrics.width(l_string) / 2, 12, l_string);
 		}
 	      else
 		{
 		  // Odd: smaller notch
-		  get_painter().drawLine(x, height() - 3, x, height() - 1);
+		  get_painter().drawLine(l_x, height() - 3, l_x, height() - 1);
 		}
 	    }
 	}
@@ -145,94 +147,94 @@ void VibratoTimeAxis::paintEvent(QPaintEvent *)
 void VibratoTimeAxis::resizeEvent(QResizeEvent *)
 {
   // Do forced update on resize
-  prevCurrentChunk = -1;
+  m_prev_current_chunk = -1;
   update();
 }
 
 //------------------------------------------------------------------------------
 void VibratoTimeAxis::doUpdate(void)
 {
-  Channel *active = gdata->getActiveChannel();
+  Channel * l_active_channel = gdata->getActiveChannel();
 
-  int myStartChunk = -1;
-  int myCurrentChunk = -1;
-  int myEndChunk = -1;
-  double myNoteLength = 0.0;
-  int myWindowOffset = -999999;
+  int l_my_start_chunk = -1;
+  int l_my_current_chunk = -1;
+  int l_my_end_chunk = -1;
+  double l_my_note_length = 0.0;
+  int l_my_window_offset = -999999;
 
-  if (active)
+  if (l_active_channel)
     {
-      AnalysisData * data = active->dataAtCurrentChunk();
-      if(data && active->isVisibleNote(data->getNoteIndex()) && active->isLabelNote(data->getNoteIndex()))
+      AnalysisData * l_data = l_active_channel->dataAtCurrentChunk();
+      if(l_data && l_active_channel->isVisibleNote(l_data->getNoteIndex()) && l_active_channel->isLabelNote(l_data->getNoteIndex()))
 	{
-	  const NoteData * note = new NoteData();
-	  note = &active->get_note_data()[data->getNoteIndex()];
+	  const NoteData * l_note = new NoteData();
+	  l_note = &l_active_channel->get_note_data()[l_data->getNoteIndex()];
 
-	  myStartChunk = note->startChunk();
-	  myCurrentChunk = active->chunkAtCurrentTime();
-	  myEndChunk = note->endChunk();
-	  myNoteLength = note->noteLength();
+	  l_my_start_chunk = l_note->startChunk();
+	  l_my_current_chunk = l_active_channel->chunkAtCurrentTime();
+	  l_my_end_chunk = l_note->endChunk();
+	  l_my_note_length = l_note->noteLength();
 
 	  // Calculate windowoffset
-	  if ((myEndChunk - myStartChunk) * zoomFactorX > width() - 2 * noteLabelOffset)
+	  if ((l_my_end_chunk - l_my_start_chunk) * m_zoom_factor_X > width() - 2 * m_note_label_offset)
 	    {
 	      // The vibrato-polyline doesn't fit in the window
-	      if ((myCurrentChunk - myStartChunk) * zoomFactorX < (width() - 2 * noteLabelOffset) / 2)
+	      if ((l_my_current_chunk - l_my_start_chunk) * m_zoom_factor_X < (width() - 2 * m_note_label_offset) / 2)
 		{
 		  // We're at the left side of the vibrato-polyline
-		  myWindowOffset = 0 - noteLabelOffset;
+		  l_my_window_offset = 0 - m_note_label_offset;
 		}
-	      else if ((myEndChunk - myCurrentChunk) * zoomFactorX < (width() - 2 * noteLabelOffset) / 2)
+	      else if ((l_my_end_chunk - l_my_current_chunk) * m_zoom_factor_X < (width() - 2 * m_note_label_offset) / 2)
 		{
 		  // We're at the right side of the vibrato-polyline
-		  myWindowOffset = toInt((myEndChunk - myStartChunk) * zoomFactorX - width() + noteLabelOffset + 1);
+		  l_my_window_offset = toInt((l_my_end_chunk - l_my_start_chunk) * m_zoom_factor_X - width() + m_note_label_offset + 1);
 		}
 	      else
 		{
 		  // We're somewhere in the middle of the vibrato-polyline
-		  myWindowOffset = toInt((myCurrentChunk - myStartChunk) * zoomFactorX - width() / 2);
+		  l_my_window_offset = toInt((l_my_current_chunk - l_my_start_chunk) * m_zoom_factor_X - width() / 2);
 		}
 	    }
 	  else
 	    {
 	      // The vibrato-polyline does fit in the window
-	      myWindowOffset = 0 - noteLabelOffset;
+	      l_my_window_offset = 0 - m_note_label_offset;
 	    }
 	}
     }
 
-  if (myCurrentChunk == -1)
+  if (l_my_current_chunk == -1)
     {
       // No note
-      if (prevCurrentChunk == myCurrentChunk)
+      if (m_prev_current_chunk == l_my_current_chunk)
 	{
 	  // Still no timeaxis needed, no update needed
 	}
       else
 	{
 	  // Timeaxis should be erased, update widget
-	  prevCurrentChunk = -1;
-	  prevWindowOffset = -999999;
-	  currentChunkToUse = -1;
+	  m_prev_current_chunk = -1;
+	  m_prev_window_offset = -999999;
+	  m_current_chunk_to_use = -1;
 	}
     }
   else
     {
       // Note
-      if (prevWindowOffset == myWindowOffset)
+      if (m_prev_window_offset == l_my_window_offset)
 	{
 	  // No movement, don't redraw timeaxis
 	}
       else
 	{
 	  // Position in note to draw has changed, so draw the timeaxis
-	  prevCurrentChunk = myCurrentChunk;
-	  prevWindowOffset = myWindowOffset;
-	  startChunkToUse = myStartChunk;
-	  currentChunkToUse = myCurrentChunk;
-	  endChunkToUse = myEndChunk;
-	  noteLengthToUse = myNoteLength;
-	  windowOffsetToUse = myWindowOffset;
+	  m_prev_current_chunk = l_my_current_chunk;
+	  m_prev_window_offset = l_my_window_offset;
+	  m_start_chunk_to_use = l_my_start_chunk;
+	  m_current_chunk_to_use = l_my_current_chunk;
+	  m_end_chunk_to_use = l_my_end_chunk;
+	  m_note_length_to_use = l_my_note_length;
+	  m_window_offset_to_use = l_my_window_offset;
 	}
     }
 }
@@ -240,10 +242,10 @@ void VibratoTimeAxis::doUpdate(void)
 //------------------------------------------------------------------------------
 void VibratoTimeAxis::setZoomFactorX(double x)
 {
-  zoomFactorX = 2 * pow10(log2(x / 25));
+  m_zoom_factor_X = 2 * pow10(log2(x / 25));
 
   // Do forced update on changed zoomwheel
-  prevWindowOffset = -1;
+  m_prev_window_offset = -1;
 
   update();
 }
