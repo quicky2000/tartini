@@ -23,36 +23,42 @@ class VibratoTimeAxis: public DrawWidget
 {
   Q_OBJECT
 
- public:
-  VibratoTimeAxis(QWidget * p_parent, int p_nls);
-  virtual ~VibratoTimeAxis(void);
+  public:
+    VibratoTimeAxis(QWidget * p_parent, int p_nls);
+    virtual ~VibratoTimeAxis(void);
 
-  QSize sizeHint(void) const;
+    QSize sizeHint(void) const;
 
-  void paintEvent(QPaintEvent *);
-  void resizeEvent( QResizeEvent *);
+    void paintEvent(QPaintEvent *);
+    void resizeEvent( QResizeEvent *);
 
  private:
-  //data goes here
-  /**
-     The horizontal space in pixels a note label requires
-  */
-  int m_note_label_offset;
+    //data goes here
+    /**
+     * The horizontal space in pixels a note label requires
+     */
+    int m_note_label_offset;
 
-  int m_start_chunk_to_use;
-  int m_current_chunk_to_use;
-  int m_end_chunk_to_use;
-  double m_note_length_to_use;
-  int m_window_offset_to_use;
+    int m_start_chunk_to_use;
 
-  int m_prev_current_chunk;
-  int m_prev_window_offset;
+    int m_current_chunk_to_use;
 
-  double m_zoom_factor_X;
+    int m_end_chunk_to_use;
+
+    double m_note_length_to_use;
+
+    int m_window_offset_to_use;
+
+    int m_prev_current_chunk;
+
+    int m_prev_window_offset;
+
+    double m_zoom_factor_X;
 
  public slots:
-  void doUpdate(void);
-  void setZoomFactorX(double x);
+    void doUpdate(void);
+
+    void setZoomFactorX(double p_x);
 };
 #endif // VIBRATOTIMEAXIS_H
 // EOF
