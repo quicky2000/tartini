@@ -23,52 +23,58 @@ class VibratoSpeedWidget: public QGLWidget
 {
   Q_OBJECT
 
- public:
-  VibratoSpeedWidget(QWidget * p_parent);
-  virtual ~VibratoSpeedWidget(void);
+  public:
+    VibratoSpeedWidget(QWidget * p_parent);
+    virtual ~VibratoSpeedWidget(void);
 
-  void initializeGL(void);
-  void resizeGL(int p_width, int p_height);
-  void paintGL(void);
+    void initializeGL(void);
+    void resizeGL(int p_width
+                 ,int p_height
+                 );
+    void paintGL(void);
 
-  QSize minimumSizeHint(void) const;
+    QSize minimumSizeHint(void) const;
 
  public slots:
-  void doUpdate(void);
-  void setUseProny(bool p_value);
+    void doUpdate(void);
+    void setUseProny(bool p_value);
 
  private:
-  //data goes here
-  float m_speed_value_to_draw, m_width_value_to_draw;
-  float m_prev_vibrato_speed, m_prev_vibrato_width;
+    //data goes here
+    float m_speed_value_to_draw;
+    float m_width_value_to_draw;
+    float m_prev_vibrato_speed;
+    float m_prev_vibrato_width;
 
-  bool m_use_prony;
+    bool m_use_prony;
 
-  QFont m_speed_width_font;
+    QFont m_speed_width_font;
 
-  int m_width_limit;
-  int m_prev_note_number;
+    int m_width_limit;
+    int m_prev_note_number;
 
-  float m_hz_label_X, m_hz_label_Y;
-  float m_cents_label_X, m_cents_label_Y;
+    float m_hz_label_X;
+    float m_hz_label_Y;
+    float m_cents_label_X;
+    float m_cents_label_Y;
 
-  struct labelStruct
-  {
-    QString label;
-    float x;
-    float y;
-  };
+    struct labelStruct
+    {
+        QString label;
+        float x;
+        float y;
+    };
 
-  int m_speed_label_counter;
-  labelStruct m_speed_labels[100];
+    int m_speed_label_counter;
+    labelStruct m_speed_labels[100];
 
-  int m_width_label_counter;
-  labelStruct m_width_labels[100];
+    int m_width_label_counter;
+    labelStruct m_width_labels[100];
 
-  GLuint m_speed_dial;
-  GLuint m_speed_needle;
-  GLuint m_width_dial;
-  GLuint m_width_needle;
+    GLuint m_speed_dial;
+    GLuint m_speed_needle;
+    GLuint m_width_dial;
+    GLuint m_width_needle;
 };
 #endif // VIBRATOSPEEDWIDGET_H
 // EOF
