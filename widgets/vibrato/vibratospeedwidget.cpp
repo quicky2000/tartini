@@ -4,7 +4,9 @@
     begin                : May 18 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
- 
+    copyright            : (C) 2019 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2 of the License, or
@@ -20,29 +22,29 @@
 #include <gl.h>
 
 //------------------------------------------------------------------------------
-VibratoSpeedWidget::VibratoSpeedWidget(QWidget * parent):
-  QGLWidget(parent)
+VibratoSpeedWidget::VibratoSpeedWidget(QWidget * p_parent):
+  QGLWidget(p_parent)
 {
-  speedValueToDraw = 0;
-  widthValueToDraw = 0;
-  prevVibratoSpeed = 0;
-  prevVibratoWidth = 0;
-  useProny = true;
-  widthLimit = 50;
-  prevNoteNumber = -1;
-  speedLabelCounter = 0;
-  widthLabelCounter = 0;
-  for (int i = 0; i < 100; i++)
+  m_speed_value_to_draw = 0;
+  m_width_value_to_draw = 0;
+  m_prev_vibrato_speed = 0;
+  m_prev_vibrato_width = 0;
+  m_use_prony = true;
+  m_width_limit = 50;
+  m_prev_note_number = -1;
+  m_speed_label_counter = 0;
+  m_width_label_counter = 0;
+  for (int l_index = 0; l_index < 100; l_index++)
     {
-      speedLabels[i].label = QString(8,' ');
-      speedLabels[i].x = 0.0f;
-      speedLabels[i].y = 0.0f;
-      widthLabels[i].label = QString(8,' ');
-      widthLabels[i].x = 0.0f;
-      widthLabels[i].y = 0.0f;
+      m_speed_labels[l_index].label = QString(8,' ');
+      m_speed_labels[l_index].x = 0.0f;
+      m_speed_labels[l_index].y = 0.0f;
+      m_width_labels[l_index].label = QString(8,' ');
+      m_width_labels[l_index].x = 0.0f;
+      m_width_labels[l_index].y = 0.0f;
     }
-  speedWidthFont = QFont();
-  speedWidthFont.setPointSize(9);
+  m_speed_width_font = QFont();
+  m_speed_width_font.setPointSize(9);
 }
 
 //------------------------------------------------------------------------------
@@ -51,17 +53,17 @@ VibratoSpeedWidget::~VibratoSpeedWidget(void)
   // Remove display lists
   makeCurrent();
 
-  glDeleteLists(speedDial, 1);
-  glDeleteLists(speedNeedle, 1);
-  glDeleteLists(widthDial, 1);
-  glDeleteLists(widthNeedle, 1);
+  glDeleteLists(m_speed_dial, 1);
+  glDeleteLists(m_speed_needle, 1);
+  glDeleteLists(m_width_dial, 1);
+  glDeleteLists(m_width_needle, 1);
 }
 
 //------------------------------------------------------------------------------
 void VibratoSpeedWidget::initializeGL(void)
 {
-  QColor bg = gdata->backgroundColor();
-  glClearColor( double(bg.red()) / 256.0, double(bg.green()) / 256.0, double(bg.blue()) / 256.0, 0.0 );
+  QColor l_bg = gdata->backgroundColor();
+  glClearColor( double(l_bg.red()) / 256.0, double(l_bg.green()) / 256.0, double(l_bg.blue()) / 256.0, 0.0 );
   glClear(GL_COLOR_BUFFER_BIT);
 
   glEnable(GL_BLEND);
@@ -74,83 +76,83 @@ void VibratoSpeedWidget::initializeGL(void)
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_COLOR_ARRAY);
 
-  speedDial = glGenLists(1);
-  speedNeedle = glGenLists(1);
-  widthDial = glGenLists(1);
-  widthNeedle = glGenLists(1);
+  m_speed_dial = glGenLists(1);
+  m_speed_needle = glGenLists(1);
+  m_width_dial = glGenLists(1);
+  m_width_needle = glGenLists(1);
 }
 
 //------------------------------------------------------------------------------
-void VibratoSpeedWidget::resizeGL(int w, int h)
+void VibratoSpeedWidget::resizeGL(int p_width, int p_height)
 {
-  glViewport(0, 0, (GLint)w, (GLint)h);
+  glViewport(0, 0, (GLint)p_width, (GLint)p_height);
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluOrtho2D(0, w, 0, h);
+  gluOrtho2D(0, p_width, 0, p_height);
 
-  const float halfWidth = 0.5 * width();
-  const float halfHeight = 0.5 * height();
-  const float radius = 1.8 * MAX(halfHeight, halfWidth);
-  const float theta = asin(float(width()) / (2 * radius));
-  const float rho = (PI / 2.0) - theta;
+  const float l_half_width = 0.5 * width();
+  const float l_half_height = 0.5 * height();
+  const float l_radius = 1.8 * MAX(l_half_height, l_half_width);
+  const float l_theta = asin(float(width()) / (2 * l_radius));
+  const float l_rho = (PI / 2.0) - l_theta;
 
 
   // Calculate the speed dial with the new width & height
-  const float speedCenterX = halfWidth;
-  const float speedCenterY = height() - radius;
+  const float l_speed_center_X = l_half_width;
+  const float l_speed_center_Y = height() - l_radius;
 
-  glNewList(speedDial, GL_COMPILE);
+  glNewList(m_speed_dial, GL_COMPILE);
 
   // Calculate the coordinates of the points on the upper arc
-  float *speedUpperArcX, *speedUpperArcY;
-  speedUpperArcX = new float[width()];
-  speedUpperArcY = new float[width()];
-  float speedUpperArcTheta = -theta;
-  float speedUpperArcThetaStep = (2 * theta) / width();
-  for (int x = 0; x < width(); x++)
+  float *l_speed_upper_arc_X, *l_speed_upper_arc_Y;
+  l_speed_upper_arc_X = new float[width()];
+  l_speed_upper_arc_Y = new float[width()];
+  float l_speed_upper_arc_theta = -l_theta;
+  float l_speed_upper_arc_theta_step = (2 * l_theta) / width();
+  for (int l_x = 0; l_x < width(); l_x++)
     {
-      speedUpperArcX[x] = x;
-      speedUpperArcY[x] = speedCenterY + (sin(0.5*PI - speedUpperArcTheta) * radius);
-      speedUpperArcTheta += speedUpperArcThetaStep;
+      l_speed_upper_arc_X[l_x] = l_x;
+      l_speed_upper_arc_Y[l_x] = l_speed_center_Y + (sin(0.5*PI - l_speed_upper_arc_theta) * l_radius);
+      l_speed_upper_arc_theta += l_speed_upper_arc_theta_step;
     }
 
   // Calculate the white semicircle of the dial
   glBegin(GL_TRIANGLE_FAN);
   glColor3ub(255, 255, 255);
-  glVertex2f(speedCenterX, speedCenterY);
-  for (int x = 0; x < width(); x++)
+  glVertex2f(l_speed_center_X, l_speed_center_Y);
+  for (int l_x = 0; l_x < width(); l_x++)
     {
-      glVertex2f(speedUpperArcX[x], speedUpperArcY[x]);
+      glVertex2f(l_speed_upper_arc_X[l_x], l_speed_upper_arc_Y[l_x]);
     }
   glEnd();
 
   // Calculate the black outline of the dial
   glBegin(GL_LINE_LOOP);
   glColor3ub(0, 0, 0);
-  glVertex2f(speedCenterX, speedCenterY);
-  for (int x = 0; x < width(); x++)
+  glVertex2f(l_speed_center_X, l_speed_center_Y);
+  for (int l_x = 0; l_x < width(); l_x++)
     {
-      glVertex2f(speedUpperArcX[x], speedUpperArcY[x]);
+      glVertex2f(l_speed_upper_arc_X[l_x], l_speed_upper_arc_Y[l_x]);
     }
   glEnd();
 
   // Calculate the black arc inside the dial
   glBegin(GL_LINE_STRIP);
   glColor3ub(0, 0, 0);
-  float speedLowerArcTheta = -theta;
-  float speedLowerArcThetaStep = (2 * theta) / halfWidth;
-  for (float x = 0.25 * width(); x < 0.75 * width(); x++)
+  float l_speed_lower_arc_theta = -l_theta;
+  float l_speed_lower_arc_theta_step = (2 * l_theta) / l_half_width;
+  for (float l_x = 0.25 * width(); l_x < 0.75 * width(); l_x++)
     {
-      glVertex2f(x, speedCenterY + (0.5 * sin(0.5*PI - speedLowerArcTheta) * radius));
-      speedLowerArcTheta += speedLowerArcThetaStep;
+      glVertex2f(l_x, l_speed_center_Y + (0.5 * sin(0.5*PI - l_speed_lower_arc_theta) * l_radius));
+      l_speed_lower_arc_theta += l_speed_lower_arc_theta_step;
     }
   glEnd();
 
   // Calculate line markings & text labels
-  float speedStep = (2 * theta) / 14.0;
-  speedLabelCounter = 0;
-  const char * speedLabelLookup[13] =
+  float l_speed_step = (2 * l_theta) / 14.0;
+  m_speed_label_counter = 0;
+  const char * l_speed_label_lookup[13] =
     {
       "12   ",
       "11",
@@ -167,62 +169,62 @@ void VibratoSpeedWidget::resizeGL(int w, int h)
       "0"
     };
 
-  for (int j = 0; j < 13; j++)
+  for (int l_j = 0; l_j < 13; l_j++)
     {
-      float i = rho + speedStep * (j + 1);
-      float startX = speedCenterX + radius * cos(i);
-      float startY = speedCenterY + radius * sin(i);
+      float l_i = l_rho + l_speed_step * (l_j + 1);
+      float l_start_X = l_speed_center_X + l_radius * cos(l_i);
+      float l_start_Y = l_speed_center_Y + l_radius * sin(l_i);
       if (width() < 175)
 	{
 	  // Small dial
-	  if ((j % 4) == 0)
+	  if ((l_j % 4) == 0)
 	    {
 	      // Bigger marking + text label
 	      glBegin(GL_LINES);
 	      glColor3ub(0, 0, 0);
-	      glVertex2f(startX, startY);
-	      glVertex2f(startX + 0.05 * (speedCenterX - startX), startY + 0.05 * (speedCenterY - startY));
+	      glVertex2f(l_start_X, l_start_Y);
+	      glVertex2f(l_start_X + 0.05 * (l_speed_center_X - l_start_X), l_start_Y + 0.05 * (l_speed_center_Y - l_start_Y));
 	      glEnd();
 
-	      speedLabels[speedLabelCounter].x = startX + 0.08 * (speedCenterX - startX);
-	      speedLabels[speedLabelCounter].y = startY + 0.08 * (speedCenterY - startY);
-	      speedLabels[speedLabelCounter++].label = speedLabelLookup[j];
+	      m_speed_labels[m_speed_label_counter].x = l_start_X + 0.08 * (l_speed_center_X - l_start_X);
+	      m_speed_labels[m_speed_label_counter].y = l_start_Y + 0.08 * (l_speed_center_Y - l_start_Y);
+	      m_speed_labels[m_speed_label_counter++].label = l_speed_label_lookup[l_j];
 	    }
 	  else
 	    {
 	      // Smaller marking, no text label
 	      glBegin(GL_LINES);
 	      glColor3ub(0, 0, 0);
-	      glVertex2f(startX, startY);
-	      glVertex2f(startX + 0.03 * (speedCenterX - startX), startY + 0.03 * (speedCenterY - startY));
+	      glVertex2f(l_start_X, l_start_Y);
+	      glVertex2f(l_start_X + 0.03 * (l_speed_center_X - l_start_X), l_start_Y + 0.03 * (l_speed_center_Y - l_start_Y));
 	      glEnd();
 	    }
 	}
       else if (width() < 300)
 	{
 	  // Bigger dial
-	  if ((j % 2) == 0)
+	  if ((l_j % 2) == 0)
 	    {
 	      // Bigger marking + text label
-	      speedLabelLookup[0] = "12";
+	      l_speed_label_lookup[0] = "12";
 
 	      glBegin(GL_LINES);
 	      glColor3ub(0, 0, 0);
-	      glVertex2f(startX, startY);
-	      glVertex2f(startX + 0.05 * (speedCenterX - startX), startY + 0.05 * (speedCenterY - startY));
+	      glVertex2f(l_start_X, l_start_Y);
+	      glVertex2f(l_start_X + 0.05 * (l_speed_center_X - l_start_X), l_start_Y + 0.05 * (l_speed_center_Y - l_start_Y));
 	      glEnd();
 
-	      speedLabels[speedLabelCounter].x = startX + 0.08 * (speedCenterX - startX);
-	      speedLabels[speedLabelCounter].y = startY + 0.08 * (speedCenterY - startY);
-	      speedLabels[speedLabelCounter++].label = speedLabelLookup[j];
+	      m_speed_labels[m_speed_label_counter].x = l_start_X + 0.08 * (l_speed_center_X - l_start_X);
+	      m_speed_labels[m_speed_label_counter].y = l_start_Y + 0.08 * (l_speed_center_Y - l_start_Y);
+	      m_speed_labels[m_speed_label_counter++].label = l_speed_label_lookup[l_j];
 	    }
 	  else
 	    {
 	      // Smaller marking, no text label
 	      glBegin(GL_LINES);
 	      glColor3ub(0, 0, 0);
-	      glVertex2f(startX, startY);
-	      glVertex2f(startX + 0.03 * (speedCenterX - startX), startY + 0.03 * (speedCenterY - startY));
+	      glVertex2f(l_start_X, l_start_Y);
+	      glVertex2f(l_start_X + 0.03 * (l_speed_center_X - l_start_X), l_start_Y + 0.03 * (l_speed_center_Y - l_start_Y));
 	      glEnd();
 	    }
 	}
@@ -230,114 +232,114 @@ void VibratoSpeedWidget::resizeGL(int w, int h)
 	{
 	  // Big dial
 	  // Bigger marking + text label
-	  speedLabelLookup[0] = "12";
+	  l_speed_label_lookup[0] = "12";
 
 	  glBegin(GL_LINES);
 	  glColor3ub(0, 0, 0);
-	  glVertex2f(startX, startY);
-	  glVertex2f(startX + 0.05 * (speedCenterX - startX), startY + 0.05 * (speedCenterY - startY));
+	  glVertex2f(l_start_X, l_start_Y);
+	  glVertex2f(l_start_X + 0.05 * (l_speed_center_X - l_start_X), l_start_Y + 0.05 * (l_speed_center_Y - l_start_Y));
 	  glEnd();
 
-	  speedLabels[speedLabelCounter].x = startX + 0.08 * (speedCenterX - startX);
-	  speedLabels[speedLabelCounter].y = startY + 0.08 * (speedCenterY - startY);
-	  speedLabels[speedLabelCounter++].label = speedLabelLookup[j];
+	  m_speed_labels[m_speed_label_counter].x = l_start_X + 0.08 * (l_speed_center_X - l_start_X);
+	  m_speed_labels[m_speed_label_counter].y = l_start_Y + 0.08 * (l_speed_center_Y - l_start_Y);
+	  m_speed_labels[m_speed_label_counter++].label = l_speed_label_lookup[l_j];
 	}
     }
 
   // Calculate the "Hz" label
-  hzLabelX = speedCenterX;
-  hzLabelY = speedCenterY + 0.7 * radius;
+  m_hz_label_X = l_speed_center_X;
+  m_hz_label_Y = l_speed_center_Y + 0.7 * l_radius;
 
   glEndList();
 
-  delete[] speedUpperArcX;
-  delete[] speedUpperArcY;
+  delete[] l_speed_upper_arc_X;
+  delete[] l_speed_upper_arc_Y;
 
 
   // Calculate the width dial with the new width & height
-  const float widthCenterX = halfWidth;
-  const float widthCenterY = halfHeight - radius;
+  const float l_width_center_X = l_half_width;
+  const float l_width_center_Y = l_half_height - l_radius;
 
-  glNewList(widthDial, GL_COMPILE);
+  glNewList(m_width_dial, GL_COMPILE);
 
   // Calculate the openGL-coordinates of the points on the upper arc
-  float *widthUpperArcX, *widthUpperArcY;
-  widthUpperArcX = new float[width()];
-  widthUpperArcY = new float[width()];
-  float widthUpperArcTheta = -theta;
-  float widthUpperArcThetaStep = (2 * theta) / width();
-  for (int x = 0; x < width(); x++)
+  float *l_width_upper_arc_X, *l_width_upper_arc_Y;
+  l_width_upper_arc_X = new float[width()];
+  l_width_upper_arc_Y = new float[width()];
+  float l_width_upper_arc_theta = -l_theta;
+  float l_width_upper_arc_theta_step = (2 * l_theta) / width();
+  for (int l_x = 0; l_x < width(); l_x++)
     {
-      widthUpperArcX[x] = x;
-      widthUpperArcY[x] = widthCenterY + (sin(0.5 * PI - widthUpperArcTheta) * radius);
-      widthUpperArcTheta += widthUpperArcThetaStep;
+      l_width_upper_arc_X[l_x] = l_x;
+      l_width_upper_arc_Y[l_x] = l_width_center_Y + (sin(0.5 * PI - l_width_upper_arc_theta) * l_radius);
+      l_width_upper_arc_theta += l_width_upper_arc_theta_step;
     }
 
   // Calculate the white semicircle of the dial
   glBegin(GL_TRIANGLE_FAN);
   glColor3ub(255, 255, 255);
-  glVertex2f(widthCenterX, widthCenterY);
+  glVertex2f(l_width_center_X, l_width_center_Y);
   for (int x = 0; x < width(); x++)
     {
-      glVertex2f(widthUpperArcX[x], widthUpperArcY[x]);
+      glVertex2f(l_width_upper_arc_X[x], l_width_upper_arc_Y[x]);
     }
   glEnd();
 
   // Calculate the black outline of the dial
   glBegin(GL_LINE_LOOP);
   glColor3ub(0, 0, 0);
-  glVertex2f(widthCenterX, widthCenterY);
+  glVertex2f(l_width_center_X, l_width_center_Y);
   for (int x = 0; x < width(); x++)
     {
-      glVertex2f(widthUpperArcX[x], widthUpperArcY[x]);
+      glVertex2f(l_width_upper_arc_X[x], l_width_upper_arc_Y[x]);
     }
   glEnd();
 
   // Calculate the black arc inside the dial
   glBegin(GL_LINE_STRIP);
   glColor3ub(0, 0, 0);
-  float widthLowerArcTheta = -theta;
-  float widthLowerArcThetaStep = (2 * theta) / halfWidth;
-  for (float x = 0.25 * width(); x < 0.75 * width(); x++)
+  float l_width_lower_arc_theta = -l_theta;
+  float l_width_lower_arc_theta_step = (2 * l_theta) / l_half_width;
+  for (float l_x = 0.25 * width(); l_x < 0.75 * width(); l_x++)
     {
-      glVertex2f(x, widthCenterY + (0.5 * sin(0.5 * PI - widthLowerArcTheta) * radius));
-      widthLowerArcTheta += widthLowerArcThetaStep;
+      glVertex2f(l_x, l_width_center_Y + (0.5 * sin(0.5 * PI - l_width_lower_arc_theta) * l_radius));
+      l_width_lower_arc_theta += l_width_lower_arc_theta_step;
     }
   glEnd();
 
   // Calculate line markings & text labels
-  float widthStep = (2 * theta) / 12.0;
-  widthLabelCounter = 0;
-  char widthLabel[5];
+  float l_width_step = (2 * l_theta) / 12.0;
+  m_width_label_counter = 0;
+  char l_width_label[5];
 
-  for (int j = 0; j < 11; j++)
+  for (int l_j = 0; l_j < 11; l_j++)
     {
-      float i = rho + widthStep * (j + 1);
-      float startX = widthCenterX + radius * cos(i);
-      float startY = widthCenterY + radius * sin(i);
+      float l_i = l_rho + l_width_step * (l_j + 1);
+      float l_start_X = l_width_center_X + l_radius * cos(l_i);
+      float l_start_Y = l_width_center_Y + l_radius * sin(l_i);
       if (width() < 250)
 	{
-	  if ((j % 2) == 0)
+	  if ((l_j % 2) == 0)
 	    {
 	      // Bigger marking + text label
 	      glBegin(GL_LINES);
 	      glColor3ub(0, 0, 0);
-	      glVertex2f(startX, startY);
-	      glVertex2f(startX + 0.05 * (widthCenterX - startX), startY + 0.05 * (widthCenterY - startY));
+	      glVertex2f(l_start_X, l_start_Y);
+	      glVertex2f(l_start_X + 0.05 * (l_width_center_X - l_start_X), l_start_Y + 0.05 * (l_width_center_Y - l_start_Y));
 	      glEnd();
 
-	      widthLabels[widthLabelCounter].x = startX + 0.08 * (widthCenterX - startX);
-	      widthLabels[widthLabelCounter].y = startY + 0.08 * (widthCenterY - startY);
-	      sprintf(widthLabel, "%d", widthLimit - ((widthLimit/10) * j));
-	      widthLabels[widthLabelCounter++].label = widthLabel;
+	      m_width_labels[m_width_label_counter].x = l_start_X + 0.08 * (l_width_center_X - l_start_X);
+	      m_width_labels[m_width_label_counter].y = l_start_Y + 0.08 * (l_width_center_Y - l_start_Y);
+	      sprintf(l_width_label, "%d", m_width_limit - ((m_width_limit/10) * l_j));
+	      m_width_labels[m_width_label_counter++].label = l_width_label;
 	    }
 	  else
 	    {
 	      // Smaller marking, no text label
 	      glBegin(GL_LINES);
 	      glColor3ub(0, 0, 0);
-	      glVertex2f(startX, startY);
-	      glVertex2f(startX + 0.03 * (widthCenterX - startX), startY + 0.03 * (widthCenterY - startY));
+	      glVertex2f(l_start_X, l_start_Y);
+	      glVertex2f(l_start_X + 0.03 * (l_width_center_X - l_start_X), l_start_Y + 0.03 * (l_width_center_Y - l_start_Y));
 	      glEnd();
 	    }
 	}
@@ -346,155 +348,155 @@ void VibratoSpeedWidget::resizeGL(int w, int h)
 	  // Bigger marking + text label
 	  glBegin(GL_LINES);
 	  glColor3ub(0, 0, 0);
-	  glVertex2f(startX, startY);
-	  glVertex2f(startX + 0.05 * (widthCenterX - startX), startY + 0.05 * (widthCenterY - startY));
+	  glVertex2f(l_start_X, l_start_Y);
+	  glVertex2f(l_start_X + 0.05 * (l_width_center_X - l_start_X), l_start_Y + 0.05 * (l_width_center_Y - l_start_Y));
 	  glEnd();
 
-	  widthLabels[widthLabelCounter].x = startX + 0.08 * (widthCenterX - startX);
-	  widthLabels[widthLabelCounter].y = startY + 0.08 * (widthCenterY - startY);
-	  sprintf(widthLabel, "%d", widthLimit - ((widthLimit/10) * j));
-	  widthLabels[widthLabelCounter++].label = widthLabel;
+	  m_width_labels[m_width_label_counter].x = l_start_X + 0.08 * (l_width_center_X - l_start_X);
+	  m_width_labels[m_width_label_counter].y = l_start_Y + 0.08 * (l_width_center_Y - l_start_Y);
+	  sprintf(l_width_label, "%d", m_width_limit - ((m_width_limit/10) * l_j));
+	  m_width_labels[m_width_label_counter++].label = l_width_label;
 	}
     }
 
   // Calculate the "Cents" label
-  centsLabelX = widthCenterX;
-  centsLabelY = widthCenterY + 0.7 * radius;
+  m_cents_label_X = l_width_center_X;
+  m_cents_label_Y = l_width_center_Y + 0.7 * l_radius;
 
   glEndList();
 
-  delete[] widthUpperArcX;
-  delete[] widthUpperArcY;
+  delete[] l_width_upper_arc_X;
+  delete[] l_width_upper_arc_Y;
 
 
   // Do forced update on resize
-  prevVibratoSpeed = -999;
-  prevVibratoWidth = -999;
+  m_prev_vibrato_speed = -999;
+  m_prev_vibrato_width = -999;
   doUpdate();
 }
 
 //------------------------------------------------------------------------------
 void VibratoSpeedWidget::paintGL(void)
 {
-  QColor bg = gdata->backgroundColor();
-  glClearColor( double(bg.red()) / 256.0, double(bg.green()) / 256.0, double(bg.blue()) / 256.0, 0.0 );
+  QColor l_bg = gdata->backgroundColor();
+  glClearColor( double(l_bg.red()) / 256.0, double(l_bg.green()) / 256.0, double(l_bg.blue()) / 256.0, 0.0 );
   glClear(GL_COLOR_BUFFER_BIT);
 
-  QFontMetrics fm = QFontMetrics(speedWidthFont);
+  QFontMetrics l_font_metric = QFontMetrics(m_speed_width_font);
 
   // Draw the speed dial
   glLineWidth(1.5);
-  glCallList(speedDial);
+  glCallList(m_speed_dial);
 
   // Draw the labels for the speed dial
   glColor3ub(0,0,0);
-  renderText(hzLabelX - (0.5 * fm.width("Hz")), hzLabelY, 0, "Hz", speedWidthFont);
-  for (int i = 0; i < speedLabelCounter; i++)
+  renderText(m_hz_label_X - (0.5 * l_font_metric.width("Hz")), m_hz_label_Y, 0, "Hz", m_speed_width_font);
+  for (int l_index = 0; l_index < m_speed_label_counter; l_index++)
     {
-      renderText(speedLabels[i].x - (0.5 * fm.width(speedLabels[i].label)), speedLabels[i].y - 8, 0, speedLabels[i].label, speedWidthFont);
+      renderText(m_speed_labels[l_index].x - (0.5 * l_font_metric.width(m_speed_labels[l_index].label)), m_speed_labels[l_index].y - 8, 0, m_speed_labels[l_index].label, m_speed_width_font);
     }
 
   // Draw the speed needle
   glLineWidth(1.0);
-  glCallList(speedNeedle);
+  glCallList(m_speed_needle);
 
   // Draw the width dial
   glLineWidth(1.5);
-  glCallList(widthDial);
+  glCallList(m_width_dial);
 
   // Draw the labels for the width dial
   glColor3ub(0,0,0);
-  renderText(centsLabelX - (0.5 * fm.width("Cents")), centsLabelY, 0, "Cents", speedWidthFont);
-  for (int i = 0; i < widthLabelCounter; i++)
+  renderText(m_cents_label_X - (0.5 * l_font_metric.width("Cents")), m_cents_label_Y, 0, "Cents", m_speed_width_font);
+  for (int l_index = 0; l_index < m_width_label_counter; l_index++)
     {
-      renderText(widthLabels[i].x - (0.5 * fm.width(widthLabels[i].label)), widthLabels[i].y - 8, 0, widthLabels[i].label, speedWidthFont);
+      renderText(m_width_labels[l_index].x - (0.5 * l_font_metric.width(m_width_labels[l_index].label)), m_width_labels[l_index].y - 8, 0, m_width_labels[l_index].label, m_speed_width_font);
     }
 
   // Draw the width needle
   glLineWidth(1.0);
-  glCallList(widthNeedle);
+  glCallList(m_width_needle);
 }
 
 //------------------------------------------------------------------------------
 void VibratoSpeedWidget::doUpdate(void)
 {
-  Channel * active = gdata->getActiveChannel();
+  Channel * l_active_channel = gdata->getActiveChannel();
 
-  float vibratoSpeed = 0;
-  float vibratoWidth = 0;
-  int currentNoteNumber = -1;
+  float l_vibrato_speed = 0;
+  float l_vibrato_width = 0;
+  int l_current_note_number = -1;
 
-  if(active)
+  if(l_active_channel)
     {
-      AnalysisData * data;
+      AnalysisData * l_data;
       if(gdata->getSoundMode() & SOUND_REC)
 	{
-	  data = active->dataAtChunk(active->chunkAtCurrentTime() - active->pronyDelay());
+	  l_data = l_active_channel->dataAtChunk(l_active_channel->chunkAtCurrentTime() - l_active_channel->pronyDelay());
 	}
       else
 	{
-	  data = active->dataAtCurrentChunk();
+	  l_data = l_active_channel->dataAtCurrentChunk();
 	}
-      if(data && active->isVisibleNote(data->getNoteIndex()) && active->isLabelNote(data->getNoteIndex()))
+      if(l_data && l_active_channel->isVisibleNote(l_data->getNoteIndex()) && l_active_channel->isLabelNote(l_data->getNoteIndex()))
 	{
-	  const NoteData * note = new NoteData();
-	  note = &(active->get_note_data()[data->getNoteIndex()]);
+	  const NoteData * l_note = new NoteData();
+	  l_note = &(l_active_channel->get_note_data()[l_data->getNoteIndex()]);
 
-	  currentNoteNumber = data->getNoteIndex();
-	  if (useProny)
+	  l_current_note_number = l_data->getNoteIndex();
+	  if (m_use_prony)
 	    {
-	      vibratoSpeed = data->getVibratoSpeed();
-	      vibratoWidth = 200 * data->getVibratoWidth();
+	      l_vibrato_speed = l_data->getVibratoSpeed();
+	      l_vibrato_width = 200 * l_data->getVibratoWidth();
 	    }
-	  else if((active->doingDetailedPitch()) && (active->get_pitch_lookup_smoothed().size() > 0))
+	  else if((l_active_channel->doingDetailedPitch()) && (l_active_channel->get_pitch_lookup_smoothed().size() > 0))
 	    {
-	      large_vector<float> pitchLookupUsed = active->get_pitch_lookup_smoothed();
-	      int smoothDelay = active->get_pitch_big_smoothing_filter().delay();
+	      large_vector<float> l_pitch_lookup_used = l_active_channel->get_pitch_lookup_smoothed();
+	      int l_smooth_delay = l_active_channel->get_pitch_big_smoothing_filter().delay();
 
-	      int currentTime = active->chunkAtCurrentTime() * active->framesPerChunk() + smoothDelay;
-	      int maximumTime = 0;
-	      int minimumTime = 0;
-	      int maximaSize = note->get_maxima()->size();
-	      int minimaSize = note->get_minima()->size();
+	      int l_current_time = l_active_channel->chunkAtCurrentTime() * l_active_channel->framesPerChunk() + l_smooth_delay;
+	      int l_maximum_time = 0;
+	      int l_minimum_time = 0;
+	      int l_maxima_size = l_note->get_maxima()->size();
+	      int l_minima_size = l_note->get_minima()->size();
 
 	      // Find the most recent maximum
-	      for (int i = 1; i < maximaSize; i++)
+	      for (int l_index = 1; l_index < l_maxima_size; l_index++)
 		{
-		  if ((currentTime > note->get_maxima()->at(i - 1)) && (currentTime <= note->get_maxima()->at(i)))
+		  if ((l_current_time > l_note->get_maxima()->at(l_index - 1)) && (l_current_time <= l_note->get_maxima()->at(l_index)))
 		    {
-		      maximumTime = note->get_maxima()->at(i - 1);
+		      l_maximum_time = l_note->get_maxima()->at(l_index - 1);
 		      break;
 		    }
 		}
-	      if ((maximaSize > 0) && (currentTime > note->get_maxima()->at(maximaSize - 1)))
+	      if ((l_maxima_size > 0) && (l_current_time > l_note->get_maxima()->at(l_maxima_size - 1)))
 		{
-		  maximumTime = note->get_maxima()->at(maximaSize - 1);
+		  l_maximum_time = l_note->get_maxima()->at(l_maxima_size - 1);
 		}
 
 	      // Find the most recent minimum
-	      for (int i = 1; i < note->get_minima()->size(); i++)
+	      for (int l_index = 1; l_index < l_note->get_minima()->size(); l_index++)
 		{
-		  if ((currentTime > note->get_minima()->at(i - 1)) && (currentTime <= note->get_minima()->at(i)))
+		  if ((l_current_time > l_note->get_minima()->at(l_index - 1)) && (l_current_time <= l_note->get_minima()->at(l_index)))
 		    {
-		      minimumTime = note->get_minima()->at(i - 1);
+		      l_minimum_time = l_note->get_minima()->at(l_index - 1);
 		      break;
 		    }
 		}
-	      if ((note->get_minima()->size() > 0) && (currentTime > note->get_minima()->at(minimaSize - 1)))
+	      if ((l_note->get_minima()->size() > 0) && (l_current_time > l_note->get_minima()->at(l_minima_size - 1)))
 		{
-		  minimumTime = note->get_minima()->at(minimaSize - 1);
+		  l_minimum_time = l_note->get_minima()->at(l_minima_size - 1);
 		}
-	      if ((maximumTime !=0 ) && (minimumTime != 0))
+	      if ((l_maximum_time !=0 ) && (l_minimum_time != 0))
 		{
 		  // The speed and width can be calculated
-		  vibratoSpeed = active->rate() / (float)(2 * abs(maximumTime - minimumTime));
-		  vibratoWidth = fabs(100 * (pitchLookupUsed.at(maximumTime) - pitchLookupUsed.at(minimumTime)));
+		  l_vibrato_speed = l_active_channel->rate() / (float)(2 * abs(l_maximum_time - l_minimum_time));
+		  l_vibrato_width = fabs(100 * (l_pitch_lookup_used.at(l_maximum_time) - l_pitch_lookup_used.at(l_minimum_time)));
 		}
 	    }
 	}
     }
 
-  if ((fabs(prevVibratoSpeed - vibratoSpeed) < 0.05) && (fabs(prevVibratoWidth - vibratoWidth) < 0.05))
+  if ((fabs(m_prev_vibrato_speed - l_vibrato_speed) < 0.05) && (fabs(m_prev_vibrato_width - l_vibrato_width) < 0.05))
     {
       // Needle values haven't changed (much) , no update needed
     }
@@ -504,22 +506,22 @@ void VibratoSpeedWidget::doUpdate(void)
 
       makeCurrent();
 
-      glNewList(speedNeedle, GL_COMPILE);
+      glNewList(m_speed_needle, GL_COMPILE);
       glEndList();
 
-      glNewList(widthNeedle, GL_COMPILE);
+      glNewList(m_width_needle, GL_COMPILE);
       glEndList();
 
-      if ((vibratoSpeed == 0) && (vibratoWidth == 0))
+      if ((l_vibrato_speed == 0) && (l_vibrato_width == 0))
 	{
 	  // No needle values, don't draw the needles this update
 
-	  prevVibratoSpeed = 0;
-	  prevVibratoWidth = 0;
+	  m_prev_vibrato_speed = 0;
+	  m_prev_vibrato_width = 0;
 
-	  speedValueToDraw = 0;
-	  widthValueToDraw = 0;
-	  prevNoteNumber = -1;
+	  m_speed_value_to_draw = 0;
+	  m_width_value_to_draw = 0;
+	  m_prev_note_number = -1;
 
 	  updateGL();
 
@@ -528,117 +530,117 @@ void VibratoSpeedWidget::doUpdate(void)
 	{
 	  // Needle values, draw the needles this update
 
-	  prevVibratoSpeed = vibratoSpeed;
-	  prevVibratoWidth = vibratoWidth;
+	  m_prev_vibrato_speed = l_vibrato_speed;
+	  m_prev_vibrato_width = l_vibrato_width;
 
-	  speedValueToDraw = vibratoSpeed;
-	  widthValueToDraw = vibratoWidth;
+	  m_speed_value_to_draw = l_vibrato_speed;
+	  m_width_value_to_draw = l_vibrato_width;
 
-	  const float halfWidth = 0.5 * width();
-	  const float halfHeight = 0.5 * height();
-	  const float radius = 1.8 * MAX(0.5 * height(), halfWidth);
-	  const float theta = asin(float(width()) / (2 * radius));
-	  const float rho = (PI * 0.5) - theta;
-	  const int halfKnobWidth = MAX(toInt(radius * 0.02), 1);
+	  const float l_half_width = 0.5 * width();
+	  const float l_half_height = 0.5 * height();
+	  const float l_radius = 1.8 * MAX(0.5 * height(), l_half_width);
+	  const float l_theta = asin(float(width()) / (2 * l_radius));
+	  const float l_rho = (PI * 0.5) - l_theta;
+	  const int halfKnobWidth = MAX(toInt(l_radius * 0.02), 1);
 
-	  // Calculate the speed needle, if speedValueToDraw is set to sensible value
-	  if ((speedValueToDraw > 0) && (speedValueToDraw <= 12))
+	  // Calculate the speed needle, if m_speed_value_to_draw is set to sensible value
+	  if ((m_speed_value_to_draw > 0) && (m_speed_value_to_draw <= 12))
 	    {
-	      const float centerX = halfWidth;
-	      const float centerY = height() - radius;
+	      const float l_center_X = l_half_width;
+	      const float l_center_Y = height() - l_radius;
 
-	      float hzAngle = (2 * theta) / 14.0;
-	      float note = PI - rho - (speedValueToDraw * hzAngle) - hzAngle;
+	      float l_hz_angle = (2 * l_theta) / 14.0;
+	      float l_note = PI - l_rho - (m_speed_value_to_draw * l_hz_angle) - l_hz_angle;
 
-	      float noteX = centerX + radius * cos(note);
-	      float noteY = centerY + radius * sin(note);
-	      float knobLeftX = centerX - halfKnobWidth;
-	      float knobLeftY = centerY;
-	      float knobRightX = centerX + halfKnobWidth;
-	      float knobRightY = centerY;
+	      float l_note_X = l_center_X + l_radius * cos(l_note);
+	      float l_note_Y = l_center_Y + l_radius * sin(l_note);
+	      float l_knob_left_X = l_center_X - halfKnobWidth;
+	      float l_knob_left_Y = l_center_Y;
+	      float l_knob_right_X = l_center_X + halfKnobWidth;
+	      float l_knob_right_Y = l_center_Y;
 
-	      glNewList(speedNeedle, GL_COMPILE);
+	      glNewList(m_speed_needle, GL_COMPILE);
 
 	      // Inside of the needle
 	      glBegin(GL_TRIANGLES);
 	      glColor3ub(255, 0, 0);
-	      glVertex2f(noteX, noteY);
-	      glVertex2f(knobLeftX, knobLeftY);
-	      glVertex2f(knobRightX, knobRightY);
+	      glVertex2f(l_note_X, l_note_Y);
+	      glVertex2f(l_knob_left_X, l_knob_left_Y);
+	      glVertex2f(l_knob_right_X, l_knob_right_Y);
 	      glEnd();
 
 	      // Outside of the needle
 	      glBegin(GL_LINE_LOOP);
 	      glColor3ub(127, 0, 0);
-	      glVertex2f(noteX, noteY);
-	      glVertex2f(knobLeftX, knobLeftY);
-	      glVertex2f(knobRightX, knobRightY);
+	      glVertex2f(l_note_X, l_note_Y);
+	      glVertex2f(l_knob_left_X, l_knob_left_Y);
+	      glVertex2f(l_knob_right_X, l_knob_right_Y);
 	      glEnd();
 
 	      glEndList();
 	    }
 
 	  // Determine whether the scale needs adjusting
-	  int oldWidthLimit = widthLimit;
-	  if ((widthValueToDraw > 0) && (currentNoteNumber == prevNoteNumber))
+	  int l_old_width_imit = m_width_limit;
+	  if ((m_width_value_to_draw > 0) && (l_current_note_number == m_prev_note_number))
 	    {
-	      if (widthValueToDraw > 50)
+	      if (m_width_value_to_draw > 50)
 		{
-		  widthLimit = std::max(widthLimit, 100);
+		  m_width_limit = std::max(m_width_limit, 100);
 		}
-	      if (widthValueToDraw > 100)
+	      if (m_width_value_to_draw > 100)
 		{
-		  widthLimit = std::max(widthLimit, 200);
+		  m_width_limit = std::max(m_width_limit, 200);
 		}
-	      if (widthValueToDraw > 200)
+	      if (m_width_value_to_draw > 200)
 		{
-		  widthLimit = std::max(widthLimit, 300);
+		  m_width_limit = std::max(m_width_limit, 300);
 		}
 	    }
-	  if (prevNoteNumber != currentNoteNumber)
+	  if (m_prev_note_number != l_current_note_number)
 	    {
-	      widthLimit = 50;
+	      m_width_limit = 50;
 	    }
-	  if (widthLimit != oldWidthLimit)
+	  if (m_width_limit != l_old_width_imit)
 	    {
 	      // Do resize and redraw the dial if the scale is adjusted
 	      resizeGL(width(), height());
 	    }
-	  prevNoteNumber = currentNoteNumber;
+	  m_prev_note_number = l_current_note_number;
 
-	  // Calculate the width needle, if widthValueToDraw is set to sensible value
-	  if ((widthValueToDraw > 0) && (widthValueToDraw <= widthLimit))
+	  // Calculate the width needle, if m_width_value_to_draw is set to sensible value
+	  if ((m_width_value_to_draw > 0) && (m_width_value_to_draw <= m_width_limit))
 	    {
-	      const float centerX = halfWidth;
-	      const float centerY = halfHeight - radius;
+	      const float l_center_X = l_half_width;
+	      const float l_center_Y = l_half_height - l_radius;
 
-	      float centAngle = (2 * theta) / (widthLimit + 2 * (widthLimit/10));
-	      float note = PI - rho - (widthValueToDraw * centAngle) - (widthLimit / 10) * centAngle;
-	      int halfKnobWidth = MAX(toInt(radius * 0.02), 1);
+	      float l_cent_angle = (2 * l_theta) / (m_width_limit + 2 * (m_width_limit/10));
+	      float l_note = PI - l_rho - (m_width_value_to_draw * l_cent_angle) - (m_width_limit / 10) * l_cent_angle;
+	      int l_half_knob_width = MAX(toInt(l_radius * 0.02), 1);
 
-	      float noteX = centerX + radius * cos(note);
-	      float noteY = centerY + radius * sin(note);
-	      float knobLeftX = centerX - halfKnobWidth;
-	      float knobLeftY = centerY;
-	      float knobRightX = centerX + halfKnobWidth;
-	      float knobRightY = centerY;
+	      float l_note_X = l_center_X + l_radius * cos(l_note);
+	      float l_note_Y = l_center_Y + l_radius * sin(l_note);
+	      float l_knob_left_X = l_center_X - l_half_knob_width;
+	      float l_knob_left_Y = l_center_Y;
+	      float l_knob_right_X = l_center_X + l_half_knob_width;
+	      float l_knob_right_Y = l_center_Y;
 
-	      glNewList(widthNeedle, GL_COMPILE);
+	      glNewList(m_width_needle, GL_COMPILE);
 
 	      // Inside of the needle
 	      glBegin(GL_TRIANGLES);
 	      glColor3ub(255, 0, 0);
-	      glVertex2f(noteX, noteY);
-	      glVertex2f(knobLeftX, knobLeftY);
-	      glVertex2f(knobRightX, knobRightY);
+	      glVertex2f(l_note_X, l_note_Y);
+	      glVertex2f(l_knob_left_X, l_knob_left_Y);
+	      glVertex2f(l_knob_right_X, l_knob_right_Y);
 	      glEnd();
 
 	      // Outside of the needle
 	      glBegin(GL_LINE_LOOP);
 	      glColor3ub(127, 0, 0);
-	      glVertex2f(noteX, noteY);
-	      glVertex2f(knobLeftX, knobLeftY);
-	      glVertex2f(knobRightX, knobRightY);
+	      glVertex2f(l_note_X, l_note_Y);
+	      glVertex2f(l_knob_left_X, l_knob_left_Y);
+	      glVertex2f(l_knob_right_X, l_knob_right_Y);
 	      glEnd();
 
 	      glEndList();
@@ -650,11 +652,11 @@ void VibratoSpeedWidget::doUpdate(void)
 }
 
 //------------------------------------------------------------------------------
-void VibratoSpeedWidget::setUseProny(bool value)
+void VibratoSpeedWidget::setUseProny(bool p_value)
 {
-  useProny = value;
-  prevVibratoSpeed = -999;
-  prevVibratoWidth = -999;
+  m_use_prony = p_value;
+  m_prev_vibrato_speed = -999;
+  m_prev_vibrato_width = -999;
   doUpdate();
 }
 
