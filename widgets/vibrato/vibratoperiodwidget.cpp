@@ -20,18 +20,18 @@
 #include <gl.h>
 
 //------------------------------------------------------------------------------
-VibratoPeriodWidget::VibratoPeriodWidget(QWidget *parent):
-  QGLWidget(parent)
+VibratoPeriodWidget::VibratoPeriodWidget(QWidget *p_parent):
+  QGLWidget(p_parent)
 {
-  prevLeftMinimumTime = -1;
-  lastPeriodToDraw = -1;
+  m_prev_left_minimum_time = -1;
+  m_last_period_to_draw = -1;
 
-  smoothedPeriods = true;
-  drawSineReference = false;
-  sineStyle = false;
-  drawPrevPeriods = false;
-  periodScaling = false;
-  drawComparison = false;
+  m_smoothed_periods = true;
+  m_draw_sine_reference = false;
+  m_sine_style = false;
+  m_draw_prev_periods = false;
+  m_period_scaling = false;
+  m_draw_comparison = false;
 }
 
 //------------------------------------------------------------------------------
@@ -40,21 +40,21 @@ VibratoPeriodWidget::~VibratoPeriodWidget(void)
   // Remove display lists
   makeCurrent();
 
-  glDeleteLists(sineReference, 1);
-  for (int i = 0; i < 5; i++)
+  glDeleteLists(m_sine_reference, 1);
+  for (int l_index = 0; l_index < 5; l_index++)
     {
-      glDeleteLists(previousPoly[i], 1);
+      glDeleteLists(m_previous_poly[l_index], 1);
     }
-  glDeleteLists(currentPeriod, 1);
-  glDeleteLists(comparisonPoly, 1);
-  glDeleteLists(comparisonReference, 1);
+  glDeleteLists(m_current_period, 1);
+  glDeleteLists(m_comparison_poly, 1);
+  glDeleteLists(m_comparison_reference, 1);
 }
 
 //------------------------------------------------------------------------------
 void VibratoPeriodWidget::initializeGL(void)
 {
-  QColor bg = gdata->backgroundColor();
-  glClearColor( double(bg.red()) / 256.0, double(bg.green()) / 256.0, double(bg.blue()) / 256.0, 0.0 );
+  QColor l_bg = gdata->backgroundColor();
+  glClearColor( double(l_bg.red()) / 256.0, double(l_bg.green()) / 256.0, double(l_bg.blue()) / 256.0, 0.0 );
   glClear(GL_COLOR_BUFFER_BIT);
 
   glEnable(GL_BLEND);
@@ -66,140 +66,140 @@ void VibratoPeriodWidget::initializeGL(void)
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_COLOR_ARRAY);
 
-  sineReference = glGenLists(1);
-  for (int i = 0; i < 5; i++)
+  m_sine_reference = glGenLists(1);
+  for (int l_index = 0; l_index < 5; l_index++)
     {
-      previousPoly[i] = glGenLists(1);
+      m_previous_poly[l_index] = glGenLists(1);
     }
-  currentPeriod = glGenLists(1);
-  comparisonPoly = glGenLists(1);
-  comparisonReference = glGenLists(1);
+  m_current_period = glGenLists(1);
+  m_comparison_poly = glGenLists(1);
+  m_comparison_reference = glGenLists(1);
 }
 
 //------------------------------------------------------------------------------
-void VibratoPeriodWidget::resizeGL(int w, int h)
+void VibratoPeriodWidget::resizeGL(int p_width, int p_height)
 {
-  glViewport(0, 0, (GLint)w, (GLint)h);
+  glViewport(0, 0, (GLint)p_width, (GLint)p_height);
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluOrtho2D(0, w, 0, h);
+  gluOrtho2D(0, p_width, 0, p_height);
 
   // Calculate the horizontal reference line
   const float halfHeight = 0.5 * height();
 
-  glNewList(comparisonReference, GL_COMPILE);
+  glNewList(m_comparison_reference, GL_COMPILE);
   glColor4ub(0, 0, 0, 64);
   glBegin(GL_LINES);
   glVertex2f(0, halfHeight);
-  glVertex2f(w, halfHeight);
+  glVertex2f(p_width, halfHeight);
   glEnd();
   glEndList();
 
   // Do forced update on resize
-  prevLeftMinimumTime = -1;
+  m_prev_left_minimum_time = -1;
   doUpdate();
 }
 
 //------------------------------------------------------------------------------
 void VibratoPeriodWidget::paintGL(void)
 {
-  QColor bg = gdata->backgroundColor();
-  glClearColor( double(bg.red()) / 256.0, double(bg.green()) / 256.0, double(bg.blue()) / 256.0, 0.0 );
+  QColor l_bg = gdata->backgroundColor();
+  glClearColor( double(l_bg.red()) / 256.0, double(l_bg.green()) / 256.0, double(l_bg.blue()) / 256.0, 0.0 );
   glClear(GL_COLOR_BUFFER_BIT);
 
   // Draw the horizontal reference line
   glLineWidth(1.5);
-  glCallList(comparisonReference);
+  glCallList(m_comparison_reference);
 
   // Draw the sinewave
   glLineWidth(2.0);
-  glCallList(sineReference);
+  glCallList(m_sine_reference);
 
   // Draw the comparison
-  glCallList(comparisonPoly);
+  glCallList(m_comparison_poly);
 
   // Draw the previous periods
-  for (int i = 4; i >= 0; i--)
+  for (int l_index = 4; l_index >= 0; l_index--)
     {
-      if (lastPeriodToDraw >= i)
+      if (m_last_period_to_draw >= l_index)
 	{
-	  glCallList(previousPoly[i]);
+	  glCallList(m_previous_poly[l_index]);
 	}
     }
 
   // Draw the current period
-  glCallList(currentPeriod);
+  glCallList(m_current_period);
 
 }
 
 //------------------------------------------------------------------------------
 void VibratoPeriodWidget::doUpdate(void)
 {
-  Channel *active = gdata->getActiveChannel();
+  Channel *l_active_channel = gdata->getActiveChannel();
 
-  int leftMinimumTime = -1;
-  int maximumTime = -1;
-  int rightMinimumTime = -1;
-  int leftMinimumAt = -1;
+  int l_left_minimum_time = -1;
+  int l_maximum_time = -1;
+  int l_right_minimum_time = -1;
+  int l_left_minimum_at = -1;
 
-  if ((active) && (active->doingDetailedPitch()) && (active->get_pitch_lookup_smoothed().size() > 0))
+  if ((l_active_channel) && (l_active_channel->doingDetailedPitch()) && (l_active_channel->get_pitch_lookup_smoothed().size() > 0))
     {
-      AnalysisData * data = active->dataAtCurrentChunk();
-      if(data && active->isVisibleNote(data->getNoteIndex()) && active->isLabelNote(data->getNoteIndex()))
+      AnalysisData * l_data = l_active_channel->dataAtCurrentChunk();
+      if(l_data && l_active_channel->isVisibleNote(l_data->getNoteIndex()) && l_active_channel->isLabelNote(l_data->getNoteIndex()))
 	{
-	  const NoteData * note = new NoteData();
-	  note = &(active->get_note_data()[data->getNoteIndex()]);
+	  const NoteData * l_note = new NoteData();
+	  l_note = &(l_active_channel->get_note_data()[l_data->getNoteIndex()]);
 
-	  int smoothDelay = active->get_pitch_big_smoothing_filter().delay();
-	  int currentTime = active->chunkAtCurrentTime() * active->framesPerChunk() + smoothDelay;
-	  int maximaSize = note->get_maxima()->size();
-	  int minimaSize = note->get_minima()->size();
+	  int l_smooth_delay = l_active_channel->get_pitch_big_smoothing_filter().delay();
+	  int l_current_time = l_active_channel->chunkAtCurrentTime() * l_active_channel->framesPerChunk() + l_smooth_delay;
+	  int l_maxima_size = l_note->get_maxima()->size();
+	  int l_minima_size = l_note->get_minima()->size();
 
 	  // Determine which period to show: the 2 rightmost minima + the maximum in between
-	  if ((maximaSize >= 1 ) && (minimaSize == 2))
+	  if ((l_maxima_size >= 1 ) && (l_minima_size == 2))
 	    {
 	      // Only 2 minima
-	      if (currentTime >= note->get_minima()->at(1))
+	      if (l_current_time >= l_note->get_minima()->at(1))
 		{
-		  leftMinimumTime  = note->get_minima()->at(0);
-		  rightMinimumTime = note->get_minima()->at(1);
-		  leftMinimumAt = 0;
+		  l_left_minimum_time  = l_note->get_minima()->at(0);
+		  l_right_minimum_time = l_note->get_minima()->at(1);
+		  l_left_minimum_at = 0;
 		}
 	    }
-	  else if ((maximaSize >= 1) && (minimaSize > 2))
+	  else if ((l_maxima_size >= 1) && (l_minima_size > 2))
 	    {
 	      // More than 2 minima
-	      for (int i = 2; i < minimaSize; i++)
+	      for (int l_index = 2; l_index < l_minima_size; l_index++)
 		{
-		  if ((currentTime >= note->get_minima()->at(i-1)) && (currentTime <= note->get_minima()->at(i)))
+		  if ((l_current_time >= l_note->get_minima()->at(l_index-1)) && (l_current_time <= l_note->get_minima()->at(l_index)))
 		    {
-		      leftMinimumTime  = note->get_minima()->at(i-2);
-		      rightMinimumTime = note->get_minima()->at(i-1);
-		      leftMinimumAt = i-2;
+		      l_left_minimum_time  = l_note->get_minima()->at(l_index-2);
+		      l_right_minimum_time = l_note->get_minima()->at(l_index-1);
+		      l_left_minimum_at = l_index-2;
 		      break;
 		    }
 		}
-	      if (currentTime > note->get_minima()->at(minimaSize - 1))
+	      if (l_current_time > l_note->get_minima()->at(l_minima_size - 1))
 		{
-		  leftMinimumTime  = note->get_minima()->at(minimaSize - 2);
-		  rightMinimumTime = note->get_minima()->at(minimaSize - 1);
-		  leftMinimumAt = minimaSize - 2;
+		  l_left_minimum_time  = l_note->get_minima()->at(l_minima_size - 2);
+		  l_right_minimum_time = l_note->get_minima()->at(l_minima_size - 1);
+		  l_left_minimum_at = l_minima_size - 2;
 		}
 	    }
 	  // The maximum in between
-	  for (int i = 0; i < maximaSize; i++)
+	  for (int l_index = 0; l_index < l_maxima_size; l_index++)
 	    {
-	      if ((note->get_maxima()->at(i) >= leftMinimumTime) && (note->get_maxima()->at(i) <= rightMinimumTime))
+	      if ((l_note->get_maxima()->at(l_index) >= l_left_minimum_time) && (l_note->get_maxima()->at(l_index) <= l_right_minimum_time))
 		{
-		  maximumTime = note->get_maxima()->at(i);
+		  l_maximum_time = l_note->get_maxima()->at(l_index);
 		  break;
 		}
 	    }
 	}
     }
 
-  if (prevLeftMinimumTime == leftMinimumTime)
+  if (m_prev_left_minimum_time == l_left_minimum_time)
     {
       // Same period as previous, don't change the polys & no update needed
     }
@@ -209,251 +209,251 @@ void VibratoPeriodWidget::doUpdate(void)
 
       makeCurrent();
 
-      if (leftMinimumTime == -1)
+      if (l_left_minimum_time == -1)
 	{
 	  // No period to draw, erase polys & update
-	  glNewList(sineReference, GL_COMPILE);
+	  glNewList(m_sine_reference, GL_COMPILE);
 	  glEndList();
 
-	  for (int i = 0; i < 5; i++)
+	  for (int l_index = 0; l_index < 5; l_index++)
 	    {
-	      glNewList(previousPoly[i], GL_COMPILE);
+	      glNewList(m_previous_poly[l_index], GL_COMPILE);
 	      glEndList();
 	    }
 
-	  glNewList(currentPeriod, GL_COMPILE);
+	  glNewList(m_current_period, GL_COMPILE);
 	  glEndList();
 
-	  glNewList(comparisonPoly, GL_COMPILE);
+	  glNewList(m_comparison_poly, GL_COMPILE);
 	  glEndList();
 
-	  prevLeftMinimumTime = -1;
+	  m_prev_left_minimum_time = -1;
 
 	  updateGL();
 	}
       else
 	{
 	  // New period, calculate new polys & update
-	  glNewList(sineReference, GL_COMPILE);
+	  glNewList(m_sine_reference, GL_COMPILE);
 	  glEndList();
 
-	  for (int i = 0; i < 5; i++)
+	  for (int l_index = 0; l_index < 5; l_index++)
 	    {
-	      glNewList(previousPoly[i], GL_COMPILE);
+	      glNewList(m_previous_poly[l_index], GL_COMPILE);
 	      glEndList();
 	    }
 
-	  glNewList(currentPeriod, GL_COMPILE);
+	  glNewList(m_current_period, GL_COMPILE);
 	  glEndList();
 
-	  glNewList(comparisonPoly, GL_COMPILE);
+	  glNewList(m_comparison_poly, GL_COMPILE);
 	  glEndList();
 
-	  AnalysisData * data = active->dataAtCurrentChunk();
-	  const NoteData * note = new NoteData();
-	  note = &(active->get_note_data()[data->getNoteIndex()]);
+	  AnalysisData * l_data = l_active_channel->dataAtCurrentChunk();
+	  const NoteData * l_note = new NoteData();
+	  l_note = &(l_active_channel->get_note_data()[l_data->getNoteIndex()]);
 
-	  large_vector<float> thePitchLookup;
-	  int theDelay;
-	  if(smoothedPeriods)
+	  large_vector<float> l_the_pitch_lookup;
+	  int l_the_delay;
+	  if(m_smoothed_periods)
 	    {
-	      thePitchLookup = active->get_pitch_lookup_smoothed();
-	      theDelay = 0;
+	      l_the_pitch_lookup = l_active_channel->get_pitch_lookup_smoothed();
+	      l_the_delay = 0;
 	    }
 	  else
 	    {
-	      thePitchLookup = active->get_pitch_lookup();
-	      theDelay = active->get_pitch_big_smoothing_filter().delay() - active->get_pitch_small_smoothing_filter().delay();
+	      l_the_pitch_lookup = l_active_channel->get_pitch_lookup();
+	      l_the_delay = l_active_channel->get_pitch_big_smoothing_filter().delay() - l_active_channel->get_pitch_small_smoothing_filter().delay();
 	    }
 
-	  int theLeftMinimumTime = leftMinimumTime - theDelay;
-	  int theRightMinimumTime = rightMinimumTime - theDelay;
-	  int theMaximumTime = maximumTime - theDelay;
-	  int periodDuration = theRightMinimumTime - theLeftMinimumTime;
+	  int l_the_left_minimum_time = l_left_minimum_time - l_the_delay;
+	  int l_the_right_minimum_time = l_right_minimum_time - l_the_delay;
+	  int l_the_maximum_time = l_maximum_time - l_the_delay;
+	  int l_period_duration = l_the_right_minimum_time - l_the_left_minimum_time;
 
-	  float minimumPitch = (thePitchLookup.at(theLeftMinimumTime) >
-				thePitchLookup.at(theRightMinimumTime))
-	    ? thePitchLookup.at(theRightMinimumTime)
-	    : thePitchLookup.at(theLeftMinimumTime);
-	  float maximumPitch = thePitchLookup.at(theMaximumTime);
-	  float periodWidth = maximumPitch - minimumPitch;
+	  float l_minimum_pitch = (l_the_pitch_lookup.at(l_the_left_minimum_time) >
+				l_the_pitch_lookup.at(l_the_right_minimum_time))
+	    ? l_the_pitch_lookup.at(l_the_right_minimum_time)
+	    : l_the_pitch_lookup.at(l_the_left_minimum_time);
+	  float l_maximum_pitch = l_the_pitch_lookup.at(l_the_maximum_time);
+	  float l_period_width = l_maximum_pitch - l_minimum_pitch;
 
-	  const float halfHeight = 0.5 * height();
+	  const float l_half_height = 0.5 * height();
 
 	  // Display either sine- or cosine-style periods
-	  int theSineDelay = 0;
-	  if (sineStyle)
+	  int l_the_sine_delay = 0;
+	  if (m_sine_style)
 	    {
-	      theSineDelay = toInt((rightMinimumTime - leftMinimumTime) * 0.25);
+	      l_the_sine_delay = toInt((l_right_minimum_time - l_left_minimum_time) * 0.25);
 	    }
 
-	  GLfloat * vertices;
-	  vertices = new GLfloat[(width() + 1) * 2];
+	  GLfloat * l_vertices;
+	  l_vertices = new GLfloat[(width() + 1) * 2];
 
-	  GLfloat * sineVertices;
-	  sineVertices = new GLfloat[(width() + 1) * 2];
+	  GLfloat * l_sine_vertices;
+	  l_sine_vertices = new GLfloat[(width() + 1) * 2];
 
-	  GLubyte * colors;
-	  colors = new GLubyte[(width() + 1) * 4];
-	  glColorPointer(4, GL_UNSIGNED_BYTE, 0, colors);
+	  GLubyte * l_colors;
+	  l_colors = new GLubyte[(width() + 1) * 4];
+	  glColorPointer(4, GL_UNSIGNED_BYTE, 0, l_colors);
 
 
 	  // Calculate the sinewave
-	  if (drawSineReference && (width() > 0) && (height() > 0))
+	  if (m_draw_sine_reference && (width() > 0) && (height() > 0))
 	    {
-	      uint v = 0;
-	      uint c = 0;
-	      if (sineStyle)
+	      uint l_v = 0;
+	      uint l_c = 0;
+	      if (m_sine_style)
 		{
-		  for (float xx = 0; xx < width(); xx++)
+		  for (float l_xx = 0; l_xx < width(); l_xx++)
 		    {
-		      sineVertices[v++] = 0.05 * width() + 0.9 * xx;
-		      sineVertices[v++] = halfHeight + halfHeight * 0.9 * sin((xx / width()) * 2 * PI);
-		      colors[c++] = 255;
-		      colors[c++] = 255;
-		      colors[c++] = 0;
-		      colors[c++] = 255;
+		      l_sine_vertices[l_v++] = 0.05 * width() + 0.9 * l_xx;
+		      l_sine_vertices[l_v++] = l_half_height + l_half_height * 0.9 * sin((l_xx / width()) * 2 * PI);
+		      l_colors[l_c++] = 255;
+		      l_colors[l_c++] = 255;
+		      l_colors[l_c++] = 0;
+		      l_colors[l_c++] = 255;
 		    }
 		}
 	      else
 		{
-		  for (float xx = 0; xx < width(); xx++)
+		  for (float l_xx = 0; l_xx < width(); l_xx++)
 		    {
-		      sineVertices[v++] = 0.05 * width() + 0.9 * xx;;
-		      sineVertices[v++] = halfHeight + halfHeight * -0.9 * cos((xx/width()) * 2 * PI);
-		      colors[c++] = 255;
-		      colors[c++] = 255;
-		      colors[c++] = 0;
-		      colors[c++] = 255;
+		      l_sine_vertices[l_v++] = 0.05 * width() + 0.9 * l_xx;;
+		      l_sine_vertices[l_v++] = l_half_height + l_half_height * -0.9 * cos((l_xx/width()) * 2 * PI);
+		      l_colors[l_c++] = 255;
+		      l_colors[l_c++] = 255;
+		      l_colors[l_c++] = 0;
+		      l_colors[l_c++] = 255;
 		    }
 		}
-	      glVertexPointer(2, GL_FLOAT, 0, sineVertices);
-	      glNewList(sineReference, GL_COMPILE);
+	      glVertexPointer(2, GL_FLOAT, 0, l_sine_vertices);
+	      glNewList(m_sine_reference, GL_COMPILE);
 	      glDrawArrays(GL_LINE_STRIP, 0, width());
 	      glEndList();
 	    }
 
 
 	  // Calculate the previous period(s)
-	  if (drawPrevPeriods && (width() > 0) && (height() > 0))
+	  if (m_draw_prev_periods && (width() > 0) && (height() > 0))
 	    {
-	      for (int i = 0; i < 5; i++)
+	      for (int l_index = 0; l_index < 5; l_index++)
 		{
-		  if (leftMinimumAt - (i+1) < 0)
+		  if (l_left_minimum_at - (l_index+1) < 0)
 		    { 
-		      lastPeriodToDraw = i - 1;
+		      m_last_period_to_draw = l_index - 1;
 		      break;
 		    }
 
-		  uint v = 0;
-		  uint c = 0;
-		  int thisPrevLeftMinimumTime = note->get_minima()->at(leftMinimumAt - (i + 1)) - theDelay;
-		  int thisPrevRightMinimumTime = note->get_minima()->at(leftMinimumAt - i) - theDelay;
-		  int thisPrevDuration = thisPrevRightMinimumTime - thisPrevLeftMinimumTime;
-		  int thisPrevMaximumTime = 0;
-		  for (int j = 0; j < note->get_maxima()->size(); j++)
+		  uint l_v = 0;
+		  uint l_c = 0;
+		  int l_this_prev_left_minimum_time = l_note->get_minima()->at(l_left_minimum_at - (l_index + 1)) - l_the_delay;
+		  int l_this_prev_right_minimum_time = l_note->get_minima()->at(l_left_minimum_at - l_index) - l_the_delay;
+		  int l_this_prev_duration = l_this_prev_right_minimum_time - l_this_prev_left_minimum_time;
+		  int l_this_prev_maximum_time = 0;
+		  for (int l_j = 0; l_j < l_note->get_maxima()->size(); l_j++)
 		    {
-		      if ((note->get_maxima()->at(j) >= thisPrevLeftMinimumTime) && (note->get_maxima()->at(j) <= thisPrevRightMinimumTime))
+		      if ((l_note->get_maxima()->at(l_j) >= l_this_prev_left_minimum_time) && (l_note->get_maxima()->at(l_j) <= l_this_prev_right_minimum_time))
 			{
-			  thisPrevMaximumTime = note->get_maxima()->at(j) - theDelay;
+			  l_this_prev_maximum_time = l_note->get_maxima()->at(l_j) - l_the_delay;
 			  break;
 			}
 		    }
 
-		  float thisPrevMinimumPitch = (thePitchLookup.at(thisPrevLeftMinimumTime) >
-						thePitchLookup.at(thisPrevRightMinimumTime))
-		    ? thePitchLookup.at(thisPrevRightMinimumTime)
-		    : thePitchLookup.at(thisPrevLeftMinimumTime);
-		  float thisPrevMaximumPitch = thePitchLookup.at(thisPrevMaximumTime);
-		  float thisPrevWidth = thisPrevMaximumPitch - thisPrevMinimumPitch;
+		  float l_this_prev_minimum_pitch = (l_the_pitch_lookup.at(l_this_prev_left_minimum_time) >
+						l_the_pitch_lookup.at(l_this_prev_right_minimum_time))
+		    ? l_the_pitch_lookup.at(l_this_prev_right_minimum_time)
+		    : l_the_pitch_lookup.at(l_this_prev_left_minimum_time);
+		  float l_this_prev_maximum_pitch = l_the_pitch_lookup.at(l_this_prev_maximum_time);
+		  float l_this_prev_width = l_this_prev_maximum_pitch - l_this_prev_minimum_pitch;
 
-		  if (periodScaling)
+		  if (m_period_scaling)
 		    {
-		      for (float xx = 0; xx < width(); xx++)
+		      for (float l_xx = 0; l_xx < width(); l_xx++)
 			{
-			  int offset = toInt((xx / width()) * thisPrevDuration + thisPrevLeftMinimumTime + theSineDelay);
-			  vertices[v++] = 0.05 * width() + 0.9 * xx;
-			  vertices[v++] = 0.05 * height() + 0.9 * ((thePitchLookup.at(offset) - thisPrevMinimumPitch) / thisPrevWidth) * height();
-			  colors[c++] = 127;
-			  colors[c++] = 0;
-			  colors[c++] = 0;
-			  colors[c++] = toInt(float(1/pow(2,i + 1)) * 255);
+			  int l_offset = toInt((l_xx / width()) * l_this_prev_duration + l_this_prev_left_minimum_time + l_the_sine_delay);
+			  l_vertices[l_v++] = 0.05 * width() + 0.9 * l_xx;
+			  l_vertices[l_v++] = 0.05 * height() + 0.9 * ((l_the_pitch_lookup.at(l_offset) - l_this_prev_minimum_pitch) / l_this_prev_width) * height();
+			  l_colors[l_c++] = 127;
+			  l_colors[l_c++] = 0;
+			  l_colors[l_c++] = 0;
+			  l_colors[l_c++] = toInt(float(1/pow(2,l_index + 1)) * 255);
 			}
-		      glVertexPointer(2, GL_FLOAT, 0, vertices);
-		      glNewList(previousPoly[i], GL_COMPILE);
+		      glVertexPointer(2, GL_FLOAT, 0, l_vertices);
+		      glNewList(m_previous_poly[l_index], GL_COMPILE);
 		      glDrawArrays(GL_LINE_STRIP, 0, width());
 		      glEndList();
 		    }
 		  else
 		    {
-		      for (float xx = 0; xx < width(); xx++)
+		      for (float l_xx = 0; l_xx < width(); l_xx++)
 			{
-			  int offset = toInt((xx / width()) * thisPrevDuration + thisPrevLeftMinimumTime + theSineDelay);
-			  float xxx = xx * (float(thisPrevDuration) / periodDuration);
-			  xxx = xxx + ((0.5 * (periodDuration - thisPrevDuration) / periodDuration) * width());
-			  vertices[v++] = 0.05 * width() + 0.9 * xxx;
-			  vertices[v++] = 0.05 * height() + 0.9 * ((thePitchLookup.at(offset) - minimumPitch) / periodWidth) * height();
-			  colors[c++] = 127;
-			  colors[c++] = 0;
-			  colors[c++] = 0;
-			  colors[c++] = toInt(float(1/pow(2, i + 1)) * 255);
+			  int l_offset = toInt((l_xx / width()) * l_this_prev_duration + l_this_prev_left_minimum_time + l_the_sine_delay);
+			  float l_xxx = l_xx * (float(l_this_prev_duration) / l_period_duration);
+			  l_xxx = l_xxx + ((0.5 * (l_period_duration - l_this_prev_duration) / l_period_duration) * width());
+			  l_vertices[l_v++] = 0.05 * width() + 0.9 * l_xxx;
+			  l_vertices[l_v++] = 0.05 * height() + 0.9 * ((l_the_pitch_lookup.at(l_offset) - l_minimum_pitch) / l_period_width) * height();
+			  l_colors[l_c++] = 127;
+			  l_colors[l_c++] = 0;
+			  l_colors[l_c++] = 0;
+			  l_colors[l_c++] = toInt(float(1/pow(2, l_index + 1)) * 255);
 			}
 
-		      glVertexPointer(2, GL_FLOAT, 0, vertices);
-		      glNewList(previousPoly[i], GL_COMPILE);
+		      glVertexPointer(2, GL_FLOAT, 0, l_vertices);
+		      glNewList(m_previous_poly[l_index], GL_COMPILE);
 		      glDrawArrays(GL_LINE_STRIP, 0, width());
 		      glEndList();
 		    }
-		  lastPeriodToDraw = i;
+		  m_last_period_to_draw = l_index;
 		}
 	    }
 
 	  // Calculate the current period
 	  if ((width() > 0) && (height() > 0))
 	    {
-	      uint v = 0;
-	      uint c = 0;
-	      for (float xx = 0; xx < width(); xx++)
+	      uint l_v = 0;
+	      uint l_c = 0;
+	      for (float l_xx = 0; l_xx < width(); l_xx++)
 		{
-		  vertices[v++] = 0.05 * width() + 0.9 * xx;
-		  vertices[v++] = 0.05 * height() + 0.9 * ((thePitchLookup.at(toInt((xx / width()) * periodDuration + theLeftMinimumTime + theSineDelay)) - minimumPitch) / periodWidth) * height();
-		  colors[c++] = 127;
-		  colors[c++] = 0;
-		  colors[c++] = 0;
-		  colors[c++] = 255;
+		  l_vertices[l_v++] = 0.05 * width() + 0.9 * l_xx;
+		  l_vertices[l_v++] = 0.05 * height() + 0.9 * ((l_the_pitch_lookup.at(toInt((l_xx / width()) * l_period_duration + l_the_left_minimum_time + l_the_sine_delay)) - l_minimum_pitch) / l_period_width) * height();
+		  l_colors[l_c++] = 127;
+		  l_colors[l_c++] = 0;
+		  l_colors[l_c++] = 0;
+		  l_colors[l_c++] = 255;
 		}
-	      glVertexPointer(2, GL_FLOAT, 0, vertices);
-	      glNewList(currentPeriod, GL_COMPILE);
+	      glVertexPointer(2, GL_FLOAT, 0, l_vertices);
+	      glNewList(m_current_period, GL_COMPILE);
 	      glDrawArrays(GL_LINE_STRIP, 0, width());
 	      glEndList();
 	    }
 
 
 	  // Calculate the comparison
-	  if (drawComparison && drawSineReference && (width() > 0) && (height() > 0))
+	  if (m_draw_comparison && m_draw_sine_reference && (width() > 0) && (height() > 0))
 	    {
-	      uint v = 0;
-	      uint c = 0;
-	      for (int xx = 0; xx < width(); xx++)
+	      uint l_v = 0;
+	      uint l_c = 0;
+	      for (int l_xx = 0; l_xx < width(); l_xx++)
 		{
-		  vertices[v++] = 0.05 * width() + 0.9 * xx;
-		  vertices[v] = halfHeight + vertices[v] - sineVertices[v]; ++v;
-		  colors[c++] = 0;
-		  colors[c++] = 255;
-		  colors[c++] = 0;
-		  colors[c++] = 255;
+		  l_vertices[l_v++] = 0.05 * width() + 0.9 * l_xx;
+		  l_vertices[l_v] = l_half_height + l_vertices[l_v] - l_sine_vertices[l_v]; ++l_v;
+		  l_colors[l_c++] = 0;
+		  l_colors[l_c++] = 255;
+		  l_colors[l_c++] = 0;
+		  l_colors[l_c++] = 255;
 		}
-	      glVertexPointer(2, GL_FLOAT, 0, vertices);
-	      glNewList(comparisonPoly, GL_COMPILE);
+	      glVertexPointer(2, GL_FLOAT, 0, l_vertices);
+	      glNewList(m_comparison_poly, GL_COMPILE);
 	      glDrawArrays(GL_LINE_STRIP, 0, width());
 	      glEndList();
 	    }
 
-	  delete[] vertices;
-	  delete[] sineVertices;
-	  delete[] colors;
+	  delete[] l_vertices;
+	  delete[] l_sine_vertices;
+	  delete[] l_colors;
 
-	  prevLeftMinimumTime = leftMinimumTime;
+	  m_prev_left_minimum_time = l_left_minimum_time;
       
 	  updateGL();
 	}
@@ -463,48 +463,48 @@ void VibratoPeriodWidget::doUpdate(void)
 //------------------------------------------------------------------------------
 void VibratoPeriodWidget::setSmoothedPeriods(bool value)
 {
-  smoothedPeriods = value;
-  prevLeftMinimumTime = -1;
+  m_smoothed_periods = value;
+  m_prev_left_minimum_time = -1;
   doUpdate();
 }
 
 //------------------------------------------------------------------------------
 void VibratoPeriodWidget::setDrawSineReference(bool value)
 {
-  drawSineReference = value;
-  prevLeftMinimumTime = -1;
+  m_draw_sine_reference = value;
+  m_prev_left_minimum_time = -1;
   doUpdate();
 }
 
 //------------------------------------------------------------------------------
 void VibratoPeriodWidget::setSineStyle(bool value)
 {
-  sineStyle = value;
-  prevLeftMinimumTime = -1;
+  m_sine_style = value;
+  m_prev_left_minimum_time = -1;
   doUpdate();
 }
 
 //------------------------------------------------------------------------------
 void VibratoPeriodWidget::setDrawPrevPeriods(bool value)
 {
-  drawPrevPeriods = value;
-  prevLeftMinimumTime = -1;
+  m_draw_prev_periods = value;
+  m_prev_left_minimum_time = -1;
   doUpdate();
 }
 
 //------------------------------------------------------------------------------
 void VibratoPeriodWidget::setPeriodScaling(bool value)
 {
-  periodScaling = value;
-  prevLeftMinimumTime = -1;
+  m_period_scaling = value;
+  m_prev_left_minimum_time = -1;
   doUpdate();
 }
 
 //------------------------------------------------------------------------------
 void VibratoPeriodWidget::setDrawComparison(bool value)
 {
-  drawComparison = value;
-  prevLeftMinimumTime = -1;
+  m_draw_comparison = value;
+  m_prev_left_minimum_time = -1;
   doUpdate();
 }
 
