@@ -23,41 +23,41 @@ class VibratoPeriodWidget: public QGLWidget
 {
   Q_OBJECT
 
- public:
-  VibratoPeriodWidget(QWidget * p_parent);
-  virtual ~VibratoPeriodWidget(void);
+  public:
+    VibratoPeriodWidget(QWidget * p_parent);
+    virtual ~VibratoPeriodWidget(void);
 
-  void initializeGL(void);
-  void resizeGL(int p_width, int p_height);
-  void paintGL(void);
+    void initializeGL(void);
+    void resizeGL(int p_width, int p_height);
+    void paintGL(void);
 
-  QSize minimumSizeHint(void) const;
+    QSize minimumSizeHint(void) const;
 
- public slots:
-  void doUpdate(void);
-  void setSmoothedPeriods(bool value);
-  void setDrawSineReference(bool value);
-  void setSineStyle(bool value);
-  void setDrawPrevPeriods(bool value);
-  void setPeriodScaling(bool value);
-  void setDrawComparison(bool value);
+  public slots:
+    void doUpdate(void);
+    void setSmoothedPeriods(bool p_value);
+    void setDrawSineReference(bool p_value);
+    void setSineStyle(bool p_value);
+    void setDrawPrevPeriods(bool p_value);
+    void setPeriodScaling(bool p_value);
+    void setDrawComparison(bool p_value);
 
- private:
-  int m_prev_left_minimum_time;
-  bool m_smoothed_periods;
-  bool m_draw_sine_reference;
-  bool m_sine_style;
-  bool m_draw_prev_periods;
-  bool m_period_scaling;
-  bool m_draw_comparison;
+  private:
+    int m_prev_left_minimum_time;
+    bool m_smoothed_periods;
+    bool m_draw_sine_reference;
+    bool m_sine_style;
+    bool m_draw_prev_periods;
+    bool m_period_scaling;
+    bool m_draw_comparison;
 
-  GLuint m_sine_reference;
-  GLuint m_previous_poly[5];
-  GLuint m_current_period;
-  GLuint m_comparison_poly;
-  GLuint m_comparison_reference;
+    GLuint m_sine_reference;
+    GLuint m_previous_poly[5];
+    GLuint m_current_period;
+    GLuint m_comparison_poly;
+    GLuint m_comparison_reference;
 
-  int m_last_period_to_draw;
+    int m_last_period_to_draw;
 };
 #endif // VIBRATOPERIODWIDGET_H
 // EOF
