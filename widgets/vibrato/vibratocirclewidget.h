@@ -23,30 +23,34 @@ class VibratoCircleWidget: public QGLWidget
 {
   Q_OBJECT
 
- public:
-  VibratoCircleWidget(QWidget * p_parent);
-  virtual ~VibratoCircleWidget(void);
+  public:
+    VibratoCircleWidget(QWidget * p_parent);
+    virtual ~VibratoCircleWidget(void);
 
-  void initializeGL(void);
-  void resizeGL(int p_width, int p_height);
-  void paintGL(void);
+    void initializeGL(void);
+    void resizeGL(int p_width
+                 ,int p_height
+                 );
+    void paintGL(void);
 
-  QSize minimumSizeHint(void) const;
-  int getType(void);
+    QSize minimumSizeHint(void) const;
+    int getType(void);
 
- public slots:
-  void doUpdate(void);
-  void setAccuracy(int p_value);
-  void setType(int p_value);
+  public slots:
 
- private:
-  float m_accuracy;
-  int m_type;
-  int m_last_period_to_draw;
+    void doUpdate(void);
+    void setAccuracy(int p_value);
+    void setType(int p_value);
 
-  GLuint m_reference_circle;
-  GLuint m_current_period;
-  GLuint m_prev_periods[6];
+  private:
+
+    float m_accuracy;
+    int m_type;
+    int m_last_period_to_draw;
+
+    GLuint m_reference_circle;
+    GLuint m_current_period;
+    GLuint m_prev_periods[6];
 };
 
 #endif // VIBRATOCIRCLEWIDGET_H
