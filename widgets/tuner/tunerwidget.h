@@ -29,11 +29,11 @@ class TunerWidget : public DrawWidget
   Q_OBJECT
 
   public:
-  TunerWidget(QWidget *p_parent);
-  virtual ~TunerWidget(void);
+    TunerWidget(QWidget *p_parent);
+    virtual ~TunerWidget(void);
 
-  void paintEvent(QPaintEvent *);
-  QSize minimumSizeHint(void) const;
+    void paintEvent(QPaintEvent *);
+    QSize minimumSizeHint(void) const;
 
     /**
        Sets the value of the widget.
@@ -41,7 +41,9 @@ class TunerWidget : public DrawWidget
        @param p_value the value to represent (in cents). Accepts values between -60 and +60 inclusive.
        @param p_intensity How sure of the note you are
     */
-    void setValue(float p_value, float p_intensity);
+    void setValue(float p_value
+                 ,float p_intensity
+                 );
     double value(void);
 
   private:
