@@ -36,7 +36,7 @@ class TunerView : public ViewWidget
   Q_OBJECT
 
   public:
-  TunerView(int viewID_, QWidget *parent = NULL);
+  TunerView(int p_view_iD_, QWidget *p_parent = NULL);
   virtual ~TunerView(void);
 
   void resizeEvent(QResizeEvent *);
@@ -45,17 +45,17 @@ class TunerView : public ViewWidget
   QSize sizeHint(void) const;
 
   public slots:
-  void slotCurrentTimeChanged(double time);
-  void setLed(int index, bool value);
+  void slotCurrentTimeChanged(double p_time);
+  void setLed(int p_index, bool p_value);
   void doUpdate(void);
 
   private:
   void resetLeds(void);
 
-  VibratoTunerWidget *tunerWidget;
-  std::vector<LEDIndicator*> leds;
-  QwtSlider * slider;
-  QPixmap * ledBuffer;
+  VibratoTunerWidget *m_tuner_widget;
+  std::vector<LEDIndicator*> m_leds;
+  QwtSlider * m_slider;
+  QPixmap * m_led_buffer;
 
 };
 #endif // TUNERVIEW_H

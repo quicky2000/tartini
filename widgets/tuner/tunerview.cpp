@@ -30,7 +30,7 @@
 #include "channel.h"
 #include "musicnotes.h"
 
-int LEDLetterLookup[12] =
+int g_LED_letter_lookup[12] =
   {
     2,
     2,
@@ -47,70 +47,70 @@ int LEDLetterLookup[12] =
   };
 
 //------------------------------------------------------------------------------
-TunerView::TunerView(int viewID_, QWidget *parent ):
-  ViewWidget( viewID_, parent)
+TunerView::TunerView(int p_view_iD_, QWidget *p_parent ):
+  ViewWidget( p_view_iD_, p_parent)
 {
 
-  Q3GridLayout * layout = new Q3GridLayout(this, 9, 3, 2);
-  layout->setResizeMode(QLayout::SetNoConstraint);
+  Q3GridLayout * l_layout = new Q3GridLayout(this, 9, 3, 2);
+  l_layout->setResizeMode(QLayout::SetNoConstraint);
 
   // Tuner widget goes from (0, 0) to (0, 8);
-  tunerWidget = new VibratoTunerWidget(this);
-  layout->addMultiCellWidget(tunerWidget, 0, 0, 0, 8);
+  m_tuner_widget = new VibratoTunerWidget(this);
+  l_layout->addMultiCellWidget(m_tuner_widget, 0, 0, 0, 8);
 
   // Slider goes from (2,0) to (2,9)
 
 #if QWT_VERSION == 0x050000
-  slider = new QwtSlider(this, Qt::Horizontal, QwtSlider::Bottom, QwtSlider::BgTrough);
+  m_slider = new QwtSlider(this, Qt::Horizontal, QwtSlider::Bottom, QwtSlider::BgTrough);
 #else
-  slider = new QwtSlider(this, Qt::Horizontal, QwtSlider::BottomScale, QwtSlider::BgTrough);
+  m_slider = new QwtSlider(this, Qt::Horizontal, QwtSlider::BottomScale, QwtSlider::BgTrough);
 #endif
-  slider->setRange(0, 2);
-  slider->setReadOnly(false);
-  layout->addMultiCellWidget(slider, 1, 1, 0, 8);
-  QToolTip::add(slider, tr("Increase slider to smooth the pitch over a longer time period"));
+  m_slider->setRange(0, 2);
+  m_slider->setReadOnly(false);
+  l_layout->addMultiCellWidget(m_slider, 1, 1, 0, 8);
+  QToolTip::add(m_slider, tr("Increase slider to smooth the pitch over a longer time period"));
 
-  ledBuffer = new QPixmap();
-  leds.push_back(new LEDIndicator(ledBuffer, this, "A"));
-  leds.push_back(new LEDIndicator(ledBuffer, this, "B"));
-  leds.push_back(new LEDIndicator(ledBuffer, this, "C"));
-  leds.push_back(new LEDIndicator(ledBuffer, this, "D"));
-  leds.push_back(new LEDIndicator(ledBuffer, this, "E"));
-  leds.push_back(new LEDIndicator(ledBuffer, this, "F"));
-  leds.push_back(new LEDIndicator(ledBuffer, this, "G"));
+  m_led_buffer = new QPixmap();
+  m_leds.push_back(new LEDIndicator(m_led_buffer, this, "A"));
+  m_leds.push_back(new LEDIndicator(m_led_buffer, this, "B"));
+  m_leds.push_back(new LEDIndicator(m_led_buffer, this, "C"));
+  m_leds.push_back(new LEDIndicator(m_led_buffer, this, "D"));
+  m_leds.push_back(new LEDIndicator(m_led_buffer, this, "E"));
+  m_leds.push_back(new LEDIndicator(m_led_buffer, this, "F"));
+  m_leds.push_back(new LEDIndicator(m_led_buffer, this, "G"));
 
-  leds.push_back(new LEDIndicator(ledBuffer, this, "#"));
+  m_leds.push_back(new LEDIndicator(m_led_buffer, this, "#"));
 
 
   // Add the leds for note names into the positions (1, 0) to (1, 6)
-  for (int n = 0; n < 7; n++)
+  for (int l_n = 0; l_n < 7; l_n++)
     {
-      layout->addWidget(leds.at(n), 2, n);
+      l_layout->addWidget(m_leds.at(l_n), 2, l_n);
     }
 
   // (1, 7) is blank
   
   // Add the flat led
-  layout->addWidget(leds.at(7), 2, 8);
+  l_layout->addWidget(m_leds.at(7), 2, 8);
 
-  layout->setRowStretch( 0, 4 );
-  layout->setRowStretch( 1, 1 );
-  layout->setRowStretch( 2, 0 ); 
+  l_layout->setRowStretch( 0, 4 );
+  l_layout->setRowStretch( 1, 1 );
+  l_layout->setRowStretch( 2, 0 );
     
   connect(gdata, SIGNAL(onChunkUpdate()), this, SLOT(doUpdate()));
-  connect(tunerWidget, SIGNAL(ledSet(int, bool)), this, SLOT(setLed(int, bool)));
+  connect(m_tuner_widget, SIGNAL(ledSet(int, bool)), this, SLOT(setLed(int, bool)));
 }
 
 //------------------------------------------------------------------------------
 TunerView::~TunerView(void)
 {
-  delete slider;
-  for (uint i = 0; i < leds.size(); i++)
+  delete m_slider;
+  for (uint l_index = 0; l_index < m_leds.size(); l_index++)
     {
-      delete leds[i];
+      delete m_leds[l_index];
     }
-  delete ledBuffer;
-  delete tunerWidget;
+  delete m_led_buffer;
+  delete m_tuner_widget;
 }
 
 //------------------------------------------------------------------------------
@@ -121,9 +121,9 @@ void TunerView::resizeEvent(QResizeEvent *)
 //------------------------------------------------------------------------------
 void TunerView::resetLeds(void)
 {
-  for (uint i = 0; i < leds.size(); i++)
+  for (uint l_index = 0; l_index < m_leds.size(); l_index++)
     {
-      leds[i]->setOn(false);
+      m_leds[l_index]->setOn(false);
     }
 }
 
@@ -138,22 +138,22 @@ void TunerView::paintEvent( QPaintEvent* )
 }
 
 //------------------------------------------------------------------------------
-void TunerView::setLed(int index, bool value)
+void TunerView::setLed(int p_index, bool p_value)
 {
-  leds[index]->setOn(value);
+  m_leds[p_index]->setOn(p_value);
 }
 
 //------------------------------------------------------------------------------
 void TunerView::doUpdate(void)
 {
-  Channel *active = gdata->getActiveChannel();
-  if (active == NULL || !active->hasAnalysisData())
+  Channel *l_active_channel = gdata->getActiveChannel();
+  if (l_active_channel == NULL || !l_active_channel->hasAnalysisData())
     {
-      tunerWidget->doUpdate(0.0);
+      m_tuner_widget->doUpdate(0.0);
       return;
     }
-  ChannelLocker channelLocker(active);
-  double time = gdata->getView().currentTime();
+  ChannelLocker l_channel_locker(l_active_channel);
+  double l_time = gdata->getView().currentTime();
 
   // To work out note:
   //   * Find the slider's value. This tells us how many seconds to average over.
@@ -162,28 +162,28 @@ void TunerView::doUpdate(void)
   //   * Calculate indexes for these times, and use them to call average.
   //
 
-  double sliderVal = slider->value();
+  double l_slider_val = m_slider->value();
 
-  double pitch = 0.0;
-  if (sliderVal == 0)
+  double l_pitch = 0.0;
+  if (l_slider_val == 0)
     {
-      int chunk = active->currentChunk();
-      if(chunk >= active->totalChunks()) chunk = active->totalChunks() - 1;
-      if(chunk >= 0)
+      int l_chunk = l_active_channel->currentChunk();
+      if(l_chunk >= l_active_channel->totalChunks()) l_chunk = l_active_channel->totalChunks() - 1;
+      if(l_chunk >= 0)
 	{
-	  pitch = active->dataAtChunk(chunk)->getPitch();
+	  l_pitch = l_active_channel->dataAtChunk(l_chunk)->getPitch();
 	}
     }
   else
     {
-      double startTime = time - sliderVal;
-      double stopTime = time;
+      double l_start_time = l_time - l_slider_val;
+      double l_stop_time = l_time;
   
-      int startChunk = active->chunkAtTime(startTime);
-      int stopChunk = active->chunkAtTime(stopTime) + 1;
-      pitch = active->averagePitch(startChunk, stopChunk);
+      int l_start_chunk = l_active_channel->chunkAtTime(l_start_time);
+      int l_stop_chunk = l_active_channel->chunkAtTime(l_stop_time) + 1;
+      l_pitch = l_active_channel->averagePitch(l_start_chunk, l_stop_chunk);
     }
-  tunerWidget->doUpdate(pitch);
+  m_tuner_widget->doUpdate(l_pitch);
 }
 
 //------------------------------------------------------------------------------
