@@ -20,29 +20,31 @@
 #include <QResizeEvent>
 
 //------------------------------------------------------------------------------
-SummaryView::SummaryView(int p_view_id, QWidget *p_parent):
-  ViewWidget( p_view_id, p_parent)
+SummaryView::SummaryView(int p_view_id
+                        ,QWidget *p_parent
+                        )
+: ViewWidget( p_view_id, p_parent)
 {
-  m_summary_draw_widget = new SummaryDrawWidget(this);
-  m_summary_draw_widget->show();
+    m_summary_draw_widget = new SummaryDrawWidget(this);
+    m_summary_draw_widget->show();
 }
 
 //------------------------------------------------------------------------------
 SummaryView::~SummaryView(void)
 {
-  delete m_summary_draw_widget;
+    delete m_summary_draw_widget;
 }
 
 //------------------------------------------------------------------------------
 void SummaryView::resizeEvent(QResizeEvent *)
 {
-  m_summary_draw_widget->resize(size());
+    m_summary_draw_widget->resize(size());
 }
  
 //------------------------------------------------------------------------------
 QSize SummaryView::sizeHint(void) const
 {
-  return QSize(512, 256);
+    return QSize(512, 256);
 }
 
 // EOF

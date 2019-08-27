@@ -27,16 +27,19 @@ class SummaryView: public ViewWidget
   Q_OBJECT
 
   public:
-  SummaryView(int p_view_id, QWidget *p_parent = NULL);
-  virtual ~SummaryView(void);
 
-  void resizeEvent(QResizeEvent *);
+    SummaryView(int p_view_id
+               ,QWidget *p_parent = NULL
+               );
+    virtual ~SummaryView(void);
 
-  QSize sizeHint(void) const;
+    void resizeEvent(QResizeEvent *);
+
+    QSize sizeHint(void) const;
 
   private:
-  SummaryDrawWidget * m_summary_draw_widget;
 
+    SummaryDrawWidget * m_summary_draw_widget;
 };
 #endif // SUMMARYVIEW_H
 // EOF
