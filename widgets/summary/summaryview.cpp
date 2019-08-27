@@ -20,23 +20,23 @@
 #include <QResizeEvent>
 
 //------------------------------------------------------------------------------
-SummaryView::SummaryView(int viewID_, QWidget *parent):
-  ViewWidget( viewID_, parent)
+SummaryView::SummaryView(int p_view_id, QWidget *p_parent):
+  ViewWidget( p_view_id, p_parent)
 {
-  summaryDrawWidget = new SummaryDrawWidget(this);
-  summaryDrawWidget->show();
+  m_summary_draw_widget = new SummaryDrawWidget(this);
+  m_summary_draw_widget->show();
 }
 
 //------------------------------------------------------------------------------
 SummaryView::~SummaryView(void)
 {
-  delete summaryDrawWidget;
+  delete m_summary_draw_widget;
 }
 
 //------------------------------------------------------------------------------
 void SummaryView::resizeEvent(QResizeEvent *)
 {
-  summaryDrawWidget->resize(size());
+  m_summary_draw_widget->resize(size());
 }
  
 //------------------------------------------------------------------------------
