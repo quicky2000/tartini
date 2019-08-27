@@ -35,25 +35,31 @@ class SummaryDrawWidget: public DrawWidget
   Q_OBJECT
 
   public:
-  SummaryDrawWidget(QWidget * p_parent);
-  virtual ~SummaryDrawWidget(void);
 
-  void paintEvent(QPaintEvent *);
+    SummaryDrawWidget(QWidget * p_parent);
+    virtual ~SummaryDrawWidget(void);
 
-  void mousePressEvent(QMouseEvent * p_event);
-  void mouseMoveEvent(QMouseEvent * p_event);
-  void mouseReleaseEvent(QMouseEvent * p_event);
-  void wheelEvent(QWheelEvent *p_event);
+    void paintEvent(QPaintEvent *);
+
+    void mousePressEvent(QMouseEvent * p_event);
+    void mouseMoveEvent(QMouseEvent * p_event);
+    void mouseReleaseEvent(QMouseEvent * p_event);
+    void wheelEvent(QWheelEvent *p_event);
 
  private:
-  QPixmap * m_buffer;
 
-  bool m_mouse_down;
-  int m_mouse_X, m_mouse_Y;
-  double m_click_time, m_click_note;
-  double m_click_current_time_diff, m_click_view_bottom_diff;
-  double m_scaler, m_down_scaler;
-  int m_click_mode;
+    QPixmap * m_buffer;
+
+    bool m_mouse_down;
+
+    int m_mouse_X;
+    int m_mouse_Y;
+    double m_click_time;
+    double m_click_note;
+    double m_click_current_time_diff;
+    double m_click_view_bottom_diff;
+    double m_scaler, m_down_scaler;
+    int m_click_mode;
 };
 #endif // SUMMARYDRAWWIDGET_H
 // EOF
