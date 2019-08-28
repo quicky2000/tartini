@@ -27,7 +27,9 @@ class ScoreView: public ViewWidget
   Q_OBJECT
 
   public:
-  ScoreView(int p_view_id, QWidget *p_parent = NULL);
+  ScoreView(int p_view_id
+           ,QWidget *p_parent = NULL
+           );
   virtual ~ScoreView(void);
 
   void resizeEvent(QResizeEvent *);
