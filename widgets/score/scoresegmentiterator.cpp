@@ -23,7 +23,7 @@
 //------------------------------------------------------------------------------
 double ScoreSegmentIterator::widthX(void)
 {
-  return (_rightTime - _leftTime) * sw->_scaleX;
+  return (_rightTime - _leftTime) * sw->m_scale_X;
 }
 
 //------------------------------------------------------------------------------
@@ -33,15 +33,15 @@ void ScoreSegmentIterator::reset(ScoreWidget * scoreWidget, Channel * channel)
   ch = channel;
   staveHeight = sw->getStaveHeight();
   halfStaveHeight = sw->getStaveCenterY();
-  numRows = std::max((sw->height() - toInt(sw->_boarderY * 2)) / staveHeight, 1);
-  totalRowTime = (double)(sw->width() - sw->_boarderX * 2) / sw->_scaleX;
+  numRows = std::max((sw->height() - toInt(sw->m_boarder_Y * 2)) / staveHeight, 1);
+  totalRowTime = (double)(sw->width() - sw->m_boarder_X * 2) / sw->m_scale_X;
   totalPageTime = totalRowTime * numRows;
   if(ch)
     {
       _curTime = ch->timeAtChunk(ch->currentChunk());
       _curPage = (int)floor(_curTime / totalPageTime);
-      lookAheadGapTime = sw->_lookAheadGap * totalPageTime;
-      lookAheadTime = _curTime + sw->_lookAhead * totalPageTime;
+      lookAheadGapTime = sw->m_look_ahead_gap * totalPageTime;
+      lookAheadTime = _curTime + sw->m_look_ahead * totalPageTime;
       lookBehindTime = lookAheadTime - totalPageTime;
       startOfPageTime = floor(_curTime / totalPageTime) * totalPageTime;
       curRelPageTime = _curTime - startOfPageTime;
@@ -73,7 +73,7 @@ bool ScoreSegmentIterator::next(void)
 	  int j = rowCounter;
 	  double startOfRowTime = startOfPageTime + j * totalRowTime;
 	  double endOfRowTime = startOfRowTime + totalRowTime;
-	  _lineCenterY = toInt(sw->_boarderY) + halfStaveHeight + staveHeight * j;
+	  _lineCenterY = toInt(sw->m_boarder_Y) + halfStaveHeight + staveHeight * j;
 	  while(++subRowCounter < 4)
 	    {
 	      switch(subRowCounter)
@@ -84,7 +84,7 @@ bool ScoreSegmentIterator::next(void)
 		      //draw any parts of the next page
 		      _leftTime = startOfRowTime + totalPageTime;
 		      _rightTime = std::min(endOfRowTime, lookBehindTime3) + totalPageTime;
-		      _leftX = (double)sw->_boarderX;
+		      _leftX = (double)sw->m_boarder_X;
 		      return (_isValid = true);
 		    }
 		  break;
@@ -94,7 +94,7 @@ bool ScoreSegmentIterator::next(void)
 		      //normal case
 		      _leftTime = std::max(startOfRowTime, lookBehindTime3 + lookAheadGapTime);
 		      _rightTime = std::min(startOfRowTime + totalRowTime, lookAheadTime2);
-		      _leftX = (double)sw->_boarderX + (_leftTime-startOfRowTime) * sw->_scaleX;
+		      _leftX = (double)sw->m_boarder_X + (_leftTime-startOfRowTime) * sw->m_scale_X;
 		      return (_isValid = true);
 		    }
 		  break;
@@ -104,7 +104,7 @@ bool ScoreSegmentIterator::next(void)
 		      _leftTime = std::max(startOfRowTime - totalPageTime, lookBehindTime2 + lookAheadGapTime);
 		      _leftTime = std::min(_leftTime, endOfRowTime - totalPageTime);
 		      _rightTime = endOfRowTime - totalPageTime;
-		      _leftX = (double)sw->_boarderX + (_leftTime -(startOfRowTime - totalPageTime)) * sw->_scaleX;
+		      _leftX = (double)sw->m_boarder_X + (_leftTime -(startOfRowTime - totalPageTime)) * sw->m_scale_X;
 		      return (_isValid = true);
 		    }
 		}
@@ -119,8 +119,8 @@ bool ScoreSegmentIterator::next(void)
 	{
 	  double startOfRowTime = startOfPageTime + rowCounter*totalRowTime;
 	  double endOfRowTime = startOfRowTime + totalRowTime;
-	  _lineCenterY = toInt(sw->_boarderY) + halfStaveHeight + staveHeight*rowCounter;
-	  _leftX = sw->_boarderX;
+	  _lineCenterY = toInt(sw->m_boarder_Y) + halfStaveHeight + staveHeight*rowCounter;
+	  _leftX = sw->m_boarder_X;
 	  _leftTime = startOfRowTime;
 	  _rightTime = endOfRowTime;
 	  rowCounter++;

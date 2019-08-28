@@ -32,87 +32,87 @@ class ScoreWidget : public DrawWidget
   enum NoteType { DemiSemiQuaver, SemiQuaver, Quaver, Crotchet, Minum, SemiBreve };
 
  public:
-  ScoreWidget(QWidget * parent);
+  ScoreWidget(QWidget * p_parent);
   virtual ~ScoreWidget(void);
 
   /**
    * Draw a crotchet at x, y
-   * @param x The lefthand-side x pixel
-   * @param y The center y pixel
+   * @param p_x The lefthand-side x pixel
+   * @param p_y The center y pixel
    * @param stemUp true if the stem is to be drawn upwards, else its drawn downwards
    */
-  void drawNote(int x, int y, StemType stepType, FillType fillType, int numFlicks);
+  void drawNote(int p_x, int p_y, StemType p_step_type, FillType p_fill_type, int p_num_flicks);
 
   /**
      Draw a single note
-     @param x The x pos in pixels
-     @param y The y pos of the center of the scale (Middle C)
-     @param pitch The midi number of the note (60 == Middle C)
-     @param noteLength in seconds
+     @param p_x The x pos in pixels
+     @param p_y The y pos of the center of the scale (Middle C)
+     @param p_pitch The midi number of the note (60 == Middle C)
+     @param p_note_length in seconds
   */
-  void drawNoteAtPitch(int x, int y, int pitch, double noteLength, double volume=1.0);
+  void drawNoteAtPitch(int p_x, int p_y, int p_pitch, double p_note_length, double p_volume=1.0);
 
   /** Draws a segment of the musical score
-   * @param ch The channel to get the notes from.
-   * @param leftX In pixels (even though a doule)
-   * @param lineCenterY In pixels
-   * @param leftTime The time is seconds at which is at the lefthand side of the scoreSegment to draw
+   * @param p_channel The channel to get the notes from.
+   * @param p_left_X In pixels (even though a doule)
+   * @param p_line_center_Y In pixels
+   * @param p_left_time The time is seconds at which is at the lefthand side of the scoreSegment to draw
    */
-  void drawScoreSegment(Channel * ch, double leftX, int lineCenterY, double leftTime, double rightTime);
+  void drawScoreSegment(Channel * p_channel, double p_left_X, int p_line_center_Y, double p_left_time, double p_right_time);
 
   /** Draw a segment of stave lines
-   * @param leftX The pixel at the left of the segment
-   * @param lineCenterY The y pixel to put middle C on
-   * @param widthX The width of the stave segment
+   * @param p_left_X The pixel at the left of the segment
+   * @param p_line_center_Y The y pixel to put middle C on
+   * @param p_width_X The width of the stave segment
    */
-  void drawStaveSegment(int leftX, int lineCenterY, int widthX);
+  void drawStaveSegment(int p_left_X, int p_line_center_Y, int p_width_X);
   void paintEvent(QPaintEvent * );
   inline int getStaveHeight(void);
   inline int getStaveCenterY(void);
   inline QSize sizeHint(void) const;
-  NoteType getNoteType(double noteLength);
+  NoteType getNoteType(double p_note_length);
 
   inline double scaleX(void);
   inline double scaleY(void);
 
   public slots:
-  inline void setScaleX(double x);
-  inline void setScaleY(double y);
-  inline void setSharpsMode(int mode);
-  inline void setNotesMode(int mode);
-  inline void setClefMode(int mode);
-  inline void setOpaqueMode(int mode);
-  inline void setTransposeLevel(int index);
-  inline void setShowAllMode(int mode);
+  inline void setScaleX(double p_x);
+  inline void setScaleY(double p_y);
+  inline void setSharpsMode(int p_mode);
+  inline void setNotesMode(int p_mode);
+  inline void setClefMode(int p_mode);
+  inline void setOpaqueMode(int p_mode);
+  inline void setTransposeLevel(int p_index);
+  inline void setShowAllMode(int p_mode);
 
  private:
-  void mousePressEvent(QMouseEvent *e);
-  void mouseMoveEvent(QMouseEvent *e);
-  void mouseReleaseEvent(QMouseEvent *e);
+  void mousePressEvent(QMouseEvent *p_event);
+  void mouseMoveEvent(QMouseEvent *p_event);
+  void mouseReleaseEvent(QMouseEvent *p_event);
 
   //data goes here
   //num. pixels between lines
-  double _scaleY;
+  double m_scale_Y;
   //num. pixels per second
-  double _scaleX;
-  double _boarderX;
-  double _boarderY;
-  bool _showBaseClef;
-  bool _showNotes;
-  bool _showOpaqueNotes;
-  bool _useFlats;
-  bool _showAllMode;
-  int _pitchOffset;
-  int sharpsLookup[129];
-  int flatsLookup[129];
-  int _fontHeight;
-  int _fontWidth;
-  QFont _font;
+  double m_scale_X;
+  double m_boarder_X;
+  double m_boarder_Y;
+  bool m_show_base_clef;
+  bool m_show_notes;
+  bool m_show_opaque_notes;
+  bool m_use_flats;
+  bool m_show_all_mode;
+  int m_pitch_offset;
+  int m_sharps_lookup[129];
+  int m_flats_lookup[129];
+  int m_font_height;
+  int m_font_width;
+  QFont m_font;
   //in fractions of a page
-  double _lookAhead;
+  double m_look_ahead;
   //in fractions of a page
-  double _lookAheadGap;
-  bool _mouseDown;
+  double m_look_ahead_gap;
+  bool m_mouse_down;
   friend class ScoreSegmentIterator;
 };
 

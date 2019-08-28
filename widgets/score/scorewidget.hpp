@@ -19,13 +19,13 @@
 //------------------------------------------------------------------------------
 int ScoreWidget::getStaveHeight(void)
 {
-  return toInt(_scaleY * (_showBaseClef ? 16 : 8));
+  return toInt(m_scale_Y * (m_show_base_clef ? 16 : 8));
 }
 
 //------------------------------------------------------------------------------
 int ScoreWidget::getStaveCenterY(void)
 {
-  return toInt(_scaleY * (_showBaseClef ? 8 : 7));
+  return toInt(m_scale_Y * (m_show_base_clef ? 8 : 7));
 }
 
 //------------------------------------------------------------------------------
@@ -37,60 +37,60 @@ QSize ScoreWidget::sizeHint(void) const
 //------------------------------------------------------------------------------
 double ScoreWidget::scaleX(void)
 {
-  return _scaleX;
+  return m_scale_X;
 }
 
 //------------------------------------------------------------------------------
 double ScoreWidget::scaleY(void)
 {
-  return _scaleY;
+  return m_scale_Y;
 }
 
 //------------------------------------------------------------------------------
-void ScoreWidget::setScaleX(double x)
+void ScoreWidget::setScaleX(double p_x)
 {
-  _scaleX = x;
+  m_scale_X = p_x;
 }
 
 //------------------------------------------------------------------------------
-void ScoreWidget::setScaleY(double y)
+void ScoreWidget::setScaleY(double p_y)
 {
-  _scaleY = y;
+  m_scale_Y = p_y;
 }
 
 //------------------------------------------------------------------------------
-void ScoreWidget::setSharpsMode(int mode)
+void ScoreWidget::setSharpsMode(int p_mode)
 {
-  _useFlats = (mode!=0);
+  m_use_flats = (p_mode!=0);
 }
 
 //------------------------------------------------------------------------------
-void ScoreWidget::setNotesMode(int mode)
+void ScoreWidget::setNotesMode(int p_mode)
 {
-  _showNotes = (mode==0);
+  m_show_notes = (p_mode==0);
 }
 
 //------------------------------------------------------------------------------
-void ScoreWidget::setClefMode(int mode)
+void ScoreWidget::setClefMode(int p_mode)
 {
-  _showBaseClef = (mode==0);
+  m_show_base_clef = (p_mode==0);
 }
 
 //------------------------------------------------------------------------------
-void ScoreWidget::setOpaqueMode(int mode)
+void ScoreWidget::setOpaqueMode(int p_mode)
 {
-  _showOpaqueNotes = (mode!=0);
+  m_show_opaque_notes = (p_mode!=0);
 }
 
 //------------------------------------------------------------------------------
-void ScoreWidget::setTransposeLevel(int index)
+void ScoreWidget::setTransposeLevel(int p_index)
 {
-  _pitchOffset = (index - 2) * -12;
+  m_pitch_offset = (p_index - 2) * -12;
 }
 
 //------------------------------------------------------------------------------
-void ScoreWidget::setShowAllMode(int mode)
+void ScoreWidget::setShowAllMode(int p_mode)
 {
-  _showAllMode = (mode!=0);
+  m_show_all_mode = (p_mode!=0);
 }
 // EOF
