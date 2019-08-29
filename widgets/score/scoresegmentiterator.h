@@ -23,45 +23,45 @@ class ScoreWidget;
 
 class ScoreSegmentIterator
 {
-  ScoreWidget * sw;
+  ScoreWidget * m_score_widget;
 
-  Channel * ch;
-  int staveHeight;
-  int halfStaveHeight;
-  int numRows;
-  double totalRowTime;
-  double totalPageTime;
-  double _curTime;
+  Channel * m_channel;
+  int m_stave_height;
+  int m_half_stave_height;
+  int m_num_rows;
+  double m_total_row_time;
+  double m_total_page_time;
+  double m_cur_time;
 
-  int _curPage;
-  double lookAheadGapTime;
-  double lookAheadTime;
-  double lookBehindTime;
-  double startOfPageTime;
-  double curRelPageTime;
-  double endTime;
-  int _numPages;
-  double endOfLastPageTime;
-  double lookAheadTime2;
-  double lookBehindTime2;
-  double lookBehindTime3;
-  int curRow;
-  int rowCounter;
-  int subRowCounter;
+  int m_cur_page;
+  double m_look_ahead_gap_time;
+  double m_look_ahead_time;
+  double m_look_behind_time;
+  double m_start_of_page_time;
+  double m_cur_rel_page_time;
+  double m_end_time;
+  int m_num_pages;
+  double m_end_of_last_page_time;
+  double m_look_ahead_time2;
+  double m_look_behind_time2;
+  double m_look_behind_time3;
+  int m_cur_row;
+  int m_row_counter;
+  int m_sub_row_counter;
 
-  double _leftTime;
-  double _rightTime;
-  double _leftX;
-  int _lineCenterY;
-  bool _isValid;
+  double m_left_time;
+  double m_right_time;
+  double m_left_X;
+  int m_line_center_Y;
+  bool m_is_valid;
 
  public :
-  inline ScoreSegmentIterator(ScoreWidget *scoreWidget, Channel *channel);
+  inline ScoreSegmentIterator(ScoreWidget *p_score_widget, Channel *p_channel);
   /**
      Initalise the iterator to just before the first segment
-     @param scoreWidget The ScoreWidget to iterate through it's segments
+     @param p_score_widget The ScoreWidget to iterate through it's segments
   */
-  void reset(ScoreWidget * scoreWidget, Channel * channel);
+  void reset(ScoreWidget * p_score_widget, Channel * p_channel);
 
   /**
      move to the next score segment
@@ -80,7 +80,7 @@ class ScoreSegmentIterator
   inline double curTime(void);
   inline int curPage(void);
   inline int numPages(void);
-  inline bool contains(double t);
+  inline bool contains(double p_t);
 };
 
 #include "scoresegmentiterator.hpp"

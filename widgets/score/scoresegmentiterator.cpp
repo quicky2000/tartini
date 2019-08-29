@@ -23,111 +23,111 @@
 //------------------------------------------------------------------------------
 double ScoreSegmentIterator::widthX(void)
 {
-  return (_rightTime - _leftTime) * sw->m_scale_X;
+  return (m_right_time - m_left_time) * m_score_widget->m_scale_X;
 }
 
 //------------------------------------------------------------------------------
-void ScoreSegmentIterator::reset(ScoreWidget * scoreWidget, Channel * channel)
+void ScoreSegmentIterator::reset(ScoreWidget * p_score_widget, Channel * p_channel)
 {
-  sw = scoreWidget;
-  ch = channel;
-  staveHeight = sw->getStaveHeight();
-  halfStaveHeight = sw->getStaveCenterY();
-  numRows = std::max((sw->height() - toInt(sw->m_boarder_Y * 2)) / staveHeight, 1);
-  totalRowTime = (double)(sw->width() - sw->m_boarder_X * 2) / sw->m_scale_X;
-  totalPageTime = totalRowTime * numRows;
-  if(ch)
+  m_score_widget = p_score_widget;
+  m_channel = p_channel;
+  m_stave_height = m_score_widget->getStaveHeight();
+  m_half_stave_height = m_score_widget->getStaveCenterY();
+  m_num_rows = std::max((m_score_widget->height() - toInt(m_score_widget->m_boarder_Y * 2)) / m_stave_height, 1);
+  m_total_row_time = (double)(m_score_widget->width() - m_score_widget->m_boarder_X * 2) / m_score_widget->m_scale_X;
+  m_total_page_time = m_total_row_time * m_num_rows;
+  if(m_channel)
     {
-      _curTime = ch->timeAtChunk(ch->currentChunk());
-      _curPage = (int)floor(_curTime / totalPageTime);
-      lookAheadGapTime = sw->m_look_ahead_gap * totalPageTime;
-      lookAheadTime = _curTime + sw->m_look_ahead * totalPageTime;
-      lookBehindTime = lookAheadTime - totalPageTime;
-      startOfPageTime = floor(_curTime / totalPageTime) * totalPageTime;
-      curRelPageTime = _curTime - startOfPageTime;
-      endTime = ch->totalTime();
-      _numPages = (int)ceil(endTime / totalPageTime);
-      endOfLastPageTime = _numPages * totalPageTime;
-      lookAheadTime2 = (_curPage == _numPages - 1) ? std::min(endTime, lookAheadTime) : lookAheadTime;
-      lookAheadTime2 = (_curPage == 0) ? endOfLastPageTime : lookAheadTime2;
-      lookBehindTime2 = std::min(lookBehindTime, endTime - totalPageTime);
+      m_cur_time = m_channel->timeAtChunk(m_channel->currentChunk());
+      m_cur_page = (int)floor(m_cur_time / m_total_page_time);
+      m_look_ahead_gap_time = m_score_widget->m_look_ahead_gap * m_total_page_time;
+      m_look_ahead_time = m_cur_time + m_score_widget->m_look_ahead * m_total_page_time;
+      m_look_behind_time = m_look_ahead_time - m_total_page_time;
+      m_start_of_page_time = floor(m_cur_time / m_total_page_time) * m_total_page_time;
+      m_cur_rel_page_time = m_cur_time - m_start_of_page_time;
+      m_end_time = m_channel->totalTime();
+      m_num_pages = (int)ceil(m_end_time / m_total_page_time);
+      m_end_of_last_page_time = m_num_pages * m_total_page_time;
+      m_look_ahead_time2 = (m_cur_page == m_num_pages - 1) ? std::min(m_end_time, m_look_ahead_time) : m_look_ahead_time;
+      m_look_ahead_time2 = (m_cur_page == 0) ? m_end_of_last_page_time : m_look_ahead_time2;
+      m_look_behind_time2 = std::min(m_look_behind_time, m_end_time - m_total_page_time);
       //FIXME: The ending page isn't drawn correctly
-      lookBehindTime2 = (_curPage == 0) ? lookBehindTime + totalPageTime : lookBehindTime2;
-      lookBehindTime3 = std::min(lookBehindTime, endTime - totalPageTime);
-      curRow = (int)floor(curRelPageTime / totalRowTime);
+      m_look_behind_time2 = (m_cur_page == 0) ? m_look_behind_time + m_total_page_time : m_look_behind_time2;
+      m_look_behind_time3 = std::min(m_look_behind_time, m_end_time - m_total_page_time);
+      m_cur_row = (int)floor(m_cur_rel_page_time / m_total_row_time);
     }
-  rowCounter = 0;
-  subRowCounter = -1;
-  _leftTime = _rightTime = _leftX = 0.0;
-  _lineCenterY = 0;
-  _isValid = false;
+  m_row_counter = 0;
+  m_sub_row_counter = -1;
+  m_left_time = m_right_time = m_left_X = 0.0;
+  m_line_center_Y = 0;
+  m_is_valid = false;
 }
 
 //------------------------------------------------------------------------------
 bool ScoreSegmentIterator::next(void)
 {
-  if(ch)
+  if(m_channel)
     {
-      while(rowCounter < numRows)
+      while(m_row_counter < m_num_rows)
 	{
-	  int j = rowCounter;
-	  double startOfRowTime = startOfPageTime + j * totalRowTime;
-	  double endOfRowTime = startOfRowTime + totalRowTime;
-	  _lineCenterY = toInt(sw->m_boarder_Y) + halfStaveHeight + staveHeight * j;
-	  while(++subRowCounter < 4)
+	  int l_j = m_row_counter;
+	  double l_start_of_row_time = m_start_of_page_time + l_j * m_total_row_time;
+	  double l_end_of_row_time = l_start_of_row_time + m_total_row_time;
+	  m_line_center_Y = toInt(m_score_widget->m_boarder_Y) + m_half_stave_height + m_stave_height * l_j;
+	  while(++m_sub_row_counter < 4)
 	    {
-	      switch(subRowCounter)
+	      switch(m_sub_row_counter)
 		{
 		case 1:
-		  if(startOfRowTime < lookBehindTime3)
+		  if(l_start_of_row_time < m_look_behind_time3)
 		    {
 		      //draw any parts of the next page
-		      _leftTime = startOfRowTime + totalPageTime;
-		      _rightTime = std::min(endOfRowTime, lookBehindTime3) + totalPageTime;
-		      _leftX = (double)sw->m_boarder_X;
-		      return (_isValid = true);
+		      m_left_time = l_start_of_row_time + m_total_page_time;
+		      m_right_time = std::min(l_end_of_row_time, m_look_behind_time3) + m_total_page_time;
+		      m_left_X = (double)m_score_widget->m_boarder_X;
+		      return (m_is_valid = true);
 		    }
 		  break;
 		case 2:
-		  if(endOfRowTime > lookBehindTime3+lookAheadGapTime && startOfRowTime < lookAheadTime2)
+		  if(l_end_of_row_time > m_look_behind_time3+m_look_ahead_gap_time && l_start_of_row_time < m_look_ahead_time2)
 		    {
 		      //normal case
-		      _leftTime = std::max(startOfRowTime, lookBehindTime3 + lookAheadGapTime);
-		      _rightTime = std::min(startOfRowTime + totalRowTime, lookAheadTime2);
-		      _leftX = (double)sw->m_boarder_X + (_leftTime-startOfRowTime) * sw->m_scale_X;
-		      return (_isValid = true);
+		      m_left_time = std::max(l_start_of_row_time, m_look_behind_time3 + m_look_ahead_gap_time);
+		      m_right_time = std::min(l_start_of_row_time + m_total_row_time, m_look_ahead_time2);
+		      m_left_X = (double)m_score_widget->m_boarder_X + (m_left_time-l_start_of_row_time) * m_score_widget->m_scale_X;
+		      return (m_is_valid = true);
 		    }
 		  break;
 		case 3:
-		  if(endOfRowTime - totalPageTime > lookBehindTime2 + lookAheadGapTime)
+		  if(l_end_of_row_time - m_total_page_time > m_look_behind_time2 + m_look_ahead_gap_time)
 		    {
-		      _leftTime = std::max(startOfRowTime - totalPageTime, lookBehindTime2 + lookAheadGapTime);
-		      _leftTime = std::min(_leftTime, endOfRowTime - totalPageTime);
-		      _rightTime = endOfRowTime - totalPageTime;
-		      _leftX = (double)sw->m_boarder_X + (_leftTime -(startOfRowTime - totalPageTime)) * sw->m_scale_X;
-		      return (_isValid = true);
+		      m_left_time = std::max(l_start_of_row_time - m_total_page_time, m_look_behind_time2 + m_look_ahead_gap_time);
+		      m_left_time = std::min(m_left_time, l_end_of_row_time - m_total_page_time);
+		      m_right_time = l_end_of_row_time - m_total_page_time;
+		      m_left_X = (double)m_score_widget->m_boarder_X + (m_left_time -(l_start_of_row_time - m_total_page_time)) * m_score_widget->m_scale_X;
+		      return (m_is_valid = true);
 		    }
 		}
 	    }
-	  rowCounter++;
-	  subRowCounter = -1;
+	  m_row_counter++;
+	  m_sub_row_counter = -1;
 	}
     }
   else
     {
-      while(rowCounter < numRows)
+      while(m_row_counter < m_num_rows)
 	{
-	  double startOfRowTime = startOfPageTime + rowCounter*totalRowTime;
-	  double endOfRowTime = startOfRowTime + totalRowTime;
-	  _lineCenterY = toInt(sw->m_boarder_Y) + halfStaveHeight + staveHeight*rowCounter;
-	  _leftX = sw->m_boarder_X;
-	  _leftTime = startOfRowTime;
-	  _rightTime = endOfRowTime;
-	  rowCounter++;
-	  return (_isValid = true);
+	  double l_start_of_row_time = m_start_of_page_time + m_row_counter*m_total_row_time;
+	  double l_end_of_row_time = l_start_of_row_time + m_total_row_time;
+	  m_line_center_Y = toInt(m_score_widget->m_boarder_Y) + m_half_stave_height + m_stave_height*m_row_counter;
+	  m_left_X = m_score_widget->m_boarder_X;
+	  m_left_time = l_start_of_row_time;
+	  m_right_time = l_end_of_row_time;
+	  m_row_counter++;
+	  return (m_is_valid = true);
 	}
     }
-  return (_isValid = false);
+  return (m_is_valid = false);
 }
 
 // EOF
