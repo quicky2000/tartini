@@ -16,74 +16,76 @@
       along with this program.  If not, see <http://www.gnu.org/licenses/>
 */
 //------------------------------------------------------------------------------
-ScoreSegmentIterator::ScoreSegmentIterator(ScoreWidget *p_score_widget, Channel *p_channel)
+ScoreSegmentIterator::ScoreSegmentIterator( ScoreWidget *p_score_widget
+                                          , Channel *p_channel
+                                          )
 {
-  reset(p_score_widget, p_channel);
+    reset(p_score_widget, p_channel);
 }
 
 //------------------------------------------------------------------------------
 bool ScoreSegmentIterator::isValid(void)
 {
-  return m_is_valid;
+    return m_is_valid;
 }
 
 //------------------------------------------------------------------------------
 double ScoreSegmentIterator::leftTime(void)
 {
-  return m_left_time;
+    return m_left_time;
 }
 
 //------------------------------------------------------------------------------
 double ScoreSegmentIterator::rightTime(void)
 {
-  return m_right_time;
+    return m_right_time;
 }
 
 //------------------------------------------------------------------------------
 double ScoreSegmentIterator::leftX(void)
 {
-  return m_left_X;
+    return m_left_X;
 }
 
 //------------------------------------------------------------------------------
 int ScoreSegmentIterator::lineCenterY(void)
 {
-  return m_line_center_Y;
+    return m_line_center_Y;
 }
 
 //------------------------------------------------------------------------------
 int ScoreSegmentIterator::staveTop(void)
 {
-  return m_line_center_Y - m_half_stave_height;
+    return m_line_center_Y - m_half_stave_height;
 }
 
 //------------------------------------------------------------------------------
 int ScoreSegmentIterator::staveBottom(void)
 {
-  return staveTop() + m_stave_height;
+    return staveTop() + m_stave_height;
 }
 
 //------------------------------------------------------------------------------
 double ScoreSegmentIterator::curTime(void)
 {
-  return m_cur_time;
+    return m_cur_time;
 }
 
 //------------------------------------------------------------------------------
 int ScoreSegmentIterator::curPage(void)
 {
-  return m_cur_page;
+    return m_cur_page;
 }
 
 //------------------------------------------------------------------------------
 int ScoreSegmentIterator::numPages(void)
 {
-  return m_num_pages;
+    return m_num_pages;
 }
 
 //------------------------------------------------------------------------------
 bool ScoreSegmentIterator::contains(double p_t)
 {
-  return (p_t >= m_left_time && p_t <= m_right_time);
+    return (p_t >= m_left_time && p_t <= m_right_time);
 }
 // EOF

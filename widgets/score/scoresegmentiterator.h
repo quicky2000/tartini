@@ -23,64 +23,73 @@ class ScoreWidget;
 
 class ScoreSegmentIterator
 {
-  ScoreWidget * m_score_widget;
 
-  Channel * m_channel;
-  int m_stave_height;
-  int m_half_stave_height;
-  int m_num_rows;
-  double m_total_row_time;
-  double m_total_page_time;
-  double m_cur_time;
+  public:
 
-  int m_cur_page;
-  double m_look_ahead_gap_time;
-  double m_look_ahead_time;
-  double m_look_behind_time;
-  double m_start_of_page_time;
-  double m_cur_rel_page_time;
-  double m_end_time;
-  int m_num_pages;
-  double m_end_of_last_page_time;
-  double m_look_ahead_time2;
-  double m_look_behind_time2;
-  double m_look_behind_time3;
-  int m_cur_row;
-  int m_row_counter;
-  int m_sub_row_counter;
-
-  double m_left_time;
-  double m_right_time;
-  double m_left_X;
-  int m_line_center_Y;
-  bool m_is_valid;
-
- public :
-  inline ScoreSegmentIterator(ScoreWidget *p_score_widget, Channel *p_channel);
-  /**
+    inline ScoreSegmentIterator( ScoreWidget *p_score_widget
+                               , Channel *p_channel
+                               );
+    /**
      Initalise the iterator to just before the first segment
      @param p_score_widget The ScoreWidget to iterate through it's segments
-  */
-  void reset(ScoreWidget * p_score_widget, Channel * p_channel);
+    */
+    void reset( ScoreWidget * p_score_widget
+              , Channel * p_channel
+              );
 
-  /**
+    /**
      move to the next score segment
      @return true, if their was another score segment
-  */
-  bool next(void);
-  inline bool isValid(void);
+    */
+    bool next(void);
+    inline bool isValid(void);
 
-  inline double leftTime(void);
-  inline double rightTime(void);
-  inline double leftX(void);
-  inline int lineCenterY(void);
-  inline int staveTop(void);
-  inline int staveBottom(void);
-  double widthX(void);
-  inline double curTime(void);
-  inline int curPage(void);
-  inline int numPages(void);
-  inline bool contains(double p_t);
+    inline double leftTime(void);
+    inline double rightTime(void);
+    inline double leftX(void);
+    inline int lineCenterY(void);
+    inline int staveTop(void);
+    inline int staveBottom(void);
+    double widthX(void);
+    inline double curTime(void);
+    inline int curPage(void);
+    inline int numPages(void);
+    inline bool contains(double p_t);
+
+  private:
+
+    ScoreWidget * m_score_widget;
+
+    Channel * m_channel;
+    int m_stave_height;
+    int m_half_stave_height;
+    int m_num_rows;
+    double m_total_row_time;
+    double m_total_page_time;
+    double m_cur_time;
+
+    int m_cur_page;
+    double m_look_ahead_gap_time;
+    double m_look_ahead_time;
+    double m_look_behind_time;
+    double m_start_of_page_time;
+    double m_cur_rel_page_time;
+    double m_end_time;
+    int m_num_pages;
+    double m_end_of_last_page_time;
+    double m_look_ahead_time2;
+    double m_look_behind_time2;
+    double m_look_behind_time3;
+    int m_cur_row;
+    int m_row_counter;
+    int m_sub_row_counter;
+
+    double m_left_time;
+    double m_right_time;
+    double m_left_X;
+    int m_line_center_Y;
+    bool m_is_valid;
+
 };
 
 #include "scoresegmentiterator.hpp"
