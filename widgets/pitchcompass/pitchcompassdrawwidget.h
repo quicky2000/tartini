@@ -4,6 +4,9 @@
     begin                : Wed Dec 15 2004
     copyright            : (C) 2004-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
+    copyright            : (C) 2019 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
+
  ***************************************************************************/
 
 #ifndef PITCHCOMPASSDRAWWIDGET_H
@@ -20,20 +23,20 @@ class PitchCompassDrawWidget: public QWidget
   Q_OBJECT
 
   public:
-  PitchCompassDrawWidget(QWidget * parent, const char * name = NULL, int mode = 0);
+  PitchCompassDrawWidget(QWidget * p_parent, const char * p_name = NULL, int p_mode = 0);
   virtual ~PitchCompassDrawWidget(void);
 
   void resizeEvent(QResizeEvent *);
 
   public slots:
-  void updateCompass(double time);
+  void updateCompass(double p_time);
 
   private:
-  QwtCompass * compass;
-  bool moveNeedle;
+  QwtCompass * m_compass;
+  bool m_move_needle;
   void blank(void);
-  int blankCount;
-  int mode;
+  int m_blank_count;
+  int m_mode;
 };
 #endif // PITCHCOMPASSDRAWWIDGET_H
 // EOF
