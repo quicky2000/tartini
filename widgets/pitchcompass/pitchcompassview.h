@@ -28,17 +28,21 @@ class PitchCompassView: public ViewWidget
   Q_OBJECT
 
   public:
-  PitchCompassView(int p_view_id, QWidget * p_parent = NULL, int p_mode = 2);
-  virtual ~PitchCompassView(void);
 
-  QSize sizeHint(void) const;
+    PitchCompassView( int p_view_id
+                    , QWidget * p_parent = NULL
+                    , int p_mode = 2
+                    );
+    virtual ~PitchCompassView(void);
 
-  void resizeEvent(QResizeEvent *);
+    QSize sizeHint(void) const;
 
+    void resizeEvent(QResizeEvent *);
 
  private:
-  PitchCompassDrawWidget * m_pitch_compass_draw_widget;
-  void changeMode(int p_mode);
+    void changeMode(int p_mode);
+
+    PitchCompassDrawWidget * m_pitch_compass_draw_widget;
 
 };
 
