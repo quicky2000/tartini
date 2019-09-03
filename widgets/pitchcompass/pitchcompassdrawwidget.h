@@ -23,20 +23,29 @@ class PitchCompassDrawWidget: public QWidget
   Q_OBJECT
 
   public:
-  PitchCompassDrawWidget(QWidget * p_parent, const char * p_name = NULL, int p_mode = 0);
-  virtual ~PitchCompassDrawWidget(void);
+    PitchCompassDrawWidget( QWidget * p_parent
+                          , const char * p_name = NULL
+                          , int p_mode = 0
+                          );
+    virtual ~PitchCompassDrawWidget(void);
 
-  void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *);
 
   public slots:
-  void updateCompass(double p_time);
+
+    void updateCompass(double p_time);
 
   private:
-  QwtCompass * m_compass;
-  bool m_move_needle;
-  void blank(void);
-  int m_blank_count;
-  int m_mode;
+
+    void blank(void);
+
+    QwtCompass * m_compass;
+
+    bool m_move_needle;
+
+    int m_blank_count;
+
+    int m_mode;
 };
 #endif // PITCHCOMPASSDRAWWIDGET_H
 // EOF

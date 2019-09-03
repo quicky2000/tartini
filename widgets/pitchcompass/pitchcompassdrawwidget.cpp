@@ -30,8 +30,11 @@
 #define INTERVAL 90
 
 //------------------------------------------------------------------------------
-PitchCompassDrawWidget::PitchCompassDrawWidget(QWidget *p_parent, const char* p_name, int p_mode)
-  : QWidget(p_parent, p_name, Qt::WDestructiveClose)
+PitchCompassDrawWidget::PitchCompassDrawWidget( QWidget *p_parent
+                                              , const char* p_name
+                                              , int p_mode
+                                              )
+: QWidget(p_parent, p_name, Qt::WDestructiveClose)
 {
     this->m_mode = p_mode;
 
@@ -39,27 +42,27 @@ PitchCompassDrawWidget::PitchCompassDrawWidget(QWidget *p_parent, const char* p_
     m_compass->setLineWidth(4);
     m_compass->setFrameShadow(QwtCompass::Sunken);
     
-    if (p_mode == 0)
-      {
-	m_compass->setMode(QwtCompass::RotateNeedle);
-	m_compass->setScale(36, 5, 0);
-      }
-    else if (p_mode == 1)
-      {
-	m_compass->setMode(QwtCompass::RotateScale);
-	m_compass->setScale(360, 0);
-      }
-    else if (p_mode == 2)
-      {
-	QMap< double, QString > l_notes;
-	m_compass->setMode(QwtCompass::RotateNeedle);
-	m_compass->setScale(11, 2, 30);
-	for (int i = 0; i < 12; i++)
-	  {
-	    l_notes[i * 30] = noteName(i);
-	  }
-	m_compass->setLabelMap(l_notes);
-      }
+    if(p_mode == 0)
+    {
+        m_compass->setMode(QwtCompass::RotateNeedle);
+        m_compass->setScale(36, 5, 0);
+    }
+    else if(p_mode == 1)
+    {
+        m_compass->setMode(QwtCompass::RotateScale);
+        m_compass->setScale(360, 0);
+    }
+    else if(p_mode == 2)
+    {
+        QMap< double, QString > l_notes;
+        m_compass->setMode(QwtCompass::RotateNeedle);
+        m_compass->setScale(11, 2, 30);
+        for(int l_i = 0; l_i < 12; l_i++)
+        {
+            l_notes[l_i * 30] = noteName(l_i);
+        }
+        m_compass->setLabelMap(l_notes);
+    }
 
     m_compass->setScaleTicks(1, 1, 3);
 
@@ -83,85 +86,85 @@ PitchCompassDrawWidget::~PitchCompassDrawWidget(void)
 //------------------------------------------------------------------------------
 void PitchCompassDrawWidget::resizeEvent(QResizeEvent *)
 {
-  m_compass->resize(size());
+    m_compass->resize(size());
 }
 
 //------------------------------------------------------------------------------
 void PitchCompassDrawWidget::updateCompass(double p_time)
 {
-  Channel *l_active_channel = gdata->getActiveChannel();
-  if (l_active_channel == NULL)
+    Channel *l_active_channel = gdata->getActiveChannel();
+    if(l_active_channel == NULL)
     {
-      blank();
-      return;
+        blank();
+        return;
     }
-  
-  const AnalysisData *l_data = l_active_channel->dataAtTime(p_time);
 
-  if(l_data && l_data->getCorrelation() >= 0.9)
+    const AnalysisData *l_data = l_active_channel->dataAtTime(p_time);
+
+    if(l_data && l_data->getCorrelation() >= 0.9)
     {
-      double l_pitch = l_data->getPitch();
-  
-      if (m_mode == 0)
-	{
-	  QMap< double, QString > l_notes;
-	  double l_zero_val = myround(l_pitch);
-  
-	  double l_value = (l_pitch - l_zero_val) * INTERVAL;
-	  m_compass->setValue(l_value);
-  
-	  l_notes[INTERVAL * 3] = noteName(toInt(l_zero_val));
-	  l_notes[0] = noteName(toInt(l_zero_val += 2));
-	  l_notes[INTERVAL] = noteName(toInt(l_zero_val));
-	  m_compass->setLabelMap(l_notes);
-	}
-      else if (m_mode == 1)
-	{
-	  QMap< double, QString > l_notes;
-	  double l_close_pitch = myround(l_pitch);
-	  double l_start = toInt((l_close_pitch - l_pitch) * INTERVAL);
-  
-	  if (l_start < 0)
-	    {
-	      l_start += 360;
-	    }
-	  if (l_start > 360)
-	    {
-	      l_start = fmod(l_start, 360.0);
-	    }
-      
-	  l_notes[l_start] = noteName(toInt(l_close_pitch));
-	  l_notes[l_start - INTERVAL] = noteName(toInt(l_close_pitch - 1));
-	  l_notes[l_start + INTERVAL] = noteName(toInt(l_close_pitch + 1));
-	  m_compass->setLabelMap(l_notes);
-	}
-      else
-	{
-	  // mode == 2
-	  double l_value = l_pitch * 30;
-	  m_compass->setValue(l_value);
-	}
+        double l_pitch = l_data->getPitch();
 
-      m_compass->setValid(true);
+        if(m_mode == 0)
+        {
+            QMap< double, QString > l_notes;
+            double l_zero_val = myround(l_pitch);
+
+            double l_value = (l_pitch - l_zero_val) * INTERVAL;
+            m_compass->setValue(l_value);
+
+            l_notes[INTERVAL * 3] = noteName(toInt(l_zero_val));
+            l_notes[0] = noteName(toInt(l_zero_val += 2));
+            l_notes[INTERVAL] = noteName(toInt(l_zero_val));
+            m_compass->setLabelMap(l_notes);
+        }
+        else if(m_mode == 1)
+        {
+            QMap< double, QString > l_notes;
+            double l_close_pitch = myround(l_pitch);
+            double l_start = toInt((l_close_pitch - l_pitch) * INTERVAL);
+
+            if(l_start < 0)
+            {
+                l_start += 360;
+            }
+            if(l_start > 360)
+            {
+                l_start = fmod(l_start, 360.0);
+            }
+
+            l_notes[l_start] = noteName(toInt(l_close_pitch));
+            l_notes[l_start - INTERVAL] = noteName(toInt(l_close_pitch - 1));
+            l_notes[l_start + INTERVAL] = noteName(toInt(l_close_pitch + 1));
+            m_compass->setLabelMap(l_notes);
+        }
+        else
+        {
+            // mode == 2
+            double l_value = l_pitch * 30;
+            m_compass->setValue(l_value);
+        }
+
+        m_compass->setValid(true);
     }
-  else
+    else
     {
-      blank();
+        blank();
     }
 }
 
 //------------------------------------------------------------------------------
 void PitchCompassDrawWidget::blank(void)
 {
-  if (++m_blank_count % 10 == 0)
+    if(++m_blank_count % 10 == 0)
     {
-      if (m_mode != 2)
-	{
-	  QMap< double, QString > l_notes;
-	  m_compass->setLabelMap(l_notes);
-	}
-      m_compass->setValid(false);
-      m_blank_count = 1;
+        if(m_mode != 2)
+        {
+            QMap< double, QString > l_notes;
+            m_compass->setLabelMap(l_notes);
+        }
+        m_compass->setValid(false);
+        m_blank_count = 1;
     }
 }
 // EOF
