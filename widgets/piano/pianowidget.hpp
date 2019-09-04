@@ -26,31 +26,31 @@ QSize PianoWidget::sizeHint(void) const
 //------------------------------------------------------------------------------
 int PianoWidget::currentNote(void)
 {
-  return _currentNote;
+  return m_current_note;
 }
 
 //------------------------------------------------------------------------------
 void PianoWidget::setNoNote(void)
 {
-  _currentNote = -1;
+  m_current_note = -1;
 }
 
 //------------------------------------------------------------------------------
 bool PianoWidget::isNote(void)
 {
-  return _currentNote >= 0;
+  return m_current_note >= 0;
 }
 
 //------------------------------------------------------------------------------
 float PianoWidget::amountPressed(void)
 {
-  return _amountPressed;
+  return m_amount_pressed;
 }
 
 //------------------------------------------------------------------------------
-void PianoWidget::setAmountPressed(float amountPressed)
+void PianoWidget::setAmountPressed(float p_amount_pressed)
 {
-  _amountPressed = amountPressed;
+  m_amount_pressed = p_amount_pressed;
 }
 
 // EOF

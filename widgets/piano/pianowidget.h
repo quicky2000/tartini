@@ -27,25 +27,25 @@ class PianoWidget:
 public DrawWidget
 {
 public:
-  PianoWidget(QWidget * parent);
+  PianoWidget(QWidget * p_parent);
   ~PianoWidget(void);
 
   void paintEvent(QPaintEvent *);
   
   inline QSize sizeHint(void) const;
   inline int currentNote(void);
-  void setCurrentNote(int n, float amountPressed = 1.0);
+  void setCurrentNote(int p_n, float p_amount_pressed = 1.0);
   inline void setNoNote(void);
   inline bool isNote(void);
   inline float amountPressed(void);
-  inline void setAmountPressed(float amountPressed);
+  inline void setAmountPressed(float p_amount_pressed);
   
-  QPixmap * buffer;
+  QPixmap * m_buffer;
 
   //-1=no note, 0=C, 1=C#, 2=D ... 11=B
-  int _currentNote;
+  int m_current_note;
 
-  float _amountPressed;
+  float m_amount_pressed;
 };
 
 #include "pianowidget.hpp"

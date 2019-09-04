@@ -22,7 +22,7 @@
 #include "gdata.h"
 #include "myqt.h"
 
-static int isBlackKeyArray[12] =
+static int g_is_black_key_array[12] =
   {
     1,
     -1,
@@ -39,8 +39,8 @@ static int isBlackKeyArray[12] =
   };
 
 //------------------------------------------------------------------------------
-PianoWidget::PianoWidget(QWidget *parent):
-  DrawWidget(parent)
+PianoWidget::PianoWidget(QWidget *p_parent):
+  DrawWidget(p_parent)
 {
   setNoNote();
 }
@@ -51,50 +51,50 @@ PianoWidget::~PianoWidget(void)
 }
 
 //------------------------------------------------------------------------------
-void PianoWidget::setCurrentNote(int n, float amountPressed)
+void PianoWidget::setCurrentNote(int p_n, float p_amount_pressed)
 {
-  if(n >= 0 && n < 12)
+  if(p_n >= 0 && p_n < 12)
     {
-      _currentNote = n;
+      m_current_note = p_n;
     }
   else
     {
       setNoNote();
     }
-  _amountPressed = amountPressed;
+  m_amount_pressed = p_amount_pressed;
 }
 
 //------------------------------------------------------------------------------
 void PianoWidget::paintEvent(QPaintEvent *)
 {
-  int j;
+  int l_j;
   beginDrawing(false);
   fillBackground(Qt::white);
   
   //1650mm
-  double scaleX = double(width()) / 1650.0;
+  double l_scale_X = double(width()) / 1650.0;
   //1480mm
-  double scaleY = double(height()) / 1480.0;
+  double l_scale_Y = double(height()) / 1480.0;
   
   if(isNote())
     {
-      int notepart = isBlackKeyArray[currentNote()];
-      if(notepart >= 0)
+      int l_note_part = g_is_black_key_array[currentNote()];
+      if(l_note_part >= 0)
 	{
 	  //it's a white key
-	  get_painter().fillRect(toInt((notepart - 1) * 235.0 * scaleX), 0, toInt(234.0 * scaleX) + 1, height(), colorBetween(Qt::white, Qt::red, _amountPressed));
+	  get_painter().fillRect(toInt((l_note_part - 1) * 235.0 * l_scale_X), 0, toInt(234.0 * l_scale_X) + 1, height(), colorBetween(Qt::white, Qt::red, m_amount_pressed));
 	}
     }
   
   get_painter().setPen(Qt::black);
   //draw the lines between the white keys
-  for(j = 1; j < 7; j++)
+  for(l_j = 1; l_j < 7; l_j++)
     {
-      get_painter().drawLine(toInt(double(j) * 235.0 * scaleX), 0, toInt(double(j) * 235.0 * scaleX), height());
+      get_painter().drawLine(toInt(double(l_j) * 235.0 * l_scale_X), 0, toInt(double(l_j) * 235.0 * l_scale_X), height());
     }
 
   //draw the black keys
-  double blackKeyOffset[5] =
+  double l_black_key_offset[5] =
     { 
       150.0,
       430.0,
@@ -103,18 +103,18 @@ void PianoWidget::paintEvent(QPaintEvent *)
       1390.0
     };
 
-  for(j = 0; j < 5; j++)
+  for(l_j = 0; l_j < 5; l_j++)
     {
-      get_painter().fillRect(toInt(blackKeyOffset[j]*scaleX), 0, toInt(110.0 * scaleX), toInt(1000.0 * scaleY), Qt::black);
+      get_painter().fillRect(toInt(l_black_key_offset[l_j]*l_scale_X), 0, toInt(110.0 * l_scale_X), toInt(1000.0 * l_scale_Y), Qt::black);
     }
   
   if(isNote())
     {
-      int notepart = isBlackKeyArray[currentNote()];
-      if(notepart < 0)
+      int l_note_part = g_is_black_key_array[currentNote()];
+      if(l_note_part < 0)
 	{
 	  //it's a black key
-	  get_painter().fillRect(toInt(blackKeyOffset[-notepart - 1] * scaleX), 0, toInt(110.0 * scaleX), toInt(1000.0 * scaleY), colorBetween(Qt::black, Qt::red, _amountPressed));
+	  get_painter().fillRect(toInt(l_black_key_offset[-l_note_part - 1] * l_scale_X), 0, toInt(110.0 * l_scale_X), toInt(1000.0 * l_scale_Y), colorBetween(Qt::black, Qt::red, m_amount_pressed));
 	}
     }
   endDrawing();
