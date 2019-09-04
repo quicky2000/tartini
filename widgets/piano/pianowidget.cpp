@@ -39,10 +39,10 @@ static int g_is_black_key_array[12] =
   };
 
 //------------------------------------------------------------------------------
-PianoWidget::PianoWidget(QWidget *p_parent):
-  DrawWidget(p_parent)
+PianoWidget::PianoWidget(QWidget *p_parent)
+: DrawWidget(p_parent)
 {
-  setNoNote();
+    setNoNote();
 }
 
 //------------------------------------------------------------------------------
@@ -51,50 +51,52 @@ PianoWidget::~PianoWidget(void)
 }
 
 //------------------------------------------------------------------------------
-void PianoWidget::setCurrentNote(int p_n, float p_amount_pressed)
+void PianoWidget::setCurrentNote( int p_n
+                                , float p_amount_pressed
+                                )
 {
-  if(p_n >= 0 && p_n < 12)
+    if(p_n >= 0 && p_n < 12)
     {
-      m_current_note = p_n;
+        m_current_note = p_n;
     }
-  else
+    else
     {
-      setNoNote();
+        setNoNote();
     }
-  m_amount_pressed = p_amount_pressed;
+    m_amount_pressed = p_amount_pressed;
 }
 
 //------------------------------------------------------------------------------
 void PianoWidget::paintEvent(QPaintEvent *)
 {
-  int l_j;
-  beginDrawing(false);
-  fillBackground(Qt::white);
+    int l_j;
+    beginDrawing(false);
+    fillBackground(Qt::white);
   
-  //1650mm
-  double l_scale_X = double(width()) / 1650.0;
-  //1480mm
-  double l_scale_Y = double(height()) / 1480.0;
-  
-  if(isNote())
+    //1650mm
+    double l_scale_X = double(width()) / 1650.0;
+    //1480mm
+    double l_scale_Y = double(height()) / 1480.0;
+
+    if(isNote())
     {
-      int l_note_part = g_is_black_key_array[currentNote()];
-      if(l_note_part >= 0)
-	{
-	  //it's a white key
-	  get_painter().fillRect(toInt((l_note_part - 1) * 235.0 * l_scale_X), 0, toInt(234.0 * l_scale_X) + 1, height(), colorBetween(Qt::white, Qt::red, m_amount_pressed));
-	}
-    }
-  
-  get_painter().setPen(Qt::black);
-  //draw the lines between the white keys
-  for(l_j = 1; l_j < 7; l_j++)
-    {
-      get_painter().drawLine(toInt(double(l_j) * 235.0 * l_scale_X), 0, toInt(double(l_j) * 235.0 * l_scale_X), height());
+        int l_note_part = g_is_black_key_array[currentNote()];
+        if(l_note_part >= 0)
+        {
+            //it's a white key
+            get_painter().fillRect(toInt((l_note_part - 1) * 235.0 * l_scale_X), 0, toInt(234.0 * l_scale_X) + 1, height(), colorBetween(Qt::white, Qt::red, m_amount_pressed));
+        }
     }
 
-  //draw the black keys
-  double l_black_key_offset[5] =
+    get_painter().setPen(Qt::black);
+    //draw the lines between the white keys
+    for(l_j = 1; l_j < 7; l_j++)
+    {
+        get_painter().drawLine(toInt(double(l_j) * 235.0 * l_scale_X), 0, toInt(double(l_j) * 235.0 * l_scale_X), height());
+    }
+
+    //draw the black keys
+    double l_black_key_offset[5] =
     { 
       150.0,
       430.0,
@@ -103,21 +105,21 @@ void PianoWidget::paintEvent(QPaintEvent *)
       1390.0
     };
 
-  for(l_j = 0; l_j < 5; l_j++)
+    for(l_j = 0; l_j < 5; l_j++)
     {
-      get_painter().fillRect(toInt(l_black_key_offset[l_j]*l_scale_X), 0, toInt(110.0 * l_scale_X), toInt(1000.0 * l_scale_Y), Qt::black);
+        get_painter().fillRect(toInt(l_black_key_offset[l_j]*l_scale_X), 0, toInt(110.0 * l_scale_X), toInt(1000.0 * l_scale_Y), Qt::black);
     }
-  
-  if(isNote())
+
+    if(isNote())
     {
-      int l_note_part = g_is_black_key_array[currentNote()];
-      if(l_note_part < 0)
-	{
-	  //it's a black key
-	  get_painter().fillRect(toInt(l_black_key_offset[-l_note_part - 1] * l_scale_X), 0, toInt(110.0 * l_scale_X), toInt(1000.0 * l_scale_Y), colorBetween(Qt::black, Qt::red, m_amount_pressed));
-	}
+        int l_note_part = g_is_black_key_array[currentNote()];
+        if(l_note_part < 0)
+        {
+            //it's a black key
+            get_painter().fillRect(toInt(l_black_key_offset[-l_note_part - 1] * l_scale_X), 0, toInt(110.0 * l_scale_X), toInt(1000.0 * l_scale_Y), colorBetween(Qt::black, Qt::red, m_amount_pressed));
+        }
     }
-  endDrawing();
+    endDrawing();
 }
 
 // EOF
