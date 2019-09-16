@@ -23,11 +23,11 @@
 #include "musicnotes.h"
 
 //------------------------------------------------------------------------------
-PianoView::PianoView(int viewID_, QWidget * parent):
-  ViewWidget( viewID_, parent)
+PianoView::PianoView(int p_view_id, QWidget * p_parent):
+  ViewWidget( p_view_id, p_parent)
 {
-  pianoWidget = new PianoWidget(this);
-  pianoWidget->show();
+  m_piano_widget = new PianoWidget(this);
+  m_piano_widget->show();
 
   //make the widget get updated when the view changes
   connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), this, SLOT(changeKey()));
@@ -36,37 +36,37 @@ PianoView::PianoView(int viewID_, QWidget * parent):
 //------------------------------------------------------------------------------
 PianoView::~PianoView(void)
 {
-  delete pianoWidget;
+  delete m_piano_widget;
 }
 
 //------------------------------------------------------------------------------
 void PianoView::resizeEvent(QResizeEvent *)
 {
-  pianoWidget->resize(size());
+  m_piano_widget->resize(size());
 }
 
 //------------------------------------------------------------------------------
 void PianoView::changeKey(void)
 {
-  Channel *active = gdata->getActiveChannel();
-  if(active)
+  Channel *l_active_channel = gdata->getActiveChannel();
+  if(l_active_channel)
     {
-      AnalysisData * data = active->dataAtCurrentChunk();
-      if(data && active->isVisibleChunk(data))
+      AnalysisData * l_data = l_active_channel->dataAtCurrentChunk();
+      if(l_data && l_active_channel->isVisibleChunk(l_data))
 	{
-	  float pitch = data->getPitch();
-	  pianoWidget->setCurrentNote(noteValue(pitch), data->getCorrelation());
+	  float l_pitch = l_data->getPitch();
+	  m_piano_widget->setCurrentNote(noteValue(l_pitch), l_data->getCorrelation());
 	}
       else
 	{
-	  pianoWidget->setNoNote();
+	  m_piano_widget->setNoNote();
 	}
     }
   else
     {
-      pianoWidget->setNoNote();
+      m_piano_widget->setNoNote();
     }
-  pianoWidget->update();
+  m_piano_widget->update();
 }
 
 //------------------------------------------------------------------------------
