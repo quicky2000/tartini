@@ -27,17 +27,21 @@ class PianoView : public ViewWidget
   Q_OBJECT
 
   public:
-  PianoView(int p_view_id, QWidget *p_parent = 0);
-  virtual ~PianoView(void);
 
-  void resizeEvent(QResizeEvent *);
+    PianoView( int p_view_id
+             , QWidget *p_parent = 0
+             );
+    virtual ~PianoView(void);
 
-  QSize sizeHint(void) const;
+    void resizeEvent(QResizeEvent *);
+
+    QSize sizeHint(void) const;
 
   public slots:
-  void changeKey(void);
- private:
-  PianoWidget * m_piano_widget;
+    void changeKey(void);
+
+  private:
+    PianoWidget * m_piano_widget;
 
 };
 
