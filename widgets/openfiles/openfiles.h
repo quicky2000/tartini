@@ -30,11 +30,11 @@ class OpenFiles : public ViewWidget
   Q_OBJECT
 
   public:
-  OpenFiles(int id, QWidget *parent);
+  OpenFiles(int p_id, QWidget *p_parent);
   virtual ~OpenFiles(void);
 
   //private: // Although it should be private, really
-  Q3ListView *theListView;
+  Q3ListView *m_the_list_view;
 
   void resizeEvent(QResizeEvent *);
 
@@ -46,17 +46,17 @@ class OpenFiles : public ViewWidget
   /**
    * Toggles a channel on or off for a specified item.
    *
-   * @param item the channel to toggle.
+   * @param p_item the channel to toggle.
    */
-  void listViewChanged(Q3ListViewItem * item);
+  void listViewChanged(Q3ListViewItem * p_item);
 
   /**
    * Changes the active channel to the item.
    *
-   * @param item the channel to toggle.
+   * @param p_item the channel to toggle.
    */
-  void slotCurrentChanged(Q3ListViewItem * item);
-  void slotActiveChannelChanged(Channel * active);
+  void slotCurrentChanged(Q3ListViewItem * p_item);
+  void slotActiveChannelChanged(Channel * p_active);
 
 };
 #endif // OPENFILES_H
