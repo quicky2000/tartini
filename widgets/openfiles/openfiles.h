@@ -30,33 +30,35 @@ class OpenFiles : public ViewWidget
   Q_OBJECT
 
   public:
-  OpenFiles(int p_id, QWidget *p_parent);
-  virtual ~OpenFiles(void);
+    OpenFiles( int p_id
+             , QWidget *p_parent
+             );
+    virtual ~OpenFiles(void);
 
-  //private: // Although it should be private, really
-  Q3ListView *m_the_list_view;
+    //private: // Although it should be private, really
+    Q3ListView *m_the_list_view;
 
-  void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *);
 
-  QSize sizeHint(void) const;
+    QSize sizeHint(void) const;
 
   public slots:
-  void refreshChannelList();
+    void refreshChannelList();
 
-  /**
-   * Toggles a channel on or off for a specified item.
-   *
-   * @param p_item the channel to toggle.
-   */
-  void listViewChanged(Q3ListViewItem * p_item);
+    /**
+     * Toggles a channel on or off for a specified item.
+     *
+     * @param p_item the channel to toggle.
+     */
+    void listViewChanged(Q3ListViewItem * p_item);
 
-  /**
-   * Changes the active channel to the item.
-   *
-   * @param p_item the channel to toggle.
-   */
-  void slotCurrentChanged(Q3ListViewItem * p_item);
-  void slotActiveChannelChanged(Channel * p_active);
+    /**
+     * Changes the active channel to the item.
+     *
+     * @param p_item the channel to toggle.
+     */
+    void slotCurrentChanged(Q3ListViewItem * p_item);
+    void slotActiveChannelChanged(Channel * p_active);
 
 };
 #endif // OPENFILES_H
