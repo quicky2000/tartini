@@ -337,7 +337,7 @@ bool GData::playSound(SoundFile *s)
 	  fprintf(stderr, "Error initialising sound\n");
 	  delete audio_stream;
 	  audio_stream = NULL;
-	  mainWindow->message("Error opening sound device. Another program might be using it", 2000);
+	  g_main_window->message("Error opening sound device. Another program might be using it", 2000);
 	}
       audioThread.start(s, NULL);
     }
@@ -668,14 +668,14 @@ void GData::saveActiveFile(void)
     }
   else if(val == -1)
     {
-      QMessageBox::warning(mainWindow, "Error", QString("Error saving file '") + QString(s->getFileName()) + QString("'"), QMessageBox::Ok, Qt::NoButton);
+      QMessageBox::warning(g_main_window, "Error", QString("Error saving file '") + QString(s->getFileName()) + QString("'"), QMessageBox::Ok, Qt::NoButton);
     }
 }
 
 //------------------------------------------------------------------------------
 QString GData::saveFileAsk(QString oldFilename)
 {
-  QString newFilename = SaveDialog::getSaveWavFileName(mainWindow);
+  QString newFilename = SaveDialog::getSaveWavFileName(g_main_window);
   if(newFilename.isNull())
     {
       return QString();
@@ -683,7 +683,7 @@ QString GData::saveFileAsk(QString oldFilename)
   newFilename = QDir::convertSeparators(newFilename);
   if(newFilename != oldFilename && QFile::exists(newFilename))
     {
-      if(QMessageBox::warning(mainWindow, tr("Overwrite File?"),
+      if(QMessageBox::warning(g_main_window, tr("Overwrite File?"),
 			      QString("A file called '") + newFilename + QString("' already exists.\n Do you want to overwrite it?"),
 			      tr("&Yes"), tr("&No"), QString::null, 0, 1 ))
 	{
@@ -937,7 +937,7 @@ void GData::setTemperedType(int type)
 	    }
 	  for(int j=gMusicScales.size()-1; j>=2; j--)
 	    {
-	      mainWindow->keyTypeComboBox->removeItem(j);
+	      g_main_window->m_key_type_combo_box->removeItem(j);
 	    }
 	}
       else if(_temperedType > 0 && type == 0)
@@ -947,7 +947,7 @@ void GData::setTemperedType(int type)
 	    {
 	      s << gMusicScales[j].name();
 	    }
-	  mainWindow->keyTypeComboBox->addItems(s);
+	  g_main_window->m_key_type_combo_box->addItems(s);
 	}
       _temperedType = type; emit temperedTypeChanged(type);
     }

@@ -197,8 +197,8 @@ bool SoundFile::openRead(const char *filename_)
       fprintf(stderr, "Error opening %s\n", filteredFilename);
       delete stream; stream = NULL;
       QString s = QString("Error opening ") + QString(filteredFilename) + QString(" for writing.\nPossible cause: temp folder is read-only or disk is out of space.\nPlease select a writable Temp Folder");
-      QMessageBox::warning(mainWindow, "Error", s, QMessageBox::Ok, QMessageBox::NoButton);
-      mainWindow->menuPreferences();
+      QMessageBox::warning(g_main_window, "Error", s, QMessageBox::Ok, QMessageBox::NoButton);
+      g_main_window->menuPreferences();
       return false;
     }
 
@@ -274,8 +274,8 @@ bool SoundFile::openWrite(const char *filename_, int rate_, int channels_, int b
       delete stream; stream = NULL;
       delete filteredStream; filteredStream = NULL;
       QString s = QString("Error opening ") + QString(filename) + QString(" for writing.\nPossible cause: temp folder is read-only or disk is out of space.\nPlease select a writable Temp Folder");
-      QMessageBox::warning(mainWindow, "Error", s, QMessageBox::Ok, QMessageBox::NoButton);
-      mainWindow->menuPreferences();
+      QMessageBox::warning(g_main_window, "Error", s, QMessageBox::Ok, QMessageBox::NoButton);
+      g_main_window->menuPreferences();
       return false;
     }
   if(filteredStream->open_write(filteredFilename, rate_, channels_, bits_))
@@ -284,8 +284,8 @@ bool SoundFile::openWrite(const char *filename_, int rate_, int channels_, int b
       delete stream; stream = NULL;
       delete filteredStream; filteredStream = NULL;
       QString s = QString("Error opening ") + QString(filteredFilename) + QString(" for writing.\nPossible cause: temp folder is read-only or disk is out of space.\nPlease select a writable Temp Folder");
-      QMessageBox::warning(mainWindow, "Error", s, QMessageBox::Ok, QMessageBox::NoButton);
-      mainWindow->menuPreferences();
+      QMessageBox::warning(g_main_window, "Error", s, QMessageBox::Ok, QMessageBox::NoButton);
+      g_main_window->menuPreferences();
       return false;
     }
 #ifdef PRINTF_DEBUG

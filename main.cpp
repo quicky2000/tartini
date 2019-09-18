@@ -68,21 +68,21 @@ int main(int p_argc, char **p_argv)
   */
   gdata->setView(*(new View()));
 
-  mainWindow = new MainWindow();
+  g_main_window = new MainWindow();
 
   //call init after we know the windows size
   gdata->getView().init();
 
-  mainWindow->showMaximized();
+  g_main_window->showMaximized();
     
-  l_app.setMainWidget(mainWindow);
-  mainWindow->show();
+  l_app.setMainWidget(g_main_window);
+  g_main_window->show();
 
   l_app.connect(&l_app, SIGNAL(lastWindowClosed()), &l_app, SLOT(quit()));
 
-  if(!mainWindow->loadViewGeometry())
+  if(!g_main_window->loadViewGeometry())
     {
-      mainWindow->aboutTartini(); //open the tartini dialog on first time open
+      g_main_window->aboutTartini(); //open the tartini dialog on first time open
     }
 
   //open any files on the command line
@@ -90,7 +90,7 @@ int main(int p_argc, char **p_argv)
     {
       for(int l_index = 1; l_index < p_argc; l_index++)
 	{
-	  mainWindow->openFile(p_argv[l_index]);
+	  g_main_window->openFile(p_argv[l_index]);
 	}
     }
   

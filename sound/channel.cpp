@@ -1190,7 +1190,7 @@ float Channel::periodOctaveEstimate(int chunk) const
 //------------------------------------------------------------------------------
 void Channel::exportChannel(int type, QString typeString) const
 {
-  QString s = QFileDialog::getSaveFileName(mainWindow, "Choose a filename to save under", ".", typeString);
+  QString s = QFileDialog::getSaveFileName(g_main_window, "Choose a filename to save under", ".", typeString);
 #ifdef DEBUG_PRINTF
   printf("file = %s\n", s.latin1());
 #endif // DEBUG_PRINTF

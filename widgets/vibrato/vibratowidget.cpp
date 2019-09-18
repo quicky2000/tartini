@@ -147,14 +147,14 @@ void VibratoWidget::paintGL(void)
   glCallList(m_maxima_minima_points);
 
   // Draw the note labels
-  mygl_font->beginGLtext(width(), height());
+  g_mygl_font->beginGLtext(width(), height());
   glColor3ub(0,0,0);
   for(int l_index = 0; l_index < m_note_label_counter; l_index++)
     {
-      mygl_font->drawGLtextRaw(3, m_note_labels[l_index].m_y - 4, m_note_labels[l_index].m_label);
-      mygl_font->drawGLtextRaw(width() - m_note_label_offset + 3, m_note_labels[l_index].m_y - 4, m_note_labels[l_index].m_label);
+      g_mygl_font->drawGLtextRaw(3, m_note_labels[l_index].m_y - 4, m_note_labels[l_index].m_label);
+      g_mygl_font->drawGLtextRaw(width() - m_note_label_offset + 3, m_note_labels[l_index].m_y - 4, m_note_labels[l_index].m_label);
     }
-  mygl_font->endGLtext();
+  g_mygl_font->endGLtext();
 }
 
 //------------------------------------------------------------------------------

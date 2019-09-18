@@ -107,7 +107,7 @@ void AudioThread::run(void)
       _recSoundFile->recordChunk(_recSoundFile->offset());
     }
   
-  QApplication::postEvent(mainWindow, new QCustomEvent(SOUND_STARTED));
+  QApplication::postEvent(g_main_window, new QCustomEvent(SOUND_STARTED));
   gdata->setRunning(STREAM_FORWARD);
 
   while(!stopping)
@@ -141,7 +141,7 @@ void AudioThread::run(void)
   _playSoundFile = NULL;
   _recSoundFile = NULL;
   
-  QApplication::postEvent(mainWindow, new QCustomEvent(SOUND_STOPPED));
+  QApplication::postEvent(g_main_window, new QCustomEvent(SOUND_STOPPED));
 }
 
 //------------------------------------------------------------------------------
@@ -229,13 +229,13 @@ int AudioThread::doStuff(void)
 	  gdata->setNeedUpdate(true);
 	  fast_update_count = 0;
 	  slow_update_count = 0;
-	  QApplication::postEvent(mainWindow, new QCustomEvent(UPDATE_SLOW));
+	  QApplication::postEvent(g_main_window, new QCustomEvent(UPDATE_SLOW));
 	}
       else if(fast_update_count >= fastUpdateAfter)
 	{
 	  gdata->setNeedUpdate(true);
 	  fast_update_count = 0;
-	  QApplication::postEvent(mainWindow, new QCustomEvent(UPDATE_FAST));
+	  QApplication::postEvent(g_main_window, new QCustomEvent(UPDATE_FAST));
 	}
     }
   gdata->doChunkUpdate();
