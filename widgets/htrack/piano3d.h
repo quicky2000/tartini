@@ -35,67 +35,96 @@
 
 class Piano3d
 {
-public:
-  Piano3d(int p_num_keys = 85, int p_first_key = 21);
-  ~Piano3d(void);
+  public:
+    Piano3d( int p_num_keys = 85
+           , int p_first_key = 21
+           );
+    ~Piano3d(void);
+
+    static void drawWhiteKey(void);
+    static void drawBlackKey(void);
   
-  static void drawWhiteKey(void);
-  static void drawBlackKey(void);
+    void draw(void);
   
-  void draw(void);
+    /** Initialises the piano.
+        This can be called again to reinitialise the piano to a different size
+        @param p_num_keys The number of keys the piano is to have
+        @param p_first_key The midi note number that will be the lowest key on the piano
+    */
+    void init(int p_num_keys = 85, int p_first_key = 21);
   
-  /** Initialises the piano.
-      This can be called again to reinitialise the piano to a different size
-      @param p_num_keys The number of keys the piano is to have
-      @param p_first_key The midi note number that will be the lowest key on the piano
-  */
-  void init(int p_num_keys = 85, int p_first_key = 21);
-  
-  void setMaterialWhiteKey(void);
-  void setMaterialBlackKey(void);
+    void setMaterialWhiteKey(void);
+    void setMaterialBlackKey(void);
 
   
-  /**
-     @return The distance the in mm away from where the 0 midi note would be
-  */
-  double offsetAtKey(int p_key_num);
-  inline bool keyState(int p_key_num);
-  inline bool midiKeyState(int p_key_num);
-  inline void setKeyState(int p_key_num, bool p_state);
-  inline void setMidiKeyState(int p_key_num, bool p_state);
-  void setAllKeyStatesOff(void);
+    /**
+       @return The distance the in mm away from where the 0 midi note would be
+    */
+    double offsetAtKey(int p_key_num);
+    inline bool keyState(int p_key_num);
+    inline bool midiKeyState(int p_key_num);
+    inline void setKeyState( int p_key_num
+                           , bool p_state
+                           );
+    inline void setMidiKeyState( int p_key_num
+                               , bool p_state
+                               );
+    void setAllKeyStatesOff(void);
 
-  /**
-     @return The width of the current piano keyboard in mm
-  */
-  double pianoWidth(void);
-  inline int numKeys(void);
-  inline int firstKey(void);
-  double m_first_key_offset;
-  
-private:
-  std::vector<bool> m_key_states;
-  std::vector<float> m_key_offsets;
-  int m_num_keys;
-  /**
-     on the midi scale (ie middle C = 60)
-  */
-  int m_first_key;
+    /**
+       @return The width of the current piano keyboard in mm
+    */
+    double pianoWidth(void);
+    inline int numKeys(void);
+    inline int firstKey(void);
+    double m_first_key_offset;
 
-  /**
-     aWhiteKeyLine;
-  */
-  GLint m_a_white_key;
-  GLint m_a_black_key;
+  private:
+
+    std::vector<bool> m_key_states;
+    std::vector<float> m_key_offsets;
+    int m_num_keys;
+    /**
+       on the midi scale (ie middle C = 60)
+    */
+    int m_first_key;
+
+    /**
+       aWhiteKeyLine;
+    */
+    GLint m_a_white_key;
+    GLint m_a_black_key;
 };
 
-inline void setMaterialColor(float p_r, float p_g, float p_b);
-inline void setMaterialSpecular(float p_r, float p_g, float p_b, float p_shiney);
-inline void setLightPosition(float p_x, float p_y, float p_z);
-inline void setLightDirection(float p_x, float p_y, float p_z);
-inline void setLightAmbient(float p_r, float p_g, float p_b);
-inline void setLightDiffuse(float p_r, float p_g, float p_b);
-inline void setLightSpecular(float p_r, float p_g, float p_b);
+inline void setMaterialColor( float p_r
+                            , float p_g
+                            , float p_b
+                            );
+inline void setMaterialSpecular( float p_r
+                               , float p_g
+                               , float p_b
+                               , float p_shiney
+                               );
+inline void setLightPosition( float p_x
+                            , float p_y
+                            , float p_z
+                            );
+inline void setLightDirection( float p_x
+                             , float p_y
+                             , float p_z
+                             );
+inline void setLightAmbient( float p_r
+                           , float p_g
+                           , float p_b
+                           );
+inline void setLightDiffuse( float p_r
+                           , float p_g
+                           , float p_b
+                           );
+inline void setLightSpecular( float p_r
+                            , float p_g
+                            , float p_b
+                            );
 
 #include "piano3d.hpp"
 
