@@ -33,15 +33,15 @@
 #endif
 
 //------------------------------------------------------------------------------
-HTrackWidget::HTrackWidget(QWidget *parent, const char *name):
-  QGLWidget(parent, name)
+HTrackWidget::HTrackWidget(QWidget *p_parent, const char *p_name):
+  QGLWidget(p_parent, p_name)
 {
 }
 
 //------------------------------------------------------------------------------
 HTrackWidget::~HTrackWidget(void)
 {
-  delete piano3d;
+  delete m_piano_3d;
 }
 
 //------------------------------------------------------------------------------
@@ -51,17 +51,17 @@ void HTrackWidget::initializeGL(void)
   setDistanceAway(1500.0);
   setViewAngleVertical(-35.0);
   setViewAngleHorizontal(20.0);
-  translateX = 0.0;
-  translateY = -60.0;
+  m_translate_X = 0.0;
+  m_translate_Y = -60.0;
   
-  piano3d = new Piano3d();
+  m_piano_3d = new Piano3d();
   glEnable(GL_NORMALIZE);
   // Set up the rendering context, define display lists etc.:
   glEnable(GL_DEPTH_TEST);
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  glGetFloatv(GL_MODELVIEW_MATRIX, gCurrentMatrix);
+  glGetFloatv(GL_MODELVIEW_MATRIX, m_g_current_matrix);
   
   glEnable(GL_LIGHTING);
   glEnable(GL_LIGHT0);
@@ -70,34 +70,34 @@ void HTrackWidget::initializeGL(void)
 }
 
 //------------------------------------------------------------------------------
-void HTrackWidget::resizeGL( int w, int h )
+void HTrackWidget::resizeGL( int p_w, int p_h )
 {
   // setup viewport, projection etc.:
-  glViewport( 0, 0, (GLint)w, (GLint)h );
+  glViewport( 0, 0, (GLint)p_w, (GLint)p_h );
 }
 
 //------------------------------------------------------------------------------
 void HTrackWidget::paintGL(void)
 {
-  Channel *active = gdata->getActiveChannel();
+  Channel *l_active_channel = gdata->getActiveChannel();
   
-  QColor bg = gdata->backgroundColor();
-  glClearColor( double(bg.red()) / 256.0, double(bg.green()) / 256.0, double(bg.blue()) / 256.0, 0.0 );
+  QColor l_background = gdata->backgroundColor();
+  glClearColor( double(l_background.red()) / 256.0, double(l_background.green()) / 256.0, double(l_background.blue()) / 256.0, 0.0 );
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  double nearPlane = 100.0;
-  double w2 = double(width()) / 2.0;
-  double h2 = double(height()) / 2.0;
-  double ratio = nearPlane / double(width());
-  glFrustum((-w2 - translateX) * ratio, (w2 - translateX) * ratio, (-h2 - translateY) * ratio, (h2 - translateY) * ratio, nearPlane, 10000.0);
+  double l_near_plane = 100.0;
+  double l_w2 = double(width()) / 2.0;
+  double l_h2 = double(height()) / 2.0;
+  double l_ratio = l_near_plane / double(width());
+  glFrustum((-l_w2 - m_translate_X) * l_ratio, (l_w2 - m_translate_X) * l_ratio, (-l_h2 - m_translate_Y) * l_ratio, (l_h2 - m_translate_Y) * l_ratio, l_near_plane, 10000.0);
   
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
-  double center_x = 0.0, center_z = 0.0;
-  gluLookAt(0.0, 0.0/*_distanceAway*/, _distanceAway, center_x, 0.0, center_z, 0.0, 1.0, 0.0);
+  double l_center_x = 0.0, l_center_z = 0.0;
+  gluLookAt(0.0, 0.0/*m_distance_away*/, m_distance_away, l_center_x, 0.0, l_center_z, 0.0, 1.0, 0.0);
   glRotated(-viewAngleVertical(), 1.0, 0.0, 0.0);
   glRotated(viewAngleHorizontal(), 0.0, 1.0, 0.0);
   
@@ -107,27 +107,27 @@ void HTrackWidget::paintGL(void)
 
   glPushMatrix();
 
-  double pianoWidth = piano3d->pianoWidth();
+  double l_piano_width = m_piano_3d->pianoWidth();
   //set center of keyboard at origin
-  glTranslatef(-pianoWidth / 2.0, 0.0, 0.0);
+  glTranslatef(-l_piano_width / 2.0, 0.0, 0.0);
   
-  piano3d->setAllKeyStatesOff();
-  if(active)
+  m_piano_3d->setAllKeyStatesOff();
+  if(l_active_channel)
     {
-      AnalysisData *data = active->dataAtCurrentChunk();
-      if(data && active->isVisibleChunk(data))
+      AnalysisData *l_data = l_active_channel->dataAtCurrentChunk();
+      if(l_data && l_active_channel->isVisibleChunk(l_data))
 	{
-	  piano3d->setMidiKeyState(toInt(data->getPitch()), true);
+	  m_piano_3d->setMidiKeyState(toInt(l_data->getPitch()), true);
 	}
     }
   glLineWidth(0.01f);
-  piano3d->draw();
+  m_piano_3d->draw();
 
   setLightDirection(-1.0, 0.0, 0.0);
   setLightAmbient(0.2f, 0.2f, 0.2f);
   setLightDiffuse(0.9f, 0.9f, 0.9f);
   
-  glTranslatef(-piano3d->m_first_key_offset, 0.0, 0.0);
+  glTranslatef(-m_piano_3d->m_first_key_offset, 0.0, 0.0);
   //set a scale of 1 semitime = 1 unit
   glScaled(OCTAVE_WIDTH / 12.0, 200.0, 5.0);
   
@@ -135,115 +135,115 @@ void HTrackWidget::paintGL(void)
   glLineWidth(1.0);
 
 
-  if(active)
+  if(l_active_channel)
     {
-      active->lock();
-      double pos;
-      int j;
-      uint numHarmonics = 40;
-      int visibleChunks = 512; //128;
-      Array2d<float> pitches(numHarmonics, visibleChunks);
-      Array2d<float> amps(numHarmonics, visibleChunks);
+      l_active_channel->lock();
+      double l_pos;
+      int l_j;
+      uint l_num_harmonics = 40;
+      int l_visible_chunks = 512; //128;
+      Array2d<float> l_pitches(l_num_harmonics, l_visible_chunks);
+      Array2d<float> l_amps(l_num_harmonics, l_visible_chunks);
     
-      AnalysisData *data;
-      int finishChunk = active->currentChunk();
-      int startChunk = finishChunk - visibleChunks;
-      uint harmonic;
-      int chunkOffset;
+      AnalysisData *l_data;
+      int l_finish_chunk = l_active_channel->currentChunk();
+      int l_start_chunk = l_finish_chunk - l_visible_chunks;
+      uint l_harmonic;
+      int l_chunk_offset;
     
       //draw the time ref lines
       glBegin(GL_LINES);
-      for(j = roundUp(startChunk, 16); j<finishChunk; j += 16)
+      for(l_j = roundUp(l_start_chunk, 16); l_j<l_finish_chunk; l_j += 16)
 	{
-	  if(active->isValidChunk(j))
+	  if(l_active_channel->isValidChunk(l_j))
 	    {
-	      glVertex3f(piano3d->firstKey(), 0.0, double(j - finishChunk));
-	      glVertex3f(piano3d->firstKey() + piano3d->numKeys(), 0.0, double(j - finishChunk));
+	      glVertex3f(m_piano_3d->firstKey(), 0.0, double(l_j - l_finish_chunk));
+	      glVertex3f(m_piano_3d->firstKey() + m_piano_3d->numKeys(), 0.0, double(l_j - l_finish_chunk));
 	    }
 	}
       glEnd();
     
       //build a table of frequencies and amplitudes for faster drawing
-      for(chunkOffset = 0; chunkOffset < visibleChunks; chunkOffset++)
+      for(l_chunk_offset = 0; l_chunk_offset < l_visible_chunks; l_chunk_offset++)
 	{
-	  data = active->dataAtChunk(startChunk + chunkOffset);
-	  if(data && data->getHarmonicFreqSize() > 0)
+	  l_data = l_active_channel->dataAtChunk(l_start_chunk + l_chunk_offset);
+	  if(l_data && l_data->getHarmonicFreqSize() > 0)
 	    {
-	      for(harmonic=0; harmonic < numHarmonics; harmonic++)
+	      for(l_harmonic=0; l_harmonic < l_num_harmonics; l_harmonic++)
 		{
-		  pitches(harmonic, chunkOffset) = freq2pitch(data->getHarmonicFreqAt(harmonic));
-		  amps(harmonic, chunkOffset) = data->getHarmonicAmpAt(harmonic);
+		  l_pitches(l_harmonic, l_chunk_offset) = freq2pitch(l_data->getHarmonicFreqAt(l_harmonic));
+		  l_amps(l_harmonic, l_chunk_offset) = l_data->getHarmonicAmpAt(l_harmonic);
 		}
 	    }
 	  else
 	    {
-	      for(harmonic=0; harmonic < numHarmonics; harmonic++)
+	      for(l_harmonic=0; l_harmonic < l_num_harmonics; l_harmonic++)
 		{
-		  pitches(harmonic, chunkOffset) = 0.0;
-		  amps(harmonic, chunkOffset) = 0.0;
+		  l_pitches(l_harmonic, l_chunk_offset) = 0.0;
+		  l_amps(l_harmonic, l_chunk_offset) = 0.0;
 		}
 	    }
 	}
     
-      bool insideLine;
-      float curPitch=0.0, curAmp=0.0, prevPitch, diffNote;
+      bool l_inside_line;
+      float l_cur_pitch=0.0, l_cur_amp=0.0, l_prev_pitch, l_diff_note;
     
       //draw the outlines
       setMaterialSpecular(0.0, 0.0, 0.0, 0.0);
       setMaterialColor(0.0f, 0.0f, 0.0f);
       glLineWidth(2.0);
-      for(harmonic = 0; harmonic < numHarmonics; harmonic++)
+      for(l_harmonic = 0; l_harmonic < l_num_harmonics; l_harmonic++)
 	{
-	  insideLine = false;
-	  pos = -double(visibleChunks - 1);
-	  for(chunkOffset = 0; chunkOffset < visibleChunks; chunkOffset++, pos++)
+	  l_inside_line = false;
+	  l_pos = -double(l_visible_chunks - 1);
+	  for(l_chunk_offset = 0; l_chunk_offset < l_visible_chunks; l_chunk_offset++, l_pos++)
 	    {
-	      curAmp = amps(harmonic, chunkOffset) - _peakThreshold;
-	      if(curAmp > 0.0)
+	      l_cur_amp = l_amps(l_harmonic, l_chunk_offset) - m_peak_threshold;
+	      if(l_cur_amp > 0.0)
 		{
-		  prevPitch = curPitch;
-		  curPitch = pitches(harmonic, chunkOffset);
-		  diffNote = prevPitch - curPitch;
-		  if(fabs(diffNote) < 1.0)
+		  l_prev_pitch = l_cur_pitch;
+		  l_cur_pitch = l_pitches(l_harmonic, l_chunk_offset);
+		  l_diff_note = l_prev_pitch - l_cur_pitch;
+		  if(fabs(l_diff_note) < 1.0)
 		    {
-		      if(!insideLine)
+		      if(!l_inside_line)
 			{
 			  glBegin(GL_LINE_STRIP);
-			  glVertex3f(curPitch, 0, pos);
-			  insideLine = true;
+			  glVertex3f(l_cur_pitch, 0, l_pos);
+			  l_inside_line = true;
 			}
-		      glVertex3f(curPitch, curAmp, pos);
+		      glVertex3f(l_cur_pitch, l_cur_amp, l_pos);
 		    }
 		  else
 		    {
 		      glEnd();
-		      insideLine = false;
+		      l_inside_line = false;
 		    }
 		}
 	      else
 		{
-		  if(insideLine)
+		  if(l_inside_line)
 		    {
-		      glVertex3f(curPitch, 0, pos - 1);
+		      glVertex3f(l_cur_pitch, 0, l_pos - 1);
 		      glEnd();
-		      insideLine = false;
+		      l_inside_line = false;
 		    }
 		}
 	    }
-	  if(insideLine)
+	  if(l_inside_line)
 	    {
-	      glVertex3f(curPitch, 0, pos - 1);
+	      glVertex3f(l_cur_pitch, 0, l_pos - 1);
 	      glEnd();
-	      insideLine = false;
+	      l_inside_line = false;
 	    }
 	}
     
       //draw the faces
       glShadeModel(GL_FLAT);
       glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-      for(harmonic = 0; harmonic < numHarmonics; harmonic++)
+      for(l_harmonic = 0; l_harmonic < l_num_harmonics; l_harmonic++)
 	{
-	  if(harmonic % 2 == 0)
+	  if(l_harmonic % 2 == 0)
 	    {
 	      setMaterialColor(0.5f, 0.5f, 0.9f);
 	    }
@@ -251,67 +251,67 @@ void HTrackWidget::paintGL(void)
 	    {
 	      setMaterialColor(0.5f, 0.9f, 0.5f);
 	    }
-	  insideLine = false;
-	  pos = -double(visibleChunks - 1);
-	  for(chunkOffset = 0; chunkOffset < visibleChunks; chunkOffset++, pos++)
+	  l_inside_line = false;
+	  l_pos = -double(l_visible_chunks - 1);
+	  for(l_chunk_offset = 0; l_chunk_offset < l_visible_chunks; l_chunk_offset++, l_pos++)
 	    {
-	      if(amps(harmonic, chunkOffset) > _peakThreshold)
+	      if(l_amps(l_harmonic, l_chunk_offset) > m_peak_threshold)
 		{
-		  if(!insideLine)
+		  if(!l_inside_line)
 		    {
 		      glBegin(GL_QUAD_STRIP);
-		      insideLine = true;
-		      curPitch = pitches(harmonic, chunkOffset);
-		      glVertex3f(curPitch, (amps(harmonic, chunkOffset) - _peakThreshold), pos);
-		      glVertex3f(curPitch, 0, pos);
+		      l_inside_line = true;
+		      l_cur_pitch = l_pitches(l_harmonic, l_chunk_offset);
+		      glVertex3f(l_cur_pitch, (l_amps(l_harmonic, l_chunk_offset) - m_peak_threshold), l_pos);
+		      glVertex3f(l_cur_pitch, 0, l_pos);
 		    }
 		  else
 		    {
-		      prevPitch = curPitch;
-		      curPitch = pitches(harmonic, chunkOffset);
-		      diffNote = prevPitch - curPitch;
-		      if(fabs(diffNote) < 1.0)
+		      l_prev_pitch = l_cur_pitch;
+		      l_cur_pitch = l_pitches(l_harmonic, l_chunk_offset);
+		      l_diff_note = l_prev_pitch - l_cur_pitch;
+		      if(fabs(l_diff_note) < 1.0)
 			{
-			  glNormal3f(diffNote ,0.0 ,1.0);
-			  glVertex3f(curPitch, (amps(harmonic, chunkOffset) - _peakThreshold), pos);
-			  glVertex3f(curPitch, 0, pos);
+			  glNormal3f(l_diff_note ,0.0 ,1.0);
+			  glVertex3f(l_cur_pitch, (l_amps(l_harmonic, l_chunk_offset) - m_peak_threshold), l_pos);
+			  glVertex3f(l_cur_pitch, 0, l_pos);
 			}
 		      else
 			{
 			  glEnd();
-			  insideLine = false;
+			  l_inside_line = false;
 			}
 		    }
 		}
 	      else
 		{
-		  if(insideLine)
+		  if(l_inside_line)
 		    { glEnd();
-		      insideLine = false;
+		      l_inside_line = false;
 		    }
 		}
 	    }
-	  if(insideLine)
+	  if(l_inside_line)
 	    {
 	      glEnd();
-	      insideLine = false;
+	      l_inside_line = false;
 	    }
 	}
-      active->unlock();
+      l_active_channel->unlock();
     }
   glPopMatrix();
 }
 
 //------------------------------------------------------------------------------
-void HTrackWidget::rotateX(const double & angle)
+void HTrackWidget::rotateX(const double & p_angle)
 {
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
   
   glLoadIdentity();
-  glRotatef(angle, 1.0, 0.0, 0.0);
-  glMultMatrixf(gCurrentMatrix);
-  glGetFloatv(GL_MODELVIEW_MATRIX, gCurrentMatrix);
+  glRotatef(p_angle, 1.0, 0.0, 0.0);
+  glMultMatrixf(m_g_current_matrix);
+  glGetFloatv(GL_MODELVIEW_MATRIX, m_g_current_matrix);
   
   glPopMatrix();
 }
@@ -323,58 +323,58 @@ void HTrackWidget::home(void)
   setDistanceAway(1500.0);
   setViewAngleVertical(-35.0);
   setViewAngleHorizontal(20.0);
-  translateX = 0.0;
-  translateY = -60.0;
+  m_translate_X = 0.0;
+  m_translate_Y = -60.0;
 }
 
 //------------------------------------------------------------------------------
-void HTrackWidget::rotateY(const double & angle)
+void HTrackWidget::rotateY(const double & p_angle)
 {
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
   
   glLoadIdentity();
-  glRotatef(angle, 0.0, 1.0, 0.0);
-  glMultMatrixf(gCurrentMatrix);
-  glGetFloatv(GL_MODELVIEW_MATRIX, gCurrentMatrix);
+  glRotatef(p_angle, 0.0, 1.0, 0.0);
+  glMultMatrixf(m_g_current_matrix);
+  glGetFloatv(GL_MODELVIEW_MATRIX, m_g_current_matrix);
   
   glPopMatrix();
 }
 
 //------------------------------------------------------------------------------
-void HTrackWidget::translate(float x, float y, float z)
+void HTrackWidget::translate(float p_x, float p_y, float p_z)
 {
-  translateX += x;
-  translateY += y;
+  m_translate_X += p_x;
+  m_translate_Y += p_y;
   
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
   
   glLoadIdentity();
-  glTranslatef(x, y, z);
-  glMultMatrixf(gCurrentMatrix);
-  glGetFloatv(GL_MODELVIEW_MATRIX, gCurrentMatrix);
+  glTranslatef(p_x, p_y, p_z);
+  glMultMatrixf(m_g_current_matrix);
+  glGetFloatv(GL_MODELVIEW_MATRIX, m_g_current_matrix);
   
   glPopMatrix();
 }
 
 //------------------------------------------------------------------------------
-void HTrackWidget::mousePressEvent( QMouseEvent *e)
+void HTrackWidget::mousePressEvent( QMouseEvent *p_event)
 {
-  mouseDown = true;
-  mouseX = e->x();
-  mouseY = e->y();
+  m_mouse_down = true;
+  m_mouse_X = p_event->x();
+  m_mouse_Y = p_event->y();
 }
 
 //------------------------------------------------------------------------------
-void HTrackWidget::mouseMoveEvent( QMouseEvent *e)
+void HTrackWidget::mouseMoveEvent( QMouseEvent *p_event)
 {
-  if(mouseDown)
+  if(m_mouse_down)
     {
-      translate(float(e->x() - mouseX), -float(e->y() - mouseY), 0.0);
+      translate(float(p_event->x() - m_mouse_X), -float(p_event->y() - m_mouse_Y), 0.0);
 
-    mouseX = e->x();
-    mouseY = e->y();
+    m_mouse_X = p_event->x();
+    m_mouse_Y = p_event->y();
     update();
   }
 }
@@ -382,15 +382,15 @@ void HTrackWidget::mouseMoveEvent( QMouseEvent *e)
 //------------------------------------------------------------------------------
 void HTrackWidget::mouseReleaseEvent( QMouseEvent * )
 {
-  mouseDown = false;
+  m_mouse_down = false;
 }
 
 //------------------------------------------------------------------------------
-void HTrackWidget::wheelEvent(QWheelEvent * e)
+void HTrackWidget::wheelEvent(QWheelEvent * p_event)
 {
-  setDistanceAway(_distanceAway * pow(2.0, -(double(e->delta()) / double(WHEEL_DELTA)) / 20.0));
+  setDistanceAway(m_distance_away * pow(2.0, -(double(p_event->delta()) / double(WHEEL_DELTA)) / 20.0));
   update();
-  e->accept();
+  p_event->accept();
 }
 
 //EOF

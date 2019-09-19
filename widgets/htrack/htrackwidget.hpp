@@ -19,54 +19,54 @@
 //------------------------------------------------------------------------------
 float HTrackWidget::peakThreshold(void)const
 {
-  return _peakThreshold;
+  return m_peak_threshold;
 }
 
 //------------------------------------------------------------------------------
 const double & HTrackWidget::viewAngleHorizontal(void)const
 {
-  return _viewAngleHorizontal;
+  return m_view_angle_horizontal;
 }
 
 //------------------------------------------------------------------------------
 const double & HTrackWidget::viewAngleVertical(void)const
 {
-  return _viewAngleVertical;
+  return m_view_angle_vertical;
 }
 
 //------------------------------------------------------------------------------
-void HTrackWidget::setPeakThreshold(float peakThreshold)
+void HTrackWidget::setPeakThreshold(float p_peak_threshold)
 {
-  _peakThreshold = peakThreshold;
+  m_peak_threshold = p_peak_threshold;
 }
 
 //------------------------------------------------------------------------------
-void HTrackWidget::setViewAngleHorizontal(const double & angle)
+void HTrackWidget::setViewAngleHorizontal(const double & p_angle)
 {
-  if(angle != _viewAngleHorizontal)
+  if(p_angle != m_view_angle_horizontal)
     {
-      _viewAngleHorizontal = angle;
-      emit viewAngleHorizontalChanged(angle);
+      m_view_angle_horizontal = p_angle;
+      emit viewAngleHorizontalChanged(p_angle);
     }
 }
 
 //------------------------------------------------------------------------------
-void HTrackWidget::setViewAngleVertical(const double & angle)
+void HTrackWidget::setViewAngleVertical(const double & p_angle)
 {
-  if(angle != _viewAngleVertical)
+  if(p_angle != m_view_angle_vertical)
     {
-      _viewAngleVertical = angle;
-      emit viewAngleVerticalChanged(angle);
+      m_view_angle_vertical = p_angle;
+      emit viewAngleVerticalChanged(p_angle);
     }
 }
 
 //------------------------------------------------------------------------------
-void HTrackWidget::setDistanceAway(const double & distance)
+void HTrackWidget::setDistanceAway(const double & p_distance)
 {
-  if(distance != _distanceAway)
+  if(p_distance != m_distance_away)
     {
-      _distanceAway = distance;
-      emit distanceAwayChanged(distance);
+      m_distance_away = p_distance;
+      emit distanceAwayChanged(p_distance);
     }
 }
 
