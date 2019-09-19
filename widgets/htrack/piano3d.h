@@ -36,7 +36,7 @@
 class Piano3d
 {
 public:
-  Piano3d(int numKeys_ = 85, int firstKey_ = 21);
+  Piano3d(int p_num_keys = 85, int p_first_key = 21);
   ~Piano3d(void);
   
   static void drawWhiteKey(void);
@@ -46,10 +46,10 @@ public:
   
   /** Initialises the piano.
       This can be called again to reinitialise the piano to a different size
-      @param numKeys_ The number of keys the piano is to have
-      @param firstKey_ The midi note number that will be the lowest key on the piano
+      @param p_num_keys The number of keys the piano is to have
+      @param p_first_key The midi note number that will be the lowest key on the piano
   */
-  void init(int numKeys_ = 85, int firstKey_ = 21);
+  void init(int p_num_keys = 85, int p_first_key = 21);
   
   void setMaterialWhiteKey(void);
   void setMaterialBlackKey(void);
@@ -58,11 +58,11 @@ public:
   /**
      @return The distance the in mm away from where the 0 midi note would be
   */
-  double offsetAtKey(int keyNum);
-  inline bool keyState(int keyNum);
-  inline bool midiKeyState(int keyNum);
-  inline void setKeyState(int keyNum, bool state);
-  inline void setMidiKeyState(int keyNum, bool state);
+  double offsetAtKey(int p_key_num);
+  inline bool keyState(int p_key_num);
+  inline bool midiKeyState(int p_key_num);
+  inline void setKeyState(int p_key_num, bool p_state);
+  inline void setMidiKeyState(int p_key_num, bool p_state);
   void setAllKeyStatesOff(void);
 
   /**
@@ -71,31 +71,31 @@ public:
   double pianoWidth(void);
   inline int numKeys(void);
   inline int firstKey(void);
-  double firstKeyOffset;
+  double m_first_key_offset;
   
 private:
-  std::vector<bool> keyStates;
-  std::vector<float> keyOffsets;
-  int _numKeys;
+  std::vector<bool> m_key_states;
+  std::vector<float> m_key_offsets;
+  int m_num_keys;
   /**
      on the midi scale (ie middle C = 60)
   */
-  int _firstKey;
+  int m_first_key;
 
   /**
      aWhiteKeyLine;
   */
-  GLint aWhiteKey;
-  GLint aBlackKey;
+  GLint m_a_white_key;
+  GLint m_a_black_key;
 };
 
-inline void setMaterialColor(float r, float g, float b);
-inline void setMaterialSpecular(float r, float g, float b, float shiney);
-inline void setLightPosition(float x, float y, float z);
-inline void setLightDirection(float x, float y, float z);
-inline void setLightAmbient(float r, float g, float b);
-inline void setLightDiffuse(float r, float g, float b);
-inline void setLightSpecular(float r, float g, float b);
+inline void setMaterialColor(float p_r, float p_g, float p_b);
+inline void setMaterialSpecular(float p_r, float p_g, float p_b, float p_shiney);
+inline void setLightPosition(float p_x, float p_y, float p_z);
+inline void setLightDirection(float p_x, float p_y, float p_z);
+inline void setLightAmbient(float p_r, float p_g, float p_b);
+inline void setLightDiffuse(float p_r, float p_g, float p_b);
+inline void setLightSpecular(float p_r, float p_g, float p_b);
 
 #include "piano3d.hpp"
 

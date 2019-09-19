@@ -17,92 +17,92 @@
 */
 
 //------------------------------------------------------------------------------
-bool Piano3d::keyState(int keyNum)
+bool Piano3d::keyState(int p_key_num)
 {
-  return (keyNum >= 0 && keyNum < _numKeys) ? keyStates[keyNum] : false;
+  return (p_key_num >= 0 && p_key_num < m_num_keys) ? m_key_states[p_key_num] : false;
 }
 
 //------------------------------------------------------------------------------
-bool Piano3d::midiKeyState(int keyNum)
+bool Piano3d::midiKeyState(int p_key_num)
 {
-  return keyState(keyNum-_firstKey);
+  return keyState(p_key_num-m_first_key);
 }
 
 //------------------------------------------------------------------------------
-void Piano3d::setKeyState(int keyNum, bool state)
+void Piano3d::setKeyState(int p_key_num, bool p_state)
 {
-  if(keyNum >= 0 && keyNum < _numKeys)
+  if(p_key_num >= 0 && p_key_num < m_num_keys)
     {
-      keyStates[keyNum] = state;
+      m_key_states[p_key_num] = p_state;
     }
 }
 
 //------------------------------------------------------------------------------
-void Piano3d::setMidiKeyState(int keyNum, bool state)
+void Piano3d::setMidiKeyState(int p_key_num, bool p_state)
 {
-  setKeyState(keyNum - _firstKey, state);
+  setKeyState(p_key_num - m_first_key, p_state);
 }
 
 //------------------------------------------------------------------------------
 int Piano3d::numKeys(void)
 {
-  return _numKeys;
+  return m_num_keys;
 }
 
 //------------------------------------------------------------------------------
 int Piano3d::firstKey(void)
 {
-  return _firstKey;
+  return m_first_key;
 }
 
 //------------------------------------------------------------------------------
-void setMaterialColor(float r, float g, float b)
+void setMaterialColor(float p_r, float p_g, float p_b)
 {
-  GLfloat theColor[4] = { r, g, b, 1.0 };
-  glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, theColor);
+  GLfloat l_the_color[4] = { p_r, p_g, p_b, 1.0 };
+  glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, l_the_color);
 }
 
 //------------------------------------------------------------------------------
-void setMaterialSpecular(float r, float g, float b, float shiney)
+void setMaterialSpecular(float p_r, float p_g, float p_b, float p_shiney)
 {
-  GLfloat theSpecular[4] = { r, g, b, 1.0 };
-  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, theSpecular);
-  glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shiney);
+  GLfloat l_the_specular[4] = { p_r, p_g, p_b, 1.0 };
+  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, l_the_specular);
+  glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, p_shiney);
 }
 
 //------------------------------------------------------------------------------
-void setLightPosition(float x, float y, float z)
+void setLightPosition(float p_x, float p_y, float p_z)
 {
-  GLfloat light_position[4] = { x, y, z, 1.0 };
-  glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+  GLfloat l_light_position[4] = { p_x, p_y, p_z, 1.0 };
+  glLightfv(GL_LIGHT0, GL_POSITION, l_light_position);
 }
 
 //------------------------------------------------------------------------------
-void setLightDirection(float x, float y, float z)
+void setLightDirection(float p_x, float p_y, float p_z)
 {
-  GLfloat light_position[4] = { x, y, z, 0.0 };
-  glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+  GLfloat l_light_position[4] = { p_x, p_y, p_z, 0.0 };
+  glLightfv(GL_LIGHT0, GL_POSITION, l_light_position);
 }
 
 //------------------------------------------------------------------------------
-void setLightAmbient(float r, float g, float b)
+void setLightAmbient(float p_r, float p_g, float p_b)
 {
-  GLfloat theColor[4] = { r, g, b, 1.0 };
-  glLightfv(GL_LIGHT0, GL_AMBIENT, theColor);
+  GLfloat l_the_color[4] = { p_r, p_g, p_b, 1.0 };
+  glLightfv(GL_LIGHT0, GL_AMBIENT, l_the_color);
 }
 
 //------------------------------------------------------------------------------
-void setLightDiffuse(float r, float g, float b)
+void setLightDiffuse(float p_r, float p_g, float p_b)
 {
-  GLfloat theColor[4] = { r, g, b, 1.0 };
-  glLightfv(GL_LIGHT0, GL_DIFFUSE, theColor);
+  GLfloat l_the_color[4] = { p_r, p_g, p_b, 1.0 };
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, l_the_color);
 }
 
 //------------------------------------------------------------------------------
-void setLightSpecular(float r, float g, float b)
+void setLightSpecular(float p_r, float p_g, float p_b)
 {
-  GLfloat theColor[4] = { r, g, b, 1.0 };
-  glLightfv(GL_LIGHT0, GL_SPECULAR, theColor);
+  GLfloat l_the_color[4] = { p_r, p_g, p_b, 1.0 };
+  glLightfv(GL_LIGHT0, GL_SPECULAR, l_the_color);
 }
 
 // EOF

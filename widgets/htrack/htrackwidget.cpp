@@ -127,7 +127,7 @@ void HTrackWidget::paintGL(void)
   setLightAmbient(0.2f, 0.2f, 0.2f);
   setLightDiffuse(0.9f, 0.9f, 0.9f);
   
-  glTranslatef(-piano3d->firstKeyOffset, 0.0, 0.0);
+  glTranslatef(-piano3d->m_first_key_offset, 0.0, 0.0);
   //set a scale of 1 semitime = 1 unit
   glScaled(OCTAVE_WIDTH / 12.0, 200.0, 5.0);
   
