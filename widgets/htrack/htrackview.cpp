@@ -32,95 +32,95 @@
 #include <QResizeEvent>
 
 //------------------------------------------------------------------------------
-HTrackView::HTrackView( int viewID_, QWidget *parent ):
-  ViewWidget( viewID_, parent)
+HTrackView::HTrackView( int p_view_ID, QWidget *p_parent ):
+  ViewWidget( p_view_ID, p_parent)
 {
-  Q3GridLayout * mainLayout = new Q3GridLayout(this, 2, 2);
-  mainLayout->setResizeMode(QLayout::SetNoConstraint);
-  Q3BoxLayout * rightLayout = new Q3VBoxLayout();
-  Q3BoxLayout * bottomLayout = new Q3HBoxLayout();
+  Q3GridLayout * l_main_layout = new Q3GridLayout(this, 2, 2);
+  l_main_layout->setResizeMode(QLayout::SetNoConstraint);
+  Q3BoxLayout * l_right_layout = new Q3VBoxLayout();
+  Q3BoxLayout * l_bottom_layout = new Q3HBoxLayout();
 
-  Q3Grid * frame = new Q3Grid(1, this);
-  frame->setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
-  QWidget * aWidget = new QWidget(frame);
-  hTrackWidget = new HTrackWidget(aWidget);
-  hTrackWidget->setWhatsThis("Shows a 3D keyboard with the current note coloured. "
+  Q3Grid * l_frame = new Q3Grid(1, this);
+  l_frame->setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
+  QWidget * l_a_widget = new QWidget(l_frame);
+  m_h_track_widget = new HTrackWidget(l_a_widget);
+  m_h_track_widget->setWhatsThis("Shows a 3D keyboard with the current note coloured. "
     "Vertical columns (or tracks), each representing a harmonic (or component frequency), protrude from the back, and move further away over time. "
     "The height of each track is related to how much energy is at that frequency. "
     "Tracks alternate in colour for better visibility. It can be seen how the hamonics in a note fit into the musical scale.");
 
-  peakThresholdSlider = new QSlider(0, 100, 10, 5, Qt::Vertical, this);
-  QToolTip::add(peakThresholdSlider, "Thresholding of harmonics");
+  m_peak_threshold_slider = new QSlider(0, 100, 10, 5, Qt::Vertical, this);
+  QToolTip::add(m_peak_threshold_slider, "Thresholding of harmonics");
   
-  rotateXWheel = new QwtWheel(this);
-  rotateXWheel->setWheelWidth(20);
-  rotateXWheel->setRange(-180, 180, 0.1, 1);
-  QToolTip::add(rotateXWheel, "Rotate piano horizonally");
+  m_rotate_X_wheel = new QwtWheel(this);
+  m_rotate_X_wheel->setWheelWidth(20);
+  m_rotate_X_wheel->setRange(-180, 180, 0.1, 1);
+  QToolTip::add(m_rotate_X_wheel, "Rotate piano horizonally");
   
-  rotateYWheel = new QwtWheel(this);
-  rotateYWheel->setOrientation(Qt::Vertical);
-  rotateYWheel->setWheelWidth(20);
-  rotateYWheel->setRange(-90, 0, 0.1, 1);
-  QToolTip::add(rotateYWheel, "Rotate piano vertically");
+  m_rotate_Y_wheel = new QwtWheel(this);
+  m_rotate_Y_wheel->setOrientation(Qt::Vertical);
+  m_rotate_Y_wheel->setWheelWidth(20);
+  m_rotate_Y_wheel->setRange(-90, 0, 0.1, 1);
+  QToolTip::add(m_rotate_Y_wheel, "Rotate piano vertically");
   
-  distanceWheel = new QwtWheel(this);
-  distanceWheel->setOrientation(Qt::Vertical);
-  distanceWheel->setRange(100, 5000, 10, 20);
-  distanceWheel->setTotalAngle(20*360);
-  QToolTip::add(distanceWheel, "Move towards/away from piano");
+  m_distance_wheel = new QwtWheel(this);
+  m_distance_wheel->setOrientation(Qt::Vertical);
+  m_distance_wheel->setRange(100, 5000, 10, 20);
+  m_distance_wheel->setTotalAngle(20*360);
+  QToolTip::add(m_distance_wheel, "Move towards/away from piano");
   
-  QPushButton * homeButton = new QPushButton("Reset", this, "homebutton");
-  QToolTip::add(homeButton, "Return to the original view");
+  QPushButton * l_home_button = new QPushButton("Reset", this, "homebutton");
+  QToolTip::add(l_home_button, "Return to the original view");
   
-  QSizeGrip * sizeGrip = new QSizeGrip(this);
+  QSizeGrip * l_size_grip = new QSizeGrip(this);
   
-  mainLayout->addWidget(frame, 0, 0);
-  mainLayout->addLayout(bottomLayout, 1, 0);
-  mainLayout->addLayout(rightLayout, 0, 1);
-  rightLayout->addStretch(2);
-  rightLayout->addWidget(peakThresholdSlider);
-  rightLayout->addStretch(4);
-  rightLayout->addWidget(rotateYWheel);
-  rightLayout->addSpacing(14);
-  rightLayout->addWidget(distanceWheel);
-  bottomLayout->addStretch(0);
-  bottomLayout->addWidget(homeButton);
-  bottomLayout->addSpacing(14);
-  bottomLayout->addWidget(rotateXWheel);
-  mainLayout->addWidget(sizeGrip, 1, 1);
+  l_main_layout->addWidget(l_frame, 0, 0);
+  l_main_layout->addLayout(l_bottom_layout, 1, 0);
+  l_main_layout->addLayout(l_right_layout, 0, 1);
+  l_right_layout->addStretch(2);
+  l_right_layout->addWidget(m_peak_threshold_slider);
+  l_right_layout->addStretch(4);
+  l_right_layout->addWidget(m_rotate_Y_wheel);
+  l_right_layout->addSpacing(14);
+  l_right_layout->addWidget(m_distance_wheel);
+  l_bottom_layout->addStretch(0);
+  l_bottom_layout->addWidget(l_home_button);
+  l_bottom_layout->addSpacing(14);
+  l_bottom_layout->addWidget(m_rotate_X_wheel);
+  l_main_layout->addWidget(l_size_grip, 1, 1);
 
   //make the widget get updated when the view changes
-  connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), hTrackWidget, SLOT(update()));
-  connect(peakThresholdSlider, SIGNAL(valueChanged(int)), this, SLOT(setPeakThreshold(int)));
-  connect(rotateYWheel, SIGNAL(valueChanged(double)), hTrackWidget, SLOT(setViewAngleVertical(double)));
-  connect(rotateYWheel, SIGNAL(valueChanged(double)), hTrackWidget, SLOT(update()));
-  connect(hTrackWidget, SIGNAL(viewAngleVerticalChanged(double)), rotateYWheel, SLOT(setValue(double)));
-  connect(distanceWheel, SIGNAL(valueChanged(double)), hTrackWidget, SLOT(setDistanceAway(double)));
-  connect(distanceWheel, SIGNAL(valueChanged(double)), hTrackWidget, SLOT(update()));
-  connect(hTrackWidget, SIGNAL(distanceAwayChanged(double)), distanceWheel, SLOT(setValue(double)));
-  connect(rotateXWheel, SIGNAL(valueChanged(double)), hTrackWidget, SLOT(setViewAngleHorizontal(double)));
-  connect(rotateXWheel, SIGNAL(valueChanged(double)), hTrackWidget, SLOT(update()));
-  connect(hTrackWidget, SIGNAL(viewAngleHorizontalChanged(double)), rotateXWheel, SLOT(setValue(double)));
-  connect(homeButton, SIGNAL(clicked()), hTrackWidget, SLOT(home()));
+  connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), m_h_track_widget, SLOT(update()));
+  connect(m_peak_threshold_slider, SIGNAL(valueChanged(int)), this, SLOT(setPeakThreshold(int)));
+  connect(m_rotate_Y_wheel, SIGNAL(valueChanged(double)), m_h_track_widget, SLOT(setViewAngleVertical(double)));
+  connect(m_rotate_Y_wheel, SIGNAL(valueChanged(double)), m_h_track_widget, SLOT(update()));
+  connect(m_h_track_widget, SIGNAL(viewAngleVerticalChanged(double)), m_rotate_Y_wheel, SLOT(setValue(double)));
+  connect(m_distance_wheel, SIGNAL(valueChanged(double)), m_h_track_widget, SLOT(setDistanceAway(double)));
+  connect(m_distance_wheel, SIGNAL(valueChanged(double)), m_h_track_widget, SLOT(update()));
+  connect(m_h_track_widget, SIGNAL(distanceAwayChanged(double)), m_distance_wheel, SLOT(setValue(double)));
+  connect(m_rotate_X_wheel, SIGNAL(valueChanged(double)), m_h_track_widget, SLOT(setViewAngleHorizontal(double)));
+  connect(m_rotate_X_wheel, SIGNAL(valueChanged(double)), m_h_track_widget, SLOT(update()));
+  connect(m_h_track_widget, SIGNAL(viewAngleHorizontalChanged(double)), m_rotate_X_wheel, SLOT(setValue(double)));
+  connect(l_home_button, SIGNAL(clicked()), m_h_track_widget, SLOT(home()));
 }
 
 //------------------------------------------------------------------------------
 HTrackView::~HTrackView(void)
 {
-  delete hTrackWidget;
+  delete m_h_track_widget;
 }
 
 //------------------------------------------------------------------------------
 void HTrackView::resizeEvent(QResizeEvent *)
 {
-  hTrackWidget->resize(size());
+  m_h_track_widget->resize(size());
 }
 
 //------------------------------------------------------------------------------
 void HTrackView::setPeakThreshold(int value)
 {
-  hTrackWidget->setPeakThreshold(float(value) / 100.0);
-  hTrackWidget->update();
+  m_h_track_widget->setPeakThreshold(float(value) / 100.0);
+  m_h_track_widget->update();
 }
 
 //------------------------------------------------------------------------------
