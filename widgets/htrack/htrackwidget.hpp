@@ -19,54 +19,54 @@
 //------------------------------------------------------------------------------
 float HTrackWidget::peakThreshold(void)const
 {
-  return m_peak_threshold;
+    return m_peak_threshold;
 }
 
 //------------------------------------------------------------------------------
 const double & HTrackWidget::viewAngleHorizontal(void)const
 {
-  return m_view_angle_horizontal;
+    return m_view_angle_horizontal;
 }
 
 //------------------------------------------------------------------------------
 const double & HTrackWidget::viewAngleVertical(void)const
 {
-  return m_view_angle_vertical;
+    return m_view_angle_vertical;
 }
 
 //------------------------------------------------------------------------------
 void HTrackWidget::setPeakThreshold(float p_peak_threshold)
 {
-  m_peak_threshold = p_peak_threshold;
+    m_peak_threshold = p_peak_threshold;
 }
 
 //------------------------------------------------------------------------------
 void HTrackWidget::setViewAngleHorizontal(const double & p_angle)
 {
-  if(p_angle != m_view_angle_horizontal)
+    if(p_angle != m_view_angle_horizontal)
     {
-      m_view_angle_horizontal = p_angle;
-      emit viewAngleHorizontalChanged(p_angle);
+        m_view_angle_horizontal = p_angle;
+        emit viewAngleHorizontalChanged(p_angle);
     }
 }
 
 //------------------------------------------------------------------------------
 void HTrackWidget::setViewAngleVertical(const double & p_angle)
 {
-  if(p_angle != m_view_angle_vertical)
+    if(p_angle != m_view_angle_vertical)
     {
-      m_view_angle_vertical = p_angle;
-      emit viewAngleVerticalChanged(p_angle);
+        m_view_angle_vertical = p_angle;
+        emit viewAngleVerticalChanged(p_angle);
     }
 }
 
 //------------------------------------------------------------------------------
 void HTrackWidget::setDistanceAway(const double & p_distance)
 {
-  if(p_distance != m_distance_away)
+    if(p_distance != m_distance_away)
     {
-      m_distance_away = p_distance;
-      emit distanceAwayChanged(p_distance);
+        m_distance_away = p_distance;
+        emit distanceAwayChanged(p_distance);
     }
 }
 
