@@ -29,7 +29,9 @@ class HTrackView : public ViewWidget
   Q_OBJECT
 
   public:
-    HTrackView(int p_view_ID, QWidget *p_parent = NULL);
+    HTrackView( int p_view_ID
+              , QWidget *p_parent = NULL
+              );
     virtual ~HTrackView(void);
 
     void resizeEvent(QResizeEvent *);
@@ -40,11 +42,11 @@ class HTrackView : public ViewWidget
     void setPeakThreshold(int p_value);
 
   private:
-    HTrackWidget *m_h_track_widget;
-    QSlider *m_peak_threshold_slider;
-    QwtWheel *m_rotate_X_wheel;
-    QwtWheel *m_rotate_Y_wheel;
-    QwtWheel *m_distance_wheel;
+    HTrackWidget * m_h_track_widget;
+    QSlider * m_peak_threshold_slider;
+    QwtWheel * m_rotate_X_wheel;
+    QwtWheel * m_rotate_Y_wheel;
+    QwtWheel * m_distance_wheel;
 };
 #endif // HTRACKVIEW_H
 // EOF
