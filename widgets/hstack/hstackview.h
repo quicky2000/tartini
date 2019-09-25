@@ -26,13 +26,15 @@ class HStackView : public ViewWidget
   Q_OBJECT
 
   public:
-  HStackView(int p_view_id, QWidget * p_parent = NULL);
-  virtual ~HStackView(void);
+    HStackView( int p_view_id
+              , QWidget * p_parent = NULL
+              );
+    virtual ~HStackView(void);
 
-  QSize sizeHint(void) const;
+    QSize sizeHint(void) const;
 
  private:
-  HStackWidget * m_h_stack_widget;
+    HStackWidget * m_h_stack_widget;
 };
 #endif // HSTACKVIEW_H
 // EOF

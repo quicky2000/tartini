@@ -36,58 +36,60 @@
 #include <Q3Frame>
 
 //------------------------------------------------------------------------------
-HStackView::HStackView( int p_view_id, QWidget * p_parent):
-  ViewWidget( p_view_id, p_parent)
+HStackView::HStackView( int p_view_id
+                      , QWidget * p_parent
+                      )
+: ViewWidget( p_view_id, p_parent)
 {
-  setCaption("Harmonic Stack");
+    setCaption("Harmonic Stack");
 
-  Q3BoxLayout * l_main_layout = new Q3HBoxLayout(this);
+    Q3BoxLayout * l_main_layout = new Q3HBoxLayout(this);
 
-  Q3BoxLayout * l_left_layout = new Q3VBoxLayout(l_main_layout);
-  Q3BoxLayout * l_right_layout = new Q3VBoxLayout(l_main_layout);
+    Q3BoxLayout * l_left_layout = new Q3VBoxLayout(l_main_layout);
+    Q3BoxLayout * l_right_layout = new Q3VBoxLayout(l_main_layout);
 
-  Q3Grid * l_wave_frame = new Q3Grid(1, this);
-  l_wave_frame->setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
-  l_left_layout->addWidget(l_wave_frame);
-  m_h_stack_widget = new HStackWidget(l_wave_frame);
-  
-  Q3BoxLayout * l_bottom_layout = new Q3HBoxLayout(l_left_layout);
+    Q3Grid * l_wave_frame = new Q3Grid(1, this);
+    l_wave_frame->setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
+    l_left_layout->addWidget(l_wave_frame);
+    m_h_stack_widget = new HStackWidget(l_wave_frame);
 
-  QwtWheel * l_db_range_wheel = new QwtWheel(this);
-  l_db_range_wheel->setOrientation(Qt::Vertical);
-  l_db_range_wheel->setWheelWidth(14);
-  l_db_range_wheel->setRange(5, 160.0, 0.1, 100);
-  l_db_range_wheel->setValue(100);
-  QToolTip::add(l_db_range_wheel, "Zoom dB range vertically");
-  l_right_layout->addWidget(l_db_range_wheel, 0);
-  l_right_layout->addStretch(2);
+    Q3BoxLayout * l_bottom_layout = new Q3HBoxLayout(l_left_layout);
 
-  QwtWheel * l_window_size_wheel = new QwtWheel(this);
-  l_window_size_wheel->setOrientation(Qt::Horizontal);
-  l_window_size_wheel->setWheelWidth(14);
-  l_window_size_wheel->setRange(32, 1024, 2, 1);
-  l_window_size_wheel->setValue(128);
-  QToolTip::add(l_window_size_wheel, "Zoom windowsize horizontally");
-  l_bottom_layout->addWidget(l_window_size_wheel, 0);
-  l_bottom_layout->addStretch(2);
+    QwtWheel * l_db_range_wheel = new QwtWheel(this);
+    l_db_range_wheel->setOrientation(Qt::Vertical);
+    l_db_range_wheel->setWheelWidth(14);
+    l_db_range_wheel->setRange(5, 160.0, 0.1, 100);
+    l_db_range_wheel->setValue(100);
+    QToolTip::add(l_db_range_wheel, "Zoom dB range vertically");
+    l_right_layout->addWidget(l_db_range_wheel, 0);
+    l_right_layout->addStretch(2);
 
-  connect(l_db_range_wheel, SIGNAL(valueChanged(double)), m_h_stack_widget, SLOT(setDBRange(double)));
-  connect(l_db_range_wheel, SIGNAL(valueChanged(double)), m_h_stack_widget, SLOT(update()));
+    QwtWheel * l_window_size_wheel = new QwtWheel(this);
+    l_window_size_wheel->setOrientation(Qt::Horizontal);
+    l_window_size_wheel->setWheelWidth(14);
+    l_window_size_wheel->setRange(32, 1024, 2, 1);
+    l_window_size_wheel->setValue(128);
+    QToolTip::add(l_window_size_wheel, "Zoom windowsize horizontally");
+    l_bottom_layout->addWidget(l_window_size_wheel, 0);
+    l_bottom_layout->addStretch(2);
 
-  connect(l_window_size_wheel, SIGNAL(valueChanged(double)), m_h_stack_widget, SLOT(setWindowSize(double)));
-  connect(l_window_size_wheel, SIGNAL(valueChanged(double)), m_h_stack_widget, SLOT(update()));
+    connect(l_db_range_wheel, SIGNAL(valueChanged(double)), m_h_stack_widget, SLOT(setDBRange(double)));
+    connect(l_db_range_wheel, SIGNAL(valueChanged(double)), m_h_stack_widget, SLOT(update()));
+
+    connect(l_window_size_wheel, SIGNAL(valueChanged(double)), m_h_stack_widget, SLOT(setWindowSize(double)));
+    connect(l_window_size_wheel, SIGNAL(valueChanged(double)), m_h_stack_widget, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------
 HStackView::~HStackView(void)
 {
-  delete m_h_stack_widget;
+    delete m_h_stack_widget;
 }
 
 //------------------------------------------------------------------------------
 QSize HStackView::sizeHint(void) const
 {
-  return QSize(300, 200);
+    return QSize(300, 200);
 }
 
 // EOF
