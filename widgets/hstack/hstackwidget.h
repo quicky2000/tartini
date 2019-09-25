@@ -29,25 +29,25 @@ class HStackWidget : public DrawWidget
   Q_OBJECT
 
   public:
-  HStackWidget(QWidget * p_parent);
-  virtual ~HStackWidget(void);
+    HStackWidget(QWidget * p_parent);
+    virtual ~HStackWidget(void);
 
-  void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *);
 
   public slots:
-  void setWindowSize(double);
-  void setDBRange(double);
+    void setWindowSize(double);
+    void setDBRange(double);
 
  signals:
-  void windowSizeChanged(double);
-  void dBOffsetChanged(double);
-  void dBRangeChanged(double);
+    void windowSizeChanged(double);
+    void dBOffsetChanged(double);
+    void dBRangeChanged(double);
 
  private:
-  QPixmap * m_buffer;
-  int m_window_size;
-  float m_view_height;
-  float m_top;
+    QPixmap * m_buffer;
+    int m_window_size;
+    float m_view_height;
+    float m_top;
 };
 #endif // HSTACKWIDGET_H
 // EOF
