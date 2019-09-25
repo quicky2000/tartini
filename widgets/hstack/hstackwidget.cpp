@@ -27,34 +27,34 @@
 #include "myqt.h"
 
 //------------------------------------------------------------------------------
-HStackWidget::HStackWidget(QWidget *parent):
-  DrawWidget(parent)
+HStackWidget::HStackWidget(QWidget *p_parent):
+  DrawWidget(p_parent)
 {
   //make the widget get updated when the view changes
-  windowSize = 128;
-  viewheight = 100;
-  top = 0;
+  m_window_size = 128;
+  m_view_height = 100;
+  m_top = 0;
 
   connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), this, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------
-void HStackWidget::setWindowSize(double _windowsize)
+void HStackWidget::setWindowSize(double p_window_size)
 {
-  if(windowSize != _windowsize)
+  if(m_window_size != p_window_size)
     {
-      windowSize = toInt(_windowsize);
-      emit windowSizeChanged((float)windowSize);
+      m_window_size = toInt(p_window_size);
+      emit windowSizeChanged((float)m_window_size);
     }
 }
 
 //------------------------------------------------------------------------------
-void HStackWidget::setDBRange(double range)
+void HStackWidget::setDBRange(double p_range)
 {
-  if(viewheight != range)
+  if(m_view_height != p_range)
     {
-      viewheight = range;
-      emit dBRangeChanged(viewheight);
+      m_view_height = p_range;
+      emit dBRangeChanged(m_view_height);
     }
 }
 
@@ -67,103 +67,103 @@ HStackWidget::~HStackWidget(void)
 //------------------------------------------------------------------------------
 void HStackWidget::paintEvent(QPaintEvent *)
 {
-  Channel * active = gdata->getActiveChannel();
-  Q3PointArray points;
+  Channel * l_active_channel = gdata->getActiveChannel();
+  Q3PointArray l_points;
 
   beginDrawing();
 
-  if (active)
+  if (l_active_channel)
   {
-    AnalysisData *data;
-    active->lock();
+    AnalysisData *l_data;
+    l_active_channel->lock();
 
-    int startChunk = active->currentChunk() - windowSize / 2;
-    int i,j;
-    int numHarmonics = 16;
+    int l_start_chunk = l_active_channel->currentChunk() - m_window_size / 2;
+    int l_i,l_j;
+    int l_num_harmonics = 16;
 
 
-    float scaleY = height() / viewheight;
-    float scaleX = (float)width() / (float)windowSize;
-    int notOnGraph = height() + 10;
+    float l_scale_Y = height() / m_view_height;
+    float l_scale_X = (float)width() / (float)m_window_size;
+    int l_not_on_graph = height() + 10;
 
-    Q3PointArray points[numHarmonics];
+    Q3PointArray l_points[l_num_harmonics];
 
-    for (j = 0; j < numHarmonics; j++)
+    for (l_j = 0; l_j < l_num_harmonics; l_j++)
     {
-      points[j].resize(windowSize + 5);
+      l_points[l_j].resize(m_window_size + 5);
     }
 
-    QString s;
+    QString l_string;
     get_painter().setPen(qRgb(128,128,128));
 
-    float lbl;
+    float l_lbl;
 
-    char * txt = (char*)"%1.1f";
-    float increase = 10;
+    char * l_txt = (char*)"%1.1f";
+    float l_increase = 10;
 
-    if (viewheight < 50)
+    if (m_view_height < 50)
       {
-	increase = 5;
+	l_increase = 5;
       }
-    if (viewheight < 10) 
+    if (m_view_height < 10)
     {
-      txt = (char*)"%1.2f";
-      increase = 1;
+      l_txt = (char*)"%1.2f";
+      l_increase = 1;
     }
 
-    for (lbl = 0; lbl < viewheight; lbl += increase)
+    for (l_lbl = 0; l_lbl < m_view_height; l_lbl += l_increase)
     {
-      get_painter().drawLine(0, -toInt((-top + lbl) * scaleY), width(), -toInt((-top + lbl) * scaleY));
-      get_painter().drawText(0, -toInt((-top + lbl) * scaleY), s.sprintf(txt, lbl));
+      get_painter().drawLine(0, -toInt((-m_top + l_lbl) * l_scale_Y), width(), -toInt((-m_top + l_lbl) * l_scale_Y));
+      get_painter().drawText(0, -toInt((-m_top + l_lbl) * l_scale_Y), l_string.sprintf(l_txt, l_lbl));
 
-      get_painter().drawLine(0, -toInt((-top - lbl) * scaleY), width(), -toInt((-top - lbl) * scaleY));
-      get_painter().drawText(0, -toInt((-top - lbl) * scaleY), s.sprintf(txt, -lbl));
+      get_painter().drawLine(0, -toInt((-m_top - l_lbl) * l_scale_Y), width(), -toInt((-m_top - l_lbl) * l_scale_Y));
+      get_painter().drawText(0, -toInt((-m_top - l_lbl) * l_scale_Y), l_string.sprintf(l_txt, -l_lbl));
     }
 
-    for (i = -1; i <= windowSize + 1; i++)
+    for (l_i = -1; l_i <= m_window_size + 1; l_i++)
     {
-      data = active->dataAtChunk(startChunk + i);
-      if (data != 0)
+      l_data = l_active_channel->dataAtChunk(l_start_chunk + l_i);
+      if (l_data != 0)
       {
-        int m = MIN(data->getHarmonicAmpNoCutOffSize(), (unsigned) numHarmonics);
-        for (j = 0; j < m;j++)
+        int l_m = MIN(l_data->getHarmonicAmpNoCutOffSize(), (unsigned) l_num_harmonics);
+        for (l_j = 0; l_j < l_m;l_j++)
         {
-          if (!isinf(data->getHarmonicAmpNoCutOffAt(j)))
+          if (!isinf(l_data->getHarmonicAmpNoCutOffAt(l_j)))
           {
-            points[j].setPoint(i + 2,toInt(scaleX * (float)i),-toInt((-top + data->getHarmonicAmpNoCutOffAt(j)) * scaleY)); 
+            l_points[l_j].setPoint(l_i + 2,toInt(l_scale_X * (float)l_i),-toInt((-m_top + l_data->getHarmonicAmpNoCutOffAt(l_j)) * l_scale_Y));
           }
           else
 	    {
-	      points[j].setPoint(i + 2,toInt(scaleX * (float)i), notOnGraph); 
+	      l_points[l_j].setPoint(l_i + 2,toInt(l_scale_X * (float)l_i), l_not_on_graph);
 	    }
         }
-        for (j = m; j < numHarmonics; j++)
+        for (l_j = l_m; l_j < l_num_harmonics; l_j++)
 	  {
-	    points[j].setPoint(i + 2,toInt(scaleX * (float)i),notOnGraph); 
+	    l_points[l_j].setPoint(l_i + 2,toInt(l_scale_X * (float)l_i),l_not_on_graph);
 	  }
       }
       else
 	{
-	  for (j = 0; j < numHarmonics;j++)
+	  for (l_j = 0; l_j < l_num_harmonics;l_j++)
 	    {
-	      points[j].setPoint(i + 2,toInt(scaleX * (float)i),notOnGraph); 
+	      l_points[l_j].setPoint(l_i + 2,toInt(l_scale_X * (float)l_i),l_not_on_graph);
 	    }
 	}
     }
 
-    for (i = 0; i < numHarmonics; i++)
+    for (l_i = 0; l_i < l_num_harmonics; l_i++)
     {
-      points[i].setPoint(0, -1, notOnGraph);
-      points[i].setPoint(windowSize + 4, width() + 1, notOnGraph);
-      get_painter().setBrush(colorBetween(qRgb(255,255,255), qRgb(0, 255, 0), float(i) / numHarmonics));
-      get_painter().setPen(colorBetween(qRgb(128,128,128), qRgb(0, 128, 0), float(i) / numHarmonics));
-      get_painter().drawPolygon(points[i]);
+      l_points[l_i].setPoint(0, -1, l_not_on_graph);
+      l_points[l_i].setPoint(m_window_size + 4, width() + 1, l_not_on_graph);
+      get_painter().setBrush(colorBetween(qRgb(255,255,255), qRgb(0, 255, 0), float(l_i) / l_num_harmonics));
+      get_painter().setPen(colorBetween(qRgb(128,128,128), qRgb(0, 128, 0), float(l_i) / l_num_harmonics));
+      get_painter().drawPolygon(l_points[l_i]);
     }
 
     get_painter().drawLine(width() / 2, 0, width() / 2, height());
     get_painter().drawLine(width() - 1, 0, width() - 1, height());
 
-    active->unlock();
+    l_active_channel->unlock();
   } 
 
   endDrawing();

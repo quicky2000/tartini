@@ -29,7 +29,7 @@ class HStackWidget : public DrawWidget
   Q_OBJECT
 
   public:
-  HStackWidget(QWidget * parent);
+  HStackWidget(QWidget * p_parent);
   virtual ~HStackWidget(void);
 
   void paintEvent(QPaintEvent *);
@@ -44,10 +44,10 @@ class HStackWidget : public DrawWidget
   void dBRangeChanged(double);
 
  private:
-  QPixmap *buffer;
-  int windowSize;
-  float viewheight;
-  float top;
+  QPixmap * m_buffer;
+  int m_window_size;
+  float m_view_height;
+  float m_top;
 };
 #endif // HSTACKWIDGET_H
 // EOF
