@@ -36,67 +36,67 @@
 #include <Q3Frame>
 
 //------------------------------------------------------------------------------
-HCircleView::HCircleView( int viewID_, QWidget *parent):
-  ViewWidget( viewID_, parent)
+HCircleView::HCircleView( int p_view_id, QWidget *p_parent):
+  ViewWidget( p_view_id, p_parent)
 {
   setCaption("Harmonic Circle");
 
-  Q3BoxLayout * mainLayout = new Q3HBoxLayout(this);
+  Q3BoxLayout * l_main_layout = new Q3HBoxLayout(this);
 
-  Q3BoxLayout * leftLayout = new Q3VBoxLayout(mainLayout);
-  Q3BoxLayout * rightLayout = new Q3VBoxLayout(mainLayout);
+  Q3BoxLayout * l_left_layout = new Q3VBoxLayout(l_main_layout);
+  Q3BoxLayout * l_right_layout = new Q3VBoxLayout(l_main_layout);
  
-  Q3Grid * waveFrame = new Q3Grid(1, this);
-  waveFrame->setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
-  leftLayout->addWidget(waveFrame);
+  Q3Grid * l_wave_frame = new Q3Grid(1, this);
+  l_wave_frame->setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
+  l_left_layout->addWidget(l_wave_frame);
 
-  hCircleWidget = new HCircleWidget(waveFrame);
+  m_h_circle_widget = new HCircleWidget(l_wave_frame);
 
-  Q3BoxLayout * bottomLayout = new Q3HBoxLayout(leftLayout);
+  Q3BoxLayout * l_bottom_layout = new Q3HBoxLayout(l_left_layout);
  
-  QwtWheel * ZoomWheel = new QwtWheel(this);
-  ZoomWheel->setOrientation(Qt::Vertical);
-  ZoomWheel->setWheelWidth(14);
-  ZoomWheel->setRange(0.001, 0.1, 0.001, 1);
-  ZoomWheel->setValue(0.007);
-  hCircleWidget->setZoom(0.007);
-  QToolTip::add(ZoomWheel, "Zoom in or out");
-  rightLayout->addWidget(ZoomWheel);
+  QwtWheel * l_zoom_wheel = new QwtWheel(this);
+  l_zoom_wheel->setOrientation(Qt::Vertical);
+  l_zoom_wheel->setWheelWidth(14);
+  l_zoom_wheel->setRange(0.001, 0.1, 0.001, 1);
+  l_zoom_wheel->setValue(0.007);
+  m_h_circle_widget->setZoom(0.007);
+  QToolTip::add(l_zoom_wheel, "Zoom in or out");
+  l_right_layout->addWidget(l_zoom_wheel);
   
-  QwtWheel * lowestValueWheel = new QwtWheel(this);
-  lowestValueWheel->setOrientation(Qt::Vertical);
-  lowestValueWheel->setWheelWidth(14);
-  lowestValueWheel->setRange(-160, 10, 0.01, 1);
-  lowestValueWheel->setValue(-100);
-  hCircleWidget->setLowestValue(-100);
-  QToolTip::add(lowestValueWheel, "Change the lowest value");
-  rightLayout->addWidget(lowestValueWheel);
-  rightLayout->addStretch(2);
+  QwtWheel * l_lowest_value_wheel = new QwtWheel(this);
+  l_lowest_value_wheel->setOrientation(Qt::Vertical);
+  l_lowest_value_wheel->setWheelWidth(14);
+  l_lowest_value_wheel->setRange(-160, 10, 0.01, 1);
+  l_lowest_value_wheel->setValue(-100);
+  m_h_circle_widget->setLowestValue(-100);
+  QToolTip::add(l_lowest_value_wheel, "Change the lowest value");
+  l_right_layout->addWidget(l_lowest_value_wheel);
+  l_right_layout->addStretch(2);
  
-  QwtWheel* thresholdWheel = new QwtWheel(this);
-  thresholdWheel->setOrientation(Qt::Horizontal);
-  thresholdWheel->setWheelWidth(14);
-  thresholdWheel->setRange(-160, 10, 0.01, 1);
-  thresholdWheel->setValue(-100);
-  hCircleWidget->setThreshold(-100);
-  QToolTip::add(thresholdWheel, "Change the harmonic threshold");
-  bottomLayout->addWidget(thresholdWheel);
-  bottomLayout->addStretch(2);
+  QwtWheel* l_threshold_wheel = new QwtWheel(this);
+  l_threshold_wheel->setOrientation(Qt::Horizontal);
+  l_threshold_wheel->setWheelWidth(14);
+  l_threshold_wheel->setRange(-160, 10, 0.01, 1);
+  l_threshold_wheel->setValue(-100);
+  m_h_circle_widget->setThreshold(-100);
+  QToolTip::add(l_threshold_wheel, "Change the harmonic threshold");
+  l_bottom_layout->addWidget(l_threshold_wheel);
+  l_bottom_layout->addStretch(2);
 
-  connect(ZoomWheel, SIGNAL(valueChanged(double)), hCircleWidget, SLOT(setZoom(double)));
-  connect(ZoomWheel, SIGNAL(valueChanged(double)), hCircleWidget, SLOT(update()));
+  connect(l_zoom_wheel, SIGNAL(valueChanged(double)), m_h_circle_widget, SLOT(setZoom(double)));
+  connect(l_zoom_wheel, SIGNAL(valueChanged(double)), m_h_circle_widget, SLOT(update()));
 
-  connect(lowestValueWheel, SIGNAL(valueChanged(double)), hCircleWidget, SLOT(setLowestValue(double)));
-  connect(lowestValueWheel, SIGNAL(valueChanged(double)), hCircleWidget, SLOT(update()));
+  connect(l_lowest_value_wheel, SIGNAL(valueChanged(double)), m_h_circle_widget, SLOT(setLowestValue(double)));
+  connect(l_lowest_value_wheel, SIGNAL(valueChanged(double)), m_h_circle_widget, SLOT(update()));
 
-  connect(thresholdWheel, SIGNAL(valueChanged(double)), hCircleWidget, SLOT(setThreshold(double)));
-  connect(thresholdWheel, SIGNAL(valueChanged(double)), hCircleWidget, SLOT(update()));
+  connect(l_threshold_wheel, SIGNAL(valueChanged(double)), m_h_circle_widget, SLOT(setThreshold(double)));
+  connect(l_threshold_wheel, SIGNAL(valueChanged(double)), m_h_circle_widget, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------
 HCircleView::~HCircleView(void)
 {
-  delete hCircleWidget;
+  delete m_h_circle_widget;
 }
 
 //------------------------------------------------------------------------------

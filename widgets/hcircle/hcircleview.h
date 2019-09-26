@@ -26,13 +26,13 @@ class HCircleView: public ViewWidget
   Q_OBJECT
 
   public:
-  HCircleView(int viewID_, QWidget *parent = NULL);
+  HCircleView(int p_view_id, QWidget *p_parent = NULL);
   virtual ~HCircleView(void);
 
   QSize sizeHint(void) const;
 
   private:
-  HCircleWidget *hCircleWidget;
+  HCircleWidget *m_h_circle_widget;
 };
 #endif // HCIRCLEVIEW_H
 // EOF
