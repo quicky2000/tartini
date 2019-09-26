@@ -29,12 +29,12 @@ class HCircleWidget : public DrawWidget
   Q_OBJECT
 
   public:
-  HCircleWidget(QWidget *p_parent);
-  virtual ~HCircleWidget(void);
+    HCircleWidget(QWidget *p_parent);
+    virtual ~HCircleWidget(void);
 
-  void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *);
  
-  QSize sizeHint(void) const;
+    QSize sizeHint(void) const;
   
   public slots:
     void setZoom(double);
