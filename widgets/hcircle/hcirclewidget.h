@@ -29,7 +29,7 @@ class HCircleWidget : public DrawWidget
   Q_OBJECT
 
   public:
-  HCircleWidget(QWidget *parent);
+  HCircleWidget(QWidget *p_parent);
   virtual ~HCircleWidget(void);
 
   void paintEvent(QPaintEvent *);
@@ -42,10 +42,10 @@ class HCircleWidget : public DrawWidget
     void setLowestValue(double);
 
   private:
-    double  zoom;
-    double  lowestValue;
-    double  threshold;
-    QPixmap *buffer;
+    double  m_zoom;
+    double  m_lowest_value;
+    double  m_threshold;
+    QPixmap * m_buffer;
 
 };
 #endif // HCIRCLEWIDGET_H
