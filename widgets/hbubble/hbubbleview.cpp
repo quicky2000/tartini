@@ -36,61 +36,63 @@
 #include <Q3Frame>
 
 //------------------------------------------------------------------------------
-HBubbleView::HBubbleView( int p_view_id, QWidget *p_parent):
-  ViewWidget( p_view_id, p_parent)
+HBubbleView::HBubbleView( int p_view_id
+                        , QWidget * p_parent
+                        )
+: ViewWidget( p_view_id, p_parent)
 {
-  setCaption("Harmonic Bubbles");
+    setCaption("Harmonic Bubbles");
 
-  Q3BoxLayout *l_main_layout = new Q3HBoxLayout(this);
+    Q3BoxLayout *l_main_layout = new Q3HBoxLayout(this);
 
-  Q3BoxLayout *l_left_layout = new Q3VBoxLayout(l_main_layout);
-  Q3BoxLayout *l_right_layout = new Q3VBoxLayout(l_main_layout);
- 
-  Q3Grid *l_wave_frame = new Q3Grid(1, this);
-  l_wave_frame->setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
-  l_left_layout->addWidget(l_wave_frame);
+    Q3BoxLayout *l_left_layout = new Q3VBoxLayout(l_main_layout);
+    Q3BoxLayout *l_right_layout = new Q3VBoxLayout(l_main_layout);
 
-  m_h_bubble_widget = new HBubbleWidget(l_wave_frame);
+    Q3Grid *l_wave_frame = new Q3Grid(1, this);
+    l_wave_frame->setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
+    l_left_layout->addWidget(l_wave_frame);
 
-  Q3BoxLayout *l_bottom_layout = new Q3HBoxLayout(l_left_layout);
+    m_h_bubble_widget = new HBubbleWidget(l_wave_frame);
 
-  QwtWheel* l_harmonics_wheel = new QwtWheel(this);
-  l_harmonics_wheel->setOrientation(Qt::Vertical);
-  l_harmonics_wheel->setWheelWidth(14);
-  l_harmonics_wheel->setRange(1, 40, 1, 1);
-  l_harmonics_wheel->setValue(15);
-  m_h_bubble_widget->setNumHarmonics(15);
-  QToolTip::add(l_harmonics_wheel, "Change number of harmonics shown");
-  l_right_layout->addWidget(l_harmonics_wheel);
-  l_right_layout->addStretch(2);
- 
-  QwtWheel* l_window_size_wheel = new QwtWheel(this);
-  l_window_size_wheel->setOrientation(Qt::Horizontal);
-  l_window_size_wheel->setWheelWidth(14);
-  l_window_size_wheel->setRange(32, 1024, 2, 1);
-  l_window_size_wheel->setValue(128);
-  m_h_bubble_widget->setHistoryChunks(128);
-  QToolTip::add(l_window_size_wheel, "Change the window size");
-  l_bottom_layout->addWidget(l_window_size_wheel);
-  l_bottom_layout->addStretch(2);
-  
-  connect(l_harmonics_wheel, SIGNAL(valueChanged(double)), m_h_bubble_widget, SLOT(setNumHarmonics(double)));
-  connect(l_harmonics_wheel, SIGNAL(valueChanged(double)), m_h_bubble_widget, SLOT(update()));
+    Q3BoxLayout *l_bottom_layout = new Q3HBoxLayout(l_left_layout);
 
-  connect(l_window_size_wheel, SIGNAL(valueChanged(double)), m_h_bubble_widget, SLOT(setHistoryChunks(double)));
-  connect(l_window_size_wheel, SIGNAL(valueChanged(double)), m_h_bubble_widget, SLOT(update()));
+    QwtWheel* l_harmonics_wheel = new QwtWheel(this);
+    l_harmonics_wheel->setOrientation(Qt::Vertical);
+    l_harmonics_wheel->setWheelWidth(14);
+    l_harmonics_wheel->setRange(1, 40, 1, 1);
+    l_harmonics_wheel->setValue(15);
+    m_h_bubble_widget->setNumHarmonics(15);
+    QToolTip::add(l_harmonics_wheel, "Change number of harmonics shown");
+    l_right_layout->addWidget(l_harmonics_wheel);
+    l_right_layout->addStretch(2);
+
+    QwtWheel* l_window_size_wheel = new QwtWheel(this);
+    l_window_size_wheel->setOrientation(Qt::Horizontal);
+    l_window_size_wheel->setWheelWidth(14);
+    l_window_size_wheel->setRange(32, 1024, 2, 1);
+    l_window_size_wheel->setValue(128);
+    m_h_bubble_widget->setHistoryChunks(128);
+    QToolTip::add(l_window_size_wheel, "Change the window size");
+    l_bottom_layout->addWidget(l_window_size_wheel);
+    l_bottom_layout->addStretch(2);
+
+    connect(l_harmonics_wheel, SIGNAL(valueChanged(double)), m_h_bubble_widget, SLOT(setNumHarmonics(double)));
+    connect(l_harmonics_wheel, SIGNAL(valueChanged(double)), m_h_bubble_widget, SLOT(update()));
+
+    connect(l_window_size_wheel, SIGNAL(valueChanged(double)), m_h_bubble_widget, SLOT(setHistoryChunks(double)));
+    connect(l_window_size_wheel, SIGNAL(valueChanged(double)), m_h_bubble_widget, SLOT(update()));
 
 }
 
 //------------------------------------------------------------------------------
 HBubbleView::~HBubbleView(void)
 {
-  delete m_h_bubble_widget;
+    delete m_h_bubble_widget;
 }
 
 //------------------------------------------------------------------------------
 QSize HBubbleView::sizeHint(void) const
 {
-  return QSize(300, 200);
+    return QSize(300, 200);
 }
 // EOF
