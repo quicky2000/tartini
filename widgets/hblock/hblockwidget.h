@@ -26,16 +26,16 @@ class HBlockWidget : public DrawWidget
 {
   Q_OBJECT
 
- public:
-  HBlockWidget(QWidget *p_parent);
-  virtual ~HBlockWidget(void);
+  public:
+    HBlockWidget(QWidget *p_parent);
+    virtual ~HBlockWidget(void);
 
-  void paintEvent(QPaintEvent * );
+    void paintEvent(QPaintEvent * );
 
-  QSize sizeHint(void) const;
+    QSize sizeHint(void) const;
 
- private:
-  QPixmap *m_buffer;
+  private:
+    QPixmap *m_buffer;
 };
 
 
