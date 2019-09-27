@@ -26,13 +26,13 @@ class HBubbleView : public ViewWidget
   Q_OBJECT
 
   public:
-  HBubbleView(int viewID_, QWidget *parent = NULL);
+  HBubbleView(int p_view_id, QWidget *p_parent = NULL);
   virtual ~HBubbleView(void);
 
   QSize sizeHint(void) const;
 
   private:
-    HBubbleWidget *hBubbleWidget;
+    HBubbleWidget *m_h_bubble_widget;
 };
 #endif // HBUBBLEVIEW_H
 // EOF
