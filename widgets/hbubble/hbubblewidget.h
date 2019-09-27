@@ -29,7 +29,7 @@ class HBubbleWidget : public DrawWidget
   Q_OBJECT
 
   public:
-    HBubbleWidget(QWidget *parent);
+    HBubbleWidget(QWidget *p_parent);
     virtual ~HBubbleWidget(void);
 
     void paintEvent(QPaintEvent *);
@@ -45,9 +45,9 @@ class HBubbleWidget : public DrawWidget
     void historyChunksChanged(double);
 
   private:
-    QPixmap *buffer;
-    int historyChunks;
-    int numHarmonics;
+    QPixmap *m_buffer;
+    int m_history_chunks;
+    int m_num_harmonics;
 };
 #endif // HBUBBLEWIDGET_H
 // EOF
