@@ -25,7 +25,7 @@ class HBlockView : public ViewWidget
   Q_OBJECT
 
 public:
-  HBlockView(int viewID_, QWidget *parent = NULL);
+  HBlockView(int p_view_id, QWidget *p_parent = NULL);
   virtual ~HBlockView(void);
 
   void resizeEvent(QResizeEvent *);
@@ -33,7 +33,7 @@ public:
   QSize sizeHint(void) const;
 
  private:
-  HBlockWidget *hBlockWidget;
+  HBlockWidget *m_h_block_widget;
 };
 #endif // HBLOCKVIEW_H
 // EOF

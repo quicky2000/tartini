@@ -18,26 +18,26 @@
 #include <QResizeEvent>
 
 //------------------------------------------------------------------------------
-HBlockView::HBlockView( int viewID_, QWidget *parent )
- : ViewWidget( viewID_, parent)
+HBlockView::HBlockView( int p_view_id, QWidget *p_parent )
+ : ViewWidget( p_view_id, p_parent)
 {
-  hBlockWidget = new HBlockWidget(this);
-  hBlockWidget->show();
+  m_h_block_widget = new HBlockWidget(this);
+  m_h_block_widget->show();
 
   //make the widget get updated when the view changes
-  connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), hBlockWidget, SLOT(update()));
+  connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), m_h_block_widget, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------
 HBlockView::~HBlockView(void)
 {
-  delete hBlockWidget;
+  delete m_h_block_widget;
 }
 
 //------------------------------------------------------------------------------
 void HBlockView::resizeEvent(QResizeEvent *)
 {
-  hBlockWidget->resize(size());
+  m_h_block_widget->resize(size());
 }
 
 //------------------------------------------------------------------------------
