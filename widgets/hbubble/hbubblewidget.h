@@ -45,7 +45,7 @@ class HBubbleWidget : public DrawWidget
     void historyChunksChanged(double);
 
   private:
-    QPixmap *m_buffer;
+    QPixmap * m_buffer;
     int m_history_chunks;
     int m_num_harmonics;
 };

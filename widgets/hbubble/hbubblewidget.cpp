@@ -26,17 +26,16 @@
 #include "myqt.h"
 
 //------------------------------------------------------------------------------
-HBubbleWidget::HBubbleWidget(QWidget *p_parent):
-  DrawWidget(p_parent)
+HBubbleWidget::HBubbleWidget(QWidget *p_parent)
+: DrawWidget(p_parent)
 {
+    fprintf(stderr,"Initializing\n");
+    m_history_chunks = 32;
+    m_num_harmonics = 40;
 
-  fprintf(stderr,"Initializing\n");
-  m_history_chunks = 32;
-  m_num_harmonics = 40;
-
-  //make the widget get updated when the view changes
-  connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), this, SLOT(update()));
-  fprintf(stderr,"Done\n");
+    //make the widget get updated when the view changes
+    connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), this, SLOT(update()));
+    fprintf(stderr,"Done\n");
 }
 
 //------------------------------------------------------------------------------
@@ -47,10 +46,10 @@ HBubbleWidget::~HBubbleWidget(void)
 //------------------------------------------------------------------------------
 void HBubbleWidget::setNumHarmonics(double num)
 {
-  if (m_num_harmonics != toInt(num))
+    if (m_num_harmonics != toInt(num))
     {
-      m_num_harmonics = toInt(num);
-      emit numHarmonicsChanged((double)num);
+        m_num_harmonics = toInt(num);
+        emit numHarmonicsChanged((double)num);
     }
 }
 
@@ -58,10 +57,10 @@ void HBubbleWidget::setNumHarmonics(double num)
 //------------------------------------------------------------------------------
 void HBubbleWidget::setHistoryChunks(double num)
 {
-  if (m_history_chunks != toInt(num))
+    if (m_history_chunks != toInt(num))
     {
-      m_history_chunks = toInt(num);
-      emit historyChunksChanged((double)num);
+        m_history_chunks = toInt(num);
+        emit historyChunksChanged((double)num);
     }
 }
 
@@ -71,54 +70,56 @@ void HBubbleWidget::setHistoryChunks(double num)
 //------------------------------------------------------------------------------
 void HBubbleWidget::paintEvent( QPaintEvent * )
 {
-  Channel * l_active_channel = gdata->getActiveChannel();
-  AnalysisData * l_data;
-  int l_i, l_j;
-  beginDrawing();
+    Channel * l_active_channel = gdata->getActiveChannel();
+    AnalysisData * l_data;
+    int l_i;
+    int l_j;
+    beginDrawing();
 
-  get_painter().setPen(Qt::NoPen);
-  if (l_active_channel)
-  {
-    for (l_j = 0; l_j < m_history_chunks; l_j++)
-      {
-        l_data = l_active_channel->dataAtChunk(l_active_channel->currentChunk() - m_history_chunks + l_j + 1);
-        if (l_data != 0)
-	  {
-	  if (l_data->getHarmonicFreqSize() != 0 && l_data->getFundamentalFreq() != 0)
-	    {
-		for (l_i = 0; l_i < m_num_harmonics; l_i++)
-		{
-		  int l_radius = toInt((l_data->getHarmonicAmpNoCutOffAt(l_i) + 160.0) / 160.0 * (float)height() / m_num_harmonics / 2);
-			if (l_radius > 0)
-			{
-			  float l_flat_sharp = (l_data->getHarmonicFreqAt(l_i) / l_data->getFundamentalFreq() - (l_i + 1)) * 10;
-				QColor l_color;
-				if (l_flat_sharp > 0)
-				  {
-				    l_color = colorBetween(qRgb(255,255,255), qRgb(255,0,0),l_flat_sharp);
-				  }
-				else
-				  {
-				    l_color = colorBetween(qRgb(255,255,255), qRgb(0,0,255),-l_flat_sharp);
-				  }
-				get_painter().setBrush(colorBetween(gdata->backgroundColor(),l_color,((l_j == (m_history_chunks - 1)) ? 1.0 : (float)l_j / m_history_chunks * 0.5)));
-				get_painter().drawEllipse(toInt(width() / 8 * 3 + l_j * (float)width() / 8 / m_history_chunks - l_radius),
-							  toInt(height() - (float) ((l_i + 1) * height()) / (m_num_harmonics + 2) - l_radius),
-							  l_radius * 2,
-							  l_radius * 2);
-			}
-		}
-	    }
-      	}
+    get_painter().setPen(Qt::NoPen);
+    if(l_active_channel)
+    {
+        for(l_j = 0; l_j < m_history_chunks; l_j++)
+        {
+            l_data = l_active_channel->dataAtChunk(l_active_channel->currentChunk() - m_history_chunks + l_j + 1);
+            if(l_data != 0)
+            {
+                if(l_data->getHarmonicFreqSize() != 0 && l_data->getFundamentalFreq() != 0)
+                {
+                    for(l_i = 0; l_i < m_num_harmonics; l_i++)
+                    {
+                        int l_radius = toInt((l_data->getHarmonicAmpNoCutOffAt(l_i) + 160.0) / 160.0 * (float)height() / m_num_harmonics / 2);
+                        if(l_radius > 0)
+                        {
+                            float l_flat_sharp = (l_data->getHarmonicFreqAt(l_i) / l_data->getFundamentalFreq() - (l_i + 1)) * 10;
+                            QColor l_color;
+                            if(l_flat_sharp > 0)
+                            {
+                                l_color = colorBetween(qRgb(255,255,255), qRgb(255,0,0),l_flat_sharp);
+                            }
+                            else
+                            {
+                                l_color = colorBetween(qRgb(255,255,255), qRgb(0,0,255),-l_flat_sharp);
+                            }
+                            get_painter().setBrush(colorBetween(gdata->backgroundColor(),l_color,((l_j == (m_history_chunks - 1)) ? 1.0 : (float)l_j / m_history_chunks * 0.5)));
+                            get_painter().drawEllipse( toInt(width() / 8 * 3 + l_j * (float)width() / 8 / m_history_chunks - l_radius)
+                                                     , toInt(height() - (float) ((l_i + 1) * height()) / (m_num_harmonics + 2) - l_radius)
+                                                     , l_radius * 2
+                                                     , l_radius * 2
+                                                     );
+                        }
+                    }
+                }
+            }
+        }
     }
-  }
-  endDrawing();
+    endDrawing();
 }
 
 //------------------------------------------------------------------------------
 QSize HBubbleWidget::sizeHint(void) const
 {
-  return QSize(300, 200);
+    return QSize(300, 200);
 }
 
 // EOF
