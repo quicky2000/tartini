@@ -19,24 +19,24 @@
 //------------------------------------------------------------------------------
 double FreqWidgetGL::leftTime(void) const
 {
-  return gdata->getView().viewLeft();
+    return gdata->getView().viewLeft();
 }
 
 //------------------------------------------------------------------------------
 double FreqWidgetGL::rightTime(void) const
 {
-  return gdata->getView().viewRight();
+    return gdata->getView().viewRight();
 }
 
 //------------------------------------------------------------------------------
 double FreqWidgetGL::timeWidth(void) const
 {
-  return gdata->getView().viewTotalTime();
+    return gdata->getView().viewTotalTime();
 }
 
 //------------------------------------------------------------------------------
 QSize FreqWidgetGL::sizeHint(void) const
 {
-  return QSize(400, 350);
+    return QSize(400, 350);
 }
 //EOF
