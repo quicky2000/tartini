@@ -43,219 +43,219 @@
 #include <Q3VBoxLayout>
 
 //------------------------------------------------------------------------------
-FreqView::FreqView(int p_view_id, QWidget *p_parent):
-  ViewWidget(p_view_id, p_parent)
+FreqView::FreqView( int p_view_id
+                  , QWidget *p_parent
+                  )
+: ViewWidget(p_view_id, p_parent)
 {
-  View & l_view = gdata->getView();
+    View & l_view = gdata->getView();
 
-  Q3BoxLayout *l_main_layout = new Q3VBoxLayout(this);
-  l_main_layout->setResizeMode(QLayout::SetNoConstraint);
+    Q3BoxLayout *l_main_layout = new Q3VBoxLayout(this);
+    l_main_layout->setResizeMode(QLayout::SetNoConstraint);
 
-
-  QSplitter * l_splitter = new QSplitter(Qt::Vertical, this);
-  QWidget * l_top_widget = new QWidget(l_splitter);
-  Q3BoxLayout * l_top_layout = new Q3HBoxLayout(l_top_widget);
-  Q3BoxLayout * l_top_left_layout = new Q3VBoxLayout(l_top_layout);
+    QSplitter * l_splitter = new QSplitter(Qt::Vertical, this);
+    QWidget * l_top_widget = new QWidget(l_splitter);
+    Q3BoxLayout * l_top_layout = new Q3HBoxLayout(l_top_widget);
+    Q3BoxLayout * l_top_left_layout = new Q3VBoxLayout(l_top_layout);
   
-  m_time_axis = new TimeAxis(l_top_widget, gdata->leftTime(), gdata->rightTime(), true);
-  m_time_axis->setWhatsThis("The time in seconds");
-  l_top_left_layout->addWidget(m_time_axis);
+    m_time_axis = new TimeAxis(l_top_widget, gdata->leftTime(), gdata->rightTime(), true);
+    m_time_axis->setWhatsThis("The time in seconds");
+    l_top_left_layout->addWidget(m_time_axis);
   
-  QFrame * l_freq_frame = new QFrame;
-  l_freq_frame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
-  QVBoxLayout *l_freq_frame_layout = new QVBoxLayout;
-  m_freq_widget_GL = new FreqWidgetGL(NULL);
-  m_freq_widget_GL->setWhatsThis("The line represents the musical pitch of the sound. A higher pitch moves up, with note names shown at the left, with octave numbers. "
+    QFrame * l_freq_frame = new QFrame;
+    l_freq_frame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
+    QVBoxLayout *l_freq_frame_layout = new QVBoxLayout;
+    m_freq_widget_GL = new FreqWidgetGL(NULL);
+    m_freq_widget_GL->setWhatsThis("The line represents the musical pitch of the sound. A higher pitch moves up, with note names shown at the left, with octave numbers. "
     "The black vertical line shows the current time. This line's position can be moved. "
     "Pitch-lines are drawn connected only because they change a small amount over a small time step. "
     "Note: This may cause semi-tone note changes appear to be joined. Clicking the background and dragging moves the view. "
     "Clicking a pitch-line selects it. Mouse-Wheel scrolls. Shift-Mouse-Wheel zooms");
-  l_freq_frame_layout->addWidget(m_freq_widget_GL);
-  l_freq_frame_layout->setMargin(0);
-  l_freq_frame_layout->setSpacing(0);
-  l_freq_frame->setLayout(l_freq_frame_layout);
-  l_top_left_layout->addWidget(l_freq_frame);
+    l_freq_frame_layout->addWidget(m_freq_widget_GL);
+    l_freq_frame_layout->setMargin(0);
+    l_freq_frame_layout->setSpacing(0);
+    l_freq_frame->setLayout(l_freq_frame_layout);
+    l_top_left_layout->addWidget(l_freq_frame);
 
+    QVBoxLayout * l_top_right_layout = new QVBoxLayout();
 
-  QVBoxLayout * l_top_right_layout = new QVBoxLayout();
+    m_freq_wheel_Y = new QwtWheel(l_top_widget);
+    m_freq_wheel_Y->setOrientation(Qt::Vertical);
+    m_freq_wheel_Y->setWheelWidth(14);
+    m_freq_wheel_Y->setRange(1.6, 5.0, 0.001, 1);
+    m_freq_wheel_Y->setValue(l_view.logZoomY());
+    QToolTip::add(m_freq_wheel_Y, "Zoom pitch contour view vertically");
+    l_top_right_layout->addSpacing(20);
+    l_top_right_layout->addWidget(m_freq_wheel_Y, 0);
   
-  m_freq_wheel_Y = new QwtWheel(l_top_widget);
-  m_freq_wheel_Y->setOrientation(Qt::Vertical);
-  m_freq_wheel_Y->setWheelWidth(14);
-  m_freq_wheel_Y->setRange(1.6, 5.0, 0.001, 1);
-  m_freq_wheel_Y->setValue(l_view.logZoomY());
-  QToolTip::add(m_freq_wheel_Y, "Zoom pitch contour view vertically");
-  l_top_right_layout->addSpacing(20);
-  l_top_right_layout->addWidget(m_freq_wheel_Y, 0);
-  
-  //Create the vertical scrollbar
-  m_freq_scroll_bar = new MyScrollBar(0, gdata->topPitch() - l_view.viewHeight(), 0.5, l_view.viewHeight(), 0, 20, Qt::Vertical, l_top_widget);
-  m_freq_scroll_bar->setValue(gdata->topPitch() - l_view.viewHeight() - l_view.viewBottom());
-  l_top_right_layout->addWidget(m_freq_scroll_bar, 4);
+    //Create the vertical scrollbar
+    m_freq_scroll_bar = new MyScrollBar(0, gdata->topPitch() - l_view.viewHeight(), 0.5, l_view.viewHeight(), 0, 20, Qt::Vertical, l_top_widget);
+    m_freq_scroll_bar->setValue(gdata->topPitch() - l_view.viewHeight() - l_view.viewBottom());
+    l_top_right_layout->addWidget(m_freq_scroll_bar, 4);
 
-  l_top_layout->addLayout(l_top_right_layout);
+    l_top_layout->addLayout(l_top_right_layout);
 
-  //------------bottom half------------------
-  
-  QWidget * l_bottom_widget = new QWidget(l_splitter);
-  Q3BoxLayout * l_bottom_layout = new Q3VBoxLayout(l_bottom_widget);
-  Q3BoxLayout * l_bottom_top_layout = new Q3HBoxLayout(l_bottom_layout);
-  
-  QFrame * l_amplitude_frame = new QFrame;
-  l_amplitude_frame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
-  QVBoxLayout * l_amplitude_frame_layout = new QVBoxLayout;
-  m_amplitude_widget = new AmplitudeWidget(NULL);
-  m_amplitude_widget->setWhatsThis("Shows the volume (or other parameters) at time lined up with the pitch above. Note: You can move the lines to change some thresholds.");
-  l_amplitude_frame_layout->addWidget(m_amplitude_widget);
-  l_amplitude_frame_layout->setMargin(0);
-  l_amplitude_frame_layout->setSpacing(0);
-  l_amplitude_frame->setLayout(l_amplitude_frame_layout);
-  l_bottom_top_layout->addWidget(l_amplitude_frame);
+    //------------bottom half------------------
+    QWidget * l_bottom_widget = new QWidget(l_splitter);
+    Q3BoxLayout * l_bottom_layout = new Q3VBoxLayout(l_bottom_widget);
+    Q3BoxLayout * l_bottom_top_layout = new Q3HBoxLayout(l_bottom_layout);
 
-  Q3BoxLayout *l_bottom_top_right_layout = new Q3VBoxLayout(l_bottom_top_layout);
+    QFrame * l_amplitude_frame = new QFrame;
+    l_amplitude_frame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
+    QVBoxLayout * l_amplitude_frame_layout = new QVBoxLayout;
+    m_amplitude_widget = new AmplitudeWidget(NULL);
+    m_amplitude_widget->setWhatsThis("Shows the volume (or other parameters) at time lined up with the pitch above. Note: You can move the lines to change some thresholds.");
+    l_amplitude_frame_layout->addWidget(m_amplitude_widget);
+    l_amplitude_frame_layout->setMargin(0);
+    l_amplitude_frame_layout->setSpacing(0);
+    l_amplitude_frame->setLayout(l_amplitude_frame_layout);
+    l_bottom_top_layout->addWidget(l_amplitude_frame);
+
+    Q3BoxLayout *l_bottom_top_right_layout = new Q3VBoxLayout(l_bottom_top_layout);
+
+    m_amplitude_wheel_Y = new QwtWheel(l_bottom_widget);
+    m_amplitude_wheel_Y->setOrientation(Qt::Vertical);
+    m_amplitude_wheel_Y->setWheelWidth(14);
+    m_amplitude_wheel_Y->setRange(0.2, 1.00, 0.01, 1);
+    m_amplitude_wheel_Y->setValue(m_amplitude_widget->range());
+    QToolTip::add(m_amplitude_wheel_Y, "Zoom pitch contour view vertically");
+    l_bottom_top_right_layout->addWidget(m_amplitude_wheel_Y, 0);
+
+    //Create the vertical scrollbar
+    m_amplitude_scroll_bar = new MyScrollBar(0.0, 1.0 - m_amplitude_widget->range(), 0.20, m_amplitude_widget->range(), 0, 20, Qt::Vertical, l_bottom_widget);
+    l_bottom_top_right_layout->addWidget(m_amplitude_scroll_bar, 4);
   
-  m_amplitude_wheel_Y = new QwtWheel(l_bottom_widget);
-  m_amplitude_wheel_Y->setOrientation(Qt::Vertical);
-  m_amplitude_wheel_Y->setWheelWidth(14);
-  m_amplitude_wheel_Y->setRange(0.2, 1.00, 0.01, 1);
-  m_amplitude_wheel_Y->setValue(m_amplitude_widget->range());
-  QToolTip::add(m_amplitude_wheel_Y, "Zoom pitch contour view vertically");
-  l_bottom_top_right_layout->addWidget(m_amplitude_wheel_Y, 0);
-  
-  //Create the vertical scrollbar
-  m_amplitude_scroll_bar = new MyScrollBar(0.0, 1.0 - m_amplitude_widget->range(), 0.20, m_amplitude_widget->range(), 0, 20, Qt::Vertical, l_bottom_widget);
-  l_bottom_top_right_layout->addWidget(m_amplitude_scroll_bar, 4);
-  
-  Q3BoxLayout * l_bottom_bottom_layout = new Q3HBoxLayout(l_bottom_layout);
-  
-  QComboBox * l_amplitude_mode_combo_box = new QComboBox(l_bottom_widget, "amplitudeTypeModeBox");
-  l_amplitude_mode_combo_box->setWhatsThis("Select different algorithm parameters to view in the bottom pannel");
-  int l_j;
-  QStringList l_string_list;
-  for(l_j = 0; l_j < NUM_AMP_MODES; l_j++)
+    Q3BoxLayout * l_bottom_bottom_layout = new Q3HBoxLayout(l_bottom_layout);
+
+    QComboBox * l_amplitude_mode_combo_box = new QComboBox(l_bottom_widget, "amplitudeTypeModeBox");
+    l_amplitude_mode_combo_box->setWhatsThis("Select different algorithm parameters to view in the bottom pannel");
+    int l_j;
+    QStringList l_string_list;
+    for(l_j = 0; l_j < NUM_AMP_MODES; l_j++)
     {
-      l_string_list << amp_mode_names[l_j];
+        l_string_list << amp_mode_names[l_j];
     }
-  l_amplitude_mode_combo_box->addItems(l_string_list);
-  connect(l_amplitude_mode_combo_box, SIGNAL(activated(int)), gdata, SLOT(setAmplitudeMode(int)));
-  connect(l_amplitude_mode_combo_box, SIGNAL(activated(int)), m_amplitude_widget, SLOT(update()));
+    l_amplitude_mode_combo_box->addItems(l_string_list);
+    connect(l_amplitude_mode_combo_box, SIGNAL(activated(int)), gdata, SLOT(setAmplitudeMode(int)));
+    connect(l_amplitude_mode_combo_box, SIGNAL(activated(int)), m_amplitude_widget, SLOT(update()));
 
-  QComboBox * l_pitch_contour_mode_combo_box = new QComboBox(l_bottom_widget, "pitchContourModeComboBox");
-  l_pitch_contour_mode_combo_box->setWhatsThis("Select whether the Pitch Contour line fades in/out with clarity/loudness of the sound or is a solid dark line");
-  l_string_list.clear();
-  l_string_list << "Clarity fading" << "Note grouping";
-  l_pitch_contour_mode_combo_box->addItems(l_string_list);
-  connect(l_pitch_contour_mode_combo_box, SIGNAL(activated(int)), gdata, SLOT(setPitchContourMode(int)));
-  connect(l_pitch_contour_mode_combo_box, SIGNAL(activated(int)), m_freq_widget_GL, SLOT(update()));
+    QComboBox * l_pitch_contour_mode_combo_box = new QComboBox(l_bottom_widget, "pitchContourModeComboBox");
+    l_pitch_contour_mode_combo_box->setWhatsThis("Select whether the Pitch Contour line fades in/out with clarity/loudness of the sound or is a solid dark line");
+    l_string_list.clear();
+    l_string_list << "Clarity fading" << "Note grouping";
+    l_pitch_contour_mode_combo_box->addItems(l_string_list);
+    connect(l_pitch_contour_mode_combo_box, SIGNAL(activated(int)), gdata, SLOT(setPitchContourMode(int)));
+    connect(l_pitch_contour_mode_combo_box, SIGNAL(activated(int)), m_freq_widget_GL, SLOT(update()));
 
-  m_freq_wheel_X = new QwtWheel(l_bottom_widget);
-  m_freq_wheel_X->setOrientation(Qt::Horizontal);
-  m_freq_wheel_X->setWheelWidth(16);
-  m_freq_wheel_X->setRange(0.5, 9.0, 0.001, 1);
-  m_freq_wheel_X->setValue(2.0);
-  QToolTip::add(m_freq_wheel_X, "Zoom horizontally");
+    m_freq_wheel_X = new QwtWheel(l_bottom_widget);
+    m_freq_wheel_X->setOrientation(Qt::Horizontal);
+    m_freq_wheel_X->setWheelWidth(16);
+    m_freq_wheel_X->setRange(0.5, 9.0, 0.001, 1);
+    m_freq_wheel_X->setValue(2.0);
+    QToolTip::add(m_freq_wheel_X, "Zoom horizontally");
+
+    l_bottom_bottom_layout->addStretch(2);
+    l_bottom_bottom_layout->addWidget(l_amplitude_mode_combo_box, 0);
+    l_bottom_bottom_layout->addStretch(2);
+    l_bottom_bottom_layout->addWidget(l_pitch_contour_mode_combo_box, 0);
+    l_bottom_bottom_layout->addStretch(2);
+    l_bottom_bottom_layout->addWidget(m_freq_wheel_X, 1);
+    l_bottom_bottom_layout->addSpacing(16);
+
+    //Create the resize grip. The thing in the bottom right hand corner
+    QSizeGrip * l_size_grip = new QSizeGrip(l_bottom_widget);
+    l_size_grip->setFixedSize(15, 15);
+    l_size_grip->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, false));
+    l_bottom_bottom_layout->addWidget(l_size_grip);
   
-  l_bottom_bottom_layout->addStretch(2);
-  l_bottom_bottom_layout->addWidget(l_amplitude_mode_combo_box, 0);
-  l_bottom_bottom_layout->addStretch(2);
-  l_bottom_bottom_layout->addWidget(l_pitch_contour_mode_combo_box, 0);
-  l_bottom_bottom_layout->addStretch(2);
-  l_bottom_bottom_layout->addWidget(m_freq_wheel_X, 1);
-  l_bottom_bottom_layout->addSpacing(16);
+    //Actually add all the widgets into the widget layout
+    l_main_layout->addWidget(l_splitter);
 
-  //Create the resize grip. The thing in the bottom right hand corner
-  QSizeGrip * l_size_grip = new QSizeGrip(l_bottom_widget);
-  l_size_grip->setFixedSize(15, 15);
-  l_size_grip->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred, false));
-  l_bottom_bottom_layout->addWidget(l_size_grip);
-  
-  //Actually add all the widgets into the widget layout
-  l_main_layout->addWidget(l_splitter);
+    //Setup all the signals and slots
+    // vertical
 
-  //Setup all the signals and slots
-  //vertical
+    connect(m_freq_scroll_bar, SIGNAL(sliderMoved(double)), &l_view, SLOT(changeViewY(double)));
+    connect(m_freq_scroll_bar, SIGNAL(sliderMoved(double)), &l_view, SLOT(doSlowUpdate()));
 
-  connect(m_freq_scroll_bar, SIGNAL(sliderMoved(double)), &l_view, SLOT(changeViewY(double)));
-  connect(m_freq_scroll_bar, SIGNAL(sliderMoved(double)), &l_view, SLOT(doSlowUpdate()));
+    connect(&l_view, SIGNAL(viewBottomChanged(double)), m_freq_scroll_bar, SLOT(setValue(double)));
+    connect(m_freq_wheel_Y, SIGNAL(valueChanged(double)), &l_view, SLOT(setZoomFactorY(double)));
+    connect(&l_view, SIGNAL(logZoomYChanged(double)), m_freq_wheel_Y, SLOT(setValue(double)));
 
-  connect(&l_view, SIGNAL(viewBottomChanged(double)), m_freq_scroll_bar, SLOT(setValue(double)));
-  connect(m_freq_wheel_Y, SIGNAL(valueChanged(double)), &l_view, SLOT(setZoomFactorY(double)));
-  connect(&l_view, SIGNAL(logZoomYChanged(double)), m_freq_wheel_Y, SLOT(setValue(double)));
-  
-  //horizontal
-  connect(m_freq_wheel_X, SIGNAL(valueChanged(double)), &l_view, SLOT(setZoomFactorX(double)));
-  connect(&l_view, SIGNAL(logZoomXChanged(double)), m_freq_wheel_X, SLOT(setValue(double)));
-  connect(m_amplitude_wheel_Y, SIGNAL(valueChanged(double)), m_amplitude_widget, SLOT(setRange(double)));
-  connect(m_amplitude_wheel_Y, SIGNAL(valueChanged(double)), m_amplitude_widget, SLOT(update()));
+    //horizontal
+    connect(m_freq_wheel_X, SIGNAL(valueChanged(double)), &l_view, SLOT(setZoomFactorX(double)));
+    connect(&l_view, SIGNAL(logZoomXChanged(double)), m_freq_wheel_X, SLOT(setValue(double)));
+    connect(m_amplitude_wheel_Y, SIGNAL(valueChanged(double)), m_amplitude_widget, SLOT(setRange(double)));
+    connect(m_amplitude_wheel_Y, SIGNAL(valueChanged(double)), m_amplitude_widget, SLOT(update()));
 
-  connect(m_amplitude_scroll_bar, SIGNAL(sliderMoved(double)), m_amplitude_widget, SLOT(setOffset(double)));
-  connect(m_amplitude_scroll_bar, SIGNAL(sliderMoved(double)), m_amplitude_widget, SLOT(update()));
+    connect(m_amplitude_scroll_bar, SIGNAL(sliderMoved(double)), m_amplitude_widget, SLOT(setOffset(double)));
+    connect(m_amplitude_scroll_bar, SIGNAL(sliderMoved(double)), m_amplitude_widget, SLOT(update()));
 
-  connect(m_amplitude_widget, SIGNAL(rangeChanged(double)), this, SLOT(setAmplitudeZoom(double)));
-  connect(m_amplitude_widget, SIGNAL(rangeChanged(double)), m_amplitude_wheel_Y, SLOT(setValue(double)));
-  connect(m_amplitude_widget, SIGNAL(offsetChanged(double)), m_amplitude_scroll_bar, SLOT(setValue(double)));
+    connect(m_amplitude_widget, SIGNAL(rangeChanged(double)), this, SLOT(setAmplitudeZoom(double)));
+    connect(m_amplitude_widget, SIGNAL(rangeChanged(double)), m_amplitude_wheel_Y, SLOT(setValue(double)));
+    connect(m_amplitude_widget, SIGNAL(offsetChanged(double)), m_amplitude_scroll_bar, SLOT(setValue(double)));
 
-  //make the widgets get updated when the view changes
-  connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), m_freq_widget_GL, SLOT(update()));
-  connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), m_amplitude_widget, SLOT(update()));
-  connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), m_time_axis, SLOT(update()));
-  connect(&(gdata->getView()), SIGNAL(timeViewRangeChanged(double, double)), m_time_axis, SLOT(setRange(double, double)));
+    //make the widgets get updated when the view changes
+    connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), m_freq_widget_GL, SLOT(update()));
+    connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), m_amplitude_widget, SLOT(update()));
+    connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), m_time_axis, SLOT(update()));
+    connect(&(gdata->getView()), SIGNAL(timeViewRangeChanged(double, double)), m_time_axis, SLOT(setRange(double, double)));
 }
 
 //------------------------------------------------------------------------------
 FreqView::~FreqView(void)
 {
-  //Qt deletes the child widgets automatically
+    //Qt deletes the child widgets automatically
 }
 
 //------------------------------------------------------------------------------
 void FreqView::zoomIn(void)
 {
-  bool l_done_it = false;
-  if(gdata->getRunning() != STREAM_FORWARD)
+    bool l_done_it = false;
+    if(gdata->getRunning() != STREAM_FORWARD)
     {
-      if(m_freq_widget_GL->hasMouse())
-	{
-	  QPoint l_mouse_pos = m_freq_widget_GL->mapFromGlobal(QCursor::pos());
-	  gdata->getView().setZoomFactorX(gdata->getView().logZoomX() + 0.1, l_mouse_pos.x());
-	  gdata->getView().setZoomFactorY(gdata->getView().logZoomY() + 0.1, m_freq_widget_GL->height() - l_mouse_pos.y());
-	  l_done_it = true;
-	}
-      else if(m_amplitude_widget->hasMouse())
-	{
-	  QPoint l_mouse_pos = m_amplitude_widget->mapFromGlobal(QCursor::pos());
-	  gdata->getView().setZoomFactorX(gdata->getView().logZoomX() + 0.1, l_mouse_pos.x());
-	  l_done_it = true;
-	}
+        if(m_freq_widget_GL->hasMouse())
+        {
+            QPoint l_mouse_pos = m_freq_widget_GL->mapFromGlobal(QCursor::pos());
+            gdata->getView().setZoomFactorX(gdata->getView().logZoomX() + 0.1, l_mouse_pos.x());
+            gdata->getView().setZoomFactorY(gdata->getView().logZoomY() + 0.1, m_freq_widget_GL->height() - l_mouse_pos.y());
+            l_done_it = true;
+        }
+        else if(m_amplitude_widget->hasMouse())
+        {
+            QPoint l_mouse_pos = m_amplitude_widget->mapFromGlobal(QCursor::pos());
+            gdata->getView().setZoomFactorX(gdata->getView().logZoomX() + 0.1, l_mouse_pos.x());
+            l_done_it = true;
+
+        }
     }
-  if(!l_done_it)
+    if(!l_done_it)
     {
-      gdata->getView().setZoomFactorX(gdata->getView().logZoomX() + 0.1);
-      gdata->getView().setZoomFactorY(gdata->getView().logZoomY() + 0.1);
-      l_done_it = true;
+        gdata->getView().setZoomFactorX(gdata->getView().logZoomX() + 0.1);
+        gdata->getView().setZoomFactorY(gdata->getView().logZoomY() + 0.1);
+        l_done_it = true;
     }
 }
 
 //------------------------------------------------------------------------------
 void FreqView::zoomOut(void)
 {
-  gdata->getView().setZoomFactorX(gdata->getView().logZoomX() - 0.1);
-  if(!m_amplitude_widget->hasMouse())
+    gdata->getView().setZoomFactorX(gdata->getView().logZoomX() - 0.1);
+    if(!m_amplitude_widget->hasMouse())
     {
-      gdata->getView().setZoomFactorY(gdata->getView().logZoomY() - 0.1);
+        gdata->getView().setZoomFactorY(gdata->getView().logZoomY() - 0.1);
     }
 }
 
 //------------------------------------------------------------------------------
 void FreqView::setAmplitudeZoom(double newRange)
 {
-  m_amplitude_scroll_bar->setRange(0.0, 1.0-newRange);
-  m_amplitude_scroll_bar->setPageStep(newRange);
+    m_amplitude_scroll_bar->setRange(0.0, 1.0-newRange);
+    m_amplitude_scroll_bar->setPageStep(newRange);
 }
 
 //------------------------------------------------------------------------------
 QSize FreqView::sizeHint(void) const
 {
-  return QSize(600, 560);
+    return QSize(600, 560);
 }
 // EOF
