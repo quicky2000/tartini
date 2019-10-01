@@ -4,7 +4,9 @@
     begin                : Fri Dec 10 2004
     copyright            : (C) 2004-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
- 
+    copyright            : (C) 2019 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2 of the License, or
@@ -41,16 +43,16 @@ public:
     };
 
 
-  FreqDrawWidget(QWidget *parent, const char* name = 0);
+  FreqDrawWidget(QWidget *p_parent, const char* p_name = 0);
   virtual ~FreqDrawWidget(void);
 
-  static void drawReferenceLines(QPaintDevice & pd,
-				 QPainter & p,
-				 double currentTime,
-				 double zoomX,
-				 double viewBottom,
-				 double zoomY,
-				 int viewType
+  static void drawReferenceLines(QPaintDevice & p_paint_device,
+				 QPainter & p_painter,
+				 double p_current_time,
+				 double p_zoom_X,
+				 double p_view_bottom,
+				 double p_zoom_Y,
+				 int p_view_type
 				 );
   void paintEvent(QPaintEvent *);
   QSize sizeHint(void) const;
@@ -62,15 +64,15 @@ public:
    *
    * @param k the QKeyEvent to respond to.
    */
-  void keyPressEvent( QKeyEvent *k );
+  void keyPressEvent( QKeyEvent *p_key_event );
 
   /*
    * Unsets the cursor icon if the control or alt key was released. Otherwise, ignores the event.
    *
    * @param k the QKeyEvent to respond to.
    */
-  void keyReleaseEvent( QKeyEvent *k);
-  void leaveEvent ( QEvent * e);
+  void keyReleaseEvent( QKeyEvent *p_key_event);
+  void leaveEvent ( QEvent * p_event);
   
   /*
    * If control or alt is pressed, zooms. If shift is also pressed, it 'reverses' the zoom: ie ctrl+shift zooms x
@@ -78,34 +80,34 @@ public:
    *
    * @param e the QMouseEvent to respond to.
    */
-  void mousePressEvent( QMouseEvent *e );
-  void mouseMoveEvent( QMouseEvent *e );
-  void mouseReleaseEvent( QMouseEvent *e );
-  void wheelEvent(QWheelEvent * e);
-  void resizeEvent (QResizeEvent *q);
+  void mousePressEvent( QMouseEvent *p_mouse_event );
+  void mouseMoveEvent( QMouseEvent *p_mouse_event );
+  void mouseReleaseEvent( QMouseEvent *p_mouse_event );
+  void wheelEvent(QWheelEvent * p_wheel_event);
+  void resizeEvent (QResizeEvent *p_resize_event);
   
   /**
      Calculates at what time the mouse is.
-     @param x the mouse's x co-ordinate
+     @param p_x the mouse's x co-ordinate
      @return the time the mouse is positioned at.
   */
-  double mouseTime(int x);
+  double mouseTime(int p_x);
 
   /**
      Calculates at what note pitch the mouse is at.
      @param x the mouse's y co-ordinate
      @return the pitch the mouse is positioned at.
   */
-  double mousePitch(int y);
-  Channel *channelAtPixel(int x, int y);
+  double mousePitch(int p_y);
+  Channel *channelAtPixel(int p_x, int p_y);
 
-  int dragMode;
-  int mouseX;
-  int mouseY;
-  double downTime;
-  double downNote;
+  int m_drag_mode;
+  int m_mouse_X;
+  int m_mouse_Y;
+  double m_down_time;
+  double m_down_note;
   
-  QPixmap *buffer;
+  QPixmap * m_buffer;
   
 };
 

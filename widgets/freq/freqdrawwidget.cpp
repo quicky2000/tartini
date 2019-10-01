@@ -45,15 +45,15 @@
 #endif
 
 //------------------------------------------------------------------------------
-FreqDrawWidget::FreqDrawWidget(QWidget *parent, const char* name):
-  DrawWidget(parent, name, Qt::WDestructiveClose)
+FreqDrawWidget::FreqDrawWidget(QWidget *p_parent, const char* p_name):
+  DrawWidget(p_parent, p_name, Qt::WDestructiveClose)
 {
   setMouseTracking(true);
   
-   dragMode = DragNone;
+   m_drag_mode = DragNone;
 
-   QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding, false);
-   setSizePolicy(sizePolicy);
+   QSizePolicy l_size_policy(QSizePolicy::Expanding, QSizePolicy::Expanding, false);
+   setSizePolicy(l_size_policy);
 
    setFocusPolicy(Qt::StrongFocus);
    gdata->getView().setPixelHeight(height());
@@ -65,151 +65,151 @@ FreqDrawWidget::~FreqDrawWidget(void)
 }
 
 //------------------------------------------------------------------------------
-void FreqDrawWidget::drawReferenceLines(QPaintDevice & pd,
-					QPainter & p,
-					double currentTime,
-					double zoomX,
-					double viewBottom,
-					double zoomY,
-					int viewType
+void FreqDrawWidget::drawReferenceLines(QPaintDevice & p_paint_device,
+					QPainter & p_painter,
+					double p_current_time,
+					double p_zoom_X,
+					double p_view_bottom,
+					double p_zoom_Y,
+					int p_view_type
 					)
 {
   // Draw the lines and notes
-  QFontMetrics fm = p.fontMetrics();
-  int fontHeightSpace = fm.height() / 4;
-  int fontWidth = fm.width("C#0") + 3;
+  QFontMetrics l_font_metric = p_painter.fontMetrics();
+  int l_font_height_space = l_font_metric.height() / 4;
+  int l_font_width = l_font_metric.width("C#0") + 3;
   
   //number of pixels to jump between each line
-  double step = 1.0 / zoomY;
+  double l_step = 1.0 / p_zoom_Y;
   //in semi-tones
-  int noteJump;
-  if(step > 10.0)
+  int l_note_jump;
+  if(l_step > 10.0)
     {
-      noteJump = 1;
+      l_note_jump = 1;
     }
-  else if(step > 5.0)
+  else if(l_step > 5.0)
     {
-      noteJump = 6;
+      l_note_jump = 6;
     }
   else
     {
-      noteJump = 12;
+      l_note_jump = 12;
     }
-  double remainder = cycle(viewBottom, double(noteJump));
-  double toFirstNote = double(noteJump) - remainder;
-  double start = toFirstNote * step;
-  double stop = double(pd.height());
-  int nameIndex = toInt(viewBottom + toFirstNote);
-  step *= noteJump;
+  double l_remainder = cycle(p_view_bottom, double(l_note_jump));
+  double l_to_first_note = double(l_note_jump) - l_remainder;
+  double l_start = l_to_first_note * l_step;
+  double l_stop = double(p_paint_device.height());
+  int l_name_index = toInt(p_view_bottom + l_to_first_note);
+  l_step *= l_note_jump;
 
   //draw the note names and reference lines
-  QString noteLabel;
-  int lineY = 0;
-  for (double y = start; y < stop; y += step, nameIndex+=noteJump)
+  QString l_note_label;
+  int l_line_Y = 0;
+  for (double l_y = l_start; l_y < l_stop; l_y += l_step, l_name_index+=l_note_jump)
     {
-      lineY = pd.height() - toInt(y);
-      if(!isBlackNote(nameIndex))
+      l_line_Y = p_paint_device.height() - toInt(l_y);
+      if(!isBlackNote(l_name_index))
 	{
-	  p.setPen(Qt::black);
-	  noteLabel.sprintf("%s%d", noteName(nameIndex), noteOctave(nameIndex));
-	  p.drawText(2, lineY + fontHeightSpace, noteLabel);
-	  if(noteValue(nameIndex) == 0)
+	  p_painter.setPen(Qt::black);
+	  l_note_label.sprintf("%s%d", noteName(l_name_index), noteOctave(l_name_index));
+	  p_painter.drawText(2, l_line_Y + l_font_height_space, l_note_label);
+	  if(noteValue(l_name_index) == 0)
 	    {
-	      p.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+	      p_painter.setPen(QPen(Qt::black, 1, Qt::SolidLine));
 	    }
 	  else
 	    {
 	      //transperenct colors don't seem to work on the printer
-	      if(viewType == DRAW_VIEW_PRINT)
+	      if(p_view_type == DRAW_VIEW_PRINT)
 		{
-		  p.setPen(QPen(QColor(128, 128, 128), 1, Qt::SolidLine));
+		  p_painter.setPen(QPen(QColor(128, 128, 128), 1, Qt::SolidLine));
 		}
 	      else
 		{
-		  p.setPen(QPen(QColor(144, 156, 170), 1, Qt::DashDotDotLine));
+		  p_painter.setPen(QPen(QColor(144, 156, 170), 1, Qt::DashDotDotLine));
 		}
 	    }
 	}
       else
 	{
-	  if(viewType == DRAW_VIEW_PRINT)
+	  if(p_view_type == DRAW_VIEW_PRINT)
 	    {
-	      p.setPen(QPen(QColor(196, 196, 196), 1, Qt::SolidLine));
+	      p_painter.setPen(QPen(QColor(196, 196, 196), 1, Qt::SolidLine));
 	    }
 	  else
 	    {
-	      p.setPen(QPen(QColor(136, 161, 180), 1, Qt::DotLine));
+	      p_painter.setPen(QPen(QColor(136, 161, 180), 1, Qt::DotLine));
 	    }
 	}
-      int offset = toInt(currentTime / zoomX) % 32;
-      p.setClipRect(fontWidth, 0, pd.width()-fontWidth, pd.height());
-      p.drawLine(fontWidth - offset, lineY, pd.width() - 1, lineY);
-      p.setClipRect(0, 0, pd.width(), pd.height());
+      int l_offset = toInt(p_current_time / p_zoom_X) % 32;
+      p_painter.setClipRect(l_font_width, 0, p_paint_device.width()-l_font_width, p_paint_device.height());
+      p_painter.drawLine(l_font_width - l_offset, l_line_Y, p_paint_device.width() - 1, l_line_Y);
+      p_painter.setClipRect(0, 0, p_paint_device.width(), p_paint_device.height());
     }
 }
 
 //------------------------------------------------------------------------------
 void FreqDrawWidget::paintEvent(QPaintEvent *)
 {
-  View & view = gdata->getView();
+  View & l_view = gdata->getView();
 
-  if(view.autoFollow() && gdata->getActiveChannel() && gdata->getRunning() == STREAM_FORWARD)
+  if(l_view.autoFollow() && gdata->getActiveChannel() && gdata->getRunning() == STREAM_FORWARD)
     {
-      setChannelVerticalView(gdata->getActiveChannel(), view.viewLeft(), view.currentTime(), view.zoomX(), view.viewBottom(), view.zoomY());
+      setChannelVerticalView(gdata->getActiveChannel(), l_view.viewLeft(), l_view.currentTime(), l_view.zoomX(), l_view.viewBottom(), l_view.zoomY());
     }
     
-  int curTimePixel = view.screenPixelX(view.currentTime());
+  int l_cur_time_pixel = l_view.screenPixelX(l_view.currentTime());
 
   beginDrawing();
 
   DrawWidget::setLineWidth(3);
 
   //draw the red/blue background color shading if needed
-  if(view.backgroundShading() && gdata->getActiveChannel())
+  if(l_view.backgroundShading() && gdata->getActiveChannel())
     {
-      drawChannelFilled(gdata->getActiveChannel(), get_painter(), view.viewLeft(), view.currentTime(), view.zoomX(), view.viewBottom(), view.zoomY(), DRAW_VIEW_NORMAL);
+      drawChannelFilled(gdata->getActiveChannel(), get_painter(), l_view.viewLeft(), l_view.currentTime(), l_view.zoomX(), l_view.viewBottom(), l_view.zoomY(), DRAW_VIEW_NORMAL);
     }
   
 
-  drawReferenceLines(*this, get_painter(), view.currentTime(), view.zoomX(), view.viewBottom(), view.zoomY(), DRAW_VIEW_NORMAL);
+  drawReferenceLines(*this, get_painter(), l_view.currentTime(), l_view.zoomX(), l_view.viewBottom(), l_view.zoomY(), DRAW_VIEW_NORMAL);
 
   //draw all the visible channels
-  for (uint i = 0; i < gdata->getChannelsSize(); i++)
+  for (uint l_i = 0; l_i < gdata->getChannelsSize(); l_i++)
     {
-      Channel *ch = gdata->getChannelAt(i);
-      if(!ch->isVisible())
+      Channel *l_channel = gdata->getChannelAt(l_i);
+      if(!l_channel->isVisible())
 	{
 	  continue;
 	}
-      drawChannel(*this, ch, get_painter(), view.viewLeft(), view.currentTime(), view.zoomX(), view.viewBottom(), view.zoomY(), DRAW_VIEW_NORMAL);
+      drawChannel(*this, l_channel, get_painter(), l_view.viewLeft(), l_view.currentTime(), l_view.zoomX(), l_view.viewBottom(), l_view.zoomY(), DRAW_VIEW_NORMAL);
     }
 
   // Draw a light grey band indicating which time is being used in the current window
   if(gdata->getActiveChannel())
     {
-      QColor lineColor = colorGroup().foreground();
-      lineColor.setAlpha(50);
-      Channel *ch = gdata->getActiveChannel();
-      double halfWindowTime = (double)ch->size() / (double)(ch->rate() * 2);
-      int pixelLeft = view.screenPixelX(view.currentTime() - halfWindowTime);
-      int pixelRight = view.screenPixelX(view.currentTime() + halfWindowTime);
-      get_painter().fillRect(pixelLeft, 0, pixelRight - pixelLeft, height() - 1, lineColor);
+      QColor l_line_color = colorGroup().foreground();
+      l_line_color.setAlpha(50);
+      Channel *l_channel = gdata->getActiveChannel();
+      double l_half_window_time = (double)l_channel->size() / (double)(l_channel->rate() * 2);
+      int l_pixel_left = l_view.screenPixelX(l_view.currentTime() - l_half_window_time);
+      int l_pixel_right = l_view.screenPixelX(l_view.currentTime() + l_half_window_time);
+      get_painter().fillRect(l_pixel_left, 0, l_pixel_right - l_pixel_left, height() - 1, l_line_color);
     }
 
   // Draw the current time line
   get_painter().setPen(QPen(colorGroup().foreground(), 1));
-  get_painter().drawLine(curTimePixel, 0, curTimePixel, height() - 1);
+  get_painter().drawLine(l_cur_time_pixel, 0, l_cur_time_pixel, height() - 1);
 
   endDrawing();
 }
 
 //------------------------------------------------------------------------------
-Channel * FreqDrawWidget::channelAtPixel(int x, int y)
+Channel * FreqDrawWidget::channelAtPixel(int p_x, int p_y)
 {
-  double time = mouseTime(x);
-  float pitch = mousePitch(y);
-  //10 pixel tolerance
-  float tolerance = 6 * gdata->getView().zoomY();
+  double l_time = mouseTime(p_x);
+  float l_pitch = mousePitch(p_y);
+  //10 pixel l_tolerance
+  float l_tolerance = 6 * gdata->getView().zoomY();
 
   std::vector<Channel*> channels;
 
@@ -220,8 +220,8 @@ Channel * FreqDrawWidget::channelAtPixel(int x, int y)
       Channel * l_channel = gdata->getChannelAt(gdata->getChannelsSize() - 1 - l_index);
       if(l_channel->isVisible())
 	{
-	  const AnalysisData *data = l_channel->dataAtTime(time);
-	  if(data && within(tolerance, data->getPitch(), pitch)) return l_channel;
+	  const AnalysisData *l_data = l_channel->dataAtTime(l_time);
+	  if(l_data && within(l_tolerance, l_data->getPitch(), l_pitch)) return l_channel;
 	}
     }
   return NULL;
@@ -234,36 +234,36 @@ QSize FreqDrawWidget::sizeHint(void) const
 }
 
 //------------------------------------------------------------------------------
-void FreqDrawWidget::mousePressEvent( QMouseEvent *e)
+void FreqDrawWidget::mousePressEvent( QMouseEvent *p_mouse_event)
 {
-  View & view = gdata->getView();
-  int timeX = toInt(view.viewOffset() / view.zoomX());
-  dragMode = DragNone;
+  View & l_view = gdata->getView();
+  int l_time_X = toInt(l_view.viewOffset() / l_view.zoomX());
+  m_drag_mode = DragNone;
   
   
   //Check if user clicked on center bar, to drag it
-  if(within(4, e->x(), timeX))
+  if(within(4, p_mouse_event->x(), l_time_X))
     {
-      dragMode = DragTimeBar;
-      mouseX = e->x();
+      m_drag_mode = DragTimeBar;
+      m_mouse_X = p_mouse_event->x();
       return;
     }
 
   // If the control or alt keys are pressed, zoom in or out on the correct axis, otherwise scroll.
-  if (e->state() & Qt::ControlModifier)
+  if (p_mouse_event->state() & Qt::ControlModifier)
     {
       // Do we zoom in or out?
-      if (e->state() & Qt::ShiftModifier)
+      if (p_mouse_event->state() & Qt::ShiftModifier)
 	{
 	}
       else
 	{
 	}
     }
-  else if (e->state() & Qt::AltModifier)
+  else if (p_mouse_event->state() & Qt::AltModifier)
     {
       // Do we zoom in or out?
-      if (e->state() & Qt::ShiftModifier)
+      if (p_mouse_event->state() & Qt::ShiftModifier)
 	{
 	}
       else
@@ -273,53 +273,53 @@ void FreqDrawWidget::mousePressEvent( QMouseEvent *e)
   else
     {
       //mouseDown = true;
-      mouseX = e->x();
-      mouseY = e->y();
+      m_mouse_X = p_mouse_event->x();
+      m_mouse_Y = p_mouse_event->y();
 
-      Channel *ch = channelAtPixel(e->x(), e->y());
-      if(ch)
+      Channel *l_channel = channelAtPixel(p_mouse_event->x(), p_mouse_event->y());
+      if(l_channel)
 	{
 	  //Clicked on a channel
-	  gdata->setActiveChannel(ch);
-	  dragMode = DragChannel;
+	  gdata->setActiveChannel(l_channel);
+	  m_drag_mode = DragChannel;
 	}
       else
 	{
 	  //Must have clicked on background
-	  dragMode = DragBackground;
-	  downTime = view.currentTime();
-	  downNote = view.viewBottom();
+	  m_drag_mode = DragBackground;
+	  m_down_time = l_view.currentTime();
+	  m_down_note = l_view.viewBottom();
 	}
     }
 }
 
 //------------------------------------------------------------------------------
-void FreqDrawWidget::mouseMoveEvent( QMouseEvent *e )
+void FreqDrawWidget::mouseMoveEvent( QMouseEvent *p_mouse_event )
 {
-  View & view = gdata->getView();
-  int pixelAtCurrentTimeX = toInt(view.viewOffset() / view.zoomX());
+  View & l_view = gdata->getView();
+  int l_pixel_at_current_time_X = toInt(l_view.viewOffset() / l_view.zoomX());
   
-  switch(dragMode)
+  switch(m_drag_mode)
     {
     case DragTimeBar:
       {
-	int newX = pixelAtCurrentTimeX + (e->x() - mouseX);
-	view.setViewOffset(double(newX) * view.zoomX());
-	mouseX = e->x();
-	view.doSlowUpdate();
+	int l_new_X = l_pixel_at_current_time_X + (p_mouse_event->x() - m_mouse_X);
+	l_view.setViewOffset(double(l_new_X) * l_view.zoomX());
+	m_mouse_X = p_mouse_event->x();
+	l_view.doSlowUpdate();
       }
       break;
     case DragBackground:
-      view.setViewBottom(downNote - (mouseY - e->y()) * view.zoomY());
-      gdata->updateActiveChunkTime(downTime - (e->x() - mouseX) * view.zoomX());
-      view.doSlowUpdate();
+      l_view.setViewBottom(m_down_note - (m_mouse_Y - p_mouse_event->y()) * l_view.zoomY());
+      gdata->updateActiveChunkTime(m_down_time - (p_mouse_event->x() - m_mouse_X) * l_view.zoomX());
+      l_view.doSlowUpdate();
       break;
     case DragNone:
-      if(within(4, e->x(), pixelAtCurrentTimeX))
+      if(within(4, p_mouse_event->x(), l_pixel_at_current_time_X))
 	{
 	  setCursor(QCursor(Qt::SplitHCursor));
 	}
-      else if(channelAtPixel(e->x(), e->y()) != NULL)
+      else if(channelAtPixel(p_mouse_event->x(), p_mouse_event->y()) != NULL)
 	{
 	  setCursor(QCursor(Qt::PointingHandCursor));
 	}
@@ -333,99 +333,99 @@ void FreqDrawWidget::mouseMoveEvent( QMouseEvent *e )
 //------------------------------------------------------------------------------
 void FreqDrawWidget::mouseReleaseEvent( QMouseEvent * )
 {
-  dragMode = DragNone;
+  m_drag_mode = DragNone;
 }
 
 //------------------------------------------------------------------------------
-double FreqDrawWidget::mouseTime(int x)
+double FreqDrawWidget::mouseTime(int p_x)
 {
-  return gdata->getView().viewLeft() + gdata->getView().zoomX() * x;
+  return gdata->getView().viewLeft() + gdata->getView().zoomX() * p_x;
 
 }
 
 //------------------------------------------------------------------------------
-double FreqDrawWidget::mousePitch(int y)
+double FreqDrawWidget::mousePitch(int p_y)
 {
-  return gdata->getView().viewBottom() + gdata->getView().zoomY() * (height() - y);
+  return gdata->getView().viewBottom() + gdata->getView().zoomY() * (height() - p_y);
 }
 
 //------------------------------------------------------------------------------
-void FreqDrawWidget::wheelEvent(QWheelEvent * e)
+void FreqDrawWidget::wheelEvent(QWheelEvent * p_wheel_event)
 {
-  View & view = gdata->getView();
-    double amount = double(e->delta() / WHEEL_DELTA);
-    bool isZoom = gdata->mouseWheelZooms();
-    if(e->state() & (Qt::ControlModifier | Qt::ShiftModifier))
+  View & l_view = gdata->getView();
+    double l_amount = double(p_wheel_event->delta() / WHEEL_DELTA);
+    bool l_is_zoom = gdata->mouseWheelZooms();
+    if(p_wheel_event->state() & (Qt::ControlModifier | Qt::ShiftModifier))
       {
-	isZoom = !isZoom;
+	l_is_zoom = !l_is_zoom;
       }
 
-  if(isZoom)
+  if(l_is_zoom)
     {
-      if(e->delta() >= 0)
+      if(p_wheel_event->delta() >= 0)
 	{
 	  //zooming in
 	  if(gdata->getRunning() == STREAM_FORWARD)
 	    {
-	      view.setZoomFactorX(view.logZoomX() + amount * 0.3);
+	      l_view.setZoomFactorX(l_view.logZoomX() + l_amount * 0.3);
 	    }
 	  else
 	    {
 	      //zoom toward mouse pointer
-	      view.setZoomFactorX(view.logZoomX() + amount * 0.3, e->x());
+	      l_view.setZoomFactorX(l_view.logZoomX() + l_amount * 0.3, p_wheel_event->x());
 	    }
-	  view.setZoomFactorY(view.logZoomY() + amount * 0.2, height() - e->y());
+	  l_view.setZoomFactorY(l_view.logZoomY() + l_amount * 0.2, height() - p_wheel_event->y());
 	}
       else
 	{
 	  //zoom out toward center
 	  if(gdata->getRunning() == STREAM_FORWARD)
 	    {
-	      view.setZoomFactorX(view.logZoomX() + amount * 0.3);
+	      l_view.setZoomFactorX(l_view.logZoomX() + l_amount * 0.3);
 	    }
 	  else
 	    {
-	      view.setZoomFactorX(view.logZoomX() + amount * 0.3, width() / 2);
+	      l_view.setZoomFactorX(l_view.logZoomX() + l_amount * 0.3, width() / 2);
 	    }
-	  view.setZoomFactorY(view.logZoomY() + amount * 0.2, height() / 2);
+	  l_view.setZoomFactorY(l_view.logZoomY() + l_amount * 0.2, height() / 2);
 	}
     }
   else
     {
       //mouse wheel scrolls
-      view.setViewBottom(view.viewBottom() + amount * view.viewHeight() * 0.1);
+      l_view.setViewBottom(l_view.viewBottom() + l_amount * l_view.viewHeight() * 0.1);
     }
-  view.doSlowUpdate();
+  l_view.doSlowUpdate();
 
-  e->accept();
+  p_wheel_event->accept();
 }
 
 //------------------------------------------------------------------------------
-void FreqDrawWidget::resizeEvent (QResizeEvent *q)
+void FreqDrawWidget::resizeEvent (QResizeEvent *p_resize_event)
 {
-  if (q->size() == q->oldSize())
+  if (p_resize_event->size() == p_resize_event->oldSize())
     {
       return;
     }
     
-  View & v = gdata->getView();
+  View & l_view = gdata->getView();
 
-  double oldViewWidth = double(v.viewWidth());
+  double l_old_view_width = double(l_view.viewWidth());
     
-  v.setPixelHeight(height());
-  v.setPixelWidth(width());
+  l_view.setPixelHeight(height());
+  l_view.setPixelWidth(width());
   // Work out what the times/heights of the view should be based on the zoom factors
-  float newYHeight = height() * v.zoomY();
-  float newYBottom = v.viewBottom() - ((newYHeight - v.viewHeight()) / 2.0);
+  float l_new_Y_height = height() * l_view.zoomY();
+  float l_new_Y_bottom = l_view.viewBottom() - ((l_new_Y_height - l_view.viewHeight()) / 2.0);
 
-  v.setViewOffset(v.viewOffset() / oldViewWidth * v.viewWidth());
-  v.setViewBottom(newYBottom);
+  l_view.setViewOffset(l_view.viewOffset() / l_old_view_width * l_view.viewWidth());
+  l_view.setViewBottom(l_new_Y_bottom);
 }
 
 //------------------------------------------------------------------------------
-void FreqDrawWidget::keyPressEvent( QKeyEvent *k )
+void FreqDrawWidget::keyPressEvent( QKeyEvent *p_key_event )
 {
-  switch (k->key())
+  switch (p_key_event->key())
     {
     case Qt::Key_Control:
       setCursor(QCursor(QPixmap(zoomx)));
@@ -434,59 +434,59 @@ void FreqDrawWidget::keyPressEvent( QKeyEvent *k )
       setCursor(QCursor(QPixmap(zoomy)));
       break;
     case Qt::Key_Shift:
-      if (k->state() & Qt::ControlModifier)
+      if (p_key_event->state() & Qt::ControlModifier)
 	{
 	  setCursor(QCursor(QPixmap(zoomxout)));
 	}
-      else if (k->state() & Qt::AltModifier)
+      else if (p_key_event->state() & Qt::AltModifier)
 	{
 	  setCursor(QCursor(QPixmap(zoomyout)));
 	}
       else
 	{
-	  k->ignore();
+	  p_key_event->ignore();
 	}
       break;
     default:
-      k->ignore();
+      p_key_event->ignore();
       break;
     } 
 }
 
 //------------------------------------------------------------------------------
-void FreqDrawWidget::keyReleaseEvent( QKeyEvent *k)
+void FreqDrawWidget::keyReleaseEvent( QKeyEvent *p_key_event)
 {
-  switch (k->key())
+  switch (p_key_event->key())
     {
     case Qt::Key_Control: // Unset the cursor if the control or alt keys were released, ignore otherwise
     case Qt::Key_Alt:
       unsetCursor();
       break;
     case Qt::Key_Shift:
-      if (k->state() & Qt::ControlModifier)
+      if (p_key_event->state() & Qt::ControlModifier)
 	{
 	  setCursor(QCursor(QPixmap(zoomx)));
 	}
-      else if (k->state() & Qt::AltModifier)
+      else if (p_key_event->state() & Qt::AltModifier)
 	{
 	  setCursor(QCursor(QPixmap(zoomy)));
 	}
       else
 	{
-	  k->ignore();
+	  p_key_event->ignore();
 	}
       break;
     default:
-      k->ignore();
+      p_key_event->ignore();
       break;
     }
 }
 
 //------------------------------------------------------------------------------
-void FreqDrawWidget::leaveEvent ( QEvent * e)
+void FreqDrawWidget::leaveEvent ( QEvent * p_event)
 {
   unsetCursor();
-  QWidget::leaveEvent(e);
+  QWidget::leaveEvent(p_event);
 }
 
 // EOF
