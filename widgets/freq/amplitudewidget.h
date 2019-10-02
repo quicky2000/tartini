@@ -32,77 +32,85 @@ class AnalysisData;
 
 class AmplitudeWidget : public QGLWidget
 {
-
   Q_OBJECT
 
-    public:
-  enum DragModes
-    {
-      DragNone = 0,
-      DragChannel = 1,
-      DragBackground = 2,
-      DragTimeBar = 3,
-      DragNoiseThreshold = 4
+  public:
+    enum DragModes
+    { DragNone = 0
+    , DragChannel = 1
+    , DragBackground = 2
+    , DragTimeBar = 3
+    , DragNoiseThreshold = 4
     };
 
-  AmplitudeWidget(QWidget *p_parent, const char* p_name = 0);
-  virtual ~AmplitudeWidget(void);
+    AmplitudeWidget( QWidget * p_parent
+                   , const char * p_name = 0
+                   );
+    virtual ~AmplitudeWidget(void);
 
-  inline QSize sizeHint(void) const;
-  inline const double & range(void)const;
+    inline QSize sizeHint(void) const;
+    inline const double & range(void)const;
 
-public slots:
-  void setRange(double p_new_range);
-  void setOffset(double p_new_offset);
+  public slots:
+    void setRange(double p_new_range);
+    void setOffset(double p_new_offset);
 
-signals:
-  void rangeChanged(double);
-  void offsetChanged(double);
-  void offsetInvChanged(double);
-  
-private:
-  void initializeGL(void);
-  void resizeGL(int p_width, int p_height);
-  void paintGL(void);
+  signals:
+    void rangeChanged(double);
+    void offsetChanged(double);
+    void offsetInvChanged(double);
 
-  void setLineWidth(float p_width);
-  void drawVerticalRefLines(void);
-  double getCurrentThreshold(int p_index);
-  QString getCurrentThresholdString(void)const;
-  void drawChannelAmplitudeGL(Channel *p_channel);
-  void drawChannelAmplitudeFilledGL(Channel *p_channel);
+  private:
+    void initializeGL(void);
+    void resizeGL( int p_width
+                 , int p_height
+                 );
+    void paintGL(void);
 
-  /**
-     This function has the side effect of changing zoom element
-  */
-  bool calcZoomElement(ZoomElement &p_zoom_element, Channel *p_channel, int p_base_element, double p_base_X);
-  double calculateElement(AnalysisData * p_data);
-  void setCurrentThreshold(double p_new_threshold, int p_index);
+    void setLineWidth(float p_width);
+    void drawVerticalRefLines(void);
+    double getCurrentThreshold(int p_index);
+    QString getCurrentThresholdString(void)const;
+    void drawChannelAmplitudeGL(Channel * p_channel);
+    void drawChannelAmplitudeFilledGL(Channel * p_channel);
 
-  void mousePressEvent( QMouseEvent * p_mouse_event);
-  void mouseMoveEvent( QMouseEvent * p_mouse_event);
-  void mouseReleaseEvent( QMouseEvent * p_mouse_event);
-  void wheelEvent(QWheelEvent * p_mouse_event);
+    /**
+       This function has the side effect of changing zoom element
+    */
+    bool calcZoomElement( ZoomElement & p_zoom_element
+                        , Channel * p_channel
+                        , int p_base_element
+                        , double p_base_X
+                        );
+    double calculateElement(AnalysisData * p_data);
+    void setCurrentThreshold( double p_new_threshold
+                            , int p_index
+                            );
 
-  inline double leftTime(void)const;
-  inline double rightTime(void)const;
-  inline double timeWidth(void)const;
-	
-  inline double maxOffset(void)const;
-  inline const double & offset(void)const;
-  inline const double & offsetInv(void)const;
+    void mousePressEvent( QMouseEvent * p_mouse_event);
+    void mouseMoveEvent( QMouseEvent * p_mouse_event);
+    void mouseReleaseEvent( QMouseEvent * p_mouse_event);
+    void wheelEvent(QWheelEvent * p_mouse_event);
 
-  int m_drag_mode;
-  int m_mouse_X;
-  int m_mouse_Y;
-  double m_down_time;
-  double m_down_offset;
-  int m_threshold_index;
-  double m_range;
-  double m_offset;
-  double m_offset_inv;
-  float m_line_width;
-  float m_half_line_width;
+    inline double leftTime(void)const;
+    inline double rightTime(void)const;
+    inline double timeWidth(void)const;
+
+    inline double maxOffset(void)const;
+    inline const double & offset(void)const;
+    inline const double & offsetInv(void)const;
+
+    int m_drag_mode;
+    int m_mouse_X;
+    int m_mouse_Y;
+    double m_down_time;
+    double m_down_offset;
+    int m_threshold_index;
+    double m_range;
+    double m_offset;
+    double m_offset_inv;
+    float m_line_width;
+    float m_half_line_width;
 
 };
 
