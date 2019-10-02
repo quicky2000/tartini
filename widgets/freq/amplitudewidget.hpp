@@ -43,25 +43,25 @@ double AmplitudeWidget::timeWidth(void)const
 //------------------------------------------------------------------------------
 const double & AmplitudeWidget::range(void)const
 {
-  return _range;
+  return m_range;
 }
 
 //------------------------------------------------------------------------------
 double AmplitudeWidget::maxOffset(void)const
 {
-  return 1.0 - _range;
+  return 1.0 - m_range;
 }
 
 //------------------------------------------------------------------------------
 const double & AmplitudeWidget::offset(void)const
 {
-  return _offset;
+  return m_offset;
 }
 
 //------------------------------------------------------------------------------
 const double & AmplitudeWidget::offsetInv(void)const
 {
-  return _offsetInv;
+  return m_offset_inv;
 }
 
 //EOF

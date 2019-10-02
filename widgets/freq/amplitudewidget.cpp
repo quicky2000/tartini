@@ -41,17 +41,17 @@ AmplitudeWidget::AmplitudeWidget(QWidget * /*parent*/, const char* /*name*/)
 // to avoid issue with non initialised values. We don't care about signal emissions
 // because at construction time there are still not bound to slots
   :
-dragMode(DragNone),
-mouseX(0),
-mouseY(0),
-downTime(0.0),
-downOffset(0.0),
-thresholdIndex(0),
-_range(0.8),
-_offset(0.0),
-_offsetInv(1.0 - _range),
-lineWidth(0.0),
-halfLineWidth(0.0)
+m_drag_mode(DragNone),
+m_mouse_X(0),
+m_mouse_Y(0),
+m_down_time(0.0),
+m_down_offset(0.0),
+m_threshold_index(0),
+m_range(0.8),
+m_offset(0.0),
+m_offset_inv(1.0 - m_range),
+m_line_width(0.0),
+m_half_line_width(0.0)
 {
   setMouseTracking(true);
   setAttribute(Qt::WA_OpaquePaintEvent);
@@ -68,9 +68,9 @@ void AmplitudeWidget::initializeGL(void)
 }
 
 //------------------------------------------------------------------------------
-void AmplitudeWidget::resizeGL(int w, int h)
+void AmplitudeWidget::resizeGL(int p_width, int p_height)
 {
-  mygl_resize2d(w, h);
+  mygl_resize2d(p_width, p_height);
 }
 
 //------------------------------------------------------------------------------
@@ -79,23 +79,23 @@ AmplitudeWidget::~AmplitudeWidget(void)
 }
 
 //------------------------------------------------------------------------------
-void AmplitudeWidget::setRange(double newRange)
+void AmplitudeWidget::setRange(double p_new_range)
 {
-  if(_range != newRange)
+  if(m_range != p_new_range)
     {
-      _range = bound(newRange, 0.0, 1.0);
+      m_range = bound(p_new_range, 0.0, 1.0);
       setOffset(offset());
-      emit rangeChanged(_range);
+      emit rangeChanged(m_range);
     }
 }
 
 //------------------------------------------------------------------------------
-void AmplitudeWidget::setOffset(double newOffset)
+void AmplitudeWidget::setOffset(double p_new_offset)
 {
-  newOffset = bound(newOffset, 0.0, maxOffset());
-  _offset = newOffset;
-  _offsetInv = maxOffset() - _offset;
-  emit offsetChanged(_offset);
+  p_new_offset = bound(p_new_offset, 0.0, maxOffset());
+  m_offset = p_new_offset;
+  m_offset_inv = maxOffset() - m_offset;
+  emit offsetChanged(m_offset);
   emit offsetInvChanged(offsetInv());
 }
 
@@ -107,10 +107,10 @@ void AmplitudeWidget::paintGL(void)
   setLineWidth(3.0);
   glEnable(GL_LINE_SMOOTH);
 
-  View & view = gdata->getView();
+  View & l_view = gdata->getView();
 
   //draw the red/blue background color shading if needed
-  if(view.backgroundShading() && gdata->getActiveChannel())
+  if(l_view.backgroundShading() && gdata->getActiveChannel())
     {
       drawChannelAmplitudeFilledGL(gdata->getActiveChannel());
     }
@@ -124,34 +124,34 @@ void AmplitudeWidget::paintGL(void)
   glEnable(GL_LINE_SMOOTH);
 
   //draw all the visible channels
-  for (uint i = 0; i < gdata->getChannelsSize(); i++)
+  for (uint l_i = 0; l_i < gdata->getChannelsSize(); l_i++)
     {
-      Channel *ch = gdata->getChannelAt(i);
-      if(!ch->isVisible())
+      Channel *l_channel = gdata->getChannelAt(l_i);
+      if(!l_channel->isVisible())
 	{
 	  continue;
 	}
-      drawChannelAmplitudeGL(ch);
+      drawChannelAmplitudeGL(l_channel);
     }
 
   // Draw the current time line
   glDisable(GL_LINE_SMOOTH);
   qglColor(colorGroup().foreground());
   glLineWidth(1.0);
-  double curScreenTime = (view.currentTime() - view.viewLeft()) / view.zoomX();
-  mygl_line(curScreenTime, 0, curScreenTime, height() - 1);
+  double l_cur_screen_time = (l_view.currentTime() - l_view.viewLeft()) / l_view.zoomX();
+  mygl_line(l_cur_screen_time, 0, l_cur_screen_time, height() - 1);
 
   // Draw a horizontal line at the current threshold.
-  int y;
-  double heightRatio = double(height()) / range();
+  int l_y;
+  double l_height_ratio = double(height()) / range();
 
   qglColor(Qt::black);
-  y = height() - 1 - toInt((getCurrentThreshold(0) - offsetInv()) * heightRatio);
-  mygl_line(0, y, width(), y);
+  l_y = height() - 1 - toInt((getCurrentThreshold(0) - offsetInv()) * l_height_ratio);
+  mygl_line(0, l_y, width(), l_y);
 
   qglColor(Qt::red);
-  y = height() - 1 - toInt((getCurrentThreshold(1) - offsetInv()) * heightRatio);
-  mygl_line(0, y, width(), y);
+  l_y = height() - 1 - toInt((getCurrentThreshold(1) - offsetInv()) * l_height_ratio);
+  mygl_line(0, l_y, width(), l_y);
 
   qglColor(Qt::black);
   renderText(2, height() - 3, getCurrentThresholdString());
@@ -162,37 +162,37 @@ void AmplitudeWidget::drawVerticalRefLines(void)
 {
   //Draw the vertical reference lines
   //time per 150 pixels
-  double timeStep = timeWidth() / double(width()) * 150.0;
+  double l_time_step = timeWidth() / double(width()) * 150.0;
   //round down to the nearest power of 10
-  double timeScaleBase = pow10(floor(log10(timeStep)));
+  double l_time_scale_base = pow10(floor(log10(l_time_step)));
 
-  //choose a timeScaleStep which is a multiple of 1, 2 or 5 of timeScaleBase
-  int largeFreq;
-  if(timeScaleBase * 5.0 < timeStep)
+  //choose a timeScaleStep which is a multiple of 1, 2 or 5 of l_time_scale_base
+  int l_large_freq;
+  if(l_time_scale_base * 5.0 < l_time_step)
     {
-      largeFreq = 5;
+      l_large_freq = 5;
     }
-  else if (timeScaleBase * 2.0 < timeStep)
+  else if (l_time_scale_base * 2.0 < l_time_step)
     {
-      largeFreq = 2;
+      l_large_freq = 2;
     }
   else
     {
-      largeFreq = 2;
-      timeScaleBase /= 2;
+      l_large_freq = 2;
+      l_time_scale_base /= 2;
     }
 
   //calc the first one just off the left of the screen
-  double timePos = floor(leftTime() / (timeScaleBase * largeFreq)) * (timeScaleBase * largeFreq);
-  int x, largeCounter = -1;
-  double ratio = double(width()) / timeWidth();
-  double lTime = leftTime();
+  double l_time_pos = floor(leftTime() / (l_time_scale_base * l_large_freq)) * (l_time_scale_base * l_large_freq);
+  int l_x, l_large_counter = -1;
+  double l_ratio = double(width()) / timeWidth();
+  double l_lTime = leftTime();
 
-  for(; timePos <= rightTime(); timePos += timeScaleBase)
+  for(; l_time_pos <= rightTime(); l_time_pos += l_time_scale_base)
     {
-      if(++largeCounter == largeFreq)
+      if(++l_large_counter == l_large_freq)
 	{
-	  largeCounter = 0;
+	  l_large_counter = 0;
 	  //draw the darker lines
 	  glColor4ub(25, 125, 170, 128);
 	}
@@ -201,368 +201,368 @@ void AmplitudeWidget::drawVerticalRefLines(void)
 	  //draw the lighter lines
 	  glColor4ub(25, 125, 170, 64);
 	}
-      x = toInt((timePos-lTime) * ratio);
-      mygl_line(x, 0, x, height() - 1);
+      l_x = toInt((l_time_pos-l_lTime) * l_ratio);
+      mygl_line(l_x, 0, l_x, height() - 1);
     }
 }
 
 //------------------------------------------------------------------------------
-bool AmplitudeWidget::calcZoomElement(ZoomElement &ze, Channel *ch, int baseElement, double baseX)
+bool AmplitudeWidget::calcZoomElement(ZoomElement &p_zoom_element, Channel *p_channel, int p_base_element, double p_base_X)
 {
-  int startChunk = int(floor(double(baseElement) * baseX));
-  myassert(startChunk <= ch->totalChunks());
-  int finishChunk = int(floor(double(baseElement + 1) * baseX)) + 1;
-  myassert(finishChunk <= ch->totalChunks());
-  if(startChunk == finishChunk)
+  int l_start_chunk = int(floor(double(p_base_element) * p_base_X));
+  myassert(l_start_chunk <= p_channel->totalChunks());
+  int l_finish_chunk = int(floor(double(p_base_element + 1) * p_base_X)) + 1;
+  myassert(l_finish_chunk <= p_channel->totalChunks());
+  if(l_start_chunk == l_finish_chunk)
     {
       return false;
     }
 
-  myassert(startChunk < finishChunk);
+  myassert(l_start_chunk < l_finish_chunk);
 
-  int mode = gdata->amplitudeMode();
+  int l_mode = gdata->amplitudeMode();
   std::pair<large_vector<AnalysisData>::iterator, large_vector<AnalysisData>::iterator> a =
-    minMaxElement(ch->dataIteratorAtChunk(startChunk), ch->dataIteratorAtChunk(finishChunk), lessValue(mode));
-  myassert(a.second != ch->dataIteratorAtChunk(finishChunk));
-  float low = (*amp_mode_func[mode])(a.first->getValue(mode), *gdata);
-  float high = (*amp_mode_func[mode])(a.second->getValue(mode), *gdata);
+    minMaxElement(p_channel->dataIteratorAtChunk(l_start_chunk), p_channel->dataIteratorAtChunk(l_finish_chunk), lessValue(l_mode));
+  myassert(a.second != p_channel->dataIteratorAtChunk(l_finish_chunk));
+  float l_low = (*amp_mode_func[l_mode])(a.first->getValue(l_mode), *gdata);
+  float l_high = (*amp_mode_func[l_mode])(a.second->getValue(l_mode), *gdata);
   
-  ze.set(low, high, 0, ch->get_color(), NO_NOTE, (startChunk + finishChunk) / 2);
+  p_zoom_element.set(l_low, l_high, 0, p_channel->get_color(), NO_NOTE, (l_start_chunk + l_finish_chunk) / 2);
   return true;
 }
 
 //------------------------------------------------------------------------------
-double AmplitudeWidget::calculateElement(AnalysisData *data)
+double AmplitudeWidget::calculateElement(AnalysisData *p_data)
 {
-  double val = (*amp_mode_func[gdata->amplitudeMode()])(data->getValue(gdata->amplitudeMode()), *gdata);
-  return val;
+  double l_val = (*amp_mode_func[gdata->amplitudeMode()])(p_data->getValue(gdata->amplitudeMode()), *gdata);
+  return l_val;
 }
 
 //------------------------------------------------------------------------------
-double AmplitudeWidget::getCurrentThreshold(int index)
+double AmplitudeWidget::getCurrentThreshold(int p_index)
 {
-  return (*amp_mode_func[gdata->amplitudeMode()])(gdata->ampThreshold(gdata->amplitudeMode(), index), *gdata);
+  return (*amp_mode_func[gdata->amplitudeMode()])(gdata->ampThreshold(gdata->amplitudeMode(), p_index), *gdata);
 }
 
 //------------------------------------------------------------------------------
-void AmplitudeWidget::setCurrentThreshold(double newThreshold, int index)
+void AmplitudeWidget::setCurrentThreshold(double p_new_threshold, int p_index)
 {
-  newThreshold = bound(newThreshold, 0.0, 1.0);
-  if(newThreshold < offsetInv())
+  p_new_threshold = bound(p_new_threshold, 0.0, 1.0);
+  if(p_new_threshold < offsetInv())
     {
-      setOffset(maxOffset() - newThreshold);
+      setOffset(maxOffset() - p_new_threshold);
     }
-  else if(newThreshold > offsetInv() + range())
+  else if(p_new_threshold > offsetInv() + range())
     {
-      setOffset(maxOffset() - (newThreshold - range()));
+      setOffset(maxOffset() - (p_new_threshold - range()));
     }
 
-  gdata->setAmpThreshold(gdata->amplitudeMode(), index, (*amp_mode_inv_func[gdata->amplitudeMode()])(newThreshold, *gdata));
+  gdata->setAmpThreshold(gdata->amplitudeMode(), p_index, (*amp_mode_inv_func[gdata->amplitudeMode()])(p_new_threshold, *gdata));
 }
 
 //------------------------------------------------------------------------------
 QString AmplitudeWidget::getCurrentThresholdString(void)const
 {
-  QString thresholdStr;
-  thresholdStr.sprintf(amp_display_string[gdata->amplitudeMode()], gdata->ampThreshold(gdata->amplitudeMode(), 0), gdata->ampThreshold(gdata->amplitudeMode(), 1));
-  return thresholdStr;
+  QString l_threshold_str;
+  l_threshold_str.sprintf(amp_display_string[gdata->amplitudeMode()], gdata->ampThreshold(gdata->amplitudeMode(), 0), gdata->ampThreshold(gdata->amplitudeMode(), 1));
+  return l_threshold_str;
 }
 
 //------------------------------------------------------------------------------
-void AmplitudeWidget::setLineWidth(float width)
+void AmplitudeWidget::setLineWidth(float p_width)
 {
-  lineWidth = width;
-  halfLineWidth = width / 2;
-  glLineWidth(lineWidth);
+  m_line_width = p_width;
+  m_half_line_width = p_width / 2;
+  glLineWidth(m_line_width);
 }
 
 //------------------------------------------------------------------------------
-void AmplitudeWidget::drawChannelAmplitudeGL(Channel *ch)
+void AmplitudeWidget::drawChannelAmplitudeGL(Channel *p_channel)
 {
-  View & view = gdata->getView();
+  View & l_view = gdata->getView();
   
-  ChannelLocker channelLocker(ch);
-  ZoomLookup *z = &ch->get_amplitude_zoom_lookup();
+  ChannelLocker l_channel_locker(p_channel);
+  ZoomLookup *l_zoom_lookup = &p_channel->get_amplitude_zoom_lookup();
   
-  // baseX is the no. of chunks a pixel must represent.
-  double baseX = view.zoomX() / ch->timePerChunk();
+  // l_base_X is the no. of chunks a pixel must represent.
+  double l_base_X = l_view.zoomX() / p_channel->timePerChunk();
 
-  z->setZoomLevel(baseX);
+  l_zoom_lookup->setZoomLevel(l_base_X);
   
-  double currentChunk = ch->chunkFractionAtTime(view.currentTime());
-  double leftFrameTime = currentChunk - ((view.currentTime() - view.viewLeft()) / ch->timePerChunk());
-  int n = 0;
-  int baseElement = int(floor(leftFrameTime / baseX));
-  if(baseElement < 0)
+  double l_current_chunk = p_channel->chunkFractionAtTime(l_view.currentTime());
+  double l_left_frame_time = l_current_chunk - ((l_view.currentTime() - l_view.viewLeft()) / p_channel->timePerChunk());
+  int l_n = 0;
+  int l_base_element = int(floor(l_left_frame_time / l_base_X));
+  if(l_base_element < 0)
     {
-      n -= baseElement;
-      baseElement = 0;
+      l_n -= l_base_element;
+      l_base_element = 0;
     }
-  int lastBaseElement = int(floor(double(ch->totalChunks()) / baseX));
-  double heightRatio = double(height()) / range();
+  int l_last_base_element = int(floor(double(p_channel->totalChunks()) / l_base_X));
+  double l_height_ratio = double(height()) / range();
   
-  Array1d<MyGLfloat2d> vertexArray(width() * 2);
-  int pointIndex = 0;
+  Array1d<MyGLfloat2d> l_vertex_array(width() * 2);
+  int l_point_index = 0;
 
-  if (baseX > 1)
+  if (l_base_X > 1)
     {
       // More samples than pixels
-      int theWidth = width();
-      if(lastBaseElement > z->size())
+      int l_the_width = width();
+      if(l_last_base_element > l_zoom_lookup->size())
 	{
-	  z->setSize(lastBaseElement);
+	  l_zoom_lookup->setSize(l_last_base_element);
 	}
-      for(; n < theWidth && baseElement < lastBaseElement; n++, baseElement++)
+      for(; l_n < l_the_width && l_base_element < l_last_base_element; l_n++, l_base_element++)
 	{
-	  myassert(baseElement >= 0);
-	  ZoomElement &ze = z->at(baseElement);
-	  if(!ze.isValid())
+	  myassert(l_base_element >= 0);
+	  ZoomElement &l_zoom_element = l_zoom_lookup->at(l_base_element);
+	  if(!l_zoom_element.isValid())
 	    {
-	      if(!calcZoomElement(ze, ch, baseElement, baseX))
+	      if(!calcZoomElement(l_zoom_element, p_channel, l_base_element, l_base_X))
 		{
 		  continue;
 		}
 	    }
       
-	  vertexArray[pointIndex++] = MyGLfloat2d(n, height() - 1 - ((ze.high() - offsetInv()) * heightRatio) - halfLineWidth);
-	  vertexArray[pointIndex++] = MyGLfloat2d(n, height() - 1 - ((ze.low() - offsetInv()) * heightRatio) + halfLineWidth);
+	  l_vertex_array[l_point_index++] = MyGLfloat2d(l_n, height() - 1 - ((l_zoom_element.high() - offsetInv()) * l_height_ratio) - m_half_line_width);
+	  l_vertex_array[l_point_index++] = MyGLfloat2d(l_n, height() - 1 - ((l_zoom_element.low() - offsetInv()) * l_height_ratio) + m_half_line_width);
 	}
-      myassert(pointIndex <= width() * 2);
-      qglColor(ch->get_color());
+      myassert(l_point_index <= width() * 2);
+      qglColor(p_channel->get_color());
       glLineWidth(1.0f);
-      glVertexPointer(2, GL_FLOAT, 0, vertexArray.begin());
-      glDrawArrays(GL_LINES, 0, pointIndex);
+      glVertexPointer(2, GL_FLOAT, 0, l_vertex_array.begin());
+      glDrawArrays(GL_LINES, 0, l_point_index);
     }
   else
     {
-      //baseX <= 1
-      float val = 0.0;
+      //l_base_X <= 1
+      float l_val = 0.0;
       // Integer version of frame time
-      int intChunk = (int) floor(leftFrameTime);
+      int l_int_chunk = (int) floor(l_left_frame_time);
       // So we skip some pixels
-      double stepSize = 1.0 / baseX;
-      float x = 0.0f, y;
+      double l_step_size = 1.0 / l_base_X;
+      float l_x = 0.0f, l_y;
 
-      double start = (double(intChunk) - leftFrameTime) * stepSize;
-      double stop = width() + (2 * stepSize);
+      double l_start = (double(l_int_chunk) - l_left_frame_time) * l_step_size;
+      double l_stop = width() + (2 * l_step_size);
 
-      double dn = start;
-      int totalChunks = ch->totalChunks();
-      if(intChunk < 0)
+      double l_dn = l_start;
+      int l_total_chunks = p_channel->totalChunks();
+      if(l_int_chunk < 0)
 	{
-	  dn += stepSize * -intChunk;
-	  intChunk = 0;
+	  l_dn += l_step_size * -l_int_chunk;
+	  l_int_chunk = 0;
 	}
-      for(; dn < stop && intChunk < totalChunks; dn += stepSize, intChunk++)
+      for(; l_dn < l_stop && l_int_chunk < l_total_chunks; l_dn += l_step_size, l_int_chunk++)
 	{
-	  AnalysisData *data = ch->dataAtChunk(intChunk);
-	  myassert(data);
+	  AnalysisData *l_data = p_channel->dataAtChunk(l_int_chunk);
+	  myassert(l_data);
       
-	  if(!data)
+	  if(!l_data)
 	    {
 	      continue;
 	    }
 
-	  val = calculateElement(data);
+	  l_val = calculateElement(l_data);
 
-	  x = dn;
-	  y = height() - 1 - ((val - offsetInv()) * heightRatio);
-	  vertexArray[pointIndex++] = MyGLfloat2d(x, y);
+	  l_x = l_dn;
+	  l_y = height() - 1 - ((l_val - offsetInv()) * l_height_ratio);
+	  l_vertex_array[l_point_index++] = MyGLfloat2d(l_x, l_y);
 	}
-      myassert(pointIndex <= width() * 2);
-      qglColor(ch->get_color());
+      myassert(l_point_index <= width() * 2);
+      qglColor(p_channel->get_color());
       glLineWidth(3.0f);
-      glVertexPointer(2, GL_FLOAT, 0, vertexArray.begin());
-      glDrawArrays(GL_LINE_STRIP, 0, pointIndex);
+      glVertexPointer(2, GL_FLOAT, 0, l_vertex_array.begin());
+      glDrawArrays(GL_LINE_STRIP, 0, l_point_index);
     }
 }
 
 //------------------------------------------------------------------------------
-void AmplitudeWidget::drawChannelAmplitudeFilledGL(Channel *ch)
+void AmplitudeWidget::drawChannelAmplitudeFilledGL(Channel *p_channel)
 {
-  View & view = gdata->getView();
+  View & l_view = gdata->getView();
   
-  ChannelLocker channelLocker(ch);
-  ZoomLookup *z = &ch->get_amplitude_zoom_lookup();
+  ChannelLocker l_channel_locker(p_channel);
+  ZoomLookup *l_zoom_lookup = &p_channel->get_amplitude_zoom_lookup();
   
-  // baseX is the no. of chunks a pixel must represent.
-  double baseX = view.zoomX() / ch->timePerChunk();
+  // l_base_X is the no. of chunks a pixel must represent.
+  double l_base_X = l_view.zoomX() / p_channel->timePerChunk();
 
-  z->setZoomLevel(baseX);
+  l_zoom_lookup->setZoomLevel(l_base_X);
   
-  double currentChunk = ch->chunkFractionAtTime(view.currentTime());
-  double leftFrameTime = currentChunk - ((view.currentTime() - view.viewLeft()) / ch->timePerChunk());
-  int n = 0;
-  int baseElement = int(floor(leftFrameTime / baseX));
-  if(baseElement < 0)
+  double l_current_chunk = p_channel->chunkFractionAtTime(l_view.currentTime());
+  double l_left_frame_time = l_current_chunk - ((l_view.currentTime() - l_view.viewLeft()) / p_channel->timePerChunk());
+  int l_n = 0;
+  int l_base_element = int(floor(l_left_frame_time / l_base_X));
+  if(l_base_element < 0)
     {
-      n -= baseElement;
-      baseElement = 0;
+      l_n -= l_base_element;
+      l_base_element = 0;
     }
-  int lastBaseElement = int(floor(double(ch->totalChunks()) / baseX));
-  double heightRatio = double(height()) / range();
+  int l_last_base_element = int(floor(double(p_channel->totalChunks()) / l_base_X));
+  double l_height_ratio = double(height()) / range();
   
-  Array1d<MyGLfloat2d> vertexArray(width() * 2);
-  int pointIndex = 0;
+  Array1d<MyGLfloat2d> l_vertex_array(width() * 2);
+  int l_point_index = 0;
 
-  if (baseX > 1)
+  if (l_base_X > 1)
     {
       // More samples than pixels
-      int theWidth = width();
-      if(lastBaseElement > z->size())
+      int l_the_width = width();
+      if(l_last_base_element > l_zoom_lookup->size())
 	{
-	  z->setSize(lastBaseElement);
+	  l_zoom_lookup->setSize(l_last_base_element);
 	}
-      for(; n < theWidth && baseElement < lastBaseElement; n++, baseElement++)
+      for(; l_n < l_the_width && l_base_element < l_last_base_element; l_n++, l_base_element++)
 	{
-	  myassert(baseElement >= 0);
-	  ZoomElement &ze = z->at(baseElement);
-	  if(!ze.isValid())
+	  myassert(l_base_element >= 0);
+	  ZoomElement &l_zoom_element = l_zoom_lookup->at(l_base_element);
+	  if(!l_zoom_element.isValid())
 	    {
-	      if(!calcZoomElement(ze, ch, baseElement, baseX))
+	      if(!calcZoomElement(l_zoom_element, p_channel, l_base_element, l_base_X))
 		{
 		  continue;
 		}
 	    }
       
-	  int y = height() - 1 - toInt((ze.high() - offsetInv()) * heightRatio);
-	  vertexArray[pointIndex++] = MyGLfloat2d(n, y);
-	  vertexArray[pointIndex++] = MyGLfloat2d(n, height());
+	  int l_y = height() - 1 - toInt((l_zoom_element.high() - offsetInv()) * l_height_ratio);
+	  l_vertex_array[l_point_index++] = MyGLfloat2d(l_n, l_y);
+	  l_vertex_array[l_point_index++] = MyGLfloat2d(l_n, height());
 	}
       qglColor(gdata->shading2Color());
-      glVertexPointer(2, GL_FLOAT, 0, vertexArray.begin());
-      glDrawArrays(GL_QUAD_STRIP, 0, pointIndex);
+      glVertexPointer(2, GL_FLOAT, 0, l_vertex_array.begin());
+      glDrawArrays(GL_QUAD_STRIP, 0, l_point_index);
     }
   else
     {
-      //baseX <= 1
-      float val = 0.0;
+      //l_base_X <= 1
+      float l_val = 0.0;
       // Integer version of frame time
-      int intChunk = (int) floor(leftFrameTime);
+      int l_int_chunk = (int) floor(l_left_frame_time);
       // So we skip some pixels
-      double stepSize = 1.0 / baseX;
-      float x = 0.0f, y;
+      double l_step_size = 1.0 / l_base_X;
+      float l_x = 0.0f, l_y;
 
-      double start = (double(intChunk) - leftFrameTime) * stepSize;
-      double stop = width() + (2 * stepSize);
+      double l_start = (double(l_int_chunk) - l_left_frame_time) * l_step_size;
+      double l_stop = width() + (2 * l_step_size);
 
-      double dn = start;
-      int totalChunks = ch->totalChunks();
-      if(intChunk < 0)
+      double l_dn = l_start;
+      int l_total_chunks = p_channel->totalChunks();
+      if(l_int_chunk < 0)
 	{
-	  dn += stepSize * -intChunk;
-	  intChunk = 0;
+	  l_dn += l_step_size * -l_int_chunk;
+	  l_int_chunk = 0;
 	}
     
-      for(; dn < stop && intChunk < totalChunks; dn += stepSize, intChunk++)
+      for(; l_dn < l_stop && l_int_chunk < l_total_chunks; l_dn += l_step_size, l_int_chunk++)
 	{
-	  AnalysisData *data = ch->dataAtChunk(intChunk);
-	  myassert(data);
+	  AnalysisData *l_data = p_channel->dataAtChunk(l_int_chunk);
+	  myassert(l_data);
       
-	  if(!data)
+	  if(!l_data)
 	    {
 	      continue;
 	    }
 
-	  val = calculateElement(data);
+	  l_val = calculateElement(l_data);
 
-	  x = dn;
-	  y = height() - 1 - ((val - offsetInv()) * heightRatio);
-	  vertexArray[pointIndex++] = MyGLfloat2d(x, y);
-	  vertexArray[pointIndex++] = MyGLfloat2d(x, height());
+	  l_x = l_dn;
+	  l_y = height() - 1 - ((l_val - offsetInv()) * l_height_ratio);
+	  l_vertex_array[l_point_index++] = MyGLfloat2d(l_x, l_y);
+	  l_vertex_array[l_point_index++] = MyGLfloat2d(l_x, height());
 	}
-      myassert(pointIndex <= width() * 2);
+      myassert(l_point_index <= width() * 2);
       qglColor(gdata->shading2Color());
-      glVertexPointer(2, GL_FLOAT, 0, vertexArray.begin());
-      glDrawArrays(GL_QUAD_STRIP, 0, pointIndex);
+      glVertexPointer(2, GL_FLOAT, 0, l_vertex_array.begin());
+      glDrawArrays(GL_QUAD_STRIP, 0, l_point_index);
     }
 }
 
 //------------------------------------------------------------------------------
-void AmplitudeWidget::mousePressEvent(QMouseEvent * e)
+void AmplitudeWidget::mousePressEvent(QMouseEvent * p_mouse_event)
 {
-  View & view = gdata->getView();
-  int timeX = toInt(view.viewOffset() / view.zoomX());
-  int pixelAtCurrentNoiseThresholdY;
-  dragMode = DragNone;
+  View & l_view = gdata->getView();
+  int l_time_X = toInt(l_view.viewOffset() / l_view.zoomX());
+  int l_pixel_at_current_noise_threshold_Y;
+  m_drag_mode = DragNone;
   
   //Check if user clicked on center bar, to drag it
-  if(within(4, e->x(), timeX))
+  if(within(4, p_mouse_event->x(), l_time_X))
     {
-      dragMode = DragTimeBar;
-      mouseX = e->x();
+      m_drag_mode = DragTimeBar;
+      m_mouse_X = p_mouse_event->x();
       return;
     }
   //Check if user clicked on a threshold bar
-  for(int j = 0; j < 2; j++)
+  for(int l_j = 0; l_j < 2; l_j++)
     {
-      pixelAtCurrentNoiseThresholdY = height() - 1 - toInt((getCurrentThreshold(j) - offsetInv()) / range() * double(height()));
-      if(within(4, e->y(), pixelAtCurrentNoiseThresholdY))
+      l_pixel_at_current_noise_threshold_Y = height() - 1 - toInt((getCurrentThreshold(l_j) - offsetInv()) / range() * double(height()));
+      if(within(4, p_mouse_event->y(), l_pixel_at_current_noise_threshold_Y))
 	{
-	  dragMode = DragNoiseThreshold;
-	  //remember which thresholdIndex the user clicked
-	  thresholdIndex = j;
-	  mouseY = e->y();
+	  m_drag_mode = DragNoiseThreshold;
+	  //remember which m_threshold_index the user clicked
+	  m_threshold_index = l_j;
+	  m_mouse_Y = p_mouse_event->y();
 	  return;
 	}
     }
   //Otherwise user has clicked on background
   {
-    mouseX = e->x();
-    mouseY = e->y();
-    dragMode = DragBackground;
-    downTime = view.currentTime();
-    downOffset = offset();
+    m_mouse_X = p_mouse_event->x();
+    m_mouse_Y = p_mouse_event->y();
+    m_drag_mode = DragBackground;
+    m_down_time = l_view.currentTime();
+    m_down_offset = offset();
   }
 }
 
 //------------------------------------------------------------------------------
-void AmplitudeWidget::mouseMoveEvent(QMouseEvent *e)
+void AmplitudeWidget::mouseMoveEvent(QMouseEvent *p_mouse_event)
 {
-  View & view = gdata->getView();
-  int pixelAtCurrentTimeX = toInt(view.viewOffset() / view.zoomX());
-  int pixelAtCurrentNoiseThresholdY;
+  View & l_view = gdata->getView();
+  int l_pixel_at_current_time_X = toInt(l_view.viewOffset() / l_view.zoomX());
+  int l_pixel_at_current_noise_threshold_Y;
   
-  switch(dragMode)
+  switch(m_drag_mode)
     {
     case DragTimeBar:
       {
-	int newX = pixelAtCurrentTimeX + (e->x() - mouseX);
-	view.setViewOffset(double(newX) * view.zoomX());
-	mouseX = e->x();
-	view.doSlowUpdate();
+	int l_new_X = l_pixel_at_current_time_X + (p_mouse_event->x() - m_mouse_X);
+	l_view.setViewOffset(double(l_new_X) * l_view.zoomX());
+	m_mouse_X = p_mouse_event->x();
+	l_view.doSlowUpdate();
       }
       break;
     case DragNoiseThreshold:
       {
-	int newY = e->y();
-	setCurrentThreshold(double(height() - 1 - newY) / double(height()) * range() + offsetInv(), thresholdIndex);
-	mouseY = e->y();
+	int l_new_Y = p_mouse_event->y();
+	setCurrentThreshold(double(height() - 1 - l_new_Y) / double(height()) * range() + offsetInv(), m_threshold_index);
+	m_mouse_Y = p_mouse_event->y();
 	gdata->getView().doSlowUpdate();
       }
       break;
     case DragBackground:
-      gdata->updateActiveChunkTime(downTime - (e->x() - mouseX) * view.zoomX());
-      setOffset(downOffset - (double(e->y() - mouseY) / double(height()) * range()));
-      view.doSlowUpdate();
+      gdata->updateActiveChunkTime(m_down_time - (p_mouse_event->x() - m_mouse_X) * l_view.zoomX());
+      setOffset(m_down_offset - (double(p_mouse_event->y() - m_mouse_Y) / double(height()) * range()));
+      l_view.doSlowUpdate();
       break;
     case DragNone:
-      if(within(4, e->x(), pixelAtCurrentTimeX))
+      if(within(4, p_mouse_event->x(), l_pixel_at_current_time_X))
 	{
   	  setCursor(QCursor(Qt::SplitHCursor));
 	}
       else
 	{
-	  bool overThreshold = false;
-	  for(int j = 0; j < 2; j++)
+	  bool l_over_threshold = false;
+	  for(int l_j = 0; l_j < 2; l_j++)
 	    {
-	      pixelAtCurrentNoiseThresholdY = height() - 1 - toInt((getCurrentThreshold(j) - offsetInv()) / range() * double(height()));
-	      if(within(4, e->y(), pixelAtCurrentNoiseThresholdY))
+	      l_pixel_at_current_noise_threshold_Y = height() - 1 - toInt((getCurrentThreshold(l_j) - offsetInv()) / range() * double(height()));
+	      if(within(4, p_mouse_event->y(), l_pixel_at_current_noise_threshold_Y))
 		{
-		  overThreshold = true;
+		  l_over_threshold = true;
 		}
 	    }
-	  if(overThreshold)
+	  if(l_over_threshold)
 	    {
 	      setCursor(QCursor(Qt::SplitVCursor));
 	    }
@@ -577,32 +577,32 @@ void AmplitudeWidget::mouseMoveEvent(QMouseEvent *e)
 //------------------------------------------------------------------------------
 void AmplitudeWidget::mouseReleaseEvent(QMouseEvent *)
 {
-  dragMode = DragNone;
+  m_drag_mode = DragNone;
 }
 
 //------------------------------------------------------------------------------
-void AmplitudeWidget::wheelEvent(QWheelEvent * e)
+void AmplitudeWidget::wheelEvent(QWheelEvent * p_mouse_event)
 {
-  View & view = gdata->getView();
-    if (!(e->state() & (Qt::ControlModifier | Qt::ShiftModifier)))
+  View & l_view = gdata->getView();
+    if (!(p_mouse_event->state() & (Qt::ControlModifier | Qt::ShiftModifier)))
       {
 	if(gdata->getRunning() == STREAM_FORWARD)
 	  {
-	    view.setZoomFactorX(view.logZoomX() + double(e->delta() / WHEEL_DELTA) * 0.3);
+	    l_view.setZoomFactorX(l_view.logZoomX() + double(p_mouse_event->delta() / WHEEL_DELTA) * 0.3);
 	  }
 	else
 	  {
-	    if(e->delta() < 0)
+	    if(p_mouse_event->delta() < 0)
 	      {
-		view.setZoomFactorX(view.logZoomX() + double(e->delta() / WHEEL_DELTA) * 0.3, width() / 2);
+		l_view.setZoomFactorX(l_view.logZoomX() + double(p_mouse_event->delta() / WHEEL_DELTA) * 0.3, width() / 2);
 	      }
 	    else
 	      {
-		view.setZoomFactorX(view.logZoomX() + double(e->delta() / WHEEL_DELTA) * 0.3, e->x());
+		l_view.setZoomFactorX(l_view.logZoomX() + double(p_mouse_event->delta() / WHEEL_DELTA) * 0.3, p_mouse_event->x());
 	      }
 	  }
-	view.doSlowUpdate();
+	l_view.doSlowUpdate();
       }
-    e->accept();
+    p_mouse_event->accept();
 }
 // EOF
