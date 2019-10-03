@@ -28,16 +28,16 @@ class FFTWidget: public DrawWidget
 {
   Q_OBJECT
 
-public:
-  FFTWidget(QWidget *p_parent);
-  virtual ~FFTWidget(void);
+  public:
+    FFTWidget(QWidget * p_parent);
+    virtual ~FFTWidget(void);
 
-  void paintEvent( QPaintEvent * );
+    void paintEvent( QPaintEvent * );
 
-  QSize sizeHint(void) const;
+    QSize sizeHint(void) const;
 
- private:
-  Q3PointArray m_point_array;
+  private:
+    Q3PointArray m_point_array;
 };
 
 #endif // FFTWIDGET_H
