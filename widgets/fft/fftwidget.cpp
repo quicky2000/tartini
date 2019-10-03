@@ -27,8 +27,8 @@
 #include "myqt.h"
 
 //------------------------------------------------------------------------------
-FFTWidget::FFTWidget(QWidget *parent):
-  DrawWidget(parent)
+FFTWidget::FFTWidget(QWidget *p_parent):
+  DrawWidget(p_parent)
 {
 }
 
@@ -40,61 +40,61 @@ FFTWidget::~FFTWidget(void)
 //------------------------------------------------------------------------------
 void FFTWidget::paintEvent( QPaintEvent * )
 {
-  Channel *active = gdata->getActiveChannel();
+  Channel *l_active_channel = gdata->getActiveChannel();
 
-  AnalysisData *data;
-  double pixelStep;
-  int j, x;
+  AnalysisData *l_data;
+  double l_pixel_step;
+  int l_j, l_x;
     
   beginDrawing(false);
   
-  if(active)
+  if(l_active_channel)
     {
-      pixelStep = double(active->get_fft_data1().size()) / double(width());
-      if(int(pointArray.size()) != width())
+      l_pixel_step = double(l_active_channel->get_fft_data1().size()) / double(width());
+      if(int(m_point_array.size()) != width())
 	{
-	  pointArray.resize(width());
+	  m_point_array.resize(width());
 	}
     
-      active->lock();
-      data = active->dataAtCurrentChunk();
+      l_active_channel->lock();
+      l_data = l_active_channel->dataAtCurrentChunk();
 
-      if(data)
+      if(l_data)
 	{
-	  double freq = data->getFundamentalFreq();
-	  double normalisedFreq = freq / double(active->rate()) * 2.0;
-	  //pixels per fundamental freq
-	  double scaleX = normalisedFreq * double(width());
+	  double l_freq = l_data->getFundamentalFreq();
+	  double l_normalised_freq = l_freq / double(l_active_channel->rate()) * 2.0;
+	  //pixels per fundamental l_freq
+	  double l_scale_X = l_normalised_freq * double(width());
       
 	  //draw alternating background color indicating period
-	  if(gdata->getView().backgroundShading() && scaleX > 4.0 && scaleX < double(width()))
+	  if(gdata->getView().backgroundShading() && l_scale_X > 4.0 && l_scale_X < double(width()))
 	    {
 	      //number of colored patches
-	      int n = int(ceil(double(width()) / scaleX));
+	      int l_n = int(ceil(double(width()) / l_scale_X));
 	      get_painter().setPen(Qt::NoPen);
-	      QColor color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), data->getCorrelation());
-	      QColor color2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), data->getCorrelation());
-	      for(j = 0; j < n; j++)
+	      QColor l_color1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), l_data->getCorrelation());
+	      QColor l_color2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), l_data->getCorrelation());
+	      for(l_j = 0; l_j < l_n; l_j++)
 		{
-		  x = toInt(scaleX * double(j));
-		  get_painter().setBrush((j % 2) ? color1 : color2);
-		  get_painter().drawRect(x, 0, toInt(scaleX * double(j + 1)) - toInt(scaleX * double(j)), height());
+		  l_x = toInt(l_scale_X * double(l_j));
+		  get_painter().setBrush((l_j % 2) ? l_color1 : l_color2);
+		  get_painter().drawRect(l_x, 0, toInt(l_scale_X * double(l_j + 1)) - toInt(l_scale_X * double(l_j)), height());
 		}
-	      get_painter().setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3 * data->getCorrelation()));
-	      for(j = 0; j < n; j++)
+	      get_painter().setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3 * l_data->getCorrelation()));
+	      for(l_j = 0; l_j < l_n; l_j++)
 		{
-		  x = toInt(scaleX * double(j));
-		  get_painter().drawLine(x, 0, x, height());
+		  l_x = toInt(l_scale_X * double(l_j));
+		  get_painter().drawLine(l_x, 0, l_x, height());
 		}
 	    }
 	  else
 	    {
 	      clearBackground();
 	    }
-	  QString fundFreqText;
-	  fundFreqText.sprintf("Fundamental Frequency = %lf", freq);
+	  QString l_fund_freq_text;
+	  l_fund_freq_text.sprintf("Fundamental Frequency = %lf", l_freq);
 	  get_painter().setPen(Qt::black);
-	  get_painter().drawText(5, 15, fundFreqText);
+	  get_painter().drawText(5, 15, l_fund_freq_text);
 	}
       else
 	{
@@ -103,14 +103,14 @@ void FFTWidget::paintEvent( QPaintEvent * )
 
       //draw the waveform
       get_painter().setPen(QPen(Qt::red, 0));
-      for(int j = 0; j < width(); j++)
+      for(l_j = 0; l_j < width(); l_j++)
 	{
 	  //cheap hack to go faster (by drawing less points)
-	  myassert(int(pixelStep * j) < active->get_fft_data2().size());
-	  pointArray.setPoint(j, j, height() - 1 - toInt(active->get_fft_data2().at(int(pixelStep * j))*double(height())));
+	  myassert(int(l_pixel_step * l_j) < l_active_channel->get_fft_data2().size());
+	  m_point_array.setPoint(l_j, l_j, height() - 1 - toInt(l_active_channel->get_fft_data2().at(int(l_pixel_step * l_j))*double(height())));
 	}
-      get_painter().drawPolyline(pointArray);
-      active->unlock();
+      get_painter().drawPolyline(m_point_array);
+      l_active_channel->unlock();
     }
   else
     {
