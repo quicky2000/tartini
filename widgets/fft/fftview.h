@@ -27,7 +27,7 @@ class FFTView: public ViewWidget
   Q_OBJECT
 
  public:
-  FFTView(int viewID_, QWidget *parent = 0);
+  FFTView(int p_view_id, QWidget *p_parent = 0);
   virtual ~FFTView(void);
 
   void resizeEvent(QResizeEvent *);
@@ -35,7 +35,7 @@ class FFTView: public ViewWidget
   QSize sizeHint(void) const;
 
  private:
-  FFTWidget *fftWidget;
+  FFTWidget *m_fft_widget;
 };
 
 #endif // FFTVIEW_H

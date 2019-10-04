@@ -21,37 +21,37 @@
 #include <QResizeEvent>
 
 //------------------------------------------------------------------------------
-FFTView::FFTView( int viewID_, QWidget *parent ):
-  ViewWidget( viewID_, parent)
+FFTView::FFTView( int p_view_id, QWidget *p_parent ):
+  ViewWidget( p_view_id, p_parent)
 {
   gdata->setDoingActiveFFT(true);
   
-  Channel *active = gdata->getActiveChannel();
-  if(active)
+  Channel *l_active_channel = gdata->getActiveChannel();
+  if(l_active_channel)
     {
-      active->lock();
-      active->processChunk(active->currentChunk());
-      active->unlock();
+      l_active_channel->lock();
+      l_active_channel->processChunk(l_active_channel->currentChunk());
+      l_active_channel->unlock();
     }
 
-  fftWidget = new FFTWidget(this);
-  fftWidget->show();
+  m_fft_widget = new FFTWidget(this);
+  m_fft_widget->show();
 
   //make the widget get updated when the view changes
-  connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), fftWidget, SLOT(update()));
+  connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), m_fft_widget, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------
 FFTView::~FFTView(void)
 {
   gdata->setDoingActiveFFT(false);
-  delete fftWidget;
+  delete m_fft_widget;
 }
 
 //------------------------------------------------------------------------------
 void FFTView::resizeEvent(QResizeEvent *)
 {
-  fftWidget->resize(size());
+  m_fft_widget->resize(size());
 }
 
 //------------------------------------------------------------------------------
