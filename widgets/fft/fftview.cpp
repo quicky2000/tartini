@@ -21,43 +21,45 @@
 #include <QResizeEvent>
 
 //------------------------------------------------------------------------------
-FFTView::FFTView( int p_view_id, QWidget *p_parent ):
-  ViewWidget( p_view_id, p_parent)
+FFTView::FFTView( int p_view_id
+                , QWidget *p_parent
+                )
+: ViewWidget( p_view_id, p_parent)
 {
-  gdata->setDoingActiveFFT(true);
-  
-  Channel *l_active_channel = gdata->getActiveChannel();
-  if(l_active_channel)
+    gdata->setDoingActiveFFT(true);
+
+    Channel *l_active_channel = gdata->getActiveChannel();
+    if(l_active_channel)
     {
-      l_active_channel->lock();
-      l_active_channel->processChunk(l_active_channel->currentChunk());
-      l_active_channel->unlock();
+        l_active_channel->lock();
+        l_active_channel->processChunk(l_active_channel->currentChunk());
+        l_active_channel->unlock();
     }
 
-  m_fft_widget = new FFTWidget(this);
-  m_fft_widget->show();
+    m_fft_widget = new FFTWidget(this);
+    m_fft_widget->show();
 
-  //make the widget get updated when the view changes
-  connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), m_fft_widget, SLOT(update()));
+    //make the widget get updated when the view changes
+    connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), m_fft_widget, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------
 FFTView::~FFTView(void)
 {
-  gdata->setDoingActiveFFT(false);
-  delete m_fft_widget;
+    gdata->setDoingActiveFFT(false);
+    delete m_fft_widget;
 }
 
 //------------------------------------------------------------------------------
 void FFTView::resizeEvent(QResizeEvent *)
 {
-  m_fft_widget->resize(size());
+    m_fft_widget->resize(size());
 }
 
 //------------------------------------------------------------------------------
-  QSize FFTView::sizeHint(void) const
+QSize FFTView::sizeHint(void) const
 {
-  return QSize(400, 128);
+    return QSize(400, 128);
 }
 
 // EOF
