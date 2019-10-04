@@ -25,17 +25,17 @@ class DebugWidget : public DrawWidget
   Q_OBJECT
 
   public:
-  DebugWidget(QWidget *parent);
+  DebugWidget(QWidget *p_parent);
   virtual ~DebugWidget(void);
 
   void paintEvent( QPaintEvent * );
-  void printString(const QString &s);
+  void printString(const QString &p_string);
 
   QSize sizeHint(void) const;
 
  private:
-  int textY;
-  int fontHeight;
+  int m_text_Y;
+  int m_font_height;
 };
 #endif // DEBUGWIDGET_H
 // EOF

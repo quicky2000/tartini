@@ -25,10 +25,10 @@
 #include "useful.h"
 
 //------------------------------------------------------------------------------
-DebugWidget::DebugWidget(QWidget *parent):
-  DrawWidget(parent)
+DebugWidget::DebugWidget(QWidget *p_parent):
+  DrawWidget(p_parent)
 {
-  textY = 0;
+  m_text_Y = 0;
 }
 
 //------------------------------------------------------------------------------
@@ -37,60 +37,60 @@ DebugWidget::~DebugWidget(void)
 }
 
 //------------------------------------------------------------------------------
-void DebugWidget::printString(const QString &s)
+void DebugWidget::printString(const QString &p_string)
 {
-  textY += fontHeight;
-  get_painter().drawText(0, textY, s);
+  m_text_Y += m_font_height;
+  get_painter().drawText(0, m_text_Y, p_string);
 }
 
 //------------------------------------------------------------------------------
 void DebugWidget::paintEvent( QPaintEvent * )
 {
-  Channel *ch = gdata->getActiveChannel();
+  Channel *l_active_channel = gdata->getActiveChannel();
 
   beginDrawing();
 
   // Drawing code goes here
-  QFontMetrics fm = get_painter().fontMetrics();
-  fontHeight = fm.height();
+  QFontMetrics l_font_metric = get_painter().fontMetrics();
+  m_font_height = l_font_metric.height();
 
-  if (ch != NULL && ch->isValidChunk(ch->currentChunk()))
+  if (l_active_channel != NULL && l_active_channel->isValidChunk(l_active_channel->currentChunk()))
     {
       //move text position back to the top
-      textY = 0;
-      int chunk = ch->currentChunk();
-      AnalysisData &data = *ch->dataAtChunk(chunk);
-      QString s;
-      printString(s.sprintf("Chunk = %d", chunk));
-      printString(s.sprintf("period = %f", data.getPeriod()));
-      printString(s.sprintf("fundamentalFreq = %f", data.getFundamentalFreq()));
-      printString(s.sprintf("pitch = %f", data.getPitch()));
-      printString(s.sprintf("pitchSum = %f", data.getPitchSum()));
-      printString(s.sprintf("pitch2Sum = %f", data.getPitch2Sum()));
-      printString(s.sprintf("_freqCentroid = %f", data.getFreqCentroid()));
-      printString(s.sprintf("shortTermMean = %f", data.getShortTermMean()));
-      printString(s.sprintf("shortTermDeviation = %f", data.getShortTermDeviation()));
-      printString(s.sprintf("longTermMean = %f", data.getLongTermMean()));
-      printString(s.sprintf("longTermDeviation = %f", data.getLongTermDeviation()));
-      printString(s.sprintf("highestCorrelationIndex = %d", data.getHighestCorrelationIndex()));
-      printString(s.sprintf("chosenCorrelationIndex = %d", data.getChosenCorrelationIndex()));
-      printString(s.sprintf("periodOctaveEstimate = %f", ch->periodOctaveEstimate(chunk)));
-      printString(s.sprintf("noteIndex = %d", data.getNoteIndex()));
-      printString(s.sprintf("done = %s", data.isDone() ? "true" : "false"));
-      printString(s.sprintf("reason = %d", data.getReason()));
-      printString(s.sprintf("notePlaying = %d", data.isNotePlaying()));
-      printString(s.sprintf("spread = %f", data.getSpread()));
-      printString(s.sprintf("spread2 = %f", data.getSpread2()));
-      printString(s.sprintf("logrms = %f", data.getLogRms()));
-      printString(s.sprintf("normalised_logrms = %f", dB2Normalised(data.getLogRms(),*gdata)));
-      printString(s.sprintf("detailedPeriod.size() = %d", ch->get_detailed_pitch_data().size()));
-      printString(s.sprintf("vibratoPitch = %f", data.getVibratoPitch()));
-      printString(s.sprintf("vibratoWidth = %f", data.getVibratoWidth()));
-      printString(s.sprintf("vibratoSpeed = %f", data.getVibratoSpeed()));
-      printString(s.sprintf("vibratoPhase = %f", data.getVibratoPhase()));
-      printString(s.sprintf("vibratoError = %f", data.getVibratoError()));
-      printString(s.sprintf("vibratoWidthAdjust = %f", data.getVibratoWidthAdjust()));
-      printString(s.sprintf("periodRatio = %f", data.getPeriodRatio()));
+      m_text_Y = 0;
+      int l_chunk = l_active_channel->currentChunk();
+      AnalysisData &l_data = *l_active_channel->dataAtChunk(l_chunk);
+      QString l_string;
+      printString(l_string.sprintf("Chunk = %d", l_chunk));
+      printString(l_string.sprintf("period = %f", l_data.getPeriod()));
+      printString(l_string.sprintf("fundamentalFreq = %f", l_data.getFundamentalFreq()));
+      printString(l_string.sprintf("pitch = %f", l_data.getPitch()));
+      printString(l_string.sprintf("pitchSum = %f", l_data.getPitchSum()));
+      printString(l_string.sprintf("pitch2Sum = %f", l_data.getPitch2Sum()));
+      printString(l_string.sprintf("_freqCentroid = %f", l_data.getFreqCentroid()));
+      printString(l_string.sprintf("shortTermMean = %f", l_data.getShortTermMean()));
+      printString(l_string.sprintf("shortTermDeviation = %f", l_data.getShortTermDeviation()));
+      printString(l_string.sprintf("longTermMean = %f", l_data.getLongTermMean()));
+      printString(l_string.sprintf("longTermDeviation = %f", l_data.getLongTermDeviation()));
+      printString(l_string.sprintf("highestCorrelationIndex = %d", l_data.getHighestCorrelationIndex()));
+      printString(l_string.sprintf("chosenCorrelationIndex = %d", l_data.getChosenCorrelationIndex()));
+      printString(l_string.sprintf("periodOctaveEstimate = %f", l_active_channel->periodOctaveEstimate(l_chunk)));
+      printString(l_string.sprintf("noteIndex = %d", l_data.getNoteIndex()));
+      printString(l_string.sprintf("done = %s", l_data.isDone() ? "true" : "false"));
+      printString(l_string.sprintf("reason = %d", l_data.getReason()));
+      printString(l_string.sprintf("notePlaying = %d", l_data.isNotePlaying()));
+      printString(l_string.sprintf("spread = %f", l_data.getSpread()));
+      printString(l_string.sprintf("spread2 = %f", l_data.getSpread2()));
+      printString(l_string.sprintf("logrms = %f", l_data.getLogRms()));
+      printString(l_string.sprintf("normalised_logrms = %f", dB2Normalised(l_data.getLogRms(),*gdata)));
+      printString(l_string.sprintf("detailedPeriod.size() = %d", l_active_channel->get_detailed_pitch_data().size()));
+      printString(l_string.sprintf("vibratoPitch = %f", l_data.getVibratoPitch()));
+      printString(l_string.sprintf("vibratoWidth = %f", l_data.getVibratoWidth()));
+      printString(l_string.sprintf("vibratoSpeed = %f", l_data.getVibratoSpeed()));
+      printString(l_string.sprintf("vibratoPhase = %f", l_data.getVibratoPhase()));
+      printString(l_string.sprintf("vibratoError = %f", l_data.getVibratoError()));
+      printString(l_string.sprintf("vibratoWidthAdjust = %f", l_data.getVibratoWidthAdjust()));
+      printString(l_string.sprintf("periodRatio = %f", l_data.getPeriodRatio()));
     }
   endDrawing();
 }
