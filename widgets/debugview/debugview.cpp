@@ -20,31 +20,33 @@
 #include <QResizeEvent>
 
 //------------------------------------------------------------------------------
-DebugView::DebugView( int p_view_id, QWidget *p_parent )
- : ViewWidget( p_view_id, p_parent)
+DebugView::DebugView( int p_view_id
+                    , QWidget *p_parent
+                    )
+: ViewWidget( p_view_id, p_parent)
 {
-  m_debug_widget = new DebugWidget(this);
-  m_debug_widget->show();
+    m_debug_widget = new DebugWidget(this);
+    m_debug_widget->show();
 
-  //make the widget get updated when the view changes
-  connect(&(gdata->getView()), SIGNAL(viewChanged()), m_debug_widget, SLOT(update()));
+    //make the widget get updated when the view changes
+    connect(&(gdata->getView()), SIGNAL(viewChanged()), m_debug_widget, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------
 DebugView::~DebugView(void)
 {
-  delete m_debug_widget;
+    delete m_debug_widget;
 }
 
 //------------------------------------------------------------------------------
 void DebugView::resizeEvent(QResizeEvent *)
 {
-  m_debug_widget->resize(size());
+    m_debug_widget->resize(size());
 }
 
 //------------------------------------------------------------------------------
 QSize DebugView::sizeHint(void) const
 {
-  return QSize(250, 500);
+    return QSize(250, 500);
 }
 // EOF

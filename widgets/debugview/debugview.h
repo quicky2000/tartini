@@ -27,15 +27,17 @@ class DebugView: public ViewWidget
   Q_OBJECT
 
   public:
-  DebugView(int p_view_id, QWidget *p_parent = 0);
-  virtual ~DebugView(void);
+    DebugView( int p_view_id
+             , QWidget *p_parent = 0
+             );
+    virtual ~DebugView(void);
 
-  void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *);
 
-  QSize sizeHint(void) const;
+    QSize sizeHint(void) const;
 
- private:
-  DebugWidget *m_debug_widget;
+  private:
+    DebugWidget *m_debug_widget;
 };
 #endif // DEBUGVIEW_H
 // EOF
