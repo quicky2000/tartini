@@ -29,21 +29,21 @@ class CorrelationWidget : public DrawWidget
 {
   Q_OBJECT
 
- public:
-  CorrelationWidget(QWidget *p_parent);
-  virtual ~CorrelationWidget(void);
+  public:
+    CorrelationWidget(QWidget * p_parent);
+    virtual ~CorrelationWidget(void);
 
-  void paintEvent( QPaintEvent * );
+    void paintEvent( QPaintEvent * );
 
-  QSize sizeHint(void) const;
-
- private:
-  Q3PointArray m_point_array;
-  Array1d<float> m_lookup;
-  int m_aggregate_mode;
+    QSize sizeHint(void) const;
 
   public slots:
-  void setAggregateMode(int p_mode);
+    void setAggregateMode(int p_mode);
+
+  private:
+    Q3PointArray m_point_array;
+    Array1d<float> m_lookup;
+    int m_aggregate_mode;
 };
 #endif // CORRELATIONWIDGET_H
 // EOF
