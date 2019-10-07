@@ -27,7 +27,7 @@ class CepstrumView : public ViewWidget
   Q_OBJECT
 
   public:
-    CepstrumView(int viewID_, QWidget *parent = 0);
+    CepstrumView(int p_view_id, QWidget *p_parent = 0);
     virtual ~CepstrumView(void);
 
     void resizeEvent(QResizeEvent *);
@@ -35,7 +35,7 @@ class CepstrumView : public ViewWidget
     QSize sizeHint(void) const;
 
   private:
-    CepstrumWidget *cepstrumWidget;
+    CepstrumWidget *m_cepstrum_widget;
 
 };
 #endif // CEPSTRUMVIEW_H

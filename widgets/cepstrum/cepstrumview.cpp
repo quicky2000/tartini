@@ -21,38 +21,38 @@
 #include <QResizeEvent>
 
 //------------------------------------------------------------------------------
-CepstrumView::CepstrumView( int viewID_, QWidget *parent ):
-  ViewWidget( viewID_, parent)
+CepstrumView::CepstrumView( int p_view_id, QWidget *p_parent ):
+  ViewWidget( p_view_id, p_parent)
 {
   gdata->setDoingActiveCepstrum(true);
 
-  Channel *active = gdata->getActiveChannel();
-  if(active)
+  Channel *l_active_channel = gdata->getActiveChannel();
+  if(l_active_channel)
     {
-      active->lock();
-      active->processChunk(active->currentChunk());
-      active->unlock();
+      l_active_channel->lock();
+      l_active_channel->processChunk(l_active_channel->currentChunk());
+      l_active_channel->unlock();
     }
 
-  cepstrumWidget = new CepstrumWidget(this);
-  cepstrumWidget->setWhatsThis("Note: The 'MPM + MODIFIED CEPSTRUM' option in the preferences needs to be seleted to see this. This is actually a kind of modified cepstrum. ");
-  cepstrumWidget->show();
+  m_cepstrum_widget = new CepstrumWidget(this);
+  m_cepstrum_widget->setWhatsThis("Note: The 'MPM + MODIFIED CEPSTRUM' option in the preferences needs to be seleted to see this. This is actually a kind of modified cepstrum. ");
+  m_cepstrum_widget->show();
 
   //make the widget get updated when the view changes
-  connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), cepstrumWidget, SLOT(update()));
+  connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), m_cepstrum_widget, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------
 CepstrumView::~CepstrumView(void)
 {
   gdata->setDoingActiveCepstrum(false);
-  delete cepstrumWidget;
+  delete m_cepstrum_widget;
 }
 
 //------------------------------------------------------------------------------
 void CepstrumView::resizeEvent(QResizeEvent *)
 {
-  cepstrumWidget->resize(size());
+  m_cepstrum_widget->resize(size());
 }
 
 //------------------------------------------------------------------------------
