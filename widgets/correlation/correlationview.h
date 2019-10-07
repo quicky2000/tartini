@@ -27,13 +27,13 @@ class CorrelationView : public ViewWidget
   Q_OBJECT
 
   public:
-  CorrelationView(int viewID_, QWidget *parent = 0);
+  CorrelationView(int p_view_ID, QWidget *p_parent = 0);
   virtual ~CorrelationView(void);
 
   QSize sizeHint(void) const;
 
  private:
-  CorrelationWidget *correlationWidget;
+  CorrelationWidget *m_correlation_widget;
 };
 #endif // CORRELATIONVIEW_H
 // EOF

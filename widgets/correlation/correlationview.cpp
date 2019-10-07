@@ -24,44 +24,44 @@
 #include <QComboBox>
 
 //------------------------------------------------------------------------------
-CorrelationView::CorrelationView( int viewID_, QWidget *parent )
- : ViewWidget( viewID_, parent)
+CorrelationView::CorrelationView( int p_view_ID, QWidget *p_parent )
+ : ViewWidget( p_view_ID, p_parent)
 {
   gdata->setDoingActiveAnalysis(true);
 
-  Channel *active = gdata->getActiveChannel();
-  if(active)
+  Channel *l_active_channel = gdata->getActiveChannel();
+  if(l_active_channel)
     {
-      active->lock();
-      active->processChunk(active->currentChunk());
-      active->unlock();
+      l_active_channel->lock();
+      l_active_channel->processChunk(l_active_channel->currentChunk());
+      l_active_channel->unlock();
     }
 
-  correlationWidget = new CorrelationWidget(this);
-  QStringList s;
-  s << "Chunk correlation" << "Note Aggregate Correlation" << "Note Aggregate Correlation Scaled";
-  QComboBox *aggregateModeComboBox = new QComboBox(this, "aggregateModeComboBox");
-  aggregateModeComboBox->addItems(s);
-  QHBoxLayout *hLayout = new QHBoxLayout();
-  hLayout->setMargin(0);
-  hLayout->addWidget(aggregateModeComboBox);
-  hLayout->addStretch(1);
-  connect(aggregateModeComboBox, SIGNAL(activated(int)), correlationWidget, SLOT(setAggregateMode(int)));
+  m_correlation_widget = new CorrelationWidget(this);
+  QStringList l_string_list;
+  l_string_list << "Chunk correlation" << "Note Aggregate Correlation" << "Note Aggregate Correlation Scaled";
+  QComboBox *l_aggregate_mode_combo_box = new QComboBox(this, "aggregateModeComboBox");
+  l_aggregate_mode_combo_box->addItems(l_string_list);
+  QHBoxLayout *l_h_layout = new QHBoxLayout();
+  l_h_layout->setMargin(0);
+  l_h_layout->addWidget(l_aggregate_mode_combo_box);
+  l_h_layout->addStretch(1);
+  connect(l_aggregate_mode_combo_box, SIGNAL(activated(int)), m_correlation_widget, SLOT(setAggregateMode(int)));
 
-  QVBoxLayout *mainLayout = new QVBoxLayout(this);
-  mainLayout->setMargin(0);
-  mainLayout->addWidget(correlationWidget);
-  mainLayout->addLayout(hLayout);
+  QVBoxLayout *l_main_layout = new QVBoxLayout(this);
+  l_main_layout->setMargin(0);
+  l_main_layout->addWidget(m_correlation_widget);
+  l_main_layout->addLayout(l_h_layout);
 
   //make the widget get updated when the view changes
-  connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), correlationWidget, SLOT(update()));
+  connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), m_correlation_widget, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------
 CorrelationView::~CorrelationView(void)
 {
   gdata->setDoingActiveAnalysis(false);
-  delete correlationWidget;
+  delete m_correlation_widget;
 }
 
 //------------------------------------------------------------------------------
