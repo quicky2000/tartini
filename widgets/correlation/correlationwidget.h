@@ -30,7 +30,7 @@ class CorrelationWidget : public DrawWidget
   Q_OBJECT
 
  public:
-  CorrelationWidget(QWidget *parent);
+  CorrelationWidget(QWidget *p_parent);
   virtual ~CorrelationWidget(void);
 
   void paintEvent( QPaintEvent * );
@@ -38,12 +38,12 @@ class CorrelationWidget : public DrawWidget
   QSize sizeHint(void) const;
 
  private:
-  Q3PointArray pointArray;
-  Array1d<float> lookup;
-  int aggregateMode;
+  Q3PointArray m_point_array;
+  Array1d<float> m_lookup;
+  int m_aggregate_mode;
 
   public slots:
-  void setAggregateMode(int mode);
+  void setAggregateMode(int p_mode);
 };
 #endif // CORRELATIONWIDGET_H
 // EOF
