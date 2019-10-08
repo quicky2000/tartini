@@ -22,8 +22,8 @@
 #include "useful.h"
 
 //------------------------------------------------------------------------------
-BaseWidget::BaseWidget(QWidget *parent)
-  : DrawWidget(parent)
+BaseWidget::BaseWidget(QWidget *p_parent)
+  : DrawWidget(p_parent)
 {
 }
 
@@ -35,7 +35,7 @@ BaseWidget::~BaseWidget(void)
 //------------------------------------------------------------------------------
 void BaseWidget::paintEvent( QPaintEvent * )
 {
-  Channel *active = gdata->getActiveChannel();
+  Channel *l_active_channel = gdata->getActiveChannel();
 
   beginDrawing();
 

@@ -22,7 +22,7 @@ class BaseWidget : public DrawWidget
   Q_OBJECT
 
   public:
-  BaseWidget(QWidget *parent);
+  BaseWidget(QWidget *p_parent);
   virtual ~BaseWidget(void);
 
   void paintEvent( QPaintEvent * );
