@@ -24,7 +24,7 @@ class BaseView : public ViewWidget
   Q_OBJECT
 
   public:
-  BaseView(int viewID_, QWidget *parent = 0);
+  BaseView(int p_view_id, QWidget *p_parent = 0);
   virtual ~BaseView(void);
 
   void resizeEvent(QResizeEvent *);
@@ -32,7 +32,7 @@ class BaseView : public ViewWidget
   QSize sizeHint(void) const;
 
   private:
-    BaseWidget *baseWidget;
+    BaseWidget *m_base_widget;
 };
 #endif // BASEVIEW_H
 // EOF
