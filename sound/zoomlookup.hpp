@@ -18,81 +18,81 @@
 
 //------------------------------------------------------------------------------
 ZoomElement::ZoomElement(void):
-  _isValid(false)
+  m_is_valid(false)
 {
 }
 
 //------------------------------------------------------------------------------
 float ZoomElement::low(void) const
 {
-  return _low;
+  return m_low;
 }
 
 //------------------------------------------------------------------------------
 float ZoomElement::high(void) const
 {
-  return _high;
+  return m_high;
 }
 
 //------------------------------------------------------------------------------
 float ZoomElement::corr(void) const
 {
-  return _corr;
+  return m_corr;
 }
 
 //------------------------------------------------------------------------------
 const QColor & ZoomElement::color(void) const
 {
-  return _color;
+  return m_color;
 }
 
 //------------------------------------------------------------------------------
 int ZoomElement::noteIndex(void) const
 {
-  return _noteIndex;
+  return m_note_index;
 }
 
 //------------------------------------------------------------------------------
 int ZoomElement::midChunk(void) const
 {
-  return _midChunk;
+  return m_mid_chunk;
 }
 
 //------------------------------------------------------------------------------
 bool ZoomElement::isValid(void) const
 {
-  return _isValid;
+  return m_is_valid;
 }
 
 //------------------------------------------------------------------------------
-void ZoomElement::set(float low_,
-		      float high_,
-		      float corr_,
-		      const QColor & color_,
-		      int noteIndex_,
-		      int midChunk_
+void ZoomElement::set(float p_low,
+		      float p_high,
+		      float p_corr,
+		      const QColor & p_color,
+		      int p_note_index,
+		      int p_mid_chunk
 		      )
 {
-  _low = low_;
-  _high = high_;
-  _corr = corr_;
-  _color = color_;
-  _noteIndex = noteIndex_;
-  _midChunk = midChunk_;
-  _isValid = true;
+  m_low = p_low;
+  m_high = p_high;
+  m_corr = p_corr;
+  m_color = p_color;
+  m_note_index = p_note_index;
+  m_mid_chunk = p_mid_chunk;
+  m_is_valid = true;
 }
 
 //------------------------------------------------------------------------------
 int ZoomLookup::size(void) const
 {
-  return _size;
+  return m_size;
 }
 
 //------------------------------------------------------------------------------
-ZoomElement & ZoomLookup::at(int x)
+ZoomElement & ZoomLookup::at(int p_x)
 {
-  myassert(x >= 0 && x < int(_table.size()));
-  return _table[x];
+  myassert(p_x >= 0 && p_x < int(m_table.size()));
+  return m_table[p_x];
 }
 
 // EOF

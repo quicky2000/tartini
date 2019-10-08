@@ -4,7 +4,9 @@
     begin                : Wed Feb 2 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
- 
+    copyright            : (C) 2019 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2 of the License, or
@@ -34,41 +36,41 @@ public:
   inline int noteIndex(void) const;
   inline int midChunk(void) const;
   inline bool isValid(void) const;
-  inline void set(float low_,
-		  float high_,
-		  float corr_,
-		  const QColor & color_,
-		  int noteIndex_,
-		  int midChunk_
+  inline void set(float p_low,
+		  float p_high,
+		  float p_corr,
+		  const QColor & p_color,
+		  int p_note_index,
+		  int p_mid_chunk
 		  );
 
 private:
-  float _low;
-  float _high;
-  float _corr;
-  QColor _color;
-  int _noteIndex;
-  int _midChunk;
-  bool _isValid;
+  float m_low;
+  float m_high;
+  float m_corr;
+  QColor m_color;
+  int m_note_index;
+  int m_mid_chunk;
+  bool m_is_valid;
 
 };
 
 class ZoomLookup
 {
 private:
-  int _size;
-  double _zoomLevel;
+  int m_size;
+  double m_zoom_level;
 public:
-  std::vector<ZoomElement> _table;
+  std::vector<ZoomElement> m_table;
 
   ZoomLookup(void);
   virtual ~ZoomLookup(void);
 
   void clear(void);
-  void setZoomLevel(double zoomLevel_);
+  void setZoomLevel(double p_zoom_level);
   inline int size(void) const;
-  void setSize(int size_);
-  inline ZoomElement & at(int x);
+  void setSize(int p_size);
+  inline ZoomElement & at(int p_x);
 };
 
 #include "zoomlookup.hpp"
