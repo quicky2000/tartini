@@ -18,8 +18,8 @@
 #include "zoomlookup.h"
 
 //------------------------------------------------------------------------------
-ZoomLookup::ZoomLookup(void):
-  m_size(0)
+ZoomLookup::ZoomLookup(void)
+: m_size(0)
 {
 }
 
@@ -31,25 +31,25 @@ ZoomLookup::~ZoomLookup(void)
 //------------------------------------------------------------------------------
 void ZoomLookup::clear(void)
 {
-  m_table.clear();
-  m_size = 0;
+    m_table.clear();
+    m_size = 0;
 }
 
 //------------------------------------------------------------------------------
 void ZoomLookup::setZoomLevel(double p_zoom_level)
 {
-  if(m_zoom_level == p_zoom_level)
+    if(m_zoom_level == p_zoom_level)
     {
-      return;
+        return;
     }
-  m_zoom_level = p_zoom_level;
-  clear();
+    m_zoom_level = p_zoom_level;
+    clear();
 }
 
 //------------------------------------------------------------------------------
 void ZoomLookup::setSize(int p_size)
 {
-  m_size = p_size;
-  m_table.resize(p_size);
+    m_size = p_size;
+    m_table.resize(p_size);
 }
 // EOF
