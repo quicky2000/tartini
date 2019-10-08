@@ -22,12 +22,12 @@ class BaseWidget : public DrawWidget
   Q_OBJECT
 
   public:
-  BaseWidget(QWidget *p_parent);
-  virtual ~BaseWidget(void);
+    BaseWidget(QWidget * p_parent);
+    virtual ~BaseWidget(void);
 
-  void paintEvent( QPaintEvent * );
+    void paintEvent( QPaintEvent * );
 
-  QSize sizeHint(void) const;
+    QSize sizeHint(void) const;
 
   private:
     //data goes here

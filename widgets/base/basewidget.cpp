@@ -22,8 +22,8 @@
 #include "useful.h"
 
 //------------------------------------------------------------------------------
-BaseWidget::BaseWidget(QWidget *p_parent)
-  : DrawWidget(p_parent)
+BaseWidget::BaseWidget(QWidget * p_parent)
+: DrawWidget(p_parent)
 {
 }
 
@@ -35,20 +35,20 @@ BaseWidget::~BaseWidget(void)
 //------------------------------------------------------------------------------
 void BaseWidget::paintEvent( QPaintEvent * )
 {
-  Channel *l_active_channel = gdata->getActiveChannel();
+    Channel * l_active_channel = gdata->getActiveChannel();
 
-  beginDrawing();
+    beginDrawing();
 
-  // Drawing code goes here
-  p.drawLine(0, 0, width(), height());
+    // Drawing code goes here
+    p.drawLine(0, 0, width(), height());
 
-  endDrawing();
+    endDrawing();
 }
 
 //------------------------------------------------------------------------------
 QSize BaseWidget::sizeHint(void) const
 {
-  return QSize(300, 200);
+    return QSize(300, 200);
 }
 
 // EOF
