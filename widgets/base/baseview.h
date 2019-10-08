@@ -24,12 +24,14 @@ class BaseView : public ViewWidget
   Q_OBJECT
 
   public:
-  BaseView(int p_view_id, QWidget *p_parent = 0);
-  virtual ~BaseView(void);
+    BaseView( int p_view_id
+            , QWidget * p_parent = 0
+            );
+    virtual ~BaseView(void);
 
-  void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *);
 
-  QSize sizeHint(void) const;
+    QSize sizeHint(void) const;
 
   private:
     BaseWidget *m_base_widget;

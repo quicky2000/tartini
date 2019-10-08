@@ -30,33 +30,35 @@
 #include "gdata.h"
 
 //------------------------------------------------------------------------------
-BaseView::BaseView(int p_view_id, QWidget *p_parent ):
-  ViewWidget( p_view_id, p_parent)
+BaseView::BaseView( int p_view_id
+                  , QWidget * p_parent
+                  )
+: ViewWidget( p_view_id, p_parent)
 {
-  //create a drawing object
-  m_base_widget = new BaseWidget(this);
-  m_base_widget->show();
+    //create a drawing object
+    m_base_widget = new BaseWidget(this);
+    m_base_widget->show();
 
-  //make any connections
-  connect(gdata->view, SIGNAL(onFastUpdate(double)), baseWidget, SLOT(update()));
+    //make any connections
+    connect(gdata->view, SIGNAL(onFastUpdate(double)), baseWidget, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------
 BaseView::~BaseView(void)
 {
-  delete m_base_widget;
+    delete m_base_widget;
 }
 
 //------------------------------------------------------------------------------
 void BaseView::resizeEvent(QResizeEvent *)
 {
-  m_base_widget->resize(size());
+    m_base_widget->resize(size());
 }
 
 //------------------------------------------------------------------------------
 QSize BaseView::sizeHint(void) const
 {
-  return QSize(300, 200);
+    return QSize(300, 200);
 }
 
 // EOF
