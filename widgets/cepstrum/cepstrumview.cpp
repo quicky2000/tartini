@@ -21,44 +21,46 @@
 #include <QResizeEvent>
 
 //------------------------------------------------------------------------------
-CepstrumView::CepstrumView( int p_view_id, QWidget *p_parent ):
-  ViewWidget( p_view_id, p_parent)
+CepstrumView::CepstrumView( int p_view_id
+                          , QWidget *p_parent
+                          )
+: ViewWidget( p_view_id, p_parent)
 {
-  gdata->setDoingActiveCepstrum(true);
+    gdata->setDoingActiveCepstrum(true);
 
-  Channel *l_active_channel = gdata->getActiveChannel();
-  if(l_active_channel)
+    Channel * l_active_channel = gdata->getActiveChannel();
+    if(l_active_channel)
     {
-      l_active_channel->lock();
-      l_active_channel->processChunk(l_active_channel->currentChunk());
-      l_active_channel->unlock();
+        l_active_channel->lock();
+        l_active_channel->processChunk(l_active_channel->currentChunk());
+        l_active_channel->unlock();
     }
 
-  m_cepstrum_widget = new CepstrumWidget(this);
-  m_cepstrum_widget->setWhatsThis("Note: The 'MPM + MODIFIED CEPSTRUM' option in the preferences needs to be seleted to see this. This is actually a kind of modified cepstrum. ");
-  m_cepstrum_widget->show();
+    m_cepstrum_widget = new CepstrumWidget(this);
+    m_cepstrum_widget->setWhatsThis("Note: The 'MPM + MODIFIED CEPSTRUM' option in the preferences needs to be seleted to see this. This is actually a kind of modified cepstrum. ");
+    m_cepstrum_widget->show();
 
-  //make the widget get updated when the view changes
-  connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), m_cepstrum_widget, SLOT(update()));
+    //make the widget get updated when the view changes
+    connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), m_cepstrum_widget, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------
 CepstrumView::~CepstrumView(void)
 {
-  gdata->setDoingActiveCepstrum(false);
-  delete m_cepstrum_widget;
+    gdata->setDoingActiveCepstrum(false);
+    delete m_cepstrum_widget;
 }
 
 //------------------------------------------------------------------------------
 void CepstrumView::resizeEvent(QResizeEvent *)
 {
-  m_cepstrum_widget->resize(size());
+    m_cepstrum_widget->resize(size());
 }
 
 //------------------------------------------------------------------------------
 QSize CepstrumView::sizeHint(void) const
 {
-  return QSize(400, 128);
+    return QSize(400, 128);
 }
 
 // EOF

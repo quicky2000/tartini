@@ -27,7 +27,9 @@ class CepstrumView : public ViewWidget
   Q_OBJECT
 
   public:
-    CepstrumView(int p_view_id, QWidget *p_parent = 0);
+    CepstrumView( int p_view_id
+                , QWidget * p_parent = 0
+                );
     virtual ~CepstrumView(void);
 
     void resizeEvent(QResizeEvent *);
