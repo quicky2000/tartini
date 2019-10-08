@@ -27,8 +27,8 @@
 #include "myqt.h"
 
 //------------------------------------------------------------------------------
-CepstrumWidget::CepstrumWidget(QWidget *p_parent):
-  DrawWidget(p_parent)
+CepstrumWidget::CepstrumWidget(QWidget * p_parent)
+: DrawWidget(p_parent)
 {
 }
 
@@ -40,99 +40,100 @@ CepstrumWidget::~CepstrumWidget(void)
 //------------------------------------------------------------------------------
 void CepstrumWidget::paintEvent( QPaintEvent * )
 {
-  Channel *l_active_channel = gdata->getActiveChannel();
+    Channel * l_active_channel = gdata->getActiveChannel();
 
-  AnalysisData *l_data = NULL;
-  double l_pixel_step;
-  int l_j, l_x;
-    
-  beginDrawing(false);
-  
-  if(l_active_channel)
+    AnalysisData * l_data = NULL;
+    double l_pixel_step;
+    int l_j;
+    int l_x;
+
+    beginDrawing(false);
+
+    if(l_active_channel)
     {
-      l_pixel_step = double(l_active_channel->get_cepstrum_data().size()) / double(width());
-      if(int(m_point_array.size()) != width())
-	{
-	  m_point_array.resize(width());
-	}
-    
-      l_active_channel->lock();
-      l_data = l_active_channel->dataAtCurrentChunk();
-      if(l_data)
-	{
-	  double l_freq = l_data->getFundamentalFreq();
-	  double l_period = double(l_active_channel->rate()) / l_freq;
-	  //pixels per period
-	  double l_scale_X = l_period * double(width()) / double(l_active_channel->get_nsdf_data().size());
-      
-	  //draw alternating background color indicating l_period
-	  if(gdata->getView().backgroundShading() && l_period > 4.0 && l_period < double(l_active_channel->get_nsdf_data().size()))
-	    {
-	      //number of colored patches
-	      int l_n = int(ceil(double(width()) / l_scale_X));
-	      get_painter().setPen(Qt::NoPen);
-	      QColor l_color_1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), l_data->getCorrelation());
-	      QColor l_color_2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), l_data->getCorrelation());
-	      for(l_j = 0; l_j < l_n; l_j++)
-		{
-		  l_x = toInt(l_scale_X * double(l_j));
-		  get_painter().setBrush((l_j % 2) ? l_color_1 : l_color_2);
-		  get_painter().drawRect(l_x, 0, toInt(l_scale_X * double(l_j + 1)) - toInt(l_scale_X * double(l_j)), height());
-		}
-	      get_painter().setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3 * l_data->getCorrelation()));
-	      for(l_j = 0; l_j < l_n; l_j++)
-		{
-		  l_x = toInt(l_scale_X * double(l_j));
-		  get_painter().drawLine(l_x, 0, l_x, height());
-		}
-	    }
-	  else
-	    {
-	      clearBackground();
-	    }
-	  QString l_num_periods_text;
-	  l_num_periods_text.sprintf("Period = %lf", l_period);
-	  get_painter().setPen(Qt::black);
-	  get_painter().drawText(5, height() - 8, l_num_periods_text);
+        l_pixel_step = double(l_active_channel->get_cepstrum_data().size()) / double(width());
+        if(int(m_point_array.size()) != width())
+        {
+            m_point_array.resize(width());
+        }
 
-	  get_painter().drawLine(0, height() / 2, width(), height() / 2);
+        l_active_channel->lock();
+        l_data = l_active_channel->dataAtCurrentChunk();
+        if(l_data)
+        {
+            double l_freq = l_data->getFundamentalFreq();
+            double l_period = double(l_active_channel->rate()) / l_freq;
+            //pixels per period
+            double l_scale_X = l_period * double(width()) / double(l_active_channel->get_nsdf_data().size());
 
-	  //draw the waveform
-	  double l_ratio = double(height()) / 2.0; //TODO: remove magic number
-	  get_painter().setPen(QPen(l_active_channel->get_color(), 0));
-	  for(int l_j = 0; l_j < width(); l_j++)
-	    {
-	      //cheap hack to go faster (by drawing less points)
-	      myassert(int(l_pixel_step*l_j) < l_active_channel->get_cepstrum_data().size());
-	      m_point_array.setPoint(l_j, l_j, height() / 2 - toInt(l_active_channel->get_cepstrum_data().at(int(l_pixel_step * l_j)) * l_ratio));
-	    }
-	  get_painter().drawPolyline(m_point_array);
+            //draw alternating background color indicating l_period
+            if(gdata->getView().backgroundShading() && l_period > 4.0 && l_period < double(l_active_channel->get_nsdf_data().size()))
+            {
+                //number of colored patches
+                int l_n = int(ceil(double(width()) / l_scale_X));
+                get_painter().setPen(Qt::NoPen);
+                QColor l_color_1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), l_data->getCorrelation());
+                QColor l_color_2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), l_data->getCorrelation());
+                for(l_j = 0; l_j < l_n; l_j++)
+                {
+                    l_x = toInt(l_scale_X * double(l_j));
+                    get_painter().setBrush((l_j % 2) ? l_color_1 : l_color_2);
+                    get_painter().drawRect(l_x, 0, toInt(l_scale_X * double(l_j + 1)) - toInt(l_scale_X * double(l_j)), height());
+                }
+                get_painter().setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3 * l_data->getCorrelation()));
+                for(l_j = 0; l_j < l_n; l_j++)
+                {
+                    l_x = toInt(l_scale_X * double(l_j));
+                    get_painter().drawLine(l_x, 0, l_x, height());
+                }
+            }
+            else
+            {
+                clearBackground();
+            }
+            QString l_num_periods_text;
+            l_num_periods_text.sprintf("Period = %lf", l_period);
+            get_painter().setPen(Qt::black);
+            get_painter().drawText(5, height() - 8, l_num_periods_text);
 
-	  if(l_data->getCepstrumIndex() >= 0)
-	    {
-	      get_painter().setPen(Qt::blue);
-	      get_painter().setBrush(Qt::blue);
-	      int l_x1 = toInt(double(l_data->getCepstrumIndex()) / double(l_active_channel->get_cepstrum_data().size()) * double(width()));
-	      int l_y1 = height() / 2 - toInt(l_active_channel->get_cepstrum_data().at(l_data->getCepstrumIndex()) * height() / 2);
-	      get_painter().drawEllipse(l_x1 - 2, l_y1 - 2, 5, 5);
-	    }
-	}
-      else
-	{
-	  clearBackground();
-	}
-      l_active_channel->unlock();
+            get_painter().drawLine(0, height() / 2, width(), height() / 2);
+
+            //draw the waveform
+            double l_ratio = double(height()) / 2.0; //TODO: remove magic number
+            get_painter().setPen(QPen(l_active_channel->get_color(), 0));
+            for(int l_j = 0; l_j < width(); l_j++)
+            {
+                //cheap hack to go faster (by drawing less points)
+                myassert(int(l_pixel_step * l_j) < l_active_channel->get_cepstrum_data().size());
+                m_point_array.setPoint(l_j, l_j, height() / 2 - toInt(l_active_channel->get_cepstrum_data().at(int(l_pixel_step * l_j)) * l_ratio));
+            }
+            get_painter().drawPolyline(m_point_array);
+
+            if(l_data->getCepstrumIndex() >= 0)
+            {
+                get_painter().setPen(Qt::blue);
+                get_painter().setBrush(Qt::blue);
+                int l_x1 = toInt(double(l_data->getCepstrumIndex()) / double(l_active_channel->get_cepstrum_data().size()) * double(width()));
+                int l_y1 = height() / 2 - toInt(l_active_channel->get_cepstrum_data().at(l_data->getCepstrumIndex()) * height() / 2);
+                get_painter().drawEllipse(l_x1 - 2, l_y1 - 2, 5, 5);
+            }
+        }
+        else
+        {
+            clearBackground();
+        }
+        l_active_channel->unlock();
     }
-  else
+    else
     {
-      clearBackground();
+        clearBackground();
     }
-  endDrawing();
+    endDrawing();
 }
 
 //------------------------------------------------------------------------------
 QSize CepstrumWidget::sizeHint(void) const
 {
-  return QSize(500, 128);
+    return QSize(500, 128);
 }
 // EOF

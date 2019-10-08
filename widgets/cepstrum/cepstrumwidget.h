@@ -28,16 +28,16 @@ class CepstrumWidget : public DrawWidget
 {
   Q_OBJECT
 
-    public:
-  CepstrumWidget(QWidget *p_parent);
-  virtual ~CepstrumWidget(void);
+  public:
+    CepstrumWidget(QWidget * p_parent);
+    virtual ~CepstrumWidget(void);
 
-  void paintEvent( QPaintEvent * );
+    void paintEvent( QPaintEvent * );
 
-  QSize sizeHint(void) const;
+    QSize sizeHint(void) const;
 
- private:
-  Q3PointArray m_point_array;
+  private:
+    Q3PointArray m_point_array;
 };
 #endif // CEPSTRUMWIDGET_H
 // EOF
