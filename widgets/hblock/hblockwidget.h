@@ -35,7 +35,6 @@ class HBlockWidget : public DrawWidget
     QSize sizeHint(void) const;
 
   private:
-    QPixmap *m_buffer;
 };
 
 
