@@ -59,8 +59,8 @@ ScoreView::ScoreView(int p_view_id
     QToolTip::add(l_scale_wheel_Y, tr("Zoom vertically"));
     l_right_layout->addWidget(l_scale_wheel_Y, 1);
     l_right_layout->addStretch(4);
-    connect(l_scale_wheel_Y, SIGNAL(sliderMoved(double)), m_score_widget, SLOT(setScaleY(double)));
-    connect(l_scale_wheel_Y, SIGNAL(sliderMoved(double)), m_score_widget, SLOT(update()));
+    connect(l_scale_wheel_Y, SIGNAL(wheelMoved(double)), m_score_widget, SLOT(setScaleY(double)));
+    connect(l_scale_wheel_Y, SIGNAL(wheelMoved(double)), m_score_widget, SLOT(update()));
 
     //horizontal scroll wheel
     QwtWheel * l_scale_wheel_X = new QwtWheel(this);
@@ -75,8 +75,8 @@ ScoreView::ScoreView(int p_view_id
 #endif // QWT_VERSION >= 0x060000
     l_scale_wheel_X->setValue(m_score_widget->scaleX());
     QToolTip::add(l_scale_wheel_X, tr("Zoom horizontally"));
-    connect(l_scale_wheel_X, SIGNAL(sliderMoved(double)), m_score_widget, SLOT(setScaleX(double)));
-    connect(l_scale_wheel_X, SIGNAL(sliderMoved(double)), m_score_widget, SLOT(update()));
+    connect(l_scale_wheel_X, SIGNAL(wheelMoved(double)), m_score_widget, SLOT(setScaleX(double)));
+    connect(l_scale_wheel_X, SIGNAL(wheelMoved(double)), m_score_widget, SLOT(update()));
 
     QComboBox * l_sharps_mode_combo_box = new QComboBox(this, tr("sharpsModeComboBox"));
     QStringList l_string_list;
