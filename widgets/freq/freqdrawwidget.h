@@ -109,8 +109,6 @@ Q_OBJECT
     double m_down_time;
     double m_down_note;
 
-    QPixmap * m_buffer;
-  
 };
 
 #endif // FREQDRAWWIDGET_H
