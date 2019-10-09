@@ -68,8 +68,7 @@ HStackWidget::~HStackWidget(void)
 void HStackWidget::paintEvent(QPaintEvent *)
 { 
     Channel * l_active_channel = gdata->getActiveChannel();
-    Q3PointArray l_points;
-    
+
     beginDrawing();
     
     if(l_active_channel) 
