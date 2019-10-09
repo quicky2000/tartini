@@ -788,7 +788,7 @@ void MainWindow::windowMenuAboutToShow(void)
     }
 
     m_window_menu->insertSeparator();
-    int l_cascade = m_window_menu->insertItem( "&Cascade", m_the_workspace, SLOT( l_cascade() ), 0 );
+    int l_cascade = m_window_menu->insertItem( "&Cascade", m_the_workspace, SLOT( cascade() ), 0 );
     int l_close = m_window_menu->insertItem( "Close &All", this, SLOT( closeAllWidgets() ), 0 );
 
     if(l_windows.isEmpty())
