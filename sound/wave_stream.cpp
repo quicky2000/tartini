@@ -21,297 +21,305 @@
 #include "useful.h"
 
 //------------------------------------------------------------------------------
-WaveStream::WaveStream(void):
-  m_file(NULL),
-  m_header_length(0)
+WaveStream::WaveStream(void)
+: m_file(NULL)
+, m_header_length(0)
 {
 }
 
 //------------------------------------------------------------------------------
 WaveStream::~WaveStream(void)
 {
-  close();
+    close();
 }
 
 //------------------------------------------------------------------------------
 void WaveStream::close(void)
 {
-  if(m_file)
+    if(m_file)
     {
-      if(mode & F_WRITE)
-	{
-	  write_header();
-	}
-      fclose(m_file);
-      m_file = NULL;
+        if(mode & F_WRITE)
+        {
+            write_header();
+        }
+        fclose(m_file);
+        m_file = NULL;
     }
 }
 
 //------------------------------------------------------------------------------
 int WaveStream::open_read(const char *p_filename)
 {
-  m_file = fopen(p_filename, "rb");
-  if(!m_file)
+    m_file = fopen(p_filename, "rb");
+    if(!m_file)
     {
-      return -1;
+        return -1;
     }
-  mode = F_READ;
-  setPos(0);
-  return read_header();
+    mode = F_READ;
+    setPos(0);
+    return read_header();
 }
 
 //------------------------------------------------------------------------------
 int WaveStream::read_header(void)
 {
-  if(!m_file || !(mode & F_READ))
+    if(!m_file || !(mode & F_READ))
     {
-      return -1;
+        return -1;
     }
 
-  int l_len;
-  int l_data_type;
-  char l_buffer[12];
+    int l_len;
+    int l_data_type;
+    char l_buffer[12];
+
+    // check RIFF header
+    if(fread(l_buffer, 1, 12, m_file) != 12)
+    {
+        goto missing_data;
+    }
+    if(memcmp(l_buffer, "RIFF", 4) || memcmp(l_buffer+8, "WAVE", 4))
+    {
+        fprintf(stderr, "WaveStream: Not a wave file\n");
+        return -1;
+    }
+    //read format chunk
+    if(fread(l_buffer, 1, 4, m_file) != 4)
+    {
+        goto missing_data;
+    }
+    if (memcmp(l_buffer, "fmt ", 4) != 0)
+    {
+        fprintf(stderr, "WaveStream: Format chunk not found\n");
+        return -1;
+    }
+
+    // read chunk length
+    l_len = igetl(m_file);
   
-  // check RIFF header
-  if(fread(l_buffer, 1, 12, m_file) != 12)
-    {
-      goto missing_data;
-    }
-  if (memcmp(l_buffer, "RIFF", 4) || memcmp(l_buffer+8, "WAVE", 4))
-    {
-      fprintf(stderr, "WaveStream: Not a wave file\n");
-      return -1;
-    }
-  //read format chunk
-  if(fread(l_buffer, 1, 4, m_file) != 4)
-    {
-      goto missing_data;
-    }
-  if (memcmp(l_buffer, "fmt ", 4) != 0)
-    {
-      fprintf(stderr, "WaveStream: Format chunk not found\n");
-      return -1;
-    }
+    // should be 1 for PCM data
+    l_data_type = igetw(m_file);
 
-  // read chunk length
-  l_len = igetl(m_file);
+    if(l_data_type != 1)
+    {
+        fprintf(stderr, "WaveStream: Not PCM data\n");
+        return -1;
+    }
+    // TODO: 3 = float data (32bit usually)
   
-  // should be 1 for PCM data
-  l_data_type = igetw(m_file);
+    // mono or stereo data
+    channels = igetw(m_file);
+    fprintf(stderr, "File: channels=%d, ", channels);
 
-  if (l_data_type != 1)
+    // sample frequency
+    freq = igetl(m_file);
+    fprintf(stderr, "freq=%d, ", freq);
+
+    // skip six bytes
+    igetl(m_file);
+    igetw(m_file);
+
+    bits = igetw(m_file);
+    fprintf(stderr, "bits=%d\n", bits);
+    //TODO: add support for 12bit etc
+    if((bits % 8) != 0 )
     {
-      fprintf(stderr, "WaveStream: Not PCM data\n");
-      return -1;
-    }
-  // TODO: 3 = float data (32bit usually)
-  
-  // mono or stereo data
-  channels = igetw(m_file);
-  fprintf(stderr, "File: channels=%d, ", channels);
-
-  // sample frequency
-  freq = igetl(m_file);
-  fprintf(stderr, "freq=%d, ", freq);
-
-  // skip six bytes
-  igetl(m_file);
-  igetw(m_file);
-  
-  bits = igetw(m_file);
-  fprintf(stderr, "bits=%d\n", bits);
-  //TODO: add support for 12bit etc
-  if ((bits % 8) != 0 )
-    {
-      fprintf(stderr, "WaveStream: Not 8, 16, 24, or 32bit data\n");
-      return -1;
+        fprintf(stderr, "WaveStream: Not 8, 16, 24, or 32bit data\n");
+        return -1;
     }
 
-  //we have just read 16 bytes
-  l_len -= 16;
-  m_header_length = 36;
+    //we have just read 16 bytes
+    l_len -= 16;
+    m_header_length = 36;
   
-  //read though the rest of the chunk
-  for(int l_j = 0; l_j < l_len; l_j++)
+    //read though the rest of the chunk
+    for(int l_j = 0; l_j < l_len; l_j++)
     {
-      fgetc(m_file);
-      m_header_length++;
+        fgetc(m_file);
+        m_header_length++;
     }
 
-  while(true)
+    while(true)
     {
-      //read data chunk
-      if(fread(l_buffer, 1, 4, m_file) != 4)
-	{
-	  goto missing_data;
-	}
-      // read chunk length
-      l_len = igetl(m_file);
-      m_header_length += 8;
-      if(memcmp(l_buffer, "data", 4) == 0)
-	{
-	  break;
-	}
-      if(feof(m_file))
-	{
-	  fprintf(stderr, "WaveStream: Data chunk not found\n");
-	  return -1;
-	}
-      for(int l_j = 0; l_j < l_len; l_j++)
-	{
-	  if(fgetc(m_file) == EOF)
-	    {
-	      fprintf(stderr, "WaveStream: Data chunk missing\n");
-	      return -1;
-	    }
-	}
+        //read data chunk
+        if(fread(l_buffer, 1, 4, m_file) != 4)
+        {
+            goto missing_data;
+        }
+        // read chunk length
+        l_len = igetl(m_file);
+        m_header_length += 8;
+        if(memcmp(l_buffer, "data", 4) == 0)
+        {
+            break;
+        }
+        if(feof(m_file))
+        {
+            fprintf(stderr, "WaveStream: Data chunk not found\n");
+            return -1;
+        }
+        for(int l_j = 0; l_j < l_len; l_j++)
+        {
+            if(fgetc(m_file) == EOF)
+            {
+                fprintf(stderr, "WaveStream: Data chunk missing\n");
+                return -1;
+            }
+        }
     }
 #ifdef PRINTF_DEBUG
-  printf("header_length=%d\n", m_header_length);
+    printf("header_length=%d\n", m_header_length);
 #endif // PRINTF_DEBUG
-  _total_frames = l_len / frame_size();
+    _total_frames = l_len / frame_size();
 
-  return 0;
+    return 0;
 
- missing_data:
-  fprintf(stderr, "Error reading header\n");
-  return -1;
+    missing_data:
+    fprintf(stderr, "Error reading header\n");
+    return -1;
 }
 
 //------------------------------------------------------------------------------
-long WaveStream::read_bytes(void *p_data, long p_length)
+long WaveStream::read_bytes( void *p_data
+                           , long p_length
+                           )
 {
-  if(!m_file || !(mode & F_READ))
+    if(!m_file || !(mode & F_READ))
     {
-      return 0;
+        return 0;
     }
 
-  long l_read = fread(p_data, 1, p_length, m_file);
-  _pos += l_read / frame_size();
-  if(pos() > totalFrames())
+    long l_read = fread(p_data, 1, p_length, m_file);
+    _pos += l_read / frame_size();
+    if(pos() > totalFrames())
     {
-      _total_frames = pos();
+        _total_frames = pos();
     }
-  return l_read;
+    return l_read;
 }
 
 //------------------------------------------------------------------------------
-long WaveStream::read_frames(void *p_data, long p_length)
+long WaveStream::read_frames( void *p_data
+                            , long p_length
+                            )
 {
-  if(!m_file || !(mode & F_READ))
+    if(!m_file || !(mode & F_READ))
     {
-      return 0;
+        return 0;
     }
 
-  long l_read = fread(p_data, frame_size(), p_length, m_file);
-  _pos += l_read;
-  if(pos() > totalFrames())
+    long l_read = fread(p_data, frame_size(), p_length, m_file);
+    _pos += l_read;
+    if(pos() > totalFrames())
     {
-      _total_frames = pos();
+        _total_frames = pos();
     }
-  return l_read;
+    return l_read;
 }
 
 //------------------------------------------------------------------------------
 int WaveStream::open_write(const char *p_filename, int p_freq, int p_channels, int p_bits)
 {
-  freq = p_freq;
-  channels = p_channels;
-  bits = p_bits;
-  _pos = _total_frames = 0;
-  m_file = fopen(p_filename, "wb");
-  if(!m_file)
+    freq = p_freq;
+    channels = p_channels;
+    bits = p_bits;
+    _pos = _total_frames = 0;
+    m_file = fopen(p_filename, "wb");
+    if(!m_file)
     {
-      return -1;
+        return -1;
     }
-  mode = F_WRITE;
-  write_header();
-  return 0;
+    mode = F_WRITE;
+    write_header();
+    return 0;
 }
 
 //------------------------------------------------------------------------------
 void WaveStream::write_header(void)
 {
-  if(!m_file || !(mode & F_WRITE))
+    if(!m_file || !(mode & F_WRITE))
     {
-      return;
+        return;
     }
 
-  rewind(m_file);
+    rewind(m_file);
 
-  fputs("RIFF", m_file);                 /* RIFF header */
-  iputl(36+data_length(), m_file);         /* size of RIFF chunk */
+    fputs("RIFF", m_file);                 /* RIFF header */
+    iputl(36+data_length(), m_file);         /* size of RIFF chunk */
   
-  fputs("WAVE", m_file);                 /* WAV definition */
-  fputs("fmt ", m_file);                 /* format chunk */
-  iputl(16, m_file);                     /* size of format chunk */
-  iputw(1, m_file);                      /* PCM data 1=two's compliment int*/
-  iputw(channels, m_file);               /* number of channels */
-  iputl(freq, m_file);                   /* sample frequency */
-  long l_byte_rate = freq * channels * sample_size();
-  iputl(l_byte_rate, m_file);              /* avg. bytes per sec */
-  int l_block_align = channels * sample_size();
-  iputw(l_block_align, m_file);             /* block alignment */
-  iputw(bits, m_file);          /* bits per sample */
-  fputs("data", m_file);                 /* data chunk */
-  iputl(data_length(), m_file);            /* actual data length */
+    fputs("WAVE", m_file);                 /* WAV definition */
+    fputs("fmt ", m_file);                 /* format chunk */
+    iputl(16, m_file);                     /* size of format chunk */
+    iputw(1, m_file);                      /* PCM data 1=two's compliment int*/
+    iputw(channels, m_file);               /* number of channels */
+    iputl(freq, m_file);                   /* sample frequency */
+    long l_byte_rate = freq * channels * sample_size();
+    iputl(l_byte_rate, m_file);              /* avg. bytes per sec */
+    int l_block_align = channels * sample_size();
+    iputw(l_block_align, m_file);             /* block alignment */
+    iputw(bits, m_file);          /* bits per sample */
+    fputs("data", m_file);                 /* data chunk */
+    iputl(data_length(), m_file);            /* actual data length */
 }
 
 //------------------------------------------------------------------------------
-long WaveStream::write_bytes(void *p_data, long p_length)
+long WaveStream::write_bytes( void * p_data
+                            , long p_length
+                            )
 {
-  if(!m_file || !(mode & F_WRITE))
+    if(!m_file || !(mode & F_WRITE))
     {
-      return 0;
+        return 0;
     }
 
-  long l_written = fwrite(p_data, 1, p_length, m_file);
-  _pos += l_written/frame_size();
-  if(pos() > totalFrames())
+    long l_written = fwrite(p_data, 1, p_length, m_file);
+    _pos += l_written/frame_size();
+    if(pos() > totalFrames())
     {
-      _total_frames = pos();
+        _total_frames = pos();
     }
-  return l_written;
+    return l_written;
 }
 
 //------------------------------------------------------------------------------
-long WaveStream::write_frames(void *p_data, long p_length)
+long WaveStream::write_frames( void *p_data
+                             , long p_length
+                             )
 {
-  if(!m_file || !(mode & F_WRITE))
+    if(!m_file || !(mode & F_WRITE))
     {
-      return 0;
+        return 0;
     }
 
-  long l_written = fwrite(p_data, frame_size(), p_length, m_file);
-  _pos += l_written;
-  if(pos() > totalFrames())
+    long l_written = fwrite(p_data, frame_size(), p_length, m_file);
+    _pos += l_written;
+    if(pos() > totalFrames())
     {
-      _total_frames = pos();
+        _total_frames = pos();
     }
-  return l_written;
+    return l_written;
 }
 
 //------------------------------------------------------------------------------
 void WaveStream::jump_to_frame(int p_frame)
 {
-  p_frame = bound(p_frame, 0, totalFrames());
-  if(fseek(m_file, m_header_length + p_frame*frame_size(), SEEK_SET))
+    p_frame = bound(p_frame, 0, totalFrames());
+    if(fseek(m_file, m_header_length + p_frame*frame_size(), SEEK_SET))
     {
-      fprintf(stderr, "error seeking, %d\n", errno);
+        fprintf(stderr, "error seeking, %d\n", errno);
     }
-  setPos(p_frame);
+    setPos(p_frame);
 }
 
 //------------------------------------------------------------------------------
 void WaveStream::jump_back(int p_frames)
 {
-  jump_to_frame(pos() - p_frames);
+    jump_to_frame(pos() - p_frames);
 }
 
 //------------------------------------------------------------------------------
 void WaveStream::jump_forward(int p_frames)
 {
-  jump_to_frame(pos() + p_frames);
+    jump_to_frame(pos() + p_frames);
 }
 
 // EOF

@@ -22,31 +22,46 @@ class QStringList;
 
 class WaveStream : public SoundFileStream
 {
- public:
-  WaveStream(void);
-  virtual ~WaveStream(void);
+  public:
+    WaveStream(void);
+    virtual ~WaveStream(void);
 
-  int open_read(const char *p_filename);
-  int read_header(void);
-  long read_bytes(void *p_data, long p_length);
-  long read_frames(void *p_data, long p_length);
+    int open_read(const char * p_filename);
+    int read_header(void);
+    long read_bytes( void * p_data
+                   , long p_length
+                   );
+    long read_frames( void * p_data
+                    , long p_length
+                    );
 
-  int open_write(const char *p_filename, int p_freq=44100, int p_channels=2, int p_bits=16);
-  void write_header(void);
-  long write_bytes(void *p_data, long p_length);
-  long write_frames(void *p_data, long p_length);
+    int open_write( const char * p_filename
+                  , int p_freq = 44100
+                  , int p_channels = 2
+                  , int p_bits = 16
+                  );
 
-  QStringList getOutputDeviceNames(void);
+    void write_header(void);
 
-  void close(void);
+    long write_bytes( void * p_data
+                    , long p_length
+                    );
 
-  void jump_to_frame(int p_frame);
-  void jump_back(int p_frames);
-  void jump_forward(int p_frames);
+    long write_frames( void * p_data
+                     , long p_length
+                     );
 
- private:
-  FILE *m_file;
-  int m_header_length;
+    QStringList getOutputDeviceNames(void);
+
+    void close(void);
+
+    void jump_to_frame(int p_frame);
+    void jump_back(int p_frames);
+    void jump_forward(int p_frames);
+
+  private:
+    FILE * m_file;
+    int m_header_length;
 };
 
 #endif // WAVE_STREAM_H
