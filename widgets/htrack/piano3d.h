@@ -77,9 +77,10 @@ class Piano3d
     double pianoWidth(void);
     inline int numKeys(void);
     inline int firstKey(void);
-    double m_first_key_offset;
+    inline const double & get_first_key_offset() const;
 
   private:
+    double m_first_key_offset;
 
     std::vector<bool> m_key_states;
     std::vector<float> m_key_offsets;

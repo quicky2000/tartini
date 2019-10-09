@@ -17,6 +17,12 @@
 */
 
 //------------------------------------------------------------------------------
+const double & Piano3d::get_first_key_offset() const
+{
+    return m_first_key_offset;
+}
+
+//------------------------------------------------------------------------------
 bool Piano3d::keyState(int p_key_num)
 {
     return (p_key_num >= 0 && p_key_num < m_num_keys) ? m_key_states[p_key_num] : false;
