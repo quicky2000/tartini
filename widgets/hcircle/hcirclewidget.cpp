@@ -144,7 +144,6 @@ void HCircleWidget::paintEvent( QPaintEvent * )
 
                     get_painter().drawLine(width() / 2 + l_x1, height() / 2 + l_y1, width() / 2 + l_x, height() / 2 + l_y);
                     get_painter().drawEllipse(width() / 2 + l_x - l_half_dot_size, height() / 2 + l_y - l_half_dot_size, l_dot_size, l_dot_size);
-                    QString l_string;
                     get_painter().drawText(width() / 2 + l_x + 5, height() / 2 + l_y, l_string.sprintf("%d", l_i + 1));
                 }
             }
