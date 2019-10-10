@@ -1196,7 +1196,7 @@ void FreqWidgetGL::setChannelVerticalView( Channel * p_channel
 
         double l_start = (double(l_int_chunk) - l_frame_time) * l_step_size;
         double l_stop = width() + (2 * l_step_size);
-        for(double l_n = l_start; l_n < l_stop && l_int_chunk < (int)p_channel->totalChunks(); l_n += l_step_size, l_int_chunk++)
+        for(double l_double_index = l_start; l_double_index < l_stop && l_int_chunk < (int)p_channel->totalChunks(); l_double_index += l_step_size, l_int_chunk++)
         {
             myassert(l_int_chunk >= 0);
             AnalysisData *l_data = p_channel->dataAtChunk(l_int_chunk);
