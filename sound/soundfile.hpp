@@ -19,55 +19,55 @@
 //------------------------------------------------------------------------------
 int SoundFile::numChannels(void) const
 {
-  return channels.size();
+  return m_channels.size();
 }
 
 //------------------------------------------------------------------------------
 const double & SoundFile::startTime(void) const
 {
-  return _startTime;
+  return m_start_time;
 }
 
 //------------------------------------------------------------------------------
-void SoundFile::setStartTime(const double & t)
+void SoundFile::setStartTime(const double & p_start_time)
 {
-  _startTime = t;
+  m_start_time = p_start_time;
 }
 
 //------------------------------------------------------------------------------
 int SoundFile::currentStreamChunk(void) const
 {
-  return (stream->pos() - offset()) / framesPerChunk();
+  return (m_stream->pos() - offset()) / framesPerChunk();
 }
 
 //------------------------------------------------------------------------------
 int SoundFile::currentRawChunk(void) const
 {
-  return _chunkNum;
+  return m_chunk_num;
 }
 
 //------------------------------------------------------------------------------
 int SoundFile::currentChunk(void) const
 {
-  return _chunkNum;
+  return m_chunk_num;
 }
 
 //------------------------------------------------------------------------------
-void SoundFile::setCurrentChunk(int x)
+void SoundFile::setCurrentChunk(int p_x)
 {
-  _chunkNum = x;
+  m_chunk_num = p_x;
 }
 
 //------------------------------------------------------------------------------
 void SoundFile::incrementChunkNum(void)
 {
- _chunkNum++;
+ m_chunk_num++;
 }
 
 //------------------------------------------------------------------------------
 int SoundFile::offset(void) const
 {
-  return _offset;
+  return m_offset;
 }
 
 //------------------------------------------------------------------------------
@@ -77,21 +77,21 @@ double SoundFile::timePerChunk(void) const
 }
 
 //------------------------------------------------------------------------------
-int SoundFile::chunkAtTime(const double & t) const
+int SoundFile::chunkAtTime(const double & p_time) const
 {
-  return toInt(chunkFractionAtTime(t));
+  return toInt(chunkFractionAtTime(p_time));
 } //this is not bounded
 
 //------------------------------------------------------------------------------
-double SoundFile::chunkFractionAtTime(const double & t) const
+double SoundFile::chunkFractionAtTime(const double & p_time) const
 {
-  return t / timePerChunk();
+  return p_time / timePerChunk();
 } //this is not bounded
 
 //------------------------------------------------------------------------------
-double SoundFile::timeAtChunk(int chunk) const
+double SoundFile::timeAtChunk(int p_chunk) const
 {
-  return double(chunk) * timePerChunk();
+  return double(p_chunk) * timePerChunk();
 }
 
 //------------------------------------------------------------------------------
@@ -107,91 +107,91 @@ int SoundFile::chunkAtCurrentTime(void) const
 }
 
 //------------------------------------------------------------------------------
-void SoundFile::jumpToTime(const double & t)
+void SoundFile::jumpToTime(const double & p_time)
 {
-  jumpToChunk(chunkAtTime(t));
+  jumpToChunk(chunkAtTime(p_time));
 }
 
 //------------------------------------------------------------------------------
 int SoundFile::rate(void) const
 {
-  myassert(stream != NULL);
-  return stream->freq;
+  myassert(m_stream != NULL);
+  return m_stream->freq;
 }
 
 //------------------------------------------------------------------------------
 int SoundFile::bits(void) const
 {
-  myassert(stream != NULL);
-  return stream->bits;
+  myassert(m_stream != NULL);
+  return m_stream->bits;
 }
 
 //------------------------------------------------------------------------------
 int SoundFile::framesPerChunk(void) const
 {
-  return _framesPerChunk;
+  return m_frames_per_chunk;
 }
 
 //------------------------------------------------------------------------------
-void SoundFile::setFramesPerChunk(int stepSize)
+void SoundFile::setFramesPerChunk(int p_step_size)
 {
-  _framesPerChunk = stepSize;
+  m_frames_per_chunk = p_step_size;
 }
 
 //------------------------------------------------------------------------------
 bool SoundFile::saved(void) const
 {
-  return _saved;
+  return m_saved;
 }
 
 //------------------------------------------------------------------------------
-void SoundFile::setSaved(bool newState)
+void SoundFile::setSaved(bool p_new_state)
 {
-  _saved = newState;
+  m_saved = p_new_state;
 }
 
 //------------------------------------------------------------------------------
 bool SoundFile::equalLoudness(void) const
 {
-  return myTransforms.getEqualLoudness();
+  return m_my_transforms.getEqualLoudness();
 }
 
 //------------------------------------------------------------------------------
 bool SoundFile::doingDetailedPitch(void) const
 {
-  return _doingDetailedPitch;
+  return m_doing_detailed_pitch;
 }
 
 //------------------------------------------------------------------------------
 bool SoundFile::isFirstTimeThrough(void) const
 {
-  return firstTimeThrough;
+  return m_first_time_through;
 }
 
 //------------------------------------------------------------------------------
 const char * SoundFile::getFileName(void) const
 {
-  return filename;
+  return m_filename;
 }
 
 //------------------------------------------------------------------------------
 void SoundFile::setFirstTimeThrough(bool p_firstTimeThrough)
 {
-  firstTimeThrough = p_firstTimeThrough;
+  m_first_time_through = p_firstTimeThrough;
 }
 
 //------------------------------------------------------------------------------
-void SoundFile::calculateAnalysisData(int chunk, Channel *ch)
+void SoundFile::calculateAnalysisData(int p_chunk, Channel *p_channel)
 {
-  myTransforms.calculateAnalysisData(chunk,ch);
+  m_my_transforms.calculateAnalysisData(p_chunk,p_channel);
 }
 
 //------------------------------------------------------------------------------
 int SoundFile::getChannelIndex(const Channel & p_channel)const
 {
-  for(int i = 0; i < channels.size(); ++i)
+  for(int i = 0; i < m_channels.size(); ++i)
     {
-      if(&p_channel == channels.at(i))
+      if(&p_channel == m_channels.at(i))
 	{
 	  return i;
 	}
@@ -205,14 +205,14 @@ int SoundFile::getChannelIndex(const Channel & p_channel)const
 //------------------------------------------------------------------------------
 Channel & SoundFile::getChannel(int p_index)
 {
-  return *(channels.at(p_index));
+  return *(m_channels.at(p_index));
 }
 
 //------------------------------------------------------------------------------
 SoundFileStream & SoundFile::getStream(void)
 {
-  assert(stream);
-  return *stream;
+  assert(m_stream);
+  return *m_stream;
 }
 
 //EOF
