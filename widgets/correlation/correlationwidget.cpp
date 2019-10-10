@@ -47,7 +47,6 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
     AnalysisData * l_data = NULL;
     int l_chunk = 0;
     double l_dh2 = double(height() - 1) / 2.0;
-    int l_j;
     int l_x;
     int l_y;
 
@@ -74,14 +73,14 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
                 get_painter().setPen(Qt::NoPen);
                 QColor l_color_1 = colorBetween(gdata->backgroundColor(), gdata->shading1Color(), l_data->getCorrelation());
                 QColor l_color_2 = colorBetween(gdata->backgroundColor(), gdata->shading2Color(), l_data->getCorrelation());
-                for(l_j = 0; l_j<l_n; l_j++)
+                for(int l_j = 0; l_j<l_n; l_j++)
                 {
                     l_x = toInt(l_scale_X*double(l_j));
                     get_painter().setBrush((l_j%2) ? l_color_1 : l_color_2);
                     get_painter().drawRect(l_x, 0, toInt(l_scale_X * double(l_j + 1)) - toInt(l_scale_X * double(l_j)), height());
                 }
                 get_painter().setPen(colorBetween(gdata->backgroundColor(), Qt::black, 0.3 * l_data->getCorrelation()));
-                for(l_j = 0; l_j < l_n; l_j++)
+                for(int l_j = 0; l_j < l_n; l_j++)
                 {
                     l_x = toInt(l_scale_X * double(l_j));
                     get_painter().drawLine(l_x, 0, l_x, height());
@@ -156,7 +155,7 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
             //draw a dot at all the period estimates
             get_painter().setPen(Qt::blue);
             get_painter().setBrush(Qt::blue);
-            for(l_j = 0; l_j < int(l_data->getPeriodEstimatesSize()); l_j++)
+            for(int l_j = 0; l_j < int(l_data->getPeriodEstimatesSize()); l_j++)
             {
                 l_x = toInt(double(l_data->getPeriodEstimatesAt(l_j)) * ratio);
                 l_y = toInt(l_dh2 - l_data->getPeriodEstimatesAmpAt(l_j) * l_dh2);
