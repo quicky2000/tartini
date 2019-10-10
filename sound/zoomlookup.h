@@ -56,20 +56,21 @@ class ZoomElement
 
 class ZoomLookup
 {
-private:
-  int m_size;
-  double m_zoom_level;
-public:
-  std::vector<ZoomElement> m_table;
+  public:
+    std::vector<ZoomElement> m_table;
 
-  ZoomLookup(void);
-  virtual ~ZoomLookup(void);
+    ZoomLookup(void);
+    virtual ~ZoomLookup(void);
 
-  void clear(void);
-  void setZoomLevel(double p_zoom_level);
-  inline int size(void) const;
-  void setSize(int p_size);
-  inline ZoomElement & at(int p_x);
+    void clear(void);
+    void setZoomLevel(double p_zoom_level);
+    inline int size(void) const;
+    void setSize(int p_size);
+    inline ZoomElement & at(int p_x);
+
+  private:
+    int m_size;
+    double m_zoom_level;
 };
 
 #include "zoomlookup.hpp"
