@@ -688,7 +688,7 @@ void FreqWidgetGL::drawChannelGL( Channel *p_channel
         int l_pen_X = 0;
         int l_pen_Y = 0;
 
-        for(double l_n = l_start; l_n < l_stop && l_int_chunk < (int)p_channel->totalChunks(); l_n += l_step_size, l_int_chunk++)
+        for(double l_double_index = l_start; l_double_index < l_stop && l_int_chunk < (int)p_channel->totalChunks(); l_double_index += l_step_size, l_int_chunk++)
         {
             myassert(l_int_chunk >= 0);
             AnalysisData * l_data = p_channel->dataAtChunk(l_int_chunk);
@@ -711,13 +711,13 @@ void FreqWidgetGL::drawChannelGL( Channel *p_channel
                 qglColor(p_channel->get_color());
             }
 
-            l_x = toInt(l_n);
+            l_x = toInt(l_double_index);
             l_pitch = (p_channel->isVisibleChunk(l_data)) ? l_data->getPitch() : 0.0f;
             myassert(l_pitch >= 0.0 && l_pitch <= gdata->topPitch());
             l_y = height() - 1 - toInt(l_pitch / p_zoom_Y) + l_view_bottom_offset;
             if(l_pitch > 0.0f)
             {
-                if(fabs(l_prev_pitch - l_pitch) < 1.0 && l_n != l_start)
+                if(fabs(l_prev_pitch - l_pitch) < 1.0 && l_double_index != l_start)
                 {
                     //if closer than one semi-tone from previous then draw a line between them
                     mygl_line((float)l_pen_X, (float)l_pen_Y, (float)l_x, (float)l_y);
