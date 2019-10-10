@@ -57,7 +57,6 @@ class ZoomElement
 class ZoomLookup
 {
   public:
-    std::vector<ZoomElement> m_table;
 
     ZoomLookup(void);
     virtual ~ZoomLookup(void);
@@ -69,6 +68,7 @@ class ZoomLookup
     inline ZoomElement & at(int p_x);
 
   private:
+    std::vector<ZoomElement> m_table;
     int m_size;
     double m_zoom_level;
 };
