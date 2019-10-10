@@ -931,7 +931,7 @@ void FreqWidgetGL::drawChannelFilledGL( Channel *p_channel
         double l_start = (double(l_int_chunk) - l_frame_time) * l_step_size;
         double l_stop = width() + (2 * l_step_size);
         l_last_N = l_first_N = toInt(l_start);
-        for(double l_n = l_start; l_n < l_stop && l_int_chunk < (int)p_channel->totalChunks(); l_n += l_step_size, l_int_chunk++)
+        for(double l_double_index = l_start; l_double_index < l_stop && l_int_chunk < (int)p_channel->totalChunks(); l_double_index += l_step_size, l_int_chunk++)
         {
             myassert(l_int_chunk >= 0);
             AnalysisData *l_data = p_channel->dataAtChunk(l_int_chunk);
@@ -946,7 +946,7 @@ void FreqWidgetGL::drawChannelFilledGL( Channel *p_channel
                 qglColor(p_channel->get_color());
             }
 
-            l_x = toInt(l_n);
+            l_x = toInt(l_double_index);
             l_last_N = l_x;
             l_pitch = (p_channel->isVisibleChunk(l_data)) ? l_data->getPitch() : 0.0f;
 
@@ -956,7 +956,7 @@ void FreqWidgetGL::drawChannelFilledGL( Channel *p_channel
 
                 if(gdata->showMeanVarianceBars())
                 {
-                    l_x2 = toInt(l_n + l_step_size);
+                    l_x2 = toInt(l_double_index + l_step_size);
                     //longTermMean bars
                     l_y2 = height() - 1 - toInt((l_data->getLongTermMean() + l_data->getLongTermDeviation()) / p_zoom_Y) + l_view_bottom_offset;
                     l_y3 = height() - 1 - toInt((l_data->getLongTermMean() - l_data->getLongTermDeviation()) / p_zoom_Y) + l_view_bottom_offset;
