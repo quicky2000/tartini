@@ -111,8 +111,8 @@ int WaveStream::read_header(void)
     fprintf(stderr, "File: channels=%d, ", channels);
 
     // sample frequency
-    freq = igetl(m_file);
-    fprintf(stderr, "freq=%d, ", freq);
+    set_frequency(igetl(m_file));
+    fprintf(stderr, "freq=%d, ", get_frequency());
 
     // skip six bytes
     igetl(m_file);
@@ -219,7 +219,7 @@ long WaveStream::read_frames( void *p_data
 //------------------------------------------------------------------------------
 int WaveStream::open_write(const char *p_filename, int p_freq, int p_channels, int p_bits)
 {
-    freq = p_freq;
+    set_frequency(p_freq);
     channels = p_channels;
     bits = p_bits;
     _pos = _total_frames = 0;
@@ -251,8 +251,8 @@ void WaveStream::write_header(void)
     iputl(16, m_file);                     /* size of format chunk */
     iputw(1, m_file);                      /* PCM data 1=two's compliment int*/
     iputw(channels, m_file);               /* number of channels */
-    iputl(freq, m_file);                   /* sample frequency */
-    long l_byte_rate = freq * channels * sample_size();
+    iputl(get_frequency(), m_file);                   /* sample frequency */
+    long l_byte_rate = get_frequency() * channels * sample_size();
     iputl(l_byte_rate, m_file);              /* avg. bytes per sec */
     int l_block_align = channels * sample_size();
     iputw(l_block_align, m_file);             /* block alignment */

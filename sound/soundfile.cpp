@@ -194,7 +194,7 @@ bool SoundFile::openRead(const char * p_filename)
         fprintf(stderr, "Error opening %s\n", m_filename);
         return false;
     }
-    if(m_filtered_stream->open_write(m_filtered_filename, m_stream->freq, m_stream->channels, m_stream->bits))
+    if(m_filtered_stream->open_write(m_filtered_filename, m_stream->get_frequency(), m_stream->channels, m_stream->bits))
     {
         fprintf(stderr, "Error opening %s\n", m_filtered_filename);
         delete m_stream; m_stream = NULL;
@@ -205,10 +205,10 @@ bool SoundFile::openRead(const char * p_filename)
     }
 
     m_channels.resize(m_stream->channels);
-    int l_window_size_ = gdata->getAnalysisBufferSize(m_stream->freq);
+    int l_window_size_ = gdata->getAnalysisBufferSize(m_stream->get_frequency());
     fprintf(stderr, "channels = %d\n", numChannels());
 
-    int l_step_size = gdata->getAnalysisStepSize(m_stream->freq);
+    int l_step_size = gdata->getAnalysisStepSize(m_stream->get_frequency());
     m_offset = l_window_size_ / 2;
     setFramesPerChunk(l_step_size); // The user needs to be able to set this
 
@@ -218,7 +218,7 @@ bool SoundFile::openRead(const char * p_filename)
         fprintf(stderr, "channel size = %d\n", m_channels(l_j)->size());
         m_channels(l_j)->setColor(gdata->getNextColor());
     }
-    m_my_transforms.init(l_window_size_, 0, m_stream->freq, gdata->doingEqualLoudness());
+    m_my_transforms.init(l_window_size_, 0, m_stream->get_frequency(), gdata->doingEqualLoudness());
 
     fprintf(stderr, "----------Opening------------\n");
     fprintf(stderr, "filename = %s\n", p_filename);
@@ -313,7 +313,7 @@ bool SoundFile::openWrite( const char * p_filename
         fprintf(stderr, "channel size = %d\n", m_channels(l_j)->size());
         m_channels(l_j)->setColor(gdata->getNextColor());
     }
-    m_my_transforms.init(p_window_size, 0, m_stream->freq, gdata->doingEqualLoudness());
+    m_my_transforms.init(p_window_size, 0, m_stream->get_frequency(), gdata->doingEqualLoudness());
 
     //setup the tempChunkBuffers
     m_temp_window_buffer = new float*[numChannels()];

@@ -16,6 +16,8 @@
       along with this program.  If not, see <http://www.gnu.org/licenses/>
 */
 
+#include "sound_stream.h"
+
 //------------------------------------------------------------------------------
 SoundStream::SoundStream(void):
   mode(F_NONE)
@@ -49,5 +51,19 @@ long SoundStream::wait_bytes(long /*length*/)
 long SoundStream::wait_frames(long /*length*/)
 {
   return 0;
+}
+
+//------------------------------------------------------------------------------
+void
+SoundStream::set_frequency(int p_frequency)
+{
+    freq = p_frequency;
+}
+
+//------------------------------------------------------------------------------
+int
+SoundStream::get_frequency() const
+{
+    return freq;
 }
 //EOF

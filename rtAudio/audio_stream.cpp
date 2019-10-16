@@ -49,7 +49,7 @@ void AudioStream::close(void)
 int AudioStream::open(int mode_, int freq_, int channels_, int /*bits_*/, int buffer_size_)
 {
   mode = mode_;
-  freq = freq_;
+  set_frequency(freq_);
   channels = channels_;
   //bits_; //ignored, just use floats and let rtAudio do the conversion
   bits = 32;
@@ -71,15 +71,15 @@ int AudioStream::open(int mode_, int freq_, int channels_, int /*bits_*/, int bu
     {
       if(mode == F_READ)
 	{
-	  audio = new RtAudio(0, 0, inDevice, channels, RTAUDIO_FLOAT32, freq, &buffer_size, num_buffers);
+	  audio = new RtAudio(0, 0, inDevice, channels, RTAUDIO_FLOAT32, get_frequency(), &buffer_size, num_buffers);
 	}
       else if(mode == F_WRITE)
 	{
-	  audio = new RtAudio(outDevice, channels, 0, 0, RTAUDIO_FLOAT32, freq, &buffer_size, num_buffers);
+	  audio = new RtAudio(outDevice, channels, 0, 0, RTAUDIO_FLOAT32, get_frequency(), &buffer_size, num_buffers);
 	}
       else if(mode == F_RDWR)
 	{
-	  audio = new RtAudio(outDevice, channels, inDevice, channels, RTAUDIO_FLOAT32, freq, &buffer_size, num_buffers);
+	  audio = new RtAudio(outDevice, channels, inDevice, channels, RTAUDIO_FLOAT32, get_frequency(), &buffer_size, num_buffers);
 	}
       else
 	{

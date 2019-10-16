@@ -116,7 +116,7 @@ void SoundFile::jumpToTime(const double & p_time)
 int SoundFile::rate(void) const
 {
     myassert(m_stream != NULL);
-    return m_stream->freq;
+    return m_stream->get_frequency();
 }
 
 //------------------------------------------------------------------------------
