@@ -148,7 +148,7 @@ class SoundFile
     void close(void);
     // End of check
 
-    int readN(int n);
+    int readN(int p_n);
     bool setupPlayChunk(void);
     void finishRecordChunk(int p_n);
     void applyEqualLoudnessFilter(int p_n);
