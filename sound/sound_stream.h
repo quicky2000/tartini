@@ -27,24 +27,51 @@ class QStringList;
 
 class SoundStream
 {
- public:
+  public:
 
-  inline SoundStream(void);
-  virtual inline ~SoundStream(void);
+    inline SoundStream(void);
+    virtual inline ~SoundStream(void);
 
-  inline int sample_size(void) const;
-  inline int frame_size(void) const;
+    inline int sample_size(void) const;
+    inline int frame_size(void) const;
 
-  virtual long read_bytes(void *p_data, long p_length) = 0;
-  virtual long read_frames(void *p_data, long p_length) = 0;
-  virtual long write_bytes(void *p_data, long p_length) = 0;
-  virtual long write_frames(void *p_data, long p_length) = 0;
-  inline virtual long wait_bytes(long /*length*/);
-  inline virtual long wait_frames(long /*length*/);
+    virtual long read_bytes( void * p_data
+                           , long p_length
+                           ) = 0;
 
-  virtual int writeFloats(float **p_channel_data, int p_length, int p_ch);
-  virtual int readFloats(float **p_channel_data, int p_length, int p_ch);
-  virtual int writeReadFloats(float **p_out_channel_data, int p_out_ch, float **p_in_channel_data, int p_in_ch, int p_length);
+    virtual long read_frames( void * p_data
+                            , long p_length
+                            ) = 0;
+
+    virtual long write_bytes( void * p_data
+                            , long p_length
+                            ) = 0;
+
+    virtual long write_frames(void * p_data
+                             , long p_length
+                             ) = 0;
+
+    inline virtual long wait_bytes(long /*length*/);
+
+    inline virtual long wait_frames(long /*length*/);
+
+
+    virtual int writeFloats( float ** p_channel_data
+                           , int p_length
+                           , int p_ch
+                           );
+
+    virtual int readFloats( float ** p_channel_data
+                          , int p_length
+                          , int p_ch
+                          );
+
+    virtual int writeReadFloats( float ** p_out_channel_data
+                               , int p_out_ch
+                               , float ** p_in_channel_data
+                               , int p_in_ch
+                               , int p_length
+                               );
 
     inline int get_frequency() const;
     inline int get_channels() const;

@@ -19,8 +19,8 @@
 #include "sound_stream.h"
 
 //------------------------------------------------------------------------------
-SoundStream::SoundStream(void):
-  m_mode(F_NONE)
+SoundStream::SoundStream(void)
+: m_mode(F_NONE)
 {
 }
 
@@ -32,25 +32,25 @@ SoundStream::~SoundStream(void)
 //------------------------------------------------------------------------------
 int SoundStream::sample_size(void) const
 {
- return (m_bits + 7) / 8;
+    return (m_bits + 7) / 8;
 }
 
 //------------------------------------------------------------------------------
 int SoundStream::frame_size(void) const
 {
-  return sample_size() * m_channels;
+    return sample_size() * m_channels;
 }
 
 //------------------------------------------------------------------------------
 long SoundStream::wait_bytes(long /*length*/)
 {
-  return 0;
+    return 0;
 }
 
 //------------------------------------------------------------------------------
 long SoundStream::wait_frames(long /*length*/)
 {
-  return 0;
+    return 0;
 }
 
 //------------------------------------------------------------------------------

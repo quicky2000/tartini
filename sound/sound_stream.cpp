@@ -18,34 +18,50 @@
 #include "sound_stream.h"
 #include <stdio.h>
 
-const double g_v8=0x7F, g_v16=0x7FFF, g_v32=0x7FFFFFFF;
+const double g_v8=0x7F;
+const double g_v16=0x7FFF;
+const double g_v32=0x7FFFFFFF;
 
-int SoundStream::writeFloats(float **p_channel_data, int p_length, int p_ch)
+//-----------------------------------------------------------------------------
+int SoundStream::writeFloats( float ** p_channel_data
+                            , int p_length
+                            , int p_ch
+                            )
 {
     int l_written;
     int l_c;
 
-    if(m_bits == 8) {
-        unsigned char *l_temp = new unsigned char[p_length * m_channels];
-        unsigned char *l_pos1 = l_temp;
-        float *l_pos, *l_end;
-        for(l_c=0; l_c < m_channels; l_c++) {
+    if(m_bits == 8)
+    {
+        unsigned char * l_temp = new unsigned char[p_length * m_channels];
+        unsigned char * l_pos1 = l_temp;
+        float * l_pos;
+        float * l_end;
+        for(l_c = 0; l_c < m_channels; l_c++)
+        {
             l_end = p_channel_data[l_c % p_ch] + p_length;
             l_pos1 = l_temp + l_c;
-            for(l_pos = p_channel_data[l_c % p_ch]; l_pos < l_end; l_pos++, l_pos1+=m_channels)
+            for(l_pos = p_channel_data[l_c % p_ch]; l_pos < l_end; l_pos++, l_pos1 += m_channels)
+            {
                 *l_pos1 = (unsigned char)((*l_pos * g_v8) + g_v8);
+            }
         }
         l_written = write_bytes(l_temp, p_length * m_channels);
         delete[] l_temp;
         return l_written / m_channels;
-    } else if(m_bits == 16) {
-        short *l_temp = new short[p_length * m_channels * sizeof(short)];
-        short *l_pos1 = l_temp;
-        float *l_pos, *l_end;
-        for(l_c=0; l_c < m_channels; l_c++) {
+    }
+    else if(m_bits == 16)
+    {
+        short * l_temp = new short[p_length * m_channels * sizeof(short)];
+        short * l_pos1 = l_temp;
+        float * l_pos;
+        float *l_end;
+        for(l_c = 0; l_c < m_channels; l_c++)
+        {
             l_end = p_channel_data[l_c % p_ch] + p_length;
             l_pos1 = l_temp + l_c;
-            for(l_pos = p_channel_data[l_c % p_ch]; l_pos < l_end; l_pos++, l_pos1+=m_channels) {
+            for(l_pos = p_channel_data[l_c % p_ch]; l_pos < l_end; l_pos++, l_pos1 += m_channels)
+            {
                 *l_pos1 = (short)(*l_pos * g_v16);
 //#ifdef Q_OS_MACX //reverse endieness
 #ifdef MACX //reverse endieness
@@ -61,32 +77,46 @@ int SoundStream::writeFloats(float **p_channel_data, int p_length, int p_ch)
     return 0;
 }
 
-int SoundStream::readFloats(float **p_channel_data, int p_length, int p_ch)
+//-----------------------------------------------------------------------------
+int SoundStream::readFloats(float ** p_channel_data
+                           , int p_length
+                           , int p_ch
+                           )
 {
     int l_read;
     int l_c;
-    if(m_bits == 8) {
-        unsigned char *l_temp = new unsigned char[p_length * m_channels];
+    if(m_bits == 8)
+    {
+        unsigned char * l_temp = new unsigned char[p_length * m_channels];
         l_read = read_bytes(l_temp, p_length * m_channels);
-        unsigned char *l_pos1 = l_temp;
-        float *l_pos, *l_end;
-        for(l_c=0; l_c < m_channels; l_c++) {
+        unsigned char * l_pos1 = l_temp;
+        float * l_pos;
+        float * l_end;
+        for(l_c = 0; l_c < m_channels; l_c++)
+        {
             l_end = p_channel_data[l_c % p_ch] + p_length;
             l_pos1 = l_temp + l_c;
-            for(l_pos = p_channel_data[l_c % p_ch]; l_pos < l_end; l_pos++, l_pos1+=m_channels)
+            for(l_pos = p_channel_data[l_c % p_ch]; l_pos < l_end; l_pos++, l_pos1 += m_channels)
+            {
                 *l_pos = float((double(*l_pos1) - g_v8) / g_v8);
+            }
         }
         delete[] l_temp;
         return l_read / m_channels;
-    } else if(m_bits == 16) {
-        short *l_temp = new short[p_length * m_channels * sizeof(short)];
+    }
+    else if(m_bits == 16)
+    {
+        short * l_temp = new short[p_length * m_channels * sizeof(short)];
         l_read = read_bytes(l_temp, p_length * m_channels * sizeof(short));
-        short *l_pos1 = l_temp;
-        float *l_pos, *l_end;
-        for(l_c=0; l_c < m_channels; l_c++) {
+        short * l_pos1 = l_temp;
+        float * l_pos;
+        float * l_end;
+        for(l_c = 0; l_c < m_channels; l_c++)
+        {
             l_end = p_channel_data[l_c % p_ch] + p_length;
             l_pos1 = l_temp + l_c;
-            for(l_pos = p_channel_data[l_c % p_ch]; l_pos < l_end; l_pos++, l_pos1+=m_channels) {
+            for(l_pos = p_channel_data[l_c % p_ch]; l_pos < l_end; l_pos++, l_pos1 += m_channels)
+            {
 //#ifdef Q_OS_MACX //reverse endieness
 #ifdef MACX //reverse endieness
                 *l_pos1 = ((*l_pos1 & 0xFF00) >> 8) | ((*l_pos1 & 0x00FF) << 8);
@@ -96,17 +126,22 @@ int SoundStream::readFloats(float **p_channel_data, int p_length, int p_ch)
         }
         delete[] l_temp;
         return l_read / m_channels / sizeof(short);
-    } else if(m_bits == 32) {
-        long *l_temp = new long[p_length * m_channels * sizeof(long)];
+    }
+    else if(m_bits == 32)
+    {
+        long * l_temp = new long[p_length * m_channels * sizeof(long)];
         l_read = read_bytes(l_temp, p_length * m_channels * sizeof(long));
-        long *l_pos1 = l_temp;
-        float *l_pos, *l_end;
-        for(l_c=0; l_c < m_channels; l_c++) {
+        long * l_pos1 = l_temp;
+        float * l_pos;
+        float * l_end;
+        for(l_c = 0; l_c < m_channels; l_c++)
+        {
             l_end = p_channel_data[l_c % p_ch] + p_length;
             l_pos1 = l_temp + l_c;
-            for(l_pos = p_channel_data[l_c % p_ch]; l_pos < l_end; l_pos++, l_pos1+=m_channels) {
+            for(l_pos = p_channel_data[l_c % p_ch]; l_pos < l_end; l_pos++, l_pos1 += m_channels)
+            {
 //#ifdef Q_OS_MACX //reverse endieness
-//                *l_pos1 = ((*l_pos1 & 0xFF00) >> 8) | ((*l_pos1 & 0x00FF) << 8);
+//              *l_pos1 = ((*l_pos1 & 0xFF00) >> 8) | ((*l_pos1 & 0x00FF) << 8);
 //#endif
                 *l_pos = float(double(*l_pos1) / g_v16);
             }
@@ -119,12 +154,18 @@ int SoundStream::readFloats(float **p_channel_data, int p_length, int p_ch)
     return 0;
 }
 
-int SoundStream::writeReadFloats(float **p_out_channel_data, int p_out_ch, float **p_in_channel_data, int p_in_ch, int p_length)
+//-----------------------------------------------------------------------------
+int SoundStream::writeReadFloats( float ** p_out_channel_data
+                                , int p_out_ch
+                                , float ** p_in_channel_data
+                                , int p_in_ch
+                                , int p_length
+                                )
 {
-  writeFloats(p_out_channel_data, p_length, p_out_ch);
-  return readFloats(p_in_channel_data, p_length, p_in_ch);
-  //not implimented yet.
-  //return 0;
+    writeFloats(p_out_channel_data, p_length, p_out_ch);
+    return readFloats(p_in_channel_data, p_length, p_in_ch);
+    //not implimented yet.
+    //return 0;
 }
 /***************************************************************************
  *                                                                         *
