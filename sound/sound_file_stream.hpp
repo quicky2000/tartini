@@ -16,6 +16,8 @@
       along with this program.  If not, see <http://www.gnu.org/licenses/>
 */
 
+#include "sound_file_stream.h"
+
 //------------------------------------------------------------------------------
 SoundFileStream::SoundFileStream(void):
   _total_frames(-1),
@@ -112,6 +114,13 @@ void SoundFileStream::jump_back(int /*frames*/)
 //------------------------------------------------------------------------------
 void SoundFileStream::jump_forward(int /*frames*/)
 {
+}
+
+//------------------------------------------------------------------------------
+void
+SoundFileStream::set_total_frames(int p_total_frames)
+{
+    _total_frames = p_total_frames;
 }
 
 

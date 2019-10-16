@@ -23,10 +23,11 @@
 class SoundFileStream : public SoundStream
 {
 protected:
-  int _total_frames;
   int _pos; //in frames
 
   inline void setPos(int newPos);
+  inline void set_total_frames(int p_total_frames);
+
 public:
 
   inline SoundFileStream(void);
@@ -49,6 +50,9 @@ public:
   virtual inline void jump_to_frame(int /*frame*/);
   virtual inline void jump_back(int /*frames*/);
   virtual inline void jump_forward(int /*frames*/);
+
+  private:
+    int _total_frames;
 };
 
 #include "sound_file_stream.hpp"
