@@ -26,7 +26,7 @@
 
 class Channel;
 
-extern const double v8, v16, v32;
+extern const double g_v8, g_v16, g_v32;
 
 class SoundFile
 {

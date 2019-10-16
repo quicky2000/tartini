@@ -20,7 +20,7 @@
 
 //------------------------------------------------------------------------------
 SoundStream::SoundStream(void):
-  mode(F_NONE)
+  m_mode(F_NONE)
 {
 }
 
@@ -32,13 +32,13 @@ SoundStream::~SoundStream(void)
 //------------------------------------------------------------------------------
 int SoundStream::sample_size(void) const
 {
- return (bits + 7) / 8;
+ return (m_bits + 7) / 8;
 }
 
 //------------------------------------------------------------------------------
 int SoundStream::frame_size(void) const
 {
-  return sample_size() * channels;
+  return sample_size() * m_channels;
 }
 
 //------------------------------------------------------------------------------
@@ -57,56 +57,56 @@ long SoundStream::wait_frames(long /*length*/)
 void
 SoundStream::set_frequency(int p_frequency)
 {
-    freq = p_frequency;
+    m_freq = p_frequency;
 }
 
 //------------------------------------------------------------------------------
 int
 SoundStream::get_frequency() const
 {
-    return freq;
+    return m_freq;
 }
 
 //------------------------------------------------------------------------------
 void
 SoundStream::set_channels(int p_channels)
 {
-    channels = p_channels;
+    m_channels = p_channels;
 }
 
 //------------------------------------------------------------------------------
 int
 SoundStream::get_channels() const
 {
-    return channels;
+    return m_channels;
 }
 
 //------------------------------------------------------------------------------
 void
 SoundStream::set_bits(int p_bits)
 {
-    bits = p_bits;
+    m_bits = p_bits;
 }
 
 //------------------------------------------------------------------------------
 int
 SoundStream::get_bits() const
 {
-    return bits;
+    return m_bits;
 }
 
 //------------------------------------------------------------------------------
 void
 SoundStream::set_mode(int p_mode)
 {
-    mode = p_mode;
+    m_mode = p_mode;
 }
 
 //------------------------------------------------------------------------------
 int
 SoundStream::get_mode() const
 {
-    return mode;
+    return m_mode;
 }
 
 //EOF

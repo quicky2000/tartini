@@ -35,16 +35,16 @@ class SoundStream
   inline int sample_size(void) const;
   inline int frame_size(void) const;
 
-  virtual long read_bytes(void *data, long length) = 0;
-  virtual long read_frames(void *data, long length) = 0;
-  virtual long write_bytes(void *data, long length) = 0;
-  virtual long write_frames(void *data, long length) = 0;
+  virtual long read_bytes(void *p_data, long p_length) = 0;
+  virtual long read_frames(void *p_data, long p_length) = 0;
+  virtual long write_bytes(void *p_data, long p_length) = 0;
+  virtual long write_frames(void *p_data, long p_length) = 0;
   inline virtual long wait_bytes(long /*length*/);
   inline virtual long wait_frames(long /*length*/);
 
-  virtual int writeFloats(float **channelData, int length, int ch);
-  virtual int readFloats(float **channelData, int length, int ch);
-  virtual int writeReadFloats(float **outChannelData, int outCh, float **inChannelData, int inCh, int length);
+  virtual int writeFloats(float **p_channel_data, int p_length, int p_ch);
+  virtual int readFloats(float **p_channel_data, int p_length, int p_ch);
+  virtual int writeReadFloats(float **p_out_channel_data, int p_out_ch, float **p_in_channel_data, int p_in_ch, int p_length);
 
     inline int get_frequency() const;
     inline int get_channels() const;
@@ -58,10 +58,10 @@ class SoundStream
     inline int get_mode() const;
 
   private:
-    int freq;
-    int channels;
-    int bits;
-    int mode;
+    int m_freq;
+    int m_channels;
+    int m_bits;
+    int m_mode;
 };
 
 #include "sound_stream.hpp"
