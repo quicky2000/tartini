@@ -66,4 +66,18 @@ SoundStream::get_frequency() const
 {
     return freq;
 }
+
+//------------------------------------------------------------------------------
+void
+SoundStream::set_channels(int p_channels)
+{
+    channels = p_channels;
+}
+
+//------------------------------------------------------------------------------
+int
+SoundStream::get_channels() const
+{
+    return channels;
+}
 //EOF

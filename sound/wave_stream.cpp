@@ -107,8 +107,8 @@ int WaveStream::read_header(void)
     // TODO: 3 = float data (32bit usually)
   
     // mono or stereo data
-    channels = igetw(m_file);
-    fprintf(stderr, "File: channels=%d, ", channels);
+    set_channels(igetw(m_file));
+    fprintf(stderr, "File: channels=%d, ", get_channels());
 
     // sample frequency
     set_frequency(igetl(m_file));
@@ -220,7 +220,7 @@ long WaveStream::read_frames( void *p_data
 int WaveStream::open_write(const char *p_filename, int p_freq, int p_channels, int p_bits)
 {
     set_frequency(p_freq);
-    channels = p_channels;
+    set_channels(p_channels);
     bits = p_bits;
     _pos = _total_frames = 0;
     m_file = fopen(p_filename, "wb");
@@ -250,11 +250,11 @@ void WaveStream::write_header(void)
     fputs("fmt ", m_file);                 /* format chunk */
     iputl(16, m_file);                     /* size of format chunk */
     iputw(1, m_file);                      /* PCM data 1=two's compliment int*/
-    iputw(channels, m_file);               /* number of channels */
+    iputw(get_channels(), m_file);               /* number of channels */
     iputl(get_frequency(), m_file);                   /* sample frequency */
-    long l_byte_rate = get_frequency() * channels * sample_size();
+    long l_byte_rate = get_frequency() * get_channels() * sample_size();
     iputl(l_byte_rate, m_file);              /* avg. bytes per sec */
-    int l_block_align = channels * sample_size();
+    int l_block_align = get_channels() * sample_size();
     iputw(l_block_align, m_file);             /* block alignment */
     iputw(bits, m_file);          /* bits per sample */
     fputs("data", m_file);                 /* data chunk */

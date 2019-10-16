@@ -194,7 +194,7 @@ bool SoundFile::openRead(const char * p_filename)
         fprintf(stderr, "Error opening %s\n", m_filename);
         return false;
     }
-    if(m_filtered_stream->open_write(m_filtered_filename, m_stream->get_frequency(), m_stream->channels, m_stream->bits))
+    if(m_filtered_stream->open_write(m_filtered_filename, m_stream->get_frequency(), m_stream->get_channels(), m_stream->bits))
     {
         fprintf(stderr, "Error opening %s\n", m_filtered_filename);
         delete m_stream; m_stream = NULL;
@@ -204,7 +204,7 @@ bool SoundFile::openRead(const char * p_filename)
         return false;
     }
 
-    m_channels.resize(m_stream->channels);
+    m_channels.resize(m_stream->get_channels());
     int l_window_size_ = gdata->getAnalysisBufferSize(m_stream->get_frequency());
     fprintf(stderr, "channels = %d\n", numChannels());
 
@@ -305,7 +305,7 @@ bool SoundFile::openWrite( const char * p_filename
     printf("stream->channels=%d\n", stream->channels);
 #endif // PRINTF_DEBUG
 
-    m_channels.resize(m_stream->channels);
+    m_channels.resize(m_stream->get_channels());
     fprintf(stderr, "channels = %d\n", numChannels());
     for(int l_j = 0; l_j < numChannels(); l_j++)
     {

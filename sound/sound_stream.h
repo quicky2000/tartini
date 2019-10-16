@@ -28,7 +28,6 @@ class QStringList;
 class SoundStream
 {
  public:
-  int channels;
   int bits;
   int mode;
 
@@ -50,12 +49,15 @@ class SoundStream
   virtual int writeReadFloats(float **outChannelData, int outCh, float **inChannelData, int inCh, int length);
 
     inline int get_frequency() const;
+    inline int get_channels() const;
 
   protected:
     inline void set_frequency(int p_frequency);
+    inline void set_channels(int p_channels);
 
   private:
     int freq;
+    int channels;
 };
 
 #include "sound_stream.hpp"
