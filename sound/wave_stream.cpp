@@ -118,10 +118,10 @@ int WaveStream::read_header(void)
     igetl(m_file);
     igetw(m_file);
 
-    bits = igetw(m_file);
-    fprintf(stderr, "bits=%d\n", bits);
+    set_bits(igetw(m_file));
+    fprintf(stderr, "bits=%d\n", get_bits());
     //TODO: add support for 12bit etc
-    if((bits % 8) != 0 )
+    if((get_bits() % 8) != 0 )
     {
         fprintf(stderr, "WaveStream: Not 8, 16, 24, or 32bit data\n");
         return -1;
@@ -221,7 +221,7 @@ int WaveStream::open_write(const char *p_filename, int p_freq, int p_channels, i
 {
     set_frequency(p_freq);
     set_channels(p_channels);
-    bits = p_bits;
+    set_bits(p_bits);
     _pos = _total_frames = 0;
     m_file = fopen(p_filename, "wb");
     if(!m_file)
@@ -256,7 +256,7 @@ void WaveStream::write_header(void)
     iputl(l_byte_rate, m_file);              /* avg. bytes per sec */
     int l_block_align = get_channels() * sample_size();
     iputw(l_block_align, m_file);             /* block alignment */
-    iputw(bits, m_file);          /* bits per sample */
+    iputw(get_bits(), m_file);          /* bits per sample */
     fputs("data", m_file);                 /* data chunk */
     iputl(data_length(), m_file);            /* actual data length */
 }

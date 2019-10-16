@@ -194,7 +194,7 @@ bool SoundFile::openRead(const char * p_filename)
         fprintf(stderr, "Error opening %s\n", m_filename);
         return false;
     }
-    if(m_filtered_stream->open_write(m_filtered_filename, m_stream->get_frequency(), m_stream->get_channels(), m_stream->bits))
+    if(m_filtered_stream->open_write(m_filtered_filename, m_stream->get_frequency(), m_stream->get_channels(), m_stream->get_bits()))
     {
         fprintf(stderr, "Error opening %s\n", m_filtered_filename);
         delete m_stream; m_stream = NULL;

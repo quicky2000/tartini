@@ -80,4 +80,19 @@ SoundStream::get_channels() const
 {
     return channels;
 }
+
+//------------------------------------------------------------------------------
+void
+SoundStream::set_bits(int p_bits)
+{
+    bits = p_bits;
+}
+
+//------------------------------------------------------------------------------
+int
+SoundStream::get_bits() const
+{
+    return bits;
+}
+
 //EOF

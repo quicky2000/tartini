@@ -123,7 +123,7 @@ int SoundFile::rate(void) const
 int SoundFile::bits(void) const
 {
     myassert(m_stream != NULL);
-    return m_stream->bits;
+    return m_stream->get_bits();
 }
 
 //------------------------------------------------------------------------------

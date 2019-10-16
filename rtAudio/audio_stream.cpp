@@ -52,7 +52,7 @@ int AudioStream::open(int mode_, int freq_, int channels_, int /*bits_*/, int bu
   set_frequency(freq_);
   set_channels(channels_);
   //bits_; //ignored, just use floats and let rtAudio do the conversion
-  bits = 32;
+  set_bits(32);
   buffer_size = buffer_size_;
   num_buffers = 4;
 
