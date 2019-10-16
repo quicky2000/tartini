@@ -22,37 +22,51 @@
 
 class SoundFileStream : public SoundStream
 {
-protected:
+  public:
 
-  inline void setPos(int p_pos);
-  inline void set_total_frames(int p_total_frames);
-  inline int get_pos() const;
+    inline SoundFileStream(void);
+    virtual inline ~SoundFileStream(void);
 
-
-public:
-
-  inline SoundFileStream(void);
-  virtual inline ~SoundFileStream(void);
-
-  inline int data_length(void) const;
-  inline int totalFrames(void) const;
-  inline int pos(void) const;
+    inline int data_length(void) const;
+    inline int totalFrames(void) const;
+    inline int pos(void) const;
   
-  virtual inline int open_read(const char * /*filename*/);
-  virtual inline long read_bytes(void * /*data*/, long /*length*/);
-  virtual inline long read_frames(void * /*data*/, long /*length*/);
+    virtual inline int open_read(const char * /*filename*/);
+    virtual inline long read_bytes( void * /*data*/
+                                  , long /*length*/
+                                  );
+    virtual inline long read_frames( void * /*data*/
+                                   , long /*length*/
+                                   );
 
-  virtual inline int open_write(const char * /*filename*/, int /*freq_*/=44100, int /*channels_*/=2, int /*bits_*/=16);
-  virtual inline long write_bytes(void * /*data*/, long /*length*/);
-  virtual inline long write_frames(void * /*data*/, long /*length*/);
+    virtual inline int open_write( const char * /*filename*/
+                                 , int /*freq_*/ = 44100
+                                 , int /*channels_*/ = 2
+                                 , int /*bits_*/ = 16
+                                 );
 
-  virtual inline void close(void);
+    virtual inline long write_bytes( void * /*data*/
+                                   , long /*length*/
+                                   );
 
-  virtual inline void jump_to_frame(int /*frame*/);
-  virtual inline void jump_back(int /*frames*/);
-  virtual inline void jump_forward(int /*frames*/);
+    virtual inline long write_frames( void * /*data*/
+                                    , long /*length*/
+                                    );
+
+    virtual inline void close(void);
+
+    virtual inline void jump_to_frame(int /*frame*/);
+    virtual inline void jump_back(int /*frames*/);
+    virtual inline void jump_forward(int /*frames*/);
+
+  protected:
+
+    inline void setPos(int p_pos);
+    inline void set_total_frames(int p_total_frames);
+    inline int get_pos() const;
 
   private:
+
     int m_total_frames;
     int m_pos; //in frames
 };

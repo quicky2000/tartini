@@ -19,9 +19,9 @@
 #include "sound_file_stream.h"
 
 //------------------------------------------------------------------------------
-SoundFileStream::SoundFileStream(void):
-        m_total_frames(-1),
-        m_pos(0)
+SoundFileStream::SoundFileStream(void)
+: m_total_frames(-1)
+, m_pos(0)
 {
 }
 
@@ -33,19 +33,19 @@ SoundFileStream::~SoundFileStream(void)
 //------------------------------------------------------------------------------
 int SoundFileStream::data_length(void) const
 {
-  return totalFrames() * frame_size();
+    return totalFrames() * frame_size();
 }
 
 //------------------------------------------------------------------------------
 int SoundFileStream::totalFrames(void) const
 {
-  return m_total_frames;
+    return m_total_frames;
 }
 
 //------------------------------------------------------------------------------
 int SoundFileStream::pos(void) const
 {
-  return m_pos;
+    return m_pos;
 }
 
 //------------------------------------------------------------------------------
@@ -57,36 +57,48 @@ void SoundFileStream::setPos(int p_pos)
 //------------------------------------------------------------------------------
 int SoundFileStream::open_read(const char * /*filename*/)
 {
-  return 0;
+    return 0;
 };
 
 //------------------------------------------------------------------------------
-long SoundFileStream::read_bytes(void * /*data*/, long /*length*/)
+long SoundFileStream::read_bytes( void * /*data*/
+                                , long /*length*/
+                                )
+{
+    return 0;
+};
+
+//------------------------------------------------------------------------------
+long SoundFileStream::read_frames( void * /*data*/
+                                 , long /*length*/
+                                 )
+{
+    return 0;
+};
+
+
+//------------------------------------------------------------------------------
+int SoundFileStream::open_write( const char * /*filename*/
+                               , int /*freq_*/
+                               , int /*channels_*/
+                               , int /*bits_*/
+                               )
 {
   return 0;
 };
 
 //------------------------------------------------------------------------------
-long SoundFileStream::read_frames(void * /*data*/, long /*length*/)
-{
-  return 0;
-};
-
-
-//------------------------------------------------------------------------------
-int SoundFileStream::open_write(const char * /*filename*/, int /*freq_*/, int /*channels_*/, int /*bits_*/)
+long SoundFileStream::write_bytes( void * /*data*/
+                                 , long /*length*/
+                                 )
 {
   return 0;
 };
 
 //------------------------------------------------------------------------------
-long SoundFileStream::write_bytes(void * /*data*/, long /*length*/)
-{
-  return 0;
-};
-
-//------------------------------------------------------------------------------
-long SoundFileStream::write_frames(void * /*data*/, long /*length*/)
+long SoundFileStream::write_frames( void * /*data*/
+                                  , long /*length*/
+                                  )
 {
   return 0;
 };
