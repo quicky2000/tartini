@@ -38,7 +38,7 @@ void WaveStream::close(void)
 {
     if(m_file)
     {
-        if(mode & F_WRITE)
+        if(get_mode() & F_WRITE)
         {
             write_header();
         }
@@ -55,7 +55,7 @@ int WaveStream::open_read(const char *p_filename)
     {
         return -1;
     }
-    mode = F_READ;
+    set_mode(F_READ);
     setPos(0);
     return read_header();
 }
@@ -63,7 +63,7 @@ int WaveStream::open_read(const char *p_filename)
 //------------------------------------------------------------------------------
 int WaveStream::read_header(void)
 {
-    if(!m_file || !(mode & F_READ))
+    if(!m_file || !(get_mode() & F_READ))
     {
         return -1;
     }
@@ -183,7 +183,7 @@ long WaveStream::read_bytes( void *p_data
                            , long p_length
                            )
 {
-    if(!m_file || !(mode & F_READ))
+    if(!m_file || !(get_mode() & F_READ))
     {
         return 0;
     }
@@ -202,7 +202,7 @@ long WaveStream::read_frames( void *p_data
                             , long p_length
                             )
 {
-    if(!m_file || !(mode & F_READ))
+    if(!m_file || !(get_mode() & F_READ))
     {
         return 0;
     }
@@ -228,7 +228,7 @@ int WaveStream::open_write(const char *p_filename, int p_freq, int p_channels, i
     {
         return -1;
     }
-    mode = F_WRITE;
+    set_mode(F_WRITE);
     write_header();
     return 0;
 }
@@ -236,7 +236,7 @@ int WaveStream::open_write(const char *p_filename, int p_freq, int p_channels, i
 //------------------------------------------------------------------------------
 void WaveStream::write_header(void)
 {
-    if(!m_file || !(mode & F_WRITE))
+    if(!m_file || !(get_mode() & F_WRITE))
     {
         return;
     }
@@ -266,7 +266,7 @@ long WaveStream::write_bytes( void * p_data
                             , long p_length
                             )
 {
-    if(!m_file || !(mode & F_WRITE))
+    if(!m_file || !(get_mode() & F_WRITE))
     {
         return 0;
     }
@@ -285,7 +285,7 @@ long WaveStream::write_frames( void *p_data
                              , long p_length
                              )
 {
-    if(!m_file || !(mode & F_WRITE))
+    if(!m_file || !(get_mode() & F_WRITE))
     {
         return 0;
     }

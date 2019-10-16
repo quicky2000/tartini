@@ -95,4 +95,18 @@ SoundStream::get_bits() const
     return bits;
 }
 
+//------------------------------------------------------------------------------
+void
+SoundStream::set_mode(int p_mode)
+{
+    mode = p_mode;
+}
+
+//------------------------------------------------------------------------------
+int
+SoundStream::get_mode() const
+{
+    return mode;
+}
+
 //EOF

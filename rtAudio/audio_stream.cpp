@@ -48,7 +48,7 @@ void AudioStream::close(void)
 //------------------------------------------------------------------------------
 int AudioStream::open(int mode_, int freq_, int channels_, int /*bits_*/, int buffer_size_)
 {
-  mode = mode_;
+  set_mode(mode_);
   set_frequency(freq_);
   set_channels(channels_);
   //bits_; //ignored, just use floats and let rtAudio do the conversion
@@ -69,15 +69,15 @@ int AudioStream::open(int mode_, int freq_, int channels_, int /*bits_*/, int bu
 
   try
     {
-      if(mode == F_READ)
+      if(get_mode() == F_READ)
 	{
 	  audio = new RtAudio(0, 0, inDevice, get_channels(), RTAUDIO_FLOAT32, get_frequency(), &buffer_size, num_buffers);
 	}
-      else if(mode == F_WRITE)
+      else if(get_mode() == F_WRITE)
 	{
 	  audio = new RtAudio(outDevice, get_channels(), 0, 0, RTAUDIO_FLOAT32, get_frequency(), &buffer_size, num_buffers);
 	}
-      else if(mode == F_RDWR)
+      else if(get_mode() == F_RDWR)
 	{
 	  audio = new RtAudio(outDevice, get_channels(), inDevice, get_channels(), RTAUDIO_FLOAT32, get_frequency(), &buffer_size, num_buffers);
 	}
