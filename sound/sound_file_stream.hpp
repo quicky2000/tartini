@@ -20,8 +20,8 @@
 
 //------------------------------------------------------------------------------
 SoundFileStream::SoundFileStream(void):
-  _total_frames(-1),
-  _pos(0)
+        m_total_frames(-1),
+        m_pos(0)
 {
 }
 
@@ -39,19 +39,19 @@ int SoundFileStream::data_length(void) const
 //------------------------------------------------------------------------------
 int SoundFileStream::totalFrames(void) const
 {
-  return _total_frames;
+  return m_total_frames;
 }
 
 //------------------------------------------------------------------------------
 int SoundFileStream::pos(void) const
 {
-  return _pos;
+  return m_pos;
 }
 
 //------------------------------------------------------------------------------
-void SoundFileStream::setPos(int newPos)
+void SoundFileStream::setPos(int p_pos)
 {
-  _pos = newPos;
+    m_pos = p_pos;
 }
 
 //------------------------------------------------------------------------------
@@ -120,14 +120,14 @@ void SoundFileStream::jump_forward(int /*frames*/)
 void
 SoundFileStream::set_total_frames(int p_total_frames)
 {
-    _total_frames = p_total_frames;
+    m_total_frames = p_total_frames;
 }
 
 //------------------------------------------------------------------------------
 int
 SoundFileStream::get_pos() const
 {
-    return _pos;
+    return m_pos;
 }
 
 
