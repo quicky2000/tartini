@@ -189,7 +189,7 @@ long WaveStream::read_bytes( void *p_data
     }
 
     long l_read = fread(p_data, 1, p_length, m_file);
-    _pos += l_read / frame_size();
+    setPos(get_pos() + l_read / frame_size());
     if(pos() > totalFrames())
     {
         set_total_frames(pos());
@@ -208,7 +208,7 @@ long WaveStream::read_frames( void *p_data
     }
 
     long l_read = fread(p_data, frame_size(), p_length, m_file);
-    _pos += l_read;
+    setPos(get_pos() + l_read);
     if(pos() > totalFrames())
     {
         set_total_frames(pos());
@@ -222,7 +222,7 @@ int WaveStream::open_write(const char *p_filename, int p_freq, int p_channels, i
     set_frequency(p_freq);
     set_channels(p_channels);
     set_bits(p_bits);
-    _pos = 0;
+    setPos(0);
     set_total_frames(0);
     m_file = fopen(p_filename, "wb");
     if(!m_file)
@@ -273,7 +273,7 @@ long WaveStream::write_bytes( void * p_data
     }
 
     long l_written = fwrite(p_data, 1, p_length, m_file);
-    _pos += l_written/frame_size();
+    setPos( get_pos() + l_written/frame_size());
     if(pos() > totalFrames())
     {
         set_total_frames(pos());
@@ -292,7 +292,7 @@ long WaveStream::write_frames( void *p_data
     }
 
     long l_written = fwrite(p_data, frame_size(), p_length, m_file);
-    _pos += l_written;
+    setPos(get_pos() + l_written);
     if(pos() > totalFrames())
     {
         set_total_frames(pos());

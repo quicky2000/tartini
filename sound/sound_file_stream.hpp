@@ -123,5 +123,12 @@ SoundFileStream::set_total_frames(int p_total_frames)
     _total_frames = p_total_frames;
 }
 
+//------------------------------------------------------------------------------
+int
+SoundFileStream::get_pos() const
+{
+    return _pos;
+}
+
 
 //EOF
