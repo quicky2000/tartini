@@ -25,41 +25,41 @@
 
 //------------------------------------------------------------------------------
 NoteData::NoteData(const Channel & p_channel):
-  maxima(new Array1d<int>()),
-  minima(new Array1d<int>()),
-  channel(&p_channel),
-  maxLogRMS(gdata->dBFloor()),
-  _numPeriods(0),
-  _periodOctaveEstimate(1.0f)
+        m_maxima(new Array1d<int>()),
+        m_minima(new Array1d<int>()),
+        m_channel(&p_channel),
+        m_max_log_RMS(gdata->dBFloor()),
+        m_num_periods(0),
+        m_period_octave_estimate(1.0f)
 {
 }
 
 //------------------------------------------------------------------------------
-NoteData::NoteData(const Channel & p_channel, int startChunk_, const AnalysisData & p_analysis_data):
-  nsdfAggregateRoof(0.0),
-  firstNsdfPeriod(0.0f),
-  currentNsdfPeriod(0.0f),
-  maxima(new Array1d<int>()),
-  minima(new Array1d<int>()),
-  channel(&p_channel),
-  _startChunk(startChunk_),
-  _endChunk(startChunk_ + 1),
-  maxLogRMS(p_analysis_data.getLogRms()),
-  maxIntensityDB(p_analysis_data.getMaxIntensityDB()),
-  maxCorrelation(p_analysis_data.getCorrelation()),
-  maxPurity(p_analysis_data.getVolumeValue(*gdata)),
-  _numPeriods(0.0f), //periods;
-  _periodOctaveEstimate(1.0f),
-  _volume(0.0f),
-  _avgPitch(0.0f),
-  loopStep(channel->rate() / 1000),  // stepsize = 0.001 seconds
-  loopStart(_startChunk * channel->framesPerChunk() + loopStep),
-  prevExtremumTime(-1),
-  prevExtremumPitch(-1),
-  prevExtremum(NONE)
+NoteData::NoteData(const Channel & p_channel, int p_start_chunk, const AnalysisData & p_analysis_data):
+        m_nsdf_aggregate_roof(0.0),
+        m_first_nsdf_period(0.0f),
+        m_current_nsdf_period(0.0f),
+        m_maxima(new Array1d<int>()),
+        m_minima(new Array1d<int>()),
+        m_channel(&p_channel),
+        m_start_chunk(p_start_chunk),
+        m_end_chunk(p_start_chunk + 1),
+        m_max_log_RMS(p_analysis_data.getLogRms()),
+        m_max_intensity_DB(p_analysis_data.getMaxIntensityDB()),
+        m_max_correlation(p_analysis_data.getCorrelation()),
+        m_max_purity(p_analysis_data.getVolumeValue(*gdata)),
+        m_num_periods(0.0f), //periods;
+  m_period_octave_estimate(1.0f),
+        m_volume(0.0f),
+        m_avg_pitch(0.0f),
+        m_loop_step(m_channel->rate() / 1000),  // stepsize = 0.001 seconds
+  m_loop_start(m_start_chunk * m_channel->framesPerChunk() + m_loop_step),
+        m_prev_extremum_time(-1),
+        m_prev_extremum_pitch(-1),
+        m_prev_extremum(NONE)
 {
-  nsdfAggregateData.resize(p_channel.get_nsdf_data().size(), 0.0f);
-  nsdfAggregateDataScaled.resize(p_channel.get_nsdf_data().size(), 0.0f);
+  m_nsdf_aggregate_data.resize(p_channel.get_nsdf_data().size(), 0.0f);
+  m_nsdf_aggregate_data_scaled.resize(p_channel.get_nsdf_data().size(), 0.0f);
 }
 
 //------------------------------------------------------------------------------
@@ -70,161 +70,161 @@ NoteData::~NoteData(void)
 //------------------------------------------------------------------------------
 void NoteData::resetData(void)
 {
-  _numPeriods = 0;
+    m_num_periods = 0;
 }
 
 //------------------------------------------------------------------------------
-void NoteData::addData(const AnalysisData & p_analysis_data, float periods)
+void NoteData::addData(const AnalysisData & p_analysis_data, float p_periods)
 {
-  maxLogRMS = MAX(maxLogRMS, p_analysis_data.getLogRms());
-  maxIntensityDB = MAX(maxIntensityDB, p_analysis_data.getMaxIntensityDB());
-  maxCorrelation = MAX(maxCorrelation, p_analysis_data.getCorrelation());
-  maxPurity = MAX(maxPurity, p_analysis_data.getVolumeValue(*gdata));
-  _volume = MAX(_volume, dB2Normalised(p_analysis_data.getLogRms(),*gdata));
-  _numPeriods += periods; //sum up the periods
-  _avgPitch = bound(freq2pitch(avgFreq()), 0.0, gdata->topPitch());
+    m_max_log_RMS = MAX(m_max_log_RMS, p_analysis_data.getLogRms());
+    m_max_intensity_DB = MAX(m_max_intensity_DB, p_analysis_data.getMaxIntensityDB());
+    m_max_correlation = MAX(m_max_correlation, p_analysis_data.getCorrelation());
+    m_max_purity = MAX(m_max_purity, p_analysis_data.getVolumeValue(*gdata));
+    m_volume = MAX(m_volume, dB2Normalised(p_analysis_data.getLogRms(), *gdata));
+    m_num_periods += p_periods; //sum up the periods
+  m_avg_pitch = bound(freq2pitch(avgFreq()), 0.0, gdata->topPitch());
 }
 
 //------------------------------------------------------------------------------
 double NoteData::noteLength(void) const
 {
-  return double(numChunks()) * double(channel->framesPerChunk()) / double(channel->rate());
+  return double(numChunks()) * double(m_channel->framesPerChunk()) / double(m_channel->rate());
 }
 
 //------------------------------------------------------------------------------
 float NoteData::avgPitch(void) const
 {
-  return _avgPitch;
+  return m_avg_pitch;
 }
 
 //------------------------------------------------------------------------------
-void NoteData::addVibratoData(int chunk)
+void NoteData::addVibratoData(int p_chunk)
 {
-  if ((channel->doingDetailedPitch()) && (channel->get_pitch_lookup_smoothed().size() > 0))
+  if ((m_channel->doingDetailedPitch()) && (m_channel->get_pitch_lookup_smoothed().size() > 0))
     {
       // Detailed pitch information available, calculate maxima and minima
-      int loopLimit = ((chunk + 1) * channel->framesPerChunk()) - loopStep;
-      for (int currentTime = loopStart; currentTime < loopLimit; currentTime += loopStep)
+      int l_loop_limit = ((p_chunk + 1) * m_channel->framesPerChunk()) - m_loop_step;
+      for (int l_current_time = m_loop_start; l_current_time < l_loop_limit; l_current_time += m_loop_step)
 	{
-	  myassert(currentTime + loopStep < (int)channel->get_pitch_lookup_smoothed().size());
-	  myassert(currentTime - loopStep >= 0);
-	  float prevPitch = channel->get_pitch_lookup_smoothed().at(currentTime - loopStep);
-	  float currentPitch = channel->get_pitch_lookup_smoothed().at(currentTime);
-	  float nextPitch = channel->get_pitch_lookup_smoothed().at(currentTime + loopStep);
+	  myassert(l_current_time + m_loop_step < (int)m_channel->get_pitch_lookup_smoothed().size());
+	  myassert(l_current_time - m_loop_step >= 0);
+	  float l_prev_pitch = m_channel->get_pitch_lookup_smoothed().at(l_current_time - m_loop_step);
+	  float l_current_pitch = m_channel->get_pitch_lookup_smoothed().at(l_current_time);
+	  float l_next_pitch = m_channel->get_pitch_lookup_smoothed().at(l_current_time + m_loop_step);
 
-	  if ((prevPitch < currentPitch) && (currentPitch >= nextPitch))
+	  if ((l_prev_pitch < l_current_pitch) && (l_current_pitch >= l_next_pitch))
 	    {
 	      // Maximum
-	      if (prevExtremum == NONE)
+	      if (m_prev_extremum == NONE)
 		{
-		  maxima->push_back(currentTime);
-		  prevExtremumTime = currentTime;
-		  prevExtremumPitch = currentPitch;
-		  prevExtremum = FIRST_MAXIMUM;
+		  m_maxima->push_back(l_current_time);
+            m_prev_extremum_time = l_current_time;
+            m_prev_extremum_pitch = l_current_pitch;
+            m_prev_extremum = FIRST_MAXIMUM;
 		  continue;
 		}
-	      if ((prevExtremum == FIRST_MAXIMUM) || (prevExtremum == MAXIMUM))
+	      if ((m_prev_extremum == FIRST_MAXIMUM) || (m_prev_extremum == MAXIMUM))
 		{
-		  if (currentPitch >= prevExtremumPitch)
+		  if (l_current_pitch >= m_prev_extremum_pitch)
 		    {
-		      myassert(!maxima->isEmpty());
-		      maxima->pop_back();
-		      maxima->push_back(currentTime);
-		      prevExtremumTime = currentTime;
-		      prevExtremumPitch = currentPitch;
+		      myassert(!m_maxima->isEmpty());
+		      m_maxima->pop_back();
+		      m_maxima->push_back(l_current_time);
+                m_prev_extremum_time = l_current_time;
+                m_prev_extremum_pitch = l_current_pitch;
 		    }
 		  continue;
 		}
-	      if ((fabs(currentPitch - prevExtremumPitch) > 0.04) &&
-		  (currentTime - prevExtremumTime > 42 * loopStep))
+	      if ((fabs(l_current_pitch - m_prev_extremum_pitch) > 0.04) &&
+              (l_current_time - m_prev_extremum_time > 42 * m_loop_step))
 		{
-		  if (prevExtremum == MINIMUM)
+		  if (m_prev_extremum == MINIMUM)
 		    {
-		      maxima->push_back(currentTime);
-		      prevExtremumTime = currentTime;
-		      prevExtremumPitch = currentPitch;
-		      prevExtremum = MAXIMUM;
+		      m_maxima->push_back(l_current_time);
+                m_prev_extremum_time = l_current_time;
+                m_prev_extremum_pitch = l_current_pitch;
+                m_prev_extremum = MAXIMUM;
 		      continue;
 		    }
 		  else
 		    {
-		      if (currentTime - minima->at(0) < loopStep * 500)
+		      if (l_current_time - m_minima->at(0) < m_loop_step * 500)
 			{
 			  // Good
-			  maxima->push_back(currentTime);
-			  prevExtremumTime = currentTime;
-			  prevExtremumPitch = currentPitch;
-			  prevExtremum = MAXIMUM;
+			  m_maxima->push_back(l_current_time);
+                m_prev_extremum_time = l_current_time;
+                m_prev_extremum_pitch = l_current_pitch;
+                m_prev_extremum = MAXIMUM;
 			  continue;
 			}
 		      else
 			{
 			  // Not good
-			  myassert(!minima->isEmpty());
-			  minima->pop_back();
-			  maxima->push_back(currentTime);
-			  prevExtremumTime = currentTime;
-			  prevExtremumPitch = currentPitch;
-			  prevExtremum = FIRST_MAXIMUM;
+			  myassert(!m_minima->isEmpty());
+			  m_minima->pop_back();
+			  m_maxima->push_back(l_current_time);
+                m_prev_extremum_time = l_current_time;
+                m_prev_extremum_pitch = l_current_pitch;
+                m_prev_extremum = FIRST_MAXIMUM;
 			  continue;
 			}
 		    }
 		}
 	    }
-	  else if ((prevPitch > currentPitch) && (currentPitch <= nextPitch))
+	  else if ((l_prev_pitch > l_current_pitch) && (l_current_pitch <= l_next_pitch))
 	    {
 	      // Minimum
-	      if (prevExtremum == NONE)
+	      if (m_prev_extremum == NONE)
 		{
-		  minima->push_back(currentTime);
-		  prevExtremumTime = currentTime;
-		  prevExtremumPitch = currentPitch;
-		  prevExtremum = FIRST_MINIMUM;
+		  m_minima->push_back(l_current_time);
+            m_prev_extremum_time = l_current_time;
+            m_prev_extremum_pitch = l_current_pitch;
+            m_prev_extremum = FIRST_MINIMUM;
 		  continue;
 		}
-	      if ((prevExtremum == FIRST_MINIMUM) || (prevExtremum == MINIMUM))
+	      if ((m_prev_extremum == FIRST_MINIMUM) || (m_prev_extremum == MINIMUM))
 		{
-		  if (currentPitch <= prevExtremumPitch)
+		  if (l_current_pitch <= m_prev_extremum_pitch)
 		    {
-		      myassert(!minima->isEmpty());
-		      minima->pop_back();
-		      minima->push_back(currentTime);
-		      prevExtremumTime = currentTime;
-		      prevExtremumPitch = currentPitch;
+		      myassert(!m_minima->isEmpty());
+		      m_minima->pop_back();
+		      m_minima->push_back(l_current_time);
+                m_prev_extremum_time = l_current_time;
+                m_prev_extremum_pitch = l_current_pitch;
 		    }
 		  continue;
 		}
-	      if ((fabs(currentPitch - prevExtremumPitch) > 0.04) &&
-		  (currentTime - prevExtremumTime > 42 * loopStep))
+	      if ((fabs(l_current_pitch - m_prev_extremum_pitch) > 0.04) &&
+              (l_current_time - m_prev_extremum_time > 42 * m_loop_step))
 		{
-		  if (prevExtremum == MAXIMUM)
+		  if (m_prev_extremum == MAXIMUM)
 		    {
-		      minima->push_back(currentTime);
-		      prevExtremumTime = currentTime;
-		      prevExtremumPitch = currentPitch;
-		      prevExtremum = MINIMUM;
+		      m_minima->push_back(l_current_time);
+                m_prev_extremum_time = l_current_time;
+                m_prev_extremum_pitch = l_current_pitch;
+                m_prev_extremum = MINIMUM;
 		      continue;
 		    }
 		  else
 		    {
-		      if (currentTime - maxima->at(0) < loopStep * 500)
+		      if (l_current_time - m_maxima->at(0) < m_loop_step * 500)
 			{
 			  // Good
-			  minima->push_back(currentTime);
-			  prevExtremumTime = currentTime;
-			  prevExtremumPitch = currentPitch;
-			  prevExtremum = MINIMUM;
+			  m_minima->push_back(l_current_time);
+                m_prev_extremum_time = l_current_time;
+                m_prev_extremum_pitch = l_current_pitch;
+                m_prev_extremum = MINIMUM;
 			  continue;
 			}
 		      else
 			{
 			  // Not good
-			  myassert(!maxima->isEmpty());
-			  maxima->pop_back();
-			  minima->push_back(currentTime);
-			  prevExtremumTime = currentTime;
-			  prevExtremumPitch = currentPitch;
-			  prevExtremum = FIRST_MINIMUM;
+			  myassert(!m_maxima->isEmpty());
+			  m_maxima->pop_back();
+			  m_minima->push_back(l_current_time);
+                m_prev_extremum_time = l_current_time;
+                m_prev_extremum_pitch = l_current_pitch;
+                m_prev_extremum = FIRST_MINIMUM;
 			  continue;
 			}
 		    }
@@ -232,19 +232,19 @@ void NoteData::addVibratoData(int chunk)
 	    }
 	}
       // Calculate start of next loop
-      loopStart = loopStart + ((loopLimit - loopStart) / loopStep) * loopStep + loopStep;
+      m_loop_start = m_loop_start + ((l_loop_limit - m_loop_start) / m_loop_step) * m_loop_step + m_loop_step;
     }
 }
 
 //------------------------------------------------------------------------------
 void NoteData::recalcAvgPitch(void)
 {
-  _numPeriods = 0.0f;
-  for(int j = startChunk(); j < endChunk(); j++)
+    m_num_periods = 0.0f;
+  for(int l_j = startChunk(); l_j < endChunk(); l_j++)
     {
-      _numPeriods += float(channel->framesPerChunk()) / float(channel->dataAtChunk(j)->getPeriod());
+        m_num_periods += float(m_channel->framesPerChunk()) / float(m_channel->dataAtChunk(l_j)->getPeriod());
     }
-  _avgPitch = bound(freq2pitch(avgFreq()), 0.0, gdata->topPitch());
+    m_avg_pitch = bound(freq2pitch(avgFreq()), 0.0, gdata->topPitch());
 }
 
 // EOF

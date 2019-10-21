@@ -18,7 +18,7 @@
 
 //------------------------------------------------------------------------------
 NoteData::NoteData(void):
-  channel(NULL)
+  m_channel(NULL)
 {
 }
 
@@ -29,57 +29,57 @@ bool NoteData::isValid(void) const
 }
 
 //------------------------------------------------------------------------------
-void NoteData::setStartChunk(int startChunk_)
+void NoteData::setStartChunk(int p_start_chunk)
 {
-  _startChunk = startChunk_;
+    m_start_chunk = p_start_chunk;
 }
 
 //------------------------------------------------------------------------------
-void NoteData::setEndChunk(int endChunk_)
+void NoteData::setEndChunk(int p_end_chunk)
 {
-  _endChunk = endChunk_;
+    m_end_chunk = p_end_chunk;
 }
 
 //------------------------------------------------------------------------------
 int NoteData::startChunk(void) const
 {
-  return _startChunk;
+  return m_start_chunk;
 }
 
 //------------------------------------------------------------------------------
 int NoteData::endChunk(void) const
 {
-  return _endChunk;
+  return m_end_chunk;
 }
 
 //------------------------------------------------------------------------------
 int NoteData::numChunks(void) const
 {
-  return _endChunk - _startChunk;
+  return m_end_chunk - m_start_chunk;
 }
 
 //------------------------------------------------------------------------------
 float NoteData::numPeriods(void) const
 {
-  return _numPeriods;
+  return m_num_periods;
 }
 
 //------------------------------------------------------------------------------
-void NoteData::setPeriodOctaveEstimate(float periodOctaveEstimate_)
+void NoteData::setPeriodOctaveEstimate(float p_period_octave_estimate)
 {
-  _periodOctaveEstimate = periodOctaveEstimate_;
+    m_period_octave_estimate = p_period_octave_estimate;
 }
 
 //------------------------------------------------------------------------------
 float NoteData::periodOctaveEstimate(void) const
 {
-  return _periodOctaveEstimate;
+  return m_period_octave_estimate;
 }
 
 //------------------------------------------------------------------------------
 float NoteData::volume(void) const
 {
-  return _volume;
+  return m_volume;
 }
 
 //------------------------------------------------------------------------------
@@ -91,72 +91,72 @@ double NoteData::avgFreq(void) const
 //------------------------------------------------------------------------------
 const SmartPtr<Array1d<int> > NoteData::get_maxima(void) const
 {
-  return maxima;
+  return m_maxima;
 }
 
 //------------------------------------------------------------------------------
 const SmartPtr<Array1d<int> > NoteData::get_minima(void) const
 {
-  return minima;
+  return m_minima;
 }
 
 //------------------------------------------------------------------------------
 void NoteData::set_first_nsdf_period(float p_period)
 {
-  firstNsdfPeriod = p_period;
+  m_first_nsdf_period = p_period;
 }
 
 //------------------------------------------------------------------------------
 float NoteData::get_first_nsdf_period(void)const
 {
-  return firstNsdfPeriod;
+  return m_first_nsdf_period;
 }
 
 //------------------------------------------------------------------------------
 void NoteData::set_current_nsdf_period(float p_period)
 {
-  currentNsdfPeriod = p_period;
+  m_current_nsdf_period = p_period;
 }
 
 //------------------------------------------------------------------------------
 void NoteData::add_current_nsdf_period(float p_period_diff)
 {
-  currentNsdfPeriod += p_period_diff;
+  m_current_nsdf_period += p_period_diff;
 }
 
 //------------------------------------------------------------------------------
 float NoteData::get_current_nsdf_period(void) const
 {
-  return currentNsdfPeriod;
+  return m_current_nsdf_period;
 }
 
 //------------------------------------------------------------------------------
 void NoteData::set_nsdf_aggregate_roof(const double & p_value)
 {
-  nsdfAggregateRoof = p_value;
+    m_nsdf_aggregate_roof = p_value;
 }
 
 //------------------------------------------------------------------------------
 void NoteData::add_nsdf_aggregate_roof(const double & p_value)
 {
-  nsdfAggregateRoof += p_value;
+    m_nsdf_aggregate_roof += p_value;
 }
 
 //------------------------------------------------------------------------------
 const double & NoteData::get_nsdf_aggregate_roof(void)const
 {
-  return nsdfAggregateRoof;
+  return m_nsdf_aggregate_roof;
 }
 
 //------------------------------------------------------------------------------
 const Array1d<float> & NoteData::get_nsdf_aggregate_data(void)const
 {
-  return nsdfAggregateData;
+  return m_nsdf_aggregate_data;
 }
 
 //------------------------------------------------------------------------------
 const Array1d<float> & NoteData::get_nsdf_aggregate_data_scaled(void)const
 {
-  return nsdfAggregateDataScaled;
+  return m_nsdf_aggregate_data_scaled;
 }
 //EOF
