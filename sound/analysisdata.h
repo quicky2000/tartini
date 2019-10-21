@@ -198,7 +198,7 @@ public:
   std::vector<float> harmonicFreq;
   std::vector<float> harmonicNoise;
   FilterState filterState; //the state of the filter at the beginning of the chunk
-  int noteIndex; //The index of the note in the noteData, or NO_NOTE
+  int noteIndex; //The index of the note in the m_note_data, or NO_NOTE
   bool notePlaying;
   bool done;
 };

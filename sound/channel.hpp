@@ -19,120 +19,120 @@
 //------------------------------------------------------------------------------
 void Channel::lock(void)
 {
-  mutex->lock();
-  isLocked = true;
+  m_mutex->lock();
+    m_is_locked = true;
 }
 
 //------------------------------------------------------------------------------
 void Channel::unlock(void)
 {
-  isLocked = false;
-  mutex->unlock();
+    m_is_locked = false;
+  m_mutex->unlock();
 }
 
 //------------------------------------------------------------------------------
 bool Channel::locked(void) const
 {
-  return isLocked; //For same thread testing of asserts only
+  return m_is_locked; //For same thread testing of asserts only
 }
 
 //------------------------------------------------------------------------------
 float * Channel::begin(void)
 {
-  return directInput.begin();
+  return m_direct_input.begin();
 }
 
 //------------------------------------------------------------------------------
 float * Channel::end(void)
 {
- return directInput.end();
+ return m_direct_input.end();
 }
 
 //------------------------------------------------------------------------------
 int Channel::size(void) const
 {
-  return directInput.size();
+  return m_direct_input.size();
 }
 
 //------------------------------------------------------------------------------
-const float & Channel::at(int pos) const
+const float & Channel::at(int p_pos) const
 {
- return directInput.at(pos);
+ return m_direct_input.at(p_pos);
 }
 
 //------------------------------------------------------------------------------
 int Channel::rate(void) const
 {
- return parent->rate();
+ return m_parent->rate();
 }
 
 //------------------------------------------------------------------------------
 int Channel::framesPerChunk(void) const
 {
-  return parent->framesPerChunk();
+  return m_parent->framesPerChunk();
 }
 
 //------------------------------------------------------------------------------
-void Channel::setParent(SoundFile *parent_)
+void Channel::setParent(SoundFile *p_parent)
 {
-  parent = parent_;
+  m_parent = p_parent;
 }
 
 //------------------------------------------------------------------------------
 SoundFile* Channel::getParent(void) const
 {
-  return parent;
+  return m_parent;
 }
 
 //------------------------------------------------------------------------------
-void Channel::setPitchMethod(int pitch_method)
+void Channel::setPitchMethod(int p_pitch_method)
 {
-  _pitch_method = pitch_method;
+    m_pitch_method = p_pitch_method;
 }
 
 //------------------------------------------------------------------------------
 int Channel::pitchMethod(void) const
 {
-  return _pitch_method;
+  return m_pitch_method;
 }
 
 //------------------------------------------------------------------------------
 bool Channel::isVisible(void) const
 {
-  return visible;
+  return m_visible;
 }
 
 //------------------------------------------------------------------------------
-void Channel::setVisible(bool state)
+void Channel::setVisible(bool p_state)
 {
-  visible = state;
+  m_visible = p_state;
 }
 
 //------------------------------------------------------------------------------
 double Channel::timePerChunk(void) const
 {
-  return parent->timePerChunk();
+  return m_parent->timePerChunk();
 }
 
 
 //------------------------------------------------------------------------------
 double Channel::startTime(void) const
 {
-  return parent->startTime();
+  return m_parent->startTime();
 }
 
 
 //------------------------------------------------------------------------------
-void Channel::setStartTime(double newStartTime)
+void Channel::setStartTime(double p_new_start_time)
 {
-  parent->setStartTime(newStartTime);
+  m_parent->setStartTime(p_new_start_time);
 }
 
 
 //------------------------------------------------------------------------------
 int Channel::totalChunks(void) const
 {
-  return lookup.size();
+  return m_lookup.size();
 }
 
 
@@ -151,56 +151,56 @@ double Channel::totalTime(void) const
 
 
 //------------------------------------------------------------------------------
-void Channel::jumpToTime(double t)
+void Channel::jumpToTime(double p_time)
 {
-  parent->jumpToTime(t);
+  m_parent->jumpToTime(p_time);
 }
 
 
 //------------------------------------------------------------------------------
-int Channel::chunkAtTime(double t) const
+int Channel::chunkAtTime(double p_time) const
 {
-  return parent->chunkAtTime(t);
+  return m_parent->chunkAtTime(p_time);
 }
 
 
 //------------------------------------------------------------------------------
-double Channel::chunkFractionAtTime(double t) const
+double Channel::chunkFractionAtTime(double p_time) const
 {
-  return parent->chunkFractionAtTime(t);
+  return m_parent->chunkFractionAtTime(p_time);
 }
 
 
 //------------------------------------------------------------------------------
 int Channel::chunkAtCurrentTime(void) const
 {
-  return parent->chunkAtCurrentTime();
+  return m_parent->chunkAtCurrentTime();
 }
 
 
 //------------------------------------------------------------------------------
 int Channel::currentChunk(void) const
 {
-  return parent->currentChunk();
+  return m_parent->currentChunk();
 } //this one should be use to retrieve current info
 
 
 //------------------------------------------------------------------------------
-double Channel::timeAtChunk(int chunk) const
+double Channel::timeAtChunk(int p_chunk) const
 {
-  return parent->timeAtChunk(chunk);
+  return m_parent->timeAtChunk(p_chunk);
 }
 
 //------------------------------------------------------------------------------
-const AnalysisData * Channel::dataAtChunk(int chunk) const
+const AnalysisData * Channel::dataAtChunk(int p_chunk) const
 {
-  return (isValidChunk(chunk)) ? &lookup[chunk] : NULL;
+  return (isValidChunk(p_chunk)) ? &m_lookup[p_chunk] : NULL;
 }
 
 //------------------------------------------------------------------------------
-AnalysisData * Channel::dataAtChunk(int chunk)
+AnalysisData * Channel::dataAtChunk(int p_chunk)
 {
-  return (isValidChunk(chunk)) ? &lookup[chunk] : NULL;
+  return (isValidChunk(p_chunk)) ? &m_lookup[p_chunk] : NULL;
 }
 
 //------------------------------------------------------------------------------
@@ -216,37 +216,37 @@ AnalysisData * Channel::dataAtCurrentChunk(void)
 }
 
 //------------------------------------------------------------------------------
-const AnalysisData * Channel::dataAtTime(double t) const
+const AnalysisData * Channel::dataAtTime(double p_time) const
 {
-  return dataAtChunk(chunkAtTime(t));
+  return dataAtChunk(chunkAtTime(p_time));
 }
 
 
 //------------------------------------------------------------------------------
-large_vector<AnalysisData>::iterator Channel::dataIteratorAtChunk(int chunk)
+large_vector<AnalysisData>::iterator Channel::dataIteratorAtChunk(int p_chunk)
 {
-  return lookup.iterator_at(chunk);
+  return m_lookup.iterator_at(p_chunk);
 }
 
 
 //------------------------------------------------------------------------------
 bool Channel::hasAnalysisData(void) const
 {
-  return !lookup.empty();
+  return !m_lookup.empty();
 }
 
 
 //------------------------------------------------------------------------------
-bool Channel::isValidChunk(int chunk) const
+bool Channel::isValidChunk(int p_chunk) const
 {
-  return (chunk >= 0 && chunk < totalChunks());
+  return (p_chunk >= 0 && p_chunk < totalChunks());
 }
 
 
 //------------------------------------------------------------------------------
-bool Channel::isValidTime(double t) const
+bool Channel::isValidTime(double p_time) const
 {
-  return isValidChunk(chunkAtTime(t));
+  return isValidChunk(chunkAtTime(p_time));
 }
 
 
@@ -261,229 +261,229 @@ bool Channel::isValidCurrentTime(void) const
 //------------------------------------------------------------------------------
 float Channel::threshold(void) const
 {
-  return _threshold;
+  return m_threshold;
 }
 
 
 //------------------------------------------------------------------------------
-void Channel::setIntThreshold(int thresholdPercentage)
+void Channel::setIntThreshold(int p_threshold_percentage)
 {
-  _threshold = float(thresholdPercentage) / 100.0f;
+    m_threshold = float(p_threshold_percentage) / 100.0f;
 }
 
 
 //------------------------------------------------------------------------------
-void Channel::setColor(QColor c)
+void Channel::setColor(QColor p_color)
 {
-  color = c;
+  m_color = p_color;
 }
 
 
 //------------------------------------------------------------------------------
 bool Channel::isNotePlaying(void) const
 {
-  return noteIsPlaying;
+  return m_note_is_playing;
 }
 
 
 //------------------------------------------------------------------------------
-bool Channel::isVisibleChunk(int chunk_) const
+bool Channel::isVisibleChunk(int p_chunk) const
 {
-  return isVisibleChunk(dataAtChunk(chunk_));
+  return isVisibleChunk(dataAtChunk(p_chunk));
 }
 
 
 //------------------------------------------------------------------------------
 int Channel::getCurrentNoteIndex(void) const
 {
-  return int(noteData.size()) - 1;
+  return int(m_note_data.size()) - 1;
 }
 
 //------------------------------------------------------------------------------
 bool Channel::firstTimeThrough(void) const
 {
-  return parent->isFirstTimeThrough();
+  return m_parent->isFirstTimeThrough();
 }
 
 //------------------------------------------------------------------------------
 bool Channel::doingDetailedPitch(void) const
 {
-  return parent->doingDetailedPitch();
+  return m_parent->doingDetailedPitch();
 }
 
 //------------------------------------------------------------------------------
 int Channel::pronyDelay(void) const
 {
-  return pronyWindowSize / 2;
+  return m_prony_window_size / 2;
 }
 
 //------------------------------------------------------------------------------
 const large_vector<float> & Channel::get_pitch_lookup(void) const
 {
-  return pitchLookup;
+  return m_pitch_lookup;
 }
 
 //------------------------------------------------------------------------------
 large_vector<float> & Channel::get_pitch_lookup(void)
 {
-  return pitchLookup;
+  return m_pitch_lookup;
 }
 
 //------------------------------------------------------------------------------
 const large_vector<float> & Channel::get_pitch_lookup_smoothed(void) const
 {
-  return pitchLookupSmoothed;
+  return m_pitch_lookup_smoothed;
 }
 
 //------------------------------------------------------------------------------
 large_vector<float> & Channel::get_pitch_lookup_smoothed(void)
 {
-  return pitchLookupSmoothed;
+  return m_pitch_lookup_smoothed;
 }
 
 //------------------------------------------------------------------------------
 const QColor & Channel::get_color(void)const
 {
-  return color;
+  return m_color;
 }
 
 //------------------------------------------------------------------------------
 const Array1d<float> & Channel::get_direct_input(void) const
 {
-  return directInput;
+  return m_direct_input;
 }
 
 //------------------------------------------------------------------------------
 const Array1d<float> & Channel::get_filtered_input(void) const
 {
-  return filteredInput;
+  return m_filtered_input;
 }
 
 //------------------------------------------------------------------------------
 const Array1d<float> & Channel::get_nsdf_data(void) const
 {
-  return nsdfData;
+  return m_nsdf_data;
 }
 
 //------------------------------------------------------------------------------
 const Array1d<float> & Channel::get_fft_data1(void) const
 {
-  return fftData1;
+  return m_fft_data1;
 }
 
 //------------------------------------------------------------------------------
 Array1d<float> & Channel::get_fft_data1(void)
 {
-  return fftData1;
+  return m_fft_data1;
 }
 
 //------------------------------------------------------------------------------
 const Array1d<float> & Channel::get_fft_data2(void) const
 {
-  return fftData2;
+  return m_fft_data2;
 }
 
 //------------------------------------------------------------------------------
 Array1d<float> & Channel::get_fft_data2(void)
 {
-  return fftData2;
+  return m_fft_data2;
 }
 
 //------------------------------------------------------------------------------
 Array1d<float> & Channel::get_cepstrum_data(void)
 {
-  return cepstrumData;
+  return m_cepstrum_data;
 }
 
 //------------------------------------------------------------------------------
 const Array1d<float> & Channel::get_detailed_pitch_data(void) const
 {
-  return detailedPitchData;
+  return m_detailed_pitch_data;
 }
 
 //------------------------------------------------------------------------------
 const Array1d<float> & Channel::get_detailed_pitch_data_smoothed(void) const
 {
-  return detailedPitchDataSmoothed;
+  return m_detailed_pitch_data_smoothed;
 }
 
 //------------------------------------------------------------------------------
 const large_vector<NoteData> & Channel::get_note_data(void) const
 {
-  return noteData;
+  return m_note_data;
 }
 
 //------------------------------------------------------------------------------
-void Channel::apply_highpass_filter(const float *input, float *output, int n)
+void Channel::apply_highpass_filter(const float *p_input, float *p_output, int p_n)
 {
-  highPassFilter->filter(input, output, n);
+  m_high_pass_filter->filter(p_input, p_output, p_n);
 }
 
 //------------------------------------------------------------------------------
 const Filter & Channel::get_pitch_small_smoothing_filter(void)const
 {
-  return *pitchSmallSmoothingFilter;
+  return *m_pitch_small_smoothing_filter;
 }
 
 //------------------------------------------------------------------------------
 const Filter & Channel::get_pitch_big_smoothing_filter(void)const
 {
-  return *pitchBigSmoothingFilter;
+  return *m_pitch_big_smoothing_filter;
 }
 
 //------------------------------------------------------------------------------
 const double & Channel::get_rms_floor(void)const
 {
-  return rmsFloor;
+  return m_rms_floor;
 }
 
 //------------------------------------------------------------------------------
 void Channel::set_rms_floor(const double & p_rms_floor)
 {
-  rmsFloor = p_rms_floor;
+    m_rms_floor = p_rms_floor;
 }
 
 //------------------------------------------------------------------------------
 const double & Channel::get_rms_ceiling(void)const
 {
-  return rmsCeiling;
+  return m_rms_ceiling;
 }
 
 //------------------------------------------------------------------------------
 void Channel::set_rms_ceiling(const double & p_rms_ceiling)
 {
-  rmsCeiling = p_rms_ceiling;
+    m_rms_ceiling = p_rms_ceiling;
 }
 
 //------------------------------------------------------------------------------
 ZoomLookup & Channel::get_summary_zoom_lookup(void)
 {
-  return summaryZoomLookup;
+  return m_summary_zoom_lookup;
 }
 
 //------------------------------------------------------------------------------
 ZoomLookup & Channel::get_normal_zoom_lookup(void)
 {
-  return normalZoomLookup;
+  return m_normal_zoom_lookup;
 }
 
 //------------------------------------------------------------------------------
 ZoomLookup & Channel::get_amplitude_zoom_lookup(void)
 {
-  return amplitudeZoomLookup;
+  return m_amplitude_zoom_lookup;
 }
 
 //------------------------------------------------------------------------------
-ChannelLocker::ChannelLocker(Channel *channel_)
+ChannelLocker::ChannelLocker(Channel *p_channel)
 {
-  myassert(channel_);
-  channel = channel_;
-  channel->lock();
+  myassert(p_channel);
+  m_channel = p_channel;
+  m_channel->lock();
 }
 
 //------------------------------------------------------------------------------
 ChannelLocker::~ChannelLocker()
 {
-  channel->unlock();
+  m_channel->unlock();
 }
 //EOF
