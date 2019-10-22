@@ -61,7 +61,7 @@ public:
   /**
      Allows you to specify how many seconds should be visible before the current time
   */
-  void setViewOffset(double x);
+  void setViewOffset(double p_x);
 
   /**
      Returns the lowest note visible in the view
@@ -71,8 +71,8 @@ public:
   /**
      Allows you to specify the lowest note that should be visible in the view
   */
-  void setViewBottomRaw(const double & y);
-  void setViewBottom(const double & y);
+  void setViewBottomRaw(const double & p_y);
+  void setViewBottom(const double & p_y);
 
   /**
      Returns the time at the left edge of the view
@@ -97,7 +97,7 @@ public:
   /**
      Returns the screen pixel for the time t will be drawn
   */
-  inline int screenPixelX(double t)const;
+  inline int screenPixelX(double p_t)const;
   
   // Relates to where the files start/stop
   
@@ -114,9 +114,9 @@ public:
   inline const double & logZoomX(void)const;
   inline const double & logZoomY(void)const;
 
-  void setPixelHeight(int h);
-  void setPixelWidth(int w);
-  inline void setLogZoomYRaw(double y);
+  void setPixelHeight(int p_h);
+  void setPixelWidth(int p_w);
+  inline void setLogZoomYRaw(double p_y);
     
 public slots:
   void doUpdate(void);
@@ -125,14 +125,14 @@ public slots:
   void newUpdate(void);
   void nextFastUpdate(void);
   void nextSlowUpdate(void);
-  void setCurrentTimeRaw(double x);
-  void setCurrentTime(double x);
-  void changeViewX(const double & x);
-  void changeViewY(const double & y);
-  void setZoomFactorX(const double & x);
-  void setZoomFactorX(const double & x, int fixedX);
-  void setZoomFactorY(const double & y);
-  void setZoomFactorY(const double & y, int fixedY);
+  void setCurrentTimeRaw(double p_x);
+  void setCurrentTime(double p_x);
+  void changeViewX(const double & p_x);
+  void changeViewY(const double & p_y);
+  void setZoomFactorX(const double & p_x);
+  void setZoomFactorX(const double & p_x, int p_fixed_x);
+  void setZoomFactorY(const double & p_y);
+  void setZoomFactorY(const double & p_y, int p_fixed_y);
   
   void doAutoFollowing(void);
   inline bool autoFollow(void)const;
@@ -141,80 +141,80 @@ public slots:
   inline bool backgroundShading(void)const;
   
 signals:
-  void onSlowUpdate(double currentTime_);
-  void onFastUpdate(double currentTime_);
+  void onSlowUpdate(double p_current_time);
+  void onFastUpdate(double p_current_time);
   void viewChanged(void);
-  void scrollableYChanged(double x);
-  void currentTimeChanged(double x);
-  void viewBottomChanged(double x);
-  void viewWidthChanged(double x);
-  void viewHeightChanged(double x);
-  void viewOffsetChanged(int x);
-  void zoomXChanged(double x);
-  void zoomYChanged(double x);
-  void timeViewRangeChanged(double leftView_, double rightView_);
-  void logZoomXChanged(double x);
-  void logZoomYChanged(double x);
+  void scrollableYChanged(double p_x);
+  void currentTimeChanged(double p_x);
+  void viewBottomChanged(double p_x);
+  void viewWidthChanged(double p_x);
+  void viewHeightChanged(double p_x);
+  void viewOffsetChanged(int p_x);
+  void zoomXChanged(double p_x);
+  void zoomYChanged(double p_x);
+  void timeViewRangeChanged(double p_left_view, double p_right_view);
+  void logZoomXChanged(double p_x);
+  void logZoomYChanged(double p_x);
 
 private:
   /**
      in seconds
   */
-  double _currentTime;
+  double m_current_time;
 
   /**
      the lowest note visible
   */
-  double _viewBottom;
+  double m_view_bottom;
 
   /**
      the amount of time visible before the current time (in seconds)
   */
-  double _viewOffset;
+  double m_view_offset;
 
   /**
      the log of the number of pixels per second
   */
-  double _logZoomX;
+  double m_log_zoom_X;
 
   /**
      the log of the number of pixels per semitone
   */
-  double _logZoomY;
+  double m_log_zoom_Y;
 
   /**
      the height of the view window (in pixels)
   */
-  int _pixelHeight;
+  int m_pixel_height;
 
   /**
      the width of the view window (in pixels)
   */
-  int _pixelWidth;
+  int m_pixel_width;
   
   /**
      How many seconds of data each pixel must represent (on the x axis)
   */
-  double _zoomX;
+  double m_zoom_X;
 
   /**
      How many semitones each pixel must represent (on the y axis)
   */
-  double _zoomY;
+  double m_zoom_Y;
   
   /**
      Whether the view should autofollow or not
   */
-  bool _autoFollow;
-  bool _backgroundShading;
+  bool m_auto_follow;
+  bool m_background_shading;
 
-  inline void setLogZoomX(double x);
-  inline void setLogZoomY(double y);
+  inline void setLogZoomX(double p_x);
+  inline void setLogZoomY(double p_y);
 
-  QTimer *fastUpdateTimer;
-  QTimer *slowUpdateTimer;
-  bool needSlowUpdate;
-  bool needFastUpdate;
+  QTimer *m_fast_update_timer;
+  QTimer *m_slow_update_timer;
+  bool m_need_slow_update;
+  bool m_need_fast_update;
 
 };
 

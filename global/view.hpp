@@ -17,47 +17,47 @@
 */
 
 //------------------------------------------------------------------------------
-void View::setLogZoomX(double x)
+void View::setLogZoomX(double p_x)
 {
-  _logZoomX = x;
-  _zoomX = 1.0 / exp(_logZoomX);
+    m_log_zoom_X = p_x;
+    m_zoom_X = 1.0 / exp(m_log_zoom_X);
 }
 
 //------------------------------------------------------------------------------
-void View::setLogZoomY(double y)
+void View::setLogZoomY(double p_y)
 {
-  _logZoomY = bound(y, 0.6, 6.0);
-  _zoomY = 1.0 / exp(_logZoomY);
+    m_log_zoom_Y = bound(p_y, 0.6, 6.0);
+    m_zoom_Y = 1.0 / exp(m_log_zoom_Y);
 }
 
 //------------------------------------------------------------------------------
 const double & View::currentTime(void)const
 {
-  return _currentTime;
+  return m_current_time;
 }
 
 //------------------------------------------------------------------------------
 double View::viewWidth(void)const
 {
-  return double(_pixelWidth) * _zoomX;
+  return double(m_pixel_width) * m_zoom_X;
 }
 
 //------------------------------------------------------------------------------
 double View::viewHeight(void)const
 {
-  return double(_pixelHeight) / exp(_logZoomY);
+  return double(m_pixel_height) / exp(m_log_zoom_Y);
 }
 
 //------------------------------------------------------------------------------
 const double & View::viewOffset(void)const
 {
-  return _viewOffset;
+  return m_view_offset;
 }
 
 //------------------------------------------------------------------------------
 const double & View::viewBottom(void)const
 {
-  return _viewBottom;
+  return m_view_bottom;
 }
 
 //------------------------------------------------------------------------------
@@ -85,51 +85,51 @@ double View::viewTop(void)const
 }
 
 //------------------------------------------------------------------------------
-int View::screenPixelX(double t)const
+int View::screenPixelX(double p_t)const
 {
-  return toInt((t - viewLeft()) / zoomX());
+  return toInt((p_t - viewLeft()) / zoomX());
 }
 
 //------------------------------------------------------------------------------
 const double & View::zoomX(void)const
 {
-  return _zoomX;
+  return m_zoom_X;
 }
 
 //------------------------------------------------------------------------------
 const double & View::zoomY(void)const
 {
-  return _zoomY;
+  return m_zoom_Y;
 }
 
 //------------------------------------------------------------------------------
 const double & View::logZoomX(void)const
 {
-  return _logZoomX;
+  return m_log_zoom_X;
 }
 
 //------------------------------------------------------------------------------
 const double & View::logZoomY(void)const
 {
-  return _logZoomY;
+  return m_log_zoom_Y;
 }
 
 //------------------------------------------------------------------------------
-void View::setLogZoomYRaw(double y)
+void View::setLogZoomYRaw(double p_y)
 {
-  setLogZoomY(y);
+  setLogZoomY(p_y);
 }
 
 //------------------------------------------------------------------------------
 bool View::autoFollow(void)const
 {
-  return _autoFollow;
+  return m_auto_follow;
 }
 
 //------------------------------------------------------------------------------
 bool View::backgroundShading(void)const
 {
-  return _backgroundShading;
+  return m_background_shading;
 }
 
 //EOF

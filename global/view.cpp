@@ -24,21 +24,21 @@
 
 //------------------------------------------------------------------------------
 View::View(void):
-  _currentTime(1.0), //to force a change in the setCurrentTime call
-  _viewBottom(0.0),
-  _viewOffset(0.0), //to force a change in the setViewOffset call
-  _logZoomX(0.0),
-  _logZoomY(0.0),
-  _pixelHeight(0), //to force a change in the setPixelHeight call
-  _pixelWidth(0), //to force a change in the setPixelWidth call
-  _zoomX(0.0),
-  _zoomY(0.0),
-  _autoFollow(gdata->getSettingsValue("View/autoFollow", true)),
-  _backgroundShading(gdata->getSettingsValue("View/backgroundShading", true)),
-  fastUpdateTimer(new QTimer(this)),
-  slowUpdateTimer(new QTimer(this)),
-  needSlowUpdate(false),
-  needFastUpdate(false)
+        m_current_time(1.0), //to force a change in the setCurrentTime call
+  m_view_bottom(0.0),
+        m_view_offset(0.0), //to force a change in the setViewOffset call
+  m_log_zoom_X(0.0),
+        m_log_zoom_Y(0.0),
+        m_pixel_height(0), //to force a change in the setPixelHeight call
+  m_pixel_width(0), //to force a change in the setPixelWidth call
+  m_zoom_X(0.0),
+        m_zoom_Y(0.0),
+        m_auto_follow(gdata->getSettingsValue("View/autoFollow", true)),
+        m_background_shading(gdata->getSettingsValue("View/backgroundShading", true)),
+        m_fast_update_timer(new QTimer(this)),
+        m_slow_update_timer(new QTimer(this)),
+        m_need_slow_update(false),
+        m_need_fast_update(false)
 {
   setCurrentTime(0.0); //in seconds
 
@@ -49,16 +49,16 @@ View::View(void):
   setZoomFactorY(3.2);
   setViewBottom(62.0); //the lowest note visible (in semitones) from C0
 
-  connect(fastUpdateTimer, SIGNAL(timeout()), this, SLOT(nextFastUpdate()));
-  connect(slowUpdateTimer, SIGNAL(timeout()), this, SLOT(nextSlowUpdate()));
+  connect(m_fast_update_timer, SIGNAL(timeout()), this, SLOT(nextFastUpdate()));
+  connect(m_slow_update_timer, SIGNAL(timeout()), this, SLOT(nextSlowUpdate()));
   connect(this, SIGNAL(viewChanged()), this, SLOT(newUpdate()));
 }
 
 //------------------------------------------------------------------------------
 View::~View(void)
 {
-  delete fastUpdateTimer;
-  delete slowUpdateTimer;
+  delete m_fast_update_timer;
+  delete m_slow_update_timer;
 }
 
 // please call this after a window has been created
@@ -78,141 +78,141 @@ void View::doUpdate(void)
 //------------------------------------------------------------------------------
 void View::doSlowUpdate(void)
 {
-  needSlowUpdate = false;
-  if(!slowUpdateTimer->isActive())
+    m_need_slow_update = false;
+  if(!m_slow_update_timer->isActive())
     {
-      slowUpdateTimer->start(gdata->slowUpdateSpeed());
+      m_slow_update_timer->start(gdata->slowUpdateSpeed());
     }
-  emit onSlowUpdate(_currentTime);
+  emit onSlowUpdate(m_current_time);
 }
 
 //------------------------------------------------------------------------------
 void View::doFastUpdate(void)
 {
-  needFastUpdate = false;
-  if(!fastUpdateTimer->isActive())
+    m_need_fast_update = false;
+  if(!m_fast_update_timer->isActive())
     {
-      fastUpdateTimer->start(gdata->fastUpdateSpeed());
+      m_fast_update_timer->start(gdata->fastUpdateSpeed());
     }
-  emit onFastUpdate(_currentTime);
+  emit onFastUpdate(m_current_time);
 }
 
 //------------------------------------------------------------------------------
 void View::newUpdate(void)
 {
-  if(slowUpdateTimer->isActive())
+  if(m_slow_update_timer->isActive())
     {
-      needSlowUpdate = true;
+        m_need_slow_update = true;
     }
   else
     {
-      needSlowUpdate = false;
-      slowUpdateTimer->start(gdata->slowUpdateSpeed());
-      emit onSlowUpdate(_currentTime);
+        m_need_slow_update = false;
+      m_slow_update_timer->start(gdata->slowUpdateSpeed());
+      emit onSlowUpdate(m_current_time);
     }
-  if(fastUpdateTimer->isActive())
+  if(m_fast_update_timer->isActive())
     {
-      needFastUpdate = true;
+        m_need_fast_update = true;
     }
   else
     {
-      needFastUpdate = false;
-      fastUpdateTimer->start(gdata->fastUpdateSpeed());
-      emit onFastUpdate(_currentTime);
+        m_need_fast_update = false;
+      m_fast_update_timer->start(gdata->fastUpdateSpeed());
+      emit onFastUpdate(m_current_time);
     }
 }
 
 //------------------------------------------------------------------------------
 void View::nextFastUpdate(void)
 {
-  if(needFastUpdate)
+  if(m_need_fast_update)
     {
-      needFastUpdate = false;
-      fastUpdateTimer->start(gdata->fastUpdateSpeed());
-      emit onFastUpdate(_currentTime);
+        m_need_fast_update = false;
+      m_fast_update_timer->start(gdata->fastUpdateSpeed());
+      emit onFastUpdate(m_current_time);
     }
 }
 
 //------------------------------------------------------------------------------
 void View::nextSlowUpdate(void)
 {
-  if(needSlowUpdate)
+  if(m_need_slow_update)
     {
-      needSlowUpdate = false;
-      slowUpdateTimer->start(gdata->slowUpdateSpeed());
-      emit onSlowUpdate(_currentTime);
+        m_need_slow_update = false;
+      m_slow_update_timer->start(gdata->slowUpdateSpeed());
+      emit onSlowUpdate(m_current_time);
     }
 }
 
 //------------------------------------------------------------------------------
-void View::setCurrentTimeRaw(double x)
+void View::setCurrentTimeRaw(double p_x)
 {
-  if(x != _currentTime)
+  if(p_x != m_current_time)
     {
-      Channel *active = gdata->getActiveChannel();
-      if(active)
+      Channel *l_active_channel = gdata->getActiveChannel();
+      if(l_active_channel)
 	{
-	  x = active->timeAtChunk(active->chunkAtTime(x)); //align time to an integer sample step
+        p_x = l_active_channel->timeAtChunk(l_active_channel->chunkAtTime(p_x)); //align time to an integer sample step
 	}
-    _currentTime = x;
+        m_current_time = p_x;
     }
 }
 
 //------------------------------------------------------------------------------
-void View::setCurrentTime(double x)
+void View::setCurrentTime(double p_x)
 {
-  if(x != _currentTime)
+  if(p_x != m_current_time)
     {
-      Channel *active = gdata->getActiveChannel();
-      if(active)
+      Channel *l_active_channel = gdata->getActiveChannel();
+      if(l_active_channel)
 	{
-	  x = active->timeAtChunk(active->chunkAtTime(x)); //align time to an integer sample step
+        p_x = l_active_channel->timeAtChunk(l_active_channel->chunkAtTime(p_x)); //align time to an integer sample step
 	}
 
-      _currentTime = x;
-      emit currentTimeChanged(x);
+        m_current_time = p_x;
+      emit currentTimeChanged(p_x);
       emit timeViewRangeChanged(viewLeft(), viewRight());
       emit viewChanged();
     }
 }
 
 //------------------------------------------------------------------------------
-void View::setViewOffset(double x)
+void View::setViewOffset(double p_x)
 {
-  if(x < 0)
+  if(p_x < 0)
     {
-      x = 0;
+        p_x = 0;
     }
 
-  if(x > viewWidth())
+  if(p_x > viewWidth())
     {
-      x = viewWidth();
+        p_x = viewWidth();
     }
-  if(x != _viewOffset)
+  if(p_x != m_view_offset)
     {
-      _viewOffset = x;
+        m_view_offset = p_x;
       emit timeViewRangeChanged(viewLeft(), viewRight());
       emit viewChanged();
     }
 }
 
 //------------------------------------------------------------------------------
-void View::setViewBottomRaw(const double & y)
+void View::setViewBottomRaw(const double & p_y)
 {
-  if(y != _viewBottom)
+  if(p_y != m_view_bottom)
     {
-      _viewBottom = y;
-      emit viewBottomChanged(gdata->topPitch() - viewHeight() - y);
+        m_view_bottom = p_y;
+      emit viewBottomChanged(gdata->topPitch() - viewHeight() - p_y);
     }
 }
 
 //------------------------------------------------------------------------------
-void View::setViewBottom(const double & y)
+void View::setViewBottom(const double & p_y)
 {
-  if(y != _viewBottom)
+  if(p_y != m_view_bottom)
     {
-      _viewBottom = y;
-      emit viewBottomChanged(gdata->topPitch() - viewHeight() - y);
+        m_view_bottom = p_y;
+      emit viewBottomChanged(gdata->topPitch() - viewHeight() - p_y);
       emit viewChanged();
     }
 }
@@ -220,28 +220,28 @@ void View::setViewBottom(const double & y)
 
 // Changes the view without using a step value
 //------------------------------------------------------------------------------
-void View::changeViewX(const double & x)
+void View::changeViewX(const double & p_x)
 {
-  setCurrentTime(x);
+  setCurrentTime(p_x);
   emit viewChanged();
 }
 
 //------------------------------------------------------------------------------
-void View::changeViewY(const double & y)
+void View::changeViewY(const double & p_y)
 {
-  setViewBottom(gdata->topPitch() - viewHeight() - y);
+  setViewBottom(gdata->topPitch() - viewHeight() - p_y);
   emit viewChanged();
 }
 
 //------------------------------------------------------------------------------
-void View::setPixelHeight(int h)
+void View::setPixelHeight(int p_h)
 {
-  if(h != _pixelHeight)
+  if(p_h != m_pixel_height)
     {
-      _pixelHeight = h;
+        m_pixel_height = p_h;
       if(viewHeight() > gdata->topPitch())
 	{
-	  setLogZoomY(log(double(_pixelHeight) / gdata->topPitch()));
+	  setLogZoomY(log(double(m_pixel_height) / gdata->topPitch()));
 	  emit logZoomYChanged(logZoomY());
 	}
       emit scrollableYChanged(gdata->topPitch() - viewHeight());
@@ -250,14 +250,14 @@ void View::setPixelHeight(int h)
 }
 
 //------------------------------------------------------------------------------
-void View::setPixelWidth(int w)
+void View::setPixelWidth(int p_w)
 {
-  if(w != _pixelWidth)
+  if(p_w != m_pixel_width)
     {
-      _pixelWidth = w;
+        m_pixel_width = p_w;
       if(viewWidth() > gdata->totalTime() * 2.0)
 	{
-	  setLogZoomX(log(double(_pixelWidth) / (gdata->totalTime() * 2.0)));
+	  setLogZoomX(log(double(m_pixel_width) / (gdata->totalTime() * 2.0)));
 	  emit logZoomXChanged(logZoomX());
 	}
       emit viewWidthChanged(viewWidth());
@@ -265,68 +265,68 @@ void View::setPixelWidth(int w)
 }
 
 //------------------------------------------------------------------------------
-void View::setZoomFactorX(const double & x)
+void View::setZoomFactorX(const double & p_x)
 {
-  if(x != logZoomX())
+  if(p_x != logZoomX())
     {
-      double oldViewWidth = viewWidth();
-      setLogZoomX(x);
+      double l_old_view_width = viewWidth();
+      setLogZoomX(p_x);
       emit logZoomXChanged(logZoomX());
       emit viewWidthChanged(viewWidth());
     
-      setViewOffset(viewOffset() * (viewWidth()/oldViewWidth));
+      setViewOffset(viewOffset() * (viewWidth() / l_old_view_width));
     }
 }
 
 //------------------------------------------------------------------------------
-void View::setZoomFactorX(const double & x, int fixedX)
+void View::setZoomFactorX(const double & p_x, int p_fixed_x)
 {
-  if(x != logZoomX())
+  if(p_x != logZoomX())
     {
-      double fixedTime = viewLeft() + zoomX() * double(fixedX);
-      double oldViewWidth = viewWidth();
-      setLogZoomX(x);
+      double l_fixed_time = viewLeft() + zoomX() * double(p_fixed_x);
+      double l_old_view_width = viewWidth();
+      setLogZoomX(p_x);
       emit logZoomXChanged(logZoomX());
       emit viewWidthChanged(viewWidth());
     
-      double ratio = viewWidth() / oldViewWidth;
-      setViewOffset(viewOffset() * ratio);
+      double l_ratio = viewWidth() / l_old_view_width;
+      setViewOffset(viewOffset() * l_ratio);
     
       //shift the current time to keep the keep the time fixed at the mouse pointer
-      double newTime = viewLeft() + zoomX() * double(fixedX);
-      gdata->updateActiveChunkTime(currentTime() - (newTime - fixedTime));
+      double l_new_time = viewLeft() + zoomX() * double(p_fixed_x);
+      gdata->updateActiveChunkTime(currentTime() - (l_new_time - l_fixed_time));
     }
 }
 
 //------------------------------------------------------------------------------
-void View::setZoomFactorY(const double & y)
+void View::setZoomFactorY(const double & p_y)
 {
-  if(y != logZoomY())
+  if(p_y != logZoomY())
     {
-      double prevCenterY = viewBottom() + viewHeight() / 2.0;
-      setLogZoomY(y);
+      double l_prev_center_Y = viewBottom() + viewHeight() / 2.0;
+      setLogZoomY(p_y);
       emit logZoomYChanged(logZoomY());
       emit scrollableYChanged(bound(gdata->topPitch() - viewHeight(), 0.0, gdata->topPitch()));
       emit viewHeightChanged(viewHeight());
     
-      setViewBottom(prevCenterY - viewHeight() / 2.0);
+      setViewBottom(l_prev_center_Y - viewHeight() / 2.0);
       emit viewBottomChanged(gdata->topPitch() - viewHeight() - viewBottom());
     }
 }
 
 //------------------------------------------------------------------------------
-void View::setZoomFactorY(const double & y, int fixedY)
+void View::setZoomFactorY(const double & p_y, int p_fixed_y)
 {
-  if(y != logZoomY())
+  if(p_y != logZoomY())
     {
-      double fixedNote = viewBottom() + zoomY() * fixedY;
-      setLogZoomY(y);
+      double l_fixed_note = viewBottom() + zoomY() * p_fixed_y;
+      setLogZoomY(p_y);
       emit logZoomYChanged(logZoomY());
       emit scrollableYChanged(bound(gdata->topPitch() - viewHeight(), 0.0, gdata->topPitch()));
       emit viewHeightChanged(viewHeight());
     
-      double newNote = viewBottom() + zoomY() * fixedY;
-      setViewBottom(viewBottom() - (newNote - fixedNote));
+      double l_new_note = viewBottom() + zoomY() * p_fixed_y;
+      setViewBottom(viewBottom() - (l_new_note - l_fixed_note));
       emit viewBottomChanged(gdata->topPitch() - viewHeight() - viewBottom());
     }
 }
@@ -338,46 +338,46 @@ void View::doAutoFollowing(void)
     {
       return;
     }
-  double time = currentTime();
+  double l_time = currentTime();
   // We want the average note value for the time period currentTime to viewRight
  
-  Channel *active = gdata->getActiveChannel();
+  Channel *l_active_channel = gdata->getActiveChannel();
 
-  if (active == NULL)
+  if (l_active_channel == NULL)
     {
       return;
     }
   
 
-  double startTime = time - (viewWidth() / 8.0);
-  double stopTime = time + (viewWidth() / 8.0);
+  double l_start_time = l_time - (viewWidth() / 8.0);
+  double l_stop_time = l_time + (viewWidth() / 8.0);
   
-  int startFrame = bound(toInt(startTime / active->timePerChunk()), 0, active->totalChunks() - 1);
-  int stopFrame = bound(toInt(stopTime / active->timePerChunk()), 0, active->totalChunks() - 1);
+  int l_start_frame = bound(toInt(l_start_time / l_active_channel->timePerChunk()), 0, l_active_channel->totalChunks() - 1);
+  int l_stop_frame = bound(toInt(l_stop_time / l_active_channel->timePerChunk()), 0, l_active_channel->totalChunks() - 1);
 
-  float pitch = active->averagePitch(startFrame, stopFrame);
+  float l_pitch = l_active_channel->averagePitch(l_start_frame, l_stop_frame);
 
-  if (pitch < 0)
+  if (l_pitch < 0)
     {
       return; // There were no good notes detected
     }
 
-  float newBottom = pitch - (viewHeight() / 2.0);
+  float l_new_bottom = l_pitch - (viewHeight() / 2.0);
 
-  setViewBottom(newBottom);
+  setViewBottom(l_new_bottom);
 }
 
 //------------------------------------------------------------------------------
-void View::setAutoFollow(bool isChecked)
+void View::setAutoFollow(bool p_is_checked)
 {
-  _autoFollow = isChecked;
-  gdata->setSettingsValue("View/autoFollow", isChecked);
+    m_auto_follow = p_is_checked;
+  gdata->setSettingsValue("View/autoFollow", p_is_checked);
 }
 
 //------------------------------------------------------------------------------
-void View::setBackgroundShading(bool isChecked)
+void View::setBackgroundShading(bool p_is_checked)
 {
-  _backgroundShading = isChecked;
-  gdata->setSettingsValue("View/backgroundShading", isChecked);
-  emit onSlowUpdate(_currentTime);
+    m_background_shading = p_is_checked;
+  gdata->setSettingsValue("View/backgroundShading", p_is_checked);
+  emit onSlowUpdate(m_current_time);
 }
