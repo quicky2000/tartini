@@ -24,56 +24,102 @@
 
 class AudioStream: public SoundStream
 {
- public:
+  public:
 
-  AudioStream(void);
-  virtual ~AudioStream(void);
+    AudioStream(void);
+    virtual ~AudioStream(void);
 
-  int bufferSize(void) { return m_buffer_size; }
-  int numBuffers(void) { return m_num_buffers; }
-  int totalBufferFrames(void) { return m_buffer_size * m_num_buffers; }
-  int inTotalBufferFrames(void) { return totalBufferFrames(); }
-  int outTotalBufferFrames(void) { return totalBufferFrames(); }
+    int bufferSize(void) { return m_buffer_size; }
+    int numBuffers(void) { return m_num_buffers; }
+    int totalBufferFrames(void) { return m_buffer_size * m_num_buffers; }
+    int inTotalBufferFrames(void) { return totalBufferFrames(); }
+    int outTotalBufferFrames(void) { return totalBufferFrames(); }
 
-  void close(void);
+    void close(void);
 
-  int open(int p_mode, int p_freq = 44100, int p_channels = 2, int p_bits = 16, int p_buffer_size = 2048);
+    int open( int p_mode
+            , int p_freq = 44100
+            , int p_channels = 2
+            , int p_bits = 16
+            , int p_buffer_size = 2048
+            );
 
-  //note: use the writeFloats or readFloats instead
-  long read_bytes(void * /*data*/, long /*length*/) { return 0; } //not implemented
-  long read_frames(void * /*data*/, long /*length*/) { return 0; } //not implemented
-  long write_bytes(void * /*data*/, long /*length*/) { return 0; } //not implemented
-  long write_frames(void * /*data*/, long /*length*/) { return 0; } //not implemented
+    //note: use the writeFloats or readFloats instead
+    long read_bytes( void * /*data*/
+                   , long /*length*/
+                   )
+    {
+        return 0;
+    } //not implemented
 
-  int writeFloats(float **p_channel_data, int p_length, int p_ch);
-  int readFloats(float **p_channel_data, int p_length, int p_ch);
+    long read_frames( void * /*data*/
+                    , long /*length*/
+                    )
+    {
+        return 0;
+    } //not implemented
 
-  /**
-     This requires that inChannelData and outChannelData have the same number of channels
-     and the same length, and this length is the same size as the AudioStream buffer
-     @param p_out_channel_data The data to write out to the sound card
-     @param p_in_channel_data The data read back from the sound card
-     @param length The amount of data per channel. This has to be the same for in and out data
-     @param ch The number of channels. This has to be the same of in and out data
-  */
-  int writeReadFloats(float ** p_out_channel_data, int p_out_channel, float ** p_in_channel_data, int p_in_channel, int p_length);
-  bool isSameInOutDevice(void) { return m_in_device == m_out_device; }
+    long write_bytes( void * /*data*/
+                    , long /*length*/
+                    )
+    {
+        return 0;
+    } //not implemented
 
-  static QStringList getInputDeviceNames(void);
-  static QStringList getOutputDeviceNames(void);
-  /**
-     @param p_device_name The name of a device as given from get*DeviceNames
-     @return The device number that matches the name, or -1 if the device name is not found
-  */
-  static int getDeviceNumber(const char * p_device_name);
+    long write_frames( void * /*data*/
+                     , long /*length*/
+                     )
+    {
+        return 0;
+    } //not implemented
 
- private:
-  int m_buffer_size; //in frames
-  int m_num_buffers;
-  RtAudio *m_audio;
-  float * m_buffer;
-  RingBuffer<float> m_flow_buffer;
-  int m_in_device, m_out_device;
+    int writeFloats( float ** p_channel_data
+                   , int p_length
+                   , int p_ch
+                   );
+    int readFloats( float ** p_channel_data
+                  , int p_length
+                  , int p_ch
+                  );
+
+
+    /**
+       This requires that inChannelData and outChannelData have the same number of channels
+       and the same length, and this length is the same size as the AudioStream buffer
+       @param p_out_channel_data The data to write out to the sound card
+       @param p_in_channel_data The data read back from the sound card
+       @param length The amount of data per channel. This has to be the same for in and out data
+       @param ch The number of channels. This has to be the same of in and out data
+    */
+    int writeReadFloats( float ** p_out_channel_data
+                       , int p_out_channel
+                       , float ** p_in_channel_data
+                       , int p_in_channel
+                       , int p_length
+                       );
+
+    bool isSameInOutDevice(void)
+    {
+        return m_in_device == m_out_device;
+    }
+
+    static QStringList getInputDeviceNames(void);
+    static QStringList getOutputDeviceNames(void);
+
+    /**
+       @param p_device_name The name of a device as given from get*DeviceNames
+       @return The device number that matches the name, or -1 if the device name is not found
+    */
+    static int getDeviceNumber(const char * p_device_name);
+
+  private:
+    int m_buffer_size; //in frames
+    int m_num_buffers;
+    RtAudio * m_audio;
+    float * m_buffer;
+    RingBuffer<float> m_flow_buffer;
+    int m_in_device;
+    int m_out_device;
 
 };
 #endif // AUDIO_STREAM_H
