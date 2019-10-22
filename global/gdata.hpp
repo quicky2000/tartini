@@ -24,309 +24,309 @@ void GData::do_nothing(void)const
 //------------------------------------------------------------------------------
 bool GData::settingsContains(const QString & p_key)const
 {
-  return qsettings->contains(p_key);
+  return m_settings->contains(p_key);
 
 }
 
 //------------------------------------------------------------------------------
 int GData::getSettingsValue(const QString & p_key,const int & p_default_value)const
 {
-  assert(qsettings->contains(p_key));
-  return qsettings->value(p_key, p_default_value).toInt();
+  assert(m_settings->contains(p_key));
+  return m_settings->value(p_key, p_default_value).toInt();
 
 }
 
 //------------------------------------------------------------------------------
 bool GData::getSettingsValue(const QString & p_key,const bool & p_default_value)const
 {
-  assert(qsettings->contains(p_key));
-  return qsettings->value(p_key, p_default_value).toBool();
+  assert(m_settings->contains(p_key));
+  return m_settings->value(p_key, p_default_value).toBool();
 
 }
 
 //------------------------------------------------------------------------------
 QString GData::getSettingsValue(const QString & p_key,const QString & p_default_value)const
 {
-  assert(qsettings->contains(p_key));
-  return qsettings->value(p_key, p_default_value).toString();
+  assert(m_settings->contains(p_key));
+  return m_settings->value(p_key, p_default_value).toString();
 
 }
 
 //------------------------------------------------------------------------------
 QPoint GData::getSettingsValue(const QString & p_key,const QPoint & p_default_value)const
 {
-  assert(qsettings->contains(p_key));
-  return qsettings->value(p_key, p_default_value).toPoint();
+  assert(m_settings->contains(p_key));
+  return m_settings->value(p_key, p_default_value).toPoint();
 
 }
 
 //------------------------------------------------------------------------------
 QSize GData::getSettingsValue(const QString & p_key,const QSize & p_default_value)const
 {
-  assert(qsettings->contains(p_key));
-  return qsettings->value(p_key, p_default_value).toSize();
+  assert(m_settings->contains(p_key));
+  return m_settings->value(p_key, p_default_value).toSize();
 
 }
 
 //------------------------------------------------------------------------------
 void GData::setSettingsValue(const QString & p_key,const QString & p_value)
 {
-  qsettings->setValue(p_key,p_value);
+  m_settings->setValue(p_key, p_value);
 }
 
 //------------------------------------------------------------------------------
 void GData::setSettingsValue(const QString & p_key,const int & p_value)
 {
-  qsettings->setValue(p_key,p_value);
+  m_settings->setValue(p_key, p_value);
 }
 
 //------------------------------------------------------------------------------
 void GData::setSettingsValue(const QString & p_key,const QPoint & p_value)
 {
-  qsettings->setValue(p_key,p_value);
+  m_settings->setValue(p_key, p_value);
 }
 
 //------------------------------------------------------------------------------
 void GData::setSettingsValue(const QString & p_key,const QSize & p_value)
 {
-  qsettings->setValue(p_key,p_value);
+  m_settings->setValue(p_key, p_value);
 }
 
 //------------------------------------------------------------------------------
 void GData::clearSettings(void)
 {
-  qsettings->clear();
+  m_settings->clear();
 }
 
 //------------------------------------------------------------------------------
 void GData::syncSettings(void)
 {
-  qsettings->sync();
+  m_settings->sync();
 }
 
 //------------------------------------------------------------------------------
 int GData::getSettingsIntValue(const QString & p_key)const
 {
-  assert(qsettings->contains(p_key));
-  return qsettings->value(p_key).toInt();
+  assert(m_settings->contains(p_key));
+  return m_settings->value(p_key).toInt();
 
 }
 
 //------------------------------------------------------------------------------
 bool GData::getSettingsBoolValue(const QString & p_key)const
 {
-  assert(qsettings->contains(p_key));
-  return qsettings->value(p_key).toBool();
+  assert(m_settings->contains(p_key));
+  return m_settings->value(p_key).toBool();
 
 }
 
 //------------------------------------------------------------------------------
 QString GData::getSettingsStringValue(const QString & p_key)const
 {
-  assert(qsettings->contains(p_key));
-  return qsettings->value(p_key).toString();
+  assert(m_settings->contains(p_key));
+  return m_settings->value(p_key).toString();
 
 }
 
 //------------------------------------------------------------------------------
 int GData::getSoundMode(void)const
 {
-  return soundMode;
+  return m_sound_mode;
 }
 
 //------------------------------------------------------------------------------
 void GData::setSoundMode(const int & p_mode)
 {
-  soundMode = p_mode;
+    m_sound_mode = p_mode;
 }
 
 //------------------------------------------------------------------------------
 AudioStream * GData::getAudioStream(void)const
 {
-  return audio_stream;
+  return m_audio_stream;
 }
 
 //------------------------------------------------------------------------------
 void GData::setAudioStream(AudioStream * p_audio_stream)
 {
-  audio_stream = p_audio_stream;
+  m_audio_stream = p_audio_stream;
 }
 
 //------------------------------------------------------------------------------
 bool GData::needUpdate(void)const
 {
-  return need_update;
+  return m_need_update;
 }
 
 //------------------------------------------------------------------------------
 void GData::setNeedUpdate(bool p_need_update)
 {
-  need_update = p_need_update;
+    m_need_update = p_need_update;
 }
 
 //------------------------------------------------------------------------------
 const AudioThread & GData::getAudioThread(void)const
 {
-  return audioThread;
+  return m_audio_thread;
 }
 
 //------------------------------------------------------------------------------
 void GData::stopAndWaitAudioThread(void)
 {
-  audioThread.stopAndWait();
+  m_audio_thread.stopAndWait();
 }
 
 //------------------------------------------------------------------------------
 void GData::setRunning(int p_running)
 {
-  running = p_running;
+  m_running = p_running;
 }
 
 //------------------------------------------------------------------------------
 int GData::getRunning(void)const
 {
-  return running;
+  return m_running;
 }
 
 //------------------------------------------------------------------------------
 size_t GData::getChannelsSize(void)const
 {
-  return channels.size();
+  return m_channels.size();
 }
 
 //------------------------------------------------------------------------------
 Channel* GData::getChannelAt(size_t p_index)const
 {
-  return channels.at(p_index);
+  return m_channels.at(p_index);
 }
 
 //------------------------------------------------------------------------------
 const View & GData::getView(void)const
 {
-  assert(view);
-  return *view;
+  assert(m_view);
+  return *m_view;
 }
 
 //------------------------------------------------------------------------------
 View & GData::getView(void)
 {
-  assert(view);
-  return *view;
+  assert(m_view);
+  return *m_view;
 }
 
 //------------------------------------------------------------------------------
 void GData::setView(View & p_view)
 {
-  view = & p_view;
+  m_view = & p_view;
 }
 
 //------------------------------------------------------------------------------
 Channel* GData::getActiveChannel(void)
 {
-  return activeChannel;
+  return m_active_channel;
 }
 
 //------------------------------------------------------------------------------
 QPixmap* GData::drawingBuffer(void)
 {
-  return _drawingBuffer;
+  return m_drawing_buffer;
 }
 
 
 //------------------------------------------------------------------------------
 const double & GData::leftTime(void)const
 {
-  return _leftTime;
+  return m_left_time;
 }
 
 //------------------------------------------------------------------------------
 const double & GData::rightTime(void)const
 {
-  return _rightTime;
+  return m_right_time;
 }
 
 //------------------------------------------------------------------------------
 double GData::totalTime(void)const
 {
-  return _rightTime - _leftTime;
+  return m_right_time - m_left_time;
 }
 
 //------------------------------------------------------------------------------
 const double & GData::topPitch(void)const
 {
-  return _topPitch;
+  return m_top_pitch;
 }
 
 //------------------------------------------------------------------------------
-void GData::setDoingActiveAnalysis(bool x)
+void GData::setDoingActiveAnalysis(bool p_x)
 {
-  _doingActiveAnalysis += (x) ? 1 : -1;
+    m_doing_active_analysis += (p_x) ? 1 : -1;
 }
 
 //------------------------------------------------------------------------------
-void GData::setDoingActiveFFT(bool x)
+void GData::setDoingActiveFFT(bool p_x)
 {
-  _doingActiveFFT += (x) ? 1 : -1;
+    m_doing_active_FFT += (p_x) ? 1 : -1;
 }
 
 //------------------------------------------------------------------------------
-void GData::setDoingActiveCepstrum(bool x)
+void GData::setDoingActiveCepstrum(bool p_x)
 {
-  _doingActiveCepstrum += (x) ? 1 : -1; setDoingActiveFFT(x);
+    m_doing_active_cepstrum += (p_x) ? 1 : -1; setDoingActiveFFT(p_x);
 }
 
 //------------------------------------------------------------------------------
-void GData::setDoingDetailedPitch(bool x)
+void GData::setDoingDetailedPitch(bool p_x)
 {
-  _doingDetailedPitch = x;
+    m_doing_detailed_pitch = p_x;
 }
 
 //------------------------------------------------------------------------------
 bool GData::doingHarmonicAnalysis(void)const
 {
-  return _doingHarmonicAnalysis;
+  return m_doing_harmonic_analysis;
 }
 
 //------------------------------------------------------------------------------
 bool GData::doingAutoNoiseFloor(void)const
 {
-  return _doingAutoNoiseFloor;
+  return m_doing_auto_noise_floor;
 }
 
 //------------------------------------------------------------------------------
 bool GData::doingEqualLoudness(void)const
 {
-  return _doingEqualLoudness;
+  return m_doing_equal_loudness;
 }
 
 //------------------------------------------------------------------------------
 bool GData::doingFreqAnalysis(void)const
 {
-  return _doingFreqAnalysis;
+  return m_doing_freq_analysis;
 }
 
 //------------------------------------------------------------------------------
 bool GData::doingActiveAnalysis(void)const
 {
-  return _doingActiveAnalysis;
+  return m_doing_active_analysis;
 }
 
 //------------------------------------------------------------------------------
 bool GData::doingActiveFFT(void)const
 {
-  return _doingActiveFFT;
+  return m_doing_active_FFT;
 }
 
 //------------------------------------------------------------------------------
 bool GData::doingActiveCepstrum(void)const
 {
-  return _doingActiveCepstrum;
+  return m_doing_active_cepstrum;
 }
 
 //------------------------------------------------------------------------------
 bool GData::doingDetailedPitch(void)const
 {
-  return _doingDetailedPitch;
+  return m_doing_detailed_pitch;
 }
 
 //------------------------------------------------------------------------------
@@ -338,115 +338,115 @@ bool GData::doingActive(void)const
 //------------------------------------------------------------------------------
 bool GData::vibratoSineStyle(void)const
 {
-  return _vibratoSineStyle;
+  return m_vibrato_sine_style;
 }
 
 //------------------------------------------------------------------------------
 int GData::amplitudeMode(void)const
 {
-  return _amplitudeMode;
+  return m_amplitude_mode;
 }
 
 //------------------------------------------------------------------------------
 int GData::pitchContourMode(void)const
 {
-  return _pitchContourMode;
+  return m_pitch_contour_mode;
 }
 
 //------------------------------------------------------------------------------
 int GData::fastUpdateSpeed(void)const
 {
-  return _fastUpdateSpeed;
+  return m_fast_update_speed;
 }
 
 //------------------------------------------------------------------------------
 int GData::slowUpdateSpeed(void)const
 {
-  return _slowUpdateSpeed;
+  return m_slow_update_speed;
 }
 
 //------------------------------------------------------------------------------
 bool GData::mouseWheelZooms(void)const
 {
-  return _mouseWheelZooms;
+  return m_mouse_wheel_zooms;
 }
 
 //------------------------------------------------------------------------------
 int GData::analysisType(void)const
 {
-  return _analysisType;
+  return m_analysis_type;
 }
 
 //------------------------------------------------------------------------------
 bool GData::polish(void)const
 {
-  return _polish;
+  return m_polish;
 }
 
 //------------------------------------------------------------------------------
 bool GData::showMeanVarianceBars(void)const
 {
-  return _showMeanVarianceBars;
+  return m_show_mean_variance_bars;
 }
 
 //------------------------------------------------------------------------------
 int GData::savingMode(void)const
 {
-  return _savingMode;
+  return m_saving_mode;
 }
 
 //------------------------------------------------------------------------------
 const QColor & GData::backgroundColor(void)const
 {
-  return _backgroundColor;
+  return m_background_color;
 }
 
 //------------------------------------------------------------------------------
 const QColor & GData::shading1Color(void)const
 {
-  return _shading1Color;
+  return m_shading_1_color;
 }
 
 //------------------------------------------------------------------------------
 const QColor & GData::shading2Color(void)const
 {
-  return _shading2Color;
+  return m_shading_2_Color;
 }
 
 //------------------------------------------------------------------------------
 const double & GData::dBFloor(void)const
 {
-  return _dBFloor;
+  return m_dB_floor;
 }
 
 //------------------------------------------------------------------------------
-void GData::setDBFloor(double dBFloor_)
+void GData::setDBFloor(double p_dB_floor)
 {
-  _dBFloor = dBFloor_;
+    m_dB_floor = p_dB_floor;
 }
 
 //------------------------------------------------------------------------------
 const double & GData::rmsFloor(void)const
 {
-  return amp_thresholds[AMPLITUDE_RMS][0];
+  return m_amp_thresholds[AMPLITUDE_RMS][0];
 }
 
 //------------------------------------------------------------------------------
 const double & GData::rmsCeiling(void)const
 {
-  return amp_thresholds[AMPLITUDE_RMS][1];
+  return m_amp_thresholds[AMPLITUDE_RMS][1];
 }
 
 //------------------------------------------------------------------------------
 void GData::set_rms_floor(const double & p_rms_floor)
 {
-  amp_thresholds[AMPLITUDE_RMS][0] = p_rms_floor;
+    m_amp_thresholds[AMPLITUDE_RMS][0] = p_rms_floor;
 }
 
 //------------------------------------------------------------------------------
 void GData::set_rms_ceiling(const double & p_rms_ceiling)
 {
-  amp_thresholds[AMPLITUDE_RMS][1] = p_rms_ceiling;
+    m_amp_thresholds[AMPLITUDE_RMS][1] = p_rms_ceiling;
 }
 
 //------------------------------------------------------------------------------
@@ -458,50 +458,50 @@ int GData::musicKey(void)const
 //------------------------------------------------------------------------------
 int GData::musicKeyType(void)const
 {
-  return _musicKeyType;
+  return m_music_key_type;
 }
 
 //------------------------------------------------------------------------------
 int GData::temperedType(void)const
 {
-  return _temperedType;
+  return m_tempered_type;
 }
 
 //------------------------------------------------------------------------------
 const double & GData::freqA(void)const
 {
-  return _freqA;
+  return m_freq_A;
 }
 
 //------------------------------------------------------------------------------
 const double & GData::semitoneOffset(void)const
 {
-  return _semitoneOffset;
+  return m_semitone_offset;
 }
 
 //------------------------------------------------------------------------------
-void GData::setMusicKey(int key)
+void GData::setMusicKey(int p_key)
 {
-  if(gMusicKey != key)
+  if(gMusicKey != p_key)
     {
-      gMusicKey = key;
-      emit musicKeyChanged(key);
+      gMusicKey = p_key;
+      emit musicKeyChanged(p_key);
     }
 }
 
 //------------------------------------------------------------------------------
-void GData::setMusicKeyType(int type)
+void GData::setMusicKeyType(int p_type)
 {
-  if(_musicKeyType != type)
+  if(m_music_key_type != p_type)
     {
-      _musicKeyType = type;
-      emit musicKeyTypeChanged(type);
+        m_music_key_type = p_type;
+      emit musicKeyTypeChanged(p_type);
     }
 }
 
 //------------------------------------------------------------------------------
-void GData::setFreqA(int x)
+void GData::setFreqA(int p_x)
 {
-  setFreqA(double(x));
+  setFreqA(double(p_x));
 }
 //EOF

@@ -172,7 +172,7 @@ MainWindow::MainWindow(void)
 
 #ifndef WINDOWS
     //for running multi-threaded profiling
-    getitimer(ITIMER_PROF, &profiler_value);
+    getitimer(ITIMER_PROF, &g_profiler_value);
 #endif // WINDOWS
     //6 pixel boarder
     resize(1024 - 6, 768 - 6);

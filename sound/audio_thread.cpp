@@ -89,11 +89,11 @@ void AudioThread::run(void)
 {
 #ifndef WINDOWS
     //setup stuff for multi-threaded profiling
-    profiler_ovalue.it_interval.tv_sec = 0;
-    profiler_ovalue.it_interval.tv_usec = 0;
-    profiler_ovalue.it_value.tv_sec = 0;
-    profiler_ovalue.it_value.tv_usec = 0;
-    setitimer(ITIMER_PROF, &profiler_value, &profiler_ovalue); //for running multi-threaded profiling
+    g_profiler_ovalue.it_interval.tv_sec = 0;
+    g_profiler_ovalue.it_interval.tv_usec = 0;
+    g_profiler_ovalue.it_value.tv_sec = 0;
+    g_profiler_ovalue.it_value.tv_usec = 0;
+    setitimer(ITIMER_PROF, &g_profiler_value, &g_profiler_ovalue); //for running multi-threaded profiling
 #endif // WINDOWS
 
     m_first = true;

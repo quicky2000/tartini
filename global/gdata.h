@@ -49,8 +49,8 @@ extern int gMusicKey;
 
 #ifndef WINDOWS
 //for multi-threaded profiling
-extern struct itimerval profiler_value;
-extern struct itimerval profiler_ovalue;
+extern struct itimerval g_profiler_value;
+extern struct itimerval g_profiler_ovalue;
 #endif
 
 #define STREAM_STOP     0
@@ -65,15 +65,15 @@ extern struct itimerval profiler_ovalue;
 enum AnalysisModes { MPM, AUTOCORRELATION, MPM_MODIFIED_CEPSTRUM };
 
 #define NUM_WIN_SIZES 5
-extern int frame_window_sizes[NUM_WIN_SIZES];
-extern const char *frame_window_strings[NUM_WIN_SIZES];
+extern int g_frame_window_sizes[NUM_WIN_SIZES];
+extern const char *g_frame_window_strings[NUM_WIN_SIZES];
 
 #define NUM_STEP_SIZES 6
-extern float step_sizes[NUM_STEP_SIZES];
-extern const char *step_size_strings[NUM_STEP_SIZES];
+extern float g_step_sizes[NUM_STEP_SIZES];
+extern const char *g_step_size_strings[NUM_STEP_SIZES];
 
 #define NUM_PITCH_METHODS 8
-extern const char *pitch_method_strings[NUM_PITCH_METHODS];
+extern const char *g_pitch_method_strings[NUM_PITCH_METHODS];
 
 class FBuffer;
 class SoundStream;
@@ -138,7 +138,7 @@ public:
   inline View & getView(void);
   inline void setView(View & p_view);
 
-  void setActiveChannel(Channel *toActive);
+  void setActiveChannel(Channel *p_to_active);
   inline Channel* getActiveChannel(void);
   SoundFile* getActiveSoundFile(void);
 
@@ -147,12 +147,12 @@ public:
   /**
      Allows you to specify the leftmost time a file starts
    */
-  void setLeftTime(double x);
+  void setLeftTime(double p_x);
 
   /**
      Allows you to specify the rightmost time a file starts
    */
-  void setRightTime(double x);
+  void setRightTime(double p_x);
 
   /**
      Returns the leftmost time a file starts
@@ -177,17 +177,17 @@ public:
   /**
      Allows you to specify the top note pitch the programme should allow
   */
-  void setTopPitch(double y);
+  void setTopPitch(double p_y);
 
-  inline void setDoingActiveAnalysis(bool x);
-  inline void setDoingActiveFFT(bool x);
-  inline void setDoingActiveCepstrum(bool x);
-  inline void setDoingDetailedPitch(bool x);
+  inline void setDoingActiveAnalysis(bool p_x);
+  inline void setDoingActiveFFT(bool p_x);
+  inline void setDoingActiveCepstrum(bool p_x);
+  inline void setDoingDetailedPitch(bool p_x);
 
   QColor getNextColor(void);
 
-  int getAnalysisBufferSize(int rate);
-  int getAnalysisStepSize(int rate);
+  int getAnalysisBufferSize(int p_rate);
+  int getAnalysisStepSize(int p_rate);
 
   inline bool doingHarmonicAnalysis(void)const;
   inline bool doingAutoNoiseFloor(void)const;
@@ -205,10 +205,10 @@ public:
   inline int slowUpdateSpeed(void)const;
   inline bool mouseWheelZooms(void)const;
 
-  void setAmpThreshold(int mode, int index, double value);
-  double ampThreshold(int mode, int index);
-  void setAmpWeight(int mode, double value);
-  double ampWeight(int mode);
+  void setAmpThreshold(int p_mode, int p_index, double p_value);
+  double ampThreshold(int p_mode, int p_index);
+  void setAmpWeight(int p_mode, double p_value);
+  double ampWeight(int p_mode);
 
   inline int analysisType(void)const;
   inline bool polish(void)const;
@@ -220,15 +220,15 @@ public:
   inline const QColor & shading2Color(void)const;
 
   QString getFilenameString(void);
-  void addFileToList(SoundFile *s);
-  void removeFileFromList(SoundFile *s);
+  void addFileToList(SoundFile *p_sound_file);
+  void removeFileFromList(SoundFile *p_sound_file);
   void clearFreqLookup(void);
   void clearAmplitudeLookup(void);
   void recalcScoreThresholds(void);
   int getActiveIntThreshold(void);
 
   inline const double & dBFloor(void)const;
-  inline void setDBFloor(double dBFloor_);
+  inline void setDBFloor(double p_dB_floor);
   inline const double & rmsFloor(void)const;
   inline const double & rmsCeiling(void)const;
   inline void set_rms_floor(const double &);
@@ -241,33 +241,33 @@ public:
   inline const double & semitoneOffset(void)const;
 
 signals:
-  void activeChannelChanged(Channel *active);
-  void activeIntThresholdChanged(int thresholdPercentage);
-  void leftTimeChanged(double x);
-  void rightTimeChanged(double x);
-  void timeRangeChanged(double leftTime_, double rightTime_);
+  void activeChannelChanged(Channel *p_active_channel);
+  void activeIntThresholdChanged(int p_threshold_percentage);
+  void leftTimeChanged(double p_x);
+  void rightTimeChanged(double p_x);
+  void timeRangeChanged(double p_left_time, double p_right_time);
   void channelsChanged(void);
   void onChunkUpdate(void);
 
-  void musicKeyChanged(int key);
-  void musicKeyTypeChanged(int type);
-  void temperedTypeChanged(int type);
+  void musicKeyChanged(int p_key);
+  void musicKeyTypeChanged(int p_type);
+  void temperedTypeChanged(int p_type);
 
 public slots:
-  void setAmplitudeMode(int amplitudeMode);
-  void setPitchContourMode(int pitchContourMode);
+  void setAmplitudeMode(int p_amplitude_mode);
+  void setPitchContourMode(int p_pitch_contour_mode);
 
-  inline void setMusicKey(int key);
-  inline void setMusicKeyType(int type);
-  void setTemperedType(int type);
-  void setFreqA(double x);
-  inline void setFreqA(int x);
+  inline void setMusicKey(int p_key);
+  inline void setMusicKeyType(int p_type);
+  void setTemperedType(int p_type);
+  void setFreqA(double p_x);
+  inline void setFreqA(int p_x);
 
   void pauseSound(void);
-  bool openPlayRecord(SoundFile *sRec, SoundFile *sPlay);
-  bool playSound(SoundFile *s);
+  bool openPlayRecord(SoundFile *p_sound_file_rec, SoundFile *p_soundfile_play);
+  bool playSound(SoundFile *p_sound_file);
   void updateViewLeftRightTimes(void);
-  void updateActiveChunkTime(double t);
+  void updateActiveChunkTime(double p_time);
   void updateQuickRefSettings(void);
   
   void beginning(void);
@@ -280,91 +280,91 @@ public slots:
   bool closeAllFiles(void);
   void saveActiveFile(void);
   void closeActiveFile(void);
-  QString saveFileAsk(QString oldFilename);
-  int saveFile(SoundFile *s, QString newFilename);
-  int closeFile(SoundFile *s, int theSavingMode/*, bool ask=true*/);
-  void resetActiveIntThreshold(int thresholdPercentage);
+  QString saveFileAsk(QString p_old_filename);
+  int saveFile(SoundFile *p_sound_file, QString p_new_filename);
+  int closeFile(SoundFile *p_sound_file, int p_saving_mode/*, bool ask=true*/);
+  void resetActiveIntThreshold(int p_threshold_percentage);
 
   void doChunkUpdate(void);
 
  private:
-  QSettings *qsettings;
-  int soundMode;
-  AudioStream *audio_stream;
-  bool need_update;
+  QSettings *m_settings;
+  int m_sound_mode;
+  AudioStream *m_audio_stream;
+  bool m_need_update;
 
   /**
      highpass filter
    */
-  std::vector<Filter*> filter_hp;
+  std::vector<Filter*> m_filter_hp;
 
   /**
      lowpass filter
    */
-  std::vector<Filter*> filter_lp;
-  AudioThread audioThread;
-  int running;
+  std::vector<Filter*> m_filter_lp;
+  AudioThread m_audio_thread;
+  int m_running;
 
-  std::vector<SoundFile*> soundFiles;
-  std::vector<Channel*> channels;
+  std::vector<SoundFile*> m_sound_files;
+  std::vector<Channel*> m_channels;
 
   // To check if really usefull
-  std::vector<QColor> lineColor;
-  int nextColorIndex;
+  std::vector<QColor> m_line_color;
+  int m_next_color_index;
   // End to check
 
-  View *view;
+  View *m_view;
 
   /**
      Pointer to the active channel
    */
-  Channel *activeChannel; 
-  bool _doingHarmonicAnalysis;
-  bool _doingFreqAnalysis;
-  bool _doingEqualLoudness;
-  bool _doingAutoNoiseFloor;
-  int _doingActiveAnalysis;
-  int _doingActiveFFT;
-  int _doingActiveCepstrum;
-  bool _doingDetailedPitch;
-  int _fastUpdateSpeed;
-  int _slowUpdateSpeed;
-  bool _polish;
-  bool _showMeanVarianceBars;
-  int _savingMode;
-  bool _vibratoSineStyle;
-  int _musicKeyType;
-  int _temperedType;
-  bool _mouseWheelZooms;
-  double _freqA;
-  double _semitoneOffset;
+  Channel *m_active_channel;
+  bool m_doing_harmonic_analysis;
+  bool m_doing_freq_analysis;
+  bool m_doing_equal_loudness;
+  bool m_doing_auto_noise_floor;
+  int m_doing_active_analysis;
+  int m_doing_active_FFT;
+  int m_doing_active_cepstrum;
+  bool m_doing_detailed_pitch;
+  int m_fast_update_speed;
+  int m_slow_update_speed;
+  bool m_polish;
+  bool m_show_mean_variance_bars;
+  int m_saving_mode;
+  bool m_vibrato_sine_style;
+  int m_music_key_type;
+  int m_tempered_type;
+  bool m_mouse_wheel_zooms;
+  double m_freq_A;
+  double m_semitone_offset;
 
-  int _amplitudeMode;
-  int _pitchContourMode;
-  int _analysisType;
-  double _dBFloor;
-  double amp_thresholds[NUM_AMP_MODES][2];
-  double amp_weights[NUM_AMP_MODES];
+  int m_amplitude_mode;
+  int m_pitch_contour_mode;
+  int m_analysis_type;
+  double m_dB_floor;
+  double m_amp_thresholds[NUM_AMP_MODES][2];
+  double m_amp_weights[NUM_AMP_MODES];
 
-  QPixmap *_drawingBuffer;
-  QColor _backgroundColor;
-  QColor _shading1Color;
-  QColor _shading2Color; 
+  QPixmap *m_drawing_buffer;
+  QColor m_background_color;
+  QColor m_shading_1_color;
+  QColor m_shading_2_Color;
   
   /**
      The lower bound of the start times of all channels
    */
-  double _leftTime;
+  double m_left_time;
 
   /**
      The upper bound of the finish times of all channels 
    */
-  double _rightTime;
+  double m_right_time;
 
   /**
      The highest possible note pitch allowed (lowest possible is 0)
    */
-  double _topPitch;
+  double m_top_pitch;
 
 };
 
