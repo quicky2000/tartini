@@ -37,40 +37,40 @@ class SoundFile;
 class AudioThread : public QThread
 {
 
- public:
-  AudioThread(void);
-  inline virtual ~AudioThread(void);
+  public:
+    AudioThread(void);
+    inline virtual ~AudioThread(void);
 
-  virtual void run(void);
-  void start(void);
-  void start(SoundFile *p_s_play, SoundFile *p_s_rec);
+    virtual void run(void);
+    void start(void);
+    void start(SoundFile *p_s_play, SoundFile *p_s_rec);
 
-  /**
-     Causes the audio thread to stop at the end of the next loop
-  */
-  void stop(void);
+    /**
+       Causes the audio thread to stop at the end of the next loop
+    */
+    void stop(void);
 
-  /**
-     Stop the audio thread and waits for it to finish
-  */
-  void stopAndWait(void);
+    /**
+       Stop the audio thread and waits for it to finish
+    */
+    void stopAndWait(void);
       
-  int doStuff(void);
-  inline SoundFile * playSoundFile(void) const;
-  inline SoundFile * recSoundFile(void) const;
-  inline SoundFile * curSoundFile(void) const;
+    int doStuff(void);
+    inline SoundFile * playSoundFile(void) const;
+    inline SoundFile * recSoundFile(void) const;
+    inline SoundFile * curSoundFile(void) const;
   
- private:
-  SoundFile * m_play_sound_file;
-  SoundFile * m_rec_sound_file;
+  private:
+    SoundFile * m_play_sound_file;
+    SoundFile * m_rec_sound_file;
   
-  bool m_stopping;
-  bool m_first;
-  int m_fast_update_count;
-  int m_slow_update_count;
-  int m_frame_num;
+    bool m_stopping;
+    bool m_first;
+    int m_fast_update_count;
+    int m_slow_update_count;
+    int m_frame_num;
 
-  int m_sleep_count;
+    int m_sleep_count;
 };
 
 #include "audio_thread.hpp"
