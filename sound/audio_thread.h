@@ -43,7 +43,7 @@ class AudioThread : public QThread
 
   virtual void run(void);
   void start(void);
-  void start(SoundFile *sPlay, SoundFile *sRec);
+  void start(SoundFile *p_s_play, SoundFile *p_s_rec);
 
   /**
      Causes the audio thread to stop at the end of the next loop
@@ -61,16 +61,16 @@ class AudioThread : public QThread
   inline SoundFile * curSoundFile(void) const;
   
  private:
-  SoundFile * _playSoundFile;
-  SoundFile * _recSoundFile;
+  SoundFile * m_play_sound_file;
+  SoundFile * m_rec_sound_file;
   
-  bool stopping;
-  bool first;
-  int fast_update_count;
-  int slow_update_count;
-  int frame_num;
+  bool m_stopping;
+  bool m_first;
+  int m_fast_update_count;
+  int m_slow_update_count;
+  int m_frame_num;
 
-  int sleepCount;
+  int m_sleep_count;
 };
 
 #include "audio_thread.hpp"

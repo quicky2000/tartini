@@ -24,19 +24,19 @@ AudioThread::~AudioThread(void)
 //------------------------------------------------------------------------------
 SoundFile * AudioThread::playSoundFile(void) const
 {
-  return _playSoundFile;
+  return m_play_sound_file;
 }
 
 //------------------------------------------------------------------------------
 SoundFile * AudioThread::recSoundFile(void) const
 {
-  return _recSoundFile;
+  return m_rec_sound_file;
 }
 
 //------------------------------------------------------------------------------
 SoundFile * AudioThread::curSoundFile(void) const
 {
-  return (_recSoundFile) ? _recSoundFile : _playSoundFile;
+  return (m_rec_sound_file) ? m_rec_sound_file : m_play_sound_file;
 }
 
 //EOF
