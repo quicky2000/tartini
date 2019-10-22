@@ -4,7 +4,9 @@
     begin                : 2004
     copyright            : (C) 2004-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
- 
+    copyright            : (C) 2019 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2 of the License, or
@@ -23,71 +25,71 @@
 
 class FreqPair {
 public:
-  float freq, amp, phase;
-  FreqPair *prev, *next;
-  FreqPair() { prev=NULL; next=NULL; }
-  FreqPair(float freq_, float amp_) { freq=freq_; amp=amp_; phase=0.0; prev=NULL; next=NULL; }
-  FreqPair(float freq_, float amp_, float phase_) { freq=freq_; amp=amp_; phase=phase_; prev=NULL; next=NULL; }
+  float m_freq, m_amp, m_phase;
+  FreqPair *m_prev, *m_next;
+  FreqPair() { m_prev=NULL; m_next=NULL; }
+  FreqPair(float p_freq, float p_amp) { m_freq=p_freq; m_amp=p_amp; m_phase=0.0; m_prev=NULL; m_next=NULL; }
+  FreqPair(float p_freq, float p_amp, float p_phase) { m_freq=p_freq; m_amp=p_amp; m_phase=p_phase; m_prev=NULL; m_next=NULL; }
   void unlink() {
-      //if(prev) { prev->next = NULL; printf("removed one\n"); }
-      if(next) { next = NULL; /*printf("removed one\n");*/ }
+      //if(m_prev) { m_prev->next = NULL; printf("removed one\n"); }
+      if(m_next) { m_next = NULL; /*printf("removed one\n");*/ }
   }
-  //void attachPrev(FreqPair *prev_) { prev = prev_; prev->next = this; }
-  //void attachNext(FreqPair *next_) { next = next_; next->prev = this; }
-  void attachNext(FreqPair *next_) { next = next_; }
+  //void attachPrev(FreqPair *prev_) { m_prev = prev_; m_prev->next = this; }
+  //void attachNext(FreqPair *next_) { next = next_; next->m_prev = this; }
+  void attachNext(FreqPair *p_next) { m_next = p_next; }
 };
 
 class FreqHistory {
  public:
-    std::vector<FreqPair> *data;
-    int num;
-    int end;
-    QMutex *mutex;
+    std::vector<FreqPair> * m_data;
+    int m_num;
+    int m_end;
+    QMutex *m_mutex;
 
     FreqHistory() {
-	num = 128;
-	end = 0;
-	mutex = new QMutex();
-	data = new std::vector<FreqPair>[num];
+	m_num = 128;
+	m_end = 0;
+	m_mutex = new QMutex();
+	m_data = new std::vector<FreqPair>[m_num];
     }
-    FreqHistory(const FreqHistory &f) {
-	num = f.num;
-	end = f.end;
-	mutex = new QMutex();
-	data = new std::vector<FreqPair>[num];
+    FreqHistory(const FreqHistory &p_f) {
+	m_num = p_f.m_num;
+	m_end = p_f.m_end;
+	m_mutex = new QMutex();
+	m_data = new std::vector<FreqPair>[m_num];
     }
     virtual ~FreqHistory() {
-	delete[] data;
-	delete mutex;
+	delete[] m_data;
+	delete m_mutex;
     }
 
-    std::vector<FreqPair> *curData() { return &data[end]; }
-    std::vector<FreqPair> *prevData() { return &data[((end>0)?end-1:num-1)]; }
-    void lock() { mutex->lock(); }
-    void unlock() { mutex->unlock(); }
+    std::vector<FreqPair> *curData() { return &m_data[m_end]; }
+    std::vector<FreqPair> *prevData() { return &m_data[((m_end>0)?m_end-1:m_num-1)]; }
+    void lock() { m_mutex->lock(); }
+    void unlock() { m_mutex->unlock(); }
     void move() {
 	//for(unsigned int k=0; k<data[end].size(); k++) data[end][k].unlink();
-	end++;
-	if(end >= num) end -= num;
+	m_end++;
+	if(m_end >= m_num) m_end -= m_num;
     }
     void connectToPrev() {
-	std::vector<FreqPair> &prev = *prevData();
-	std::vector<FreqPair> &cur = *curData();
-	unsigned int prevPos=0, curPos=0;
-	float freqThreshold = 10.0;
-	float ampThreshold = 10.0;
-	while((prevPos < prev.size()) && (curPos < cur.size())) {
-	    //make connection between two consecutive (freq,amp) points if within thresholds
-	    if(prev[prevPos].freq > cur[curPos].freq - freqThreshold &&
-	       prev[prevPos].freq < cur[curPos].freq + freqThreshold &&
-	       prev[prevPos].amp > cur[curPos].amp - ampThreshold &&
-	       prev[prevPos].amp < cur[curPos].amp + ampThreshold) {
-		prev[prevPos].attachNext(&cur[curPos]);
+	std::vector<FreqPair> &l_prev = *prevData();
+	std::vector<FreqPair> &l_cur = *curData();
+	unsigned int l_prev_pos=0, l_cur_pos=0;
+	float l_freq_threshold = 10.0;
+	float l_amp_threshold = 10.0;
+	while((l_prev_pos < l_prev.size()) && (l_cur_pos < l_cur.size())) {
+	    //make connection between two consecutive (freq,m_amp) points if within thresholds
+	    if(l_prev[l_prev_pos].m_freq > l_cur[l_cur_pos].m_freq - l_freq_threshold &&
+           l_prev[l_prev_pos].m_freq < l_cur[l_cur_pos].m_freq + l_freq_threshold &&
+           l_prev[l_prev_pos].m_amp > l_cur[l_cur_pos].m_amp - l_amp_threshold &&
+           l_prev[l_prev_pos].m_amp < l_cur[l_cur_pos].m_amp + l_amp_threshold) {
+		l_prev[l_prev_pos].attachNext(&l_cur[l_cur_pos]);
 	    }
 
 	    //increment the one with the smallest freq (because they are orded by freq)
-	    if(prev[prevPos].freq < cur[curPos].freq) prevPos++;
-	    else curPos++;
+	    if(l_prev[l_prev_pos].m_freq < l_cur[l_cur_pos].m_freq) l_prev_pos++;
+	    else l_cur_pos++;
 	}
     }
 };
