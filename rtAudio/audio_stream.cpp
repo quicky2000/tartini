@@ -20,66 +20,66 @@
 //------------------------------------------------------------------------------
 AudioStream::AudioStream(void)
 {
-  buffer_size = 1024;
-  num_buffers = 0;
-  audio = NULL;
-  buffer = NULL;
-  flowBuffer.setAutoGrow(true);
-  inDevice = outDevice = 0;
+  m_buffer_size = 1024;
+    m_num_buffers = 0;
+  m_audio = NULL;
+  m_buffer = NULL;
+  m_flow_buffer.setAutoGrow(true);
+  m_in_device = m_out_device = 0;
 }
 
 //------------------------------------------------------------------------------
 AudioStream::~AudioStream(void)
 {
   close();
-  if(audio) delete audio;
+  if(m_audio) delete m_audio;
 }
 
 //------------------------------------------------------------------------------
 void AudioStream::close(void)
 {
-  if(audio)
+  if(m_audio)
     {
-      audio->stopStream();
-      audio->closeStream();
+      m_audio->stopStream();
+      m_audio->closeStream();
     }
 }
 
 //------------------------------------------------------------------------------
-int AudioStream::open(int mode_, int freq_, int channels_, int /*bits_*/, int buffer_size_)
+int AudioStream::open(int p_mode, int p_freq, int p_channels, int /*bits_*/, int p_buffer_size)
 {
-  set_mode(mode_);
-  set_frequency(freq_);
-  set_channels(channels_);
+  set_mode(p_mode);
+  set_frequency(p_freq);
+  set_channels(p_channels);
   //bits_; //ignored, just use floats and let rtAudio do the conversion
   set_bits(32);
-  buffer_size = buffer_size_;
-  num_buffers = 4;
+  m_buffer_size = p_buffer_size;
+    m_num_buffers = 4;
 
-  QStringList inNames = getInputDeviceNames();
-  const char * audioInput = gdata->getSettingsValue("Sound/soundInput", QString("Default"));
-  inDevice = getDeviceNumber(audioInput);
+  QStringList l_in_names = getInputDeviceNames();
+  const char * l_audio_input = gdata->getSettingsValue("Sound/soundInput", QString("Default"));
+  m_in_device = getDeviceNumber(l_audio_input);
 
-  QStringList outNames = getOutputDeviceNames();
-  const char * audioOutput = gdata->getSettingsValue("Sound/soundOutput", QString("Default"));
-  outDevice = getDeviceNumber(audioOutput);
+  QStringList l_out_names = getOutputDeviceNames();
+  const char * l_audio_output = gdata->getSettingsValue("Sound/soundOutput", QString("Default"));
+  m_out_device = getDeviceNumber(l_audio_output);
 
-  fprintf(stderr, "Input Device %d: %s\n", inDevice, audioInput);
-  fprintf(stderr, "Output Device %d: %s\n", outDevice, audioOutput);
+  fprintf(stderr, "Input Device %d: %s\n", m_in_device, l_audio_input);
+  fprintf(stderr, "Output Device %d: %s\n", m_out_device, l_audio_output);
 
   try
     {
       if(get_mode() == F_READ)
 	{
-	  audio = new RtAudio(0, 0, inDevice, get_channels(), RTAUDIO_FLOAT32, get_frequency(), &buffer_size, num_buffers);
+	  m_audio = new RtAudio(0, 0, m_in_device, get_channels(), RTAUDIO_FLOAT32, get_frequency(), &m_buffer_size, m_num_buffers);
 	}
       else if(get_mode() == F_WRITE)
 	{
-	  audio = new RtAudio(outDevice, get_channels(), 0, 0, RTAUDIO_FLOAT32, get_frequency(), &buffer_size, num_buffers);
+	  m_audio = new RtAudio(m_out_device, get_channels(), 0, 0, RTAUDIO_FLOAT32, get_frequency(), &m_buffer_size, m_num_buffers);
 	}
       else if(get_mode() == F_RDWR)
 	{
-	  audio = new RtAudio(outDevice, get_channels(), inDevice, get_channels(), RTAUDIO_FLOAT32, get_frequency(), &buffer_size, num_buffers);
+	  m_audio = new RtAudio(m_out_device, get_channels(), m_in_device, get_channels(), RTAUDIO_FLOAT32, get_frequency(), &m_buffer_size, m_num_buffers);
 	}
       else
 	{
@@ -90,49 +90,49 @@ int AudioStream::open(int mode_, int freq_, int channels_, int /*bits_*/, int bu
   catch (RtError &error)
     {
       error.printMessage();
-      audio = NULL;
+      m_audio = NULL;
       return -1;
     }
 
-  if(buffer_size != buffer_size_)
+  if(m_buffer_size != p_buffer_size)
     {
-      fprintf(stderr, "Warning: Got buffer_size of %d instead of %d\n", buffer_size, buffer_size_);
+      fprintf(stderr, "Warning: Got buffer_size of %d instead of %d\n", m_buffer_size, p_buffer_size);
     }
 
   try
     {
       // Get a pointer to the stream buffer
-      buffer = (float *) audio->getStreamBuffer();
-      audio->startStream();
+      m_buffer = (float *) m_audio->getStreamBuffer();
+      m_audio->startStream();
     }
   catch (RtError &error)
     {
       error.printMessage();
-      delete audio;
+      delete m_audio;
       return -1;
     }
   return 0;
 }
 
 //------------------------------------------------------------------------------
-int AudioStream::writeFloats(float **channelData, int length, int ch)
+int AudioStream::writeFloats(float **p_channel_data, int p_length, int p_ch)
 {
-  float * bufPtr = buffer;
-  int c, j;
-  if(length == buffer_size)
+  float * l_buffer_ptr = m_buffer;
+  int l_c, l_j;
+  if(p_length == m_buffer_size)
     {
-      for(j = 0; j < length; j++)
+      for(l_j = 0; l_j < p_length; l_j++)
 	{
-	  for(c = 0; c < ch; c++)
+	  for(l_c = 0; l_c < p_ch; l_c++)
 	    {
-	      *bufPtr++ = channelData[c][j];
+	      *l_buffer_ptr++ = p_channel_data[l_c][l_j];
 	    }
 	}
 
       // Trigger the output of the data buffer
       try
 	{
-	  audio->tickStream();
+	  m_audio->tickStream();
 	}
       catch (RtError &error)
 	{
@@ -142,57 +142,57 @@ int AudioStream::writeFloats(float **channelData, int length, int ch)
     }
   else
     {
-      for(j = 0; j < length; j++)
+      for(l_j = 0; l_j < p_length; l_j++)
 	{
-	  for(c = 0; c < ch; c++)
+	  for(l_c = 0; l_c < p_ch; l_c++)
 	    {
-	      flowBuffer.put(channelData[c][j]);
+	      m_flow_buffer.put(p_channel_data[l_c][l_j]);
 	    }
 	}
-      while(flowBuffer.size() >= buffer_size * ch)
+      while(m_flow_buffer.size() >= m_buffer_size * p_ch)
 	{
-	  int recieved = flowBuffer.get(buffer, buffer_size * ch);
-	  if(recieved != buffer_size * ch)
+	  int l_received = m_flow_buffer.get(m_buffer, m_buffer_size * p_ch);
+	  if(l_received != m_buffer_size * p_ch)
 	    {
-	      fprintf(stderr, "AudioStream::writeFloats: Error recieved != buffer_size*ch\n");
+	      fprintf(stderr, "AudioStream::writeFloats: Error l_received != buffer_size*p_ch\n");
 	    }
 	  // Trigger the output of the data buffer
 	  try
 	    {
-	      audio->tickStream();
+	      m_audio->tickStream();
 	    }
-	  catch (RtError &error)
+	  catch (RtError &l_error)
 	    {
-	      error.printMessage();
+	      l_error.printMessage();
 	      return 0;
 	    }
 	}
     }
-  return length;
+  return p_length;
 }
 
 //------------------------------------------------------------------------------
-int AudioStream::readFloats(float **channelData, int length, int ch)
+int AudioStream::readFloats(float **p_channel_data, int p_length, int p_ch)
 {
-  float * bufPtr = buffer;
-  int c, j;
-  if(length == buffer_size)
+  float * l_buffer_ptr = m_buffer;
+  int l_c, l_j;
+  if(p_length == m_buffer_size)
     {
       // Trigger the input of the data buffer
       try
 	{
-	  audio->tickStream();
+	  m_audio->tickStream();
 	}
-      catch (RtError &error)
+      catch (RtError &l_error)
 	{
-	  error.printMessage();
+	  l_error.printMessage();
 	  return 0;
 	}
-    for(j = 0; j < length; j++)
+    for(l_j = 0; l_j < p_length; l_j++)
       {
-	for(c = 0; c < ch; c++)
+	for(l_c = 0; l_c < p_ch; l_c++)
 	  {
-	    channelData[c][j] = *bufPtr++;
+          p_channel_data[l_c][l_j] = *l_buffer_ptr++;
 	  }
       }
     }
@@ -200,43 +200,43 @@ int AudioStream::readFloats(float **channelData, int length, int ch)
     {
       fprintf(stderr, "Error reading floats\n");
     }
-  return length;
+  return p_length;
 }
 
 //------------------------------------------------------------------------------
-int AudioStream::writeReadFloats(float ** outChannelData, int outCh, float ** inChannelData, int inCh, int length)
+int AudioStream::writeReadFloats(float ** p_out_channel_data, int p_out_channel, float ** p_in_channel_data, int p_in_channel, int p_length)
 {
-  float * bufPtr = buffer;
-  int c, j;
+  float * l_buffer_ptr = m_buffer;
+  int l_c, l_j;
 
-  //put the outChannelData into the Audio buffer to be written out
-  if(length == buffer_size)
+  //put the p_out_channel_data into the Audio buffer to be written out
+  if(p_length == m_buffer_size)
     {
-      for(j = 0; j < length; j++)
+      for(l_j = 0; l_j < p_length; l_j++)
 	{
-	  for(c = 0; c < outCh; c++)
+	  for(l_c = 0; l_c < p_out_channel; l_c++)
 	    {
-	      *bufPtr++ = outChannelData[c][j];
+	      *l_buffer_ptr++ = p_out_channel_data[l_c][l_j];
 	    }
 	}
       // Trigger the input/output of the data buffer
       try
 	{
-	  audio->tickStream();
+	  m_audio->tickStream();
 	}
-      catch (RtError &error)
+      catch (RtError &l_error)
 	{
-	  error.printMessage();
+	  l_error.printMessage();
 	  return 0;
 	}
 
-    //get the new data from the Audio buffer and put it in inChannelData
-    bufPtr = buffer;
-    for(j = 0; j < length; j++)
+    //get the new data from the Audio buffer and put it in p_in_channel_data
+    l_buffer_ptr = m_buffer;
+    for(l_j = 0; l_j < p_length; l_j++)
       {
-	for(c = 0; c < inCh; c++)
+	for(l_c = 0; l_c < p_in_channel; l_c++)
 	  {
-	    inChannelData[c][j] = *bufPtr++;
+          p_in_channel_data[l_c][l_j] = *l_buffer_ptr++;
 	  }
       }
     }
@@ -245,142 +245,142 @@ int AudioStream::writeReadFloats(float ** outChannelData, int outCh, float ** in
       fprintf(stderr, "Error: audio buffer length is a different size than the data chunk buffer\n");
       fprintf(stderr, "Not supported on Read/Write yet. Try changing the buffer size in preferences\n");
     }
-  return length;
+  return p_length;
 }
 
 //------------------------------------------------------------------------------
 QStringList AudioStream::getInputDeviceNames(void)
 {
-  QStringList toReturn;
-  toReturn << "Default";
+  QStringList l_to_return;
+  l_to_return << "Default";
 
-  RtAudio * tempAudio = NULL;
+  RtAudio * l_temp_audio = NULL;
   try
     {
-      tempAudio = new RtAudio();
+        l_temp_audio = new RtAudio();
     }
-  catch (RtError &error)
+  catch (RtError &l_error)
     {
-      error.printMessage();
-      return toReturn;
+      l_error.printMessage();
+      return l_to_return;
     }
 
   // Determine the number of devices available
-  int numDevices = tempAudio->getDeviceCount();
+  int l_num_devices = l_temp_audio->getDeviceCount();
 
   // Scan through devices for various capabilities
-  RtAudioDeviceInfo info;
-  for (int i = 1; i <= numDevices; i++)
+  RtAudioDeviceInfo l_info;
+  for (int l_i = 1; l_i <= l_num_devices; l_i++)
     {
       try
 	{
-	  info = tempAudio->getDeviceInfo(i);
+        l_info = l_temp_audio->getDeviceInfo(l_i);
 	}
-      catch (RtError &error)
+      catch (RtError &l_error)
 	{
-	  error.printMessage();
+	  l_error.printMessage();
 	  break;
 	}
-      if(info.inputChannels > 0)
+      if(l_info.inputChannels > 0)
 	{
-	  toReturn << info.name.c_str();
+	  l_to_return << l_info.name.c_str();
 	}
     }
 
   // Clean up
-  delete tempAudio;
-  return toReturn;
+  delete l_temp_audio;
+  return l_to_return;
 }
 
 //------------------------------------------------------------------------------
 QStringList AudioStream::getOutputDeviceNames(void)
 {
-  QStringList toReturn;
-  toReturn << "Default";
+  QStringList l_to_return;
+  l_to_return << "Default";
 
-  RtAudio *tempAudio = NULL;
+  RtAudio *l_temp_audio = NULL;
   try
     {
-      tempAudio = new RtAudio();
+        l_temp_audio = new RtAudio();
     }
-  catch (RtError &error)
+  catch (RtError &l_error)
     {
-      error.printMessage();
-      return toReturn;
+      l_error.printMessage();
+      return l_to_return;
     }
 
   // Determine the number of devices available
-  int numDevices = tempAudio->getDeviceCount();
+  int l_num_devices = l_temp_audio->getDeviceCount();
 
   // Scan through devices for various capabilities
-  RtAudioDeviceInfo info;
-  for (int i = 1; i <= numDevices; i++)
+  RtAudioDeviceInfo l_info;
+  for (int l_i = 1; l_i <= l_num_devices; l_i++)
     {
       try
 	{
-	  info = tempAudio->getDeviceInfo(i);
+        l_info = l_temp_audio->getDeviceInfo(l_i);
 	}
-      catch (RtError &error)
+      catch (RtError &l_error)
 	{
-	  error.printMessage();
+	  l_error.printMessage();
 	  break;
 	}
 
-      if(info.outputChannels > 0)
+      if(l_info.outputChannels > 0)
 	{
-	  toReturn << info.name.c_str();
+	  l_to_return << l_info.name.c_str();
 	}
     }
   // Clean up
-  delete tempAudio;
-  return toReturn;
+  delete l_temp_audio;
+  return l_to_return;
 }
 
 //------------------------------------------------------------------------------
-int AudioStream::getDeviceNumber(const char * deviceName)
+int AudioStream::getDeviceNumber(const char * p_device_name)
 {
-  int deviceNumber = -1;
-  if(strcmp("Default", deviceName) == 0)
+  int l_device_number = -1;
+  if(strcmp("Default", p_device_name) == 0)
     {
       return 0;
     }
 
-  RtAudio * tempAudio = NULL;
+  RtAudio * l_temp_audio = NULL;
   try
     {
-      tempAudio = new RtAudio();
+        l_temp_audio = new RtAudio();
     }
-  catch (RtError &error)
+  catch (RtError &l_error)
     {
-      error.printMessage();
+      l_error.printMessage();
       return -1;
     }
 
   // Determine the number of devices available
-  int numDevices = tempAudio->getDeviceCount();
+  int l_num_devices = l_temp_audio->getDeviceCount();
 
   // Scan through devices for various capabilities
-  RtAudioDeviceInfo info;
-  for (int i = 1; i <= numDevices; i++)
+  RtAudioDeviceInfo l_info;
+  for (int l_i = 1; l_i <= l_num_devices; l_i++)
     {
       try
 	{
-	  info = tempAudio->getDeviceInfo(i);
+        l_info = l_temp_audio->getDeviceInfo(l_i);
 	}
-      catch (RtError &error)
+      catch (RtError &l_error)
 	{
-	  error.printMessage();
+	  l_error.printMessage();
 	  break;
 	}
-      if(strcmp(info.name.c_str(), deviceName) == 0)
+      if(strcmp(l_info.name.c_str(), p_device_name) == 0)
 	{
-	  deviceNumber = i;
+        l_device_number = l_i;
 	  break;
 	}
   }
   // Clean up
-  delete tempAudio;
-  return deviceNumber;
+  delete l_temp_audio;
+  return l_device_number;
 }
 
 // EOF
