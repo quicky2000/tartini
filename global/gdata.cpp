@@ -100,11 +100,11 @@ GData * gdata = NULL;
 //Define the Phase function. This one is applicable to 
 //accelerating sources since the phase goes as x^2.
 //------------------------------------------------------------------------------
-float phase_function(float x)
+float phase_function(float p_x)
 {
     float phase;
-    //phase = x*x;
-    phase = x;
+    //phase = p_x*p_x;
+    phase = p_x;
     return(phase);
 }
 
@@ -200,21 +200,21 @@ GData::~GData(void)
 
     //Note: The m_sound_files is responsible for cleaning up the data the channels point to
     m_channels.clear();
-    for(uint j = 0; j < m_sound_files.size(); j++)
+    for(uint l_j = 0; l_j < m_sound_files.size(); l_j++)
     {
-        delete m_sound_files[j];
+        delete m_sound_files[l_j];
     }
     m_sound_files.clear();
       
-    std::vector<Filter *>::iterator fi;
-    for(fi = m_filter_hp.begin(); fi != m_filter_hp.end(); ++fi)
+    std::vector<Filter *>::iterator l_filter_iter;
+    for(l_filter_iter = m_filter_hp.begin(); l_filter_iter != m_filter_hp.end(); ++l_filter_iter)
     {
-        delete (*fi);
+        delete (*l_filter_iter);
     }
     m_filter_hp.clear();
-    for(fi = m_filter_lp.begin(); fi != m_filter_lp.end(); ++fi)
+    for(l_filter_iter = m_filter_lp.begin(); l_filter_iter != m_filter_lp.end(); ++l_filter_iter)
     {
-        delete (*fi);
+        delete (*l_filter_iter);
     }
 
     m_filter_lp.clear();
@@ -253,31 +253,31 @@ bool GData::openPlayRecord( SoundFile * p_sound_file_rec
                           , SoundFile * p_soundfile_play
                           )
 {
-    int theOpenMode;
+    int l_open_mode;
 
     stop();
 
-    int rate = p_sound_file_rec->rate();
-    int numChannels = p_sound_file_rec->numChannels();
-    int bits = p_sound_file_rec->bits();
-    int theBufferSize = p_sound_file_rec->framesPerChunk();
+    int l_rate = p_sound_file_rec->rate();
+    int l_num_channels = p_sound_file_rec->numChannels();
+    int l_bits = p_sound_file_rec->bits();
+    int l_buffer_size = p_sound_file_rec->framesPerChunk();
 
     if(p_soundfile_play)
     {
         m_sound_mode = SOUND_PLAY_REC;
-        theOpenMode = F_RDWR;
+        l_open_mode = F_RDWR;
         p_soundfile_play->jumpToChunk(0);
         gdata->m_view->setCurrentTime(0);
     }
     else
     {
         m_sound_mode = SOUND_REC;
-        theOpenMode = F_READ;
+        l_open_mode = F_READ;
     }
 
     //open the audio input
     m_audio_stream = new AudioStream;
-    if(m_audio_stream->open(theOpenMode, rate, numChannels, bits, theBufferSize))
+    if(m_audio_stream->open(l_open_mode, l_rate, l_num_channels, l_bits, l_buffer_size))
     {
         fprintf(stderr, "Error initilizing sound\n");
         delete m_audio_stream;
@@ -286,7 +286,7 @@ bool GData::openPlayRecord( SoundFile * p_sound_file_rec
     }
     else
     {
-        if((theOpenMode & F_WRITE))
+        if((l_open_mode & F_WRITE))
         {
             m_audio_thread.start(p_soundfile_play, p_sound_file_rec);
         }
@@ -320,8 +320,8 @@ bool GData::playSound(SoundFile * p_sound_file)
 
     stop();
   
-    int chunk = p_sound_file->currentChunk();
-    if(chunk < 0 || chunk+1 >= p_sound_file->totalChunks())
+    int l_chunk = p_sound_file->currentChunk();
+    if(l_chunk < 0 || l_chunk + 1 >= p_sound_file->totalChunks())
     {
         p_sound_file->jumpToChunk(0); /*< If at the end of the file reset to the start */
     }
@@ -346,23 +346,23 @@ bool GData::playSound(SoundFile * p_sound_file)
 //------------------------------------------------------------------------------
 void GData::updateViewLeftRightTimes(void)
 {
-    double left = 0.0; //in seconds
-    double right = 0.0; //in seconds
-    Channel *ch;
-    for(uint j = 0; j < m_channels.size(); j++)
+    double l_left = 0.0; //in seconds
+    double l_right = 0.0; //in seconds
+    Channel * l_channel;
+    for(uint l_j = 0; l_j < m_channels.size(); l_j++)
     {
-        ch = m_channels.at(j);
-        if(ch->startTime() < left)
+        l_channel = m_channels.at(l_j);
+        if(l_channel->startTime() < l_left)
         {
-            left = ch->startTime();
+            l_left = l_channel->startTime();
         }
-        if(ch->finishTime() > right)
+        if(l_channel->finishTime() > l_right)
         {
-            right = ch->finishTime();
+            l_right = l_channel->finishTime();
         }
     }
-    setLeftTime(left); //in seconds
-    setRightTime(right); //in seconds
+    setLeftTime(l_left); //in seconds
+    setRightTime(l_right); //in seconds
 }
 
 //------------------------------------------------------------------------------
@@ -386,16 +386,16 @@ void GData::updateActiveChunkTime(double p_time)
         return;
     }
 
-    Channel *active = getActiveChannel();
+    Channel * l_active_channel = getActiveChannel();
     p_time = bound(p_time, leftTime(), rightTime());
-    if(active)
+    if(l_active_channel)
     {
-        active->jumpToTime(p_time);
+        l_active_channel->jumpToTime(p_time);
         if(gdata->doingActive())
         {
-            active->lock();
-            active->processChunk(active->currentChunk());
-            active->unlock();
+            l_active_channel->lock();
+            l_active_channel->processChunk(l_active_channel->currentChunk());
+            l_active_channel->unlock();
         }
     }
     m_view->setCurrentTime(p_time);
@@ -444,13 +444,13 @@ void GData::beginning(void)
 //------------------------------------------------------------------------------
 void GData::rewind(void)
 {
-    double speed = 16;
-    double diffTime = m_view->zoomX() * speed;
+    double l_speed = 16;
+    double l_diff_time = m_view->zoomX() * l_speed;
     if(getActiveChannel())
     {
-        diffTime = MAX(diffTime, getActiveChannel()->timePerChunk());
+        l_diff_time = MAX(l_diff_time, getActiveChannel()->timePerChunk());
     }
-    updateActiveChunkTime(m_view->currentTime() - diffTime);
+    updateActiveChunkTime(m_view->currentTime() - l_diff_time);
     m_view->doSlowUpdate();
 }
 
@@ -469,13 +469,13 @@ void GData::stop(void)
 //------------------------------------------------------------------------------
 void GData::fastforward(void)
 {
-    double speed = 16;
-    double diffTime = m_view->zoomX() * speed;
+    double l_speed = 16;
+    double l_diff_time = m_view->zoomX() * l_speed;
     if(getActiveChannel())
     {
-        diffTime = MAX(diffTime, getActiveChannel()->timePerChunk());
+        l_diff_time = MAX(l_diff_time, getActiveChannel()->timePerChunk());
     }
-    updateActiveChunkTime(m_view->currentTime() + diffTime);
+    updateActiveChunkTime(m_view->currentTime() + l_diff_time);
     m_view->doSlowUpdate();
 }
   
@@ -489,35 +489,35 @@ void GData::end(void)
 //------------------------------------------------------------------------------
 int GData::getAnalysisBufferSize(int p_rate)
 {  
-    int windowSize = m_settings->value("Analysis/bufferSizeValue", 48).toInt();
-    QString windowSizeUnit = m_settings->value("Analysis/bufferSizeUnit", "milli-seconds").toString();
-    if(windowSizeUnit.lower() == "milli-seconds")
+    int l_window_size = m_settings->value("Analysis/bufferSizeValue", 48).toInt();
+    QString l_window_size_unit = m_settings->value("Analysis/bufferSizeUnit", "milli-seconds").toString();
+    if(l_window_size_unit.lower() == "milli-seconds")
     {
         //convert to samples
-        windowSize = int(double(windowSize) * double(p_rate) / 1000.0);
+        l_window_size = int(double(l_window_size) * double(p_rate) / 1000.0);
     }
     if(m_settings->value("Analysis/bufferSizeRound", true).toBool())
     {
-        windowSize = toInt(nearestPowerOf2(windowSize));
+        l_window_size = toInt(nearestPowerOf2(l_window_size));
     }
-    return windowSize;
+    return l_window_size;
 }
 
 //------------------------------------------------------------------------------
 int GData::getAnalysisStepSize(int p_rate)
 {  
-    int stepSize = m_settings->value("Analysis/stepSizeValue", 24).toInt();
-    QString stepSizeUnit = m_settings->value("Analysis/stepSizeUnit", "milli-seconds").toString();
-    if(stepSizeUnit.lower() == "milli-seconds")
+    int l_step_size = m_settings->value("Analysis/stepSizeValue", 24).toInt();
+    QString l_step_size_unit = m_settings->value("Analysis/stepSizeUnit", "milli-seconds").toString();
+    if(l_step_size_unit.lower() == "milli-seconds")
     {
         //convert to samples
-        stepSize = int(double(stepSize) * double(p_rate) / 1000.0);
+        l_step_size = int(double(l_step_size) * double(p_rate) / 1000.0);
     }
     if(m_settings->value("Analysis/stepSizeRound", true).toBool())
     {
-        stepSize = toInt(nearestPowerOf2(stepSize));
+        l_step_size = toInt(nearestPowerOf2(l_step_size));
     }
-    return stepSize;
+    return l_step_size;
 }
 
 //------------------------------------------------------------------------------
@@ -534,12 +534,12 @@ void GData::updateQuickRefSettings(void)
     m_fast_update_speed = m_settings->value("Display/fastUpdateSpeed", 75).toInt();
     m_slow_update_speed = m_settings->value("Display/slowUpdateSpeed", 150).toInt();
     m_vibrato_sine_style = m_settings->value("Advanced/vibratoSineStyle", false).toBool();
-    QString analysisString = m_settings->value("Analysis/analysisType", "MPM").toString();
-    if(analysisString == QString("MPM"))
+    QString l_analysis_string = m_settings->value("Analysis/analysisType", "MPM").toString();
+    if(l_analysis_string == QString("MPM"))
     {
         m_analysis_type = MPM;
     }
-    else if(analysisString == QString("AUTOCORRELATION"))
+    else if(l_analysis_string == QString("AUTOCORRELATION"))
     {
         m_analysis_type = AUTOCORRELATION;
     }
@@ -548,12 +548,12 @@ void GData::updateQuickRefSettings(void)
         m_analysis_type = MPM_MODIFIED_CEPSTRUM;
     }
     m_show_mean_variance_bars = m_settings->value("Advanced/showMeanVarianceBars", false).toBool();
-    QString s = m_settings->value("Advanced/savingMode", "Ask when closing unsaved files (normal)").toString();
-    if(s == "Ask when closing unsaved files (normal)")
+    QString l_string = m_settings->value("Advanced/savingMode", "Ask when closing unsaved files (normal)").toString();
+    if(l_string == "Ask when closing unsaved files (normal)")
     {
         m_saving_mode = 0;
     }
-    else if(s == "Don't ask when closing unsaved files (use with care)")
+    else if(l_string == "Don't ask when closing unsaved files (use with care)")
     {
         m_saving_mode = 1;
     }
@@ -568,19 +568,19 @@ void GData::updateQuickRefSettings(void)
 //------------------------------------------------------------------------------
 QString GData::getFilenameString(void)
 {
-    QString fileGeneratingString = m_settings->value("General/filenameGeneratingString", "Untitled").toString();
-    QString filename;
-    int fileGeneratingNumber = m_settings->value("General/fileGeneratingNumber", 1).toInt();
-    int digits = m_settings->value("General/fileNumberOfDigits", 2).toInt();
-    if(digits == 0)
+    QString l_file_generating_string = m_settings->value("General/filenameGeneratingString", "Untitled").toString();
+    QString l_filename;
+    int l_file_generating_number = m_settings->value("General/fileGeneratingNumber", 1).toInt();
+    int l_digits = m_settings->value("General/fileNumberOfDigits", 2).toInt();
+    if(l_digits == 0)
     {
-        filename.sprintf("%s.wav", fileGeneratingString.latin1());
+        l_filename.sprintf("%s.wav", l_file_generating_string.latin1());
     }
     else
     {
-        filename.sprintf("%s%0*d.wav", fileGeneratingString.latin1(), digits, fileGeneratingNumber);
+        l_filename.sprintf("%s%0*d.wav", l_file_generating_string.latin1(), l_digits, l_file_generating_number);
     }
-    return filename;
+    return l_filename;
 }
 
 //------------------------------------------------------------------------------
@@ -592,11 +592,11 @@ QColor GData::getNextColor(void)
 //------------------------------------------------------------------------------
 void GData::addFileToList(SoundFile * p_sound_file)
 {
-    int c;
+    int l_channel_index;
     m_sound_files.push_back(p_sound_file);
-    for(c = 0; c < p_sound_file->numChannels(); c++)
+    for(l_channel_index = 0; l_channel_index < p_sound_file->numChannels(); l_channel_index++)
     {
-      m_channels.push_back(&(p_sound_file->getChannel(c)));
+      m_channels.push_back(&(p_sound_file->getChannel(l_channel_index)));
     }
     emit channelsChanged();
 }
@@ -604,23 +604,23 @@ void GData::addFileToList(SoundFile * p_sound_file)
 //------------------------------------------------------------------------------
 void GData::removeFileFromList(SoundFile * p_sound_file)
 {
-    int j;
-    int curPos;
-    int prevPos;
+    int l_j;
+    int l_cur_pos;
+    int l_prev_pos;
     //remove all the channels in p_sound_file from the channels list
-    for(j = 0; j < p_sound_file->numChannels(); j++)
+    for(l_j = 0; l_j < p_sound_file->numChannels(); l_j++)
     {
-        Channel * c = &(p_sound_file->getChannel(j));
-        curPos = prevPos = 0;
-        for(std::vector<Channel*>::iterator it1=m_channels.begin(); it1 != m_channels.end(); it1++, curPos++)
+        Channel * l_channel = &(p_sound_file->getChannel(l_j));
+        l_cur_pos = l_prev_pos = 0;
+        for(std::vector<Channel *>::iterator l_channel_iter_1 = m_channels.begin(); l_channel_iter_1 != m_channels.end(); l_channel_iter_1++, l_cur_pos++)
         {
-            if((*it1) == c)
+            if((*l_channel_iter_1) == l_channel)
             {
-                if(c == getActiveChannel())
+                if(l_channel == getActiveChannel())
                 {
-                    prevPos = curPos;
+                    l_prev_pos = l_cur_pos;
                 }
-                it1 = m_channels.erase(it1) - 1;
+                l_channel_iter_1 = m_channels.erase(l_channel_iter_1) - 1;
             }
         }
         if(m_channels.empty())
@@ -629,15 +629,15 @@ void GData::removeFileFromList(SoundFile * p_sound_file)
         }
         else
         {
-            setActiveChannel(m_channels.at(bound(prevPos, 0, int(m_channels.size()-1))));
+            setActiveChannel(m_channels.at(bound(l_prev_pos, 0, int(m_channels.size() - 1))));
         }
     }
     //remove the soundFile from the m_sound_files list
-    for(std::vector<SoundFile*>::iterator it2 = m_sound_files.begin(); it2 != m_sound_files.end(); it2++)
+    for(std::vector<SoundFile *>::iterator l_sound_file_iter_2 = m_sound_files.begin(); l_sound_file_iter_2 != m_sound_files.end(); l_sound_file_iter_2++)
     {
-        if((*it2) == p_sound_file)
+        if((*l_sound_file_iter_2) == p_sound_file)
         {
-            it2 = m_sound_files.erase(it2) - 1;
+            l_sound_file_iter_2 = m_sound_files.erase(l_sound_file_iter_2) - 1;
         }
     }
     emit channelsChanged();
@@ -646,51 +646,51 @@ void GData::removeFileFromList(SoundFile * p_sound_file)
 //------------------------------------------------------------------------------
 void GData::saveActiveFile(void)
 {
-    SoundFile * s = getActiveSoundFile();
-    if(!s)
+    SoundFile * l_sound_file = getActiveSoundFile();
+    if(!l_sound_file)
     {
         return;
     }
-    if(s->saved())
+    if(l_sound_file->saved())
     {
         return;
     }
-    if(m_audio_thread.playSoundFile() == s || m_audio_thread.recSoundFile() == s)
+    if(m_audio_thread.playSoundFile() == l_sound_file || m_audio_thread.recSoundFile() == l_sound_file)
     {
         stop();
     }
-    int val = saveFile(s, saveFileAsk(s->getFileName()));
-    if(val == 0)
+    int l_val = saveFile(l_sound_file, saveFileAsk(l_sound_file->getFileName()));
+    if(l_val == 0)
     {
         //success
         emit channelsChanged();
     }
-    else if(val == -1)
+    else if(l_val == -1)
     {
-        QMessageBox::warning(g_main_window, "Error", QString("Error saving file '") + QString(s->getFileName()) + QString("'"), QMessageBox::Ok, Qt::NoButton);
+        QMessageBox::warning(g_main_window, "Error", QString("Error saving file '") + QString(l_sound_file->getFileName()) + QString("'"), QMessageBox::Ok, Qt::NoButton);
     }
 }
 
 //------------------------------------------------------------------------------
 QString GData::saveFileAsk(QString p_old_filename)
 {
-    QString newFilename = SaveDialog::getSaveWavFileName(g_main_window);
-    if(newFilename.isNull())
+    QString l_new_filename = SaveDialog::getSaveWavFileName(g_main_window);
+    if(l_new_filename.isNull())
     {
         return QString();
     }
-    newFilename = QDir::convertSeparators(newFilename);
-    if(newFilename != p_old_filename && QFile::exists(newFilename))
+    l_new_filename = QDir::convertSeparators(l_new_filename);
+    if(l_new_filename != p_old_filename && QFile::exists(l_new_filename))
     {
         if(QMessageBox::warning(g_main_window, tr("Overwrite File?"),
-			      QString("A file called '") + newFilename + QString("' already exists.\n Do you want to overwrite it?"),
+                                QString("A file called '") + l_new_filename + QString("' already exists.\n Do you want to overwrite it?"),
 			      tr("&Yes"), tr("&No"), QString::null, 0, 1 )
 		  )
         {
             return QString(); //user canceled overwrite
         }
     }
-    return newFilename;
+    return l_new_filename;
 }
 
 /**
@@ -704,25 +704,25 @@ int GData::saveFile( SoundFile * p_sound_file
     {
         return 1;
     }
-    QString oldFilename(p_sound_file->getFileName());
-    oldFilename = QDir::convertSeparators(oldFilename);
-    int pos = p_sound_file->getStream().pos();
+    QString l_old_filename(p_sound_file->getFileName());
+    l_old_filename = QDir::convertSeparators(l_old_filename);
+    int l_pos = p_sound_file->getStream().pos();
     p_sound_file->getStream().close();
   
-    int ret = (moveFile(oldFilename.latin1(), p_new_filename.latin1())) ? 0 : -1;
-    if(ret == 0)
+    int l_ret = (moveFile(l_old_filename.latin1(), p_new_filename.latin1())) ? 0 : -1;
+    if(l_ret == 0)
     {
         p_sound_file->getStream().open_read(p_new_filename.latin1());
-        p_sound_file->getStream().jump_to_frame(pos);
+        p_sound_file->getStream().jump_to_frame(l_pos);
         p_sound_file->setSaved(true);
         p_sound_file->setFilename(p_new_filename.latin1());
     }
     else
     {
-        p_sound_file->getStream().open_read(oldFilename.latin1());
-        p_sound_file->getStream().jump_to_frame(pos);
+        p_sound_file->getStream().open_read(l_old_filename.latin1());
+        p_sound_file->getStream().jump_to_frame(l_pos);
     }
-    return ret;
+    return l_ret;
 }
 
 /**
@@ -743,12 +743,12 @@ bool GData::closeAllFiles(void)
 //------------------------------------------------------------------------------
 void GData::closeActiveFile(void)
 {
-    SoundFile * s = getActiveSoundFile();
-    if(!s)
+    SoundFile * l_sound_file = getActiveSoundFile();
+    if(!l_sound_file)
     {
         return;
     }
-    closeFile(s, gdata->savingMode());
+    closeFile(l_sound_file, gdata->savingMode());
     m_view->doUpdate();
     doChunkUpdate();
 }
@@ -766,9 +766,9 @@ int GData::closeFile( SoundFile * p_sound_file
     {
         return -1;
     }
-    QString newFilename;
-    QString oldFilename(p_sound_file->getFileName());
-    oldFilename = QDir::convertSeparators(oldFilename);
+    QString l_new_filename;
+    QString l_old_filename(p_sound_file->getFileName());
+    l_old_filename = QDir::convertSeparators(l_old_filename);
 
     if(gdata->m_audio_thread.playSoundFile() == p_sound_file || gdata->m_audio_thread.recSoundFile() == p_sound_file)
     {
@@ -785,22 +785,22 @@ int GData::closeFile( SoundFile * p_sound_file
 
     if(p_saving_mode == ALWAYS_ASK)
     {
-        QString filename = QString(getFilenamePart(oldFilename.latin1()));
-        int option = QMessageBox::question(NULL
-                                          , QString("Save changes to file '") + filename + "' ?"
-                                          , QString("Save changes to the file '") + filename + QString("' ?\n")
-                                          , "&Yes"
-                                          , "&No"
-                                          , "&Cancel"
-                                          , 0
-                                          , 2
-					                      );
+        QString l_filename = QString(getFilenamePart(l_old_filename.latin1()));
+        int l_option = QMessageBox::question(NULL
+                                            , QString("Save changes to file '") + l_filename + "' ?"
+                                            , QString("Save changes to the file '") + l_filename + QString("' ?\n")
+                                            , "&Yes"
+                                            , "&No"
+                                            , "&Cancel"
+                                            , 0
+                                            , 2
+                                            );
 
-        switch(option)
+        switch(l_option)
         {
             case 0: //Yes
-                newFilename = saveFileAsk(oldFilename);
-                if(newFilename.isNull())
+                l_new_filename = saveFileAsk(l_old_filename);
+                if(l_new_filename.isNull())
                 {
                     return 1;
                 }
@@ -831,9 +831,9 @@ int GData::closeFile( SoundFile * p_sound_file
 //------------------------------------------------------------------------------
 void GData::clearFreqLookup(void)
 {
-    for(std::vector<Channel *>::iterator it1=m_channels.begin(); it1 != m_channels.end(); it1++)
+    for(std::vector<Channel *>::iterator l_channel_iterator = m_channels.begin(); l_channel_iterator != m_channels.end(); l_channel_iterator++)
     {
-        (*it1)->clearFreqLookup();
+        (*l_channel_iterator)->clearFreqLookup();
     }
 }
 
@@ -860,19 +860,19 @@ void GData::setPitchContourMode(int p_pitch_contour_mode)
 //------------------------------------------------------------------------------
 void GData::clearAmplitudeLookup(void)
 {
-    for(std::vector<Channel* >::iterator it1=m_channels.begin(); it1 != m_channels.end(); it1++)
+    for(std::vector<Channel *>::iterator l_channel_iter = m_channels.begin(); l_channel_iter != m_channels.end(); l_channel_iter++)
     {
-        (*it1)->clearAmplitudeLookup();
+        (*l_channel_iter)->clearAmplitudeLookup();
     }
 }
   
 //------------------------------------------------------------------------------
 int GData::getActiveIntThreshold(void)
 {
-    Channel * active = getActiveChannel();
-    if(active)
+    Channel * l_active_channel = getActiveChannel();
+    if(l_active_channel)
     {
-        return toInt(active->threshold() * 100.0f);
+        return toInt(l_active_channel->threshold() * 100.0f);
     }
     else
     {
@@ -883,10 +883,10 @@ int GData::getActiveIntThreshold(void)
 //------------------------------------------------------------------------------
 void GData::resetActiveIntThreshold(int p_threshold_percentage)
 {
-    Channel* active = getActiveChannel();
-    if(active)
+    Channel * l_active_channel = getActiveChannel();
+    if(l_active_channel)
     {
-        active->resetIntThreshold(p_threshold_percentage);
+        l_active_channel->resetIntThreshold(p_threshold_percentage);
     }
 }
 
@@ -928,9 +928,9 @@ double GData::ampWeight(int p_mode)
 //------------------------------------------------------------------------------
 void GData::recalcScoreThresholds(void)
 {
-    for(std::vector<Channel *>::iterator it1=m_channels.begin(); it1 != m_channels.end(); it1++)
+    for(std::vector<Channel *>::iterator l_channel_iter = m_channels.begin(); l_channel_iter != m_channels.end(); l_channel_iter++)
     {
-        (*it1)->recalcScoreThresholds();
+        (*l_channel_iter)->recalcScoreThresholds();
     }
 }
 
@@ -952,19 +952,19 @@ void GData::setTemperedType(int p_type)
             {
                 setMusicKeyType(0);
             }
-            for(int j = gMusicScales.size()-1; j >= 2; j--)
+            for(int l_j = gMusicScales.size() - 1; l_j >= 2; l_j--)
             {
-                g_main_window->m_key_type_combo_box->removeItem(j);
+                g_main_window->m_key_type_combo_box->removeItem(l_j);
             }
         }
         else if(m_tempered_type > 0 && p_type == 0)
         {
-            QStringList s;
-            for(unsigned int j = 2; j < gMusicScales.size(); j++)
+            QStringList l_string_list;
+            for(unsigned int l_j = 2; l_j < gMusicScales.size(); l_j++)
             {
-                s << gMusicScales[j].name();
+                l_string_list << gMusicScales[l_j].name();
             }
-            g_main_window->m_key_type_combo_box->addItems(s);
+            g_main_window->m_key_type_combo_box->addItems(l_string_list);
         }
         m_tempered_type = p_type; emit temperedTypeChanged(p_type);
     }
