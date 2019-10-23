@@ -66,14 +66,14 @@ enum AnalysisModes { MPM, AUTOCORRELATION, MPM_MODIFIED_CEPSTRUM };
 
 #define NUM_WIN_SIZES 5
 extern int g_frame_window_sizes[NUM_WIN_SIZES];
-extern const char *g_frame_window_strings[NUM_WIN_SIZES];
+extern const char * g_frame_window_strings[NUM_WIN_SIZES];
 
 #define NUM_STEP_SIZES 6
 extern float g_step_sizes[NUM_STEP_SIZES];
-extern const char *g_step_size_strings[NUM_STEP_SIZES];
+extern const char * g_step_size_strings[NUM_STEP_SIZES];
 
 #define NUM_PITCH_METHODS 8
-extern const char *g_pitch_method_strings[NUM_PITCH_METHODS];
+extern const char * g_pitch_method_strings[NUM_PITCH_METHODS];
 
 class FBuffer;
 class SoundStream;
@@ -88,28 +88,51 @@ class GData : public QObject
 {
   Q_OBJECT
 
-public:
-  enum SavingModes { ALWAYS_ASK, NEVER_SAVE, ALWAYS_SAVE };
+  public:
 
-  GData(void);
-  virtual ~GData(void);
+    enum SavingModes
+    { ALWAYS_ASK
+    , NEVER_SAVE
+    , ALWAYS_SAVE
+    };
 
-  /**
-     Empty methods just defined to avoid unused parameters warning
-     assuming that will be removed at ocmpile time during optimisation
-     phase 
-  */
-  inline void do_nothing(void)const;
-  inline bool settingsContains(const QString & p_key)const;
-  inline int getSettingsValue(const QString & p_key,const int & p_default_value)const;
-  inline bool getSettingsValue(const QString & p_key,const bool & p_default_value)const;
-  inline QString getSettingsValue(const QString & p_key,const QString & p_default_value)const;
-  inline QPoint getSettingsValue(const QString & p_key,const QPoint & p_default_value)const;
-  inline QSize getSettingsValue(const QString & p_key,const QSize & p_default_value)const;
-  inline void setSettingsValue(const QString & p_key,const QString & p_value);
-  inline void setSettingsValue(const QString & p_key,const int & p_value);
-  inline void setSettingsValue(const QString & p_key,const QPoint & p_value);
-  inline void setSettingsValue(const QString & p_key,const QSize & p_value);
+    GData(void);
+    virtual ~GData(void);
+
+    /**
+       Empty methods just defined to avoid unused parameters warning
+       assuming that will be removed at ocmpile time during optimisation
+       phase
+    */
+    inline void do_nothing(void)const;
+    inline bool settingsContains(const QString & p_key)const;
+    inline int getSettingsValue( const QString & p_key
+                               , const int & p_default_value
+                               )const;
+    inline bool getSettingsValue( const QString & p_key
+                                , const bool & p_default_value
+                                )const;
+  inline QString getSettingsValue( const QString & p_key
+                                 , const QString & p_default_value
+                                 )const;
+  inline QPoint getSettingsValue( const QString & p_key
+                                , const QPoint & p_default_value
+                                )const;
+  inline QSize getSettingsValue( const QString & p_key
+                               , const QSize & p_default_value
+                               )const;
+  inline void setSettingsValue( const QString & p_key
+                              , const QString & p_value
+                              );
+  inline void setSettingsValue( const QString & p_key
+                              , const int & p_value
+                              );
+  inline void setSettingsValue( const QString & p_key
+                              , const QPoint & p_value
+                              );
+  inline void setSettingsValue( const QString & p_key
+                              , const QSize & p_value
+                              );
   inline void clearSettings(void);
   inline void syncSettings(void);
   inline int getSettingsIntValue(const QString & p_key)const;
@@ -132,17 +155,17 @@ public:
   inline int getRunning(void)const;
 
   inline size_t getChannelsSize(void)const;
-  inline Channel* getChannelAt(size_t p_index)const;
+  inline Channel * getChannelAt(size_t p_index)const;
 
   inline const View & getView(void)const;
   inline View & getView(void);
   inline void setView(View & p_view);
 
-  void setActiveChannel(Channel *p_to_active);
-  inline Channel* getActiveChannel(void);
-  SoundFile* getActiveSoundFile(void);
+  void setActiveChannel(Channel * p_to_active);
+  inline Channel * getActiveChannel(void);
+  SoundFile * getActiveSoundFile(void);
 
-  inline QPixmap* drawingBuffer(void);
+  inline QPixmap * drawingBuffer(void);
 
   /**
      Allows you to specify the leftmost time a file starts
@@ -205,9 +228,16 @@ public:
   inline int slowUpdateSpeed(void)const;
   inline bool mouseWheelZooms(void)const;
 
-  void setAmpThreshold(int p_mode, int p_index, double p_value);
-  double ampThreshold(int p_mode, int p_index);
-  void setAmpWeight(int p_mode, double p_value);
+  void setAmpThreshold( int p_mode
+                      , int p_index
+                      , double p_value
+                      );
+  double ampThreshold( int p_mode
+                     , int p_index
+                     );
+  void setAmpWeight( int p_mode
+                   , double p_value
+                   );
   double ampWeight(int p_mode);
 
   inline int analysisType(void)const;
@@ -220,8 +250,8 @@ public:
   inline const QColor & shading2Color(void)const;
 
   QString getFilenameString(void);
-  void addFileToList(SoundFile *p_sound_file);
-  void removeFileFromList(SoundFile *p_sound_file);
+  void addFileToList(SoundFile * p_sound_file);
+  void removeFileFromList(SoundFile * p_sound_file);
   void clearFreqLookup(void);
   void clearAmplitudeLookup(void);
   void recalcScoreThresholds(void);
@@ -241,11 +271,13 @@ public:
   inline const double & semitoneOffset(void)const;
 
 signals:
-  void activeChannelChanged(Channel *p_active_channel);
+  void activeChannelChanged(Channel * p_active_channel);
   void activeIntThresholdChanged(int p_threshold_percentage);
   void leftTimeChanged(double p_x);
   void rightTimeChanged(double p_x);
-  void timeRangeChanged(double p_left_time, double p_right_time);
+  void timeRangeChanged( double p_left_time
+                       , double p_right_time
+                       );
   void channelsChanged(void);
   void onChunkUpdate(void);
 
@@ -264,8 +296,10 @@ public slots:
   inline void setFreqA(int p_x);
 
   void pauseSound(void);
-  bool openPlayRecord(SoundFile *p_sound_file_rec, SoundFile *p_soundfile_play);
-  bool playSound(SoundFile *p_sound_file);
+  bool openPlayRecord( SoundFile * p_sound_file_rec
+                     , SoundFile * p_soundfile_play
+                     );
+  bool playSound(SoundFile * p_sound_file);
   void updateViewLeftRightTimes(void);
   void updateActiveChunkTime(double p_time);
   void updateQuickRefSettings(void);
@@ -281,44 +315,49 @@ public slots:
   void saveActiveFile(void);
   void closeActiveFile(void);
   QString saveFileAsk(QString p_old_filename);
-  int saveFile(SoundFile *p_sound_file, QString p_new_filename);
-  int closeFile(SoundFile *p_sound_file, int p_saving_mode/*, bool ask=true*/);
+  int saveFile( SoundFile * p_sound_file
+              , QString p_new_filename
+              );
+  int closeFile(SoundFile * p_sound_file
+               , int p_saving_mode
+               /*, bool ask=true*/
+               );
   void resetActiveIntThreshold(int p_threshold_percentage);
 
   void doChunkUpdate(void);
 
  private:
-  QSettings *m_settings;
+  QSettings * m_settings;
   int m_sound_mode;
-  AudioStream *m_audio_stream;
+  AudioStream * m_audio_stream;
   bool m_need_update;
 
   /**
      highpass filter
    */
-  std::vector<Filter*> m_filter_hp;
+  std::vector<Filter *> m_filter_hp;
 
   /**
      lowpass filter
    */
-  std::vector<Filter*> m_filter_lp;
+  std::vector<Filter *> m_filter_lp;
   AudioThread m_audio_thread;
   int m_running;
 
-  std::vector<SoundFile*> m_sound_files;
-  std::vector<Channel*> m_channels;
+  std::vector<SoundFile *> m_sound_files;
+  std::vector<Channel *> m_channels;
 
   // To check if really usefull
   std::vector<QColor> m_line_color;
   int m_next_color_index;
   // End to check
 
-  View *m_view;
+  View * m_view;
 
   /**
      Pointer to the active channel
    */
-  Channel *m_active_channel;
+  Channel * m_active_channel;
   bool m_doing_harmonic_analysis;
   bool m_doing_freq_analysis;
   bool m_doing_equal_loudness;
@@ -346,7 +385,7 @@ public slots:
   double m_amp_thresholds[NUM_AMP_MODES][2];
   double m_amp_weights[NUM_AMP_MODES];
 
-  QPixmap *m_drawing_buffer;
+  QPixmap * m_drawing_buffer;
   QColor m_background_color;
   QColor m_shading_1_color;
   QColor m_shading_2_Color;
@@ -368,7 +407,7 @@ public slots:
 
 };
 
-extern GData *gdata;
+extern GData * gdata;
 
 #include "gdata.hpp"
 
