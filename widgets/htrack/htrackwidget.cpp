@@ -83,9 +83,9 @@ void HTrackWidget::resizeGL( int p_w
 //------------------------------------------------------------------------------
 void HTrackWidget::paintGL(void)
 {
-    Channel *l_active_channel = gdata->getActiveChannel();
+    Channel *l_active_channel = g_data->getActiveChannel();
 
-    QColor l_background = gdata->backgroundColor();
+    QColor l_background = g_data->backgroundColor();
     glClearColor( double(l_background.red()) / 256.0, double(l_background.green()) / 256.0, double(l_background.blue()) / 256.0, 0.0 );
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

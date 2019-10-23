@@ -37,7 +37,7 @@ char *gMusicKeyName[NUM_MUSIC_KEYS] =
    (char*)"G#/Ab"
   };
 int   gMusicKeyRoot[NUM_MUSIC_KEYS] = {  9,   10,      11,  0,   1,       2,   3,       4,   5,   6,        7,  8      };
-int   gMusicKey = 3; //C
+int   g_music_key = 3; //C
 //                       0    1     2    3     4    5    6     7    8     9    10    11
 const QString noteNames[12] =
   {

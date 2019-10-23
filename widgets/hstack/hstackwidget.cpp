@@ -35,7 +35,7 @@ HStackWidget::HStackWidget(QWidget *p_parent)
     m_view_height = 100;
     m_top = 0;
 
-    connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), this, SLOT(update()));
+    connect(&(g_data->getView()), SIGNAL(onFastUpdate(double)), this, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------
@@ -67,7 +67,7 @@ HStackWidget::~HStackWidget(void)
 //------------------------------------------------------------------------------
 void HStackWidget::paintEvent(QPaintEvent *)
 { 
-    Channel * l_active_channel = gdata->getActiveChannel();
+    Channel * l_active_channel = g_data->getActiveChannel();
 
     beginDrawing();
     

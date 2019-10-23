@@ -29,7 +29,7 @@ HBlockView::HBlockView( int p_view_id
     m_h_block_widget->show();
 
     //make the widget get updated when the view changes
-    connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), m_h_block_widget, SLOT(update()));
+    connect(&(g_data->getView()), SIGNAL(onFastUpdate(double)), m_h_block_widget, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------

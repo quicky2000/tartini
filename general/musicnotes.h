@@ -133,7 +133,7 @@ extern std::vector<MusicScale> gMusicScales;
 
 extern char *gMusicKeyName[NUM_MUSIC_KEYS];
 extern int gMusicKeyRoot[NUM_MUSIC_KEYS];
-extern int gMusicKey;
+extern int g_music_key;
 
 #include "musicnotes.hpp"
 

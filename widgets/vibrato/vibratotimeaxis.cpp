@@ -154,7 +154,7 @@ void VibratoTimeAxis::resizeEvent(QResizeEvent *)
 //------------------------------------------------------------------------------
 void VibratoTimeAxis::doUpdate(void)
 {
-    Channel * l_active_channel = gdata->getActiveChannel();
+    Channel * l_active_channel = g_data->getActiveChannel();
 
     int l_my_start_chunk = -1;
     int l_my_current_chunk = -1;

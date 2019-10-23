@@ -32,7 +32,7 @@ VolumeMeterWidget::VolumeMeterWidget(QWidget * p_parent)
 : DrawWidget(p_parent)
 {
     //make the widget get updated when the view changes
-    connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), this, SLOT(update()));
+    connect(&(g_data->getView()), SIGNAL(onFastUpdate(double)), this, SLOT(update()));
 
     // Define the number of labels to use for available places
     m_label_numbers.push_back(1);
@@ -60,7 +60,7 @@ void VolumeMeterWidget::setFontSize(int p_font_size)
 //------------------------------------------------------------------------------
 void VolumeMeterWidget::paintEvent(QPaintEvent *)
 {
-    Channel * l_active = gdata->getActiveChannel();
+    Channel * l_active = g_data->getActiveChannel();
 
     beginDrawing(false);
     fillBackground(colorGroup().background());

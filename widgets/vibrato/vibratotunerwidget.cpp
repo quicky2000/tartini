@@ -54,7 +54,7 @@ VibratoTunerWidget::~VibratoTunerWidget()
 //------------------------------------------------------------------------------
 void VibratoTunerWidget::initializeGL(void)
 {
-  QColor l_background = gdata->backgroundColor();
+  QColor l_background = g_data->backgroundColor();
   glClearColor( double(l_background.red()) / 256.0, double(l_background.green()) / 256.0, double(l_background.blue()) / 256.0, 0.0 );
   glClear(GL_COLOR_BUFFER_BIT);
 
@@ -228,7 +228,7 @@ void VibratoTunerWidget::resizeGL(int p_width
 //------------------------------------------------------------------------------
 void VibratoTunerWidget::paintGL()
 {
-  QColor l_background = gdata->backgroundColor();
+  QColor l_background = g_data->backgroundColor();
   glClearColor( double(l_background.red()) / 256.0, double(l_background.green()) / 256.0, double(l_background.blue()) / 256.0, 0.0 );
   glClear(GL_COLOR_BUFFER_BIT);
 
@@ -257,7 +257,7 @@ void VibratoTunerWidget::doUpdate(double p_pitch)
 {
   m_cur_pitch = p_pitch;
 
-  Channel * l_active_channel = gdata->getActiveChannel();
+  Channel * l_active_channel = g_data->getActiveChannel();
 
   float l_needle_value = 0;
   int l_close_pitch = 0;

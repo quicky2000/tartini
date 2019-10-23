@@ -62,7 +62,7 @@ VibratoSpeedWidget::~VibratoSpeedWidget(void)
 //------------------------------------------------------------------------------
 void VibratoSpeedWidget::initializeGL(void)
 {
-    QColor l_bg = gdata->backgroundColor();
+    QColor l_bg = g_data->backgroundColor();
     glClearColor( double(l_bg.red()) / 256.0, double(l_bg.green()) / 256.0, double(l_bg.blue()) / 256.0, 0.0 );
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -395,7 +395,7 @@ void VibratoSpeedWidget::resizeGL(int p_width
 //------------------------------------------------------------------------------
 void VibratoSpeedWidget::paintGL(void)
 {
-    QColor l_bg = gdata->backgroundColor();
+    QColor l_bg = g_data->backgroundColor();
     glClearColor( double(l_bg.red()) / 256.0, double(l_bg.green()) / 256.0, double(l_bg.blue()) / 256.0, 0.0 );
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -452,7 +452,7 @@ void VibratoSpeedWidget::paintGL(void)
 //------------------------------------------------------------------------------
 void VibratoSpeedWidget::doUpdate(void)
 {
-    Channel * l_active_channel = gdata->getActiveChannel();
+    Channel * l_active_channel = g_data->getActiveChannel();
 
     float l_vibrato_speed = 0;
     float l_vibrato_width = 0;
@@ -461,7 +461,7 @@ void VibratoSpeedWidget::doUpdate(void)
     if(l_active_channel)
     {
         AnalysisData * l_data;
-        if(gdata->getSoundMode() & SOUND_REC)
+        if(g_data->getSoundMode() & SOUND_REC)
         {
             l_data = l_active_channel->dataAtChunk(l_active_channel->chunkAtCurrentTime() - l_active_channel->pronyDelay());
         }

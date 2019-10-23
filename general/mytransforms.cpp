@@ -223,7 +223,7 @@ double MyTransforms::nsdf(float *input, float *output)
   double sumSq = autocorr(input, output);
 
   double totalSumSq = sumSq * 2.0;
-  if(gdata->analysisType() == MPM || gdata->analysisType() == MPM_MODIFIED_CEPSTRUM)
+  if(g_data->analysisType() == MPM || g_data->analysisType() == MPM_MODIFIED_CEPSTRUM)
     {
       //nsdf
       for(int j = 0; j < k; j++)
@@ -376,38 +376,38 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
   float *curInput = (equalLoudness) ? ch->get_filtered_input().begin() : ch->get_direct_input().begin();
 
   std::vector<int> nsdfMaxPositions;
-  analysisData.setMaxIntensityDB(linear2dB(fabs(*std::max_element(curInput, curInput + n, absoluteLess<float>())),*gdata));
+  analysisData.setMaxIntensityDB(linear2dB(fabs(*std::max_element(curInput, curInput + n, absoluteLess<float>())),*g_data));
   
   doChannelDataFFT(ch, curInput, chunk);
   std::copy(curInput, curInput + n, dataTime);
   
-  if(gdata->doingFreqAnalysis() && (ch->firstTimeThrough() || gdata->doingActiveAnalysis()))
+  if(g_data->doingFreqAnalysis() && (ch->firstTimeThrough() || g_data->doingActiveAnalysis()))
     {
       //calculate the Normalised Square Difference Function
-      double logrms = linear2dB(nsdf(dataTime, ch->get_nsdf_data().begin()) / double(n),*gdata); /**< Do the NSDF calculation */
+      double logrms = linear2dB(nsdf(dataTime, ch->get_nsdf_data().begin()) / double(n),*g_data); /**< Do the NSDF calculation */
       analysisData.setLogRms(logrms);
-      if(gdata->doingAutoNoiseFloor() && !analysisData.isDone())
+      if(g_data->doingAutoNoiseFloor() && !analysisData.isDone())
 	{
-	  //do it for gdata. this is only here for old code. remove some stage
+	  //do it for g_data. this is only here for old code. remove some stage
 	  if(chunk == 0)
 	    {
-	      gdata->set_rms_floor(0.0);
-	      gdata->set_rms_ceiling(gdata->dBFloor());
+	      g_data->set_rms_floor(0.0);
+	      g_data->set_rms_ceiling(g_data->dBFloor());
 	    }
-	  if(logrms + 15 < gdata->rmsFloor())
+	  if(logrms + 15 < g_data->rmsFloor())
 	    {
-	      gdata->set_rms_floor(logrms + 15);
+	      g_data->set_rms_floor(logrms + 15);
 	    }
-	  if(logrms > gdata->rmsCeiling())
+	  if(logrms > g_data->rmsCeiling())
 	    {
-	      gdata->set_rms_ceiling(logrms);
+	      g_data->set_rms_ceiling(logrms);
 	    }
 
 	  //do it for the channel
 	  if(chunk == 0)
 	    {
 	      ch->set_rms_floor(0.0);
-	      ch->set_rms_ceiling(gdata->dBFloor());
+	      ch->set_rms_ceiling(g_data->dBFloor());
 	    }
 	  if(logrms + 15 < ch->get_rms_floor())
 	    {
@@ -477,7 +477,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
 
 	  if(!analysisData.isDone())
 	    {
-	      if(gdata->analysisType() == MPM_MODIFIED_CEPSTRUM)
+	      if(g_data->analysisType() == MPM_MODIFIED_CEPSTRUM)
 		{
 		  //calculate pitch
 		  ch->chooseCorrelationIndex(chunk, float(analysisData.getCepstrumIndex()));
@@ -503,7 +503,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
 
 	  analysisData.setChangeness(0.0f);
 
-	  if(gdata->doingHarmonicAnalysis())
+	  if(g_data->doingHarmonicAnalysis())
 	    {
 	      std::copy(dataTime, dataTime+n, dataTemp);
 	      if(analysisData.getChosenCorrelationIndex() >= 0)
@@ -513,7 +513,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
 	    }
 	}
 
-      if(gdata->doingFreqAnalysis() && ch->doingDetailedPitch() && ch->firstTimeThrough())
+      if(g_data->doingFreqAnalysis() && ch->doingDetailedPitch() && ch->firstTimeThrough())
 	{
 	  float periodDiff2 = ch->calcDetailedPitch(curInput, analysisData.getPeriod(), chunk);
 	  periodDiff = periodDiff2;
@@ -529,13 +529,13 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
 	  analysisData.setDone(true);
 	}
 
-      if(gdata->doingFreqAnalysis() && ch->doingDetailedPitch() && ch->firstTimeThrough())
+      if(g_data->doingFreqAnalysis() && ch->doingDetailedPitch() && ch->firstTimeThrough())
 	{
 	  ch->calcVibratoData(chunk);
 	}
     }
 
-  if(gdata->doingFreqAnalysis() && ch->doingDetailedPitch() && (!ch->firstTimeThrough()))
+  if(g_data->doingFreqAnalysis() && ch->doingDetailedPitch() && (!ch->firstTimeThrough()))
     {
       ch->get_pitch_lookup().copyTo(ch->get_detailed_pitch_data().begin(), chunk*ch->get_detailed_pitch_data().size(), ch->get_detailed_pitch_data().size());
       ch->get_pitch_lookup_smoothed().copyTo(ch->get_detailed_pitch_data_smoothed().begin(), chunk*ch->get_detailed_pitch_data_smoothed().size(), ch->get_detailed_pitch_data_smoothed().size());
@@ -550,7 +550,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
 	{
 	  rms += sq(dataTime[j]);
 	}
-      analysisData.setLogRms(linear2dB(rms / float(n),*gdata));
+      analysisData.setLogRms(linear2dB(rms / float(n),*g_data));
       analysisData.calcScores();
       analysisData.setDone(true);
     }
@@ -817,29 +817,29 @@ void MyTransforms::doChannelDataFFT(Channel *ch, float *curInput, int chunk)
       ch->get_fft_data2()[j] = logBaseN(logBase, 1.0 + 2.0 * sqrt(sqValue) / double(nDiv2) * (logBase - 1.0));
       if(sqValue > 0.0)
 	{
-	  ch->get_fft_data1()[j] = bound(log10(sqValue) / 2.0 - logSize, gdata->dBFloor(), 0.0);
+	  ch->get_fft_data1()[j] = bound(log10(sqValue) / 2.0 - logSize, g_data->dBFloor(), 0.0);
 	}
       else
 	{
-	  ch->get_fft_data1()[j] = gdata->dBFloor();
+	  ch->get_fft_data1()[j] = g_data->dBFloor();
 	}
     }
   sqValue = sq(dataFFT[0]) + sq(dataFFT[nDiv2]);
   ch->get_fft_data2()[0] = logBaseN(logBase, 1.0 + 2.0 * sqrt(sqValue) / double(nDiv2) * (logBase - 1.0));
   if(sqValue > 0.0)
     {
-      ch->get_fft_data1()[0] = bound(log10(sqValue) / 2.0 - logSize, gdata->dBFloor(), 0.0);
+      ch->get_fft_data1()[0] = bound(log10(sqValue) / 2.0 - logSize, g_data->dBFloor(), 0.0);
     }
   else
     {
-      ch->get_fft_data1()[0] = gdata->dBFloor();
+      ch->get_fft_data1()[0] = g_data->dBFloor();
     }
 
 #ifdef PRINTF_DEBUG
   printf("n = %d, fff = %f\n", nDiv2, *std::max_element(ch->get_fft_data2().begin(), ch->get_fft_data2().end()));
 #endif // PRINTF_DEBUG
 
-  if(gdata->analysisType() == MPM_MODIFIED_CEPSTRUM)
+  if(g_data->analysisType() == MPM_MODIFIED_CEPSTRUM)
     {
       for(int j = 1; j < nDiv2; j++)
 	{
@@ -952,7 +952,7 @@ void MyTransforms::doHarmonicAnalysis(float *input, AnalysisData &analysisData, 
     {
       analysisData.setHarmonicAmpAt(j, log10(harmonicsAmpCenter[j] / hanningScalar) * 20);
       analysisData.setHarmonicAmpNoCutOffAt(j,analysisData.getHarmonicAmpAt(j));
-      analysisData.setHarmonicAmpAt(j, 1.0 - (analysisData.getHarmonicAmpAt(j) / gdata->ampThreshold(AMPLITUDE_RMS, 0)));
+      analysisData.setHarmonicAmpAt(j, 1.0 - (analysisData.getHarmonicAmpAt(j) / g_data->ampThreshold(AMPLITUDE_RMS, 0)));
       if(analysisData.getHarmonicAmpAt(j) < 0.0)
 	{
 	  analysisData.setHarmonicAmpAt(j,0.0);

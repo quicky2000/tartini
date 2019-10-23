@@ -53,28 +53,28 @@ void TartiniSettingsDialog::loadSetting(QObject *obj, const QString &group)
     }
   else if(obj->isA("QLineEdit"))
     {
-      ((QLineEdit*)obj)->setText(gdata->getSettingsStringValue(fullKey));
+      ((QLineEdit*)obj)->setText(g_data->getSettingsStringValue(fullKey));
     }
   else if(obj->isA("QComboBox"))
     {
-      ((QComboBox*)obj)->setCurrentText(gdata->getSettingsStringValue(fullKey));
+      ((QComboBox*)obj)->setCurrentText(g_data->getSettingsStringValue(fullKey));
     }
   else if(obj->isA("QPushButton") && ((QPushButton*)obj)->isToggleButton())
     {
-      ((QPushButton*)obj)->setOn(gdata->getSettingsBoolValue(fullKey));
+      ((QPushButton*)obj)->setOn(g_data->getSettingsBoolValue(fullKey));
     }
   else if(obj->isA("QCheckBox"))
     {
-      ((QCheckBox*)obj)->setChecked(gdata->getSettingsBoolValue(fullKey));
+      ((QCheckBox*)obj)->setChecked(g_data->getSettingsBoolValue(fullKey));
     }
   else if(obj->isA("QSpinBox"))
     {
-      ((QSpinBox*)obj)->setValue(gdata->getSettingsIntValue(fullKey));
+      ((QSpinBox*)obj)->setValue(g_data->getSettingsIntValue(fullKey));
     }
   else if(obj->isA("QFrame"))
     {
       QColor color;
-      color.setNamedColor(gdata->getSettingsStringValue(fullKey));
+      color.setNamedColor(g_data->getSettingsStringValue(fullKey));
       ((QFrame*)obj)->setPaletteBackgroundColor(color);
     }
 }
@@ -182,27 +182,27 @@ void TartiniSettingsDialog::saveSetting(QObject *obj, const QString group)
   }
   else if(obj->isA("QLineEdit"))
     {
-      gdata->setSettingsValue(fullKey, ((QLineEdit*)obj)->text());
+      g_data->setSettingsValue(fullKey, ((QLineEdit*)obj)->text());
     }
   else if(obj->isA("QComboBox"))
     {
-      gdata->setSettingsValue(fullKey, ((QComboBox*)obj)->currentText());
+      g_data->setSettingsValue(fullKey, ((QComboBox*)obj)->currentText());
     }
   else if(obj->isA("QPushButton") && ((QPushButton*)obj)->isToggleButton())
     {
-      gdata->setSettingsValue(fullKey, ((QPushButton*)obj)->isOn());
+      g_data->setSettingsValue(fullKey, ((QPushButton*)obj)->isOn());
     }
   else if(obj->isA("QCheckBox"))
     {
-      gdata->setSettingsValue(fullKey, ((QCheckBox*)obj)->isChecked());
+      g_data->setSettingsValue(fullKey, ((QCheckBox*)obj)->isChecked());
     }
   else if(obj->isA("QSpinBox"))
     {
-      gdata->setSettingsValue(fullKey, ((QSpinBox*)obj)->value());
+      g_data->setSettingsValue(fullKey, ((QSpinBox*)obj)->value());
     }
   else if(obj->isA("QFrame"))
     {
-      gdata->setSettingsValue(fullKey, ((QFrame*)obj)->paletteBackgroundColor().name());
+      g_data->setSettingsValue(fullKey, ((QFrame*)obj)->paletteBackgroundColor().name());
     }
 }
 
@@ -223,7 +223,7 @@ void TartiniSettingsDialog::saveSettings(void)
 	  saveSetting(*it, group);
 	}
     }
-  gdata->syncSettings();
+  g_data->syncSettings();
   QApplication::postEvent(g_main_window, new QCustomEvent(SETTINGS_CHANGED));
   TartiniSettingsDialog::accept();
 }
@@ -360,9 +360,9 @@ void TartiniSettingsDialog::setUnknownsToDefault(GData & p_gdata)
 //------------------------------------------------------------------------------
 void TartiniSettingsDialog::resetDefaults(void)
 {
-  gdata->clearSettings();
-  setUnknownsToDefault(*gdata);
-  gdata->syncSettings();
+  g_data->clearSettings();
+  setUnknownsToDefault(*g_data);
+  g_data->syncSettings();
   init();
 }
 

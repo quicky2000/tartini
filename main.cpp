@@ -58,7 +58,7 @@ int main(int p_argc, char **p_argv)
   fprintf(stderr, "QT_VERSION=%x\n", QT_VERSION);
 
   //Create one instance only of the global data
-  gdata = new GData();
+  g_data = new GData();
 
   /*
     The view needs to be created here, not in GData's constructor because of the View's
@@ -66,12 +66,12 @@ int main(int p_argc, char **p_argv)
     object before the constructor finishes, which causes an access violation in 
     Visual Studio 6.
   */
-  gdata->setView(*(new View()));
+  g_data->setView(*(new View()));
 
   g_main_window = new MainWindow();
 
   //call init after we know the windows size
-  gdata->getView().init();
+  g_data->getView().init();
 
   g_main_window->showMaximized();
     
@@ -96,8 +96,8 @@ int main(int p_argc, char **p_argv)
   
   int l_ret_value = l_app.exec();
 
-  delete & (gdata->getView());
-  delete gdata;
+  delete & (g_data->getView());
+  delete g_data;
   
   return l_ret_value;
 }

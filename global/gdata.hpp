@@ -461,7 +461,7 @@ void GData::set_rms_ceiling(const double & p_rms_ceiling)
 //------------------------------------------------------------------------------
 int GData::musicKey(void)const
 {
-    return gMusicKey;
+    return g_music_key;
 }
 
 //------------------------------------------------------------------------------
@@ -491,9 +491,9 @@ const double & GData::semitoneOffset(void)const
 //------------------------------------------------------------------------------
 void GData::setMusicKey(int p_key)
 {
-    if(gMusicKey != p_key)
+    if(g_music_key != p_key)
     {
-        gMusicKey = p_key;
+        g_music_key = p_key;
         emit musicKeyChanged(p_key);
     }
 }

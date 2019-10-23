@@ -25,19 +25,19 @@ QSize TimeAxis::sizeHint(void) const
 //------------------------------------------------------------------------------
 double TimeAxis::leftTime(void) const
 {
-    return gdata->getView().viewLeft();
+    return g_data->getView().viewLeft();
 }
 
 //------------------------------------------------------------------------------
 double TimeAxis::rightTime(void) const
 {
-    return gdata->getView().viewRight();
+    return g_data->getView().viewRight();
 }
 
 //------------------------------------------------------------------------------
 double TimeAxis::timeWidth(void) const
 {
-    return gdata->getView().viewTotalTime();
+    return g_data->getView().viewTotalTime();
 }
 
 //------------------------------------------------------------------------------

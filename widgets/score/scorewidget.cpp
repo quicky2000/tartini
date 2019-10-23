@@ -89,7 +89,7 @@ void ScoreWidget::drawNote( int p_x
     double l_note_height = m_scale_Y;
 
     //draw the left hand side of the note on the point
-    if(gdata->polish())
+    if(g_data->polish())
     {
         get_painter().setRenderHint(QPainter::Antialiasing, true);
     }
@@ -103,7 +103,7 @@ void ScoreWidget::drawNote( int p_x
     }
     get_painter().drawEllipse(p_x, p_y - toInt(l_note_height / 2), toInt(l_note_width), toInt(l_note_height));
 
-    if(gdata->polish())
+    if(g_data->polish())
     {
         get_painter().setRenderHint(QPainter::Antialiasing, false);
     }
@@ -342,7 +342,7 @@ void ScoreWidget::drawScoreSegment( Channel * p_channel
 //------------------------------------------------------------------------------
 void ScoreWidget::paintEvent(QPaintEvent *)
 {
-    Channel * l_active_channel = gdata->getActiveChannel();
+    Channel * l_active_channel = g_data->getActiveChannel();
 
     beginDrawing();
     get_painter().setFont(m_font);
@@ -378,7 +378,7 @@ void ScoreWidget::paintEvent(QPaintEvent *)
 void ScoreWidget::mousePressEvent(QMouseEvent *p_event)
 {
     m_mouse_down = true;
-    Channel * l_active_channel = gdata->getActiveChannel();
+    Channel * l_active_channel = g_data->getActiveChannel();
 
     ScoreSegmentIterator l_score_segment_iterator(this, l_active_channel);
     if(l_active_channel)
@@ -400,10 +400,10 @@ void ScoreWidget::mousePressEvent(QMouseEvent *p_event)
                 if(l_data && l_data->getNoteIndex() >= 0)
                 {
                     int l_start_chunk = l_active_channel->get_note_data()[l_data->getNoteIndex()].startChunk();
-                    gdata->updateActiveChunkTime(l_active_channel->timeAtChunk(l_start_chunk));
-                    if(gdata->getRunning() == STREAM_STOP)
+                    g_data->updateActiveChunkTime(l_active_channel->timeAtChunk(l_start_chunk));
+                    if(g_data->getRunning() == STREAM_STOP)
                     {
-                        gdata->playSound(l_active_channel->getParent());
+                        g_data->playSound(l_active_channel->getParent());
                     }
                 }
             }

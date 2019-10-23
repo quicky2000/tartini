@@ -46,7 +46,7 @@ void DebugWidget::printString(const QString & p_string)
 //------------------------------------------------------------------------------
 void DebugWidget::paintEvent( QPaintEvent * )
 {
-    Channel *l_active_channel = gdata->getActiveChannel();
+    Channel *l_active_channel = g_data->getActiveChannel();
 
     beginDrawing();
 
@@ -82,7 +82,7 @@ void DebugWidget::paintEvent( QPaintEvent * )
         printString(l_string.sprintf("spread = %f", l_data.getSpread()));
         printString(l_string.sprintf("spread2 = %f", l_data.getSpread2()));
         printString(l_string.sprintf("logrms = %f", l_data.getLogRms()));
-        printString(l_string.sprintf("normalised_logrms = %f", dB2Normalised(l_data.getLogRms(),*gdata)));
+        printString(l_string.sprintf("normalised_logrms = %f", dB2Normalised(l_data.getLogRms(),*g_data)));
         printString(l_string.sprintf("detailedPeriod.size() = %d", l_active_channel->get_detailed_pitch_data().size()));
         printString(l_string.sprintf("vibratoPitch = %f", l_data.getVibratoPitch()));
         printString(l_string.sprintf("vibratoWidth = %f", l_data.getVibratoWidth()));

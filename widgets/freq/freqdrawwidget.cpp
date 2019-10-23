@@ -58,7 +58,7 @@ FreqDrawWidget::FreqDrawWidget( QWidget *p_parent
     setSizePolicy(l_size_policy);
 
     setFocusPolicy(Qt::StrongFocus);
-    gdata->getView().setPixelHeight(height());
+    g_data->getView().setPixelHeight(height());
 }
 
 //------------------------------------------------------------------------------
@@ -153,11 +153,11 @@ void FreqDrawWidget::drawReferenceLines( QPaintDevice & p_paint_device
 //------------------------------------------------------------------------------
 void FreqDrawWidget::paintEvent(QPaintEvent *)
 {
-    View & l_view = gdata->getView();
+    View & l_view = g_data->getView();
 
-    if(l_view.autoFollow() && gdata->getActiveChannel() && gdata->getRunning() == STREAM_FORWARD)
+    if(l_view.autoFollow() && g_data->getActiveChannel() && g_data->getRunning() == STREAM_FORWARD)
     {
-        setChannelVerticalView(gdata->getActiveChannel(), l_view.viewLeft(), l_view.currentTime(), l_view.zoomX(), l_view.viewBottom(), l_view.zoomY());
+        setChannelVerticalView(g_data->getActiveChannel(), l_view.viewLeft(), l_view.currentTime(), l_view.zoomX(), l_view.viewBottom(), l_view.zoomY());
     }
 
     int l_cur_time_pixel = l_view.screenPixelX(l_view.currentTime());
@@ -167,18 +167,18 @@ void FreqDrawWidget::paintEvent(QPaintEvent *)
     DrawWidget::setLineWidth(3);
 
     //draw the red/blue background color shading if needed
-    if(l_view.backgroundShading() && gdata->getActiveChannel())
+    if(l_view.backgroundShading() && g_data->getActiveChannel())
     {
-        drawChannelFilled(gdata->getActiveChannel(), get_painter(), l_view.viewLeft(), l_view.currentTime(), l_view.zoomX(), l_view.viewBottom(), l_view.zoomY(), DRAW_VIEW_NORMAL);
+        drawChannelFilled(g_data->getActiveChannel(), get_painter(), l_view.viewLeft(), l_view.currentTime(), l_view.zoomX(), l_view.viewBottom(), l_view.zoomY(), DRAW_VIEW_NORMAL);
     }
   
 
     drawReferenceLines(*this, get_painter(), l_view.currentTime(), l_view.zoomX(), l_view.viewBottom(), l_view.zoomY(), DRAW_VIEW_NORMAL);
 
     //draw all the visible channels
-    for(uint l_i = 0; l_i < gdata->getChannelsSize(); l_i++)
+    for(uint l_i = 0; l_i < g_data->getChannelsSize(); l_i++)
     {
-        Channel * l_channel = gdata->getChannelAt(l_i);
+        Channel * l_channel = g_data->getChannelAt(l_i);
         if(!l_channel->isVisible())
         {
             continue;
@@ -187,11 +187,11 @@ void FreqDrawWidget::paintEvent(QPaintEvent *)
     }
 
     // Draw a light grey band indicating which time is being used in the current window
-    if(gdata->getActiveChannel())
+    if(g_data->getActiveChannel())
     {
         QColor l_line_color = colorGroup().foreground();
         l_line_color.setAlpha(50);
-        Channel * l_channel = gdata->getActiveChannel();
+        Channel * l_channel = g_data->getActiveChannel();
         double l_half_window_time = (double)l_channel->size() / (double)(l_channel->rate() * 2);
         int l_pixel_left = l_view.screenPixelX(l_view.currentTime() - l_half_window_time);
         int l_pixel_right = l_view.screenPixelX(l_view.currentTime() + l_half_window_time);
@@ -213,15 +213,15 @@ Channel * FreqDrawWidget::channelAtPixel( int p_x
     double l_time = mouseTime(p_x);
     float l_pitch = mousePitch(p_y);
     //10 pixel l_tolerance
-    float l_tolerance = 6 * gdata->getView().zoomY();
+    float l_tolerance = 6 * g_data->getView().zoomY();
 
     std::vector<Channel*> channels;
 
     //loop through channels in reverse order finding which one the user clicked on
     unsigned int l_index = 0;
-    for(l_index = 0 ; l_index < gdata->getChannelsSize() ; ++l_index)
+    for(l_index = 0 ; l_index < g_data->getChannelsSize() ; ++l_index)
     {
-        Channel * l_channel = gdata->getChannelAt(gdata->getChannelsSize() - 1 - l_index);
+        Channel * l_channel = g_data->getChannelAt(g_data->getChannelsSize() - 1 - l_index);
         if(l_channel->isVisible())
         {
             const AnalysisData *l_data = l_channel->dataAtTime(l_time);
@@ -243,7 +243,7 @@ QSize FreqDrawWidget::sizeHint(void) const
 //------------------------------------------------------------------------------
 void FreqDrawWidget::mousePressEvent( QMouseEvent * p_mouse_event)
 {
-    View & l_view = gdata->getView();
+    View & l_view = g_data->getView();
     int l_time_X = toInt(l_view.viewOffset() / l_view.zoomX());
     m_drag_mode = DragNone;
   
@@ -286,7 +286,7 @@ void FreqDrawWidget::mousePressEvent( QMouseEvent * p_mouse_event)
         if(l_channel)
         {
             //Clicked on a channel
-            gdata->setActiveChannel(l_channel);
+            g_data->setActiveChannel(l_channel);
             m_drag_mode = DragChannel;
         }
         else
@@ -302,7 +302,7 @@ void FreqDrawWidget::mousePressEvent( QMouseEvent * p_mouse_event)
 //------------------------------------------------------------------------------
 void FreqDrawWidget::mouseMoveEvent( QMouseEvent * p_mouse_event)
 {
-    View & l_view = gdata->getView();
+    View & l_view = g_data->getView();
     int l_pixel_at_current_time_X = toInt(l_view.viewOffset() / l_view.zoomX());
   
     switch(m_drag_mode)
@@ -317,7 +317,7 @@ void FreqDrawWidget::mouseMoveEvent( QMouseEvent * p_mouse_event)
         break;
         case DragBackground:
             l_view.setViewBottom(m_down_note - (m_mouse_Y - p_mouse_event->y()) * l_view.zoomY());
-            gdata->updateActiveChunkTime(m_down_time - (p_mouse_event->x() - m_mouse_X) * l_view.zoomX());
+            g_data->updateActiveChunkTime(m_down_time - (p_mouse_event->x() - m_mouse_X) * l_view.zoomX());
             l_view.doSlowUpdate();
             break;
         case DragNone:
@@ -345,21 +345,21 @@ void FreqDrawWidget::mouseReleaseEvent( QMouseEvent *)
 //------------------------------------------------------------------------------
 double FreqDrawWidget::mouseTime(int p_x)
 {
-    return gdata->getView().viewLeft() + gdata->getView().zoomX() * p_x;
+    return g_data->getView().viewLeft() + g_data->getView().zoomX() * p_x;
 }
 
 //------------------------------------------------------------------------------
 double FreqDrawWidget::mousePitch(int p_y)
 {
-    return gdata->getView().viewBottom() + gdata->getView().zoomY() * (height() - p_y);
+    return g_data->getView().viewBottom() + g_data->getView().zoomY() * (height() - p_y);
 }
 
 //------------------------------------------------------------------------------
 void FreqDrawWidget::wheelEvent(QWheelEvent * p_wheel_event)
 {
-    View & l_view = gdata->getView();
+    View & l_view = g_data->getView();
     double l_amount = double(p_wheel_event->delta() / WHEEL_DELTA);
-    bool l_is_zoom = gdata->mouseWheelZooms();
+    bool l_is_zoom = g_data->mouseWheelZooms();
     if(p_wheel_event->state() & (Qt::ControlModifier | Qt::ShiftModifier))
     {
         l_is_zoom = !l_is_zoom;
@@ -370,7 +370,7 @@ void FreqDrawWidget::wheelEvent(QWheelEvent * p_wheel_event)
         if(p_wheel_event->delta() >= 0)
         {
             //zooming in
-            if(gdata->getRunning() == STREAM_FORWARD)
+            if(g_data->getRunning() == STREAM_FORWARD)
             {
                 l_view.setZoomFactorX(l_view.logZoomX() + l_amount * 0.3);
             }
@@ -384,7 +384,7 @@ void FreqDrawWidget::wheelEvent(QWheelEvent * p_wheel_event)
         else
         {
             //zoom out toward center
-            if(gdata->getRunning() == STREAM_FORWARD)
+            if(g_data->getRunning() == STREAM_FORWARD)
             {
                 l_view.setZoomFactorX(l_view.logZoomX() + l_amount * 0.3);
             }
@@ -413,7 +413,7 @@ void FreqDrawWidget::resizeEvent (QResizeEvent * p_resize_event)
         return;
     }
     
-    View & l_view = gdata->getView();
+    View & l_view = g_data->getView();
 
     double l_old_view_width = double(l_view.viewWidth());
 

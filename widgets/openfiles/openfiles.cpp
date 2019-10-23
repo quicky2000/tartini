@@ -51,8 +51,8 @@ OpenFiles::OpenFiles( int p_id
     m_the_list_view->setSorting(-1);
     m_the_list_view->setFocusPolicy(Qt::NoFocus);
 
-    connect(gdata, SIGNAL(channelsChanged()), this, SLOT(refreshChannelList()));
-    connect(gdata, SIGNAL(activeChannelChanged(Channel*)), this, SLOT(slotActiveChannelChanged(Channel *)));
+    connect(g_data, SIGNAL(channelsChanged()), this, SLOT(refreshChannelList()));
+    connect(g_data, SIGNAL(activeChannelChanged(Channel*)), this, SLOT(slotActiveChannelChanged(Channel *)));
     connect(m_the_list_view, SIGNAL(pressed(Q3ListViewItem*)), this, SLOT(listViewChanged(Q3ListViewItem*)));
     connect(m_the_list_view, SIGNAL(selectionChanged(Q3ListViewItem*)), this, SLOT(slotCurrentChanged(Q3ListViewItem*)));
 
@@ -73,17 +73,17 @@ void OpenFiles::refreshChannelList(void)
     QString l_string;
     int l_j = 0;
     unsigned int l_index = 0;
-    for(l_index = 0 ; l_index < gdata->getChannelsSize() ; ++l_index)
+    for(l_index = 0 ; l_index < g_data->getChannelsSize() ; ++l_index)
     {
-        l_string = gdata->getChannelAt(l_index)->getUniqueFilename();
+        l_string = g_data->getChannelAt(l_index)->getUniqueFilename();
 
         Q3CheckListItem *l_new_element = new Q3CheckListItem(m_the_list_view, m_the_list_view->lastItem(), l_string, Q3CheckListItem::CheckBox);
 
-        if(gdata->getChannelAt(l_index)->isVisible())
+        if(g_data->getChannelAt(l_index)->isVisible())
         {
             l_new_element->setOn(true);
         }
-        if(gdata->getChannelAt(l_index) == gdata->getActiveChannel())
+        if(g_data->getChannelAt(l_index) == g_data->getActiveChannel())
         {
             l_new_element->setText(1, "A");
             m_the_list_view->setSelected(l_new_element, true);
@@ -101,9 +101,9 @@ void OpenFiles::slotActiveChannelChanged(Channel * p_active)
     bool l_found = false;
 
     // Find the index of the active channel
-    for(l_index = 0; l_index < int(gdata->getChannelsSize()); l_index++)
+    for(l_index = 0; l_index < int(g_data->getChannelsSize()); l_index++)
     {
-        if (gdata->getChannelAt(l_index) == p_active)
+        if (g_data->getChannelAt(l_index) == p_active)
         {
             l_found = true;
             break;
@@ -148,13 +148,13 @@ void OpenFiles::listViewChanged(Q3ListViewItem* p_item)
         l_my_child = l_my_child->nextSibling();
         l_pos++;
     }
-    myassert(l_pos < int(gdata->getChannelsSize()));
+    myassert(l_pos < int(g_data->getChannelsSize()));
     bool l_state = ((Q3CheckListItem *)p_item)->isOn();
-    if(gdata->getChannelAt(l_pos)->isVisible() != l_state)
+    if(g_data->getChannelAt(l_pos)->isVisible() != l_state)
     {
-        gdata->getChannelAt(l_pos)->setVisible(l_state);
+        g_data->getChannelAt(l_pos)->setVisible(l_state);
     }
-    gdata->getView().doUpdate();
+    g_data->getView().doUpdate();
 }
 
 //------------------------------------------------------------------------------
@@ -177,9 +177,9 @@ void OpenFiles::slotCurrentChanged(Q3ListViewItem* p_item)
         l_my_child = l_my_child->nextSibling();
         l_pos++;
     }
-    myassert(l_pos < int(gdata->getChannelsSize()));
+    myassert(l_pos < int(g_data->getChannelsSize()));
     l_my_child->setText(1, "A");
-    gdata->setActiveChannel(gdata->getChannelAt(l_pos));
+    g_data->setActiveChannel(g_data->getChannelAt(l_pos));
 
     // Go through the rest of the items and reset their active channel markers
     l_my_child = l_my_child->nextSibling();

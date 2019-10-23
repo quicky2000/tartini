@@ -1,5 +1,5 @@
 /***************************************************************************
-                          gdata.cpp  -  
+                          g_data.cpp  -
                              -------------------
     begin                : 2003
     copyright            : (C) 2003-2005 by Philip McLeod
@@ -95,7 +95,7 @@ const char * g_pitch_method_strings[NUM_PITCH_METHODS] =
   , "Correlation (multiplied) 2"
   };
 
-GData * gdata = NULL;
+GData * g_data = NULL;
 
 //Define the Phase function. This one is applicable to 
 //accelerating sources since the phase goes as x^2.
@@ -267,7 +267,7 @@ bool GData::openPlayRecord( SoundFile * p_sound_file_rec
         m_sound_mode = SOUND_PLAY_REC;
         l_open_mode = F_RDWR;
         p_soundfile_play->jumpToChunk(0);
-        gdata->m_view->setCurrentTime(0);
+        g_data->m_view->setCurrentTime(0);
     }
     else
     {
@@ -391,7 +391,7 @@ void GData::updateActiveChunkTime(double p_time)
     if(l_active_channel)
     {
         l_active_channel->jumpToTime(p_time);
-        if(gdata->doingActive())
+        if(g_data->doingActive())
         {
             l_active_channel->lock();
             l_active_channel->processChunk(l_active_channel->currentChunk());
@@ -732,7 +732,7 @@ bool GData::closeAllFiles(void)
 {
     while(!m_sound_files.empty())
     {
-        if(closeFile(m_sound_files.at(0), gdata->savingMode()) == 1)
+        if(closeFile(m_sound_files.at(0), g_data->savingMode()) == 1)
         {
             return false; //cancelled
         }
@@ -748,7 +748,7 @@ void GData::closeActiveFile(void)
     {
         return;
     }
-    closeFile(l_sound_file, gdata->savingMode());
+    closeFile(l_sound_file, g_data->savingMode());
     m_view->doUpdate();
     doChunkUpdate();
 }
@@ -770,9 +770,9 @@ int GData::closeFile( SoundFile * p_sound_file
     QString l_old_filename(p_sound_file->getFileName());
     l_old_filename = QDir::convertSeparators(l_old_filename);
 
-    if(gdata->m_audio_thread.playSoundFile() == p_sound_file || gdata->m_audio_thread.recSoundFile() == p_sound_file)
+    if(g_data->m_audio_thread.playSoundFile() == p_sound_file || g_data->m_audio_thread.recSoundFile() == p_sound_file)
     {
-        gdata->stop();
+        g_data->stop();
     }
 
     if(p_sound_file->saved())

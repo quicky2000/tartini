@@ -26,9 +26,9 @@ FFTView::FFTView( int p_view_id
                 )
 : ViewWidget( p_view_id, p_parent)
 {
-    gdata->setDoingActiveFFT(true);
+    g_data->setDoingActiveFFT(true);
 
-    Channel *l_active_channel = gdata->getActiveChannel();
+    Channel *l_active_channel = g_data->getActiveChannel();
     if(l_active_channel)
     {
         l_active_channel->lock();
@@ -40,13 +40,13 @@ FFTView::FFTView( int p_view_id
     m_fft_widget->show();
 
     //make the widget get updated when the view changes
-    connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), m_fft_widget, SLOT(update()));
+    connect(&(g_data->getView()), SIGNAL(onFastUpdate(double)), m_fft_widget, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------
 FFTView::~FFTView(void)
 {
-    gdata->setDoingActiveFFT(false);
+    g_data->setDoingActiveFFT(false);
     delete m_fft_widget;
 }
 

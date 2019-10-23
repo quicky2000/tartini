@@ -99,7 +99,7 @@ void AnalysisData::calcScores(void)
   double a[NUM_AMP_MODES-2];
   for(int j = 0; j < NUM_AMP_MODES - 2 ; j++)
     {
-      a[j] = bound(((*amp_mode_func[j])(values[j],*gdata) - (*amp_mode_func[j])(gdata->ampThreshold(j,0),*gdata)) / ((*amp_mode_func[j])(gdata->ampThreshold(j,1),*gdata) - (*amp_mode_func[j])(gdata->ampThreshold(j,0),*gdata)), 0.0, 1.0);
+      a[j] = bound(((*amp_mode_func[j])(values[j],*g_data) - (*amp_mode_func[j])(g_data->ampThreshold(j,0),*g_data)) / ((*amp_mode_func[j])(g_data->ampThreshold(j,1),*g_data) - (*amp_mode_func[j])(g_data->ampThreshold(j,0),*g_data)), 0.0, 1.0);
     }
   values[NOTE_SCORE] = a[AMPLITUDE_RMS] * a[AMPLITUDE_CORRELATION];
   values[NOTE_CHANGE_SCORE] = (1.0 - a[FREQ_CHANGENESS]);

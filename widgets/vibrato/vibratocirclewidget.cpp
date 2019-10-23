@@ -47,7 +47,7 @@ VibratoCircleWidget::~VibratoCircleWidget(void)
 //------------------------------------------------------------------------------
 void VibratoCircleWidget::initializeGL(void)
 {
-	QColor l_bg = gdata->backgroundColor();
+	QColor l_bg = g_data->backgroundColor();
 	glClearColor( double(l_bg.red()) / 256.0, double(l_bg.green()) / 256.0, double(l_bg.blue()) / 256.0, 0.0 );
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -122,7 +122,7 @@ void VibratoCircleWidget::resizeGL(int p_width
 //------------------------------------------------------------------------------
 void VibratoCircleWidget::paintGL(void)
 {
-	QColor l_bg = gdata->backgroundColor();
+	QColor l_bg = g_data->backgroundColor();
 	glClearColor( double(l_bg.red()) / 256.0, double(l_bg.green()) / 256.0, double(l_bg.blue()) / 256.0, 0.0 );
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -163,7 +163,7 @@ void VibratoCircleWidget::doUpdate(void)
 		glEndList();
     }
 
-    Channel * l_active_channel = gdata->getActiveChannel();
+    Channel * l_active_channel = g_data->getActiveChannel();
 
 	int l_left_minimum_time = -1;
 	int l_maximum_time = -1;

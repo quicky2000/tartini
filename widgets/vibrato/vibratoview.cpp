@@ -306,11 +306,11 @@ VibratoView::VibratoView(int p_view_ID
     setLayout(l_main_layout);
 
     // Make signal/slot connections
-    connect(gdata, SIGNAL(onChunkUpdate()), m_vibrato_speed_widget, SLOT(doUpdate()));
-    connect(gdata, SIGNAL(onChunkUpdate()), m_vibrato_circle_widget, SLOT(doUpdate()));
-    connect(gdata, SIGNAL(onChunkUpdate()), m_vibrato_period_widget, SLOT(doUpdate()));
-    connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), m_vibrato_time_axis, SLOT(update()));
-    connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), m_vibrato_widget, SLOT(updateGL()));
+    connect(g_data, SIGNAL(onChunkUpdate()), m_vibrato_speed_widget, SLOT(doUpdate()));
+    connect(g_data, SIGNAL(onChunkUpdate()), m_vibrato_circle_widget, SLOT(doUpdate()));
+    connect(g_data, SIGNAL(onChunkUpdate()), m_vibrato_period_widget, SLOT(doUpdate()));
+    connect(&(g_data->getView()), SIGNAL(onFastUpdate(double)), m_vibrato_time_axis, SLOT(update()));
+    connect(&(g_data->getView()), SIGNAL(onFastUpdate(double)), m_vibrato_widget, SLOT(updateGL()));
 
     // The vertical scrollbar
     connect(l_scroll_bar_V, SIGNAL(valueChanged(int)), m_vibrato_widget, SLOT(setOffsetY(int)));

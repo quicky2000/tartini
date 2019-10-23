@@ -33,8 +33,8 @@ View::View(void)
 , m_pixel_width(0) //to force a change in the setPixelWidth call
 , m_zoom_X(0.0)
 , m_zoom_Y(0.0)
-, m_auto_follow(gdata->getSettingsValue("View/autoFollow", true))
-, m_background_shading(gdata->getSettingsValue("View/backgroundShading", true))
+, m_auto_follow(g_data->getSettingsValue("View/autoFollow", true))
+, m_background_shading(g_data->getSettingsValue("View/backgroundShading", true))
 , m_fast_update_timer(new QTimer(this))
 , m_slow_update_timer(new QTimer(this))
 , m_need_slow_update(false)
@@ -81,7 +81,7 @@ void View::doSlowUpdate(void)
     m_need_slow_update = false;
     if(!m_slow_update_timer->isActive())
     {
-        m_slow_update_timer->start(gdata->slowUpdateSpeed());
+        m_slow_update_timer->start(g_data->slowUpdateSpeed());
     }
     emit onSlowUpdate(m_current_time);
 }
@@ -92,7 +92,7 @@ void View::doFastUpdate(void)
     m_need_fast_update = false;
     if(!m_fast_update_timer->isActive())
     {
-        m_fast_update_timer->start(gdata->fastUpdateSpeed());
+        m_fast_update_timer->start(g_data->fastUpdateSpeed());
     }
     emit onFastUpdate(m_current_time);
 }
@@ -107,7 +107,7 @@ void View::newUpdate(void)
     else
     {
         m_need_slow_update = false;
-        m_slow_update_timer->start(gdata->slowUpdateSpeed());
+        m_slow_update_timer->start(g_data->slowUpdateSpeed());
         emit onSlowUpdate(m_current_time);
     }
     if(m_fast_update_timer->isActive())
@@ -117,7 +117,7 @@ void View::newUpdate(void)
     else
     {
         m_need_fast_update = false;
-        m_fast_update_timer->start(gdata->fastUpdateSpeed());
+        m_fast_update_timer->start(g_data->fastUpdateSpeed());
         emit onFastUpdate(m_current_time);
     }
 }
@@ -128,7 +128,7 @@ void View::nextFastUpdate(void)
     if(m_need_fast_update)
     {
         m_need_fast_update = false;
-        m_fast_update_timer->start(gdata->fastUpdateSpeed());
+        m_fast_update_timer->start(g_data->fastUpdateSpeed());
         emit onFastUpdate(m_current_time);
     }
 }
@@ -139,7 +139,7 @@ void View::nextSlowUpdate(void)
     if(m_need_slow_update)
     {
         m_need_slow_update = false;
-        m_slow_update_timer->start(gdata->slowUpdateSpeed());
+        m_slow_update_timer->start(g_data->slowUpdateSpeed());
         emit onSlowUpdate(m_current_time);
     }
 }
@@ -149,7 +149,7 @@ void View::setCurrentTimeRaw(double p_x)
 {
     if(p_x != m_current_time)
     {
-        Channel * l_active_channel = gdata->getActiveChannel();
+        Channel * l_active_channel = g_data->getActiveChannel();
         if(l_active_channel)
         {
             p_x = l_active_channel->timeAtChunk(l_active_channel->chunkAtTime(p_x)); //align time to an integer sample step
@@ -163,7 +163,7 @@ void View::setCurrentTime(double p_x)
 {
     if(p_x != m_current_time)
     {
-        Channel * l_active_channel = gdata->getActiveChannel();
+        Channel * l_active_channel = g_data->getActiveChannel();
         if(l_active_channel)
         {
             p_x = l_active_channel->timeAtChunk(l_active_channel->chunkAtTime(p_x)); //align time to an integer sample step
@@ -202,7 +202,7 @@ void View::setViewBottomRaw(const double & p_y)
     if(p_y != m_view_bottom)
     {
         m_view_bottom = p_y;
-        emit viewBottomChanged(gdata->topPitch() - viewHeight() - p_y);
+        emit viewBottomChanged(g_data->topPitch() - viewHeight() - p_y);
     }
 }
 
@@ -212,7 +212,7 @@ void View::setViewBottom(const double & p_y)
     if(p_y != m_view_bottom)
     {
         m_view_bottom = p_y;
-        emit viewBottomChanged(gdata->topPitch() - viewHeight() - p_y);
+        emit viewBottomChanged(g_data->topPitch() - viewHeight() - p_y);
         emit viewChanged();
     }
 }
@@ -229,7 +229,7 @@ void View::changeViewX(const double & p_x)
 //------------------------------------------------------------------------------
 void View::changeViewY(const double & p_y)
 {
-    setViewBottom(gdata->topPitch() - viewHeight() - p_y);
+    setViewBottom(g_data->topPitch() - viewHeight() - p_y);
     emit viewChanged();
 }
 
@@ -239,12 +239,12 @@ void View::setPixelHeight(int p_h)
     if(p_h != m_pixel_height)
     {
         m_pixel_height = p_h;
-        if(viewHeight() > gdata->topPitch())
+        if(viewHeight() > g_data->topPitch())
         {
-            setLogZoomY(log(double(m_pixel_height) / gdata->topPitch()));
+            setLogZoomY(log(double(m_pixel_height) / g_data->topPitch()));
             emit logZoomYChanged(logZoomY());
         }
-        emit scrollableYChanged(gdata->topPitch() - viewHeight());
+        emit scrollableYChanged(g_data->topPitch() - viewHeight());
         emit viewHeightChanged(viewHeight());
     }
 }
@@ -255,9 +255,9 @@ void View::setPixelWidth(int p_w)
     if(p_w != m_pixel_width)
     {
         m_pixel_width = p_w;
-        if(viewWidth() > gdata->totalTime() * 2.0)
+        if(viewWidth() > g_data->totalTime() * 2.0)
         {
-            setLogZoomX(log(double(m_pixel_width) / (gdata->totalTime() * 2.0)));
+            setLogZoomX(log(double(m_pixel_width) / (g_data->totalTime() * 2.0)));
             emit logZoomXChanged(logZoomX());
         }
         emit viewWidthChanged(viewWidth());
@@ -296,7 +296,7 @@ void View::setZoomFactorX( const double & p_x
     
         //shift the current time to keep the keep the time fixed at the mouse pointer
         double l_new_time = viewLeft() + zoomX() * double(p_fixed_x);
-        gdata->updateActiveChunkTime(currentTime() - (l_new_time - l_fixed_time));
+        g_data->updateActiveChunkTime(currentTime() - (l_new_time - l_fixed_time));
     }
 }
 
@@ -308,11 +308,11 @@ void View::setZoomFactorY(const double & p_y)
         double l_prev_center_Y = viewBottom() + viewHeight() / 2.0;
         setLogZoomY(p_y);
         emit logZoomYChanged(logZoomY());
-        emit scrollableYChanged(bound(gdata->topPitch() - viewHeight(), 0.0, gdata->topPitch()));
+        emit scrollableYChanged(bound(g_data->topPitch() - viewHeight(), 0.0, g_data->topPitch()));
         emit viewHeightChanged(viewHeight());
     
         setViewBottom(l_prev_center_Y - viewHeight() / 2.0);
-        emit viewBottomChanged(gdata->topPitch() - viewHeight() - viewBottom());
+        emit viewBottomChanged(g_data->topPitch() - viewHeight() - viewBottom());
     }
 }
 
@@ -326,12 +326,12 @@ void View::setZoomFactorY( const double & p_y
         double l_fixed_note = viewBottom() + zoomY() * p_fixed_y;
         setLogZoomY(p_y);
         emit logZoomYChanged(logZoomY());
-        emit scrollableYChanged(bound(gdata->topPitch() - viewHeight(), 0.0, gdata->topPitch()));
+        emit scrollableYChanged(bound(g_data->topPitch() - viewHeight(), 0.0, g_data->topPitch()));
         emit viewHeightChanged(viewHeight());
     
         double l_new_note = viewBottom() + zoomY() * p_fixed_y;
         setViewBottom(viewBottom() - (l_new_note - l_fixed_note));
-        emit viewBottomChanged(gdata->topPitch() - viewHeight() - viewBottom());
+        emit viewBottomChanged(g_data->topPitch() - viewHeight() - viewBottom());
     }
 }
 
@@ -345,7 +345,7 @@ void View::doAutoFollowing(void)
     double l_time = currentTime();
     // We want the average note value for the time period currentTime to viewRight
  
-    Channel * l_active_channel = gdata->getActiveChannel();
+    Channel * l_active_channel = g_data->getActiveChannel();
 
     if(l_active_channel == NULL)
     {
@@ -375,13 +375,13 @@ void View::doAutoFollowing(void)
 void View::setAutoFollow(bool p_is_checked)
 {
     m_auto_follow = p_is_checked;
-    gdata->setSettingsValue("View/autoFollow", p_is_checked);
+    g_data->setSettingsValue("View/autoFollow", p_is_checked);
 }
 
 //------------------------------------------------------------------------------
 void View::setBackgroundShading(bool p_is_checked)
 {
     m_background_shading = p_is_checked;
-    gdata->setSettingsValue("View/backgroundShading", p_is_checked);
+    g_data->setSettingsValue("View/backgroundShading", p_is_checked);
     emit onSlowUpdate(m_current_time);
 }

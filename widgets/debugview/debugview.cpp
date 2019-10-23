@@ -29,7 +29,7 @@ DebugView::DebugView( int p_view_id
     m_debug_widget->show();
 
     //make the widget get updated when the view changes
-    connect(&(gdata->getView()), SIGNAL(viewChanged()), m_debug_widget, SLOT(update()));
+    connect(&(g_data->getView()), SIGNAL(viewChanged()), m_debug_widget, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------

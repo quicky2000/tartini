@@ -34,7 +34,7 @@ HBubbleWidget::HBubbleWidget(QWidget *p_parent)
     m_num_harmonics = 40;
 
     //make the widget get updated when the view changes
-    connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), this, SLOT(update()));
+    connect(&(g_data->getView()), SIGNAL(onFastUpdate(double)), this, SLOT(update()));
     fprintf(stderr,"Done\n");
 }
 
@@ -70,7 +70,7 @@ void HBubbleWidget::setHistoryChunks(double num)
 //------------------------------------------------------------------------------
 void HBubbleWidget::paintEvent( QPaintEvent * )
 {
-    Channel * l_active_channel = gdata->getActiveChannel();
+    Channel * l_active_channel = g_data->getActiveChannel();
     AnalysisData * l_data;
     int l_i;
     int l_j;
@@ -101,7 +101,7 @@ void HBubbleWidget::paintEvent( QPaintEvent * )
                             {
                                 l_color = colorBetween(qRgb(255,255,255), qRgb(0,0,255),-l_flat_sharp);
                             }
-                            get_painter().setBrush(colorBetween(gdata->backgroundColor(),l_color,((l_j == (m_history_chunks - 1)) ? 1.0 : (float)l_j / m_history_chunks * 0.5)));
+                            get_painter().setBrush(colorBetween(g_data->backgroundColor(),l_color,((l_j == (m_history_chunks - 1)) ? 1.0 : (float)l_j / m_history_chunks * 0.5)));
                             get_painter().drawEllipse( toInt(width() / 8 * 3 + l_j * (float)width() / 8 / m_history_chunks - l_radius)
                                                      , toInt(height() - (float) ((l_i + 1) * height()) / (m_num_harmonics + 2) - l_radius)
                                                      , l_radius * 2

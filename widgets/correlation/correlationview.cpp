@@ -29,9 +29,9 @@ CorrelationView::CorrelationView( int p_view_ID
                                 )
 : ViewWidget( p_view_ID, p_parent)
 {
-    gdata->setDoingActiveAnalysis(true);
+    g_data->setDoingActiveAnalysis(true);
 
-    Channel * l_active_channel = gdata->getActiveChannel();
+    Channel * l_active_channel = g_data->getActiveChannel();
     if(l_active_channel)
     {
         l_active_channel->lock();
@@ -56,13 +56,13 @@ CorrelationView::CorrelationView( int p_view_ID
     l_main_layout->addLayout(l_h_layout);
 
     //make the widget get updated when the view changes
-    connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), m_correlation_widget, SLOT(update()));
+    connect(&(g_data->getView()), SIGNAL(onSlowUpdate(double)), m_correlation_widget, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------
 CorrelationView::~CorrelationView(void)
 {
-    gdata->setDoingActiveAnalysis(false);
+    g_data->setDoingActiveAnalysis(false);
     delete m_correlation_widget;
 }
 

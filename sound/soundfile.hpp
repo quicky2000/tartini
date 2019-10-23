@@ -103,7 +103,7 @@ double SoundFile::timeAtCurrentChunk(void) const
 //------------------------------------------------------------------------------
 int SoundFile::chunkAtCurrentTime(void) const
 {
-    return chunkAtTime(gdata->getView().currentTime());
+    return chunkAtTime(g_data->getView().currentTime());
 }
 
 //------------------------------------------------------------------------------

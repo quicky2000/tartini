@@ -124,7 +124,7 @@ ScoreView::ScoreView(int p_view_id
     l_bottom_layout->addStretch(4);
 
     //make any connections
-    connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), m_score_widget, SLOT(update()));
+    connect(&(g_data->getView()), SIGNAL(onFastUpdate(double)), m_score_widget, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------

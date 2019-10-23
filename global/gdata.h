@@ -45,7 +45,7 @@
 #include "useful.h"
 #include "view.h"
 #include "analysisdata.h"
-extern int gMusicKey;
+extern int g_music_key;
 
 #ifndef WINDOWS
 //for multi-threaded profiling
@@ -407,7 +407,7 @@ public slots:
 
 };
 
-extern GData * gdata;
+extern GData * g_data;
 
 #include "gdata.hpp"
 

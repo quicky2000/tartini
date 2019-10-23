@@ -54,7 +54,7 @@ WaveView::WaveView(int p_view_ID
     connect(m_wave_widget, SIGNAL(zoomYChanged(double)), m_wave_widget, SLOT(update()));
 
     //make the widget get updated when the view changes
-    connect(&(gdata->getView()), SIGNAL(onSlowUpdate(double)), m_wave_widget, SLOT(update()));
+    connect(&(g_data->getView()), SIGNAL(onSlowUpdate(double)), m_wave_widget, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------

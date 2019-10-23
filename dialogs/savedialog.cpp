@@ -22,7 +22,7 @@
 
 //------------------------------------------------------------------------------
 SaveDialog::SaveDialog(QWidget * parent):
-  Q3FileDialog(QDir::convertSeparators(gdata->getSettingsValue("Dialogs/saveFilesFolder", QDir::currentDirPath())),
+  Q3FileDialog(QDir::convertSeparators(g_data->getSettingsValue("Dialogs/saveFilesFolder", QDir::currentDirPath())),
                tr("Wave files (*.wav)"), parent, NULL, true)
 {
   setCaption(tr("Choose a filename to save under"));
@@ -33,8 +33,8 @@ SaveDialog::SaveDialog(QWidget * parent):
   Q3BoxLayout *baseLayout = new Q3VBoxLayout(baseWidget);
   appendWavCheckBox =      new QCheckBox(tr("Append .wav extension if needed"), baseWidget);
   rememberFolderCheckBox = new QCheckBox(tr("Remember current folder"), baseWidget);
-  appendWavCheckBox->setChecked(gdata->getSettingsValue("Dialogs/appendWav", true));
-  rememberFolderCheckBox->setChecked(gdata->getSettingsValue("Dialogs/rememberSaveFolder", true));
+  appendWavCheckBox->setChecked(g_data->getSettingsValue("Dialogs/appendWav", true));
+  rememberFolderCheckBox->setChecked(g_data->getSettingsValue("Dialogs/rememberSaveFolder", true));
   baseLayout->addSpacing(10);
   baseLayout->addWidget(appendWavCheckBox);
   baseLayout->addWidget(rememberFolderCheckBox);
@@ -49,14 +49,14 @@ SaveDialog::~SaveDialog(void)
 void SaveDialog::accept(void)
 {
   bool remember = rememberFolderCheckBox->isChecked();
-  gdata->setSettingsValue("Dialogs/rememberSaveFolder", remember);
+  g_data->setSettingsValue("Dialogs/rememberSaveFolder", remember);
   if(remember == true) {
     const QDir *curDir = dir();
-    gdata->setSettingsValue("Dialogs/saveFilesFolder", curDir->absPath());
+    g_data->setSettingsValue("Dialogs/saveFilesFolder", curDir->absPath());
     delete curDir;
   }
   bool appendWav = appendWavCheckBox->isChecked();
-  gdata->setSettingsValue("Dialogs/appendWav", appendWav);
+  g_data->setSettingsValue("Dialogs/appendWav", appendWav);
   if(appendWav == true) {
     QString s = selectedFile();
     if(!s.lower().endsWith(".wav")) { s += ".wav"; }

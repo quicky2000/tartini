@@ -26,9 +26,9 @@ CepstrumView::CepstrumView( int p_view_id
                           )
 : ViewWidget( p_view_id, p_parent)
 {
-    gdata->setDoingActiveCepstrum(true);
+    g_data->setDoingActiveCepstrum(true);
 
-    Channel * l_active_channel = gdata->getActiveChannel();
+    Channel * l_active_channel = g_data->getActiveChannel();
     if(l_active_channel)
     {
         l_active_channel->lock();
@@ -41,13 +41,13 @@ CepstrumView::CepstrumView( int p_view_id
     m_cepstrum_widget->show();
 
     //make the widget get updated when the view changes
-    connect(&(gdata->getView()), SIGNAL(onFastUpdate(double)), m_cepstrum_widget, SLOT(update()));
+    connect(&(g_data->getView()), SIGNAL(onFastUpdate(double)), m_cepstrum_widget, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------
 CepstrumView::~CepstrumView(void)
 {
-    gdata->setDoingActiveCepstrum(false);
+    g_data->setDoingActiveCepstrum(false);
     delete m_cepstrum_widget;
 }
 

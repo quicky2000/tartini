@@ -55,7 +55,7 @@ VibratoPeriodWidget::~VibratoPeriodWidget(void)
 //------------------------------------------------------------------------------
 void VibratoPeriodWidget::initializeGL(void)
 {
-    QColor l_bg = gdata->backgroundColor();
+    QColor l_bg = g_data->backgroundColor();
     glClearColor( double(l_bg.red()) / 256.0, double(l_bg.green()) / 256.0, double(l_bg.blue()) / 256.0, 0.0 );
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -108,7 +108,7 @@ void VibratoPeriodWidget::resizeGL(int p_width
 //------------------------------------------------------------------------------
 void VibratoPeriodWidget::paintGL(void)
 {
-	QColor l_bg = gdata->backgroundColor();
+	QColor l_bg = g_data->backgroundColor();
 	glClearColor( double(l_bg.red()) / 256.0, double(l_bg.green()) / 256.0, double(l_bg.blue()) / 256.0, 0.0 );
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -140,7 +140,7 @@ void VibratoPeriodWidget::paintGL(void)
 //------------------------------------------------------------------------------
 void VibratoPeriodWidget::doUpdate(void)
 {
-	Channel *l_active_channel = gdata->getActiveChannel();
+	Channel *l_active_channel = g_data->getActiveChannel();
 
 	int l_left_minimum_time = -1;
 	int l_maximum_time = -1;

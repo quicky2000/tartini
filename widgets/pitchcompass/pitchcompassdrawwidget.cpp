@@ -92,7 +92,7 @@ void PitchCompassDrawWidget::resizeEvent(QResizeEvent *)
 //------------------------------------------------------------------------------
 void PitchCompassDrawWidget::updateCompass(double p_time)
 {
-    Channel *l_active_channel = gdata->getActiveChannel();
+    Channel *l_active_channel = g_data->getActiveChannel();
     if(l_active_channel == NULL)
     {
         blank();

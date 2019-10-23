@@ -182,8 +182,8 @@ Channel::Channel( SoundFile * p_parent
 , m_high_pass_filter(NULL)
 , m_pitch_small_smoothing_filter(new GrowingAverageFilter(m_parent->rate() / 64))
 , m_pitch_big_smoothing_filter(new FastSmoothedAveragingFilter(m_parent->rate() / 16))
-, m_rms_floor(gdata->dBFloor())
-, m_rms_ceiling(gdata->dBFloor())
+, m_rms_floor(g_data->dBFloor())
+, m_rms_ceiling(g_data->dBFloor())
 {
     if(p_k == 0)
     {
@@ -202,7 +202,7 @@ Channel::Channel( SoundFile * p_parent
     m_coefficients_table.resize(p_size * 4);
     m_prony_data.resize(m_prony_window_size);
 
-    setIntThreshold(gdata->getSettingsValue("Analysis/thresholdValue", 93));
+    setIntThreshold(g_data->getSettingsValue("Analysis/thresholdValue", 93));
     int l_filter_index = 2;
     int l_sample_rate = m_parent->rate();
     if(l_sample_rate > (48000 + 96000) / 2)
@@ -295,7 +295,7 @@ void Channel::calc_last_n_coefficients(int p_n)
     float * l_buf_pos = begin() + l_start_pos;
     float * l_coeff_pos = m_coefficients_table.begin() + l_start_pos * 4;
 #ifdef DEBUG_PRINTF
-    printf("toRead=%d, length()=%d, w=%d, start_pos=%d\n", toRead, gdata->mainBuffer->length(), gdata->m_coefficients_table.w(), l_start_pos);
+    printf("toRead=%d, length()=%d, w=%d, start_pos=%d\n", toRead, g_data->mainBuffer->length(), g_data->m_coefficients_table.w(), l_start_pos);
 #endif // DEBUG_PRINTF
 
     for(; l_buf_pos < end(); l_buf_pos++)
@@ -431,7 +431,7 @@ float Channel::averageMaxCorrelation( int p_begin
 //------------------------------------------------------------------------------
 const AnalysisData * Channel::getActiveChannelCurrentChunkData(void)
 {
-    Channel * l_active_channel = gdata->getActiveChannel();
+    Channel * l_active_channel = g_data->getActiveChannel();
     return (l_active_channel) ? l_active_channel->dataAtCurrentChunk() : NULL;
 }
 
@@ -479,7 +479,7 @@ bool Channel::isVisibleNote(int p_note_index) const
 bool Channel::isVisibleChunk(const AnalysisData * p_data) const
 {
     myassert(p_data);
-    if(p_data->getNoteScore() >= gdata->ampThreshold(NOTE_SCORE, 0))
+    if(p_data->getNoteScore() >= g_data->ampThreshold(NOTE_SCORE, 0))
     {
         return true;
     }
@@ -490,7 +490,7 @@ bool Channel::isVisibleChunk(const AnalysisData * p_data) const
 bool Channel::isChangingChunk(AnalysisData * p_data) const
 {
     myassert(p_data);
-    if(p_data->getNoteChangeScore() >= gdata->ampThreshold(NOTE_CHANGE_SCORE, 0))
+    if(p_data->getNoteChangeScore() >= g_data->ampThreshold(NOTE_CHANGE_SCORE, 0))
     {
         return true;
     }
@@ -684,7 +684,7 @@ void Channel::processNoteDecisions( int p_chunk
 
         l_current_note->addData(l_analysis_data, float(framesPerChunk()) / float(l_analysis_data.getPeriod()));
         l_current_note->setPeriodOctaveEstimate(calcOctaveEstimate());
-        if(gdata->analysisType() != MPM_MODIFIED_CEPSTRUM)
+        if(g_data->analysisType() != MPM_MODIFIED_CEPSTRUM)
         {
             recalcNotePitches(p_chunk);
         }
@@ -861,7 +861,7 @@ void Channel::chooseCorrelationIndex1(int p_chunk)
     l_analysis_data.setPeriod(l_analysis_data.getPeriodEstimatesAt(l_choosen_max_index));
     double l_freq = rate() / l_analysis_data.getPeriod();
     l_analysis_data.setFundamentalFreq(float(l_freq));
-    l_analysis_data.setPitch(bound(freq2pitch(l_freq), 0.0, gdata->topPitch()));
+    l_analysis_data.setPitch(bound(freq2pitch(l_freq), 0.0, g_data->topPitch()));
     l_analysis_data.setPitchSum((double)l_analysis_data.getPitch());
     l_analysis_data.setPitch2Sum(sq((double)l_analysis_data.getPitch()));
 }
@@ -881,7 +881,7 @@ bool Channel::chooseCorrelationIndex( int p_chunk
         //no period found
         return false;
     }
-    if(gdata->analysisType() == MPM || gdata->analysisType() == MPM_MODIFIED_CEPSTRUM)
+    if(g_data->analysisType() == MPM || g_data->analysisType() == MPM_MODIFIED_CEPSTRUM)
     {
         //choose the periodEstimate which is closest to the periodOctaveEstimate
         float l_min_dist = fabs(l_analysis_data.getPeriodEstimatesAt(0) - p_period_octave_estimate);
@@ -910,7 +910,7 @@ bool Channel::chooseCorrelationIndex( int p_chunk
     l_analysis_data.setPeriod(l_analysis_data.getPeriodEstimatesAt(l_choosen_max_index));
     double l_freq = rate() / l_analysis_data.getPeriod();
     l_analysis_data.setFundamentalFreq(float(l_freq));
-    l_analysis_data.setPitch(bound(freq2pitch(l_freq), 0.0, gdata->topPitch()));
+    l_analysis_data.setPitch(bound(freq2pitch(l_freq), 0.0, g_data->topPitch()));
     if(p_chunk > 0 && !isFirstChunkInNote(p_chunk))
     {
         l_analysis_data.setPitchSum(dataAtChunk(p_chunk - 1)->getPitchSum() + (double)l_analysis_data.getPitch());
@@ -1174,7 +1174,7 @@ float Channel::calcDetailedPitch( float * p_input
 #endif // DEBUG_PRINTF
     for(l_j = 0; l_j < l_num; l_j++)
     {
-        m_detailed_pitch_data_smoothed[l_j] = bound(m_detailed_pitch_data_smoothed[l_j], 0.0f, (float)gdata->topPitch());
+        m_detailed_pitch_data_smoothed[l_j] = bound(m_detailed_pitch_data_smoothed[l_j], 0.0f, (float)g_data->topPitch());
     }
 
     m_pitch_small_smoothing_filter->filter(l_unsmoothed.begin(), m_detailed_pitch_data.begin(), l_num);
@@ -1183,7 +1183,7 @@ float Channel::calcDetailedPitch( float * p_input
 #endif // DEBUG_PRINTF
     for(l_j = 0; l_j < l_num; l_j++)
     {
-        m_detailed_pitch_data[l_j] = bound(m_detailed_pitch_data[l_j], 0.0f, (float)gdata->topPitch());
+        m_detailed_pitch_data[l_j] = bound(m_detailed_pitch_data[l_j], 0.0f, (float)g_data->topPitch());
     }
 #ifdef DEBUG_PRINTF
     printf("end calcDetailedPitch\n"); fflush(stdout);
