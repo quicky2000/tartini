@@ -23,20 +23,20 @@ class Settings
 
 public:
   Settings();
-  Settings(QString domain_, QString product_);
+  Settings(QString p_domain, QString p_product);
   virtual ~Settings() {};
 
-  void init(QString domain_, QString product_);
+  void init(QString p_domain, QString p_product);
 	
-  QString getString(QString group, QString key);
-	int getInt(QString group, QString key);
-	double getDouble(QString group, QString key);
-  bool getBool(QString group, QString key);
+  QString getString(QString p_group, QString p_key);
+	int getInt(QString p_group, QString p_key);
+	double getDouble(QString p_group, QString p_key);
+  bool getBool(QString p_group, QString p_key);
   
-	void setString(QString group, QString key, QString value);
-  void setInt(QString group, QString key, int value);
-  void setDouble(QString group, QString key, double value);
-  void setBool(QString group, QString key, bool value);
+	void setString(QString p_group, QString p_key, QString p_value);
+  void setInt(QString p_group, QString p_key, int p_value);
+  void setDouble(QString p_group, QString p_key, double p_value);
+  void setBool(QString p_group, QString p_key, bool p_value);
 
 	//void loadDefaults();
 
@@ -45,11 +45,11 @@ public:
 
   void print();
 private:
-	std::map<QString, std::map<QString, QString> > settings; /*< A memory version of the settings on disk. Only the Settings form can change these values. */
+	std::map<QString, std::map<QString, QString> > m_settings; /*< A memory version of the settings on disk. Only the Settings form can change these values. */
 	//std::map<QString, std::map<QString, QString> > defaults; /*< Default settings */
   
-  QString domain;
-  QString product;
+  QString m_domain;
+  QString m_product;
 };
 
 //extern Settings *settings;
