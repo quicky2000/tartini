@@ -19,44 +19,58 @@
 #include <qsettings.h>
 #include <qdir.h>
 
-// Load the settings from disk into the map.
+//-----------------------------------------------------------------------------
 Settings::Settings()
 {
 }
 
-Settings::Settings(QString p_domain, QString p_product)
+//-----------------------------------------------------------------------------
+Settings::Settings( QString p_domain
+                  , QString p_product
+                  )
 {
-  init(p_domain, p_product);
+    init(p_domain, p_product);
 }
 
-void Settings::init(QString p_domain, QString p_product)
+//-----------------------------------------------------------------------------
+void Settings::init( QString p_domain
+                   , QString p_product
+                   )
 {
     m_domain = p_domain;
     m_product = p_product;
 }
 
-// Return the value indexed in the map, or load it in from the defaults if need be
-QString Settings::getString(QString p_group, QString p_key)
+//-----------------------------------------------------------------------------
+QString Settings::getString( QString p_group
+                           , QString p_key
+                           )
 {
-  // Preconditions
-  myassert( !p_group.isNull() && !p_key.isNull() );
+    // Preconditions
+    myassert( !p_group.isNull() && !p_key.isNull() );
 
-  // First try to load it from the map
-  std::map<QString, std::map<QString, QString> >::const_iterator l_iter = m_settings.find(p_group);
-  if (l_iter != m_settings.end()) {
-    std::map<QString, QString>::const_iterator l_iter_value = (l_iter->second).find(p_key);
-    if (l_iter_value != (l_iter->second).end()) {
-      return l_iter_value->second;
-    } else {
-      fprintf(stderr, "No defined key[%s] in group[%s]. (%s, %s)\n", p_key.ascii(), p_group.ascii(), m_domain.ascii(), m_product.ascii());
-      myassert(false); //The defaults haven't been defined for this key!
-      return QString("");
+    // First try to load it from the map
+    std::map<QString, std::map<QString, QString> >::const_iterator l_iter = m_settings.find(p_group);
+    if (l_iter != m_settings.end())
+    {
+        std::map<QString, QString>::const_iterator l_iter_value = (l_iter->second).find(p_key);
+        if (l_iter_value != (l_iter->second).end())
+        {
+            return l_iter_value->second;
+        }
+        else
+        {
+            fprintf(stderr, "No defined key[%s] in group[%s]. (%s, %s)\n", p_key.ascii(), p_group.ascii(), m_domain.ascii(), m_product.ascii());
+            myassert(false); //The defaults haven't been defined for this key!
+            return QString("");
+        }
     }
-  } else {
-    fprintf(stderr, "No defined group[%s], can't get key[%s]. (%s, %s)\n", p_group.ascii(), p_key.ascii(), m_domain.ascii(), m_product.ascii());
-    myassert(false); //The defaults haven't been defined for this key!
-    return QString("");
-  }
+    else
+    {
+        fprintf(stderr, "No defined group[%s], can't get key[%s]. (%s, %s)\n", p_group.ascii(), p_key.ascii(), m_domain.ascii(), m_product.ascii());
+        myassert(false); //The defaults haven't been defined for this key!
+        return QString("");
+    }
 
 /*
   // If we're here, then the value was not found. Load it in from the defaults.
@@ -77,155 +91,194 @@ QString Settings::getString(QString p_group, QString p_key)
 	
 }
 
-// Use getString, convert to an int
-int Settings::getInt(QString p_group, QString p_key)
+//-----------------------------------------------------------------------------
+int Settings::getInt( QString p_group
+                    , QString p_key
+                    )
 {
-  // Preconditions
-  myassert( !p_group.isNull() && !p_key.isNull() );
+    // Preconditions
+    myassert( !p_group.isNull() && !p_key.isNull() );
 
-  bool l_ok = false;
-  int l_to_return = getString(p_group, p_key).toInt(&l_ok);
+    bool l_ok = false;
+    int l_to_return = getString(p_group, p_key).toInt(&l_ok);
 
-  myassert(l_ok);
-  return l_to_return;
+    myassert(l_ok);
+    return l_to_return;
 }
 
-// Use getString, convert to a double
-double Settings::getDouble(QString p_group, QString p_key)
+//-----------------------------------------------------------------------------
+double Settings::getDouble( QString p_group
+                          , QString p_key
+                          )
 {
-  // Preconditions
-  myassert( !p_group.isNull() && !p_key.isNull() );
+    // Preconditions
+    myassert( !p_group.isNull() && !p_key.isNull() );
 
-  bool l_ok = false;
-  double l_to_return = getString(p_group, p_key).toDouble(&l_ok);
+    bool l_ok = false;
+    double l_to_return = getString(p_group, p_key).toDouble(&l_ok);
 
-  myassert(l_ok);
-  return l_to_return;
+    myassert(l_ok);
+    return l_to_return;
 }
 
-// Use getString, convert to a bool
-bool Settings::getBool(QString p_group, QString p_key)
+//-----------------------------------------------------------------------------
+bool Settings::getBool( QString p_group
+                      , QString p_key
+                      )
 {
-  // Preconditions
-  myassert(!p_group.isNull() && !p_key.isNull());
+    // Preconditions
+    myassert(!p_group.isNull() && !p_key.isNull());
 
-  if(getString(p_group, p_key).at(0).lower() == QChar('t')) return true;
-  else return false;
+    if(getString(p_group, p_key).at(0).lower() == QChar('t'))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
-void Settings::setString(QString p_group, QString p_key, QString p_value)
+//-----------------------------------------------------------------------------
+void Settings::setString( QString p_group
+                        , QString p_key
+                        , QString p_value
+                        )
 {
-  // Preconditions
-  myassert(!p_group.isNull() && !p_key.isNull() && !p_value.isNull());
+    // Preconditions
+    myassert(!p_group.isNull() && !p_key.isNull() && !p_value.isNull());
 
-  m_settings[p_group][p_key] = p_value;
+    m_settings[p_group][p_key] = p_value;
 
-  // Postconditions
-  myassert((m_settings[p_group])[p_key] == p_value);
+    // Postconditions
+    myassert((m_settings[p_group])[p_key] == p_value);
 }
 
-void Settings::setInt(QString p_group, QString p_key, int p_value)
+//-----------------------------------------------------------------------------
+void Settings::setInt( QString p_group
+                     , QString p_key
+                     , int p_value
+                     )
 {
-  QString l_string;
-  setString(p_group, p_key, l_string.setNum(p_value));
+    QString l_string;
+    setString(p_group, p_key, l_string.setNum(p_value));
 }
 
-void Settings::setDouble(QString p_group, QString p_key, double p_value)
+//-----------------------------------------------------------------------------
+void Settings::setDouble( QString p_group
+                        , QString p_key
+                        , double p_value
+                        )
 {
-  QString l_string;
-  setString(p_group, p_key, l_string.setNum(p_value));
+    QString l_string;
+    setString(p_group, p_key, l_string.setNum(p_value));
 }
 
-void Settings::setBool(QString p_group, QString p_key, bool p_value)
+//-----------------------------------------------------------------------------
+void Settings::setBool( QString p_group
+                      , QString p_key
+                      , bool p_value
+                      )
 {
-  setString(p_group, p_key, (p_value) ? "true" : "false");
+    setString(p_group, p_key, (p_value) ? "true" : "false");
 }
 
+//-----------------------------------------------------------------------------
 void Settings::load()
 {
-  myassert(m_domain != "" && m_product != "");
+    myassert(m_domain != "" && m_product != "");
   
 //#ifdef MACX
 //  QSettings l_on_disk_settings(QSettings::Ini);
 //#else
 //  QSettings l_on_disk_settings(QSettings::Native);
 //#endif
-  QSettings l_on_disk_settings(m_domain, m_product);
+    QSettings l_on_disk_settings(m_domain, m_product);
 
-  //l_on_disk_settings.setPath(m_domain, m_product, QSettings::UserScope);
-  l_on_disk_settings.beginGroup(QString("/") + m_product);
-  //l_on_disk_settings.beginGroup(QString("/General"));
+    //l_on_disk_settings.setPath(m_domain, m_product, QSettings::UserScope);
+    l_on_disk_settings.beginGroup(QString("/") + m_product);
+    //l_on_disk_settings.beginGroup(QString("/General"));
   
-  /* QT is the stupidest thing in the world. Instead of being able to use the 
-   * subkeylist function, which is meant to do _exactly_ what I want, we can't 
-   * use it in anything but Windows. So, we have to iterate through our 
-   * defaults map and use the first key as a category.
-   */
-  QStringList l_subkeys;
-  std::map<QString, std::map<QString, QString> >::const_iterator iter = m_settings.begin();
-  while (!(iter == m_settings.end())) {
+    /* QT is the stupidest thing in the world. Instead of being able to use the
+     * subkeylist function, which is meant to do _exactly_ what I want, we can't
+     * use it in anything but Windows. So, we have to iterate through our
+     * defaults map and use the first key as a category.
+     */
+    QStringList l_subkeys;
+    std::map<QString, std::map<QString, QString> >::const_iterator iter = m_settings.begin();
+    while (!(iter == m_settings.end()))
+    {
       l_subkeys += iter->first;
-    iter++;
-  }
-  
-  // Get all the entries in the folders, and stick them in the map
-  QStringList l_entries;
-  QString l_key;
-  for (int i = 0; i < l_subkeys.size(); i++) {
-    l_entries = l_on_disk_settings.entryList("/" + *(l_subkeys.at(i)));
-    //printf("There are %d entries in category %s.\n", l_entries.size(), (*l_subkeys.at(i)).data());
-    for (int l_n = 0; l_n < l_entries.size(); l_n++) {
-      //key = QString("/") + *(l_subkeys.at(i)) + "/" + *(l_entries.at(l_n));
-      l_key = "/" + l_subkeys.at(i) + "/" + l_entries.at(l_n);
-      //(settings[*(l_subkeys.at(i))])[*(l_entries.at(l_n))] = l_on_disk_settings.readEntry(l_key, "");
-      (m_settings[l_subkeys.at(i)])[l_entries.at(l_n)] = l_on_disk_settings.readEntry(l_key, "");
+      iter++;
     }
-  }
+  
+    // Get all the entries in the folders, and stick them in the map
+    QStringList l_entries;
+    QString l_key;
+    for(int i = 0; i < l_subkeys.size(); i++)
+    {
+        l_entries = l_on_disk_settings.entryList("/" + *(l_subkeys.at(i)));
+        //printf("There are %d entries in category %s.\n", l_entries.size(), (*l_subkeys.at(i)).data());
+        for(int l_n = 0; l_n < l_entries.size(); l_n++)
+        {
+            //key = QString("/") + *(l_subkeys.at(i)) + "/" + *(l_entries.at(l_n));
+            l_key = "/" + l_subkeys.at(i) + "/" + l_entries.at(l_n);
+            //(settings[*(l_subkeys.at(i))])[*(l_entries.at(l_n))] = l_on_disk_settings.readEntry(l_key, "");
+            (m_settings[l_subkeys.at(i)])[l_entries.at(l_n)] = l_on_disk_settings.readEntry(l_key, "");
+        }
+    }
 
-  l_on_disk_settings.endGroup();
+    l_on_disk_settings.endGroup();
 }
 
+//-----------------------------------------------------------------------------
 void Settings::save()
 {
-  myassert(m_domain != "" && m_product != "");
-  // Save settings to www.cs.otago.ac.nz/Pitch/Pitch/_GroupName_/_Key_/
-  // Needs to be like this so it works properly in Unix.
+    myassert(m_domain != "" && m_product != "");
+    // Save settings to www.cs.otago.ac.nz/Pitch/Pitch/_GroupName_/_Key_/
+    // Needs to be like this so it works properly in Unix.
 
-//#ifdef MACX
-//  QSettings l_on_disk_settings(QSettings::Ini);
-//#else
-//  QSettings l_on_disk_settings(QSettings::Native);
-//#endif
+    //#ifdef MACX
+    //  QSettings l_on_disk_settings(QSettings::Ini);
+    //#else
+    //  QSettings l_on_disk_settings(QSettings::Native);
+    //#endif
 
-  QSettings l_on_disk_settings(m_domain, m_product);
+    QSettings l_on_disk_settings(m_domain, m_product);
 
-  //l_on_disk_settings.setPath(m_domain, m_product, QSettings::UserScope);
-  l_on_disk_settings.beginGroup(QString("/") + m_product);
+    //l_on_disk_settings.setPath(m_domain, m_product, QSettings::UserScope);
+    l_on_disk_settings.beginGroup(QString("/") + m_product);
 
-  std::map<QString, std::map<QString, QString> >::const_iterator l_iter = m_settings.begin();
-  while (l_iter != m_settings.end()) {
-    l_on_disk_settings.beginGroup(l_iter->first);
-    //qDebug(l_on_disk_settings.group());
-    std::map<QString, QString>::const_iterator l_iter_value = l_iter->second.begin();
-    while (l_iter_value != l_iter->second.end()) {
-      l_on_disk_settings.writeEntry("/" + l_iter_value->first, l_iter_value->second);
-		  //qDebug("Wrote /" + l_iter_value->first + "= " + l_iter_value->second);
-      l_iter_value++;
+    std::map<QString, std::map<QString, QString> >::const_iterator l_iter = m_settings.begin();
+    while (l_iter != m_settings.end())
+    {
+        l_on_disk_settings.beginGroup(l_iter->first);
+        //qDebug(l_on_disk_settings.group());
+        std::map<QString, QString>::const_iterator l_iter_value = l_iter->second.begin();
+        while (l_iter_value != l_iter->second.end())
+        {
+            l_on_disk_settings.writeEntry("/" + l_iter_value->first, l_iter_value->second);
+            //qDebug("Wrote /" + l_iter_value->first + "= " + l_iter_value->second);
+            l_iter_value++;
+        }
+        l_on_disk_settings.endGroup();
+        l_iter++;
     }
     l_on_disk_settings.endGroup();
-    l_iter++;
-  }
-  l_on_disk_settings.endGroup();
 }
 
+//-----------------------------------------------------------------------------
 void Settings::print()
 {
-  std::map<QString, std::map<QString, QString> >::const_iterator l_iter = m_settings.begin();
-  for(; l_iter != m_settings.end(); l_iter++) {
-    std::map<QString, QString>::const_iterator l_iter_value = (l_iter->second).begin();
-    for(; l_iter_value != (l_iter->second).end(); l_iter_value++) {
-      printf("%s/%s=%s\n", l_iter->first.latin1(), l_iter_value->first.latin1(), l_iter_value->second.latin1());
+    std::map<QString, std::map<QString, QString> >::const_iterator l_iter = m_settings.begin();
+    for(; l_iter != m_settings.end(); l_iter++)
+    {
+        std::map<QString, QString>::const_iterator l_iter_value = (l_iter->second).begin();
+        for(; l_iter_value != (l_iter->second).end(); l_iter_value++)
+        {
+            printf("%s/%s=%s\n", l_iter->first.latin1(), l_iter_value->first.latin1(), l_iter_value->second.latin1());
+        }
     }
-  }
-  fflush(stdout);
+    fflush(stdout);
 }
+// EOF

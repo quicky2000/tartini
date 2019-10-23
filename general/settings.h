@@ -21,37 +21,90 @@
 class Settings
 {
 
-public:
-  Settings();
-  Settings(QString p_domain, QString p_product);
-  virtual ~Settings() {};
+  public:
 
-  void init(QString p_domain, QString p_product);
-	
-  QString getString(QString p_group, QString p_key);
-	int getInt(QString p_group, QString p_key);
-	double getDouble(QString p_group, QString p_key);
-  bool getBool(QString p_group, QString p_key);
+    /**
+     * Load the settings from disk into the map.
+     */
+    Settings();
+
+    Settings( QString p_domain
+            , QString p_product
+            );
+
+    virtual ~Settings() {};
+
+    void init( QString p_domain
+             , QString p_product
+             );
+
+
+
+    /**
+     * Return the value indexed in the map, or load it in from the defaults if need be
+     */
+    QString getString( QString p_group
+                     , QString p_key
+                     );
+
+    /**
+     * Use getString, convert to an int
+     */
+    int getInt( QString p_group
+	          , QString p_key
+	          );
+
+    /**
+     * Use getString, convert to a double
+     */
+	double getDouble( QString p_group
+	                , QString p_key
+	                );
+
+    /**
+     * Use getString, convert to a bool
+     */
+    bool getBool( QString p_group
+	            , QString p_key
+	            );
   
-	void setString(QString p_group, QString p_key, QString p_value);
-  void setInt(QString p_group, QString p_key, int p_value);
-  void setDouble(QString p_group, QString p_key, double p_value);
-  void setBool(QString p_group, QString p_key, bool p_value);
+	void setString( QString p_group
+	              , QString p_key
+	              , QString p_value
+	              );
+
+	void setInt( QString p_group
+	           , QString p_key
+	           , int p_value
+	           );
+
+	void setDouble( QString p_group
+	              , QString p_key
+	              , double p_value
+	              );
+
+	void setBool( QString p_group
+	            , QString p_key
+	            , bool p_value
+	            );
 
 	//void loadDefaults();
 
 	void load(); //loads settings in from disk
-  void save(); //saves settings out to disk
+	void save(); //saves settings out to disk
 
-  void print();
-private:
-	std::map<QString, std::map<QString, QString> > m_settings; /*< A memory version of the settings on disk. Only the Settings form can change these values. */
+	void print();
+
+  private:
+
+    std::map<QString, std::map<QString, QString> > m_settings; /*< A memory version of the settings on disk. Only the Settings form can change these values. */
 	//std::map<QString, std::map<QString, QString> > defaults; /*< Default settings */
   
-  QString m_domain;
-  QString m_product;
+	QString m_domain;
+	QString m_product;
 };
 
 //extern Settings *settings;
 
-#endif 
+#endif // SETTINGS_H
+// EOF
