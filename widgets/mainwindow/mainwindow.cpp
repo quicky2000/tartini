@@ -401,7 +401,7 @@ MainWindow::MainWindow(void)
     QStringList l_string_list;
     for(int l_j = 0; l_j < NUM_MUSIC_KEYS; l_j++)
     {
-        l_string_list << gMusicKeyName[l_j];
+        l_string_list << g_music_key_name[l_j];
     }
     l_key_combo_box->addItems(l_string_list);
     l_key_combo_box->setCurrentIndex(g_data->musicKey());
@@ -413,9 +413,9 @@ MainWindow::MainWindow(void)
     m_key_type_combo_box = new QComboBox(l_key_tool_bar);
     m_key_type_combo_box->setWindowTitle(tr("Scale type"));
     l_string_list.clear();
-    for(uint l_j = 0; l_j < gMusicScales.size(); l_j++)
+    for(uint l_j = 0; l_j < g_music_scales.size(); l_j++)
     {
-        l_string_list << gMusicScales[l_j].name();
+        l_string_list << g_music_scales[l_j].name();
     }
     m_key_type_combo_box->addItems(l_string_list);
     m_key_type_combo_box->setCurrentIndex(g_data->musicKeyType());
@@ -427,9 +427,9 @@ MainWindow::MainWindow(void)
     QComboBox * l_tempered_combo_box = new QComboBox(l_key_tool_bar);
     l_tempered_combo_box->setWindowTitle(tr("Tempered type"));
     l_string_list.clear();
-    for(uint j = 0; j < gMusicKeys.size(); j++)
+    for(uint j = 0; j < g_music_keys.size(); j++)
     {
-        l_string_list << gMusicKeys[j].name();
+        l_string_list << g_music_keys[j].name();
     }
     l_tempered_combo_box->addItems(l_string_list);
     l_tempered_combo_box->setCurrentIndex(g_data->temperedType());

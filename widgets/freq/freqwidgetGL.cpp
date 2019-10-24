@@ -103,10 +103,10 @@ void FreqWidgetGL::drawReferenceLinesGL( const double & /* p_left_time*/
     int l_font_height_space = l_font_metric.height() / 4;
     int l_font_width = l_font_metric.width("C#0") + 3;
 
-    MusicKey &l_music_key = gMusicKeys[g_data->temperedType()];
-    MusicScale &l_music_scale = gMusicScales[g_data->musicKeyType()];
+    MusicKey &l_music_key = g_music_keys[g_data->temperedType()];
+    MusicScale &l_music_scale = g_music_scales[g_data->musicKeyType()];
 
-    int l_key_root = cycle(gMusicKeyRoot[g_data->musicKey()] + l_music_scale.semitoneOffset(), 12);
+    int l_key_root = cycle(g_music_key_root[g_data->musicKey()] + l_music_scale.semitoneOffset(), 12);
     int l_view_bottom_note = (int)p_view_bottom - l_key_root;
     int l_remainder = cycle(l_view_bottom_note, 12);
     int l_low_root = l_view_bottom_note - l_remainder + l_key_root;
@@ -138,7 +138,7 @@ void FreqWidgetGL::drawReferenceLinesGL( const double & /* p_left_time*/
                     glColor4ub(0, 0, 0, 128);
                     mygl_line(l_font_width, l_line_Y, width() - 1, l_line_Y);
                 }
-                else if((g_data->musicKeyType() == MusicScale::Chromatic) && !gMusicScales[MusicScale::Major].hasSemitone(l_music_key.noteType(l_j)))
+                else if((g_data->musicKeyType() == MusicScale::Chromatic) && !g_music_scales[MusicScale::Major].hasSemitone(l_music_key.noteType(l_j)))
                 {
                     glColor4ub(25, 125, 170, 128);
                     glEnable(GL_LINE_STIPPLE);

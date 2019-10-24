@@ -17,130 +17,130 @@
 */
 
 //------------------------------------------------------------------------------
-double freq2pitch(const double & freq)
+double freq2pitch(const double & p_freq)
 {
 #ifdef log2
   //From log rules  log(x/y) = log(x) - log(y)
-  //return 69 + 12*(log2(freq) - log2(440));
-  return -36.3763165622959152488 + 12.0*log2(freq);
+  //return 69 + 12*(log2(p_freq) - log2(440));
+  return -36.3763165622959152488 + 12.0*log2(p_freq);
 #else
   //From log rules  log_b(x) = log_a(x) / log_a(b)
-  //return 69 + 39.8631371386483481 * log10(freq / 440);
-  return -36.3763165622959152488 + 39.8631371386483481 * log10(freq);
+  //return 69 + 39.8631371386483481 * log10(p_freq / 440);
+  return -36.3763165622959152488 + 39.8631371386483481 * log10(p_freq);
 #endif
 }
 
 //------------------------------------------------------------------------------
-double pitch2freq(const double & note)
+double pitch2freq(const double & p_note)
 {
-  double result = pow10((note + 36.3763165622959152488) / 39.8631371386483481);
-  return result;
+  double l_result = pow10((p_note + 36.3763165622959152488) / 39.8631371386483481);
+  return l_result;
 }
 
 //------------------------------------------------------------------------------
-const char* noteName(const double & pitch)
+const char* noteName(const double & p_pitch)
 {
-  return noteName(toInt(pitch));
+  return noteName(toInt(p_pitch));
 }
 
 //------------------------------------------------------------------------------
-int noteOctave(const double & pitch)
+int noteOctave(const double & p_pitch)
 {
-  return noteOctave(toInt(pitch));
+  return noteOctave(toInt(p_pitch));
 }
 
 //------------------------------------------------------------------------------
-int noteValue(const double & pitch)
+int noteValue(const double & p_pitch)
 {
-  return noteValue(toInt(pitch));
+  return noteValue(toInt(p_pitch));
 }
 
 //------------------------------------------------------------------------------
-bool isBlackNote(const double & pitch)
+bool isBlackNote(const double & p_pitch)
 {
-  return isBlackNote(toInt(pitch));
+  return isBlackNote(toInt(p_pitch));
 }
 
 //------------------------------------------------------------------------------
 MusicScale::MusicScale(void):
-  pName(NULL),
-  _semitoneOffset(0)
+        m_p_name(NULL),
+        m_semitone_offset(0)
 {
 }
 
 //------------------------------------------------------------------------------
 int MusicScale::size(void)const
 {
-  return pNotes.size();
+  return m_p_notes.size();
 }
 
 //------------------------------------------------------------------------------
 int MusicScale::note(int j)const
 {
 #ifdef MYDEBUG
-  return pNotes.at(j);
+  return m_p_notes.at(j);
 #else
-  return pNotes[j];
+  return m_p_notes[j];
 #endif // MYDEBUG
 }
 
 //------------------------------------------------------------------------------
-bool MusicScale::hasSemitone(int j)const
+bool MusicScale::hasSemitone(int p_j)const
 {
 #ifdef MYDEBUG
-  return pSemitoneLookup.at(j);
+  return m_p_semitone_lookup.at(p_j);
 #else
-  return pSemitoneLookup[j];
+  return m_p_semitone_lookup[p_j];
 #endif // MYDEBUG
 }
 
 //------------------------------------------------------------------------------
 const char * MusicScale::name(void)const
 {
-  return pName;
+  return m_p_name;
 }
 
 //------------------------------------------------------------------------------
 int MusicScale::semitoneOffset(void)const
 {
-  return _semitoneOffset;
+  return m_semitone_offset;
 }
 
 //------------------------------------------------------------------------------
 MusicKey::MusicKey(void):
-  pName(NULL)
+        m_name(NULL)
 {
 }
 
 //------------------------------------------------------------------------------
 const char * MusicKey::name(void)const
 {
-  return pName;
+  return m_name;
 }
 
 //------------------------------------------------------------------------------
 int MusicKey::size(void) const
 {
-  return noteOffsets.size();
+  return m_note_offsets.size();
 }
 
 //------------------------------------------------------------------------------
-double MusicKey::noteOffset(int j) const
+double MusicKey::noteOffset(int p_j) const
 {
 #ifdef MYDEBUG
-  return noteOffsets.at(j);
+  return m_note_offsets.at(p_j);
 #else
-  return noteOffsets[j];
+  return m_note_offsets[p_j];
 #endif // MYDEBUG
 }
 
 //------------------------------------------------------------------------------
-int MusicKey::noteType(int j) const
+int MusicKey::noteType(int p_j) const
 {
 #ifdef MYDEBUG
-  return noteTypes.at(j);
+  return m_note_types.at(p_j);
 #else
-  return noteTypes[j];
+  return m_note_types[p_j];
 #endif // MYDEBUG
 }
 //EOF

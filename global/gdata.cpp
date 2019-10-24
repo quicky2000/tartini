@@ -952,7 +952,7 @@ void GData::setTemperedType(int p_type)
             {
                 setMusicKeyType(0);
             }
-            for(int l_j = gMusicScales.size() - 1; l_j >= 2; l_j--)
+            for(int l_j = g_music_scales.size() - 1; l_j >= 2; l_j--)
             {
                 g_main_window->m_key_type_combo_box->removeItem(l_j);
             }
@@ -960,9 +960,9 @@ void GData::setTemperedType(int p_type)
         else if(m_tempered_type > 0 && p_type == 0)
         {
             QStringList l_string_list;
-            for(unsigned int l_j = 2; l_j < gMusicScales.size(); l_j++)
+            for(unsigned int l_j = 2; l_j < g_music_scales.size(); l_j++)
             {
-                l_string_list << gMusicScales[l_j].name();
+                l_string_list << g_music_scales[l_j].name();
             }
             g_main_window->m_key_type_combo_box->addItems(l_string_list);
         }

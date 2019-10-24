@@ -19,10 +19,10 @@
 #include "myassert.h"
 #include <qobject.h>
 
-std::vector<MusicKey> gMusicKeys;
-std::vector<MusicScale> gMusicScales;
+std::vector<MusicKey> g_music_keys;
+std::vector<MusicScale> g_music_scales;
 
-char *gMusicKeyName[NUM_MUSIC_KEYS] =
+char *g_music_key_name[NUM_MUSIC_KEYS] =
   {(char*)"A             ",
    (char*)"A#/Bb",
    (char*)"B",
@@ -36,7 +36,7 @@ char *gMusicKeyName[NUM_MUSIC_KEYS] =
    (char*)"G",
    (char*)"G#/Ab"
   };
-int   gMusicKeyRoot[NUM_MUSIC_KEYS] = {  9,   10,      11,  0,   1,       2,   3,       4,   5,   6,        7,  8      };
+int   g_music_key_root[NUM_MUSIC_KEYS] = {9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8      };
 int   g_music_key = 3; //C
 //                       0    1     2    3     4    5    6     7    8     9    10    11
 const QString noteNames[12] =
@@ -91,36 +91,36 @@ const QString noteNames[12] =
 //------------------------------------------------------------------------------
 void initMusicStuff(void)
 {
-  double evenTemperedScale[12]  = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0 };
+  double l_even_tempered_scale[12]  = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0 };
   /**
      Note types: 0x01=Major Scale Note, 0x02=Minor Scale Note, 0x04=Root Note
   */
-  int twelveNoteType[12]      = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-  double justIntonationRatios[10] = { 1.0, 9.0 / 8, 6.0 / 5, 5.0 / 4, 4.0 / 3, 25.0 / 18, 3.0 / 2, 25.0 / 16, 5.0 / 3, 15.0 / 8 };
-  int justIntonationType[10]   = { 0, 2, 3, 4, 5, 6, 7, 8, 9, 11 };
-  double pythagoreanRatio[12]    = { 1.0, 256.0 / 242, 9.0 / 8, 32.0 / 27, 81.0 / 64, 4.0 / 3, 729.0 / 512, 3.0 / 2, 128.0 / 81, 27.0 / 16, 16.0 / 9, 243.0 / 128 };
-  double meantoneTemperamentScale[12]  = { 0, 76, 193, 310, 386, 503, 579, 697, 773, 890, 1007, 1083 };
-  gMusicKeys.resize(4);
-  gMusicKeys[0].setName("Even Tempered");
-  gMusicKeys[0].setScaleMidi(evenTemperedScale, twelveNoteType, 12); 
-  gMusicKeys[1].setName("Just Intonation");
-  gMusicKeys[1].setScaleRatios(justIntonationRatios, justIntonationType, 10);
-  gMusicKeys[2].setName("Pythagorean Tuning");
-  gMusicKeys[2].setScaleRatios(pythagoreanRatio, twelveNoteType, 12);
-  gMusicKeys[3].setName("Meantone Temperament");
-  gMusicKeys[3].setScaleCents(meantoneTemperamentScale, twelveNoteType, 12);
+  int l_twelve_note_type[12]      = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+  double l_just_intonation_ratios[10] = {1.0, 9.0 / 8, 6.0 / 5, 5.0 / 4, 4.0 / 3, 25.0 / 18, 3.0 / 2, 25.0 / 16, 5.0 / 3, 15.0 / 8 };
+  int l_just_intonationT_type[10]   = {0, 2, 3, 4, 5, 6, 7, 8, 9, 11 };
+  double l_pythagorean_ratio[12]    = {1.0, 256.0 / 242, 9.0 / 8, 32.0 / 27, 81.0 / 64, 4.0 / 3, 729.0 / 512, 3.0 / 2, 128.0 / 81, 27.0 / 16, 16.0 / 9, 243.0 / 128 };
+  double l_meantone_temperament_scale[12]  = {0, 76, 193, 310, 386, 503, 579, 697, 773, 890, 1007, 1083 };
+  g_music_keys.resize(4);
+  g_music_keys[0].setName("Even Tempered");
+  g_music_keys[0].setScaleMidi(l_even_tempered_scale, l_twelve_note_type, 12);
+  g_music_keys[1].setName("Just Intonation");
+  g_music_keys[1].setScaleRatios(l_just_intonation_ratios, l_just_intonationT_type, 10);
+  g_music_keys[2].setName("Pythagorean Tuning");
+  g_music_keys[2].setScaleRatios(l_pythagorean_ratio, l_twelve_note_type, 12);
+  g_music_keys[3].setName("Meantone Temperament");
+  g_music_keys[3].setScaleCents(l_meantone_temperament_scale, l_twelve_note_type, 12);
 
-  int allNoteScale[12] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-  int majorScale[7]                 = { 0, 2, 4, 5, 7, 9, 11 };
-  int naturalMinorScale[7]          = { 0, 2, 3, 5, 7, 8, 10 };
-  int harmonicMinorScale[7]         = { 0, 2, 3, 5, 7, 8, 11 };
-  int ascendingMelodicMinorScale[7] = { 0, 2, 3, 5, 7, 9, 11 };
-  gMusicScales.resize(5);
-  gMusicScales[MusicScale::Chromatic].addScale("All Notes", allNoteScale, 12, 0);
-  gMusicScales[MusicScale::Major].addScale("Major", majorScale, 7, 0);
-  gMusicScales[MusicScale::NaturalMinor].addScale("Minor (Natural)", naturalMinorScale, 7, 0);
-  gMusicScales[MusicScale::HarmonicMinor].addScale("Minor (Harmonic)", harmonicMinorScale, 7, 0);
-  gMusicScales[MusicScale::MelodicMinor].addScale("Minor (Ascending Melodic)", ascendingMelodicMinorScale, 7, 0);
+  int l_all_note_scale[12] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+  int l_major_scale[7]                   = {0, 2, 4, 5, 7, 9, 11 };
+  int l_natural_minor_scale[7]           = {0, 2, 3, 5, 7, 8, 10 };
+  int l_harmonic_minor_scale[7]          = {0, 2, 3, 5, 7, 8, 11 };
+  int l_ascending_melodic_minor_scale[7] = {0, 2, 3, 5, 7, 9, 11 };
+  g_music_scales.resize(5);
+  g_music_scales[MusicScale::Chromatic].addScale("All Notes", l_all_note_scale, 12, 0);
+  g_music_scales[MusicScale::Major].addScale("Major", l_major_scale, 7, 0);
+  g_music_scales[MusicScale::NaturalMinor].addScale("Minor (Natural)", l_natural_minor_scale, 7, 0);
+  g_music_scales[MusicScale::HarmonicMinor].addScale("Minor (Harmonic)", l_harmonic_minor_scale, 7, 0);
+  g_music_scales[MusicScale::MelodicMinor].addScale("Minor (Ascending Melodic)", l_ascending_melodic_minor_scale, 7, 0);
 }
 
 /**
@@ -139,27 +139,27 @@ void initMusicStuff(void)
 */
 
 //------------------------------------------------------------------------------
-const char* noteName(int pitch)
+const char* noteName(int p_pitch)
 {
-  return noteNames[cycle(pitch, 12)].toStdString().c_str();
+  return noteNames[cycle(p_pitch, 12)].toStdString().c_str();
 }
 
 //------------------------------------------------------------------------------
-int noteOctave(int pitch)
+int noteOctave(int p_pitch)
 {
-  return (pitch / 12) - 1;
+  return (p_pitch / 12) - 1;
 }
 
 //------------------------------------------------------------------------------
-int noteValue(int pitch)
+int noteValue(int p_pitch)
 {
-  return cycle(pitch, 12);
+  return cycle(p_pitch, 12);
 }
 
 //------------------------------------------------------------------------------
-bool isBlackNote(int pitch)
+bool isBlackNote(int p_pitch)
 {
-  switch(cycle(pitch, 12))
+  switch(cycle(p_pitch, 12))
     {
     case 1:
     case 3:
@@ -175,102 +175,102 @@ bool isBlackNote(int pitch)
 //------------------------------------------------------------------------------
 MusicScale::~MusicScale(void)
 {
-  if(pName)
+  if(m_p_name)
     {
-      free(pName);
+      free(m_p_name);
     }
 }
 
 //------------------------------------------------------------------------------
-void MusicScale::addScale(const char *theName, const int * theNotes, int length, int semitoneOffset_)
+void MusicScale::addScale(const char *p_name, const int * p_notes, int p_length, int p_semitone_offset)
 {
-  if(pName)
+  if(m_p_name)
     {
-      free(pName);
+      free(m_p_name);
     }
-  pNotes.resize_copy(theNotes, length);
-  pSemitoneLookup.resize(12, false);
-  for(int j=0; j<length; j++)
+  m_p_notes.resize_copy(p_notes, p_length);
+  m_p_semitone_lookup.resize(12, false);
+  for(int l_j=0; l_j < p_length; l_j++)
     {
-      myassert(theNotes[j] >= 0 && theNotes[j] < 12);
-      pSemitoneLookup[theNotes[j]] = true;
+      myassert(p_notes[l_j] >= 0 && p_notes[l_j] < 12);
+        m_p_semitone_lookup[p_notes[l_j]] = true;
     }
-  pName = copy_string(theName);
-  _semitoneOffset = semitoneOffset_;
+    m_p_name = copy_string(p_name);
+    m_semitone_offset = p_semitone_offset;
 }
 
 //------------------------------------------------------------------------------
 MusicKey::~MusicKey(void)
 {
-  if(pName)
+  if(m_name)
     {
-      free(pName);
+      free(m_name);
     }
 }
 
 //------------------------------------------------------------------------------
-void MusicKey::setScaleMidi(double *theNoteOffsets, int *types, int n)
+void MusicKey::setScaleMidi(double *p_note_offsets, int *p_types, int p_n)
 {
-  noteOffsets.resize(n);
-  noteTypes.resize(n);
-  for(int j=0; j<n; j++)
+  m_note_offsets.resize(p_n);
+  m_note_types.resize(p_n);
+  for(int l_j=0; l_j < p_n; l_j++)
     {
-      noteOffsets[j] = theNoteOffsets[j];
-      noteTypes[j] = types[j];
+        m_note_offsets[l_j] = p_note_offsets[l_j];
+        m_note_types[l_j] = p_types[l_j];
     }
 }
 
 //------------------------------------------------------------------------------
-void MusicKey::setScaleCents(double *theNoteOffsets, int *types, int n)
+void MusicKey::setScaleCents(double *p_note_offsets, int *p_types, int p_n)
 {
-  noteOffsets.resize(n);
-  noteTypes.resize(n);
-  for(int j=0; j<n; j++)
+  m_note_offsets.resize(p_n);
+  m_note_types.resize(p_n);
+  for(int l_j=0; l_j < p_n; l_j++)
     {
-      noteOffsets[j] = theNoteOffsets[j]/100.0;
-      noteTypes[j] = types[j];
+        m_note_offsets[l_j] = p_note_offsets[l_j] / 100.0;
+        m_note_types[l_j] = p_types[l_j];
     }
 }
 
 //------------------------------------------------------------------------------
-void MusicKey::setScaleRatios(double *theNoteOffsets, int *types, int n)
+void MusicKey::setScaleRatios(double *p_note_offsets, int *p_types, int p_n)
 {
   double k = freq2pitch(1.0);
-  noteOffsets.resize(n);
-  noteTypes.resize(n);
-  for(int j=0; j<n; j++)
+  m_note_offsets.resize(p_n);
+  m_note_types.resize(p_n);
+  for(int l_j=0; l_j < p_n; l_j++)
     {
-      noteOffsets[j] = freq2pitch(theNoteOffsets[j]) - k;
-      noteTypes[j] = types[j];
+        m_note_offsets[l_j] = freq2pitch(p_note_offsets[l_j]) - k;
+        m_note_types[l_j] = p_types[l_j];
     }
 }
 
 //------------------------------------------------------------------------------
-void MusicKey::setName(const char *theName)
+void MusicKey::setName(const char *p_name)
 {
-  if(pName)
+  if(m_name)
     {
-      free(pName);
+      free(m_name);
     }
-  pName = copy_string(theName);
+    m_name = copy_string(p_name);
 }
 
 //------------------------------------------------------------------------------
-int MusicKey::nearestNoteIndex(const double & x)const
+int MusicKey::nearestNoteIndex(const double & p_x)const
 {
-  return (int)(binary_search_closest(noteOffsets.begin(), noteOffsets.end(), x) - noteOffsets.begin());
+  return (int)(binary_search_closest(m_note_offsets.begin(), m_note_offsets.end(), p_x) - m_note_offsets.begin());
 }
 
 //------------------------------------------------------------------------------
-double MusicKey::nearestNote(const double & x)const
+double MusicKey::nearestNote(const double & p_x)const
 {
-  return *binary_search_closest(noteOffsets.begin(), noteOffsets.end(), x);
+  return *binary_search_closest(m_note_offsets.begin(), m_note_offsets.end(), p_x);
 }
 
 //------------------------------------------------------------------------------
-double MusicKey::nearestNoteDistance(const double & x)const
+double MusicKey::nearestNoteDistance(const double & p_x)const
 {
-  return fabs(*binary_search_closest(noteOffsets.begin(), noteOffsets.end(), x) - x);
+  return fabs(*binary_search_closest(m_note_offsets.begin(), m_note_offsets.end(), p_x) - p_x);
 }
 
 //EOF
