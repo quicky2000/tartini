@@ -26,41 +26,45 @@
 // return the index of the first occurance of char c in string s.
 // or -1 if not found
 //------------------------------------------------------------------------------
-int find_pos(const char *p_s, const char p_c)
+int find_pos( const char *p_s
+            , const char p_c
+            )
 {
     int l_len = strlen(p_s);
     for(int l_j = 0; l_j < l_len; l_j++)
-      {
-	if(p_s[l_j] == p_c)
-	  {
-	    return l_j;
-	  }
-      }
+    {
+        if(p_s[l_j] == p_c)
+        {
+            return l_j;
+        }
+    }
     return -1;
 }
 
 // returns a pointer to a copy of the string s
 // allocating the memory required
 //------------------------------------------------------------------------------
-char *copy_string(const char *p_s)
+char * copy_string(const char * p_s)
 {
     if(!p_s)
-      {
-	return NULL;
-      }
-    char *l_t = (char *)malloc(strlen(p_s) + 1);
+    {
+        return NULL;
+    }
+    char * l_t = (char *)malloc(strlen(p_s) + 1);
     strcpy(l_t, p_s);
     return l_t;
 }
 
 //------------------------------------------------------------------------------
-int str_case_cmp(const char *p_s1, const char *p_s2)
+int str_case_cmp( const char * p_s1
+                , const char * p_s2
+                )
 {
 #ifdef WINDOWS
-  return _stricmp(p_s1, p_s2);
-#else
-  return strcasecmp(p_s1, p_s2);
-#endif
+    return _stricmp(p_s1, p_s2);
+#else // WINDOWS
+    return strcasecmp(p_s1, p_s2);
+#endif // WINDOWS
 }
 
 // converts string to lower case
@@ -69,9 +73,9 @@ int str_case_cmp(const char *p_s1, const char *p_s2)
 char *to_lower_case(char *p_s)
 {
     for(char * l_a = p_s; * l_a != '\0'; l_a++)
-      {
-	*l_a = tolower(*l_a);
-      }
+    {
+        *l_a = tolower(*l_a);
+    }
     return p_s;
 }
 
@@ -81,26 +85,26 @@ char *to_lower_case(char *p_s)
 char * strip_space(char * p_s)
 {
   if(p_s[0] == ' ')
-    {
+  {
       int l_pos = 0;
       while(p_s[l_pos] == ' ')
-	{
-	  l_pos++;
-	}
+      {
+          l_pos++;
+      }
       memmove(p_s, p_s + l_pos, strlen(p_s) + 1 - l_pos);
-    }
+  }
   int l_len = strlen(p_s);
   for(int l_j = l_len - 1; l_j >= 0; l_j--)
-    {
+  {
       if(p_s[l_j] == ' ')
-	{
-        p_s[l_j] = '\0';
-	}
+      {
+          p_s[l_j] = '\0';
+      }
       else
-	{
-	  break;
-	}
-    }
+      {
+          break;
+      }
+  }
   return p_s;
 }
 
@@ -109,14 +113,14 @@ char * strip_space(char * p_s)
 //------------------------------------------------------------------------------
 const char * getFileExtension(const char * p_filename)
 {
-  const char * l_ext;
-  if(p_filename && (l_ext = strrchr(p_filename, '.')) != NULL)
+    const char * l_ext;
+    if(p_filename && (l_ext = strrchr(p_filename, '.')) != NULL)
     {
-      return l_ext + 1;
+        return l_ext + 1;
     }
-  else
+    else
     {
-      return NULL;
+        return NULL;
     }
 }
 
@@ -125,20 +129,20 @@ const char * getFileExtension(const char * p_filename)
 //------------------------------------------------------------------------------
 const char * getFilenamePart(const char * p_filename)
 {
-  const char *l_ext;
-  if(!p_filename)
+    const char *l_ext;
+    if(!p_filename)
     {
-      return NULL;
+        return NULL;
     }
-  if((l_ext = strrchr(p_filename, '/')) != NULL)
+    if((l_ext = strrchr(p_filename, '/')) != NULL)
     {
-      return l_ext + 1;
+        return l_ext + 1;
     }
-  if((l_ext = strrchr(p_filename, '\\')) != NULL)
+    if((l_ext = strrchr(p_filename, '\\')) != NULL)
     {
-      return l_ext + 1;
+        return l_ext + 1;
     }
-  return p_filename;
+    return p_filename;
 }
 
 // a static string used by getFolderPart and withTrailingSlash
@@ -148,63 +152,63 @@ char g_mystring_folder[2048];
 // if no folder name is found it return "./"
 // NOTE: The return value is static so the next call to getFolderPart or withTrailingSlash will overwrite it
 //------------------------------------------------------------------------------
-const char *getFolderPart(const char *p_filename)
+const char * getFolderPart(const char * p_filename)
 {
-  if(!p_filename)
+    if(!p_filename)
     {
-      strcpy(g_mystring_folder, "./");
-      return g_mystring_folder;
+        strcpy(g_mystring_folder, "./");
+        return g_mystring_folder;
     }
-  int l_len = strlen(p_filename);
-  for(; l_len > 0; l_len--)
+    int l_len = strlen(p_filename);
+    for(; l_len > 0; l_len--)
     {
-      if(p_filename[l_len - 1] == '/' || p_filename[l_len - 1] == '\\')
-	{
-	  break;
-	}
+        if(p_filename[l_len - 1] == '/' || p_filename[l_len - 1] == '\\')
+        {
+            break;
+        }
     }
-  if(l_len == 0)
+    if(l_len == 0)
     {
-      strcpy(g_mystring_folder, "./");
+        strcpy(g_mystring_folder, "./");
     }
-  else
+    else
     {
-      if(l_len > 2047)
-	{
-        l_len = 2047;
-	}
-      memcpy(g_mystring_folder, p_filename, sizeof(char) * l_len);
+        if(l_len > 2047)
+        {
+            l_len = 2047;
+        }
+        memcpy(g_mystring_folder, p_filename, sizeof(char) * l_len);
         g_mystring_folder[l_len] = '\0';
     }
-  return g_mystring_folder;
+    return g_mystring_folder;
 }
 
 // If filename ends in a slash it is returned
 // otherwise a pointer to static string is returned which contains a trailing slash
 // NOTE: The return value is static so the next call to getFolderPart or withTrailingSlash will overwrite it
 //------------------------------------------------------------------------------
-const char *withTrailingSlash(const char *p_filename)
+const char * withTrailingSlash(const char * p_filename)
 {
-  if(!p_filename)
+    if(!p_filename)
     {
-      strcpy(g_mystring_folder, "/");
-      return g_mystring_folder;
+        strcpy(g_mystring_folder, "/");
+        return g_mystring_folder;
     }
-  int l_len = strlen(p_filename);
-  if(p_filename[l_len - 1] == '/')
+    int l_len = strlen(p_filename);
+    if(p_filename[l_len - 1] == '/')
     {
-      return p_filename;
+        return p_filename;
     }
-  else
+    else
     {
-      if(l_len > 2046)
-	{
-        l_len = 2046;
-	}
-      memcpy(g_mystring_folder, p_filename, sizeof(char) * l_len);
+        if(l_len > 2046)
+        {
+            l_len = 2046;
+        }
+        memcpy(g_mystring_folder, p_filename, sizeof(char) * l_len);
         g_mystring_folder[l_len] = '/';
         g_mystring_folder[l_len + 1] = '\0';
-      return g_mystring_folder;
+        return g_mystring_folder;
     }
 }
 

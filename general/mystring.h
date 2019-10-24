@@ -19,56 +19,58 @@
    @return the index of the first occurance of char c in string s.
    or -1 if not found
 */
-int find_pos(const char *p_s, const char p_c);
+int find_pos( const char *p_s
+            , const char p_c
+            );
 
 /**
    @return a pointer to a copy of the string s
    allocating the memory required
 */
-char *copy_string(const char *p_s);
+char * copy_string(const char * p_s);
 
 /**
    works exactly like strcasecmp but also works on windows
 */
-int str_case_cmp(const char *p_s1, const char *p_s2);
+int str_case_cmp(const char * p_s1, const char * p_s2);
 
 /**
    converts string to lower case
    @return the string
 */
-char *to_lower_case(char *p_s);
+char * to_lower_case(char * p_s);
 
 /**
    modifies the string, removing any leading or trailing spaces
    @returns a pointer to the string
 */
-char *strip_space(char *p_s);
+char * strip_space(char * p_s);
 
 /**
    @return a pointer to the file extention part or NULL
    if no file extention found
 */
-const char *getFileExtension(const char *p_filename);
+const char * getFileExtension(const char * p_filename);
 
 /**
    @return a pointer to the filename part of a full path name
    or NULL if no filename is found
 */
-const char *getFilenamePart(const char *p_filename);
+const char * getFilenamePart(const char * p_filename);
 
 /**
    @retun a string which contains only the folder name part of the string.
    if no folder name is found it return "./"
    NOTE: The return value is static so the next call to getFolderPart or withTrailingSlash will overwrite it
 */
-const char *getFolderPart(const char *p_filename);
+const char * getFolderPart(const char * p_filename);
 
 /**
    If filename ends in a slash it is returned
    otherwise a pointer to static string is returned which contains a trailing slash
    NOTE: The return value is static so the next call to getFolderPart or withTrailingSlash will overwrite it
 */
-const char *withTrailingSlash(const char *p_filename);
+const char * withTrailingSlash(const char * p_filename);
 
 #endif // MYSTRING_H
 // EOF
