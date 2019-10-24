@@ -36,8 +36,8 @@ inline double freq2pitch(const double & p_freq);
 */
 inline double pitch2freq(const double & p_note);
 
-const char* noteName(int p_pitch);
-inline const char* noteName(const double & p_pitch);
+const char * noteName(int p_pitch);
+inline const char * noteName(const double & p_pitch);
 
 /**
    @param note The midi note number
@@ -58,25 +58,37 @@ inline bool isBlackNote(const double & p_pitch);
 
 class MusicScale
 {
- public:
-  enum MusicScale_t { Chromatic, Major, NaturalMinor, HarmonicMinor, MelodicMinor };
+  public:
 
-  inline MusicScale(void);
-  ~MusicScale(void);
+    enum MusicScale_t
+            { Chromatic
+            , Major
+            , NaturalMinor
+            , HarmonicMinor
+            , MelodicMinor
+            };
 
-  void addScale(const char *p_name, const int *p_notes, int p_length, int p_semitone_offset);
+    inline MusicScale(void);
+    ~MusicScale(void);
 
-  inline int size(void)const;
-  inline int note(int j)const;
-  inline bool hasSemitone(int p_j)const;
-  inline const char * name(void)const;
-  inline int semitoneOffset(void)const;
+    void addScale( const char *p_name
+                 , const int * p_notes
+                 , int p_length
+                 , int p_semitone_offset
+                 );
 
- private:
-  Array1d<int> m_p_notes;
-  std::vector<bool> m_p_semitone_lookup;
-  char *m_p_name;
-  int m_semitone_offset;
+    inline int size(void)const;
+    inline int note(int j)const;
+    inline bool hasSemitone(int p_j)const;
+    inline const char * name(void)const;
+    inline int semitoneOffset(void)const;
+
+  private:
+
+    Array1d<int> m_p_notes;
+    std::vector<bool> m_p_semitone_lookup;
+    char * m_p_name;
+    int m_semitone_offset;
 
 };
 
@@ -85,43 +97,57 @@ class MusicScale
 */
 class MusicKey
 {
- public:
-  inline MusicKey(void);
-  ~MusicKey(void);
+  public:
+    inline MusicKey(void);
+    ~MusicKey(void);
 
-  /**
-     @param a the array of ratios
-     @param p_n the size of the array
-     e.g. [0.0, 1.0, 2.0, 3.0, 4.0, ... 11.0] for equal tempered
-  */
-  void setScaleMidi(double *p_note_offsets, int *p_types, int p_n);
+    /**
+       @param a the array of ratios
+       @param p_n the size of the array
+       e.g. [0.0, 1.0, 2.0, 3.0, 4.0, ... 11.0] for equal tempered
+    */
+    void setScaleMidi( double * p_note_offsets
+                     , int * p_types
+                     , int p_n
+                     );
 
-  /**
-     @param a the array of ratios
-     @param p_n the size of the array
-     e.g. [0, 100, 200, 300, 400, ... 1100] for equal tempered
-  */
-  void setScaleCents(double *p_note_offsets, int *p_types, int p_n);
+    /**
+       @param a the array of ratios
+       @param p_n the size of the array
+       e.g. [0, 100, 200, 300, 400, ... 1100] for equal tempered
+    */
+    void setScaleCents( double * p_note_offsets
+                      , int * p_types
+                      , int p_n
+                      );
 
-  /**
-      @param a the array of ratios
-      @param p_n the size of the array
-      e.g. [1.0, 5.0/4, 4.0/3, 3.0/2]
-  */
-  void setScaleRatios(double *p_note_offsets, int *p_types, int p_n);
-  void setName(const char *p_name);
-  inline const char * name(void)const;
-  inline int size(void) const;
-  inline double noteOffset(int p_j) const;
-  inline int noteType(int p_j) const;
-  int nearestNoteIndex(const double & p_x)const;
-  double nearestNote(const double & p_x)const;
-  double nearestNoteDistance(const double & p_x)const;
+    /**
+       @param a the array of ratios
+       @param p_n the size of the array
+       e.g. [1.0, 5.0/4, 4.0/3, 3.0/2]
+    */
+    void setScaleRatios( double * p_note_offsets
+                       , int * p_types
+                       , int p_n
+                       );
 
- private:
-  Array1d<double> m_note_offsets; //ordered midi values of the notes in 1 octave
-  Array1d<int> m_note_types;
-  char *m_name;
+    void setName(const char * p_name);
+    inline const char * name(void)const;
+    inline int size(void) const;
+    inline double noteOffset(int p_j) const;
+    inline int noteType(int p_j) const;
+    int nearestNoteIndex(const double & p_x)const;
+    double nearestNote(const double & p_x)const;
+    double nearestNoteDistance(const double & p_x)const;
+
+  private:
+
+    /**
+     * ordered midi values of the notes in 1 octave
+     */
+    Array1d<double> m_note_offsets;
+    Array1d<int> m_note_types;
+    char * m_name;
 
 };
 
@@ -131,7 +157,7 @@ void initMusicStuff(void);
 extern std::vector<MusicKey> g_music_keys;
 extern std::vector<MusicScale> g_music_scales;
 
-extern char *g_music_key_name[NUM_MUSIC_KEYS];
+extern char * g_music_key_name[NUM_MUSIC_KEYS];
 extern int g_music_key_root[NUM_MUSIC_KEYS];
 extern int g_music_key;
 
