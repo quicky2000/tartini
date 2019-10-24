@@ -4,7 +4,9 @@
     begin                : Feb 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
-   
+    copyright            : (C) 2019 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2 of the License, or
@@ -26,14 +28,14 @@ class SaveDialog : public Q3FileDialog
 {
   Q_OBJECT
 public:
-  SaveDialog(QWidget * parent = 0);
+  SaveDialog(QWidget * p_parent = 0);
   ~SaveDialog(void);
   void accept(void);
 
-  static QString getSaveWavFileName(QWidget *parent = 0);
+  static QString getSaveWavFileName(QWidget *p_parent = 0);
   
-  QCheckBox *rememberFolderCheckBox;
-  QCheckBox *appendWavCheckBox;
+  QCheckBox *m_remember_folder_check_box;
+  QCheckBox *m_append_wav_check_box;
 };
 
 #endif // SAVE_DIALOG_H
