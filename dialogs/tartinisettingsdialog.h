@@ -23,22 +23,22 @@ class TartiniSettingsDialog : public QDialog, private Ui_SettingsDialog
   Q_OBJECT
 
 public:
-  TartiniSettingsDialog(QWidget *parent = 0);
+  TartiniSettingsDialog(QWidget *p_parent = 0);
 
-  void loadSetting(QObject *obj, const QString &group);
+  void loadSetting(QObject *p_object, const QString &p_group);
   void init(void);
 
 public slots:
-  QString getPath(const QString initialPath);
+  QString getPath(const QString p_initial_path);
   void changeTempFolder(void);
   void fileNameChanged(void);
   void getBackgroundColor(void);
   void getShading1Color(void);
   void getShading2Color(void);
-  void saveSetting(QObject *obj, const QString group);
+  void saveSetting(QObject *p_object, const QString p_group);
   void saveSettings(void);
   void checkAnalysisEnabled(void);
-  void onNoteRangeChoice(int choice);
+  void onNoteRangeChoice(int p_choice);
   static void setUnknownsToDefault(GData & p_gdata);
   void resetDefaults();
 };
