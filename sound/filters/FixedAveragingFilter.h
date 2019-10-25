@@ -26,18 +26,21 @@
 */
 class FixedAverageFilter : public Filter
 {
- public:
-  inline FixedAverageFilter(void) { }
-  FixedAverageFilter(int p_size);
-  void init(int p_size);
-  void filter(const float *p_input, float *p_output, int p_n);
-  void reset(void);
-  int delay(void) const { return m_size / 2; }
+  public:
+    inline FixedAverageFilter(void) { }
+    FixedAverageFilter(int p_size);
+    void init(int p_size);
+    void filter( const float * p_input
+               , float * p_output
+               , int p_n
+               );
+    void reset(void);
+    int delay(void) const { return m_size / 2; }
 
- private:
-  int m_size;
-  double m_total_sum;
-  Array1d<float> m_x; // the last size input values
+  private:
+    int m_size;
+    double m_total_sum;
+    Array1d<float> m_x; // the last size input values
 };
 
 #endif // FIXED_AVERAGING_FILTER_H
