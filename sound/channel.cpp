@@ -582,7 +582,7 @@ bool Channel::isNoteChanging(int p_chunk)
     myassert(dataAtChunk(p_chunk));
     myassert(m_note_data.size() > 0);
     AnalysisData * l_analysis_data = dataAtChunk(p_chunk);
-    //Note: analysisData.noteIndex is still undefined here
+    //Note: analysisData.m_note_index is still undefined here
     int l_num_chunks = getLastNote()->numChunks();
 
     float l_diff = fabs(l_analysis_data->getPitch() - l_analysis_data->getShortTermMean());

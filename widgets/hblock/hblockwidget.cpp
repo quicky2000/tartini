@@ -69,7 +69,7 @@ void HBlockWidget::paintEvent( QPaintEvent * )
             /*
              * Each note has a fundamental frequency f, which comes from the lookup table.
              * The harmonic frequencies are defined as f, 2f, 3f, 4f, 5f...
-             * harmonicFreq stores what the harmonics have been calculated to be.
+             * m_harmonic_freq stores what the harmonics have been calculated to be.
              */
             for(uint l_index = 0; l_index < l_data.getHarmonicFreqSize(); l_index++)
             {

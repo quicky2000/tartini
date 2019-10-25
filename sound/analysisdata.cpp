@@ -18,7 +18,7 @@
 #include "analysisdata.h"
 #include "gdata.h"
 
-const char *amp_mode_names[NUM_AMP_MODES] =
+const char *g_amp_mode_names[NUM_AMP_MODES] =
   { "RMS Amplitude (dB)",
     "Max Amplitude (dB)",
     "Amplitude Correlation",
@@ -28,7 +28,7 @@ const char *amp_mode_names[NUM_AMP_MODES] =
     "Note Change Score"
   };
 
-const char *amp_display_string[NUM_AMP_MODES] =
+const char *g_amp_display_string[NUM_AMP_MODES] =
   { "RMS Amp Threshold = %0.2f, %0.2f",
     "Max Amp Threshold = %0.2f, %0.2f",
     "Amp Corr Threshold = %0.2f, %0.2f",
@@ -38,7 +38,7 @@ const char *amp_display_string[NUM_AMP_MODES] =
     "Note Change Score Threshold = %0.2f, %0.2f"
   };
 
-double(*amp_mode_func[NUM_AMP_MODES])(const double &, const GData &) =
+double(*g_amp_mode_func[NUM_AMP_MODES])(const double &, const GData &) =
 {
   &dB2Normalised,
   &dB2Normalised,
@@ -49,7 +49,7 @@ double(*amp_mode_func[NUM_AMP_MODES])(const double &, const GData &) =
   &same
 };
 
-double(*amp_mode_inv_func[NUM_AMP_MODES])(const double &, const GData &) =
+double(*g_amp_mode_inv_func[NUM_AMP_MODES])(const double &, const GData &) =
 {
   &normalised2dB,
   &normalised2dB,
@@ -62,46 +62,46 @@ double(*amp_mode_inv_func[NUM_AMP_MODES])(const double &, const GData &) =
 
 //------------------------------------------------------------------------------
 AnalysisData::AnalysisData(void):
-  period(0.0f),
-  fundamentalFreq(0.0f),
-  pitch(0.0f),
-  _freqCentroid(0.0f),
-  pitchSum(0.0f),
-  pitch2Sum(0.0),
-  shortTermMean(0.0),
-  shortTermDeviation(0.0),
-  longTermMean(0.0),
-  longTermDeviation(0.0),
-  spread(0.0),
-  spread2(0.0),
-  vibratoPitch(0.0f),
-  vibratoWidth(0.0f),
-  vibratoWidthAdjust(0.0f),
-  vibratoSpeed(0.0f),
-  vibratoPhase(0.0f),
-  vibratoError(0.0f),
-  reason(0),
-  highestCorrelationIndex(-1),
-  chosenCorrelationIndex(-1),
-  periodRatio(1.0f),
-  cepstrumIndex(-1),
-  cepstrumPitch(0.0f),
-  noteIndex(NO_NOTE),
-  notePlaying(false),
-  done(false)
+        m_period(0.0f),
+        m_fundamental_freq(0.0f),
+        m_pitch(0.0f),
+        m_freq_centroid(0.0f),
+        m_pitch_sum(0.0f),
+        m_pitch_squared_sum(0.0),
+        m_short_term_mean(0.0),
+        m_short_term_deviation(0.0),
+        m_long_term_mean(0.0),
+        m_long_term_deviation(0.0),
+        m_spread(0.0),
+        m_spread_2(0.0),
+        m_vibrato_pitch(0.0f),
+        m_vibrato_width(0.0f),
+        m_vibrato_width_adjust(0.0f),
+        m_vibrato_speed(0.0f),
+        m_vibrato_phase(0.0f),
+        m_vibrato_error(0.0f),
+        m_reason(0),
+        m_highest_correlation_index(-1),
+        m_chosen_correlation_index(-1),
+        m_period_ratio(1.0f),
+        m_cepstrum_index(-1),
+        m_cepstrum_pitch(0.0f),
+        m_note_index(NO_NOTE),
+        m_note_playing(false),
+        m_done(false)
 {
-  std::fill(values, values + NUM_AMP_MODES, 0.0f);
+  std::fill(m_values, m_values + NUM_AMP_MODES, 0.0f);
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::calcScores(void)
 {
-  double a[NUM_AMP_MODES-2];
-  for(int j = 0; j < NUM_AMP_MODES - 2 ; j++)
+  double l_a[NUM_AMP_MODES - 2];
+  for(int l_j = 0; l_j < NUM_AMP_MODES - 2 ; l_j++)
     {
-      a[j] = bound(((*amp_mode_func[j])(values[j],*g_data) - (*amp_mode_func[j])(g_data->ampThreshold(j,0),*g_data)) / ((*amp_mode_func[j])(g_data->ampThreshold(j,1),*g_data) - (*amp_mode_func[j])(g_data->ampThreshold(j,0),*g_data)), 0.0, 1.0);
+        l_a[l_j] = bound(((*g_amp_mode_func[l_j])(m_values[l_j], *g_data) - (*g_amp_mode_func[l_j])(g_data->ampThreshold(l_j, 0), *g_data)) / ((*g_amp_mode_func[l_j])(g_data->ampThreshold(l_j, 1), *g_data) - (*g_amp_mode_func[l_j])(g_data->ampThreshold(l_j, 0), *g_data)), 0.0, 1.0);
     }
-  values[NOTE_SCORE] = a[AMPLITUDE_RMS] * a[AMPLITUDE_CORRELATION];
-  values[NOTE_CHANGE_SCORE] = (1.0 - a[FREQ_CHANGENESS]);
+  m_values[NOTE_SCORE] = l_a[AMPLITUDE_RMS] * l_a[AMPLITUDE_CORRELATION];
+  m_values[NOTE_CHANGE_SCORE] = (1.0 - l_a[FREQ_CHANGENESS]);
 }
 //EOF

@@ -497,7 +497,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
 		}
 	      ch->calcDeviation(chunk);
 
-	      //calculate vibratoPitch, vibratoWidth, vibratoSpeed
+	      //calculate m_vibrato_pitch, m_vibrato_width, m_vibrato_speed
 	      ch->doPronyFit(chunk);
 	    }
 
@@ -560,8 +560,8 @@ void MyTransforms::calculateAnalysisData(/*float *input, */int chunk, Channel *c
 float MyTransforms::get_fine_clarity_measure(double period)
 {
 #ifdef PRINTF_DEBUG
-  printf("%f, ", analysisData.periodEstimates[choosenMaxIndex]);
-  printf("%f, ", analysisData.periodEstimatesAmp[choosenMaxIndex]);
+  printf("%f, ", analysisData.m_period_estimates[choosenMaxIndex]);
+  printf("%f, ", analysisData.m_period_estimates_amp[choosenMaxIndex]);
 #endif // PRINTF_DEBUG
   int tempN = n - int(ceil(period));
   float *tempData = new float[tempN];

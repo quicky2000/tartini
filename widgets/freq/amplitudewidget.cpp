@@ -226,8 +226,8 @@ bool AmplitudeWidget::calcZoomElement(ZoomElement &p_zoom_element, Channel *p_ch
     std::pair<large_vector<AnalysisData>::iterator, large_vector<AnalysisData>::iterator> a =
     minMaxElement(p_channel->dataIteratorAtChunk(l_start_chunk), p_channel->dataIteratorAtChunk(l_finish_chunk), lessValue(l_mode));
     myassert(a.second != p_channel->dataIteratorAtChunk(l_finish_chunk));
-    float l_low = (*amp_mode_func[l_mode])(a.first->getValue(l_mode), *g_data);
-    float l_high = (*amp_mode_func[l_mode])(a.second->getValue(l_mode), *g_data);
+    float l_low = (*g_amp_mode_func[l_mode])(a.first->getValue(l_mode), *g_data);
+    float l_high = (*g_amp_mode_func[l_mode])(a.second->getValue(l_mode), *g_data);
 
     p_zoom_element.set(l_low, l_high, 0, p_channel->get_color(), NO_NOTE, (l_start_chunk + l_finish_chunk) / 2);
     return true;
@@ -236,14 +236,14 @@ bool AmplitudeWidget::calcZoomElement(ZoomElement &p_zoom_element, Channel *p_ch
 //------------------------------------------------------------------------------
 double AmplitudeWidget::calculateElement(AnalysisData *p_data)
 {
-    double l_val = (*amp_mode_func[g_data->amplitudeMode()])(p_data->getValue(g_data->amplitudeMode()), *g_data);
+    double l_val = (*g_amp_mode_func[g_data->amplitudeMode()])(p_data->getValue(g_data->amplitudeMode()), *g_data);
     return l_val;
 }
 
 //------------------------------------------------------------------------------
 double AmplitudeWidget::getCurrentThreshold(int p_index)
 {
-    return (*amp_mode_func[g_data->amplitudeMode()])(g_data->ampThreshold(g_data->amplitudeMode(), p_index), *g_data);
+    return (*g_amp_mode_func[g_data->amplitudeMode()])(g_data->ampThreshold(g_data->amplitudeMode(), p_index), *g_data);
 }
 
 //------------------------------------------------------------------------------
@@ -259,14 +259,14 @@ void AmplitudeWidget::setCurrentThreshold(double p_new_threshold, int p_index)
         setOffset(maxOffset() - (p_new_threshold - range()));
     }
 
-    g_data->setAmpThreshold(g_data->amplitudeMode(), p_index, (*amp_mode_inv_func[g_data->amplitudeMode()])(p_new_threshold, *g_data));
+    g_data->setAmpThreshold(g_data->amplitudeMode(), p_index, (*g_amp_mode_inv_func[g_data->amplitudeMode()])(p_new_threshold, *g_data));
 }
 
 //------------------------------------------------------------------------------
 QString AmplitudeWidget::getCurrentThresholdString(void)const
 {
     QString l_threshold_str;
-    l_threshold_str.sprintf(amp_display_string[g_data->amplitudeMode()], g_data->ampThreshold(g_data->amplitudeMode(), 0), g_data->ampThreshold(g_data->amplitudeMode(), 1));
+    l_threshold_str.sprintf(g_amp_display_string[g_data->amplitudeMode()], g_data->ampThreshold(g_data->amplitudeMode(), 0), g_data->ampThreshold(g_data->amplitudeMode(), 1));
     return l_threshold_str;
 }
 

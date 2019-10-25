@@ -39,10 +39,10 @@ enum AmplitudeModes {
 
 class GData;
 
-extern const char *amp_mode_names[NUM_AMP_MODES];
-extern const char *amp_display_string[NUM_AMP_MODES];
-extern double(*amp_mode_func[NUM_AMP_MODES])(const double &, const GData &);
-extern double(*amp_mode_inv_func[NUM_AMP_MODES])(const double &, const GData &);
+extern const char *g_amp_mode_names[NUM_AMP_MODES];
+extern const char *g_amp_display_string[NUM_AMP_MODES];
+extern double(*g_amp_mode_func[NUM_AMP_MODES])(const double &, const GData &);
+extern double(*g_amp_mode_inv_func[NUM_AMP_MODES])(const double &, const GData &);
 
 #define NO_NOTE -1
 
@@ -165,76 +165,76 @@ public:
   inline float getNoteChangeScore(void)const;
 
  private:
-  float values[NUM_AMP_MODES];
-  float period; /*< The period of the fundamental (in samples) */
-  float fundamentalFreq; /*< The fundamental frequency in hertz */
-  float pitch; /*< The pitch in semi-tones */
-  float _freqCentroid;
-  double pitchSum; /*< The sum of pitches so far in a note */
-  double pitch2Sum; /*< The sum of pitches squared so far in a note */
-  double shortTermMean; /*< The mean note so far */
-  double shortTermDeviation; /*< The deviation of the note so far (based on standard deviation) */
-  double longTermMean; /*> The mean note so far */
-  double longTermDeviation; /*< The deviation of the note so far (based on standard deviation) */
-  double spread;
-  double spread2;
-  float vibratoPitch;
-  float vibratoWidth;
-  float vibratoWidthAdjust;
-  float vibratoSpeed;
-  float vibratoPhase;
-  float vibratoError;
-  int reason; /*< The reason why there was a note change */
-  int highestCorrelationIndex;
-  int chosenCorrelationIndex;
-  float periodRatio; /*< The ratio of the current period to the period at the beginning of the current note */
-  int cepstrumIndex;
-  float cepstrumPitch;
-  std::vector<float> periodEstimates;
-  std::vector<float> periodEstimatesAmp;
-  std::vector<float> harmonicAmpNoCutOff;
-  std::vector<float> harmonicAmpRelative;
-  std::vector<float> harmonicAmp;
-  std::vector<float> harmonicFreq;
-  std::vector<float> harmonicNoise;
-  FilterState filterState; //the state of the filter at the beginning of the chunk
-  int noteIndex; //The index of the note in the m_note_data, or NO_NOTE
-  bool notePlaying;
-  bool done;
+  float m_values[NUM_AMP_MODES];
+  float m_period; /*< The period of the fundamental (in samples) */
+  float m_fundamental_freq; /*< The fundamental frequency in hertz */
+  float m_pitch; /*< The pitch in semi-tones */
+  float m_freq_centroid;
+  double m_pitch_sum; /*< The sum of pitches so far in a note */
+  double m_pitch_squared_sum; /*< The sum of pitches squared so far in a note */
+  double m_short_term_mean; /*< The mean note so far */
+  double m_short_term_deviation; /*< The deviation of the note so far (based on standard deviation) */
+  double m_long_term_mean; /*> The mean note so far */
+  double m_long_term_deviation; /*< The deviation of the note so far (based on standard deviation) */
+  double m_spread;
+  double m_spread_2;
+  float m_vibrato_pitch;
+  float m_vibrato_width;
+  float m_vibrato_width_adjust;
+  float m_vibrato_speed;
+  float m_vibrato_phase;
+  float m_vibrato_error;
+  int m_reason; /*< The reason why there was a note change */
+  int m_highest_correlation_index;
+  int m_chosen_correlation_index;
+  float m_period_ratio; /*< The ratio of the current period to the period at the beginning of the current note */
+  int m_cepstrum_index;
+  float m_cepstrum_pitch;
+  std::vector<float> m_period_estimates;
+  std::vector<float> m_period_estimates_amp;
+  std::vector<float> m_harmonic_amp_no_cut_off;
+  std::vector<float> m_harmonic_amp_relative;
+  std::vector<float> m_harmonic_amp;
+  std::vector<float> m_harmonic_freq;
+  std::vector<float> m_harmonic_noise;
+  FilterState m_filter_state; //the state of the filter at the beginning of the chunk
+  int m_note_index; //The index of the note in the m_note_data, or NO_NOTE
+  bool m_note_playing;
+  bool m_done;
 };
 
 struct lessFundametalFreq : public std::binary_function<AnalysisData &, AnalysisData &, bool>
 {
-  inline bool operator()(const AnalysisData & x, const AnalysisData & y);
+  inline bool operator()(const AnalysisData & p_x, const AnalysisData & p_y);
 };
 
 struct greaterFundametalFreq : public std::binary_function<AnalysisData &, AnalysisData &, bool>
 {
-  inline bool operator()(const AnalysisData &x, const AnalysisData &y);
+  inline bool operator()(const AnalysisData &p_x, const AnalysisData &p_y);
 };
 
 struct lessPitch : public std::binary_function<AnalysisData &, AnalysisData &, bool>
 {
-  inline bool operator()(const AnalysisData &x, const AnalysisData &y);
+  inline bool operator()(const AnalysisData &p_x, const AnalysisData &p_y);
 };
 
 struct greaterPitch : public std::binary_function<AnalysisData &, AnalysisData &, bool>
 {
-  inline bool operator()(const AnalysisData &x, const AnalysisData &y);
+  inline bool operator()(const AnalysisData &p_x, const AnalysisData &p_y);
 };
 
 struct lessValue : public std::binary_function<AnalysisData &, AnalysisData &, bool>
 {
-  int v;
-  inline lessValue(int v_);
-  inline bool operator()(const AnalysisData &x, const AnalysisData &y);
+  int m_value;
+  inline lessValue(int p_value);
+  inline bool operator()(const AnalysisData &p_x, const AnalysisData &p_y);
 };
 
 struct greaterValue : public std::binary_function<AnalysisData &, AnalysisData &, bool>
 {
-  int v;
-  inline greaterValue(int v_);
-  inline bool operator()(const AnalysisData &x, const AnalysisData &y);
+  int m_value;
+  inline greaterValue(int p_value);
+  inline bool operator()(const AnalysisData &p_x, const AnalysisData &p_y);
 };
 
 #include "analysisdata.hpp"
