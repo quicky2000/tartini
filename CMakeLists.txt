@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.12)
 project(tartini)
 
 #set(CMAKE_VERBOSE ON)
@@ -300,8 +300,8 @@ set(MY_SOURCE_FILES ${MY_SOURCE_FILES} ${MY_HEADER_FILES})
 
 # Qt Manangement
 #-----------------
-find_package( Qt4 REQUIRED QtCore QtGui QtOpenGL)
-include( ${QT_USE_FILE} )
+find_package( Qt5 COMPONENTS Core Widgets REQUIRED)
+#include( ${QT_USE_FILE} )
 add_definitions( ${QT_DEFINITIONS} )
 include_directories( ${CMAKE_BINARY_DIR} )
 
@@ -346,7 +346,7 @@ set(MY_INCLUDE_DIRECTORIES
    )
 
 add_executable(${PROJECT_NAME} ${MY_SOURCE_FILES} ${DEPENDANCY_OBJECTS})
-target_link_libraries(${PROJECT_NAME} ${LINKED_LIBRARIES} ${QT_LIBRARIES} -lfftw3f Qwt::Qwt -lasound OpenGL::GLU OpenGL::GL Threads::Threads)
+target_link_libraries(${PROJECT_NAME} ${LINKED_LIBRARIES} Qt5::Widgets Qt5::Core -lfftw3f Qwt::Qwt -lasound OpenGL::GLU OpenGL::GL Threads::Threads)
 target_compile_options(${PROJECT_NAME} PUBLIC ${MY_CPP_FLAGS})
 target_include_directories(${PROJECT_NAME} PUBLIC ${MY_INCLUDE_DIRECTORIES})
 

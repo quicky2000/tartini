@@ -11,6 +11,7 @@ before_install:
   - sudo apt-get install -y qt5-default libqwt-qt5-dev libfftw3-dev libglu1-mesa-dev libasound2-dev libqt5opengl5-dev
 
 script:
+  - ls -1 /usr/include | grep -i qwt
   - qmake pitch.pro
   - make
   - mkdir cmake-build; cd cmake-build
