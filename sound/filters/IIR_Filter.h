@@ -4,7 +4,9 @@
     begin                : 2004
     copyright            : (C) 2004-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
- 
+    copyright            : (C) 2019 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2 of the License, or
@@ -33,53 +35,53 @@ public:
      Create an IIR Filter from the coeff's a direct form II transposed structure
      if a[0] is not 1.0 then all the coefficients are normalized be dividing by a[0]
   */
-  IIR_Filter(double *b, double *a, int n, int m=-1);
+  IIR_Filter(double *p_b, double *p_a, int p_n, int p_m=-1);
   inline ~IIR_Filter(void) { }
 
   /**
      Initialise the IIR Filter from the coeff's a direct form II transposed structure
      if a[0] is not 1.0 then all the coefficients are normalized be dividing by a[0]
   */
-  void init(double *b, double *a, int n, int m=-1);
+  void init(double *p_b, double *p_a, int p_n, int p_m=-1);
   void print(void);
 
   /**
      Apply the filter to a block of data
-     @param input The data to be filtered
-     @param ourput Where the filtered result is stored. Note: The output is delayed by the filter size.
-     @param n The size of data
+     @param p_input The data to be filtered
+     @param p_output Where the filtered result is stored. Note: The output is delayed by the filter size.
+     @param p_n The size of data
   */
-  void filter(const float *input, float *output, int n);
+  void filter(const float *p_input, float *p_output, int p_n);
 
   /**
      Resets the filter back to an initial state of zeros
   */
   void reset(void);
-  void getState(FilterState *filterState) const;
-  void setState(const FilterState *filterState);
+  void getState(FilterState *p_filter_state) const;
+  void setState(const FilterState *p_filter_state);
 
  private:
   /**
      tempery buffer storage
   */
-  Array1d<double> bufx, bufy;
+  Array1d<double> m_buf_x, m_buf_y;
 
   /**
      The filter coefficient's
   */
-  Array1d<double> _a, _b;
+  Array1d<double> m_a, m_b;
 
   /**
      The current filter state (last n states of input and output)
   */
-  Array1d<double> _x, _y;
+  Array1d<double> m_x, m_y;
 
 };
 
 class FilterState
 {
  public:
-  Array1d<double> _x, _y;
+  Array1d<double> m_x, m_y;
 };
 
 #endif // IIR_FILTER_H

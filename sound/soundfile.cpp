@@ -388,10 +388,10 @@ void SoundFile::applyEqualLoudnessFilter(int p_n)
     for(l_c = 0; l_c < numChannels(); l_c++)
     {
 #ifdef PRINTF_DEBUG
-        printf("before: %f == %f\n", channels(l_c)->filterStateX1, channels(c)->m_high_pass_filter->_x[0]);
-        printf("before: %f == %f\n", channels(l_c)->filterStateX2, channels(c)->m_high_pass_filter->_x[1]);
-        printf("before: %f == %f\n", channels(l_c)->filterStateY1, channels(c)->m_high_pass_filter->_y[0]);
-        printf("before: %f == %f\n", channels(l_c)->filterStateY2, channels(c)->m_high_pass_filter->_y[1]);
+        printf("before: %f == %f\n", channels(l_c)->filterStateX1, channels(c)->m_high_pass_filter->m_x[0]);
+        printf("before: %f == %f\n", channels(l_c)->filterStateX2, channels(c)->m_high_pass_filter->m_x[1]);
+        printf("before: %f == %f\n", channels(l_c)->filterStateY1, channels(c)->m_high_pass_filter->m_y[0]);
+        printf("before: %f == %f\n", channels(l_c)->filterStateY2, channels(c)->m_high_pass_filter->m_y[1]);
 #endif // PRINTF_DEBUG
 
         m_channels(l_c)->apply_highpass_filter(m_temp_window_buffer[l_c], m_temp_window_buffer_filtered[l_c], p_n);

@@ -4,7 +4,9 @@
     begin                : 2004
     copyright            : (C) 2004-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
- 
+    copyright            : (C) 2019 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2 of the License, or
@@ -19,143 +21,142 @@
 #include "useful.h"
 
 //------------------------------------------------------------------------------
-IIR_Filter::IIR_Filter(double *b, double *a, int len_b, int len_a)
+IIR_Filter::IIR_Filter(double *p_b, double *p_a, int p_n, int p_m)
 {
-  init(b, a, len_b, len_a);
+  init(p_b, p_a, p_n, p_m);
 }
 
 //------------------------------------------------------------------------------
-void IIR_Filter::init(double *b, double *a, int len_b, int len_a)
+void IIR_Filter::init(double *p_b, double *p_a, int p_n, int p_m)
 {
-  //same number of terms in a and b
-  if(len_a == -1)
+  //same number of terms in p_a and p_b
+  if(p_m == -1)
     {
-      len_a = len_b;
+        p_m = p_n;
     }
 
-  _b.resize_copy(b, len_b);
-  _a.resize_copy(a+1, len_a-1);
+  m_b.resize_copy(p_b, p_n);
+  m_a.resize_copy(p_a + 1, p_m - 1);
 
-  if(a[0] != 1.0)
+  if(p_a[0] != 1.0)
     {
       //normalize
-      _a /= a[0];
-      _b /= a[0];
+      m_a /= p_a[0];
+        m_b /= p_a[0];
     }
   
-  _x.resize(_b.size()-1);
-  _y.resize(_a.size());
+  m_x.resize(m_b.size() - 1);
+  m_y.resize(m_a.size());
   reset();
 }
 
 //------------------------------------------------------------------------------
 void IIR_Filter::reset(void)
 {
-  _x.fill(0.0);
-  _y.fill(0.0);
+  m_x.fill(0.0);
+  m_y.fill(0.0);
 }
 
 //------------------------------------------------------------------------------
 void IIR_Filter::print(void)
 {
-  int j;
-  for(j = 0; j < _b.size(); ++j)
+  int l_j;
+  for(l_j = 0; l_j < m_b.size(); ++l_j)
     {
-      std::cout << "b[" << j+1 << "] = " << _b[j] << std::endl;
+      std::cout << "b[" << l_j + 1 << "] = " << m_b[l_j] << std::endl;
     }
-  for(j = 0; j < _a.size(); ++j)
+  for(l_j = 0; l_j < m_a.size(); ++l_j)
     {
-      std::cout << "a[1.0 " << j << "] = " << _a[j] << std::endl;
+      std::cout << "a[1.0 " << l_j << "] = " << m_a[l_j] << std::endl;
     }
 }
 
 //------------------------------------------------------------------------------
-void IIR_Filter::filter(const float *input, float *output, int n)
+void IIR_Filter::filter(const float *p_input, float *p_output, int p_n)
 {
-  int j, k;
-  int sizeX = _x.size();
-  int sizeY = _y.size();
-  bufx.resize_raw(sizeX+n);
-  bufy.resize_raw(sizeY+n);
+  int l_size_x = m_x.size();
+  int l_size_y = m_y.size();
+  m_buf_x.resize_raw(l_size_x + p_n);
+  m_buf_y.resize_raw(l_size_y + p_n);
 
-  for(int j = 0; j < sizeX; j++)
+  for(int l_j = 0; l_j < l_size_x; l_j++)
     {
-      bufx[j] = _x[j];
+        m_buf_x[l_j] = m_x[l_j];
     }
-  for(int j = 0; j < sizeY; j++)
+  for(int l_j = 0; l_j < l_size_y; l_j++)
     {
-      bufy[j] = _y[j];
+        m_buf_y[l_j] = m_y[l_j];
     }
-  for(int j = 0; j < n; j++)
+  for(int l_j = 0; l_j < p_n; l_j++)
     {
-      bufx[sizeX + j] = input[j];
+        m_buf_x[l_size_x + l_j] = p_input[l_j];
     }
 
-  double *y = bufy.begin() + sizeY;
-  double *x = bufx.begin() + sizeX;
-  float *outy = output;
+  double *l_y = m_buf_y.begin() + l_size_y;
+  double *l_x = m_buf_x.begin() + l_size_x;
+  float *outy = p_output;
 
   // do the special common case of 2, 2 more efficiently
-  if(sizeX == 2 && sizeY == 2)
+  if(l_size_x == 2 && l_size_y == 2)
     {
-      for(int j = 0; j < n; j++)
+      for(int l_j = 0; l_j < p_n; l_j++)
 	{
-	  double b0 = _b[0];
-	  double b1 = _b[1];
-	  double b2 = _b[2];
-	  double a0 = _a[0];
-	  double a1 = _a[1];
-	  *y = b0 * x[0] + b1 * x[-1] + b2 * x[-2] - a0 * y[-1] - a1 * y[-2];
-	  *outy++ = *y;
-	  y++;
-	  x++;
+	  double l_b0 = m_b[0];
+	  double l_b1 = m_b[1];
+	  double l_b2 = m_b[2];
+	  double l_a0 = m_a[0];
+	  double l_a1 = m_a[1];
+	  *l_y = l_b0 * l_x[0] + l_b1 * l_x[-1] + l_b2 * l_x[-2] - l_a0 * l_y[-1] - l_a1 * l_y[-2];
+	  *outy++ = *l_y;
+	  l_y++;
+	  l_x++;
 	}
-    _x[0] = bufx[n];
-    _x[1] = bufx[n+1];
-    _y[0] = bufy[n];
-    _y[1] = bufy[n+1];
+        m_x[0] = m_buf_x[p_n];
+        m_x[1] = m_buf_x[p_n + 1];
+        m_y[0] = m_buf_y[p_n];
+        m_y[1] = m_buf_y[p_n + 1];
     }
   else
     {
       // General case
-      for(j = 0; j < n; j++)
+      for(int l_j = 0; l_j < p_n; l_j++)
 	{
-	  *y = 0.0;
-	  for(k = 0; k < sizeX + 1; k++)
+	  *l_y = 0.0;
+	  for(int l_k = 0; l_k < l_size_x + 1; l_k++)
 	    {
-	      *y += _b[k] * x[-k];
+	      *l_y += m_b[l_k] * l_x[-l_k];
 	    }
-	  for(k = 0; k < sizeY;   k++)
+	  for(int l_k = 0; l_k < l_size_y; l_k++)
 	    {
-	      *y -= _a[k] * y[-k - 1];
+	      *l_y -= m_a[l_k] * l_y[-l_k - 1];
 	    }
-	  *outy++ = *y;
-	  y++;
-	  x++;
+	  *outy++ = *l_y;
+	  l_y++;
+	  l_x++;
 	}
-      for(k = 0; k < sizeX; k++)
+      for(int l_k = 0; l_k < l_size_x; l_k++)
 	{
-	  _x[k] = bufx[n + k];
+        m_x[l_k] = m_buf_x[p_n + l_k];
 	}
-      for(k = 0; k < sizeY; k++)
+      for(int l_k = 0; l_k < l_size_y; l_k++)
 	{
-	  _y[k] = bufy[n + k];
+        m_y[l_k] = m_buf_y[p_n + l_k];
 	}
     }
 }
 
 //------------------------------------------------------------------------------
-void IIR_Filter::getState(FilterState *filterState) const
+void IIR_Filter::getState(FilterState *p_filter_state) const
 {
-  filterState->_x = _x;
-  filterState->_y = _y;
+    p_filter_state->m_x = m_x;
+    p_filter_state->m_y = m_y;
 }
 
 //------------------------------------------------------------------------------
-void IIR_Filter::setState(const FilterState *filterState)
+void IIR_Filter::setState(const FilterState *p_filter_state)
 {
-  _x = filterState->_x;
-  _y = filterState->_y;
+    m_x = p_filter_state->m_x;
+    m_y = p_filter_state->m_y;
 }
 
 // EOF
