@@ -4,7 +4,9 @@
     begin                : 2004
     copyright            : (C) 2004-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
- 
+    copyright            : (C) 2019 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2 of the License, or
@@ -19,78 +21,78 @@
 #include "useful.h"
 
 //------------------------------------------------------------------------------
-FastSmoothedAveragingFilter::FastSmoothedAveragingFilter(int size)
+FastSmoothedAveragingFilter::FastSmoothedAveragingFilter(int p_size)
 {
-  init(size);
+  init(p_size);
 }
 
 //------------------------------------------------------------------------------
-void FastSmoothedAveragingFilter::init(int size)
+void FastSmoothedAveragingFilter::init(int p_size)
 {
-  _size = size;
-  _size_left = _size / 2;
-  _size_right = _size - _size_left;
-  _angle = -2 * M_PI / double(size + 1);
-  _sin_angle = sin(_angle);
-  _cos_angle = cos(_angle);
-  _sum = 0;
-  for(int j = 0; j < size; j++)
+    m_size = p_size;
+    m_size_left = m_size / 2;
+    m_size_right = m_size - m_size_left;
+    m_angle = -2 * M_PI / double(p_size + 1);
+    m_sin_angle = sin(m_angle);
+    m_cos_angle = cos(m_angle);
+    m_sum = 0;
+  for(int l_j = 0; l_j < p_size; l_j++)
     {
-      _sum += 1.0 - cos(( j + 1) * _angle);
+        m_sum += 1.0 - cos((l_j + 1) * m_angle);
     }
 
-  cos_sum = sin_sum = total_sum = 0.0;
-  _x.resize(size);
+    m_cos_sum = m_sin_sum = m_total_sum = 0.0;
+  m_x.resize(p_size);
   reset();
 }
 
 #include "fast_smooth.h"
 
 //------------------------------------------------------------------------------
-void FastSmoothedAveragingFilter::filter(const float *input, float *output, int n)
+void FastSmoothedAveragingFilter::filter(const float *p_input, float *p_output, int p_n)
 {
   //blur stays centered if odd
-  int j;
-  if(n > _size)
+  int l_j;
+  if(p_n > m_size)
     {
-      for(j = 0; j < _size; j++)
+      for(l_j = 0; l_j < m_size; l_j++)
 	{
-	  cos_sum += input[j];
-	  fast_complex_rotate(sin_sum, cos_sum, _sin_angle, _cos_angle);
-	  cos_sum -= _x[j];
-	  total_sum += input[j] - _x[j];
-	  output[j] = (total_sum - cos_sum) / _sum;
+        m_cos_sum += p_input[l_j];
+	  fast_complex_rotate(m_sin_sum, m_cos_sum, m_sin_angle, m_cos_angle);
+        m_cos_sum -= m_x[l_j];
+        m_total_sum += p_input[l_j] - m_x[l_j];
+        p_output[l_j] = (m_total_sum - m_cos_sum) / m_sum;
 	}
-      for(j = _size; j < n; j++)
+      for(l_j = m_size; l_j < p_n; l_j++)
 	{
-	  cos_sum += input[j];
-	  fast_complex_rotate(sin_sum, cos_sum, _sin_angle, _cos_angle);
-	  cos_sum -= input[j - _size];
-	  total_sum += input[j] - input[j - _size];
-	  output[j] = (total_sum - cos_sum) / _sum;
+        m_cos_sum += p_input[l_j];
+	  fast_complex_rotate(m_sin_sum, m_cos_sum, m_sin_angle, m_cos_angle);
+        m_cos_sum -= p_input[l_j - m_size];
+        m_total_sum += p_input[l_j] - p_input[l_j - m_size];
+        p_output[l_j] = (m_total_sum - m_cos_sum) / m_sum;
 	}
-      std::copy(input + n - _size, input + n, _x.begin());
+      std::copy(p_input + p_n - m_size, p_input + p_n, m_x.begin());
     }
   else
     {
-      for(j = 0; j < n; j++)
+      for(l_j = 0; l_j < p_n; l_j++)
 	{
-	  cos_sum += input[j];
-	  fast_complex_rotate(sin_sum, cos_sum, _sin_angle, _cos_angle);
-	  cos_sum -= _x[j];
-	  total_sum += input[j] - _x[j];
-	  output[j] = (total_sum - cos_sum) / _sum;
+        m_cos_sum += p_input[l_j];
+	  fast_complex_rotate(m_sin_sum, m_cos_sum, m_sin_angle, m_cos_angle);
+        m_cos_sum -= m_x[l_j];
+        m_total_sum += p_input[l_j] - m_x[l_j];
+        p_output[l_j] = (m_total_sum - m_cos_sum) / m_sum;
 	}
-      _x.shift_left(n);
-      std::copy(input, input + n, _x.end() - n);
+      m_x.shift_left(p_n);
+      std::copy(p_input, p_input + p_n, m_x.end() - p_n);
     }
 }
 
 //------------------------------------------------------------------------------
 void FastSmoothedAveragingFilter::reset(void)
 {
-  cos_sum = sin_sum = total_sum = 0.0;
-  _x.fill(0.0f);
+    m_cos_sum = m_sin_sum = m_total_sum = 0.0;
+  m_x.fill(0.0f);
 }
 
 //EOF
