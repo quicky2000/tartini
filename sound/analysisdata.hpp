@@ -22,38 +22,38 @@
 //------------------------------------------------------------------------------
 float AnalysisData::getValue(size_t p_index)const
 {
-  assert(p_index < NUM_AMP_MODES);
-  return m_values[p_index];
+    assert(p_index < NUM_AMP_MODES);
+    return m_values[p_index];
 }
 
 //------------------------------------------------------------------------------
 float AnalysisData::getPeriod(void)const
 {
-  return m_period;
+    return m_period;
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::setPeriod(float p_period)
 {
-  m_period = p_period;
+    m_period = p_period;
 }
 
 //------------------------------------------------------------------------------
 float AnalysisData::getFundamentalFreq(void)const
 {
-  return m_fundamental_freq;
+    return m_fundamental_freq;
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::setFundamentalFreq(float p_fundamental_freq)
 {
-  m_fundamental_freq = p_fundamental_freq;
+    m_fundamental_freq = p_fundamental_freq;
 }
 
 //------------------------------------------------------------------------------
 float AnalysisData::getFreqCentroid(void)const
 {
-  return m_freq_centroid;
+    return m_freq_centroid;
 }
 
 //------------------------------------------------------------------------------
@@ -65,19 +65,19 @@ void AnalysisData::setFreqCentroid(float p_value)
 //------------------------------------------------------------------------------
 float AnalysisData::getPitch(void)const
 {
-  return m_pitch;
+    return m_pitch;
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::setPitch(float p_pitch)
 {
-  m_pitch = p_pitch;
+    m_pitch = p_pitch;
 }
 
 //------------------------------------------------------------------------------
 const double & AnalysisData::getPitchSum(void)const
 {
-  return m_pitch_sum;
+    return m_pitch_sum;
 }
 
 //------------------------------------------------------------------------------
@@ -89,7 +89,7 @@ void AnalysisData::setPitchSum(const double & p_pitch_sum)
 //------------------------------------------------------------------------------
 const double & AnalysisData::getPitch2Sum(void)const
 {
-  return m_pitch_squared_sum;
+    return m_pitch_squared_sum;
 }
 
 //------------------------------------------------------------------------------
@@ -101,7 +101,7 @@ void AnalysisData::setPitch2Sum(const double & p_pitch_2_sum)
 //------------------------------------------------------------------------------
 const double & AnalysisData::getShortTermMean(void)const
 {
-  return m_short_term_mean;
+    return m_short_term_mean;
 }
 
 //------------------------------------------------------------------------------
@@ -113,7 +113,7 @@ void AnalysisData::setShortTermMean(const double & p_short_term_mean)
 //------------------------------------------------------------------------------
 const double & AnalysisData::getShortTermDeviation(void)const
 {
-  return m_short_term_deviation;
+    return m_short_term_deviation;
 }
 
 //------------------------------------------------------------------------------
@@ -125,19 +125,19 @@ void AnalysisData::setShortTermDeviation(const double & p_short_term_deviation)
 //------------------------------------------------------------------------------
 const double & AnalysisData::getLongTermMean(void)const
 {
-  return m_long_term_mean;
+    return m_long_term_mean;
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::setLongTermMean(const double & p_long_term_mean)
 {
-  m_long_term_mean = p_long_term_mean;
+    m_long_term_mean = p_long_term_mean;
 }
 
 //------------------------------------------------------------------------------
 const double & AnalysisData::getLongTermDeviation(void)const
 {
-  return m_long_term_deviation;
+    return m_long_term_deviation;
 }
 
 //------------------------------------------------------------------------------
@@ -149,7 +149,7 @@ void AnalysisData::setLongTermDeviation(const double & p_long_term_deviation)
 //------------------------------------------------------------------------------
 const double & AnalysisData::getSpread(void)const
 {
-  return m_spread;
+    return m_spread;
 }
 
 //------------------------------------------------------------------------------
@@ -161,7 +161,7 @@ void AnalysisData::setSpread(const double & p_spread)
 //------------------------------------------------------------------------------
 const double & AnalysisData::getSpread2(void)const
 {
-  return m_spread_2;
+    return m_spread_2;
 }
 
 //------------------------------------------------------------------------------
@@ -173,7 +173,7 @@ void AnalysisData::setSpread2(const double & p_spread2)
 //------------------------------------------------------------------------------
 float AnalysisData::getVibratoPitch(void)const
 {
-  return m_vibrato_pitch;
+    return m_vibrato_pitch;
 }
 
 //------------------------------------------------------------------------------
@@ -185,7 +185,7 @@ void AnalysisData::setVibratoPitch(float p_vibrato_pitch)
 //------------------------------------------------------------------------------
 float AnalysisData::getVibratoWidth(void)const
 {
-  return m_vibrato_width;
+    return m_vibrato_width;
 }
 
 //------------------------------------------------------------------------------
@@ -197,7 +197,7 @@ void AnalysisData::setVibratoWidth(float p_vibrato_width)
 //------------------------------------------------------------------------------
 float AnalysisData::getVibratoWidthAdjust(void)const
 {
-  return m_vibrato_width_adjust;
+    return m_vibrato_width_adjust;
 }
 
 //------------------------------------------------------------------------------
@@ -209,7 +209,7 @@ void AnalysisData::setVibratoWidthAdjust(float p_vibrato_width_adjust)
 //------------------------------------------------------------------------------
 float AnalysisData::getVibratoSpeed(void)const
 {
-  return m_vibrato_speed;
+    return m_vibrato_speed;
 }
 
 //------------------------------------------------------------------------------
@@ -221,7 +221,7 @@ void AnalysisData::setVibratoSpeed(float p_vibrato_speed)
 //------------------------------------------------------------------------------
 float AnalysisData::getVibratoPhase(void)const
 {
-  return m_vibrato_phase;
+    return m_vibrato_phase;
 }
 
 //------------------------------------------------------------------------------
@@ -233,7 +233,7 @@ void AnalysisData::setVibratoPhase(float p_vibrato_phase)
 //------------------------------------------------------------------------------
 float AnalysisData::getVibratoError(void)const
 {
-  return m_vibrato_error;
+    return m_vibrato_error;
 }
 
 //------------------------------------------------------------------------------
@@ -245,19 +245,19 @@ void AnalysisData::setVibratoError(float p_vibrato_error)
 //------------------------------------------------------------------------------
 int AnalysisData::getReason(void)const
 {
-  return m_reason;
+    return m_reason;
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::setReason(int p_reason)
 {
-  m_reason = p_reason;
+    m_reason = p_reason;
 }
 
 //------------------------------------------------------------------------------
 int AnalysisData::getHighestCorrelationIndex(void)const
 {
-  return m_highest_correlation_index;
+    return m_highest_correlation_index;
 }
 
 //------------------------------------------------------------------------------
@@ -269,7 +269,7 @@ void AnalysisData::setHighestCorrelationIndex(int p_index)
 //------------------------------------------------------------------------------
 int AnalysisData::getChosenCorrelationIndex(void)const
 {
-  return m_chosen_correlation_index;
+    return m_chosen_correlation_index;
 }
 
 //------------------------------------------------------------------------------
@@ -281,7 +281,7 @@ void AnalysisData::setChosenCorrelationIndex(int p_index)
 //------------------------------------------------------------------------------
 float AnalysisData::getPeriodRatio(void)const
 {
-  return m_period_ratio;
+    return m_period_ratio;
 }
 
 //------------------------------------------------------------------------------
@@ -293,7 +293,7 @@ void AnalysisData::setPeriodRatio(float p_period_ratio)
 //------------------------------------------------------------------------------
 int AnalysisData::getCepstrumIndex(void)const
 {
-  return m_cepstrum_index;
+    return m_cepstrum_index;
 }
 
 //------------------------------------------------------------------------------
@@ -305,7 +305,7 @@ void AnalysisData::setCepstrumIndex(int p_index)
 //------------------------------------------------------------------------------
 float AnalysisData::getCepstrumPitch(void)const
 {
-  return m_cepstrum_pitch;
+    return m_cepstrum_pitch;
 }
 
 //------------------------------------------------------------------------------
@@ -317,107 +317,109 @@ void AnalysisData::setCepstrumPitch(float p_cepstrum_pitch)
 //------------------------------------------------------------------------------
 bool AnalysisData::isPeriodEstimatesEmpty(void)const
 {
-  return m_period_estimates.empty();
+    return m_period_estimates.empty();
 }
 
 //------------------------------------------------------------------------------
 size_t AnalysisData::getPeriodEstimatesSize(void)const
 {
-  return m_period_estimates.size();
+    return m_period_estimates.size();
 }
 
 //------------------------------------------------------------------------------
 float AnalysisData::getPeriodEstimatesAt(size_t p_index)const
 {
 #ifdef MYDEBUG
-  return m_period_estimates.at(p_index);
-#else
-  return m_period_estimates[p_index];
+    return m_period_estimates.at(p_index);
+#else // MYDEBUG
+    return m_period_estimates[p_index];
 #endif // MYDEBUG
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::clearPeriodEstimates(void)
 {
-  m_period_estimates.clear();
+    m_period_estimates.clear();
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::addPeriodEstimates(float p_value)
 {
-  m_period_estimates.push_back(p_value);
+    m_period_estimates.push_back(p_value);
 }
 
 //------------------------------------------------------------------------------
 float AnalysisData::searchClosestPeriodEstimates(const float & p_value)const
 {
-  std::vector<float>::const_iterator l_closest_iter = binary_search_closest(m_period_estimates.begin(), m_period_estimates.end(), p_value);
-  return *l_closest_iter;
+    std::vector<float>::const_iterator l_closest_iter = binary_search_closest(m_period_estimates.begin(), m_period_estimates.end(), p_value);
+    return *l_closest_iter;
 }
 
 //------------------------------------------------------------------------------
 size_t AnalysisData::getPeriodEstimatesAmpSize(void)const
 {
-  return m_period_estimates_amp.size();
+    return m_period_estimates_amp.size();
 }
 
 //------------------------------------------------------------------------------
 float AnalysisData::getPeriodEstimatesAmpAt(size_t p_index)const
 {
 #ifdef MYDEBUG
-  return m_period_estimates_amp.at(p_index);
-#else
-  return m_period_estimates_amp[p_index];
+    return m_period_estimates_amp.at(p_index);
+#else // MYDEBUG
+    return m_period_estimates_amp[p_index];
 #endif // MYDEBUG
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::clearPeriodEstimatesAmp(void)
 {
-  m_period_estimates_amp.clear();
+    m_period_estimates_amp.clear();
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::addPeriodEstimatesAmp(float p_value)
 {
-  m_period_estimates_amp.push_back(p_value);
+    m_period_estimates_amp.push_back(p_value);
 }
 
 //------------------------------------------------------------------------------
 int AnalysisData::getPeriodEstimatesAmpMaxElementIndex(void)const
 {
-  return int(std::max_element(m_period_estimates_amp.begin(), m_period_estimates_amp.end()) - m_period_estimates_amp.begin());
+    return int(std::max_element(m_period_estimates_amp.begin(), m_period_estimates_amp.end()) - m_period_estimates_amp.begin());
 }
 
 //------------------------------------------------------------------------------
 size_t AnalysisData::getHarmonicAmpNoCutOffSize(void)const
 {
-  return m_harmonic_amp_no_cut_off.size();
+    return m_harmonic_amp_no_cut_off.size();
 }
 
 //------------------------------------------------------------------------------
 float AnalysisData::getHarmonicAmpNoCutOffAt(size_t p_index)const
 {
 #ifdef MYDEBUG
-  return m_harmonic_amp_no_cut_off.at(p_index);
-#else
-  return m_harmonic_amp_no_cut_off[p_index];
+    return m_harmonic_amp_no_cut_off.at(p_index);
+#else // MYDEBUG
+    return m_harmonic_amp_no_cut_off[p_index];
 #endif // MYDEBUG
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::resizeHarmonicAmpNoCutOff(size_t p_size)
 {
-  m_harmonic_amp_no_cut_off.resize(p_size);
+    m_harmonic_amp_no_cut_off.resize(p_size);
 }
 
 //------------------------------------------------------------------------------
-void AnalysisData::setHarmonicAmpNoCutOffAt(size_t p_index, float p_value)
+void AnalysisData::setHarmonicAmpNoCutOffAt( size_t p_index
+                                           , float p_value
+                                           )
 {
 #ifdef MYDEBUG
     m_harmonic_amp_no_cut_off.at(p_index) = p_value;
-#else
-  m_harmonic_amp_no_cut_off[p_index] = p_value;
+#else // MYDEBUG
+    m_harmonic_amp_no_cut_off[p_index] = p_value;
 #endif // MYDEBUG
 }
 
@@ -425,41 +427,43 @@ void AnalysisData::setHarmonicAmpNoCutOffAt(size_t p_index, float p_value)
 float AnalysisData::getHarmonicAmpRelativeAt(size_t p_index)const
 {
 #ifdef MYDEBUG
-  return m_harmonic_amp_relative.at(p_index);
-#else
-  return m_harmonic_amp_relative[p_index];
+    return m_harmonic_amp_relative.at(p_index);
+#else // MYDEBUG
+    return m_harmonic_amp_relative[p_index];
 #endif // MYDEBUG
 }
 
 //------------------------------------------------------------------------------
 size_t AnalysisData::getHarmonicAmpRelativeSize(void)const
 {
-  return m_harmonic_amp_relative.size();
+    return m_harmonic_amp_relative.size();
 }
 
 //------------------------------------------------------------------------------
 float AnalysisData::getHarmonicAmpAt(size_t p_index)const
 {
 #ifdef MYDEBUG
-  return m_harmonic_amp.at(p_index);
-#else
-  return m_harmonic_amp[p_index];
+    return m_harmonic_amp.at(p_index);
+#else // MYDEBUG
+    return m_harmonic_amp[p_index];
 #endif // MYDEBUG
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::resizeHarmonicAmp(size_t p_size)
 {
-  m_harmonic_amp.resize(p_size);
+    m_harmonic_amp.resize(p_size);
 }
 
 //------------------------------------------------------------------------------
-void AnalysisData::setHarmonicAmpAt(size_t p_index, float p_value)
+void AnalysisData::setHarmonicAmpAt( size_t p_index
+                                   , float p_value
+                                   )
 {
 #ifdef MYDEBUG
     m_harmonic_amp.at(p_index) = p_value;
-#else
-  m_harmonic_amp[p_index] = p_value;
+#else // MYDEBUG
+    m_harmonic_amp[p_index] = p_value;
 #endif // MYDEBUG
 }
 
@@ -467,31 +471,33 @@ void AnalysisData::setHarmonicAmpAt(size_t p_index, float p_value)
 float AnalysisData::getHarmonicFreqAt(size_t p_index)const
 {
 #ifdef MYDEBUG
-  return m_harmonic_freq.at(p_index);
-#else
-  return m_harmonic_freq[p_index];
+    return m_harmonic_freq.at(p_index);
+#else // MYDEBUG
+    return m_harmonic_freq[p_index];
 #endif // MYDEBUG
 }
 
 //------------------------------------------------------------------------------
 size_t AnalysisData::getHarmonicFreqSize(void)const
 {
-  return m_harmonic_freq.size();
+    return m_harmonic_freq.size();
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::resizeHarmonicFreq(size_t p_size)
 {
-  m_harmonic_freq.resize(p_size);
+    m_harmonic_freq.resize(p_size);
 }
 
 //------------------------------------------------------------------------------
-void AnalysisData::setHarmonicFreqAt(size_t p_index, float p_value)
+void AnalysisData::setHarmonicFreqAt( size_t p_index
+                                    , float p_value
+                                    )
 {
 #ifdef MYDEBUG
     m_harmonic_freq.at(p_index) = p_value;
-#else
-  m_harmonic_freq[p_index] = p_value;
+#else // MYDEBUG
+    m_harmonic_freq[p_index] = p_value;
 #endif // MYDEBUG
 }
 
@@ -499,25 +505,27 @@ void AnalysisData::setHarmonicFreqAt(size_t p_index, float p_value)
 float AnalysisData::getHarmonicNoiseAt(size_t p_index)const
 {
 #ifdef MYDEBUG
-  return m_harmonic_noise.at(p_index);
-#else
-  return m_harmonic_noise[p_index];
+    return m_harmonic_noise.at(p_index);
+#else // MYDEBUG
+    return m_harmonic_noise[p_index];
 #endif // MYDEBUG
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::resizeHarmonicNoise(size_t p_size)
 {
-  m_harmonic_noise.resize(p_size);
+    m_harmonic_noise.resize(p_size);
 }
 
 //------------------------------------------------------------------------------
-void AnalysisData::setHarmonicNoiseAt(size_t p_index, float p_value)
+void AnalysisData::setHarmonicNoiseAt( size_t p_index
+                                     , float p_value
+                                     )
 {
 #ifdef MYDEBUG
     m_harmonic_noise.at(p_index) = p_value;
-#else
-  m_harmonic_noise[p_index] = p_value;
+#else // MYDEBUG
+    m_harmonic_noise[p_index] = p_value;
 #endif // MYDEBUG
 }
 
@@ -530,7 +538,7 @@ void AnalysisData::setFilterState(const FilterState & p_filter_state)
 //------------------------------------------------------------------------------
 int AnalysisData::getNoteIndex(void)const
 {
-  return m_note_index;
+    return m_note_index;
 }
 
 //------------------------------------------------------------------------------
@@ -548,133 +556,145 @@ void AnalysisData::setNotePlaying(bool p_note_playing)
 //------------------------------------------------------------------------------
 bool AnalysisData::isNotePlaying(void)const
 {
-  return m_note_playing;
+    return m_note_playing;
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::setDone(bool p_done)
 {
-  m_done = p_done;
+    m_done = p_done;
 }
 
 //------------------------------------------------------------------------------
 bool AnalysisData::isDone(void)const
 {
-  return m_done;
+    return m_done;
 }
 
 //------------------------------------------------------------------------------
 float AnalysisData::getLogRms(void)const
 {
-  return m_values[AMPLITUDE_RMS];
+    return m_values[AMPLITUDE_RMS];
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::setLogRms(float p_log_rms)
 {
-  m_values[AMPLITUDE_RMS] = p_log_rms;
+    m_values[AMPLITUDE_RMS] = p_log_rms;
 }
 
 //------------------------------------------------------------------------------
 float AnalysisData::getMaxIntensityDB(void)const
 {
-  return m_values[AMPLITUDE_MAX_INTENSITY];
+    return m_values[AMPLITUDE_MAX_INTENSITY];
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::setMaxIntensityDB(float p_value)
 {
-  m_values[AMPLITUDE_MAX_INTENSITY] = p_value;
+    m_values[AMPLITUDE_MAX_INTENSITY] = p_value;
 }
 
 //------------------------------------------------------------------------------
 float AnalysisData::getCorrelation(void)const
 {
-  return m_values[AMPLITUDE_CORRELATION];
+    return m_values[AMPLITUDE_CORRELATION];
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::setCorrelation(float p_value)
 {
-  m_values[AMPLITUDE_CORRELATION] = p_value;
+    m_values[AMPLITUDE_CORRELATION] = p_value;
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::setChangeness(float p_value)
 {
-  m_values[FREQ_CHANGENESS] = p_value;
+    m_values[FREQ_CHANGENESS] = p_value;
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::setDeltaFreqCentroid(float p_value)
 {
-  m_values[DELTA_FREQ_CENTROID] = p_value;
+    m_values[DELTA_FREQ_CENTROID] = p_value;
 }
 
 //------------------------------------------------------------------------------
 float AnalysisData::getVolumeValue(const GData & p_data)const
 {
-  return (dB2Normalised(m_values[AMPLITUDE_RMS],p_data) + m_values[AMPLITUDE_CORRELATION] - 1.0f) * 0.2;
+    return (dB2Normalised(m_values[AMPLITUDE_RMS], p_data) + m_values[AMPLITUDE_CORRELATION] - 1.0f) * 0.2;
 }
 
 //------------------------------------------------------------------------------
 float AnalysisData::getNoteScore(void)const
 {
-  return m_values[NOTE_SCORE];
+    return m_values[NOTE_SCORE];
 }
 
 //------------------------------------------------------------------------------
 float AnalysisData::getNoteChangeScore(void)const
 {
-  return m_values[NOTE_CHANGE_SCORE];
+    return m_values[NOTE_CHANGE_SCORE];
 }
 
 //------------------------------------------------------------------------------
-bool lessFundametalFreq::operator()(const AnalysisData & p_x, const AnalysisData & p_y)
+bool lessFundametalFreq::operator()( const AnalysisData & p_x
+                                   , const AnalysisData & p_y
+                                   )
 {
-  return p_x.getFundamentalFreq() < p_y.getFundamentalFreq();
+    return p_x.getFundamentalFreq() < p_y.getFundamentalFreq();
 }
 
 //------------------------------------------------------------------------------
-bool greaterFundametalFreq::operator()(const AnalysisData &p_x, const AnalysisData &p_y)
+bool greaterFundametalFreq::operator()( const AnalysisData & p_x
+                                      , const AnalysisData & p_y
+                                      )
 {
-  return p_x.getFundamentalFreq() > p_y.getFundamentalFreq();
+    return p_x.getFundamentalFreq() > p_y.getFundamentalFreq();
 }
 
 //------------------------------------------------------------------------------
-bool lessPitch::operator()(const AnalysisData &p_x, const AnalysisData &p_y)
+bool lessPitch::operator()( const AnalysisData & p_x
+                          , const AnalysisData & p_y
+                          )
 {
-  return p_x.getPitch() < p_y.getPitch();
+    return p_x.getPitch() < p_y.getPitch();
 }
 
 //------------------------------------------------------------------------------
-bool greaterPitch::operator()(const AnalysisData &p_x, const AnalysisData &p_y)
+bool greaterPitch::operator()( const AnalysisData & p_x
+                             , const AnalysisData & p_y
+                             )
 {
-  return p_x.getPitch() > p_y.getPitch();
+    return p_x.getPitch() > p_y.getPitch();
 }
 
 //------------------------------------------------------------------------------
 lessValue::lessValue(int p_value)
 {
-  m_value = p_value;
+    m_value = p_value;
 }
 
 //------------------------------------------------------------------------------
-bool lessValue::operator()(const AnalysisData &p_x, const AnalysisData &p_y)
+bool lessValue::operator()( const AnalysisData & p_x
+                          , const AnalysisData & p_y
+                          )
 {
-  return p_x.getValue(m_value) < p_y.getValue(m_value);
+    return p_x.getValue(m_value) < p_y.getValue(m_value);
 }
 
 //------------------------------------------------------------------------------
 greaterValue::greaterValue(int p_value)
 {
-  m_value = p_value;
+    m_value = p_value;
 }
 
 //------------------------------------------------------------------------------
-bool greaterValue::operator()(const AnalysisData &p_x, const AnalysisData &p_y)
+bool greaterValue::operator()( const AnalysisData & p_x
+                             , const AnalysisData & p_y
+                             )
 {
-  return p_x.getValue(m_value) > p_y.getValue(m_value);
+    return p_x.getValue(m_value) > p_y.getValue(m_value);
 }
 
 //EOF
