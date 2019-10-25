@@ -4,7 +4,9 @@
     begin                : 2004
     copyright            : (C) 2004-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
- 
+    copyright            : (C) 2019 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2 of the License, or
@@ -26,16 +28,16 @@ class FixedAverageFilter : public Filter
 {
  public:
   inline FixedAverageFilter(void) { }
-  FixedAverageFilter(int size);
-  void init(int size);
-  void filter(const float *input, float *output, int n);
+  FixedAverageFilter(int p_size);
+  void init(int p_size);
+  void filter(const float *p_input, float *p_output, int p_n);
   void reset(void);
-  int delay(void) const { return _size / 2; }
+  int delay(void) const { return m_size / 2; }
 
  private:
-  int _size;
-  double total_sum;
-  Array1d<float> _x; // the last size input values
+  int m_size;
+  double m_total_sum;
+  Array1d<float> m_x; // the last size input values
 };
 
 #endif // FIXED_AVERAGING_FILTER_H
