@@ -4,7 +4,9 @@
     begin                : 2004
     copyright            : (C) 2004-2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
- 
+    copyright            : (C) 2019 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2 of the License, or
@@ -19,69 +21,69 @@
 #include "useful.h"
 
 //------------------------------------------------------------------------------
-GrowingAverageFilter::GrowingAverageFilter(int size)
+GrowingAverageFilter::GrowingAverageFilter(int p_size)
 {
-  init(size);
+  init(p_size);
 }
 
 //------------------------------------------------------------------------------
-void GrowingAverageFilter::init(int size)
+void GrowingAverageFilter::init(int p_size)
 {
-  _size = size;
-  _count = 0;
-  total_sum = 0;
-  _x.resize(size);
+    m_size = p_size;
+    m_count = 0;
+    m_total_sum = 0;
+  m_x.resize(p_size);
   reset();
 }
 
 //------------------------------------------------------------------------------
-void GrowingAverageFilter::filter(const float *input, float *output, int n)
+void GrowingAverageFilter::filter(const float *p_input, float *p_output, int p_n)
 {
-  int j;
-  if(n > _size)
+  int l_j;
+  if(p_n > m_size)
     {
-      for(j = 0; j < _size; j++)
+      for(l_j = 0; l_j < m_size; l_j++)
 	{
-	  if(_count < _size)
+	  if(m_count < m_size)
 	    {
-	      _count++;
+	      m_count++;
 	    }
-	  total_sum += input[j] - _x[j];
-	  output[j] = total_sum / _count;
+        m_total_sum += p_input[l_j] - m_x[l_j];
+        p_output[l_j] = m_total_sum / m_count;
 	}
-      for(j = _size; j < n; j++)
+      for(l_j = m_size; l_j < p_n; l_j++)
 	{
-	  if(_count < _size)
+	  if(m_count < m_size)
 	    {
-	      _count++;
+	      m_count++;
 	    }
-	  total_sum += input[j] - input[j - _size];
-	  output[j] = total_sum / _count;
+        m_total_sum += p_input[l_j] - p_input[l_j - m_size];
+        p_output[l_j] = m_total_sum / m_count;
 	}
-      std::copy(input + n - _size, input + n, _x.begin());
+      std::copy(p_input + p_n - m_size, p_input + p_n, m_x.begin());
     }
   else
     {
-      for(j = 0; j < n; j++)
+      for(l_j = 0; l_j < p_n; l_j++)
 	{
-	  if(_count < _size)
+	  if(m_count < m_size)
 	    {
-	      _count++;
+	      m_count++;
 	    }
-	  total_sum += input[j] - _x[j];
-	  output[j] = total_sum / _count;
+        m_total_sum += p_input[l_j] - m_x[l_j];
+        p_output[l_j] = m_total_sum / m_count;
 	}
-      _x.shift_left(n);
-      std::copy(input, input + n, _x.end() - n);
+      m_x.shift_left(p_n);
+      std::copy(p_input, p_input + p_n, m_x.end() - p_n);
     }
 }
 
 //------------------------------------------------------------------------------
 void GrowingAverageFilter::reset(void)
 {
-  _count = 0;
-  total_sum = 0.0;
-  _x.fill(0.0f);
+    m_count = 0;
+    m_total_sum = 0.0;
+  m_x.fill(0.0f);
 }
 
 // EOF
