@@ -56,6 +56,8 @@ int main(int p_argc, char **p_argv)
 
   fprintf(stderr, "QT_VERSION_STR=%s\n", QT_VERSION_STR);
   fprintf(stderr, "QT_VERSION=%x\n", QT_VERSION);
+  std::cerr << "QWT_VERSION_STR=" << QWT_VERSION_STR << std::endl;
+  std::cerr << "QWT_VERSION=" << std::hex << QWT_VERSION << std::dec << std::endl;
 
   //Create one instance only of the global data
   g_data = new GData();
