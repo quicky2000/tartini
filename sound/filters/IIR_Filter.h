@@ -27,61 +27,78 @@ class FilterState;
 */
 class IIR_Filter : public Filter
 {
-public:
 
-  inline IIR_Filter(void) { }
+  public:
 
-  /**
-     Create an IIR Filter from the coeff's a direct form II transposed structure
-     if a[0] is not 1.0 then all the coefficients are normalized be dividing by a[0]
-  */
-  IIR_Filter(double *p_b, double *p_a, int p_n, int p_m=-1);
-  inline ~IIR_Filter(void) { }
+    inline IIR_Filter(void) { }
 
-  /**
-     Initialise the IIR Filter from the coeff's a direct form II transposed structure
-     if a[0] is not 1.0 then all the coefficients are normalized be dividing by a[0]
-  */
-  void init(double *p_b, double *p_a, int p_n, int p_m=-1);
-  void print(void);
+    /**
+       Create an IIR Filter from the coeff's a direct form II transposed structure
+       if a[0] is not 1.0 then all the coefficients are normalized be dividing by a[0]
+    */
+    IIR_Filter( double * p_b
+              , double * p_a
+              , int p_n
+              , int p_m = -1
+              );
+    inline ~IIR_Filter(void) { }
 
-  /**
-     Apply the filter to a block of data
-     @param p_input The data to be filtered
-     @param p_output Where the filtered result is stored. Note: The output is delayed by the filter size.
-     @param p_n The size of data
-  */
-  void filter(const float *p_input, float *p_output, int p_n);
 
-  /**
-     Resets the filter back to an initial state of zeros
-  */
-  void reset(void);
-  void getState(FilterState *p_filter_state) const;
-  void setState(const FilterState *p_filter_state);
+    /**
+       Initialise the IIR Filter from the coeff's a direct form II transposed structure
+       if a[0] is not 1.0 then all the coefficients are normalized be dividing by a[0]
+    */
+    void init( double * p_b
+             , double * p_a
+             , int p_n
+             , int p_m = -1
+             );
+    void print(void);
 
- private:
-  /**
-     tempery buffer storage
-  */
-  Array1d<double> m_buf_x, m_buf_y;
+    /**
+       Apply the filter to a block of data
+       @param p_input The data to be filtered
+       @param p_output Where the filtered result is stored. Note: The output is delayed by the filter size.
+       @param p_n The size of data
+    */
+    void filter( const float * p_input
+               , float * p_output
+               , int p_n
+               );
 
-  /**
-     The filter coefficient's
-  */
-  Array1d<double> m_a, m_b;
+    /**
+       Resets the filter back to an initial state of zeros
+    */
+    void reset(void);
+    void getState(FilterState * p_filter_state) const;
+    void setState(const FilterState * p_filter_state);
 
-  /**
-     The current filter state (last n states of input and output)
-  */
-  Array1d<double> m_x, m_y;
+  private:
+    /**
+       tempery buffer storage
+    */
+    Array1d<double> m_buf_x;
+    Array1d<double> m_buf_y;
+
+    /**
+       The filter coefficient's
+    */
+    Array1d<double> m_a;
+    Array1d<double> m_b;
+
+    /**
+       The current filter state (last n states of input and output)
+    */
+    Array1d<double> m_x;
+    Array1d<double> m_y;
 
 };
 
 class FilterState
 {
- public:
-  Array1d<double> m_x, m_y;
+  public:
+    Array1d<double> m_x;
+    Array1d<double> m_y;
 };
 
 #endif // IIR_FILTER_H
