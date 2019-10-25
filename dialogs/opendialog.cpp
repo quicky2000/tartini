@@ -25,7 +25,14 @@
 
 //------------------------------------------------------------------------------
 OpenDialog::OpenDialog(QWidget * p_parent):
-  QFileDialog(p_parent, tr("Open File"), QDir::convertSeparators(g_data->getSettingsValue("Dialogs/openFilesFolder", QDir::currentDirPath())), "Wave files (*.wav)")
+QFileDialog( p_parent
+           , tr("Open File")
+           , QDir::convertSeparators(g_data->getSettingsValue( "Dialogs/openFilesFolder"
+                                                             , QDir::currentDirPath()
+                                                             )
+                                    )
+           , "Wave files (*.wav)"
+           )
 {
   setCaption("Choose a file to open");
   setMode(QFileDialog::ExistingFile);
@@ -39,18 +46,18 @@ OpenDialog::~OpenDialog(void)
 //------------------------------------------------------------------------------
 void OpenDialog::accept(void)
 {
-  QFileDialog::accept();
+    QFileDialog::accept();
 }
 
 //------------------------------------------------------------------------------
 QString OpenDialog::getOpenWavFileName(QWidget *p_parent)
 {
-  OpenDialog l_dialog(p_parent);
-  if(l_dialog.exec() != QDialog::Accepted)
+    OpenDialog l_dialog(p_parent);
+    if(l_dialog.exec() != QDialog::Accepted)
     {
-      return QString();
+        return QString();
     }
-  return l_dialog.selectedFile();
+    return l_dialog.selectedFile();
 }
 
 // EOF

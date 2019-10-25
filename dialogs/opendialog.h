@@ -25,14 +25,16 @@ class QCheckBox;
 class OpenDialog : public QFileDialog
 {
   Q_OBJECT
-public:
-  OpenDialog(QWidget * p_parent);
-  ~OpenDialog(void);
-  void accept(void);
+
+  public:
+
+    OpenDialog(QWidget * p_parent);
+    ~OpenDialog(void);
+    void accept(void);
   
-  static QString getOpenWavFileName(QWidget *p_parent = 0);
+    static QString getOpenWavFileName(QWidget * p_parent = 0);
   
-  QCheckBox *m_remember_folder_check_box;
+    QCheckBox * m_remember_folder_check_box;
 };
 
 #endif // OPENDIALOG_H
