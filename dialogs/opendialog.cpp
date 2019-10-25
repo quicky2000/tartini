@@ -4,7 +4,9 @@
     begin                : Feb 2005
     copyright            : (C) 2005 by Philip McLeod
     email                : pmcleod@cs.otago.ac.nz
-   
+    copyright            : (C) 2019 by Julien Thevenon
+    email                : julien_thevenon at yahoo.fr
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2 of the License, or
@@ -22,8 +24,8 @@
 #include "gdata.h"
 
 //------------------------------------------------------------------------------
-OpenDialog::OpenDialog(QWidget * parent):
-  QFileDialog(parent,tr("Open File"),QDir::convertSeparators(g_data->getSettingsValue("Dialogs/openFilesFolder",QDir::currentDirPath())),"Wave files (*.wav)")
+OpenDialog::OpenDialog(QWidget * p_parent):
+  QFileDialog(p_parent, tr("Open File"), QDir::convertSeparators(g_data->getSettingsValue("Dialogs/openFilesFolder", QDir::currentDirPath())), "Wave files (*.wav)")
 {
   setCaption("Choose a file to open");
   setMode(QFileDialog::ExistingFile);
@@ -41,14 +43,14 @@ void OpenDialog::accept(void)
 }
 
 //------------------------------------------------------------------------------
-QString OpenDialog::getOpenWavFileName(QWidget *parent)
+QString OpenDialog::getOpenWavFileName(QWidget *p_parent)
 {
-  OpenDialog d(parent);
-  if(d.exec() != QDialog::Accepted)
+  OpenDialog l_dialog(p_parent);
+  if(l_dialog.exec() != QDialog::Accepted)
     {
       return QString();
     }
-  return d.selectedFile();
+  return l_dialog.selectedFile();
 }
 
 // EOF
