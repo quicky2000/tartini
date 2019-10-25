@@ -27,15 +27,15 @@ extern const char *windowSizeBoxStr[];
 class SaveDialog : public Q3FileDialog
 {
   Q_OBJECT
-public:
-  SaveDialog(QWidget * p_parent = 0);
-  ~SaveDialog(void);
-  void accept(void);
+  public:
+    SaveDialog(QWidget * p_parent = 0);
+    ~SaveDialog(void);
+    void accept(void);
 
-  static QString getSaveWavFileName(QWidget *p_parent = 0);
+    static QString getSaveWavFileName(QWidget * p_parent = 0);
   
-  QCheckBox *m_remember_folder_check_box;
-  QCheckBox *m_append_wav_check_box;
+    QCheckBox *m_remember_folder_check_box;
+    QCheckBox *m_append_wav_check_box;
 };
 
 #endif // SAVE_DIALOG_H
