@@ -27,80 +27,86 @@ QString macxPathString;
 #include "myassert.h"
 #include "myglfonts.h"
 
-int main(int p_argc, char **p_argv)
+int main( int p_argc
+        , char ** p_argv
+        )
 {
 
 #ifdef WINDOWS
-  freopen("stdout.txt", "w", stdout);
-  freopen("stderr.txt", "w", stderr);
+    freopen("stdout.txt", "w", stdout);
+    freopen("stderr.txt", "w", stderr);
 #endif // WINDOWS
 	
 #ifdef MACX
-  CFURLRef pluginRef = CFBundleCopyBundleURL(CFBundleGetMainBundle());
-  CFStringRef macPath = CFURLCopyFileSystemPath(pluginRef, kCFURLPOSIXPathStyle);
-  const char *pathPtr = CFStringGetCStringPtr(macPath, CFStringGetSystemEncoding());
-  macxPathString = QString(pathPtr);
-  if(!macxPathString.endsWith("/")) macxPathString.append('/');
-  CFRelease(pluginRef);
-  CFRelease(macPath);
+    CFURLRef pluginRef = CFBundleCopyBundleURL(CFBundleGetMainBundle());
+    CFStringRef macPath = CFURLCopyFileSystemPath(pluginRef, kCFURLPOSIXPathStyle);
+    const char *pathPtr = CFStringGetCStringPtr(macPath, CFStringGetSystemEncoding());
+    macxPathString = QString(pathPtr);
+    if(!macxPathString.endsWith("/"))
+    {
+        macxPathString.append('/');
+    }
+    CFRelease(pluginRef);
+    CFRelease(macPath);
 #endif // MACX
 	
-  application l_app(p_argc, p_argv);
-  QString l_locale = QLocale::system().name();
+    application l_app(p_argc, p_argv);
+    QString l_locale = QLocale::system().name();
 
-  QTranslator l_translator;
-  l_translator.load(QString("tartini_") + l_locale);
-  l_app.installTranslator(&l_translator);
+    QTranslator l_translator;
+    l_translator.load(QString("tartini_") + l_locale);
+    l_app.installTranslator(&l_translator);
 
-  Q_INIT_RESOURCE(pitch);
+    Q_INIT_RESOURCE(pitch);
 
-  fprintf(stderr, "QT_VERSION_STR=%s\n", QT_VERSION_STR);
-  fprintf(stderr, "QT_VERSION=%x\n", QT_VERSION);
-  std::cerr << "QWT_VERSION_STR=" << QWT_VERSION_STR << std::endl;
-  std::cerr << "QWT_VERSION=" << std::hex << QWT_VERSION << std::dec << std::endl;
+    std::cerr << "QT_VERSION_STR=\"" << QT_VERSION_STR << "\"" << std::endl;
+    std::cerr << "QT_VERSION=" << std::hex << QT_VERSION << std::dec << std::endl;
+    std::cerr << "QWT_VERSION_STR=\"" << QWT_VERSION_STR << "\"" << std::endl;
+    std::cerr << "QWT_VERSION=" << std::hex << QWT_VERSION << std::dec << std::endl;
 
-  //Create one instance only of the global data
-  g_data = new GData();
+    //Create one instance only of the global data
+    g_data = new GData();
 
-  /*
-    The view needs to be created here, not in GData's constructor because of the View's
-    autofollow method and the signals in the View class. It can try to reference the GData 
-    object before the constructor finishes, which causes an access violation in 
-    Visual Studio 6.
-  */
-  g_data->setView(*(new View()));
+    /*
+      The view needs to be created here, not in GData's constructor because of the View's
+      autofollow method and the signals in the View class. It can try to reference the GData
+      object before the constructor finishes, which causes an access violation in
+      Visual Studio 6.
 
-  g_main_window = new MainWindow();
+    */
+    g_data->setView(*(new View()));
 
-  //call init after we know the windows size
-  g_data->getView().init();
+    g_main_window = new MainWindow();
 
-  g_main_window->showMaximized();
+    //call init after we know the windows size
+    g_data->getView().init();
+
+    g_main_window->showMaximized();
     
-  l_app.setMainWidget(g_main_window);
-  g_main_window->show();
+    l_app.setMainWidget(g_main_window);
+    g_main_window->show();
 
-  l_app.connect(&l_app, SIGNAL(lastWindowClosed()), &l_app, SLOT(quit()));
+    l_app.connect(&l_app, SIGNAL(lastWindowClosed()), &l_app, SLOT(quit()));
 
-  if(!g_main_window->loadViewGeometry())
+    if(!g_main_window->loadViewGeometry())
     {
-      g_main_window->aboutTartini(); //open the tartini dialog on first time open
+        g_main_window->aboutTartini(); //open the tartini dialog on first time open
     }
 
-  //open any files on the command line
-  if(p_argc >= 2)
+    //open any files on the command line
+    if(p_argc >= 2)
     {
-      for(int l_index = 1; l_index < p_argc; l_index++)
-	{
-	  g_main_window->openFile(p_argv[l_index]);
-	}
+        for(int l_index = 1; l_index < p_argc; l_index++)
+        {
+            g_main_window->openFile(p_argv[l_index]);
+        }
     }
   
-  int l_ret_value = l_app.exec();
+    int l_ret_value = l_app.exec();
 
-  delete & (g_data->getView());
-  delete g_data;
+    delete & (g_data->getView());
+    delete g_data;
   
-  return l_ret_value;
+    return l_ret_value;
 }
 //EOF
