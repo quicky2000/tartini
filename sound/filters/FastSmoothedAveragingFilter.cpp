@@ -36,55 +36,58 @@ void FastSmoothedAveragingFilter::init(int p_size)
     m_sin_angle = sin(m_angle);
     m_cos_angle = cos(m_angle);
     m_sum = 0;
-  for(int l_j = 0; l_j < p_size; l_j++)
+    for(int l_j = 0; l_j < p_size; l_j++)
     {
         m_sum += 1.0 - cos((l_j + 1) * m_angle);
     }
 
     m_cos_sum = m_sin_sum = m_total_sum = 0.0;
-  m_x.resize(p_size);
-  reset();
+    m_x.resize(p_size);
+    reset();
 }
 
 #include "fast_smooth.h"
 
 //------------------------------------------------------------------------------
-void FastSmoothedAveragingFilter::filter(const float *p_input, float *p_output, int p_n)
+void FastSmoothedAveragingFilter::filter( const float * p_input
+                                        , float * p_output
+                                        , int p_n
+                                        )
 {
-  //blur stays centered if odd
-  int l_j;
-  if(p_n > m_size)
+    //blur stays centered if odd
+    int l_j;
+    if(p_n > m_size)
     {
-      for(l_j = 0; l_j < m_size; l_j++)
-	{
-        m_cos_sum += p_input[l_j];
-	  fast_complex_rotate(m_sin_sum, m_cos_sum, m_sin_angle, m_cos_angle);
-        m_cos_sum -= m_x[l_j];
-        m_total_sum += p_input[l_j] - m_x[l_j];
-        p_output[l_j] = (m_total_sum - m_cos_sum) / m_sum;
-	}
-      for(l_j = m_size; l_j < p_n; l_j++)
-	{
-        m_cos_sum += p_input[l_j];
-	  fast_complex_rotate(m_sin_sum, m_cos_sum, m_sin_angle, m_cos_angle);
-        m_cos_sum -= p_input[l_j - m_size];
-        m_total_sum += p_input[l_j] - p_input[l_j - m_size];
-        p_output[l_j] = (m_total_sum - m_cos_sum) / m_sum;
-	}
-      std::copy(p_input + p_n - m_size, p_input + p_n, m_x.begin());
+        for(l_j = 0; l_j < m_size; l_j++)
+        {
+            m_cos_sum += p_input[l_j];
+            fast_complex_rotate(m_sin_sum, m_cos_sum, m_sin_angle, m_cos_angle);
+            m_cos_sum -= m_x[l_j];
+            m_total_sum += p_input[l_j] - m_x[l_j];
+            p_output[l_j] = (m_total_sum - m_cos_sum) / m_sum;
+        }
+        for(l_j = m_size; l_j < p_n; l_j++)
+        {
+            m_cos_sum += p_input[l_j];
+            fast_complex_rotate(m_sin_sum, m_cos_sum, m_sin_angle, m_cos_angle);
+            m_cos_sum -= p_input[l_j - m_size];
+            m_total_sum += p_input[l_j] - p_input[l_j - m_size];
+            p_output[l_j] = (m_total_sum - m_cos_sum) / m_sum;
+        }
+        std::copy(p_input + p_n - m_size, p_input + p_n, m_x.begin());
     }
-  else
+    else
     {
-      for(l_j = 0; l_j < p_n; l_j++)
-	{
-        m_cos_sum += p_input[l_j];
-	  fast_complex_rotate(m_sin_sum, m_cos_sum, m_sin_angle, m_cos_angle);
-        m_cos_sum -= m_x[l_j];
-        m_total_sum += p_input[l_j] - m_x[l_j];
-        p_output[l_j] = (m_total_sum - m_cos_sum) / m_sum;
-	}
-      m_x.shift_left(p_n);
-      std::copy(p_input, p_input + p_n, m_x.end() - p_n);
+        for(l_j = 0; l_j < p_n; l_j++)
+        {
+            m_cos_sum += p_input[l_j];
+            fast_complex_rotate(m_sin_sum, m_cos_sum, m_sin_angle, m_cos_angle);
+            m_cos_sum -= m_x[l_j];
+            m_total_sum += p_input[l_j] - m_x[l_j];
+            p_output[l_j] = (m_total_sum - m_cos_sum) / m_sum;
+        }
+        m_x.shift_left(p_n);
+        std::copy(p_input, p_input + p_n, m_x.end() - p_n);
     }
 }
 
@@ -92,7 +95,7 @@ void FastSmoothedAveragingFilter::filter(const float *p_input, float *p_output, 
 void FastSmoothedAveragingFilter::reset(void)
 {
     m_cos_sum = m_sin_sum = m_total_sum = 0.0;
-  m_x.fill(0.0f);
+    m_x.fill(0.0f);
 }
 
 //EOF

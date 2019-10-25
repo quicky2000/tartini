@@ -27,33 +27,38 @@
 */
 class FastSmoothedAveragingFilter : public Filter
 {
-public:
-  /**
-     Construct a FastSmoothedAverageFilter
-     @param size The total width of the hanning window. To keep data centered use an odd size
-  */
-  FastSmoothedAveragingFilter(void) { }
-  FastSmoothedAveragingFilter(int p_size);
-  void init(int p_size);
-  void filter(const float *p_input, float *p_output, int p_n);
-  void reset(void);
-  inline int delay(void) const { return m_size / 2; }
+  public:
+    /**
+       Construct a FastSmoothedAverageFilter
+       @param size The total width of the hanning window. To keep data centered use an odd size
+    */
+    FastSmoothedAveragingFilter(void) { }
+    FastSmoothedAveragingFilter(int p_size);
+    void init(int p_size);
+    void filter( const float * p_input
+               , float * p_output
+               , int p_n
+               );
+    void reset(void);
+    inline int delay(void) const { return m_size / 2; }
 
- private:
-  int m_size, m_size_left, m_size_right;
-  double m_angle;
-  double m_cos_angle, m_sin_angle;
-  double m_sum;
+  private:
+    int m_size;
+    int m_size_left;
+    int m_size_right;
+    double m_angle;
+    double m_cos_angle;
+    double m_sin_angle;
+    double m_sum;
 
-  /**
+    /**
      the last size input values
-  */
-  Array1d<float> m_x;
+    */
+    Array1d<float> m_x;
 
-  double m_cos_sum;
-  double m_sin_sum;
-  double m_total_sum;
-
+    double m_cos_sum;
+    double m_sin_sum;
+    double m_total_sum;
 };
 
 #endif // FAST_SMOOTHED_AVERAGING_FILTER_H
