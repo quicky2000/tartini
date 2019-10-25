@@ -1,0 +1,31 @@
+Tartini 1.2.1
+
+    Correct of of a SEGFAULT in mytransforms ( https://wiki.logre.eu/index.php/Tartini/en#Bug_1 )
+    Correction of a SEGFAULT in hstackwidget ( https://wiki.logre.eu/index.php/Tartini/en#Bug_2 )
+    Correction of a SEGFAULT in hcirclewidget ( https://wiki.logre.eu/index.php/Tartini/en#Bug_3 )
+    Support of Qt4
+    Support of Qwt6
+    Better encapsulation by putting most object members private
+    Coherent naming conventions in most of the source code of the project
+    Coherent indentation in most of the source code of the project
+    Support of CMake for build
+
+Tartini 1.2
+
+    The ability to set an offset frequency. i.e. not fixed to A=440 Hz
+    Vertical reference lines
+    Fixed a bug in note detection which caused a number of pitch detection problems. This made a huge improvement to a lot of things
+
+
+Tartini 1.1
+
+    An even more refined pitch algorithm.
+    A vibrato tool. You can analyse properties such as speed, height and shape of vibrato.
+    Full Duplex sound. You can listen to a track, and record at the same time. Compare yourself to the line.
+    A choice of reference scales (Major, minor or chromatic).
+    A choice of tuning system (Even tempered, Just intonation, Pythagorean tuning or Meantone temperament).
+    Support for more sound interfaces. Linux (OSS, ALSA, JACK), MacOSX, Windows (ASIO, Windows-MM).
+    The ability to export the pitch data to Matlab or plain text.
+
+
+Tartini 1.0
