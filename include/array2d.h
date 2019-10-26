@@ -76,11 +76,11 @@ class Array2d
 
     T * operator[](int p_y);
 
-    int w();
+    int w() const;
 
-    int h();
+    int h() const;
 
-    int size();
+    int size() const;
 
     T * begin();
 
@@ -90,7 +90,7 @@ class Array2d
 
     T * end(int p_y);
 
-    /*virtual*/ bool isEmpty();
+    /*virtual*/ bool isEmpty() const;
 
     void resize_raw( int p_width
                    , int p_height
@@ -204,21 +204,21 @@ T * Array2d<T>::operator[](int p_y)
 
 //-----------------------------------------------------------------------------
 template<class T>
-int Array2d<T>::w()
+int Array2d<T>::w() const
 {
     return m_width;
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-int Array2d<T>::h()
+int Array2d<T>::h() const
 {
     return m_height;
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-int Array2d<T>::size()
+int Array2d<T>::size() const
 {
     return m_width * m_height;
 }
@@ -255,7 +255,7 @@ T * Array2d<T>::end(int p_y)
 
 //-----------------------------------------------------------------------------
 template<class T>
-bool Array2d<T>::isEmpty()
+bool Array2d<T>::isEmpty() const
 {
     return (m_data == NULL);
 }
