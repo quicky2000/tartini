@@ -32,7 +32,7 @@ class QMutexLocker
     QMutex *mutex() const;
 
   private:
-    QMutex *mtx;
+    QMutex * m_mutex;
 
 #if defined(Q_DISABLE_COPY)
     QMutexLocker( const QMutexLocker & );
@@ -41,28 +41,28 @@ class QMutexLocker
 };
 
 //-----------------------------------------------------------------------------
-inline QMutexLocker::QMutexLocker( QMutex *m )
-: mtx( m )
+inline QMutexLocker::QMutexLocker( QMutex * p_mutex)
+: m_mutex(p_mutex)
 {
-    if( mtx )
+    if( m_mutex )
     {
-        mtx->lock();
+        m_mutex->lock();
     }
 }
 
 //-----------------------------------------------------------------------------
 inline QMutexLocker::~QMutexLocker()
 {
-    if(mtx)
+    if(m_mutex)
     {
-        mtx->unlock();
+        m_mutex->unlock();
     }
 }
 
 //-----------------------------------------------------------------------------
 inline QMutex * QMutexLocker::mutex() const
 {
-    return mtx;
+    return m_mutex;
 }
 
 #endif // (QT_VERSION > 230)
