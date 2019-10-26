@@ -21,13 +21,26 @@
 
 class GData;
 
-double linear2dB(const double & x, const GData & p_data);
-double dB2Linear(const double & x);
-double dB2Normalised(const double & x, const GData & p_data);
-double normalised2dB(const double & x, const GData & p_data);
-double dB2ViewVal(const double & x);
-double same(const double & x, const GData & p_data);
-double oneMinus(const double & x, const GData & p_data);
+double linear2dB( const double & p_x
+                , const GData & p_data
+                );
+double dB2Linear(const double & p_x);
+double dB2Normalised( const double & p_x
+                    , const GData & p_data
+                    );
+double normalised2dB( const double & p_x
+                    , const GData & p_data
+                    );
+double dB2ViewVal(const double & p_x);
+double same( const double & p_x
+           , const GData & p_data
+           );
+double oneMinus( const double & p_x
+               , const GData & p_data
+               );
 
-double dB2Normalised(const double & x, const double & theCeiling, const double & theFloor);
+double dB2Normalised( const double & p_x
+                    , const double & p_ceiling
+                    , const double & p_floor
+                    );
 //EOF

@@ -19,51 +19,64 @@
 #include "gdata.h"
 
 //------------------------------------------------------------------------------
-double linear2dB(const double & x, const GData & p_data)
+double linear2dB( const double & p_x
+                , const GData & p_data
+                )
 {
-  return (x > 0.0) ? bound((log10(x) * 20.0), p_data.dBFloor(), 0.0) : p_data.dBFloor();
+  return (p_x > 0.0) ? bound((log10(p_x) * 20.0), p_data.dBFloor(), 0.0) : p_data.dBFloor();
 }
 
 //------------------------------------------------------------------------------
-double dB2Linear(const double & x)
+double dB2Linear(const double & p_x)
 {
-  return pow10(x / 20.0);
+  return pow10(p_x / 20.0);
 }
 
 //------------------------------------------------------------------------------
-double dB2Normalised(const double & x, const GData & p_data)
+double dB2Normalised( const double & p_x
+                    , const GData & p_data
+                    )
 {
-  return bound(1.0 - (x / p_data.dBFloor()), 0.0, 1.0);
+  return bound(1.0 - (p_x / p_data.dBFloor()), 0.0, 1.0);
 }
 
 //------------------------------------------------------------------------------
-double normalised2dB(const double & x, const GData & p_data)
+double normalised2dB( const double & p_x
+                    , const GData & p_data
+                    )
 {
-  return (1.0 - x) * p_data.dBFloor();
+  return (1.0 - p_x) * p_data.dBFloor();
 }
 //------------------------------------------------------------------------------
-double dB2ViewVal(const double & x)
+double dB2ViewVal(const double & p_x)
 {
-  return pow10(1.0 + x / 40.0);
+  return pow10(1.0 + p_x / 40.0);
 }
 
 //------------------------------------------------------------------------------
-double same(const double & x, const GData & p_data)
+double same( const double & p_x
+           , const GData & p_data
+           )
 {
   p_data.do_nothing();
- return x;
+ return p_x;
 }
 
 //------------------------------------------------------------------------------
-double oneMinus(const double & x, const GData & p_data)
+double oneMinus( const double & p_x
+               , const GData & p_data
+               )
 {
   p_data.do_nothing();
- return 1.0 - x;
+ return 1.0 - p_x;
 }
 
 //------------------------------------------------------------------------------
-double dB2Normalised(const double & x,const double & theCeiling, const double & theFloor)
+double dB2Normalised( const double & p_x
+                    , const double & p_ceiling
+                    , const double & p_floor
+                    )
 {
-  return bound(1.0 + ((x - theCeiling) / (theCeiling - theFloor)), 0.0, 1.0);
+  return bound(1.0 + ((p_x - p_ceiling) / (p_ceiling - p_floor)), 0.0, 1.0);
 }
 //EOF
