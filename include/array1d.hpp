@@ -19,63 +19,63 @@
 //------------------------------------------------------------------------------
 template<class T>
 Array1d<T>::Array1d(void):
-  dataSize(0),
-  allocatedSize(0),
-  data(NULL)
+  m_data_size(0),
+  m_allocated_size(0),
+  m_data(NULL)
 {
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-Array1d<T>::Array1d(int length):
-  dataSize(length),
-  allocatedSize(nextPowerOf2(dataSize)),
-  data((T*)malloc(allocatedSize * sizeof(T)))
+Array1d<T>::Array1d(int p_length):
+  m_data_size(p_length),
+  m_allocated_size(nextPowerOf2(m_data_size)),
+  m_data((T*)malloc(m_allocated_size * sizeof(T)))
 {
-  myassert(data != NULL);
+  myassert(m_data != NULL);
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-Array1d<T>::Array1d(int length, const T &val):
-  dataSize(length),
-  allocatedSize(nextPowerOf2(dataSize)),
-  data((T*)malloc(allocatedSize * sizeof(T)))
+Array1d<T>::Array1d(int p_length, const T &p_val):
+  m_data_size(p_length),
+  m_allocated_size(nextPowerOf2(m_data_size)),
+  m_data((T*)malloc(m_allocated_size * sizeof(T)))
 {
-  myassert(data != NULL);
-  fill(val);
+  myassert(m_data != NULL);
+  fill(p_val);
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-Array1d<T>::Array1d(const T *src, int length):
-  dataSize(length),
-  allocatedSize(nextPowerOf2(dataSize)),
-  data((T*)malloc(allocatedSize * sizeof(T)))
+Array1d<T>::Array1d(const T *p_src, int p_length):
+  m_data_size(p_length),
+  m_allocated_size(nextPowerOf2(m_data_size)),
+  m_data((T*)malloc(m_allocated_size * sizeof(T)))
 {
-  myassert(data != NULL);
-  for(T *p = data; p != end();)
+  myassert(m_data != NULL);
+  for(T *l_p = m_data; l_p != end();)
     {
-      *p++ = *src++;
+      *l_p++ = *p_src++;
     }
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-Array1d<T>::Array1d(Array1d<T> const &r):
-  dataSize(r.size()),
-  allocatedSize(nextPowerOf2(dataSize)),
-  data((T*)malloc(allocatedSize * sizeof(T)))
+Array1d<T>::Array1d(Array1d<T> const &p_r):
+  m_data_size(p_r.size()),
+  m_allocated_size(nextPowerOf2(m_data_size)),
+  m_data((T*)malloc(m_allocated_size * sizeof(T)))
 {
-  myassert(data != NULL);
-  copy_raw(r.begin());
+  myassert(m_data != NULL);
+  copy_raw(p_r.begin());
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-Array1d<T> & Array1d<T>::operator = (Array1d<T> const &r)
+Array1d<T> & Array1d<T>::operator =(Array1d<T> const &p_r)
 {
-  resize_copy(r.begin(), r.size());
+  resize_copy(p_r.begin(), p_r.size());
   return *this;
 }
 
@@ -83,201 +83,201 @@ Array1d<T> & Array1d<T>::operator = (Array1d<T> const &r)
 template<class T>
 Array1d<T>::~Array1d(void)
 {
-  if(data)
+  if(m_data)
     {
-      free(data);
+      free(m_data);
     }
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-T & Array1d<T>::operator()(int x)
+T & Array1d<T>::operator()(int p_x)
 {
-  return at(x);
+  return at(p_x);
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-const T & Array1d<T>::operator()(int x) const
+const T & Array1d<T>::operator()(int p_x) const
 {
-  return at(x);
+  return at(p_x);
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-T & Array1d<T>::operator[](int x)
+T & Array1d<T>::operator[](int p_x)
 {
-  return at(x);
+  return at(p_x);
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-const T& Array1d<T>::operator[](int x) const
+const T& Array1d<T>::operator[](int p_x) const
 {
-  return at(x);
+  return at(p_x);
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-T& Array1d<T>::at(int x)
+T& Array1d<T>::at(int p_x)
 {
-  myassert(data != NULL);
-  myassert(x >= 0 && x < size());
-  return data[x];
+  myassert(m_data != NULL);
+  myassert(p_x >= 0 && p_x < size());
+  return m_data[p_x];
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-const T& Array1d<T>::at(int x) const
+const T& Array1d<T>::at(int p_x) const
 {
-  myassert(data != NULL);
-  myassert(x >= 0 && x < size());
-  return data[x];
+  myassert(m_data != NULL);
+  myassert(p_x >= 0 && p_x < size());
+  return m_data[p_x];
 }
 
 //------------------------------------------------------------------------------
 template<class T>
 int Array1d<T>::size(void) const
 {
-  return dataSize;
+  return m_data_size;
 }
 
 //------------------------------------------------------------------------------
 template<class T>
 T * Array1d<T>::begin(void) const
 {
-  return data;
+  return m_data;
 }
 
 //------------------------------------------------------------------------------
 template<class T>
 T * Array1d<T>::end(void) const
 {
-  return data+dataSize;
+  return m_data+m_data_size;
 }
 
 //------------------------------------------------------------------------------
 template<class T>
 bool Array1d<T>::isEmpty(void) const
 {
-  return (data==NULL);
+  return (m_data==NULL);
 }
 
 //------------------------------------------------------------------------------
 template<class T>
 T & Array1d<T>::front(void) const
 {
-  return *data;
+  return *m_data;
 }
 
 //------------------------------------------------------------------------------
 template<class T>
 T & Array1d<T>::back(void) const
 {
-  return data[dataSize - 1];
+  return m_data[m_data_size - 1];
 }
 
 //------------------------------------------------------------------------------
 template<class T>
 int Array1d<T>::capacity(void) const
 {
-  return allocatedSize;
+  return m_allocated_size;
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-int Array1d<T>::getIndex(T *element) const
+int Array1d<T>::getIndex(T *p_element) const
 {
-  return element - data;
+  return p_element - m_data;
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-void Array1d<T>::resize_raw(int newSize)
+void Array1d<T>::resize_raw(int p_new_size)
 {
-  if(newSize == dataSize)
+  if(p_new_size == m_data_size)
     {
       return;
     }
-  if(newSize > allocatedSize)
+  if(p_new_size > m_allocated_size)
     {
-      if(data)
+      if(m_data)
 	{
-	  free(data);
+	  free(m_data);
 	}
-      allocatedSize = nextPowerOf2(newSize);
-      data = (T*)malloc(allocatedSize * sizeof(T)); //I think this is faster than realloc
+        m_allocated_size = nextPowerOf2(p_new_size);
+      m_data = (T*)malloc(m_allocated_size * sizeof(T)); //I think this is faster than realloc
     }
-    dataSize = newSize;
+    m_data_size = p_new_size;
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-void Array1d<T>::resize(int newSize)
+void Array1d<T>::resize(int p_new_size)
 {
-  if(newSize > allocatedSize)
+  if(p_new_size > m_allocated_size)
     {
-      allocatedSize = nextPowerOf2(newSize);
-      data = (T*)realloc(data, allocatedSize * sizeof(T));
+        m_allocated_size = nextPowerOf2(p_new_size);
+      m_data = (T*)realloc(m_data, m_allocated_size * sizeof(T));
     }
-  dataSize = newSize;
+    m_data_size = p_new_size;
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-void Array1d<T>::resize(int newSize, const T &val)
+void Array1d<T>::resize(int p_new_size, const T &p_val)
 {
-  if(newSize > allocatedSize)
+  if(p_new_size > m_allocated_size)
     {
-      allocatedSize = nextPowerOf2(newSize);
-      data = (T*)realloc(data, allocatedSize * sizeof(T));
+        m_allocated_size = nextPowerOf2(p_new_size);
+      m_data = (T*)realloc(m_data, m_allocated_size * sizeof(T));
     }
-  if(newSize > dataSize)
+  if(p_new_size > m_data_size)
     {
-      T *theEnd = data+newSize;
-      for(T* p=data+dataSize; p<theEnd;)
+      T *l_end = m_data + p_new_size;
+      for(T* l_p= m_data + m_data_size; l_p < l_end;)
 	{
-	  *p++ = val;
+	  *l_p++ = p_val;
 	}
     }
-  dataSize = newSize;
+    m_data_size = p_new_size;
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-void Array1d<T>::resize_copy(const T *src, int length)
+void Array1d<T>::resize_copy(const T *p_src, int p_length)
 {
-  resize_raw(length);
-  copy_raw(src);
+  resize_raw(p_length);
+  copy_raw(p_src);
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-void Array1d<T>::push_back(const T &val)
+void Array1d<T>::push_back(const T &p_val)
 {
-  if(++dataSize > allocatedSize)
+  if(++m_data_size > m_allocated_size)
     {
-      allocatedSize = nextPowerOf2(dataSize);
-      data = (T*)realloc(data, allocatedSize * sizeof(T));
+        m_allocated_size = nextPowerOf2(m_data_size);
+      m_data = (T*)realloc(m_data, m_allocated_size * sizeof(T));
     }
-  back() = val;
+  back() = p_val;
 }
 
 //------------------------------------------------------------------------------
 template<class T>
 void Array1d<T>::pop_back(void)
 {
-  dataSize--;
+    m_data_size--;
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-void Array1d<T>::copy_raw(const T *src)
+void Array1d<T>::copy_raw(const T *p_src)
 {
-  T *theEnd = end();
-  for(T *p = begin(); p != theEnd;)
+  T *l_end = end();
+  for(T *l_p = begin(); l_p != l_end;)
     {
-      *p++ = *src++;
+      *l_p++ = *p_src++;
     }
 }
 
@@ -285,84 +285,84 @@ void Array1d<T>::copy_raw(const T *src)
 template<class T>
 void Array1d<T>::clear(void)
 {
-  if(data)
+  if(m_data)
     {
-      free(data);
-      data = NULL; 
+      free(m_data);
+      m_data = NULL;
     }
-  dataSize = 0;
-  allocatedSize = 0;
+    m_data_size = 0;
+    m_allocated_size = 0;
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-void Array1d<T>::fill(const T &val)
+void Array1d<T>::fill(const T &p_val)
 {
-  T *theEnd = end();
-  for(T *p = begin(); p != theEnd;)
+  T *l_end = end();
+  for(T *l_p = begin(); l_p != l_end;)
     {
-      *p++ = val;
-    }
-}
-
-//------------------------------------------------------------------------------
-template<class T>
-void Array1d<T>::operator*=(const T &val)
-{
-  T *theEnd = end();
-  for(T *p = begin(); p != theEnd;)
-    {
-      *p++ *= val;
+      *l_p++ = p_val;
     }
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-void Array1d<T>::operator/=(const T &val)
+void Array1d<T>::operator*=(const T &p_val)
 {
-  T *theEnd = end();
-  for(T *p = begin(); p != theEnd;)
+  T *l_end = end();
+  for(T *l_p = begin(); l_p != l_end;)
     {
-      *p++ /= val;
+      *l_p++ *= p_val;
     }
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-void Array1d<T>::shift_left(int n)
+void Array1d<T>::operator/=(const T &p_val)
 {
-  if(n < 1 || n >= size())
+  T *l_end = end();
+  for(T *l_p = begin(); l_p != l_end;)
+    {
+      *l_p++ /= p_val;
+    }
+}
+
+//------------------------------------------------------------------------------
+template<class T>
+void Array1d<T>::shift_left(int p_n)
+{
+  if(p_n < 1 || p_n >= size())
     {
       return;
     }
-  memmove(begin(), begin()+n, (size()-n)*sizeof(T));
+  memmove(begin(), begin() + p_n, (size() - p_n) * sizeof(T));
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-void Array1d<T>::shift_right(int n)
+void Array1d<T>::shift_right(int p_n)
 {
-  if(n < 1 || n >= size())
+  if(p_n < 1 || p_n >= size())
     {
       return;
     }
-  memmove(begin()+n, begin(), (size()-n)*sizeof(T));
+  memmove(begin() + p_n, begin(), (size() - p_n) * sizeof(T));
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-std::ostream& operator<<(std::ostream &o, Array1d<T> &a)
+std::ostream& operator<<(std::ostream &p_ostream, Array1d<T> &p_array)
 {
-  o << '[';
-  for(int j=0; j<a.size(); j++)
+  p_ostream << '[';
+  for(int l_j=0; l_j < p_array.size(); l_j++)
     {
-      o << a(j);
-      if(j != a.size()-1)
+      p_ostream << p_array(l_j);
+      if(l_j != p_array.size() - 1)
 	{
-	  o << ' ';
+	  p_ostream << ' ';
 	}
     }
-  o << ']' << std::endl;
-  return o;
+  p_ostream << ']' << std::endl;
+  return p_ostream;
 }
 //EOF
