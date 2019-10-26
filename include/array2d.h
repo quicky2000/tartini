@@ -55,26 +55,26 @@ class Array2d
   public:
     Array2d();
 
-    Array2d( int w_
-           , int h_
+    Array2d( int p_width
+           , int p_height
            );
 
-    Array2d( int w_
-           , int h_
-           , T val
+    Array2d( int p_width
+           , int p_height
+           , T p_value
            );
 
     /*virtual*/ ~Array2d();
 
-    T & operator()( int x
-                  , int y
+    T & operator()( int p_x
+                  , int p_y
                   );
 
-    T const & operator()( int x
-                        , int y
+    T const & operator()( int p_x
+                        , int p_y
                         ) const;
 
-    T * operator[](int y);
+    T * operator[](int p_y);
 
     int w();
 
@@ -84,38 +84,38 @@ class Array2d
 
     T * begin();
 
-    T * begin(int y);
+    T * begin(int p_y);
 
     T * end();
 
-    T * end(int y);
+    T * end(int p_y);
 
     /*virtual*/ bool isEmpty();
 
-    void resize_raw( int w_
-                   , int h_
+    void resize_raw( int p_width
+                   , int p_height
                    );
 
-    void resize( int w_
-               , int h_
+    void resize( int p_width
+               , int p_height
                );
 
-    void resize( int w_
-               , int h_
-               , T val
+    void resize( int p_width
+               , int p_height
+               , T p_value
                );
 
-    void set_w(int w_);
+    void set_w(int p_width);
 
-    void set_h(int h_);
+    void set_h(int p_height);
 
-    void shift_left(int n);
+    void shift_left(int p_n);
 
   private:
 
-    T * data;
-    int width;
-    int height;
+    T * m_data;
+    int m_width;
+    int m_height;
 
 };
 
@@ -123,222 +123,222 @@ class Array2d
 template<class T>
 Array2d<T>::Array2d()
 {
-    width = 0;
-    height = 0;
-    data = NULL;
+    m_width = 0;
+    m_height = 0;
+    m_data = NULL;
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-Array2d<T>::Array2d( int w_
-                   , int h_
+Array2d<T>::Array2d( int p_width
+                   , int p_height
                    )
 {
-    w_ = MAX(w_, 0);
-    h_ = MAX(h_, 0);
-    width = w_;
-    height = h_;
-    data = (T *)malloc(size() * sizeof(T));
-    myassert(data);
+    p_width = MAX(p_width, 0);
+    p_height = MAX(p_height, 0);
+    m_width = p_width;
+    m_height = p_height;
+    m_data = (T *)malloc(size() * sizeof(T));
+    myassert(m_data);
     //std::uninitialized_fill(begin(), end(), T());
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-Array2d<T>::Array2d( int w_
-                   , int h_
-                   , T val
+Array2d<T>::Array2d( int p_width
+                   , int p_height
+                   , T p_value
                    )
 {
-    //initialise fill with val
-    w_ = MAX(w_, 0);
-    h_ = MAX(h_, 0);
-    width = w_;
-    height = h_;
-    data = (T *)malloc(size() * sizeof(T));
-    myassert(data);
+    //initialise fill with p_value
+    p_width = MAX(p_width, 0);
+    p_height = MAX(p_height, 0);
+    m_width = p_width;
+    m_height = p_height;
+    m_data = (T *)malloc(size() * sizeof(T));
+    myassert(m_data);
     //for(T *p = data; p != end();)
-    //*p++ = val;
-    std::uninitialized_fill(begin(), end(), val);
+    //*p++ = p_value;
+    std::uninitialized_fill(begin(), end(), p_value);
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
 Array2d<T>::~Array2d()
 {
-    if(data)
+    if(m_data)
     {
-        free(data);
+        free(m_data);
     }
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-T & Array2d<T>::operator()( int x
-                          , int y
+T & Array2d<T>::operator()( int p_x
+                          , int p_y
                           )
 {
-    myassert(x >= 0 && x < width);
-    myassert(y >= 0 && y < height);
-    return( *(data + (width * y + x)));
+    myassert(p_x >= 0 && p_x < m_width);
+    myassert(p_y >= 0 && p_y < m_height);
+    return( *(m_data + (m_width * p_y + p_x)));
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-T const & Array2d<T>::operator()( int x
-                                , int y
+T const & Array2d<T>::operator()( int p_x
+                                , int p_y
                                 ) const
 {
-    myassert(x >= 0 && x < width);
-    myassert(y >= 0 && y < height);
-    return( *(data + (width * y + x)));
+    myassert(p_x >= 0 && p_x < m_width);
+    myassert(p_y >= 0 && p_y < m_height);
+    return( *(m_data + (m_width * p_y + p_x)));
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-T * Array2d<T>::operator[](int y)
+T * Array2d<T>::operator[](int p_y)
 {
-    myassert(y >= 0 && y < height);
-    return(data + width * y);
+    myassert(p_y >= 0 && p_y < m_height);
+    return(m_data + m_width * p_y);
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
 int Array2d<T>::w()
 {
-    return width;
+    return m_width;
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
 int Array2d<T>::h()
 {
-    return height;
+    return m_height;
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
 int Array2d<T>::size()
 {
-    return width * height;
+    return m_width * m_height;
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
 T * Array2d<T>::begin()
 {
-    return data;
+    return m_data;
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-T * Array2d<T>::begin(int y)
+T * Array2d<T>::begin(int p_y)
 {
     // same as []
-    myassert(y >= 0 && y < height);
-    return(data + width * y);
+    myassert(p_y >= 0 && p_y < m_height);
+    return(m_data + m_width * p_y);
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
 T * Array2d<T>::end()
 {
-    return data + size();
+    return m_data + size();
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-T * Array2d<T>::end(int y)
+T * Array2d<T>::end(int p_y)
 {
-    return begin(y) + width;
+    return begin(p_y) + m_width;
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
 bool Array2d<T>::isEmpty()
 {
-    return (data == NULL);
+    return (m_data == NULL);
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-void Array2d<T>::resize_raw( int w_
-                           , int h_
+void Array2d<T>::resize_raw( int p_width
+                           , int p_height
                            )
 {
     //messes up data, but fast
-    w_ = std::max(w_, 0);
-    h_ = std::max(h_, 0);
-    width = w_;
-    height = h_;
-    data = (T *)realloc(data, size() * sizeof(T));
+    p_width = std::max(p_width, 0);
+    p_height = std::max(p_height, 0);
+    m_width = p_width;
+    m_height = p_height;
+    m_data = (T *)realloc(m_data, size() * sizeof(T));
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-void Array2d<T>::resize( int w_
-                       , int h_
+void Array2d<T>::resize( int p_width
+                       , int p_height
                        )
 {
     //keeps data in order, but doesn't initialise new data
-    w_ = std::max(w_, 0);
-    h_ = std::max(h_, 0);
-    if(w_ < width)
+    p_width = std::max(p_width, 0);
+    p_height = std::max(p_height, 0);
+    if(p_width < m_width)
     {
-        for(int j = 1; j < std::min(h_, height); j++)
+        for(int l_j = 1; l_j < std::min(p_height, m_height); l_j++)
         {
-            memmove(data + w_ * j, data + width * j, w_ * sizeof(T));
+            memmove(m_data + p_width * l_j, m_data + m_width * l_j, p_width * sizeof(T));
         }
-        resize_raw(w_, h_);
+        resize_raw(p_width, p_height);
     }
-    else if(w_ > width)
+    else if(p_width > m_width)
     {
-        int old_height = height;
-        int old_width = width;
-        resize_raw(w_, h_);
-        for(int j = std::min(h_, old_height) - 1; j > 0; j--)
+        int l_old_height = m_height;
+        int l_old_width = m_width;
+        resize_raw(p_width, p_height);
+        for(int l_j = std::min(p_height, l_old_height) - 1; l_j > 0; l_j--)
         {
-            memmove(data + w_ * j, data + old_width * j, old_width * sizeof(T));
+            memmove(m_data + p_width * l_j, m_data + l_old_width * l_j, l_old_width * sizeof(T));
         }
     }
     else
     {
-        resize_raw(w_, h_);
+        resize_raw(p_width, p_height);
     }
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-void Array2d<T>::resize( int w_
-                       , int h_
-                       , T val
+void Array2d<T>::resize( int p_width
+                       , int p_height
+                       , T p_value
                        )
 {
-    //keeps data in order and initialises new stuff to val
-    w_ = std::max(w_, 0);
-    h_ = std::max(h_, 0);
-    int old_height = height;
-    int old_width = width;
-    resize(w_, h_);
-    if(w_ > old_width)
+    //keeps data in order and initialises new stuff to p_value
+    p_width = std::max(p_width, 0);
+    p_height = std::max(p_height, 0);
+    int l_old_height = m_height;
+    int l_old_width = m_width;
+    resize(p_width, p_height);
+    if(p_width > l_old_width)
     {
-        for(int j = 0; j < std::min(h_, old_height); j++)
+        for(int l_j = 0; l_j < std::min(p_height, l_old_height); l_j++)
         {
-            T * end = data + j * w_ + w_;
-            for(T * p = data + w_ * j + old_width; p != end;)
+            T * l_end = m_data + l_j * p_width + p_width;
+            for(T * l_p = m_data + p_width * l_j + l_old_width; l_p != l_end;)
             {
-                *p++ = val;
+                *l_p++ = p_value;
             }
         }
     }
-    if(h_ > old_height)
+    if(p_height > l_old_height)
     {
-        for(int j = old_height; j < h_; j++)
+        for(int l_j = l_old_height; l_j < p_height; l_j++)
         {
-            T * end = data + w_ * j + w_;
-            for(T * p = data + w_ * j; p!=end;)
+            T * l_end = m_data + p_width * l_j + p_width;
+            for(T * l_p = m_data + p_width * l_j; l_p != l_end;)
             {
-                *p++ = val;
+                *l_p++ = p_value;
             }
         }
     }
@@ -346,57 +346,57 @@ void Array2d<T>::resize( int w_
 
 //-----------------------------------------------------------------------------
 template<class T>
-void Array2d<T>::set_w(int w_)
+void Array2d<T>::set_w(int p_width)
 {
-    resize(w_, height);
+    resize(p_width, m_height);
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-void Array2d<T>::set_h(int h_)
+void Array2d<T>::set_h(int p_height)
 {
-    resize(width, h_);
+    resize(m_width, p_height);
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-void Array2d<T>::shift_left(int n)
+void Array2d<T>::shift_left(int p_n)
 {
-    //shift all cols to the left by n. losing the first n cols and not initialising the last n
-    if(n < 1 || n >= width)
+    //shift all cols to the left by p_n. losing the first p_n cols and not initialising the last p_n
+    if(p_n < 1 || p_n >= m_width)
     {
         return;
     }
-    for(int k = 0; k < height; k++)
+    for(int l_k = 0; l_k < m_height; l_k++)
     {
-        memmove(begin(k), begin(k) + n, (width - n) * sizeof(T));
+        memmove(begin(l_k), begin(l_k) + p_n, (m_width - p_n) * sizeof(T));
     }
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-std::ostream & operator<<( std::ostream & o
-                         , Array2d<T> & a
-                        )
+std::ostream & operator<<( std::ostream & p_ostream
+                         , Array2d<T> & p_array
+                         )
 {
-    if(a.w() == 0 && a.h() == 0)
+    if(p_array.w() == 0 && p_array.h() == 0)
     {
-        o << "[]" << std::endl;
+        p_ostream << "[]" << std::endl;
     }
-    for(int k = 0; k < a.h(); k++)
+    for(int l_k = 0; l_k < p_array.h(); l_k++)
     {
-        o << '[';
-        for(int j = 0; j < a.w(); j++)
+        p_ostream << '[';
+        for(int l_j = 0; l_j < p_array.w(); l_j++)
         {
-            o << a(j, k);
-            if(j != a.w()-1)
+            p_ostream << p_array(l_j, l_k);
+            if(l_j != p_array.w() - 1)
             {
-                o << '\t';
+                p_ostream << '\t';
             }
         }
-        o << ']' << std::endl;
+        p_ostream << ']' << std::endl;
     }
-    return o;
+    return p_ostream;
 }
 
 #endif // ARRAY2D_H
