@@ -35,11 +35,11 @@ class RingBuffer
 
 	RingBuffer();
 
-	RingBuffer(int buf_size_);
+	RingBuffer(int p_buf_size);
 
 	virtual ~RingBuffer();
 
-	void resize_clear(int buf_size_ = 0);
+	void resize_clear(int p_buf_size = 0);
 
 	int size();
 
@@ -47,11 +47,11 @@ class RingBuffer
 
 	int available();
 
-	void setAutoGrow(bool value);
+	void setAutoGrow(bool p_value);
 
 	int nextGrowSize();
 
-	T & operator[](int x);
+	T & operator[](int p_x);
 
 	/**
 	 * Empty all the element from the buffer
@@ -60,78 +60,78 @@ class RingBuffer
 
 	/**
 	 * ignore - read past num elements without returning them
-	 * @param num
+	 * @param p_num
 	 * @return
 	 */
-	int ignore(int num);
+	int ignore(int p_num);
 
 	/**
      * put item on the back of the queue
      * @return false in no room on the queue
      */
-	bool put(const T &item);
+	bool put(const T & p_item);
 
 	/**
 	 * Put a number of items on the queue
 	 * @return the number of items successfully put in
 	 */
-	int put( const T * items
-	       , int num
+	int put( const T * p_items
+	       , int p_num
 	       );
 
 	/**
 	 * always put item, may lose the oldest item from the buffer
-	 * @param item
+	 * @param p_item
 	 */
-	void force_put(const T & item);
+	void force_put(const T & p_item);
 
 	/**
 	 * always put items, may lose some older items from the buffer
-	 * @param items
+	 * @param p_items
 	 * @param num
 	 */
-	void force_put( const T * items
+	void force_put( const T * p_items
 	              , int num
 	              );
 	/**
 	 * retrieves 1 item without removing it
-	 * @param item
+	 * @param p_item
 	 * @return
 	 */
-	bool peek(T * item);
+	bool peek(T * p_item);
 
 	/**
 	 * returns the number of items returned, max of num items
 	 * peek doesn't remove the item from the list like get does
 	 */
-	int peek( T * items
-	        , int num
+	int peek( T * p_items
+	        , int p_num
 	        );
 
-	bool get(T * item);
+	bool get(T * p_item);
 
 	/**
 	 * returns the number of items returned, max of num items
-	 * @param items
-	 * @param num
+	 * @param p_items
+	 * @param p_num
 	 * @return
 	 */
-	int get( T *items
-	       , int num
+	int get( T * p_items
+	       , int p_num
 	       );
 
 	/**
 	 * keeps the current data intacted
 	 * Note: if resizing smaller, items will be lost from the front
 	 */
-	void resize(int new_size);
+	void resize(int p_new_size);
 
   protected:
-    T * buf;
-    int buf_size;
-    int cur_size;
-    int start;
-    bool autoGrow;
+    T * m_bufffer;
+    int m_buffer_size;
+    int m_current_size;
+    int m_start;
+    bool m_auto_grow;
 
     int end();
 
@@ -141,43 +141,43 @@ class RingBuffer
 template<class T>
 RingBuffer<T>::RingBuffer()
 {
-    buf = NULL;
-    buf_size = 0;
-    autoGrow = false;
+    m_bufffer = NULL;
+    m_buffer_size = 0;
+    m_auto_grow = false;
     clear();
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-RingBuffer<T>::RingBuffer(int buf_size_)
+RingBuffer<T>::RingBuffer(int p_buf_size)
 {
-    buf = NULL;
-    buf_size = 0;
-    autoGrow = false;
-    resize_clear(buf_size_);
+    m_bufffer = NULL;
+    m_buffer_size = 0;
+    m_auto_grow = false;
+    resize_clear(p_buf_size);
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
 RingBuffer<T>::~RingBuffer()
 {
-    if(buf)
+    if(m_bufffer)
     {
-        delete buf;
+        delete m_bufffer;
     }
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-void RingBuffer<T>::resize_clear(int buf_size_)
+void RingBuffer<T>::resize_clear(int p_buf_size)
 {
-    if(buf)
+    if(m_bufffer)
     {
-        delete buf;
+        delete m_bufffer;
     }
 
-    buf_size = std::max(buf_size_, 0);
-    buf = new T[buf_size];
+    m_buffer_size = std::max(p_buf_size, 0);
+    m_bufffer = new T[m_buffer_size];
     clear();
 }
 
@@ -185,69 +185,69 @@ void RingBuffer<T>::resize_clear(int buf_size_)
 template<class T>
 int RingBuffer<T>::size()
 {
-    return cur_size;
+    return m_current_size;
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
 int RingBuffer<T>::capacity()
 {
-    return buf_size;
+    return m_buffer_size;
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
 int RingBuffer<T>::available()
 {
-    return buf_size - cur_size;
+    return m_buffer_size - m_current_size;
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-void RingBuffer<T>::setAutoGrow(bool value)
+void RingBuffer<T>::setAutoGrow(bool p_value)
 {
-    autoGrow = value;
+    m_auto_grow = p_value;
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
 int RingBuffer<T>::nextGrowSize()
 {
-    return std::max(2, cur_size * 2);
+    return std::max(2, m_current_size * 2);
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-T & RingBuffer<T>::operator[](int x)
+T & RingBuffer<T>::operator[](int p_x)
 {
-    myassert(x >= 0 && x < cur_size);
-    return buf[(start + x) % buf_size];
+    myassert(p_x >= 0 && p_x < m_current_size);
+    return m_bufffer[(m_start + p_x) % m_buffer_size];
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
 void RingBuffer<T>::clear()
 {
-    cur_size = start = 0;
+    m_current_size = m_start = 0;
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-int RingBuffer<T>::ignore(int num)
+int RingBuffer<T>::ignore(int p_num)
 {
-    num = bound(num, 0, cur_size);
-    start = (start + num) % buf_size;
-    cur_size -= num;
-    return num;
+    p_num = bound(p_num, 0, m_current_size);
+    m_start = (m_start + p_num) % m_buffer_size;
+    m_current_size -= p_num;
+    return p_num;
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-bool RingBuffer<T>::put(const T &item)
+bool RingBuffer<T>::put(const T &p_item)
 {
-    if(cur_size == buf_size)
+    if(m_current_size == m_buffer_size)
     {
-        if(autoGrow)
+        if(m_auto_grow)
         {
             resize(nextGrowSize());
         }
@@ -256,201 +256,201 @@ bool RingBuffer<T>::put(const T &item)
             return false;
         }
     }
-    buf[end()] = item;
-    cur_size++;
+    m_bufffer[end()] = p_item;
+    m_current_size++;
     return true;
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-int RingBuffer<T>::put( const T * items
-                      , int num
+int RingBuffer<T>::put( const T * p_items
+                      , int p_num
        )
 {
-    if(num <= 0)
+    if(p_num <= 0)
     {
         return 0;
     }
-    if(num > available())
+    if(p_num > available())
     {
-        if(autoGrow)
+        if(m_auto_grow)
         {
-            resize(nextPowerOf2(cur_size + num));
+            resize(nextPowerOf2(m_current_size + p_num));
         }
         else
         {
-            num = available();
+            p_num = available();
         }
     }
-    if(end() + num <= buf_size)
+    if(end() + p_num <= m_buffer_size)
     {
         //do in one go
-        //memcpy((void *)(buf+end()), (void *)items, num * sizeof(T));
-        std::copy(items, items + num, buf + end());
+        //memcpy((void *)(m_bufffer+end()), (void *)p_items, p_num * sizeof(T));
+        std::copy(p_items, p_items + p_num, m_bufffer + end());
     }
     else
     {
         //split into two bits
-        int chunk1 = buf_size - end();
-        //int chunk2 = num - chunk1;
-        //memcpy((void *)(buf+end()), (void *)items, chunk1 * sizeof(T));
-        std::copy(items, items + chunk1, buf + end());
-        //memcpy((void *)buf, (void *)(items+chunk1), chunk2 * sizeof(T));
-        std::copy(items + chunk1, items + num, buf);
+        int l_chunk_1 = m_buffer_size - end();
+        //int chunk2 = p_num - l_chunk_1;
+        //memcpy((void *)(m_bufffer+end()), (void *)p_items, l_chunk_1 * sizeof(T));
+        std::copy(p_items, p_items + l_chunk_1, m_bufffer + end());
+        //memcpy((void *)m_bufffer, (void *)(p_items+l_chunk_1), chunk2 * sizeof(T));
+        std::copy(p_items + l_chunk_1, p_items + p_num, m_bufffer);
     }
 
-    cur_size += num;
-    return num;
+    m_current_size += p_num;
+    return p_num;
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-void RingBuffer<T>::force_put(const T & item)
+void RingBuffer<T>::force_put(const T & p_item)
 {
-    if(autoGrow || cur_size < buf_size)
+    if(m_auto_grow || m_current_size < m_buffer_size)
     {
-        put(item);
+        put(p_item);
     }
     else
     {
-        buf[end()] = item;
-        start = (start + 1) % buf_size;
+        m_bufffer[end()] = p_item;
+        m_start = (m_start + 1) % m_buffer_size;
     }
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-void RingBuffer<T>::force_put( const T * items
+void RingBuffer<T>::force_put( const T * p_items
                              , int num
                              )
 {
-    if(autoGrow || num < available())
+    if(m_auto_grow || num < available())
     {
-        put(items, num);
+        put(p_items, num);
     }
-    if(num > buf_size)
+    if(num > m_buffer_size)
     {
-        //just fill the whole buffer with the last buf_size elements
-        //memcpy((void *)buf, (void *)(items+num-buf_size), buf_size * sizeof(T));
-        std::copy(items + num - buf_size, items + num, buf);
-        cur_size = buf_size;
-        start = 0;
+        //just fill the whole buffer with the last m_buffer_size elements
+        //memcpy((void *)m_bufffer, (void *)(p_items+num-m_buffer_size), m_buffer_size * sizeof(T));
+        std::copy(p_items + num - m_buffer_size, p_items + num, m_bufffer);
+        m_current_size = m_buffer_size;
+        m_start = 0;
     }
     else
     {
-        int overlap = num - available();
-        if(overlap > 0)
+        int l_overlap = num - available();
+        if(l_overlap > 0)
         {
-            ignore(overlap);
+            ignore(l_overlap);
         }
-        put(items, num);
+        put(p_items, num);
     }
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-bool RingBuffer<T>::peek(T * item)
+bool RingBuffer<T>::peek(T * p_item)
 {
-    if(cur_size < 1)
+    if(m_current_size < 1)
     {
         return false;
     }
-    *item = buf[start];
+    *p_item = m_bufffer[m_start];
     return true;
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-int RingBuffer<T>::peek( T * items
-                       , int num
+int RingBuffer<T>::peek( T * p_items
+                       , int p_num
                        )
 {
-    num = bound(num, 0, cur_size);
-    if(start + num < buf_size)
+    p_num = bound(p_num, 0, m_current_size);
+    if(m_start + p_num < m_buffer_size)
     {
         //do in one go
-        //memcpy((void *)items, (void *)(buf+start), num * sizeof(T));
-        std::copy(buf + start, buf + start + num, items);
+        //memcpy((void *)p_items, (void *)(m_bufffer+m_start), p_num * sizeof(T));
+        std::copy(m_bufffer + m_start, m_bufffer + m_start + p_num, p_items);
     }
     else
     {
         //split into two bits
-        int chunk1 = buf_size - start;
-        int chunk2 = num - chunk1;
-        //memcpy((void *)items, (void *)(buf+start), chunk1 * sizeof(T));
-        std::copy(buf + start, buf + buf_size, items);
-        //memcpy((void *)(items + chunk1), (void *)buf, chunk2 * sizeof(T));
-        std::copy(buf, buf+chunk2, items+chunk1);
+        int l_chunk_1 = m_buffer_size - m_start;
+        int l_chunk_2 = p_num - l_chunk_1;
+        //memcpy((void *)p_items, (void *)(m_bufffer+m_start), l_chunk_1 * sizeof(T));
+        std::copy(m_bufffer + m_start, m_bufffer + m_buffer_size, p_items);
+        //memcpy((void *)(p_items + l_chunk_1), (void *)m_bufffer, l_chunk_2 * sizeof(T));
+        std::copy(m_bufffer, m_bufffer + l_chunk_2, p_items + l_chunk_1);
     }
-    return num;
+    return p_num;
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-bool RingBuffer<T>::get(T * item)
+bool RingBuffer<T>::get(T * p_item)
 {
-    if(cur_size < 1)
+    if(m_current_size < 1)
     {
         return false;
     }
-    *item = buf[start];
-    start = (start + 1) % buf_size;
-    cur_size--;
+    *p_item = m_bufffer[m_start];
+    m_start = (m_start + 1) % m_buffer_size;
+    m_current_size--;
     return true;
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-int RingBuffer<T>::get( T * items
-                      , int num
+int RingBuffer<T>::get( T * p_items
+                      , int p_num
                       )
 {
-    num = peek(items, num);
-    start = (start + num) % buf_size;
-    cur_size -= num;
-    return num;
+    p_num = peek(p_items, p_num);
+    m_start = (m_start + p_num) % m_buffer_size;
+    m_current_size -= p_num;
+    return p_num;
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
-void RingBuffer<T>::resize(int new_size)
+void RingBuffer<T>::resize(int p_new_size)
 {
-    if(cur_size == 0)
+    if(m_current_size == 0)
     {
-        resize_clear(new_size);
+        resize_clear(p_new_size);
         return;
     }
-    if(new_size < buf_size)
+    if(p_new_size < m_buffer_size)
     {
-        ignore(buf_size - new_size);
+        ignore(m_buffer_size - p_new_size);
     }
-    T * new_buf = new T[new_size];
-    if(start + cur_size > buf_size)
+    T * l_new_buffer = new T[p_new_size];
+    if(m_start + m_current_size > m_buffer_size)
     {
         //do in one go
-        std::copy(buf + start, buf + start + cur_size, new_buf);
+        std::copy(m_bufffer + m_start, m_bufffer + m_start + m_current_size, l_new_buffer);
     }
     else
     {
-        int chunk1 = buf_size - start;
-        int chunk2 = cur_size - chunk1;
-        std::copy(buf + start, buf + buf_size, new_buf);
-        std::copy(buf, buf + chunk2, new_buf + chunk1);
+        int l_chunk_1 = m_buffer_size - m_start;
+        int l_chunk_2 = m_current_size - l_chunk_1;
+        std::copy(m_bufffer + m_start, m_bufffer + m_buffer_size, l_new_buffer);
+        std::copy(m_bufffer, m_bufffer + l_chunk_2, l_new_buffer + l_chunk_1);
     }
-    start = 0;
-    if(buf)
+    m_start = 0;
+    if(m_bufffer)
     {
-        delete buf;
+        delete m_bufffer;
     }
-    buf = new_buf;
-    buf_size = new_size;
+    m_bufffer = l_new_buffer;
+    m_buffer_size = p_new_size;
 }
 
 //-----------------------------------------------------------------------------
 template<class T>
 int RingBuffer<T>::end()
 {
-    return (start + cur_size) % buf_size;
+    return (m_start + m_current_size) % m_buffer_size;
 }
 
 #endif // RING_BUFFER_H
