@@ -17,42 +17,42 @@
 */
 
 //------------------------------------------------------------------------------
-double sq(const double & x)
+double sq(const double & p_x)
 {
-  return x * x;
+  return p_x * p_x;
 }
 
 //------------------------------------------------------------------------------
 #ifndef pow10
 //rasises 10^x
-double pow10(const double x)
+double pow10(const double p_x)
 {
-  return pow(10.0, x);
+  return pow(10.0, p_x);
 }
 #endif // pow10
 
 //------------------------------------------------------------------------------
 #ifndef pow2
 //rasises 2^x
-double pow2(const double & x)
+double pow2(const double & p_x)
 {
-  return pow(2.0, x);
+  return pow(2.0, p_x);
 }
 #endif // POW2
 
 //------------------------------------------------------------------------------
 #ifdef WINDOWS
 //From log rules  log_b(x) = log_a(x) / log_a(b)
-double log2(const double & x)
+double log2(const double & p_x)
 {
-  return log(x) / 0.69314718055994530941723212145818;
+  return log(p_x) / 0.69314718055994530941723212145818;
 }
 #endif // WINDOWS
 
 //------------------------------------------------------------------------------
-double logBaseN(const double & baseN, const double & x)
+double logBaseN(const double & p_base_N, const double & p_x)
 {
-  return log(x) / log(baseN);
+  return log(p_x) / log(p_base_N);
 }
 
 //------------------------------------------------------------------------------
@@ -62,176 +62,176 @@ double prand(void)
 }
 
 //------------------------------------------------------------------------------
-double cycle(const double & a, const double & b)
+double cycle(const double & p_a, const double & p_b)
 {
-    if(a >= 0.0)
+    if(p_a >= 0.0)
       {
-	return fmod(a, b);
+	return fmod(p_a, p_b);
       }
     else
       {
-	return b + fmod(a, b);
+	return p_b + fmod(p_a, p_b);
       }
 }
 
 //------------------------------------------------------------------------------
-int cycle(const int a, const int b)
+int cycle(const int p_a, const int p_b)
 {
-    if(a >= 0)
+    if(p_a >= 0)
       {
-	return a % b;
+	return p_a % p_b;
       }
     else
       {
-	return b + ((a+1) % b) - 1;
+	return p_b + ((p_a + 1) % p_b) - 1;
       }
 }
 
 //------------------------------------------------------------------------------
-double myround(const double & x)
+double myround(const double & p_x)
 {
-  return floor(x + 0.5);
+  return floor(p_x + 0.5);
 }
 
 //------------------------------------------------------------------------------
-int toInt(const float x)
+int toInt(const float p_x)
 {
-  return lrintf(x);
+  return lrintf(p_x);
 }
 
 //------------------------------------------------------------------------------
-int toInt(const double & x)
+int toInt(const double & p_x)
 {
-  return lrint(x);
+  return lrint(p_x);
 }
 
 //------------------------------------------------------------------------------
-int intFloor(const float x)
+int intFloor(const float p_x)
 {
-  return lrintf(x-0.5);
+  return lrintf(p_x - 0.5);
 }
 
 //------------------------------------------------------------------------------
-int intFloor(const double & x)
+int intFloor(const double & p_x)
 {
-  return lrint(x-0.5);
+  return lrint(p_x - 0.5);
 }
 
 //------------------------------------------------------------------------------
-int roundUp(const int x, const int multiple)
+int roundUp(const int p_x, const int p_multiple)
 {
-  int remainder = x % multiple;
-  return (remainder == 0) ? x : x - remainder + multiple;
-}
-
-//------------------------------------------------------------------------------
-template<class T>
-bool within(T plusMinus, T value1, T value2)
-{
-  return (value1 >= value2-plusMinus) ? (value1 <= value2+plusMinus) : false;
+  int l_remainder = p_x % p_multiple;
+  return (l_remainder == 0) ? p_x : p_x - l_remainder + p_multiple;
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-bool between(T x, T lowerBound, T upperBound)
+bool within(T p_plus_minus, T p_value_1, T p_value_2)
 {
-  return (x >= lowerBound) && (x <= upperBound);
+  return (p_value_1 >= p_value_2 - p_plus_minus) ? (p_value_1 <= p_value_2 + p_plus_minus) : false;
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-T bound(T var, T lowerBound, T upperBound)
+bool between(T p_x, T p_lower_bound, T p_upper_bound)
+{
+  return (p_x >= p_lower_bound) && (p_x <= p_upper_bound);
+}
+
+//------------------------------------------------------------------------------
+template<class T>
+T bound(T p_var, T p_lower_bound, T p_upper_bound)
 {
   //this way will deal with NAN, setting it to lowerBound
-  if(var >= lowerBound)
+  if(p_var >= p_lower_bound)
     {
-      if(var <= upperBound)
+      if(p_var <= p_upper_bound)
 	{
-	  return var;
+	  return p_var;
 	}
       else
 	{
-	  return upperBound;
+	  return p_upper_bound;
 	}
     }
   else
     {
-      return lowerBound;
+      return p_lower_bound;
     }
 }
 
 //------------------------------------------------------------------------------
-double parabolaTurningPoint(const double & a, const double & b, const double & c)
+double parabolaTurningPoint(const double & p_a, const double & p_b, const double & p_c)
 {
-  double bottom = (2 * ( c + a - 2 * b));
-  return (bottom == 0.0) ? 0.0 : ((a - c) / bottom);
+  double l_bottom = (2 * (p_c + p_a - 2 * p_b));
+  return (l_bottom == 0.0) ? 0.0 : ((p_a - p_c) / l_bottom);
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-inline void parabolaTurningPoint2(T y_1, T y0, T y1, T xOffset, T *x, T *y)
+inline void parabolaTurningPoint2(T p_y_1, T p_y0, T p_y1, T p_x_offset, T *p_x, T *p_y)
 {
-  T yTop = y_1 - y1;
-  T yBottom = y1 + y_1 - 2 * y0;
-  if(yBottom != 0.0)
+  T l_y_top = p_y_1 - p_y1;
+  T l_y_bottom = p_y1 + p_y_1 - 2 * p_y0;
+  if(l_y_bottom != 0.0)
     {
-      *x = xOffset + yTop / (2 * yBottom);
-      *y = y0 - (sq(yTop) / (8 * yBottom));
+      *p_x = p_x_offset + l_y_top / (2 * l_y_bottom);
+      *p_y = p_y0 - (sq(l_y_top) / (8 * l_y_bottom));
     }
   else
     {
-      *x = xOffset;
-      *y = y0;
+      *p_x = p_x_offset;
+      *p_y = p_y0;
     }
 }
 
 //------------------------------------------------------------------------------
 MinMax::MinMax(void):
-  min(0.0),
-  max(0.0)
+  m_min(0.0),
+  m_max(0.0)
 {
 }
 
 //------------------------------------------------------------------------------
-MinMax::MinMax(float min_, float max_):
-  min(min_),
-  max(max_)
+MinMax::MinMax(float p_min, float p_max):
+  m_min(p_min),
+  m_max(p_max)
 {
-}
-
-//------------------------------------------------------------------------------
-template <class ForwardIterator>
-int maxIndex(ForwardIterator aFirst, int length)
-{
-  int bestIndex = 0;
-  for(int j = 1; j < length; j++)
-    {
-      if(aFirst[j] > aFirst[bestIndex])
-	{
-	  bestIndex = j;
-	}
-    }
-  return bestIndex;
 }
 
 //------------------------------------------------------------------------------
 template <class ForwardIterator>
-int minIndex(ForwardIterator aFirst, int length)
+int maxIndex(ForwardIterator p_attay_first, int p_length)
 {
-  int bestIndex = 0;
-  for(int j = 1; j < length; j++)
+  int l_best_index = 0;
+  for(int l_j = 1; l_j < p_length; l_j++)
     {
-      if(aFirst[j] < aFirst[bestIndex])
+      if(p_attay_first[l_j] > p_attay_first[l_best_index])
 	{
-	  bestIndex = j;
+        l_best_index = l_j;
 	}
     }
-  return bestIndex;
+  return l_best_index;
+}
+
+//------------------------------------------------------------------------------
+template <class ForwardIterator>
+int minIndex(ForwardIterator p_array_first, int p_length)
+{
+  int l_best_index = 0;
+  for(int l_j = 1; l_j < p_length; l_j++)
+    {
+      if(p_array_first[l_j] < p_array_first[l_best_index])
+	{
+        l_best_index = l_j;
+	}
+    }
+  return l_best_index;
 }
 
 //------------------------------------------------------------------------------
 template<typename _ForwardIter, typename _Compare>
-std::pair<_ForwardIter, _ForwardIter> minMaxElement(_ForwardIter __first, _ForwardIter __last, _Compare __lessComp)
+std::pair<_ForwardIter, _ForwardIter> minMaxElement(_ForwardIter p_first, _ForwardIter p_last, _Compare p_less_comp)
 {
   // concept requirements
   //__glibcpp_function_requires(_ForwardIteratorConcept<_ForwardIter>)
@@ -239,123 +239,123 @@ std::pair<_ForwardIter, _ForwardIter> minMaxElement(_ForwardIter __first, _Forwa
   //typename iterator_traits<_ForwardIter>::value_type,
   //typename iterator_traits<_ForwardIter>::value_type>)
 
-  std::pair<_ForwardIter, _ForwardIter> __result(__first, __first);
-  if (__first == __last)
+  std::pair<_ForwardIter, _ForwardIter> l_result(p_first, p_first);
+  if (p_first == p_last)
     {
-      return __result;
+      return l_result;
     }
-  while (++__first != __last)
+  while (++p_first != p_last)
     {
-      if (__lessComp(*__first, *__result.first))
+      if (p_less_comp(*p_first, *l_result.first))
 	{
-	  __result.first = __first;
+        l_result.first = p_first;
 	}
-      if (__lessComp(*__result.second, *__first))
+      if (p_less_comp(*l_result.second, *p_first))
 	{
-	  __result.second = __first;
+        l_result.second = p_first;
 	}
   }
-  return __result;
+  return l_result;
 }
 
 //------------------------------------------------------------------------------
 template <class ForwardIterator>
-void addElements(ForwardIterator aFirst, ForwardIterator aLast, ForwardIterator bFirst)
+void addElements(ForwardIterator p_a_first, ForwardIterator p_a_last, ForwardIterator p_b_first)
 {
-  while(aFirst != aLast)
+  while(p_a_first != p_a_last)
     {
-      *aFirst += *bFirst;
-      ++bFirst;
-      ++aFirst;
+      *p_a_first += *p_b_first;
+      ++p_b_first;
+      ++p_a_first;
     }
 }
 
 //------------------------------------------------------------------------------
 template <class ForwardIterator, class ElementType>
-void addElements(ForwardIterator aFirst, ForwardIterator aLast, ForwardIterator bFirst, ElementType scaler)
+void addElements(ForwardIterator p_a_first, ForwardIterator p_a_last, ForwardIterator p_b_first, ElementType p_scaler)
 {
-  //while(aFirst != aLast) *bFirst++ += *aFirst++;
-  while(aFirst != aLast) { *aFirst += (*bFirst) * scaler; ++bFirst; ++aFirst; }
+  //while(p_a_first != p_a_last) *p_b_first++ += *p_a_first++;
+  while(p_a_first != p_a_last) { *p_a_first += (*p_b_first) * p_scaler; ++p_b_first; ++p_a_first; }
 }
 
 //------------------------------------------------------------------------------
 template <class ForwardIterator, class ElementType>
-void copyElementsScale(ForwardIterator aFirst, ForwardIterator aLast, ForwardIterator bFirst, ElementType scaler)
+void copyElementsScale(ForwardIterator p_a_first, ForwardIterator p_a_last, ForwardIterator p_b_first, ElementType p_scaler)
 {
-  while(aFirst != aLast)
+  while(p_a_first != p_a_last)
     {
-      *bFirst++ = (*aFirst++) * scaler;
+      *p_b_first++ = (*p_a_first++) * p_scaler;
     }
 }
 
 //------------------------------------------------------------------------------
 template <class ForwardIterator, class ElementType>
-void copyElementsDivide(ForwardIterator aFirst, ForwardIterator aLast, ForwardIterator bFirst, ElementType div)
+void copyElementsDivide(ForwardIterator p_a_first, ForwardIterator p_a_last, ForwardIterator p_b_first, ElementType p_div)
 {
-  while(aFirst != aLast)
+  while(p_a_first != p_a_last)
     {
-      *bFirst++ = (*aFirst++) / div;
+      *p_b_first++ = (*p_a_first++) / p_div;
     }
 }
 
 //------------------------------------------------------------------------------
 template <class T>
-T absolute(const T &x)
+T absolute(const T &p_x)
 {
-  return (x >= 0) ? x : -x;
+  return (p_x >= 0) ? p_x : -p_x;
 }
 
 //------------------------------------------------------------------------------
 template <class T>
-bool absoluteLess<T>::operator()(const T &x, const T &y) const
+bool absoluteLess<T>::operator()(const T &p_x, const T &p_y) const
 {
-  return absolute(x) < absolute(y);
+  return absolute(p_x) < absolute(p_y);
 }
 
 //------------------------------------------------------------------------------
 template <class T>
-bool absoluteGreater<T>::operator()(T &x, T &y) const
+bool absoluteGreater<T>::operator()(T &p_x, T &p_y) const
 {
-  return absolute(x) > absolute(y);
+  return absolute(p_x) > absolute(p_y);
 }
 
 //------------------------------------------------------------------------------
 template <class ForwardIterator, class ElementType>
-ForwardIterator binary_search_closest(ForwardIterator aFirst, ForwardIterator aLast, const ElementType &value)
+ForwardIterator binary_search_closest(ForwardIterator p_a_first, ForwardIterator p_a_last, const ElementType &p_value)
 {
-  std::pair<ForwardIterator, ForwardIterator> range = std::equal_range(aFirst, aLast, value);
-  if(range.first != aFirst)
+  std::pair<ForwardIterator, ForwardIterator> l_range = std::equal_range(p_a_first, p_a_last, p_value);
+  if(l_range.first != p_a_first)
     {
-      --range.first;
+      --l_range.first;
     }
-  if(range.second != aLast)
+  if(l_range.second != p_a_last)
     {
-      ++range.second;
+      ++l_range.second;
     }
-  ForwardIterator best = range.first;
-  ForwardIterator it = best;
-  while(++it != range.second)
+  ForwardIterator l_best = l_range.first;
+  ForwardIterator l_iter = l_best;
+  while(++l_iter != l_range.second)
     {
-      if(absolute(*it - value) < absolute(*best - value))
+      if(absolute(*l_iter - p_value) < absolute(*l_best - p_value))
 	{
-	  best = it;
+        l_best = l_iter;
 	}
     }
-  return best;
+  return l_best;
 }
 
 //------------------------------------------------------------------------------
 template <class ForwardIterator>
-ForwardIterator print_elements(ForwardIterator aFirst, ForwardIterator aLast)
+ForwardIterator print_elements(ForwardIterator p_a_first, ForwardIterator p_a_last)
 {
   std::cout << "[";
-  if(aFirst != aLast)
+  if(p_a_first != p_a_last)
     {
-      std::cout << *aFirst++;
+      std::cout << *p_a_first++;
     }
-  while(aFirst != aLast)
+  while(p_a_first != p_a_last)
     {
-      std::cout << " " << *aFirst++;
+      std::cout << " " << *p_a_first++;
     }
   std::cout << "]" << std::endl;
 }

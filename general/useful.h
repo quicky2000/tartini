@@ -37,47 +37,47 @@
 /**
    return a pointer to a 2d array with each element of size size
 */
-void **malloc2d(const int row, const int col, const int size);
+void **malloc2d(const int p_row, const int p_col, const int p_size);
 
 /**
    like malloc2d but changes an existing 2d array
 */
-void **realloc2d(void **ptr, const int row, const int col, const int old_rol, const int old_col, const int size);
+void **realloc2d(void **p_ptr, const int p_row, const int p_col, const int p_old_row, const int p_old_col, const int p_size);
 
 /**
    frees the memory created by malloc2d
 */
-void free2d(void **ptr, const int row);
+void free2d(void **p_ptr, const int p_row);
 
 /**
    returns x squared
 */
-inline double sq(const double & x);
+inline double sq(const double & p_x);
 
 /**
    return x to the power of integer y
    works for all values of x and y
 */
-double powi(const double x, const int y);
+double powi(const double p_x, const int p_y);
 
-double nearestPowerOf2(double x);
+double nearestPowerOf2(double p_x);
 
 #ifndef pow10
 //rasises 10^x
-inline double pow10(const double x);
+inline double pow10(const double p_x);
 #endif // pow10
 
 #ifndef pow2
 //rasises 2^x
-inline double pow2(const double & x);
+inline double pow2(const double & p_x);
 #endif // POW2
 
 #ifdef WINDOWS
 //From log rules  log_b(x) = log_a(x) / log_a(b)
-inline double log2(const double & x);
+inline double log2(const double & p_x);
 #endif // WINDOWS
 
-inline double logBaseN(const double & baseN, const double & x);
+inline double logBaseN(const double & p_base_N, const double & p_x);
 
 /**
    return a random number between 0 and 1 (inclusive)
@@ -87,113 +87,113 @@ inline double prand(void);
 /**
    cycle is like mod except it deals with negative numbers nicely
 */
-inline double cycle(const double & a, const double & b);
+inline double cycle(const double & p_a, const double & p_b);
 
-inline int cycle(const int a, const int b);
+inline int cycle(const int p_a, const int p_b);
 
-inline double myround(const double & x);
+inline double myround(const double & p_x);
 
-inline int toInt(const float x);
+inline int toInt(const float p_x);
 
-inline int toInt(const double & x);
+inline int toInt(const double & p_x);
 
-inline int intFloor(const float x);
+inline int intFloor(const float p_x);
 
-inline int intFloor(const double & x);
+inline int intFloor(const double & p_x);
 
 /**
    Round x up to the nearest multiple of multiple
 */
-inline int roundUp(const int x, const int multiple);
+inline int roundUp(const int p_x, const int p_multiple);
 
 /**
    Returns true if value1 is within plusMinus of value2 (inclusive)
 */
 template<class T>
-inline bool within(T plusMinus, T value1, T value2);
+inline bool within(T p_plus_minus, T p_value_1, T p_value_2);
 
 /**
    Returns true if x is between lowerBound and upperBound (inclusive)
 */
 template<class T>
-inline bool between(T x, T lowerBound, T upperBound);
+inline bool between(T p_x, T p_lower_bound, T p_upper_bound);
 
 /**
    makes  lowerBound <= var <= upperBound
 */
 template<class T>
-inline T bound(T var, T lowerBound, T upperBound);
+inline T bound(T p_var, T p_lower_bound, T p_upper_bound);
 
 /**
    Returns the x position of the min/max of a parabola
-   @param a, b and c are the values of the function at -1, 0 and 1
+   @param p_a, p_b and c are the values of the function at -1, 0 and 1
    @return The x position, or zero if no solution.
 */
-inline double parabolaTurningPoint(const double & a, const double & b, const double & c);
+inline double parabolaTurningPoint(const double & p_a, const double & p_b, const double & p_c);
 
 /**
    Calculate the x position and the y position of the min/max of a parabola at the same time
-   @param y_1, y0 and y1 are the values of the function at xOffset-1, xOffset and xOffset+1
-   @param xOffset the x value at which y0 is a function of
-   @param x The x result will be put in here
-   @param y The y result will be put in here
+   @param p_y_1, p_y0 and y1 are the values of the function at xOffset-1, xOffset and xOffset+1
+   @param p_x_offset the x value at which y0 is a function of
+   @param p_x The x result will be put in here
+   @param p_y The y result will be put in here
 */
 template<class T>
-inline void parabolaTurningPoint2(T y_1, T y0, T y1, T xOffset, T *x, T *y);
+inline void parabolaTurningPoint2(T p_y_1, T p_y0, T p_y1, T p_x_offset, T *p_x, T *p_y);
 
 struct MinMax
 {
   inline MinMax(void);
-  inline MinMax(float min_, float max_);
-  float min;
-  float max;
+  inline MinMax(float p_min, float p_max);
+  float m_min;
+  float m_max;
 };
 
 /**
    Returns the minimum & maximum values between two pointers
 */
-MinMax minMax(float *begin, float *end);
+MinMax minMax(float *p_begin, float *p_end);
 
 /**
    Returns the minimum & maximum values between two pointers, ignoring anything outside the two bounds (exclusive)
 */
-MinMax minMax(float *begin, float *end, float lowBound, float highBound);
+MinMax minMax(float *p_begin, float *p_end, float p_low_bound, float p_high_bound);
 
 /**
    Returns the average value between two pointers
 */
-float average(float *begin, float *end);
+float average(float *p_begin, float *p_end);
 
 /**
    Returns the average value between two pointers ignoring anything outside the two bounds (exclusive)
 */
-float average(float *begin, float *end, float lowBound, float highBound);
+float average(float *p_begin, float *p_end, float p_low_bound, float p_high_bound);
 
 /**
    This guarantees consistent blocks of indices for a given baseX value.
-   @param size the array's size
+   @param p_size the array's size
  **/
-int calcIndex(const double & frameTime, const double & baseX, int size);
+int calcIndex(const double & p_frame_time, const double & p_base_X, int p_size);
 
 /**
    Return the index with the maximum value in an array.
    If more than one value with the maximum, the first is returned.
-   @param aFirst Pointer to the beginning of the array
-   @param length The length of the array
+   @param p_attay_first Pointer to the beginning of the array
+   @param p_length The length of the array
    @return The index of the maximum
 */
 template <class ForwardIterator>
-inline int maxIndex(ForwardIterator aFirst, int length);
+inline int maxIndex(ForwardIterator p_attay_first, int p_length);
 
 /**
    Return the index with the minimum value in an array.
    If more than one value with the minimum, the first is returned.
-   @param aFirst Pointer to the beginning of the array
-   @param length The length of the array
+   @param p_array_first Pointer to the beginning of the array
+   @param p_length The length of the array
    @return The index of the minimum
 */
 template <class ForwardIterator>
-inline int minIndex(ForwardIterator aFirst, int length);
+inline int minIndex(ForwardIterator p_array_first, int p_length);
 
 #include <utility>
 
@@ -204,48 +204,48 @@ inline int minIndex(ForwardIterator aFirst, int length);
    @return a std::pair of which .first is an iterator to the min, and .second to the max
 */
 template<typename _ForwardIter, typename _Compare>
-inline std::pair<_ForwardIter, _ForwardIter> minMaxElement(_ForwardIter __first, _ForwardIter __last, _Compare __lessComp);
+inline std::pair<_ForwardIter, _ForwardIter> minMaxElement(_ForwardIter p_first, _ForwardIter p_last, _Compare p_less_comp);
 
 /**
    Add sequence 'B' element-wise to sequence 'A' and store result in 'A'
 */
 template <class ForwardIterator>
-inline void addElements(ForwardIterator aFirst, ForwardIterator aLast, ForwardIterator bFirst);
+inline void addElements(ForwardIterator p_a_first, ForwardIterator p_a_last, ForwardIterator p_b_first);
 
 /**
    Add a scaled sequence 'B' element-wise to sequence 'A' and store result in 'A'
 */
 template <class ForwardIterator, class ElementType>
-inline void addElements(ForwardIterator aFirst, ForwardIterator aLast, ForwardIterator bFirst, ElementType scaler);
+inline void addElements(ForwardIterator p_a_first, ForwardIterator p_a_last, ForwardIterator p_b_first, ElementType p_scaler);
 
 /**
    Copy element-wise 'A' into 'B' scaling the scaler
 */
 template <class ForwardIterator, class ElementType>
-inline void copyElementsScale(ForwardIterator aFirst, ForwardIterator aLast, ForwardIterator bFirst, ElementType scaler);
+inline void copyElementsScale(ForwardIterator p_a_first, ForwardIterator p_a_last, ForwardIterator p_b_first, ElementType p_scaler);
 
 
 /**
    Copy element-wise 'A' into 'B' dividing by div
 */
 template <class ForwardIterator, class ElementType>
-  void copyElementsDivide(ForwardIterator aFirst, ForwardIterator aLast, ForwardIterator bFirst, ElementType div);
+  void copyElementsDivide(ForwardIterator p_a_first, ForwardIterator p_a_last, ForwardIterator p_b_first, ElementType p_div);
 
 #include <functional>
 
 template <class T>
-inline T absolute(const T &x);
+inline T absolute(const T &p_x);
 
 template <class T>
 struct absoluteLess : public std::binary_function<T, T, bool>
 {
-  inline bool operator()(const T &x, const T &y)const;
+  inline bool operator()(const T &p_x, const T &p_y)const;
 };
 
 template <class T>
 struct absoluteGreater : public std::binary_function<T, T, bool>
 {
-  inline bool operator()(T &x, T &y)const;
+  inline bool operator()(T &p_x, T &p_y)const;
 };
 
 
@@ -254,7 +254,7 @@ struct absoluteGreater : public std::binary_function<T, T, bool>
    If dest already exists it will be overwitten
    @return true on success, false on error
 */
-bool copyFile(const char *src, const char *dest);
+bool copyFile(const char *p_src, const char *p_dest);
 
 /**
    Moves the file src to the file dest.
@@ -262,12 +262,12 @@ bool copyFile(const char *src, const char *dest);
    Otherwise it is copied, and the original removed.
    @return true on success, false on error
 */
-bool moveFile(const char *src, const char *dest);
+bool moveFile(const char *p_src, const char *p_dest);
 
 /**
    Returns the power of 2 greater or equal to x
 */
-int nextPowerOf2(int x);
+int nextPowerOf2(int p_x);
 
 #include <algorithm>
 
@@ -275,7 +275,7 @@ int nextPowerOf2(int x);
    Given an ordered sequence, 'A', return an iterator to the closest element to value
 */
 template <class ForwardIterator, class ElementType>
-inline ForwardIterator binary_search_closest(ForwardIterator aFirst, ForwardIterator aLast, const ElementType &value);
+inline ForwardIterator binary_search_closest(ForwardIterator p_a_first, ForwardIterator p_a_last, const ElementType &p_value);
 
 #include <iostream>
 
@@ -283,7 +283,7 @@ inline ForwardIterator binary_search_closest(ForwardIterator aFirst, ForwardIter
    Print out a range of elements to cout. eg [1 2 3 4]
 */
 template <class ForwardIterator>
-inline ForwardIterator print_elements(ForwardIterator aFirst, ForwardIterator aLast);
+inline ForwardIterator print_elements(ForwardIterator p_a_first, ForwardIterator p_a_last);
 
 #include "useful.hpp"
 

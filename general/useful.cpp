@@ -25,288 +25,288 @@
 
 //------------------------------------------------------------------------------
 //return a pointer to a 2d array with each element of size size
-void **malloc2d(const int row, const int col, const int size)
+void **malloc2d(const int p_row, const int p_col, const int p_size)
 {
-  void **ptr = (void **)malloc(sizeof(void *) * row);
-  for(int j=0; j<row; j++)
+  void **l_ptr = (void **)malloc(sizeof(void *) * p_row);
+  for(int l_j=0; l_j < p_row; l_j++)
     {
-      ptr[j] = (void *)malloc(size * col);
+        l_ptr[l_j] = (void *)malloc(p_size * p_col);
     }
-  return ptr;
+  return l_ptr;
 }
 
 //------------------------------------------------------------------------------
 //like malloc2d but changes an existing 2d array
-void **realloc2d(void **ptr, const int row, const int col, const int old_row, const int old_col, const int size)
+void **realloc2d(void **p_ptr, const int p_row, const int p_col, const int p_old_row, const int p_old_col, const int p_size)
 {
-  if(ptr)
+  if(p_ptr)
     {
-      int j;
+      int l_j;
       //shrink
-      if(row < old_row)
+      if(p_row < p_old_row)
 	{
-	  for(j=row; j<old_row; j++)
+	  for(l_j=p_row; l_j < p_old_row; l_j++)
 	    {
-	      free(ptr[j]);
+	      free(p_ptr[l_j]);
 	    }
-	  ptr = (void **)realloc(ptr, sizeof(void *) * row);
-	  if(col != old_col)
+        p_ptr = (void **)realloc(p_ptr, sizeof(void *) * p_row);
+	  if(p_col != p_old_col)
 	    {
-	      for(j=0; j<row; j++)
+	      for(l_j=0; l_j < p_row; l_j++)
 		{
-		  ptr[j] = (void *)realloc(ptr[j], size * col);
+            p_ptr[l_j] = (void *)realloc(p_ptr[l_j], p_size * p_col);
 		}
 	    }
 	}
       //grow
-      else if(row > old_row)
+      else if(p_row > p_old_row)
 	{
-	  ptr = (void **)realloc(ptr, sizeof(void *) * row);
-	  if(col != old_col)
+        p_ptr = (void **)realloc(p_ptr, sizeof(void *) * p_row);
+	  if(p_col != p_old_col)
 	    {
-	      for(j=0; j<old_row; j++)
+	      for(l_j=0; l_j < p_old_row; l_j++)
 		{
-		  ptr[j] = (void *)realloc(ptr[j], size * col);
+            p_ptr[l_j] = (void *)realloc(p_ptr[l_j], p_size * p_col);
 		}
 	    }
-	  for(j=old_row; j<row; j++)
+	  for(l_j=p_old_row; l_j < p_row; l_j++)
 	    {
-	      ptr[j] = (void *)malloc(size * col);
+            p_ptr[l_j] = (void *)malloc(p_size * p_col);
 	    }
 	}
       else
 	{ //same
-	  if(col != old_col)
+	  if(p_col != p_old_col)
 	    {
-	      for(j=0; j<row; j++)
+	      for(l_j=0; l_j < p_row; l_j++)
 		{
-		  ptr[j] = (void *)realloc(ptr[j], size * col);
+            p_ptr[l_j] = (void *)realloc(p_ptr[l_j], p_size * p_col);
 		}
 	    }
 	}
-      return ptr;
+      return p_ptr;
     }
   else
     {
-      return malloc2d(row, col, size);
+      return malloc2d(p_row, p_col, p_size);
     }
 }
 
 //------------------------------------------------------------------------------
-void free2d(void **ptr, const int row)
+void free2d(void **p_ptr, const int p_row)
 {
-  for(int j=0; j<row; j++)
+  for(int l_j=0; l_j < p_row; l_j++)
     {
-      free(ptr[j]);
+      free(p_ptr[l_j]);
     }
-  free(ptr);
+  free(p_ptr);
 }
 
 //------------------------------------------------------------------------------
-double powi(const double x, const int y)
+double powi(const double p_x, const int p_y)
 {
-    if(y > 1)
+    if(p_y > 1)
       {
-	if(y & 0x01)
+	if(p_y & 0x01)
 	  {
-	    return x * powi(x * x, y >> 1);
+	    return p_x * powi(p_x * p_x, p_y >> 1);
 	  }
 	else
 	  {
-	    return powi(x * x, y >> 1);
+	    return powi(p_x * p_x, p_y >> 1);
 	  }
       }
-    else if(y == 1)
+    else if(p_y == 1)
       {
-	return x;
+	return p_x;
       }
-    else if(y == 0)
+    else if(p_y == 0)
       {
 	return 1;
       }
     else 
       {
-	return 1.0 / powi(x, -y);
+	return 1.0 / powi(p_x, -p_y);
       }
 }
 
 //------------------------------------------------------------------------------
-double nearestPowerOf2(double x)
+double nearestPowerOf2(double p_x)
 {
-  return pow2(myround(log2(x)));
+  return pow2(myround(log2(p_x)));
 }
 
 //------------------------------------------------------------------------------
 //sets max_pos to the position with the max value in the array
 //sets max_value to the max value in the array
 //max_pos and/or max_value can be NULL
-void max_array(int n, float *data, int *max_pos, float *max_value)
+void max_array(int p_n, float *p_data, int *p_max_pos, float *p_max_value)
 {
-  int pos = 0;
-  float value = data[0];
-  for(int j=1; j<n; j++)
+  int l_pos = 0;
+  float l_value = p_data[0];
+  for(int l_j=1; l_j < p_n; l_j++)
     {
-      if(data[j] > value)
+      if(p_data[l_j] > l_value)
 	{
-	  value=data[j];
-	  pos=j;
+        l_value=p_data[l_j];
+        l_pos=l_j;
 	}
     }
-  if(max_pos)
+  if(p_max_pos)
     {
-      *max_pos = pos;
+      *p_max_pos = l_pos;
     }
-  if(max_value)
+  if(p_max_value)
     {
-      *max_value = value;
+      *p_max_value = l_value;
     }
 }
 
 //------------------------------------------------------------------------------
-MinMax minMax(float *begin, float *end)
+MinMax minMax(float *p_begin, float *p_end)
 {
-  if (begin == end)
+  if (p_begin == p_end)
     {
       return MinMax();
     }
   
-  MinMax toReturn(*begin, *begin);
+  MinMax l_result(*p_begin, *p_begin);
 
-  for (float *p = begin + 1; p < end; p++)
+  for (float *l_p = p_begin + 1; l_p < p_end; l_p++)
     {
-      toReturn.min = MIN(toReturn.min, *p);
-      toReturn.max = MAX(toReturn.max, *p);
+        l_result.m_min = MIN(l_result.m_min, *l_p);
+        l_result.m_max = MAX(l_result.m_max, *l_p);
     }
-  return toReturn;
+  return l_result;
 }
 
 //------------------------------------------------------------------------------
-MinMax minMax(float *begin, float *end, float lowBound, float highBound)
+MinMax minMax(float *p_begin, float *p_end, float p_low_bound, float p_high_bound)
 {
-  if (begin == end)
+  if (p_begin == p_end)
     {
       return MinMax();
     }
 
-  float def = (*begin > lowBound && *begin < highBound) ? *begin : 0;
-  MinMax toReturn(def, def);
+  float l_def = (*p_begin > p_low_bound && *p_begin < p_high_bound) ? *p_begin : 0;
+  MinMax l_result(l_def, l_def);
 
-  for (float *p = begin + 1; p < end; p++)
+  for (float *l_p = p_begin + 1; l_p < p_end; l_p++)
     {
-      if (*p >= lowBound && *p <= highBound)
+      if (*l_p >= p_low_bound && *l_p <= p_high_bound)
 	{
-	  toReturn.min = MIN(toReturn.min, *p);
-	  toReturn.max = MAX(toReturn.max, *p);
+        l_result.m_min = MIN(l_result.m_min, *l_p);
+        l_result.m_max = MAX(l_result.m_max, *l_p);
 	}
     }
-  return toReturn;
+  return l_result;
 }
 
 //------------------------------------------------------------------------------
-float average(float *begin, float *end)
+float average(float *p_begin, float *p_end)
 {
-  if (begin == end)
+  if (p_begin == p_end)
     {
       return 0;
     }
 
-  float total = *begin;
+  float l_total = *p_begin;
 
-  int count = 1;
-  for (float *p = begin + 1; p < end; p++, count++)
+  int l_count = 1;
+  for (float *l_p = p_begin + 1; l_p < p_end; l_p++, l_count++)
     {
-      total += *p;
+        l_total += *l_p;
     }
-  return (total / count);
+  return (l_total / l_count);
 }
 
 //------------------------------------------------------------------------------
-float average(float *begin, float *end, float lowBound, float highBound)
+float average(float *p_begin, float *p_end, float p_low_bound, float p_high_bound)
 {
-  if (begin == end)
+  if (p_begin == p_end)
     {
-      return *begin;
+      return *p_begin;
     }
 
-  float total = (*begin > lowBound && *begin < highBound) ? *begin : 0;
+  float l_total = (*p_begin > p_low_bound && *p_begin < p_high_bound) ? *p_begin : 0;
 
-  int count = 1;
-  for (float *p = begin + 1; p < end; p++, count++)
+  int l_count = 1;
+  for (float *l_p = p_begin + 1; l_p < p_end; l_p++, l_count++)
     {
-      if (*p >= lowBound && *p <= highBound)
+      if (*l_p >= p_low_bound && *l_p <= p_high_bound)
 	{
-	  total += *p;
+        l_total += *l_p;
 	}
     }
-  return (total / count);
+  return (l_total / l_count);
 }
 
 //------------------------------------------------------------------------------
-int calcIndex(const double & frameTime, const double & baseX, int size)
+int calcIndex(const double & p_frame_time, const double & p_base_X, int p_size)
 {
-  int toReturn = (int) myround((floor(frameTime / baseX) * baseX));
-  if (toReturn < 0)
+  int l_result = (int) myround((floor(p_frame_time / p_base_X) * p_base_X));
+  if (l_result < 0)
     {
       return 0;
     }
-  if (toReturn > size)
+  if (l_result > p_size)
     {
-      return size;
+      return p_size;
     }
-  return toReturn;
+  return l_result;
 }
 
 //------------------------------------------------------------------------------
-bool copyFile(const char *src, const char *dest)
+bool copyFile(const char *p_src, const char *p_dest)
 {
-  char buffer[4096];
-  size_t bytesRead;
+  char l_buffer[4096];
+  size_t l_bytes_read;
   
-  FILE *inputFile = fopen(src, "rb");
-  if(!inputFile)
+  FILE *l_input_file = fopen(p_src, "rb");
+  if(!l_input_file)
     {
-      fprintf(stderr, "copyFile: Error opening %s for reading\n", src);
+      fprintf(stderr, "copyFile: Error opening %s for reading\n", p_src);
       return false;
     }
   
-  FILE *outputFile = fopen(dest, "wb");
-  if(!outputFile)
+  FILE *l_output_file = fopen(p_dest, "wb");
+  if(!l_output_file)
     {
-      fclose(inputFile);
-      fprintf(stderr, "copyFile: Error opening %s for writing\n", dest);
+      fclose(l_input_file);
+      fprintf(stderr, "copyFile: Error opening %s for writing\n", p_dest);
       return false;
   }
   
-  while((bytesRead = fread(buffer, 1, 4096, inputFile)) != 0)
+  while((l_bytes_read = fread(l_buffer, 1, 4096, l_input_file)) != 0)
     {
-      if(fwrite(buffer, 1, bytesRead, outputFile) < bytesRead)
+      if(fwrite(l_buffer, 1, l_bytes_read, l_output_file) < l_bytes_read)
 	{
-	  fprintf(stderr, "copyFile: Error writing to %s. Possibly out of disk\n", dest);
-	  fclose(inputFile);
-	  fclose(outputFile);
+	  fprintf(stderr, "copyFile: Error writing to %s. Possibly out of disk\n", p_dest);
+	  fclose(l_input_file);
+	  fclose(l_output_file);
 	  return false;
 	}
     }
 
-  fclose(inputFile);
-  fclose(outputFile);
+  fclose(l_input_file);
+  fclose(l_output_file);
   return true; //success
 }
 
 //------------------------------------------------------------------------------
-bool moveFile(const char *src, const char *dest)
+bool moveFile(const char *p_src, const char *p_dest)
 {
-  if(rename(src, dest) == 0)
+  if(rename(p_src, p_dest) == 0)
     {
       return true;
     }
   if(errno == EXDEV)
     { //on different file system
-      if(copyFile(src, dest))
+      if(copyFile(p_src, p_dest))
 	{
-	  if(remove(src))
+	  if(remove(p_src))
 	    {
-	      fprintf(stderr, "moveFile: Copy to %s Successful. Error removing old file %s\n", dest, src);
+	      fprintf(stderr, "moveFile: Copy to %s Successful. Error removing old file %s\n", p_dest, p_src);
 	      return false;
 	    }
 	  else
@@ -317,21 +317,21 @@ bool moveFile(const char *src, const char *dest)
     }
   else
     {
-      fprintf(stderr, "moveFile: Error moving '%s' to '%s'\n", src, dest);
+      fprintf(stderr, "moveFile: Error moving '%s' to '%s'\n", p_src, p_dest);
     }
   return false;
 }
 
 //------------------------------------------------------------------------------
-int nextPowerOf2(int x)
+int nextPowerOf2(int p_x)
 {
-  myassert(x > 1<<31);
-  int y = 1;
-  while(y < x)
+  myassert(p_x > 1 << 31);
+  int l_y = 1;
+  while(l_y < p_x)
     {
-      y <<= 1;
+        l_y <<= 1;
     }
-  return y;
+  return l_y;
 }
 
 //EOF
