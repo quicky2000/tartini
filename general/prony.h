@@ -15,9 +15,9 @@
 #ifndef PRONY_H
 #define PRONY_H
 
-const double Pi = 3.1415926535897932384;
-const double TwoPi = 3.1415926535897932384 * 2.0;
-const double HalfPi = 3.1415926535897932384 * 0.5;
+const double g_pi = 3.1415926535897932384;
+const double g_two_pi = 3.1415926535897932384 * 2.0;
+const double g_half_pi = 3.1415926535897932384 * 0.5;
 
 /**
    fitted parameters
@@ -27,24 +27,24 @@ struct PronyData
   /**
      amplitude
   */
-  double amp;
+  double m_amp;
 
   /**
      phase in radians
    */
-  double phase;
+  double m_phase;
 
   /**
      frequency in radians per unit
   */
-  double omega;
+  double m_omega;
 
-  double yOffset;
+  double m_y_offset;
 
   /**
      squared error of the fit
   */
-  double error;   
+  double m_error;
 
   PronyData(void)
   {
@@ -53,27 +53,27 @@ struct PronyData
   
   void reset(void)
   {
-    amp = phase = omega = yOffset = error = 0.0;
+      m_amp = m_phase = m_omega = m_y_offset = m_error = 0.0;
   }
 
   /**
-     @param dt is the time between samples in the input.
+     @param p_dt is the time between samples in the input.
   */
-  double freqHz(double dt)
+  double freqHz(double p_dt)
   {
-    return omega / (dt * TwoPi);
+    return m_omega / (p_dt * g_two_pi);
   }
 };
 
 /**
    Prony Spectral Line Extimation (see S. Kay "Spectrum Analysis - A Modern Perspective" Pro. IEEE, Vol 69, #11, Nov 1981)
-   @param result Where the results of the calculation are stored
-   @param x The data to process
-   @param length The number of elements in x
-   @param gap The number samples used as a delay size (best is around 1/4 of a cycle)
+   @param p_result Where the results of the calculation are stored
+   @param p_x The data to process
+   @param p_length The number of elements in x
+   @param p_gap The number samples used as a delay size (best is around 1/4 of a cycle)
    @return true if the prony fit was a success. else false 
 */
-bool pronyFit(PronyData *result, const float *x, int length, int gap, bool allowOffset);
+bool pronyFit(PronyData *p_result, const float *p_x, int p_length, int p_gap, bool p_allow_offset);
 
 #endif // PRONY_H
 // EOF
