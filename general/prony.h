@@ -24,45 +24,49 @@ const double g_half_pi = 3.1415926535897932384 * 0.5;
 */
 struct PronyData
 { 
-  /**
-     amplitude
-  */
-  double m_amp;
+    /**
+       amplitude
+    */
+    double m_amp;
 
-  /**
-     phase in radians
-   */
-  double m_phase;
+    /**
+       phase in radians
+     */
+    double m_phase;
 
-  /**
-     frequency in radians per unit
-  */
-  double m_omega;
+    /**
+       frequency in radians per unit
+    */
+    double m_omega;
 
-  double m_y_offset;
+    double m_y_offset;
 
-  /**
-     squared error of the fit
-  */
-  double m_error;
+    /**
+       squared error of the fit
+    */
+    double m_error;
 
-  PronyData(void)
-  {
-    reset();
-  }
+    PronyData(void)
+    {
+        reset();
+    }
   
-  void reset(void)
-  {
-      m_amp = m_phase = m_omega = m_y_offset = m_error = 0.0;
-  }
+    void reset(void)
+    {
+        m_amp = 0.0;
+        m_phase = 0.0;
+        m_omega = 0.0;
+        m_y_offset = 0.0;
+        m_error = 0.0;
+    }
 
-  /**
-     @param p_dt is the time between samples in the input.
-  */
-  double freqHz(double p_dt)
-  {
-    return m_omega / (p_dt * g_two_pi);
-  }
+    /**
+       @param p_dt is the time between samples in the input.
+    */
+    double freqHz(double p_dt)
+    {
+        return m_omega / (p_dt * g_two_pi);
+    }
 };
 
 /**
@@ -73,7 +77,12 @@ struct PronyData
    @param p_gap The number samples used as a delay size (best is around 1/4 of a cycle)
    @return true if the prony fit was a success. else false 
 */
-bool pronyFit(PronyData *p_result, const float *p_x, int p_length, int p_gap, bool p_allow_offset);
+bool pronyFit( PronyData * p_result
+             , const float * p_x
+             , int p_length
+             , int p_gap
+             , bool p_allow_offset
+             );
 
 #endif // PRONY_H
 // EOF
