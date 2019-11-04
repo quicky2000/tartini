@@ -17,71 +17,71 @@
 */
 
 //------------------------------------------------------------------------------
-MyGLfloat2d::MyGLfloat2d(GLfloat _x, GLfloat _y):
-  x(_x),
-  y(_y)
+MyGLfloat2d::MyGLfloat2d(GLfloat p_x, GLfloat p_y):
+  m_x(p_x),
+  m_y(p_y)
 {
 }
 
 //------------------------------------------------------------------------------
-void MyGLfloat2d::set(GLfloat _x, GLfloat _y)
+void MyGLfloat2d::set(GLfloat p_x, GLfloat p_y)
 {
-  x=_x;
-  y=_y;
+  m_x=p_x;
+  m_y=p_y;
 }
 
 
 //------------------------------------------------------------------------------
-void mygl_line(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2)
+void mygl_line(GLfloat p_x1, GLfloat p_y1, GLfloat p_x2, GLfloat p_y2)
 {
   glBegin(GL_LINES);
-  glVertex2f(x1, y1);
-  glVertex2f(x2, y2);
+  glVertex2f(p_x1, p_y1);
+  glVertex2f(p_x2, p_y2);
   glEnd();
 }
 
 //------------------------------------------------------------------------------
-void mygl_rect(GLfloat x, GLfloat y, GLfloat w, GLfloat h)
+void mygl_rect(GLfloat p_x, GLfloat p_y, GLfloat p_width, GLfloat p_height)
 {
   glBegin(GL_QUADS);
-  glVertex2f(x, y);
-  glVertex2f(x + w, y);
-  glVertex2f(x + w, y + h);
-  glVertex2f(x, y + h);
+  glVertex2f(p_x, p_y);
+  glVertex2f(p_x + p_width, p_y);
+  glVertex2f(p_x + p_width, p_y + p_height);
+  glVertex2f(p_x, p_y + p_height);
   glEnd();
 }
 
 //------------------------------------------------------------------------------
-void mygl_rect(const MyGLfloat2d & v1, const MyGLfloat2d & v2)
+void mygl_rect(const MyGLfloat2d & p_v1, const MyGLfloat2d & p_v2)
 {
   glBegin(GL_QUADS);
-  glVertex2f(v1.x, v1.y);
-  glVertex2f(v2.x, v1.y);
-  glVertex2f(v2.x, v2.y);
-  glVertex2f(v1.x, v2.y);
+  glVertex2f(p_v1.m_x, p_v1.m_y);
+  glVertex2f(p_v2.m_x, p_v1.m_y);
+  glVertex2f(p_v2.m_x, p_v2.m_y);
+  glVertex2f(p_v1.m_x, p_v2.m_y);
   glEnd();
 }
 
 //------------------------------------------------------------------------------
-void mygl_resize2d(int w, int h)
+void mygl_resize2d(int p_width, int p_height)
 {
-  glViewport(0, 0, (GLint)w, (GLint)h);
+  glViewport(0, 0, (GLint)p_width, (GLint)p_height);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluOrtho2D(0, w, h, 0);
+  gluOrtho2D(0, p_width, p_height, 0);
 }
 
 //------------------------------------------------------------------------------
-GLushort my_wrap_left(GLushort x, int offset)
+GLushort my_wrap_left(GLushort p_x, int p_offset)
 {
-  offset %= 16;
-  return (x << offset) + (x >> (16 - offset));
+    p_offset %= 16;
+  return (p_x << p_offset) + (p_x >> (16 - p_offset));
 }
 
 //------------------------------------------------------------------------------
-GLushort my_wrap_right(GLushort x, int offset)
+GLushort my_wrap_right(GLushort p_x, int p_offset)
 {
-  offset %= 16;
-  return (x >> offset) + (x << (16 - offset));
+    p_offset %= 16;
+  return (p_x >> p_offset) + (p_x << (16 - p_offset));
 }
 //EOF

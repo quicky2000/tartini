@@ -23,18 +23,18 @@
 
 struct MyGLfloat2d
 {
-  GLfloat x;
-  GLfloat y;
-  inline MyGLfloat2d(GLfloat _x, GLfloat _y);
-  inline void set(GLfloat _x, GLfloat _y);
+  GLfloat m_x;
+  GLfloat m_y;
+  inline MyGLfloat2d(GLfloat p_x, GLfloat p_y);
+  inline void set(GLfloat p_x, GLfloat p_y);
 };
 
-inline void mygl_line(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2);
-inline void mygl_rect(GLfloat x, GLfloat y, GLfloat w, GLfloat h);
-inline void mygl_rect(const MyGLfloat2d & v1, const MyGLfloat2d & v2);
-inline void mygl_resize2d(int w, int h);
-inline GLushort my_wrap_left(GLushort x, int offset);
-inline GLushort my_wrap_right(GLushort x, int offset);
+inline void mygl_line(GLfloat p_x1, GLfloat p_y1, GLfloat p_x2, GLfloat p_y2);
+inline void mygl_rect(GLfloat p_x, GLfloat p_y, GLfloat p_width, GLfloat p_height);
+inline void mygl_rect(const MyGLfloat2d & p_v1, const MyGLfloat2d & p_v2);
+inline void mygl_resize2d(int p_width, int p_height);
+inline GLushort my_wrap_left(GLushort p_x, int p_offset);
+inline GLushort my_wrap_right(GLushort p_x, int p_offset);
 
 #include "mygl.hpp"
 
