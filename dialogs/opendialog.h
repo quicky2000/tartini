@@ -33,7 +33,9 @@ class OpenDialog : public QFileDialog
     void accept(void);
   
     static QString getOpenWavFileName(QWidget * p_parent = 0);
-  
+
+  private:
+    
     QCheckBox * m_remember_folder_check_box;
 };
 
