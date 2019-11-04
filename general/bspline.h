@@ -25,7 +25,7 @@
    a linear interpolation
    quicker than b-spline
 */
-float interpolate_linear(int len, const float *array, float x);
+float interpolate_linear(int p_len, const float *p_array, float p_x);
 
 /**
    a cubic b-spline interpolation
@@ -33,12 +33,12 @@ float interpolate_linear(int len, const float *array, float x);
          but it gives a nice smooth curve
          slower than linear
 */
-float interpolate_b_spline(int len, const float *array, float x);
+float interpolate_b_spline(int p_len, const float *p_array, float p_x);
 
 /**
    Uses a Hermite curve
 */
-float interpolate_cubic(int len, const float *data, const double & x);
+float interpolate_cubic(int p_len, const float *p_data, const double & p_x);
 
 /**
    NOTE: Only LINEAR has been optimised a little for speed. The others could be made more efficient
@@ -49,7 +49,7 @@ float interpolate_cubic(int len, const float *data, const double & x);
    type = LINEAR or BSPLINE
 */
 //------------------------------------------------------------------------------
-void stretch_array(int in_len, const float *in, int out_len, float *out, float start, float len, int type);
+void stretch_array(int p_in_len, const float *p_in, int p_out_len, float *p_out, float p_start, float p_len, int p_type);
 
 #endif // BSPLINE_H
 //EOF
