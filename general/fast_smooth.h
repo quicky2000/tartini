@@ -20,7 +20,7 @@
 /**
    rotates a the complex number (sin_sum, cos_sum) by an angle.
 */
-inline void fast_complex_rotate(double &x, double &y, const double & sin_angle, const double & cos_angle);
+inline void fast_complex_rotate(double &p_x, double &p_y, const double & p_sin_angle, const double & p_cos_angle);
 
 /**
    A class to perform smoothing/bluring on data using a hanning (cos shaped) window.
@@ -28,28 +28,28 @@ inline void fast_complex_rotate(double &x, double &y, const double & sin_angle, 
 */
 class fast_smooth
 {
-    int _size, _size_left, _size_right;
-    double _angle;
-    double _cos_angle, _sin_angle;
-    double _sum;
+    int m_size, m_size_left, m_size_right;
+    double m_angle;
+    double m_cos_angle, m_sin_angle;
+    double m_sum;
 
  public:
     /**
         the total width of the hanning window. To keep data centered use an odd size
     */
-    fast_smooth(int size);
-    void fast_smoothA(float *source, float *dest, int length, int step);
-    void fast_smoothA(float *source, float *dest, int length);
+    fast_smooth(int p_size);
+    void fast_smoothA(float *p_source, float *p_dest, int p_length, int p_step);
+    void fast_smoothA(float *p_source, float *p_dest, int p_length);
 
     /**
        treats all values off either end the same as the value at end
     */
-    void fast_smoothB(float *source, float *dest, int length, int step);
+    void fast_smoothB(float *p_source, float *p_dest, int p_length, int p_step);
 
     /**
        treats all values off either end the same as the value at end
     */
-    void fast_smoothB(float *source, float *dest, int length);
+    void fast_smoothB(float *p_source, float *p_dest, int p_length);
 };
 
 #include "fast_smooth.hpp"

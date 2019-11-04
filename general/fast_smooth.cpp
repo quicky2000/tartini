@@ -19,205 +19,205 @@
 #include <numeric>
 
 //------------------------------------------------------------------------------
-fast_smooth::fast_smooth(int size):
-  _size(size),
-  _size_left(_size / 2),
-  _size_right(_size - _size_left),
-  _angle(-2 * M_PI/double(size + 1)), 
-  _cos_angle(cos(_angle)),
-  _sin_angle(sin(_angle)),
-  _sum(0)
+fast_smooth::fast_smooth(int p_size):
+        m_size(p_size),
+        m_size_left(m_size / 2),
+        m_size_right(m_size - m_size_left),
+        m_angle(-2 * M_PI / double(p_size + 1)),
+        m_cos_angle(cos(m_angle)),
+        m_sin_angle(sin(m_angle)),
+        m_sum(0)
 {
-  for(int j = 0; j < size; j++)
+  for(int l_j = 0; l_j < p_size; l_j++)
     {
-      _sum += 1.0 - cos((j + 1) * _angle);
+        m_sum += 1.0 - cos((l_j + 1) * m_angle);
     }
 }
 
 //------------------------------------------------------------------------------
-void fast_smooth::fast_smoothA(float *source, float *dest, int length, int step)
+void fast_smooth::fast_smoothA(float *p_source, float *p_dest, int p_length, int p_step)
 {
-  if(step == 1)
+  if(p_step == 1)
     {
-      fast_smoothA(source, dest, length);
+      fast_smoothA(p_source, p_dest, p_length);
       return;
     }
   //blur stays centered if odd
-  double cos_sum = 0;
-  double sin_sum = 0;
-  double total_sum = 0;
-  int j;
-  for(j = 0; j < _size_right; j++)
+  double l_cos_sum = 0;
+  double l_sin_sum = 0;
+  double l_total_sum = 0;
+  int l_j;
+  for(l_j = 0; l_j < m_size_right; l_j++)
     {
-      cos_sum += source[j * step];
-      fast_complex_rotate(sin_sum, cos_sum, _sin_angle, _cos_angle);
-      total_sum += source[j * step];
+        l_cos_sum += p_source[l_j * p_step];
+      fast_complex_rotate(l_sin_sum, l_cos_sum, m_sin_angle, m_cos_angle);
+        l_total_sum += p_source[l_j * p_step];
     }
-  for(j = 0; j < _size_left; j++)
+  for(l_j = 0; l_j < m_size_left; l_j++)
     {
-      dest[j * step] = (total_sum - cos_sum) / _sum;
-      cos_sum += source[(j + _size_right) * step];
-      fast_complex_rotate(sin_sum, cos_sum, _sin_angle, _cos_angle);
-      total_sum += source[(j + _size_right) * step];
+        p_dest[l_j * p_step] = (l_total_sum - l_cos_sum) / m_sum;
+        l_cos_sum += p_source[(l_j + m_size_right) * p_step];
+      fast_complex_rotate(l_sin_sum, l_cos_sum, m_sin_angle, m_cos_angle);
+        l_total_sum += p_source[(l_j + m_size_right) * p_step];
     }
-  for(j = _size_left; j < length - _size_left - 1; j++)
+  for(l_j = m_size_left; l_j < p_length - m_size_left - 1; l_j++)
     {
-      dest[j * step] = (total_sum - cos_sum) / _sum;
-      cos_sum += source[(j + _size_right) * step];
-      fast_complex_rotate(sin_sum, cos_sum, _sin_angle, _cos_angle);
-      cos_sum -= source[(j - _size_left) * step];
-      total_sum += source[(j + _size_right) * step] - source[(j - _size_left) * step];
+        p_dest[l_j * p_step] = (l_total_sum - l_cos_sum) / m_sum;
+        l_cos_sum += p_source[(l_j + m_size_right) * p_step];
+      fast_complex_rotate(l_sin_sum, l_cos_sum, m_sin_angle, m_cos_angle);
+        l_cos_sum -= p_source[(l_j - m_size_left) * p_step];
+        l_total_sum += p_source[(l_j + m_size_right) * p_step] - p_source[(l_j - m_size_left) * p_step];
   }
-  for(j = length - _size_left - 1; j < length; j++)
+  for(l_j = p_length - m_size_left - 1; l_j < p_length; l_j++)
     {
-      dest[j * step] = (total_sum - cos_sum) / _sum;
-      fast_complex_rotate(sin_sum, cos_sum, _sin_angle, _cos_angle);
-      cos_sum -= source[(j - _size_left) * step];
-      total_sum -= source[(j - _size_left) * step];
+        p_dest[l_j * p_step] = (l_total_sum - l_cos_sum) / m_sum;
+      fast_complex_rotate(l_sin_sum, l_cos_sum, m_sin_angle, m_cos_angle);
+        l_cos_sum -= p_source[(l_j - m_size_left) * p_step];
+        l_total_sum -= p_source[(l_j - m_size_left) * p_step];
     }
 }
 
 //------------------------------------------------------------------------------
-void fast_smooth::fast_smoothA(float *source, float *dest, int length)
+void fast_smooth::fast_smoothA(float *p_source, float *p_dest, int p_length)
 {
   //blur stays centered if odd
-  double cos_sum = 0;
-  double sin_sum = 0;
-  double total_sum = 0;
-  int j;
-  for(j = 0; j < _size_right; j++)
+  double l_cos_sum = 0;
+  double l_sin_sum = 0;
+  double l_total_sum = 0;
+  int l_j;
+  for(l_j = 0; l_j < m_size_right; l_j++)
     {
-      cos_sum += source[j];
-      fast_complex_rotate(sin_sum, cos_sum, _sin_angle, _cos_angle);
-      total_sum += source[j];
+        l_cos_sum += p_source[l_j];
+      fast_complex_rotate(l_sin_sum, l_cos_sum, m_sin_angle, m_cos_angle);
+        l_total_sum += p_source[l_j];
     }
-  for(j = 0; j < _size_left; j++)
+  for(l_j = 0; l_j < m_size_left; l_j++)
     {
-      dest[j] = (total_sum - cos_sum) / _sum;
-      cos_sum += source[(j + _size_right)];
-      fast_complex_rotate(sin_sum, cos_sum, _sin_angle, _cos_angle);
-      total_sum += source[(j + _size_right)];
+        p_dest[l_j] = (l_total_sum - l_cos_sum) / m_sum;
+        l_cos_sum += p_source[(l_j + m_size_right)];
+      fast_complex_rotate(l_sin_sum, l_cos_sum, m_sin_angle, m_cos_angle);
+        l_total_sum += p_source[(l_j + m_size_right)];
     }
-  for(j = _size_left; j < length - _size_left - 1; j++)
+  for(l_j = m_size_left; l_j < p_length - m_size_left - 1; l_j++)
     {
-      dest[j] = (total_sum - cos_sum) / _sum;
-      cos_sum += source[(j + _size_right)];
-      fast_complex_rotate(sin_sum, cos_sum, _sin_angle, _cos_angle);
-      cos_sum -= source[(j - _size_left)];
-      total_sum += source[(j + _size_right)] - source[(j - _size_left)];
+        p_dest[l_j] = (l_total_sum - l_cos_sum) / m_sum;
+        l_cos_sum += p_source[(l_j + m_size_right)];
+      fast_complex_rotate(l_sin_sum, l_cos_sum, m_sin_angle, m_cos_angle);
+        l_cos_sum -= p_source[(l_j - m_size_left)];
+        l_total_sum += p_source[(l_j + m_size_right)] - p_source[(l_j - m_size_left)];
     }
-  for(j = length - _size_left - 1; j < length; j++)
+  for(l_j = p_length - m_size_left - 1; l_j < p_length; l_j++)
     {
-      dest[j] = (total_sum - cos_sum) / _sum;
-      fast_complex_rotate(sin_sum, cos_sum, _sin_angle, _cos_angle);
-      cos_sum -= source[(j - _size_left)];
-      total_sum -= source[(j - _size_left)];
+        p_dest[l_j] = (l_total_sum - l_cos_sum) / m_sum;
+      fast_complex_rotate(l_sin_sum, l_cos_sum, m_sin_angle, m_cos_angle);
+        l_cos_sum -= p_source[(l_j - m_size_left)];
+        l_total_sum -= p_source[(l_j - m_size_left)];
     }
 }
 
 //------------------------------------------------------------------------------
-void fast_smooth::fast_smoothB(float *source, float *dest, int length, int step)
+void fast_smooth::fast_smoothB(float *p_source, float *p_dest, int p_length, int p_step)
 {
-  if(step == 1)
+  if(p_step == 1)
     {
-      fast_smoothB(source, dest, length);
+      fast_smoothB(p_source, p_dest, p_length);
       return;
     }
   //blur should be odd
-  double cos_sum = 0;
-  double sin_sum = 0;
-  double total_sum = 0;
-  int j;
-  for(j = 0; j < _size_left; j++)
+  double l_cos_sum = 0;
+  double l_sin_sum = 0;
+  double l_total_sum = 0;
+  int l_j;
+  for(l_j = 0; l_j < m_size_left; l_j++)
     {
-      cos_sum += source[0* step];
-      fast_complex_rotate(sin_sum, cos_sum, _sin_angle, _cos_angle);
-      total_sum += source[0* step];
+        l_cos_sum += p_source[0 * p_step];
+      fast_complex_rotate(l_sin_sum, l_cos_sum, m_sin_angle, m_cos_angle);
+        l_total_sum += p_source[0 * p_step];
     }
-  for(j = 0; j<_size_right; j++)
+  for(l_j = 0; l_j < m_size_right; l_j++)
     {
-      cos_sum += source[j * step];
-      fast_complex_rotate(sin_sum, cos_sum, _sin_angle, _cos_angle);
-      total_sum += source[j * step];
+        l_cos_sum += p_source[l_j * p_step];
+      fast_complex_rotate(l_sin_sum, l_cos_sum, m_sin_angle, m_cos_angle);
+        l_total_sum += p_source[l_j * p_step];
     }
-  for(j = 0; j<_size_left; j++)
+  for(l_j = 0; l_j < m_size_left; l_j++)
     {
-      dest[j * step] = (total_sum - cos_sum) / _sum;
-      cos_sum += source[(j + _size_right) * step];
-      fast_complex_rotate(sin_sum, cos_sum, _sin_angle, _cos_angle);
-      cos_sum -= source[0* step];
-      total_sum += source[(j + _size_right) * step] - source[0* step];
+        p_dest[l_j * p_step] = (l_total_sum - l_cos_sum) / m_sum;
+        l_cos_sum += p_source[(l_j + m_size_right) * p_step];
+      fast_complex_rotate(l_sin_sum, l_cos_sum, m_sin_angle, m_cos_angle);
+        l_cos_sum -= p_source[0 * p_step];
+        l_total_sum += p_source[(l_j + m_size_right) * p_step] - p_source[0 * p_step];
     }
-  for(j = _size_left; j < length - _size_left-1; j++)
+  for(l_j = m_size_left; l_j < p_length - m_size_left - 1; l_j++)
     {
-      dest[j * step] = (total_sum - cos_sum) / _sum;
-      cos_sum += source[(j + _size_right) * step];
-      fast_complex_rotate(sin_sum, cos_sum, _sin_angle, _cos_angle);
-      cos_sum -= source[(j - _size_left) * step];
-      total_sum += source[(j + _size_right) * step] - source[(j - _size_left) * step];
+        p_dest[l_j * p_step] = (l_total_sum - l_cos_sum) / m_sum;
+        l_cos_sum += p_source[(l_j + m_size_right) * p_step];
+      fast_complex_rotate(l_sin_sum, l_cos_sum, m_sin_angle, m_cos_angle);
+        l_cos_sum -= p_source[(l_j - m_size_left) * p_step];
+        l_total_sum += p_source[(l_j + m_size_right) * p_step] - p_source[(l_j - m_size_left) * p_step];
     }
-  for(j = length - _size_left - 1; j < length; j++)
+  for(l_j = p_length - m_size_left - 1; l_j < p_length; l_j++)
     {
-      dest[j * step] = (total_sum - cos_sum) / _sum;
-      cos_sum += source[(length-1) * step];
-      fast_complex_rotate(sin_sum, cos_sum, _sin_angle, _cos_angle);
-      cos_sum -= source[(j - _size_left) * step];
-      total_sum += source[(length-1) * step] - source[(j - _size_left) * step];
+        p_dest[l_j * p_step] = (l_total_sum - l_cos_sum) / m_sum;
+        l_cos_sum += p_source[(p_length - 1) * p_step];
+      fast_complex_rotate(l_sin_sum, l_cos_sum, m_sin_angle, m_cos_angle);
+        l_cos_sum -= p_source[(l_j - m_size_left) * p_step];
+        l_total_sum += p_source[(p_length - 1) * p_step] - p_source[(l_j - m_size_left) * p_step];
     }
 }
 
 #include <stdio.h>
 
 //------------------------------------------------------------------------------
-void fast_smooth::fast_smoothB(float *source, float *dest, int length)
+void fast_smooth::fast_smoothB(float *p_source, float *p_dest, int p_length)
 {
   //blur should be odd
-  double cos_sum = 0;
-  double sin_sum = 0;
-  double total_sum = 0;
-  int j;
-  if(length < _size)
+  double l_cos_sum = 0;
+  double l_sin_sum = 0;
+  double l_total_sum = 0;
+  int l_j;
+  if(p_length < m_size)
     {
-      float avg = std::accumulate(source, source+length, 0.0) / float(length);
-      std::fill(dest, dest+length, avg);
+      float l_avg = std::accumulate(p_source, p_source + p_length, 0.0) / float(p_length);
+      std::fill(p_dest, p_dest + p_length, l_avg);
       return;
     }
-  for(j = 0; j<_size_left; j++)
+  for(l_j = 0; l_j < m_size_left; l_j++)
     {
-      cos_sum += source[0];
-      fast_complex_rotate(sin_sum, cos_sum, _sin_angle, _cos_angle);
-      total_sum += source[0];
+        l_cos_sum += p_source[0];
+      fast_complex_rotate(l_sin_sum, l_cos_sum, m_sin_angle, m_cos_angle);
+        l_total_sum += p_source[0];
     }
-  //FIXME: Doesn't deal with a blur bigger than the length
-  for(j = 0; j<_size_right; j++)
+  //FIXME: Doesn't deal with a blur bigger than the p_length
+  for(l_j = 0; l_j < m_size_right; l_j++)
     {
-      cos_sum += source[j];
-      fast_complex_rotate(sin_sum, cos_sum, _sin_angle, _cos_angle);
-      total_sum += source[j];
+        l_cos_sum += p_source[l_j];
+      fast_complex_rotate(l_sin_sum, l_cos_sum, m_sin_angle, m_cos_angle);
+        l_total_sum += p_source[l_j];
     }
-  for(j = 0; j<_size_left; j++)
+  for(l_j = 0; l_j < m_size_left; l_j++)
     {
-      dest[j] = (total_sum - cos_sum) / _sum;
-      cos_sum += source[(j + _size_right)];
-      fast_complex_rotate(sin_sum, cos_sum, _sin_angle, _cos_angle);
-      cos_sum -= source[0];
-      total_sum += source[(j + _size_right)] - source[0];
+        p_dest[l_j] = (l_total_sum - l_cos_sum) / m_sum;
+        l_cos_sum += p_source[(l_j + m_size_right)];
+      fast_complex_rotate(l_sin_sum, l_cos_sum, m_sin_angle, m_cos_angle);
+        l_cos_sum -= p_source[0];
+        l_total_sum += p_source[(l_j + m_size_right)] - p_source[0];
     }
-  for(j = _size_left; j < length - _size_left-1; j++)
+  for(l_j = m_size_left; l_j < p_length - m_size_left - 1; l_j++)
     {
-      dest[j] = (total_sum - cos_sum) / _sum;
-      cos_sum += source[(j + _size_right)];
-      fast_complex_rotate(sin_sum, cos_sum, _sin_angle, _cos_angle);
-      cos_sum -= source[(j - _size_left)];
-      total_sum += source[(j + _size_right)] - source[(j - _size_left)];
+        p_dest[l_j] = (l_total_sum - l_cos_sum) / m_sum;
+        l_cos_sum += p_source[(l_j + m_size_right)];
+      fast_complex_rotate(l_sin_sum, l_cos_sum, m_sin_angle, m_cos_angle);
+        l_cos_sum -= p_source[(l_j - m_size_left)];
+        l_total_sum += p_source[(l_j + m_size_right)] - p_source[(l_j - m_size_left)];
     }
-  for(j = length - _size_left-1; j < length; j++)
+  for(l_j = p_length - m_size_left - 1; l_j < p_length; l_j++)
     {
-      dest[j] = (total_sum - cos_sum) / _sum;
-      cos_sum += source[(length-1)];
-      fast_complex_rotate(sin_sum, cos_sum, _sin_angle, _cos_angle);
-      cos_sum -= source[(j - _size_left)];
-      total_sum += source[(length-1)] - source[(j - _size_left)];
+        p_dest[l_j] = (l_total_sum - l_cos_sum) / m_sum;
+        l_cos_sum += p_source[(p_length - 1)];
+      fast_complex_rotate(l_sin_sum, l_cos_sum, m_sin_angle, m_cos_angle);
+        l_cos_sum -= p_source[(l_j - m_size_left)];
+        l_total_sum += p_source[(p_length - 1)] - p_source[(l_j - m_size_left)];
     }
 }
 
