@@ -19,6 +19,6 @@
 //------------------------------------------------------------------------------
 bool MyTransforms::getEqualLoudness(void) const
 {
-  return m_equal_loudness;
+    return m_equal_loudness;
 }
 //EOF
