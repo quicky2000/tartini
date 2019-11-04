@@ -40,79 +40,93 @@
 template<typename T>
 class large_vector
 {
- public:
-  class iterator
-  {
-    large_vector<T> *m_parent;
-    uint m_pos;
-    
   public:
-    iterator(large_vector<T> *p_parent, int p_pos);
-    iterator(const iterator &p_iter);
-    uint pos(void) const;
-    iterator& operator++();
-    iterator& operator++(int);
-    iterator& operator--();
-    iterator& operator--(int);
-    T& operator*();
-    const T& operator*() const;
-    T* operator->();
-    const T* operator->() const;
-    bool operator!=(const iterator &p_iter) const;
-    bool operator==(const iterator &p_iter) const;
-    bool operator<(const iterator &p_iter) const;
-    bool operator>(const iterator &p_iter) const;
-    //iterator& operator=(const iterator &it) { return (*this); }
-  };
 
-  large_vector(uint p_size=0, uint p_buffer_size=2048);
-  ~large_vector(void);
+    class iterator
+    {
+      public:
+
+        iterator(large_vector<T> * p_parent
+                , int p_pos
+                );
+        iterator(const iterator & p_iter);
+        uint pos(void) const;
+        iterator & operator++();
+        iterator & operator++(int);
+        iterator & operator--();
+        iterator & operator--(int);
+        T & operator*();
+        const T & operator*() const;
+        T* operator->();
+        const T * operator->() const;
+        bool operator!=(const iterator & p_iter) const;
+        bool operator==(const iterator & p_iter) const;
+        bool operator<(const iterator & p_iter) const;
+        bool operator>(const iterator & p_iter) const;
+        //iterator& operator=(const iterator &it) { return (*this); }
+
+      private:
+        large_vector<T> * m_parent;
+        uint m_pos;
+
+    };
+
+    large_vector( uint p_size = 0
+                , uint p_buffer_size = 2048
+                );
+    ~large_vector(void);
   
-  T& operator[](uint p_pos);
-  const T & operator[](uint p_pos) const;
+    T & operator[](uint p_pos);
+    const T & operator[](uint p_pos) const;
 
-  T & at(uint p_pos);
-  const T & at(uint p_pos) const;
-  T & front(void);
-  const T & front(void) const;
-  T & back(void);
-  const T & back(void) const;
-  uint size(void) const;
-  bool empty(void) const;
-  void push_back(const T &p_new_element);
-  T pop_back(void);
-  void push_back(const T *p_src, uint p_length);
-  void increase_size(uint p_num);
-  void clear(void);
-  iterator begin(void);
-  iterator end(void);
-  iterator iterator_at(uint p_pos);
+    T & at(uint p_pos);
+    const T & at(uint p_pos) const;
+    T & front(void);
+    const T & front(void) const;
+    T & back(void);
+    const T & back(void) const;
+    uint size(void) const;
+    bool empty(void) const;
+    void push_back(const T & p_new_element);
+    T pop_back(void);
+    void push_back(const T * p_src, uint p_length);
+    void increase_size(uint p_num);
+    void clear(void);
+    iterator begin(void);
+    iterator end(void);
+    iterator iterator_at(uint p_pos);
   
-  uint bufferSize(void) const;
-  int numBuffers(void);
-  std::vector<T> &getBuffer(uint p_buffer_num);
+    uint bufferSize(void) const;
+    int numBuffers(void);
+    std::vector<T> & getBuffer(uint p_buffer_num);
 
-  /**
-     efficient copy to a single block of memory (ie array or vector)
-  */
-  void copyTo(T *p_dest, uint p_start, uint p_length);
+    /**
+       efficient copy to a single block of memory (ie array or vector)
+    */
+    void copyTo( T * p_dest
+               , uint p_start
+               , uint p_length
+               );
 
-  /**
-     efficient copy from a single block of memory (ie array or vector)
-  */
-  void copyFrom(const T *p_src, uint p_start, uint p_length);
+    /**
+       efficient copy from a single block of memory (ie array or vector)
+    */
+    void copyFrom( const T * p_src
+                 , uint p_start
+                 , uint p_length
+                 );
 
- private:
-  uint m_buffer_size;
-  //std::vector<std::vector<T> *> buf_ptrs();
-  SmartPtr<Array1d<std::vector<T> *> > m_buf_ptrs;
+  private:
 
-  Array1d<std::vector<T> *> & buf_ptrs(void);
-  const Array1d<std::vector<T> *> & buf_ptrs(void) const;
+    Array1d<std::vector<T> *> & buf_ptrs(void);
+    const Array1d<std::vector<T> *> & buf_ptrs(void) const;
 
-  void addBuffer(uint p_num=0);
-  void removeBuffer(void);
+    void addBuffer(uint p_num = 0);
+    void removeBuffer(void);
 
+    uint m_buffer_size;
+    //std::vector<std::vector<T> *> buf_ptrs();
+    SmartPtr<Array1d<std::vector<T> *> > m_buf_ptrs;
 
 };
 
