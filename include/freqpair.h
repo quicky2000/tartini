@@ -26,11 +26,6 @@
 class FreqPair
 {
   public:
-    float m_freq;
-    float m_amp;
-    float m_phase;
-    FreqPair * m_prev;
-    FreqPair * m_next;
 
     FreqPair()
     {
@@ -78,15 +73,25 @@ class FreqPair
     {
         m_next = p_next;
     }
+
+    inline
+    float get_frequency() const;
+
+    inline float get_amplitude() const;
+
+  private:
+
+    float m_freq;
+    float m_amp;
+    float m_phase;
+    FreqPair * m_prev;
+    FreqPair * m_next;
+
 };
 
 class FreqHistory
 {
   public:
-    std::vector<FreqPair> * m_data;
-    int m_num;
-    int m_end;
-    QMutex *m_mutex;
 
     FreqHistory()
     {
@@ -151,17 +156,17 @@ class FreqHistory
         while((l_prev_pos < l_prev.size()) && (l_cur_pos < l_cur.size()))
         {
             //make connection between two consecutive (freq,m_amp) points if within thresholds
-            if (l_prev[l_prev_pos].m_freq > l_cur[l_cur_pos].m_freq - l_freq_threshold &&
-                l_prev[l_prev_pos].m_freq < l_cur[l_cur_pos].m_freq + l_freq_threshold &&
-                l_prev[l_prev_pos].m_amp > l_cur[l_cur_pos].m_amp - l_amp_threshold &&
-                l_prev[l_prev_pos].m_amp < l_cur[l_cur_pos].m_amp + l_amp_threshold
+            if (l_prev[l_prev_pos].get_frequency() > l_cur[l_cur_pos].get_frequency() - l_freq_threshold &&
+                l_prev[l_prev_pos].get_frequency() < l_cur[l_cur_pos].get_frequency() + l_freq_threshold &&
+                l_prev[l_prev_pos].get_amplitude() > l_cur[l_cur_pos].get_amplitude() - l_amp_threshold &&
+                l_prev[l_prev_pos].get_amplitude() < l_cur[l_cur_pos].get_amplitude() + l_amp_threshold
                )
             {
                 l_prev[l_prev_pos].attachNext(&l_cur[l_cur_pos]);
             }
 
             //increment the one with the smallest freq (because they are orded by freq)
-            if (l_prev[l_prev_pos].m_freq < l_cur[l_cur_pos].m_freq)
+            if (l_prev[l_prev_pos].get_frequency() < l_cur[l_cur_pos].get_frequency())
             {
                 l_prev_pos++;
             }
@@ -172,7 +177,26 @@ class FreqHistory
         }
 	}
 
+  private:
+
+    std::vector<FreqPair> * m_data;
+    int m_num;
+    int m_end;
+    QMutex *m_mutex;
+
 };
-    
+
+//-----------------------------------------------------------------------------
+float FreqPair::get_frequency() const
+{
+    return m_freq;
+}
+
+//-----------------------------------------------------------------------------
+float FreqPair::get_amplitude() const
+{
+    return m_amp;
+}
+
 #endif
 
