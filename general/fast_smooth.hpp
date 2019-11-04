@@ -17,7 +17,11 @@
 */
 
 //------------------------------------------------------------------------------
-void fast_complex_rotate(double & p_x, double & p_y, const double & p_sin_angle, const double & p_cos_angle)
+void fast_complex_rotate( double & p_x
+                        , double & p_y
+                        , const double & p_sin_angle
+                        , const double & p_cos_angle
+                        )
 {
     double l_temp = p_y * p_cos_angle - p_x * p_sin_angle;
     p_x = p_y * p_sin_angle + p_x * p_cos_angle;
