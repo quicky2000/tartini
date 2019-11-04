@@ -20,7 +20,10 @@
 /**
    Gives a color between a and b, using ratio (a number between 0 and 1)
 */
-extern QColor colorBetween(QColor p_color_a, QColor p_color_b, double p_ratio);
+extern QColor colorBetween( QColor p_color_a
+                          , QColor p_color_b
+                          , double p_ratio
+                          );
 
 #endif // MYQT_H
 // EOF
