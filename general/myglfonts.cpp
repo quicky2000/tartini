@@ -4,80 +4,80 @@
 #include <QColor>
 
 //------------------------------------------------------------------------------
-void MyGLFont::init(const QFont f)
+void MyGLFont::init(const QFont p_font)
 {
-  QImage image(32, 32, QImage::Format_RGB32);
-  QPainter p(&image);
-  p.setFont(f);
-  p.setPen(QColor(255, 255, 255));
-  QFontMetrics fm = p.fontMetrics();
-  int h = fm.height();
-  int w, w_raw;
-  GLubyte *data;
-  QString s;
-  for(int j = 0; j < 255; j++)
+  QImage l_image(32, 32, QImage::Format_RGB32);
+  QPainter l_painter(&l_image);
+  l_painter.setFont(p_font);
+  l_painter.setPen(QColor(255, 255, 255));
+  QFontMetrics l_font_metric = l_painter.fontMetrics();
+  int l_height = l_font_metric.height();
+  int l_width, l_width_raw;
+  GLubyte *l_data;
+  QString l_string;
+  for(int l_j = 0; l_j < 255; l_j++)
     {
-      unsigned char ch = j;
-      s = ch;
-      w = fm.width(ch);
-      w_raw = w + 3;
-      w_raw -= (w_raw % 4); //round length up to multiple of 4
-      data = (GLubyte*)malloc(w_raw * h * sizeof(GLubyte));
-      for(int y = 0; y < h; y++)
+      unsigned char l_char = l_j;
+        l_string = l_char;
+        l_width = l_font_metric.width(l_char);
+        l_width_raw = l_width + 3;
+        l_width_raw -= (l_width_raw % 4); //round length up to multiple of 4
+      l_data = (GLubyte*)malloc(l_width_raw * l_height * sizeof(GLubyte));
+      for(int l_y = 0; l_y < l_height; l_y++)
 	{
-	  for(int x = 0; x < w_raw; x++)
+	  for(int l_x = 0; l_x < l_width_raw; l_x++)
 	    {
-	      image.setPixel(x, y, qRgb(0, 0, 0));
+	      l_image.setPixel(l_x, l_y, qRgb(0, 0, 0));
 	    }
 	}
-      p.drawText(0, 0, 32, 32, Qt::AlignLeft, s);
-      for(int y = 0; y < h; y++)
+      l_painter.drawText(0, 0, 32, 32, Qt::AlignLeft, l_string);
+      for(int l_y = 0; l_y < l_height; l_y++)
 	{
-	  for(int x = 0; x < w_raw; x++)
+	  for(int l_x = 0; l_x < l_width_raw; l_x++)
 	    {
-	      data[x + (h - 1 - y) * w_raw] = qRed(image.pixel(x,y)); //build our font upside down
+            l_data[l_x + (l_height - 1 - l_y) * l_width_raw] = qRed(l_image.pixel(l_x, l_y)); //build our font upside down
 	    }
 	}
-      c[ch] = new MyGLChar(w, h, data, w_raw);
+      m_chars[l_char] = new MyGLChar(l_width, l_height, l_data, l_width_raw);
     }
-  beenInit = true;
+    m_been_init = true;
 }
 
 //------------------------------------------------------------------------------
 MyGLFont::~MyGLFont(void)
 {
-  if(beenInit)
+  if(m_been_init)
     {
-      for(int j = 0; j < 255; j++)
+      for(int l_j = 0; l_j < 255; l_j++)
 	{
-	  delete c[j];
+	  delete m_chars[l_j];
 	}
     }
 }
 
 //------------------------------------------------------------------------------
-void MyGLFont::drawGLtext(float x, float y, QString s, int w, int h) const
+void MyGLFont::drawGLtext(float p_x, float p_y, QString p_string, int p_width, int p_height) const
 {
-  beginGLtext(w, h);
-  drawGLtextRaw(x, y, s);
+  beginGLtext(p_width, p_height);
+  drawGLtextRaw(p_x, p_y, p_string);
   endGLtext();
 }
 
 //------------------------------------------------------------------------------
-void MyGLFont::drawGLtextRaw(float x, float y, QString s) const
+void MyGLFont::drawGLtextRaw(float p_x, float p_y, QString p_string) const
 {
-  unsigned char ch;
-  for(int j = 0; j < s.size(); ++j)
+  unsigned char l_char;
+  for(int l_j = 0; l_j < p_string.size(); ++l_j)
     {
-      ch = s.at(j).toAscii();
-      glRasterPos2f(x, y);
-      glDrawPixels(c[ch]->w_raw(), c[ch]->h(), GL_ALPHA, GL_UNSIGNED_BYTE, c[ch]->data());
-      x += c[ch]->w();
+        l_char = p_string.at(l_j).toAscii();
+      glRasterPos2f(p_x, p_y);
+      glDrawPixels(m_chars[l_char]->w_raw(), m_chars[l_char]->h(), GL_ALPHA, GL_UNSIGNED_BYTE, m_chars[l_char]->data());
+        p_x += m_chars[l_char]->w();
     }
 }
 
 //------------------------------------------------------------------------------
-void MyGLFont::beginGLtext(int w, int h) const
+void MyGLFont::beginGLtext(int p_width, int p_height) const
 {
   glPushAttrib(GL_ALL_ATTRIB_BITS);
 
@@ -89,7 +89,7 @@ void MyGLFont::beginGLtext(int w, int h) const
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity();
-  gluOrtho2D(0, w, 0, h);
+  gluOrtho2D(0, p_width, 0, p_height);
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
   glLoadIdentity();

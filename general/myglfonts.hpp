@@ -17,48 +17,48 @@
 */
 
 //------------------------------------------------------------------------------
-MyGLChar::MyGLChar(int width, int height, GLubyte *theData, int width_raw):
-  _w(width),
-  _h(height),
-  _w_raw(width_raw),
-  _data(theData)
+MyGLChar::MyGLChar(int p_width, int p_height, GLubyte *p_data, int p_width_raw):
+        m_width(p_width),
+        m_height(p_height),
+        m_width_raw(p_width_raw),
+        m_data(p_data)
 {
 }
 
 //------------------------------------------------------------------------------
 const GLubyte * MyGLChar::data(void) const
 {
-  return _data;
+  return m_data;
 }
 
 //------------------------------------------------------------------------------
 int MyGLChar::w(void) const
 {
-  return _w;
+  return m_width;
 }
 
 //------------------------------------------------------------------------------
 int MyGLChar::h(void) const
 {
-  return _h;
+  return m_height;
 }
 
 //------------------------------------------------------------------------------
 int MyGLChar::w_raw(void) const
 {
-  return _w_raw;
+  return m_width_raw;
 }
 
 //------------------------------------------------------------------------------
 MyGLFont::MyGLFont(void):
-  beenInit(false)
+        m_been_init(false)
 {
 }
 
 //------------------------------------------------------------------------------
-MyGLFont::MyGLFont(const QFont f)
+MyGLFont::MyGLFont(const QFont p_font)
 {
-  init(f);
+  init(p_font);
 }
 
 //EOF
