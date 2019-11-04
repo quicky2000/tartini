@@ -17,6 +17,6 @@
 #ifndef EQUAL_LOUDNESS_H
 #define EQUAL_LOUDNESS_H
 
-extern double dbToPhons(const double & freq, const double & intensity = 70.0);
+extern double dbToPhons(const double & p_freq, const double & p_intensity = 70.0);
 #endif // EQUAL_LOUDNESS_H
 //EOF
