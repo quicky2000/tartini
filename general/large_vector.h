@@ -43,12 +43,12 @@ class large_vector
  public:
   class iterator
   {
-    large_vector<T> *_parent;
-    uint _pos;
+    large_vector<T> *m_parent;
+    uint m_pos;
     
   public:
-    iterator(large_vector<T> *parent, int pos);
-    iterator(const iterator &it);
+    iterator(large_vector<T> *p_parent, int p_pos);
+    iterator(const iterator &p_iter);
     uint pos(void) const;
     iterator& operator++();
     iterator& operator++(int);
@@ -58,59 +58,59 @@ class large_vector
     const T& operator*() const;
     T* operator->();
     const T* operator->() const;
-    bool operator!=(const iterator &it) const;
-    bool operator==(const iterator &it) const;
-    bool operator<(const iterator &it) const;
-    bool operator>(const iterator &it) const;
+    bool operator!=(const iterator &p_iter) const;
+    bool operator==(const iterator &p_iter) const;
+    bool operator<(const iterator &p_iter) const;
+    bool operator>(const iterator &p_iter) const;
     //iterator& operator=(const iterator &it) { return (*this); }
   };
 
-  large_vector(uint size=0, uint buffer_size=2048);
+  large_vector(uint p_size=0, uint p_buffer_size=2048);
   ~large_vector(void);
   
-  T& operator[](uint pos);
-  const T & operator[](uint pos) const;
+  T& operator[](uint p_pos);
+  const T & operator[](uint p_pos) const;
 
-  T & at(uint pos);
-  const T & at(uint pos) const;
+  T & at(uint p_pos);
+  const T & at(uint p_pos) const;
   T & front(void);
   const T & front(void) const;
   T & back(void);
   const T & back(void) const;
   uint size(void) const;
   bool empty(void) const;
-  void push_back(const T &new_element);
+  void push_back(const T &p_new_element);
   T pop_back(void);
-  void push_back(const T *src, uint length);
-  void increase_size(uint num);
+  void push_back(const T *p_src, uint p_length);
+  void increase_size(uint p_num);
   void clear(void);
   iterator begin(void);
   iterator end(void);
-  iterator iterator_at(uint pos);
+  iterator iterator_at(uint p_pos);
   
   uint bufferSize(void) const;
   int numBuffers(void);
-  std::vector<T> &getBuffer(uint bufferNum);
+  std::vector<T> &getBuffer(uint p_buffer_num);
 
   /**
      efficient copy to a single block of memory (ie array or vector)
   */
-  void copyTo(T *dest, uint start, uint length);
+  void copyTo(T *p_dest, uint p_start, uint p_length);
 
   /**
      efficient copy from a single block of memory (ie array or vector)
   */
-  void copyFrom(const T *src, uint start, uint length);
+  void copyFrom(const T *p_src, uint p_start, uint p_length);
 
  private:
-  uint _buffer_size;
+  uint m_buffer_size;
   //std::vector<std::vector<T> *> buf_ptrs();
-  SmartPtr<Array1d<std::vector<T> *> > _buf_ptrs;
+  SmartPtr<Array1d<std::vector<T> *> > m_buf_ptrs;
 
   Array1d<std::vector<T> *> & buf_ptrs(void);
   const Array1d<std::vector<T> *> & buf_ptrs(void) const;
 
-  void addBuffer(uint num=0);
+  void addBuffer(uint p_num=0);
   void removeBuffer(void);
 
 

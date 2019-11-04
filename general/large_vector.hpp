@@ -20,22 +20,22 @@
 template<typename T>
 Array1d<std::vector<T> *> & large_vector<T>::buf_ptrs(void)
 {
-  return *_buf_ptrs;
+  return *m_buf_ptrs;
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
 const Array1d<std::vector<T> *> & large_vector<T>::buf_ptrs(void) const
 {
-  return *_buf_ptrs;
+  return *m_buf_ptrs;
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-void large_vector<T>::addBuffer(uint num)
+void large_vector<T>::addBuffer(uint p_num)
 {
-  buf_ptrs().push_back(new std::vector<T>(num));
-  buf_ptrs().back()->reserve(_buffer_size);
+  buf_ptrs().push_back(new std::vector<T>(p_num));
+  buf_ptrs().back()->reserve(m_buffer_size);
 }
 
 //------------------------------------------------------------------------------
@@ -48,55 +48,55 @@ void large_vector<T>::removeBuffer(void)
 
 //------------------------------------------------------------------------------
 template<typename T>
-void large_vector<T>::copyTo(T *dest, uint start, uint length)
+void large_vector<T>::copyTo(T *p_dest, uint p_start, uint p_length)
 {
-  myassert(start + length <= size());
-  T * ending = dest+length;
-  uint curBuf = start / bufferSize();
-  uint offset = start % bufferSize();
-  if(length <= bufferSize() - offset)
+  myassert(p_start + p_length <= size());
+  T * l_ending = p_dest + p_length;
+  uint l_cur_buf = p_start / bufferSize();
+  uint l_offset = p_start % bufferSize();
+  if(p_length <= bufferSize() - l_offset)
     {
-      std::copy(getBuffer(curBuf).begin() + offset, getBuffer(curBuf).begin() + offset + length, dest);
+      std::copy(getBuffer(l_cur_buf).begin() + l_offset, getBuffer(l_cur_buf).begin() + l_offset + p_length, p_dest);
     }
   else
     {
-      std::copy(getBuffer(curBuf).begin() + offset, getBuffer(curBuf).end(), dest);
-      dest += bufferSize() - offset;
-      curBuf++;
-      while(uint(ending - dest) > bufferSize())
+      std::copy(getBuffer(l_cur_buf).begin() + l_offset, getBuffer(l_cur_buf).end(), p_dest);
+        p_dest += bufferSize() - l_offset;
+      l_cur_buf++;
+      while(uint(l_ending - p_dest) > bufferSize())
 	{
-	  std::copy(getBuffer(curBuf).begin(), getBuffer(curBuf).end(), dest);
-	  dest += bufferSize();
-	  curBuf++;
+	  std::copy(getBuffer(l_cur_buf).begin(), getBuffer(l_cur_buf).end(), p_dest);
+        p_dest += bufferSize();
+	  l_cur_buf++;
 	}
-      std::copy(getBuffer(curBuf).begin(), getBuffer(curBuf).begin() + (ending - dest), dest);
+      std::copy(getBuffer(l_cur_buf).begin(), getBuffer(l_cur_buf).begin() + (l_ending - p_dest), p_dest);
     }
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-void large_vector<T>::copyFrom(const T *src, uint start, uint length)
+void large_vector<T>::copyFrom(const T *p_src, uint p_start, uint p_length)
 {
-  myassert(start + length <= size());
-  const T * ending = src + length;
-  uint curBuf = start / bufferSize();
-  uint offset = start % bufferSize();
-  if(length <= bufferSize() - offset)
+  myassert(p_start + p_length <= size());
+  const T * l_ending = p_src + p_length;
+  uint l_cur_buf = p_start / bufferSize();
+  uint l_offset = p_start % bufferSize();
+  if(p_length <= bufferSize() - l_offset)
     {
-      std::copy(src, src + length, getBuffer(curBuf).begin() + offset);
+      std::copy(p_src, p_src + p_length, getBuffer(l_cur_buf).begin() + l_offset);
     }
   else
     {
-      std::copy(src, src + (bufferSize()-offset), getBuffer(curBuf).begin() + offset);
-      src += bufferSize() - offset;
-      curBuf++;
-      while(uint(ending - src) > bufferSize())
+      std::copy(p_src, p_src + (bufferSize() - l_offset), getBuffer(l_cur_buf).begin() + l_offset);
+        p_src += bufferSize() - l_offset;
+      l_cur_buf++;
+      while(uint(l_ending - p_src) > bufferSize())
 	{
-	  std::copy(src, src + bufferSize(), getBuffer(curBuf).begin());
-	  src += bufferSize();
-	  curBuf++;
+	  std::copy(p_src, p_src + bufferSize(), getBuffer(l_cur_buf).begin());
+        p_src += bufferSize();
+	  l_cur_buf++;
 	}
-      std::copy(src, ending, getBuffer(curBuf).begin());
+      std::copy(p_src, l_ending, getBuffer(l_cur_buf).begin());
     }
 }
 
@@ -104,9 +104,9 @@ void large_vector<T>::copyFrom(const T *src, uint start, uint length)
 template<typename T>
 void large_vector<T>::clear(void)
 {
-  for(int j = 0; j < buf_ptrs().size(); j++)
+  for(int l_j = 0; l_j < buf_ptrs().size(); l_j++)
     {
-      delete buf_ptrs()[j];
+      delete buf_ptrs()[l_j];
     }
   buf_ptrs().clear();
   addBuffer();
@@ -128,16 +128,16 @@ typename large_vector<T>::iterator large_vector<T>::end(void)
 
 //------------------------------------------------------------------------------
 template<typename T>
-typename large_vector<T>::iterator large_vector<T>::iterator_at(uint pos)
+typename large_vector<T>::iterator large_vector<T>::iterator_at(uint p_pos)
 {
-  return iterator(this, pos);
+  return iterator(this, p_pos);
 }
   
 //------------------------------------------------------------------------------
 template<typename T>
 uint large_vector<T>::bufferSize(void) const
 {
-  return _buffer_size;
+  return m_buffer_size;
 }
 
 //------------------------------------------------------------------------------
@@ -149,25 +149,25 @@ int large_vector<T>::numBuffers(void)
 
 //------------------------------------------------------------------------------
 template<typename T>
-std::vector<T> & large_vector<T>::getBuffer(uint bufferNum)
+std::vector<T> & large_vector<T>::getBuffer(uint p_buffer_num)
 {
-  return *buf_ptrs()[bufferNum];
+  return *buf_ptrs()[p_buffer_num];
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-T& large_vector<T>::at(uint pos)
+T& large_vector<T>::at(uint p_pos)
 {
-  myassert(empty() || pos < size());
-  return (*buf_ptrs()[pos / _buffer_size])[pos % _buffer_size];
+  myassert(empty() || p_pos < size());
+  return (*buf_ptrs()[p_pos / m_buffer_size])[p_pos % m_buffer_size];
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-const T & large_vector<T>::at(uint pos) const
+const T & large_vector<T>::at(uint p_pos) const
 {
-  myassert(empty() || pos < size());
-  return (*buf_ptrs()[pos / _buffer_size])[pos % _buffer_size];
+  myassert(empty() || p_pos < size());
+  return (*buf_ptrs()[p_pos / m_buffer_size])[p_pos % m_buffer_size];
 }
 
 //------------------------------------------------------------------------------
@@ -202,7 +202,7 @@ const T & large_vector<T>::back(void) const
 template<typename T>
 uint large_vector<T>::size(void) const
 {
-  return (buf_ptrs().size() - 1) * _buffer_size + buf_ptrs().back()->size();
+  return (buf_ptrs().size() - 1) * m_buffer_size + buf_ptrs().back()->size();
 }
 
 //------------------------------------------------------------------------------
@@ -214,10 +214,10 @@ bool large_vector<T>::empty(void) const
 
 //------------------------------------------------------------------------------
 template<typename T>
-void large_vector<T>::push_back(const T &new_element)
+void large_vector<T>::push_back(const T &p_new_element)
 {
-  buf_ptrs().back()->push_back(new_element);
-  if(buf_ptrs().back()->size() == _buffer_size)
+  buf_ptrs().back()->push_back(p_new_element);
+  if(buf_ptrs().back()->size() == m_buffer_size)
     {
       addBuffer();
     }
@@ -232,97 +232,97 @@ T large_vector<T>::pop_back(void)
       if(numBuffers() == 1) return T();
       else removeBuffer();
     }
-  T temp = buf_ptrs().back()->back();
+  T l_temp = buf_ptrs().back()->back();
   buf_ptrs().back()->pop_back();
-  return temp;
+  return l_temp;
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-void large_vector<T>::push_back(const T *src, uint length)
+void large_vector<T>::push_back(const T *p_src, uint p_length)
 {
-  uint sizeBefore = size();
-  increase_size(length);
-  copyFrom(src, sizeBefore, length);
+  uint l_size_before = size();
+  increase_size(p_length);
+  copyFrom(p_src, l_size_before, p_length);
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-void large_vector<T>::increase_size(uint num)
+void large_vector<T>::increase_size(uint p_num)
 {
-  if(num < bufferSize() - buf_ptrs().back()->size())
+  if(p_num < bufferSize() - buf_ptrs().back()->size())
     {
-      buf_ptrs().back()->resize(buf_ptrs().back()->size() + num);
+      buf_ptrs().back()->resize(buf_ptrs().back()->size() + p_num);
     }
   else
     {
-      num -= bufferSize() - buf_ptrs().back()->size();
+        p_num -= bufferSize() - buf_ptrs().back()->size();
       buf_ptrs().back()->resize(bufferSize());
       addBuffer();
-      while(num >= bufferSize())
+      while(p_num >= bufferSize())
 	{
-	  num -= bufferSize();
+        p_num -= bufferSize();
 	  buf_ptrs().back()->resize(bufferSize());
 	  addBuffer();
 	}
-      buf_ptrs().back()->resize(num);
+      buf_ptrs().back()->resize(p_num);
     }
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-large_vector<T>::large_vector(uint size, uint buffer_size)
+large_vector<T>::large_vector(uint p_size, uint p_buffer_size)
 {
-  _buf_ptrs = new Array1d<std::vector<T> *>();
-  _buffer_size = buffer_size;
-  while(size > _buffer_size)
+    m_buf_ptrs = new Array1d<std::vector<T> *>();
+    m_buffer_size = p_buffer_size;
+  while(p_size > m_buffer_size)
     {
-      buf_ptrs().push_back(new std::vector<T>(_buffer_size));
-      size-=_buffer_size;
+      buf_ptrs().push_back(new std::vector<T>(m_buffer_size));
+        p_size-=m_buffer_size;
     }
-  addBuffer(size);
+  addBuffer(p_size);
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
 large_vector<T>::~large_vector(void)
 {
-  if(_buf_ptrs.getNumRef() == 1)
+  if(m_buf_ptrs.getNumRef() == 1)
     {
-      for(int j = 0; j < buf_ptrs().size(); j++)
+      for(int l_j = 0; l_j < buf_ptrs().size(); l_j++)
 	{
-	  delete buf_ptrs()[j];
+	  delete buf_ptrs()[l_j];
 	}
     }
 }
   
 //------------------------------------------------------------------------------
 template<typename T>
-T& large_vector<T>::operator[](uint pos)
+T& large_vector<T>::operator[](uint p_pos)
 {
-  return (*buf_ptrs()[pos / _buffer_size])[pos % _buffer_size];
+  return (*buf_ptrs()[p_pos / m_buffer_size])[p_pos % m_buffer_size];
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-const T & large_vector<T>::operator[](uint pos) const
+const T & large_vector<T>::operator[](uint p_pos) const
 {
-  return (*buf_ptrs()[pos / _buffer_size])[pos % _buffer_size];
+  return (*buf_ptrs()[p_pos / m_buffer_size])[p_pos % m_buffer_size];
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-large_vector<T>::iterator::iterator(large_vector<T> *parent, int pos):
-  _parent(parent),
-  _pos(pos)
+large_vector<T>::iterator::iterator(large_vector<T> *p_parent, int p_pos):
+  m_parent(p_parent),
+  m_pos(p_pos)
 {
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-large_vector<T>::iterator::iterator(const iterator &it):
-  _parent(it._parent),
-  _pos(it._pos)
+large_vector<T>::iterator::iterator(const iterator &p_iter):
+  m_parent(p_iter.m_parent),
+  m_pos(p_iter.m_pos)
 {
 }
 
@@ -330,14 +330,14 @@ large_vector<T>::iterator::iterator(const iterator &it):
 template<typename T>
 uint large_vector<T>::iterator::pos(void) const
 {
-  return _pos;
+  return m_pos;
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
 typename large_vector<T>::iterator & large_vector<T>::iterator::operator++()
 {
-  ++_pos;
+  ++m_pos;
   return (*this);
 }
 
@@ -345,7 +345,7 @@ typename large_vector<T>::iterator & large_vector<T>::iterator::operator++()
 template<typename T>
 typename large_vector<T>::iterator & large_vector<T>::iterator::operator++(int)
 {
-  _pos++;
+  m_pos++;
   return (*this);
 }
 
@@ -353,7 +353,7 @@ typename large_vector<T>::iterator & large_vector<T>::iterator::operator++(int)
 template<typename T>
 typename large_vector<T>::iterator & large_vector<T>::iterator::operator--()
 {
-  --_pos;
+  --m_pos;
   return (*this);
 }
 
@@ -361,7 +361,7 @@ typename large_vector<T>::iterator & large_vector<T>::iterator::operator--()
 template<typename T>
 typename large_vector<T>::iterator & large_vector<T>::iterator::operator--(int)
 {
-  _pos--;
+  m_pos--;
   return (*this);
 }
 
@@ -369,14 +369,14 @@ typename large_vector<T>::iterator & large_vector<T>::iterator::operator--(int)
 template<typename T>
 T& large_vector<T>::iterator::operator*()
 {
-  return (*_parent)[_pos];
+  return (*m_parent)[m_pos];
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
 const T& large_vector<T>::iterator::operator*() const
 {
-  return (*_parent)[_pos];
+  return (*m_parent)[m_pos];
 }
 
 //------------------------------------------------------------------------------
@@ -395,29 +395,29 @@ const T* large_vector<T>::iterator::operator->() const
 
 //------------------------------------------------------------------------------
 template<typename T>
-bool large_vector<T>::iterator::operator!=(const iterator &it) const
+bool large_vector<T>::iterator::operator!=(const iterator &p_iter) const
 {
-  return _pos != it.pos();
+  return m_pos != p_iter.pos();
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-bool large_vector<T>::iterator::operator==(const iterator &it) const
+bool large_vector<T>::iterator::operator==(const iterator &p_iter) const
 {
-  return _pos == it.pos();
+  return m_pos == p_iter.pos();
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-bool large_vector<T>::iterator::operator<(const iterator &it) const
+bool large_vector<T>::iterator::operator<(const iterator &p_iter) const
 {
-  return _pos < it.pos();
+  return m_pos < p_iter.pos();
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-bool large_vector<T>::iterator::operator>(const iterator &it) const
+bool large_vector<T>::iterator::operator>(const iterator &p_iter) const
 {
-  return _pos > it.pos();
+  return m_pos > p_iter.pos();
 }
 //EOF
