@@ -18,66 +18,66 @@
 #include "myalgo.h"
 
 //------------------------------------------------------------------------------
-void bresenham1d(const Array1d<float> & input, Array1d<float> & output)
+void bresenham1d(const Array1d<float> & p_input, Array1d<float> & p_output)
 {
   //Use Bresenham's algorithm in 1d to choose the points to draw
-  int w = output.size();
-  int intStep = int(input.size() / w);
-  int remainderStep = input.size() - (intStep * w);
-  int pos = 0;
-  int remainder = 0;
-  for(int j = 0; j < w; j++, pos += intStep, remainder += remainderStep)
+  int l_w = p_output.size();
+  int l_int_step = int(p_input.size() / l_w);
+  int l_remainder_step = p_input.size() - (l_int_step * l_w);
+  int l_pos = 0;
+  int l_remainder = 0;
+  for(int l_j = 0; l_j < l_w; l_j++, l_pos += l_int_step, l_remainder += l_remainder_step)
     {
-      if(remainder >= w)
+      if(l_remainder >= l_w)
 	{
-	  pos++;
-	  remainder -= w;
+	  l_pos++;
+        l_remainder -= l_w;
 	}
-      myassert(pos < input.size());
-      output[j] = input[pos];
+      myassert(l_pos < p_input.size());
+        p_output[l_j] = p_input[l_pos];
     }
 }
 
 //------------------------------------------------------------------------------
-void maxAbsDecimate1d(const Array1d<float> & input, Array1d<float> & output)
+void maxAbsDecimate1d(const Array1d<float> & p_input, Array1d<float> & p_output)
 {
-  if(input.size() > output.size())
+  if(p_input.size() > p_output.size())
     {
       //Use Bresenham's algorithm in 1d to choose the points to draw
-      int w = output.size();
-      if(w <= 0)
+      int l_w = p_output.size();
+      if(l_w <= 0)
 	{
 	  return;
 	}
-      int intStep = int(input.size() / w);
-      int remainderStep = input.size() - (intStep * w);
-      int pos = 0;
-      int remainder = 0;
-      int prev = 0;
-      int j=0;
+      int l_int_step = int(p_input.size() / l_w);
+      int l_remainder_step = p_input.size() - (l_int_step * l_w);
+      int l_pos = 0;
+      int l_remainder = 0;
+      int l_prev = 0;
+      int l_j=0;
 
       do
 	{
-	  pos += intStep;
-	  remainder += remainderStep;
-	  if(remainder >= w)
+        l_pos += l_int_step;
+        l_remainder += l_remainder_step;
+	  if(l_remainder >= l_w)
 	    {
-	      pos++;
-	      remainder -= w;
+	      l_pos++;
+            l_remainder -= l_w;
 	    }
-	  myassert(pos <= input.size());
-	  output[j] = *std::max_element(input.begin() + prev, input.begin() + pos, absoluteLess<float>());
-	  prev = pos;
+	  myassert(l_pos <= p_input.size());
+        p_output[l_j] = *std::max_element(p_input.begin() + l_prev, p_input.begin() + l_pos, absoluteLess<float>());
+        l_prev = l_pos;
 	}
-      while(++j < w);
+      while(++l_j < l_w);
     }
-  else if(input.size() == output.size())
+  else if(p_input.size() == p_output.size())
     {
-      std::copy(input.begin(), input.end(), output.begin());
+      std::copy(p_input.begin(), p_input.end(), p_output.begin());
     }
   else
     {
-      bresenham1d(input, output);
+      bresenham1d(p_input, p_output);
     }
 }
 //EOF

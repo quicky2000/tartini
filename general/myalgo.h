@@ -22,12 +22,12 @@
 /**
    Decimates input into the output, using a fast pick every n'th value idea.
 */
-void bresenham1d(const Array1d<float> & input, Array1d<float> & output);
+void bresenham1d(const Array1d<float> & p_input, Array1d<float> & p_output);
 
 /**
    Decimates input into the output, using a 'find the max of every n values' idea.
 */
-void maxAbsDecimate1d(const Array1d<float> & input, Array1d<float> & output);
+void maxAbsDecimate1d(const Array1d<float> & p_input, Array1d<float> & p_output);
 
 #endif // MYALGO_H
 //EOF
