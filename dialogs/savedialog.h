@@ -33,7 +33,8 @@ class SaveDialog : public QFileDialog
     void accept(void);
 
     static QString getSaveWavFileName(QWidget * p_parent = 0);
-  
+
+  private:
     QCheckBox * m_remember_folder_check_box;
     QCheckBox * m_append_wav_check_box;
 };
