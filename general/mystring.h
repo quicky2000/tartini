@@ -19,7 +19,7 @@
    @return the index of the first occurance of char c in string s.
    or -1 if not found
 */
-int find_pos( const char *p_s
+int find_pos( const char * p_s
             , const char p_c
             );
 
@@ -32,7 +32,9 @@ char * copy_string(const char * p_s);
 /**
    works exactly like strcasecmp but also works on windows
 */
-int str_case_cmp(const char * p_s1, const char * p_s2);
+int str_case_cmp( const char * p_s1
+                , const char * p_s2
+                );
 
 /**
    converts string to lower case

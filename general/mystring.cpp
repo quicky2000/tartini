@@ -69,7 +69,7 @@ int str_case_cmp( const char * p_s1
 // converts string to lower case
 // returns the string
 //------------------------------------------------------------------------------
-char *to_lower_case(char *p_s)
+char * to_lower_case(char * p_s)
 {
     for(char * l_a = p_s; * l_a != '\0'; l_a++)
     {
