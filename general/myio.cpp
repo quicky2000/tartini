@@ -19,15 +19,15 @@
    igetw:
    Reads a 16 bit word from a file, using intel byte ordering.
 */
-int igetw(FILE *f)
+int igetw(FILE *p_file)
 {
-  int b1, b2;
+  int l_byte_1, l_byte_2;
 
-  if((b1 = fgetc(f)) != EOF)
+  if((l_byte_1 = fgetc(p_file)) != EOF)
     {
-      if((b2 = fgetc(f)) != EOF)
+      if((l_byte_2 = fgetc(p_file)) != EOF)
 	{
-	  return ((b2 << 8) | b1);
+	  return ((l_byte_2 << 8) | l_byte_1);
 	}
     }
   return EOF;
@@ -39,20 +39,20 @@ int igetw(FILE *f)
    igetl:
    Reads a 32 bit long from a file, using intel byte ordering.
 */
-long igetl(FILE *f)
+long igetl(FILE *p_file)
 {
-  int b1, b2, b3, b4;
+  int l_byte_1, l_byte_2, l_byte_3, l_byte_4;
 
-  if((b1 = fgetc(f)) != EOF)
+  if((l_byte_1 = fgetc(p_file)) != EOF)
     {
-      if((b2 = fgetc(f)) != EOF)
+      if((l_byte_2 = fgetc(p_file)) != EOF)
 	{
-	  if((b3 = fgetc(f)) != EOF)
+	  if((l_byte_3 = fgetc(p_file)) != EOF)
 	    {
-	      if((b4 = fgetc(f)) != EOF)
+	      if((l_byte_4 = fgetc(p_file)) != EOF)
 		{
-		  return (((long)b4 << 24) | ((long)b3 << 16) |
-			  ((long)b2 << 8) | (long)b1);
+		  return (((long)l_byte_4 << 24) | ((long)l_byte_3 << 16) |
+                  ((long)l_byte_2 << 8) | (long)l_byte_1);
 		}
 	    }
 	}
@@ -66,18 +66,18 @@ long igetl(FILE *f)
    iputw:
    Writes a 16 bit int to a file, using intel byte ordering.
 */
-int iputw(int w, FILE *f)
+int iputw(int p_word, FILE *p_file)
 {
-  int b1, b2;
+  int l_byte_1, l_byte_2;
 
-  b1 = (w & 0xFF00) >> 8;
-  b2 = w & 0x00FF;
+    l_byte_1 = (p_word & 0xFF00) >> 8;
+    l_byte_2 = p_word & 0x00FF;
 
-  if (fputc(b2,f) == b2)
+  if (fputc(l_byte_2, p_file) == l_byte_2)
     {
-      if (fputc(b1,f) == b1)
+      if (fputc(l_byte_1, p_file) == l_byte_1)
 	{
-	  return w;
+	  return p_word;
 	}
     }
   return EOF;
@@ -89,24 +89,24 @@ int iputw(int w, FILE *f)
    iputw:
    Writes a 32 bit long to a file, using intel byte ordering.
 */
-long iputl(long l, FILE *f)
+long iputl(long p_long, FILE *p_file)
 {
-  int b1, b2, b3, b4;
+  int l_byte_1, l_byte_2, l_byte_3, l_byte_4;
 
-  b1 = (int)((l & 0xFF000000L) >> 24);
-  b2 = (int)((l & 0x00FF0000L) >> 16);
-  b3 = (int)((l & 0x0000FF00L) >> 8);
-  b4 = (int)l & 0x00FF;
+  l_byte_1 = (int)((p_long & 0xFF000000L) >> 24);
+  l_byte_2 = (int)((p_long & 0x00FF0000L) >> 16);
+  l_byte_3 = (int)((p_long & 0x0000FF00L) >> 8);
+  l_byte_4 = (int)p_long & 0x00FF;
 
-  if(fputc(b4,f)==b4)
+  if(fputc(l_byte_4, p_file) == l_byte_4)
     {
-      if(fputc(b3,f)==b3)
+      if(fputc(l_byte_3, p_file) == l_byte_3)
 	{
-	  if(fputc(b2,f)==b2)
+	  if(fputc(l_byte_2, p_file) == l_byte_2)
 	    {
-	      if(fputc(b1,f)==b1)
+	      if(fputc(l_byte_1, p_file) == l_byte_1)
 		{
-		  return l;
+		  return p_long;
 		}
 	    }
 	}
@@ -120,15 +120,15 @@ long iputl(long l, FILE *f)
    mgetw:
    Reads a 16 bit int from a file, using motorola byte-ordering.
 */
-int mgetw(FILE *f)
+int mgetw(FILE *p_file)
 {
-  int b1, b2;
+  int l_byte_1, l_byte_2;
 
-  if((b1 = fgetc(f)) != EOF)
+  if((l_byte_1 = fgetc(p_file)) != EOF)
     {
-      if((b2 = fgetc(f)) != EOF)
+      if((l_byte_2 = fgetc(p_file)) != EOF)
 	{
-	  return ((b1 << 8) | b2);
+	  return ((l_byte_1 << 8) | l_byte_2);
 	}
     }
   return EOF;
@@ -140,20 +140,20 @@ int mgetw(FILE *f)
    mgetl:
    Reads a 32 bit long from a file, using motorola byte-ordering.
 */
-long mgetl(FILE *f)
+long mgetl(FILE *p_file)
 {
-  int b1, b2, b3, b4;
+  int l_byte_1, l_byte_2, l_byte_3, l_byte_4;
 
-  if((b1 = fgetc(f)) != EOF)
+  if((l_byte_1 = fgetc(p_file)) != EOF)
     {
-      if((b2 = fgetc(f)) != EOF)
+      if((l_byte_2 = fgetc(p_file)) != EOF)
 	{
-	  if((b3 = fgetc(f)) != EOF)
+	  if((l_byte_3 = fgetc(p_file)) != EOF)
 	    {
-	      if((b4 = fgetc(f)) != EOF)
+	      if((l_byte_4 = fgetc(p_file)) != EOF)
 		{
-		  return (((long)b1 << 24) | ((long)b2 << 16) |
-			  ((long)b3 << 8) | (long)b4);
+		  return (((long)l_byte_1 << 24) | ((long)l_byte_2 << 16) |
+                  ((long)l_byte_3 << 8) | (long)l_byte_4);
 		}
 	    }
 	}
@@ -167,18 +167,18 @@ long mgetl(FILE *f)
    mputw:
    Writes a 16 bit int to a file, using motorola byte-ordering.
 */
-int mputw(int w, FILE *f)
+int mputw(int p_word, FILE *p_file)
 {
-  int b1, b2;
+  int l_byte_1, l_byte_2;
 
-  b1 = (w & 0xFF00) >> 8;
-  b2 = w & 0x00FF;
+  l_byte_1 = (p_word & 0xFF00) >> 8;
+  l_byte_2 = p_word & 0x00FF;
 
-  if(fputc(b1,f)==b1)
+  if(fputc(l_byte_1, p_file) == l_byte_1)
     {
-      if(fputc(b2,f)==b2)
+      if(fputc(l_byte_2, p_file) == l_byte_2)
 	{
-	  return w;
+	  return p_word;
 	}
     }
   return EOF;
@@ -190,24 +190,24 @@ int mputw(int w, FILE *f)
    mputl:
    Writes a 32 bit long to a file, using motorola byte-ordering.
 */
-long mputl(long l, FILE *f)
+long mputl(long p_long, FILE *p_file)
 {
-  int b1, b2, b3, b4;
+  int l_byte_1, l_byte_2, l_byte_3, l_byte_4;
 
-  b1 = (int)((l & 0xFF000000L) >> 24);
-  b2 = (int)((l & 0x00FF0000L) >> 16);
-  b3 = (int)((l & 0x0000FF00L) >> 8);
-  b4 = (int)l & 0x00FF;
+  l_byte_1 = (int)((p_long & 0xFF000000L) >> 24);
+  l_byte_2 = (int)((p_long & 0x00FF0000L) >> 16);
+  l_byte_3 = (int)((p_long & 0x0000FF00L) >> 8);
+  l_byte_4 = (int)p_long & 0x00FF;
 
-  if(fputc(b1,f)==b1)
+  if(fputc(l_byte_1, p_file) == l_byte_1)
     {
-      if(fputc(b2,f)==b2)
+      if(fputc(l_byte_2, p_file) == l_byte_2)
 	{
-	  if(fputc(b3,f)==b3)
+	  if(fputc(l_byte_3, p_file) == l_byte_3)
 	    {
-	      if(fputc(b4,f)==b4)
+	      if(fputc(l_byte_4, p_file) == l_byte_4)
 		{
-		  return l;
+		  return p_long;
 		}
 	    }
 	}

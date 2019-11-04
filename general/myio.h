@@ -20,42 +20,42 @@
 /**
    Reads a 16 bit word (intel byte ordering)
 */
-int igetw(FILE *f);
+int igetw(FILE *p_file);
 
 /**
    Reads a 32 bit long (intel byte ordering)
 */
-long igetl(FILE *f);
+long igetl(FILE *p_file);
 
 /**
    Writes a 16 bit int (intel byte ordering)
 */
-int iputw(int w, FILE *f);
+int iputw(int p_word, FILE *p_file);
 
 /**
    Writes a 32 bit long (intel byte ordering)
 */
-long iputl(long l, FILE *f);
+long iputl(long p_long, FILE *p_file);
 
 /**
    Reads a 16 bit int (motorola byte-ordering)
 */
-int mgetw(FILE *f);
+int mgetw(FILE *p_file);
 
 /**
    Reads a 32 bit long (motorola byte-ordering)
 */
-long mgetl(FILE *f);
+long mgetl(FILE *p_file);
 
 /**
    Writes a 16 bit int (motorola byte-ordering)
 */
-int mputw(int w, FILE *f);
+int mputw(int p_word, FILE *p_file);
 
 /**
    Writes a 32 bit long (motorola byte-ordering)
 */
-long mputl(long l, FILE *f);
+long mputl(long p_long, FILE *p_file);
 
 #endif // MY_IO_H
 
