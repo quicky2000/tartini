@@ -45,38 +45,53 @@
 
 class MyGLChar
 {
-public:
-  inline MyGLChar(int p_width, int p_height, GLubyte *p_data, int p_width_raw);
-  inline const GLubyte * data(void) const;
-  inline int w(void) const;
-  inline int h(void) const;
-  inline int w_raw(void) const;
+  public:
+    inline MyGLChar( int p_width
+                   , int p_height
+                   , GLubyte * p_data
+                   , int p_width_raw
+                   );
+    inline const GLubyte * data(void) const;
+    inline int w(void) const;
+    inline int h(void) const;
+    inline int w_raw(void) const;
 
- private:
-  int m_width;
-  int m_height;
-  int m_width_raw;
-  GLubyte *m_data;
+  private:
+    int m_width;
+    int m_height;
+    int m_width_raw;
+    GLubyte * m_data;
 };
 
 class MyGLFont
 {
- public:
-  inline MyGLFont(void);
-  inline MyGLFont(const QFont p_font);
-  ~MyGLFont(void);
+  public:
 
-  void beginGLtext(int p_width, int p_height) const;
-  void drawGLtextRaw(float p_x, float p_y, QString p_string) const;
-  void endGLtext(void) const;
+    inline MyGLFont(void);
+    inline MyGLFont(const QFont p_font);
+    ~MyGLFont(void);
 
- private:
-  void init(const QFont p_font);
-  void drawGLtext(float p_x, float p_y, QString p_string, int p_width, int p_height) const;
+    void beginGLtext( int p_width
+                    , int p_height
+                    ) const;
+    void drawGLtextRaw( float p_x
+                      , float p_y
+                      , QString p_string
+                      ) const;
+    void endGLtext(void) const;
 
- private:
-  MyGLChar * m_chars[256];
-  bool m_been_init;
+  private:
+
+    void init(const QFont p_font);
+    void drawGLtext( float p_x
+                   , float p_y
+                   , QString p_string
+                   , int p_width
+                   , int p_height
+                   ) const;
+
+    MyGLChar * m_chars[256];
+    bool m_been_init;
 };
 
 #include "myglfonts.hpp"
