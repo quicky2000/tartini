@@ -24,7 +24,9 @@ void print3x3matrix(const double * p_x);
    [2  3]
    @return true if the matrix was inverted. false if no solution.
 */
-bool invert2x2matrix(const double * p_input, double * p_output);
+bool invert2x2matrix( const double * p_input
+                    , double * p_output
+                    );
 
 /**
    Matrix inverse assuming the array follows this index pattern.
@@ -35,7 +37,9 @@ bool invert2x2matrix(const double * p_input, double * p_output);
    @param p_y stores the result in y
    @return true if the matrix was inverted. false if no solution.
 */
-bool invert3x3matrix(const double * p_x, double * p_y);
+bool invert3x3matrix( const double * p_x
+                    , double * p_y
+                    );
 
 /**
    Moore-Penrose Matrix-inverse (or pseudo-inverse) such that X*alpha1 - Y is minimised using least squares
@@ -46,7 +50,11 @@ bool invert3x3matrix(const double * p_x, double * p_y);
    @param p_alpha Array length 1. The result is stored here. The scaler value for x1
    @return true if there is a psudeo-inverse, else false
 */
-bool pinv(const float * p_x1, const float * p_y, int p_n, double *p_alpha);
+bool pinv( const float * p_x1
+         , const float * p_y
+         , int p_n
+         , double * p_alpha
+         );
 
 /**
    Moore-Penrose Matrix-inverse (or pseudo-inverse) such that X*alpha1 - Y is minimised using least squares
@@ -58,7 +66,12 @@ bool pinv(const float * p_x1, const float * p_y, int p_n, double *p_alpha);
    @param p_alpha Array length 2. The result is stored here. The scaler values for x1 and x2 respectively
    @return true if there is a psudeo-inverse, else false
 */
-bool pinv(const float * p_x1, const float * p_x2, const float * p_y, int p_n, double * p_alpha);
+bool pinv( const float * p_x1
+         , const float * p_x2
+         , const float * p_y
+         , int p_n
+         , double * p_alpha
+         );
 
 /**
    Moore-Penrose Matrix-inverse (or pseudo-inverse) such that X*alpha1 - Y is minimised using least squares
@@ -71,14 +84,24 @@ bool pinv(const float * p_x1, const float * p_x2, const float * p_y, int p_n, do
    @param p_alpha Array length 3. The result is stored here. The scaler values for x1, x2 and x3 respectively
    @return true if there is a psudeo-inverse, else false
 */
-bool pinv(const float * p_x1, const float * p_x2, const float * p_x3, const float * p_y, int p_n, double * p_alpha);
+bool pinv( const float * p_x1
+         , const float * p_x2
+         , const float * p_x3
+         , const float * p_y
+         , int p_n
+         , double * p_alpha
+         );
 
 /**
    Finds the determinant of a 2x2 matrix
    [a b]
    [c d]
 */
-inline double determinant2x2(double p_a, double p_b, double p_c, double p_d);
+inline double determinant2x2( double p_a
+                            , double p_b
+                            , double p_c
+                            , double p_d
+                            );
 
 /**
    Finds the determinant of a 3x3 matrix
@@ -86,7 +109,7 @@ inline double determinant2x2(double p_a, double p_b, double p_c, double p_d);
    [3 4 5]
    [6 7 8]
 */
-inline double determinant3x3(const double *p_x);
+inline double determinant3x3(const double * p_x);
 
 #include "mymatrix.hpp"
 

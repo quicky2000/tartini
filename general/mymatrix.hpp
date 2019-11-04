@@ -17,13 +17,17 @@
 */
 
 //------------------------------------------------------------------------------
-double determinant2x2(double p_a, double p_b, double p_c, double p_d)
+double determinant2x2( double p_a
+                     , double p_b
+                     , double p_c
+                     , double p_d
+                     )
 {
   return p_a * p_d - p_b * p_c;
 }
 
 //------------------------------------------------------------------------------
-double determinant3x3(const double *p_x)
+double determinant3x3(const double * p_x)
 {
   return p_x[0] * p_x[4] * p_x[8] - p_x[0] * p_x[5] * p_x[7] - p_x[1] * p_x[3] * p_x[8] + p_x[1] * p_x[5] * p_x[6] + p_x[2] * p_x[3] * p_x[7] - p_x[2] * p_x[4] * p_x[6];
 }
