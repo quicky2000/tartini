@@ -37,8 +37,10 @@ class Channel;
 class MyLabel;
 class QComboBox;
 
-struct ViewData
+class ViewData
 {
+  public:
+
     ViewData( QString p_title
             , QString p_menu_name
             , QString p_class_name
@@ -50,6 +52,13 @@ struct ViewData
         m_class_name = p_class_name;
         m_menu_type = p_menu_type;
     };
+
+    const QString & get_title() const;
+    const QString & get_menu_name() const;
+    const QString & get_class_name() const;
+    int get_menu_type() const;
+
+  private:
     QString m_title;
     QString m_menu_name;
     QString m_class_name;

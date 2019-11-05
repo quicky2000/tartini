@@ -978,21 +978,21 @@ void MainWindow::newViewAboutToShow(void)
     for(int j = 0; j < NUM_VIEWS; j++)
     {
         QAction *l_action;
-        if(g_view_data[j].m_menu_type == 0)
+        if(g_view_data[j].get_menu_type() == 0)
         {
-            l_action = m_new_view_menu->addAction(g_view_data[j].m_menu_name);
+            l_action = m_new_view_menu->addAction(g_view_data[j].get_menu_name());
         }
-        else if(g_view_data[j].m_menu_type == 1)
+        else if(g_view_data[j].get_menu_type() == 1)
         {
-            l_action = l_technical_menu->addAction(g_view_data[j].m_menu_name);
+            l_action = l_technical_menu->addAction(g_view_data[j].get_menu_name());
         }
-        else if(g_view_data[j].m_menu_type == 2)
+        else if(g_view_data[j].get_menu_type() == 2)
         {
-            l_action = l_experimental_menu->addAction(g_view_data[j].m_menu_name);
+            l_action = l_experimental_menu->addAction(g_view_data[j].get_menu_name());
         }
-        else if(g_view_data[j].m_menu_type == 3)
+        else if(g_view_data[j].get_menu_type() == 3)
         {
-            l_action = l_other_menu->addAction(g_view_data[j].m_menu_name);
+            l_action = l_other_menu->addAction(g_view_data[j].get_menu_name());
         }
         else
         {
@@ -1003,7 +1003,7 @@ void MainWindow::newViewAboutToShow(void)
         m_create_signal_mapper->setMapping(l_action, j);
         for(QWidgetList::iterator l_iterator=l_opened.begin(); l_iterator<l_opened.end(); l_iterator++)
         {
-            if(QString((*l_iterator)->metaObject()->className()) == g_view_data[j].m_class_name)
+            if(QString((*l_iterator)->metaObject()->className()) == g_view_data[j].get_class_name())
             {
                 l_action->setEnabled(false);
                 break;
@@ -1419,7 +1419,7 @@ bool MainWindow::loadViewGeometry(void)
 
     for(int l_j = 0; l_j < NUM_VIEWS; l_j++)
     {
-        QString l_base = QString("geometry/") + g_view_data[l_j].m_class_name;
+        QString l_base = QString("geometry/") + g_view_data[l_j].get_class_name();
         QString l_key = l_base+"/visible";
         if(g_data->settingsContains(l_key) && g_data->getSettingsValue(l_key, false) == true)
         {
@@ -1454,12 +1454,12 @@ void MainWindow::saveViewGeometry(void)
 
     for(int l_j = 0; l_j < NUM_VIEWS; l_j++)
     {
-        QString l_base = QString("geometry/") + g_view_data[l_j].m_class_name;
+        QString l_base = QString("geometry/") + g_view_data[l_j].get_class_name();
 
         bool l_found = false;
         for(QWidgetList::iterator l_iterator = l_opened.begin(); l_iterator < l_opened.end(); l_iterator++)
         {
-            if(QString((*l_iterator)->metaObject()->className()) == g_view_data[l_j].m_class_name)
+            if(QString((*l_iterator)->metaObject()->className()) == g_view_data[l_j].get_class_name())
             {
                 //get the subwindow frame
                 QWidget * l_parent_widget = (QWidget*)((*l_iterator)->parent());
@@ -1479,6 +1479,34 @@ void MainWindow::saveViewGeometry(void)
             g_data->setSettingsValue(l_base+"/visible", false);
         }
     }
+}
+
+//-----------------------------------------------------------------------------
+const QString &
+ViewData::get_title() const
+{
+    return m_title;
+}
+
+//-----------------------------------------------------------------------------
+const QString &
+ViewData::get_menu_name() const
+{
+    return m_menu_name;
+}
+
+//-----------------------------------------------------------------------------
+int
+ViewData::get_menu_type() const
+{
+    return m_menu_type;
+}
+
+//-----------------------------------------------------------------------------
+const QString &
+ViewData::get_class_name() const
+{
+    return m_class_name;
 }
 
 //------------------------------------------------------------------------------
