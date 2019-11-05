@@ -38,8 +38,7 @@ VibratoWidget::VibratoWidget(QWidget * p_parent, int p_nls):
   m_note_label_counter = 0;
   for(int l_index = 0; l_index < 100; l_index++)
     {
-      m_note_labels[l_index].m_label = QString(8,' ');
-      m_note_labels[l_index].m_y = 0.0f;
+      m_note_labels[l_index].set(QString(8,' '), 0.0f);
     }
   m_vibrato_font = QFont();
   m_vibrato_font.setPointSize(9);
@@ -151,8 +150,8 @@ void VibratoWidget::paintGL(void)
   glColor3ub(0,0,0);
   for(int l_index = 0; l_index < m_note_label_counter; l_index++)
     {
-      g_mygl_font->drawGLtextRaw(3, m_note_labels[l_index].m_y - 4, m_note_labels[l_index].m_label);
-      g_mygl_font->drawGLtextRaw(width() - m_note_label_offset + 3, m_note_labels[l_index].m_y - 4, m_note_labels[l_index].m_label);
+      g_mygl_font->drawGLtextRaw(3, m_note_labels[l_index].get_y() - 4, m_note_labels[l_index].get_label());
+      g_mygl_font->drawGLtextRaw(width() - m_note_label_offset + 3, m_note_labels[l_index].get_y() - 4, m_note_labels[l_index].get_label());
     }
   g_mygl_font->endGLtext();
 }
@@ -501,8 +500,7 @@ void VibratoWidget::doUpdate(void)
 	  l_colors[l_colors_counter++] = 170;
 
 	  compose_note_label(l_note_label, l_nearest_note);
-	  m_note_labels[m_note_label_counter].m_label = l_note_label;
-	  m_note_labels[m_note_label_counter].m_y = l_reference_line_Y;
+	  m_note_labels[m_note_label_counter].set( l_note_label, l_reference_line_Y);
 	  m_note_label_counter++;
 
 	  // Calculate as many reference lines + note labels above the note as can be seen
@@ -527,8 +525,7 @@ void VibratoWidget::doUpdate(void)
 	      l_colors[l_colors_counter++] = 170;
 	
 	      compose_note_label(l_note_label, l_nearest_note + l_index);
-	      m_note_labels[m_note_label_counter].m_label = l_note_label;
-	      m_note_labels[m_note_label_counter].m_y = l_reference_line_Y;
+	      m_note_labels[m_note_label_counter].set( l_note_label, l_reference_line_Y);
 	      m_note_label_counter++;
 	    }
 
@@ -554,8 +551,7 @@ void VibratoWidget::doUpdate(void)
 	      l_colors[l_colors_counter++] = 170;
 
 	      compose_note_label(l_note_label, l_nearest_note + l_index);
-	      m_note_labels[m_note_label_counter].m_label = l_note_label;
-	      m_note_labels[m_note_label_counter].m_y = l_reference_line_Y;
+	      m_note_labels[m_note_label_counter].set( l_note_label, l_reference_line_Y);
 	      m_note_label_counter++;
 	    }
 
@@ -947,4 +943,29 @@ void VibratoWidget::compose_note_label(QString & p_note_label, const int & p_not
     }
   p_note_label = l_composed_note_label.str().c_str();
 }
+
+//------------------------------------------------------------------------------
+void
+VibratoWidget::noteLabelStruct::set( const QString & p_label
+                                   , float p_y
+                                   )
+{
+    m_label = p_label;
+    m_y = p_y;
+}
+
+//------------------------------------------------------------------------------
+float
+VibratoWidget::noteLabelStruct::get_y() const
+{
+    return m_y;
+}
+
+//------------------------------------------------------------------------------
+const QString &
+VibratoWidget::noteLabelStruct::get_label() const
+{
+    return m_label;
+}
+
 // EOF

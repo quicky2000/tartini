@@ -61,10 +61,19 @@ class VibratoWidget :public QGLWidget
   GLuint m_maxima_minima_points;
 
   int m_note_label_counter;
-  struct noteLabelStruct
+  class noteLabelStruct
   {
-    QString m_label;
-    float m_y;
+    public:
+      void set( const QString & p_label
+              , float p_y
+              );
+      float get_y() const;
+      const QString & get_label() const;
+
+    private:
+
+      QString m_label;
+      float m_y;
   };
   noteLabelStruct m_note_labels[100];
 
