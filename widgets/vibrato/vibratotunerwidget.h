@@ -58,8 +58,21 @@ class VibratoTunerWidget: public QGLWidget
     float m_cents_label_Y;
 
     int m_tuner_label_counter;
-    struct tunerLabelStruct
+    class tunerLabelStruct
     {
+      public:
+
+        void set( const QString & p_label
+                , float p_x
+                , float p_y
+                );
+
+        const QString & get_label() const;
+        float get_x() const;
+        float get_y() const;
+
+      private:
+
         QString m_label;
         float m_x;
         float m_y;

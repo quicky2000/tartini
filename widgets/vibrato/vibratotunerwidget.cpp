@@ -33,9 +33,7 @@ VibratoTunerWidget::VibratoTunerWidget(QWidget *parent):
   m_tuner_label_counter = 0;
   for (int l_index = 0; l_index < 100; l_index++)
     {
-      tunerLabels[l_index].m_label = QString(8,' ');
-      tunerLabels[l_index].m_x = 0.0f;
-      tunerLabels[l_index].m_y = 0.0f;
+      tunerLabels[l_index].set( QString(8,' '), 0.0f, 0.0f);
     }
   m_tuner_font = QFont();
   m_tuner_font.setPointSize(9);
@@ -176,9 +174,10 @@ void VibratoTunerWidget::resizeGL(int p_width
 	      glVertex2f(l_start_X + 0.05 * (l_center_X - l_start_X), l_start_Y + 0.05 * (l_center_Y - l_start_Y));
 	      glEnd();
 
-	      tunerLabels[m_tuner_label_counter].m_x = l_start_X + 0.08 * (l_center_X - l_start_X);
-	      tunerLabels[m_tuner_label_counter].m_y = l_start_Y + 0.08 * (l_center_Y - l_start_Y);
-	      tunerLabels[m_tuner_label_counter++].m_label = l_tuner_label_lookup[l_j];
+	      tunerLabels[m_tuner_label_counter++].set( l_tuner_label_lookup[l_j]
+	                                              , l_start_X + 0.08 * (l_center_X - l_start_X)
+	                                              , l_start_Y + 0.08 * (l_center_Y - l_start_Y)
+	                                              );
 	    }
 	  else
 	    {
@@ -203,9 +202,10 @@ void VibratoTunerWidget::resizeGL(int p_width
 	  glVertex2f(l_start_X + 0.05 * (l_center_X - l_start_X), l_start_Y + 0.05 * (l_center_Y - l_start_Y));
 	  glEnd();
 
-	  tunerLabels[m_tuner_label_counter].m_x = l_start_X + 0.08 * (l_center_X - l_start_X);
-	  tunerLabels[m_tuner_label_counter].m_y = l_start_Y + 0.08 * (l_center_Y - l_start_Y);
-	  tunerLabels[m_tuner_label_counter++].m_label = l_tuner_label_lookup[l_j];
+	  tunerLabels[m_tuner_label_counter++].set( l_tuner_label_lookup[l_j]
+	                                          , l_start_X + 0.08 * (l_center_X - l_start_X)
+	                                          , l_start_Y + 0.08 * (l_center_Y - l_start_Y)
+	                                          );
 	}
     }
 
@@ -243,7 +243,7 @@ void VibratoTunerWidget::paintGL()
   renderText(m_cents_label_X - (0.5 * l_font_metric.width("Cents")), m_cents_label_Y, 0, "Cents", m_tuner_font);
   for (int l_index = 0; l_index < m_tuner_label_counter; l_index++)
     {
-      renderText(tunerLabels[l_index].m_x - (0.5 * l_font_metric.width(tunerLabels[l_index].m_label)), tunerLabels[l_index].m_y - 8, 0, tunerLabels[l_index].m_label, m_tuner_font);
+      renderText(tunerLabels[l_index].get_x() - (0.5 * l_font_metric.width(tunerLabels[l_index].get_label())), tunerLabels[l_index].get_y() - 8, 0, tunerLabels[l_index].get_label(), m_tuner_font);
     }
 
   // Draw the needle
@@ -374,4 +374,38 @@ QSize VibratoTunerWidget::minimumSizeHint(void) const
 {
   return QSize(100, 75);
 }
+
+//------------------------------------------------------------------------------
+void
+VibratoTunerWidget::tunerLabelStruct::set( const QString & p_label
+                                         , float p_x
+                                         , float p_y
+                                         )
+{
+    m_label = p_label;
+    m_x = p_x;
+    m_y = p_y;
+}
+
+//------------------------------------------------------------------------------
+const QString &
+VibratoTunerWidget::tunerLabelStruct::get_label() const
+{
+    return m_label;
+}
+
+//------------------------------------------------------------------------------
+float
+VibratoTunerWidget::tunerLabelStruct::get_x() const
+{
+    return m_x;
+}
+
+//------------------------------------------------------------------------------
+float
+VibratoTunerWidget::tunerLabelStruct::get_y() const
+{
+    return m_y;
+}
+
 // EOF
