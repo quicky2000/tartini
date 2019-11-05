@@ -228,6 +228,30 @@ MinMax::MinMax( float p_min
 }
 
 //------------------------------------------------------------------------------
+void MinMax::set_min(float p_min)
+{
+    m_min = p_min;
+}
+
+//------------------------------------------------------------------------------
+void MinMax::set_max(float p_max)
+{
+    m_max = p_max;
+}
+
+//------------------------------------------------------------------------------
+float MinMax::get_min() const
+{
+    return m_min;
+}
+
+//------------------------------------------------------------------------------
+float MinMax::get_max() const
+{
+    return m_max;
+}
+
+//------------------------------------------------------------------------------
 template <class ForwardIterator>
 int maxIndex( ForwardIterator p_attay_first
             , int p_length

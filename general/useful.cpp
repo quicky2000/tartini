@@ -194,8 +194,8 @@ MinMax minMax( float * p_begin
 
     for(float *l_p = p_begin + 1; l_p < p_end; l_p++)
     {
-        l_result.m_min = MIN(l_result.m_min, *l_p);
-        l_result.m_max = MAX(l_result.m_max, *l_p);
+        l_result.set_min(MIN(l_result.get_min(), *l_p));
+        l_result.set_max(MAX(l_result.get_max(), *l_p));
     }
     return l_result;
 }
@@ -219,8 +219,8 @@ MinMax minMax( float * p_begin
     {
         if (*l_p >= p_low_bound && *l_p <= p_high_bound)
         {
-            l_result.m_min = MIN(l_result.m_min, *l_p);
-            l_result.m_max = MAX(l_result.m_max, *l_p);
+            l_result.set_min(MIN(l_result.get_min(), *l_p));
+            l_result.set_max(MAX(l_result.get_max(), *l_p));
         }
     }
     return l_result;

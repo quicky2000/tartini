@@ -180,12 +180,22 @@ inline void parabolaTurningPoint2( T p_y_1
                                  , T * p_y
                                  );
 
-struct MinMax
+class MinMax
 {
+  public:
+
     inline MinMax(void);
     inline MinMax( float p_min
                  , float p_max
                  );
+
+    inline void set_min(float p_min);
+    inline void set_max(float p_max);
+    inline float get_min() const;
+    inline float get_max() const;
+
+  private:
+
     float m_min;
     float m_max;
 };
