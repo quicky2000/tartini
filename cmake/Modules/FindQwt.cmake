@@ -45,7 +45,7 @@ if("${PC_QWT}" STREQUAL "")
               NAMES qwt.h
               PATHS ${QWT_PATHS}
               HINTS ${QWT_HINTS}
-              PATH_SUFFIXES include qwt-qt4 qwt-qt5
+              PATH_SUFFIXES include qwt-qt4 qwt-qt5 qwt
               DOC "Variable storing the location of Qwt header"
              )
 
