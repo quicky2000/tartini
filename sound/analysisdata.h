@@ -256,29 +256,39 @@ struct greaterPitch: public std::binary_function< AnalysisData &
                         );
 };
 
-struct lessValue: public std::binary_function< AnalysisData &
-                                             , AnalysisData &
-                                             , bool
-                                             >
+class lessValue: public std::binary_function< AnalysisData &
+                                            , AnalysisData &
+                                            , bool
+                                            >
 {
-    int m_value;
+  public:
+
     inline lessValue(int p_value);
     inline bool operator()( const AnalysisData & p_x
                           , const AnalysisData & p_y
                           );
-};
 
-struct greaterValue: public std::binary_function< AnalysisData &
-                                                , AnalysisData &
-                                                , bool
-                                                >
-{
+  private:
 
     int m_value;
+
+};
+
+class greaterValue: public std::binary_function< AnalysisData &
+                                               , AnalysisData &
+                                               , bool
+                                               >
+{
+  public:
+
     inline greaterValue(int p_value);
     inline bool operator()( const AnalysisData & p_x
                           , const AnalysisData & p_y
                           );
+
+  private:
+
+    int m_value;
 };
 
 #include "analysisdata.hpp"
