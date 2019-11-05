@@ -44,6 +44,9 @@ class VibratoTunerWidget: public QGLWidget
 
   private:
 
+    void resetLeds(void);
+
+
     //data goes here
 
     float m_needle_value_to_draw;
@@ -77,9 +80,7 @@ class VibratoTunerWidget: public QGLWidget
         float m_x;
         float m_y;
     };
-    tunerLabelStruct tunerLabels[100];
-
-    void resetLeds(void);
+    tunerLabelStruct m_tuner_labels[100];
 
     GLuint m_dial;
     GLuint m_needle;
