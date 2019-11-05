@@ -25,7 +25,7 @@
 #include <QPaintEvent>
 #include "channel.h"
 
-struct ZoomElement;
+class ZoomElement;
 class AnalysisData;
 
 class AmplitudeWidget : public QGLWidget
