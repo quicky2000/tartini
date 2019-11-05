@@ -97,6 +97,13 @@ class IIR_Filter : public Filter
 class FilterState
 {
   public:
+
+    void set_x(const Array1d<double> & p_x);
+    void set_y(const Array1d<double> & p_y);
+    const Array1d<double> & get_x() const;
+    const Array1d<double> & get_y() const;
+
+  private:
     Array1d<double> m_x;
     Array1d<double> m_y;
 };

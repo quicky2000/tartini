@@ -157,15 +157,41 @@ void IIR_Filter::filter(const float *p_input, float *p_output, int p_n)
 //------------------------------------------------------------------------------
 void IIR_Filter::getState(FilterState * p_filter_state) const
 {
-    p_filter_state->m_x = m_x;
-    p_filter_state->m_y = m_y;
+    p_filter_state->set_x(m_x);
+    p_filter_state->set_y(m_y);
 }
 
 //------------------------------------------------------------------------------
 void IIR_Filter::setState(const FilterState *p_filter_state)
 {
-    m_x = p_filter_state->m_x;
-    m_y = p_filter_state->m_y;
+    m_x = p_filter_state->get_x();
+    m_y = p_filter_state->get_y();
+}
+
+//------------------------------------------------------------------------------
+void FilterState::set_x(const Array1d<double> & p_x)
+{
+    m_x = p_x;
+}
+
+//------------------------------------------------------------------------------
+void FilterState::set_y(const Array1d<double> & p_y)
+{
+    m_y = p_y;
+}
+
+//------------------------------------------------------------------------------
+const Array1d<double> &
+FilterState::get_x() const
+{
+    return m_x;
+}
+
+//------------------------------------------------------------------------------
+const Array1d<double> &
+FilterState::get_y() const
+{
+    return m_y;
 }
 
 // EOF
