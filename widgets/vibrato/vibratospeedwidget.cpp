@@ -36,12 +36,8 @@ VibratoSpeedWidget::VibratoSpeedWidget(QWidget * p_parent)
     m_width_label_counter = 0;
     for (int l_index = 0; l_index < 100; l_index++)
     {
-        m_speed_labels[l_index].label = QString(8,' ');
-        m_speed_labels[l_index].x = 0.0f;
-        m_speed_labels[l_index].y = 0.0f;
-        m_width_labels[l_index].label = QString(8,' ');
-        m_width_labels[l_index].x = 0.0f;
-        m_width_labels[l_index].y = 0.0f;
+        m_speed_labels[l_index].set( QString(8,' '), 0.0f, 0.0f);
+        m_width_labels[l_index].set( QString(8,' '), 0.0f, 0.0f);
     }
     m_speed_width_font = QFont();
     m_speed_width_font.setPointSize(9);
@@ -190,9 +186,10 @@ void VibratoSpeedWidget::resizeGL(int p_width
                           );
                 glEnd();
 
-                m_speed_labels[m_speed_label_counter].x = l_start_X + 0.08 * (l_speed_center_X - l_start_X);
-                m_speed_labels[m_speed_label_counter].y = l_start_Y + 0.08 * (l_speed_center_Y - l_start_Y);
-                m_speed_labels[m_speed_label_counter++].label = l_speed_label_lookup[l_j];
+                m_speed_labels[m_speed_label_counter++].set( l_speed_label_lookup[l_j]
+                                                           , l_start_X + 0.08 * (l_speed_center_X - l_start_X)
+                                                           , l_start_Y + 0.08 * (l_speed_center_Y - l_start_Y)
+                                                           );
             }
             else
             {
@@ -222,9 +219,10 @@ void VibratoSpeedWidget::resizeGL(int p_width
                           );
                 glEnd();
 
-                m_speed_labels[m_speed_label_counter].x = l_start_X + 0.08 * (l_speed_center_X - l_start_X);
-                m_speed_labels[m_speed_label_counter].y = l_start_Y + 0.08 * (l_speed_center_Y - l_start_Y);
-                m_speed_labels[m_speed_label_counter++].label = l_speed_label_lookup[l_j];
+                m_speed_labels[m_speed_label_counter++].set( l_speed_label_lookup[l_j]
+                                                           , l_start_X + 0.08 * (l_speed_center_X - l_start_X)
+                                                           , l_start_Y + 0.08 * (l_speed_center_Y - l_start_Y)
+                                                           );
             }
             else
             {
@@ -252,9 +250,10 @@ void VibratoSpeedWidget::resizeGL(int p_width
                       );
             glEnd();
 
-            m_speed_labels[m_speed_label_counter].x = l_start_X + 0.08 * (l_speed_center_X - l_start_X);
-            m_speed_labels[m_speed_label_counter].y = l_start_Y + 0.08 * (l_speed_center_Y - l_start_Y);
-            m_speed_labels[m_speed_label_counter++].label = l_speed_label_lookup[l_j];
+            m_speed_labels[m_speed_label_counter++].set( l_speed_label_lookup[l_j]
+                                                       , l_start_X + 0.08 * (l_speed_center_X - l_start_X)
+                                                       , l_start_Y + 0.08 * (l_speed_center_Y - l_start_Y)
+                                                       );
         }
     }
 
@@ -342,10 +341,11 @@ void VibratoSpeedWidget::resizeGL(int p_width
                           );
                 glEnd();
 
-                m_width_labels[m_width_label_counter].x = l_start_X + 0.08 * (l_width_center_X - l_start_X);
-                m_width_labels[m_width_label_counter].y = l_start_Y + 0.08 * (l_width_center_Y - l_start_Y);
                 sprintf(l_width_label, "%d", m_width_limit - ((m_width_limit / 10) * l_j));
-                m_width_labels[m_width_label_counter++].label = l_width_label;
+                m_width_labels[m_width_label_counter++].set( l_width_label
+                                                           , l_start_X + 0.08 * (l_width_center_X - l_start_X)
+                                                           , l_start_Y + 0.08 * (l_width_center_Y - l_start_Y)
+                                                           );
             }
             else
             {
@@ -370,10 +370,11 @@ void VibratoSpeedWidget::resizeGL(int p_width
                       );
             glEnd();
 
-            m_width_labels[m_width_label_counter].x = l_start_X + 0.08 * (l_width_center_X - l_start_X);
-            m_width_labels[m_width_label_counter].y = l_start_Y + 0.08 * (l_width_center_Y - l_start_Y);
             sprintf(l_width_label, "%d", m_width_limit - ((m_width_limit / 10) * l_j));
-            m_width_labels[m_width_label_counter++].label = l_width_label;
+            m_width_labels[m_width_label_counter++].set( l_width_label
+                                                       , l_start_X + 0.08 * (l_width_center_X - l_start_X)
+                                                       , l_start_Y + 0.08 * (l_width_center_Y - l_start_Y)
+                                                       );
         }
     }
 
@@ -410,10 +411,10 @@ void VibratoSpeedWidget::paintGL(void)
     renderText(m_hz_label_X - (0.5 * l_font_metric.width("Hz")), m_hz_label_Y, 0, "Hz", m_speed_width_font);
     for (int l_index = 0; l_index < m_speed_label_counter; l_index++)
     {
-        renderText(m_speed_labels[l_index].x - (0.5 * l_font_metric.width(m_speed_labels[l_index].label))
-                  ,m_speed_labels[l_index].y - 8
+        renderText(m_speed_labels[l_index].get_x() - (0.5 * l_font_metric.width(m_speed_labels[l_index].get_label()))
+                  ,m_speed_labels[l_index].get_y() - 8
                   ,0
-                  ,m_speed_labels[l_index].label
+                  ,m_speed_labels[l_index].get_label()
                   ,m_speed_width_font
                   );
     }
@@ -436,10 +437,10 @@ void VibratoSpeedWidget::paintGL(void)
               );
     for(int l_index = 0; l_index < m_width_label_counter; l_index++)
     {
-        renderText(m_width_labels[l_index].x - (0.5 * l_font_metric.width(m_width_labels[l_index].label))
-                  ,m_width_labels[l_index].y - 8
+        renderText(m_width_labels[l_index].get_x() - (0.5 * l_font_metric.width(m_width_labels[l_index].get_label()))
+                  ,m_width_labels[l_index].get_y() - 8
                   ,0
-                  ,m_width_labels[l_index].label
+                  ,m_width_labels[l_index].get_label()
                   ,m_speed_width_font
                   );
     }
@@ -692,5 +693,38 @@ void VibratoSpeedWidget::setUseProny(bool p_value)
 QSize VibratoSpeedWidget::minimumSizeHint(void) const
 {
     return QSize(100, 75);
+}
+
+//------------------------------------------------------------------------------
+void
+VibratoSpeedWidget::labelStruct::set( const QString & p_label
+                                    , float p_x
+                                    , float p_y
+                                    )
+{
+    m_label = p_label;
+    m_x = p_x;
+    m_y = p_y;
+}
+
+//------------------------------------------------------------------------------
+const QString &
+VibratoSpeedWidget::labelStruct::get_label() const
+{
+    return m_label;
+}
+
+//------------------------------------------------------------------------------
+float
+VibratoSpeedWidget::labelStruct::get_x() const
+{
+    return m_x;
+}
+
+//------------------------------------------------------------------------------
+float
+VibratoSpeedWidget::labelStruct::get_y() const
+{
+    return m_y;
 }
 // EOD
