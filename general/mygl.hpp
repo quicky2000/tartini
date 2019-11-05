@@ -34,6 +34,17 @@ void MyGLfloat2d::set( GLfloat p_x
     m_y = p_y;
 }
 
+//------------------------------------------------------------------------------
+GLfloat MyGLfloat2d::get_x() const
+{
+    return m_x;
+}
+
+//------------------------------------------------------------------------------
+GLfloat MyGLfloat2d::get_y() const
+{
+    return m_y;
+}
 
 //------------------------------------------------------------------------------
 void mygl_line( GLfloat p_x1
@@ -69,10 +80,10 @@ void mygl_rect( const MyGLfloat2d & p_v1
               )
 {
     glBegin(GL_QUADS);
-    glVertex2f(p_v1.m_x, p_v1.m_y);
-    glVertex2f(p_v2.m_x, p_v1.m_y);
-    glVertex2f(p_v2.m_x, p_v2.m_y);
-    glVertex2f(p_v1.m_x, p_v2.m_y);
+    glVertex2f(p_v1.get_x(), p_v1.get_y());
+    glVertex2f(p_v2.get_x(), p_v1.get_y());
+    glVertex2f(p_v2.get_x(), p_v2.get_y());
+    glVertex2f(p_v1.get_x(), p_v2.get_y());
     glEnd();
 }
 

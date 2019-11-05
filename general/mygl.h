@@ -21,8 +21,10 @@
 #include <glu.h>
 #include <gl.h>
 
-struct MyGLfloat2d
+class MyGLfloat2d
 {
+  public:
+
     inline MyGLfloat2d( GLfloat p_x
                       , GLfloat p_y
                       );
@@ -30,6 +32,10 @@ struct MyGLfloat2d
                    , GLfloat p_y
                    );
 
+    inline GLfloat get_x() const;
+    inline GLfloat get_y() const;
+
+  private:
     GLfloat m_x;
     GLfloat m_y;
 };
