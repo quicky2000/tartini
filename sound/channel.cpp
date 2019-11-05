@@ -1298,19 +1298,19 @@ void Channel::doPronyFit(int p_chunk)
     PronyData l_prony_data;
     if(pronyFit(&l_prony_data, m_prony_data.begin(), m_prony_window_size, 2, true))
     {
-        l_data->setVibratoError(l_prony_data.m_error);
-        l_data->setVibratoPitch(l_prony_data.m_y_offset);
-        if(l_prony_data.m_error < 1.0)
+        l_data->setVibratoError(l_prony_data.get_error());
+        l_data->setVibratoPitch(l_prony_data.get_y_offset());
+        if(l_prony_data.get_error() < 1.0)
         {
             l_data->setVibratoSpeed(l_prony_data.freqHz(timePerChunk()));
-            if(l_prony_data.m_omega * m_prony_window_size < g_two_pi)
+            if(l_prony_data.get_omega() * m_prony_window_size < g_two_pi)
             {
                 l_data->setVibratoPitch(l_data->getPitch());
             }
             else
             {
-                l_data->setVibratoWidth(l_prony_data.m_amp);
-                l_data->setVibratoPhase(l_prony_data.m_phase);
+                l_data->setVibratoWidth(l_prony_data.get_amplitude());
+                l_data->setVibratoPhase(l_prony_data.get_phase());
                 l_data->setVibratoWidthAdjust(0.0f);
             }
         }

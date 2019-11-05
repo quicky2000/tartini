@@ -68,7 +68,7 @@ bool pronyFit( PronyData * p_result
         return false;
     }
 
-    p_result->m_omega = l_omega;
+    p_result->set_omega(l_omega);
     for(l_j = 0; l_j < p_length; l_j++)
     {
           l_x1[l_j] = cos(l_j * l_omega);
@@ -80,9 +80,9 @@ bool pronyFit( PronyData * p_result
         {
             return false;
         }
-        p_result->m_y_offset = l_alpha[0];
-        p_result->m_amp = hypot(l_alpha[1], l_alpha[2]);
-        p_result->m_phase = (g_half_pi - atan2(l_alpha[2], l_alpha[1]));
+        p_result->set_y_offset(l_alpha[0]);
+        p_result->set_amplitude(hypot(l_alpha[1], l_alpha[2]));
+        p_result->set_phase((g_half_pi - atan2(l_alpha[2], l_alpha[1])));
     }
     else
     {
@@ -90,16 +90,16 @@ bool pronyFit( PronyData * p_result
         {
             return false;
         }
-        p_result->m_amp = hypot(l_alpha[0], l_alpha[1]);
-        p_result->m_phase = (g_half_pi - atan2(l_alpha[1], l_alpha[0]));
+        p_result->set_amplitude(hypot(l_alpha[0], l_alpha[1]));
+        p_result->set_phase((g_half_pi - atan2(l_alpha[1], l_alpha[0])));
     }
 
     //calculate the squared error
     for(l_j = 0; l_j < p_length; l_j++)
     {
-        l_error += sq(p_result->m_amp * sin(l_j * l_omega + p_result->m_phase) + p_result->m_y_offset - p_x[l_j]);
+        l_error += sq(p_result->get_amplitude() * sin(l_j * l_omega + p_result->get_phase()) + p_result->get_y_offset() - p_x[l_j]);
     }
-    p_result->m_error = l_error / p_length;
+    p_result->set_error(l_error / p_length);
 
     return true;
 }

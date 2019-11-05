@@ -22,8 +22,32 @@ const double g_half_pi = 3.1415926535897932384 * 0.5;
 /**
    fitted parameters
 */
-struct PronyData
-{ 
+class PronyData
+{
+  public:
+    inline PronyData();
+  
+    inline void reset();
+
+    /**
+       @param p_dt is the time between samples in the input.
+    */
+    inline double freqHz(double p_dt);
+
+    inline void set_omega(const double & p_omega);
+    inline void set_y_offset(const double & p_y_offset);
+    inline void set_amplitude(const double & p_amplitude);
+    inline void set_phase(const double & p_phase);
+    inline void set_error(const double & p_error);
+
+    inline const double & get_amplitude() const;
+    inline const double & get_phase() const;
+    inline const double & get_omega() const;
+    inline const double & get_y_offset() const;
+    inline const double & get_error() const;
+
+  private:
+
     /**
        amplitude
     */
@@ -46,27 +70,6 @@ struct PronyData
     */
     double m_error;
 
-    PronyData(void)
-    {
-        reset();
-    }
-  
-    void reset(void)
-    {
-        m_amp = 0.0;
-        m_phase = 0.0;
-        m_omega = 0.0;
-        m_y_offset = 0.0;
-        m_error = 0.0;
-    }
-
-    /**
-       @param p_dt is the time between samples in the input.
-    */
-    double freqHz(double p_dt)
-    {
-        return m_omega / (p_dt * g_two_pi);
-    }
 };
 
 /**
@@ -83,6 +86,97 @@ bool pronyFit( PronyData * p_result
              , int p_gap
              , bool p_allow_offset
              );
+
+//-----------------------------------------------------------------------------
+void PronyData::set_omega(const double & p_omega)
+{
+    m_omega = p_omega;
+}
+
+//-----------------------------------------------------------------------------
+PronyData::PronyData()
+{
+    reset();
+}
+
+//-----------------------------------------------------------------------------
+void PronyData::reset()
+{
+    m_amp = 0.0;
+    m_phase = 0.0;
+    m_omega = 0.0;
+    m_y_offset = 0.0;
+    m_error = 0.0;
+}
+
+//-----------------------------------------------------------------------------
+double PronyData::freqHz(double p_dt)
+{
+    return m_omega / (p_dt * g_two_pi);
+}
+
+//-----------------------------------------------------------------------------
+void
+PronyData::set_y_offset(const double & p_y_offset)
+{
+    m_y_offset = p_y_offset;
+}
+
+//-----------------------------------------------------------------------------
+void
+PronyData::set_amplitude(const double & p_amplitude)
+{
+    m_amp = p_amplitude;
+}
+
+//-----------------------------------------------------------------------------
+void
+PronyData::set_phase(const double & p_phase)
+{
+    m_phase = p_phase;
+}
+
+//-----------------------------------------------------------------------------
+void
+PronyData::set_error(const double & p_error)
+{
+    m_error = p_error;
+}
+
+//-----------------------------------------------------------------------------
+const double &
+PronyData::get_amplitude() const
+{
+    return m_amp;
+}
+
+//-----------------------------------------------------------------------------
+const double &
+PronyData::get_phase() const
+{
+    return m_phase;
+}
+
+//-----------------------------------------------------------------------------
+const double &
+PronyData::get_y_offset() const
+{
+    return m_y_offset;
+}
+
+//-----------------------------------------------------------------------------
+const double &
+PronyData::get_error() const
+{
+    return m_error;
+}
+
+//-----------------------------------------------------------------------------
+const double &
+PronyData::get_omega() const
+{
+    return m_omega;
+}
 
 #endif // PRONY_H
 // EOF
