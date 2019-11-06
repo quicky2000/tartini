@@ -19,7 +19,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QWorkspace>
+#include <QMdiArea>
 #include <QDialog>
 #include <QKeyEvent>
 #include <QEvent>
@@ -110,7 +110,7 @@ class MainWindow : public QMainWindow
     void keyPressEvent(QKeyEvent * p_event);
     void message(QString p_string, int p_msec);
 
-    QWorkspace * m_the_workspace;
+    QMdiArea * m_the_workspace;
 
     QMenu * m_new_view_menu;
     QMenu * m_window_menu;

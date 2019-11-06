@@ -22,7 +22,6 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QPushButton>
-#include <QWorkspace>
 #include <QToolButton>
 #include <QLabel>
 #include <QSpinBox>
@@ -39,6 +38,8 @@
 #include <QTextStream>
 #include <QTextBrowser>
 #include <QIcon>
+#include <QMdiArea>
+#include <QMdiSubWindow>
 
 #include <QAction>
 #include <QKeyEvent>
@@ -180,7 +181,7 @@ MainWindow::MainWindow(void)
 #endif // MYDEBUG
 
     //Create the main Workspace for the view widgets to go in (for MDI)
-    m_the_workspace = new QWorkspace(this);
+    m_the_workspace = new QMdiArea(this);
     m_the_workspace->setObjectName("TheWorkspace");
     setCentralWidget( m_the_workspace );
   
@@ -818,12 +819,12 @@ void MainWindow::windowMenuAboutToShow(void)
 {
     m_window_menu->clear();
 
-    QWidgetList l_windows = m_the_workspace->windowList();
+    QList<QMdiSubWindow *> l_windows = m_the_workspace->subWindowList();
     for(int l_i = 0; l_i < int(l_windows.count()); ++l_i )
     {
         QAction * l_action = m_window_menu->addAction(l_windows.at(l_i)->windowTitle(),this, SLOT( windowMenuActivated() ) );
         l_action->setData(l_i);
-        l_action->setChecked(m_the_workspace->activeWindow() == l_windows.at(l_i));
+        l_action->setChecked(m_the_workspace->activeSubWindow() == l_windows.at(l_i));
     }
 
     m_window_menu->addSeparator();
@@ -842,7 +843,7 @@ void MainWindow::windowMenuActivated(void)
 {
     int l_id = static_cast<QAction*>(sender())->data().toInt();
     std::cout << "windowMenuActivated " << l_id << std::endl ;
-    QWidget* l_widget = m_the_workspace->windowList().at( l_id );
+    QWidget* l_widget = m_the_workspace->subWindowList().at( l_id );
     if( l_widget )
     {
         l_widget->showNormal();
@@ -865,8 +866,8 @@ void MainWindow::message( QString p_string
 //------------------------------------------------------------------------------
 void MainWindow::closeAllWidgets(void)
 {
-    QWidgetList l_opened = m_the_workspace->windowList();
-    for(QWidgetList::iterator l_iterator = l_opened.begin(); l_iterator < l_opened.end(); l_iterator++)
+    QList<QMdiSubWindow *> l_opened = m_the_workspace->subWindowList();
+    for(QList<QMdiSubWindow *>::iterator l_iterator = l_opened.begin(); l_iterator < l_opened.end(); l_iterator++)
     {
         (*l_iterator)->close();
     }
@@ -956,7 +957,7 @@ QWidget * MainWindow::openView(int p_view_id)
     {
         if(l_parent)
         {
-            m_the_workspace->addWindow(l_widget);
+            m_the_workspace->addSubWindow(l_widget);
         }
         l_widget->show();
     }
@@ -972,7 +973,7 @@ void MainWindow::newViewAboutToShow(void)
     QMenu * l_experimental_menu = new QMenu("Experimental");
     QMenu * l_other_menu = new QMenu("Other");
 
-    QWidgetList l_opened = m_the_workspace->windowList();
+    QList<QMdiSubWindow *> l_opened = m_the_workspace->subWindowList();
 
     for(int j = 0; j < NUM_VIEWS; j++)
     {
@@ -1000,7 +1001,7 @@ void MainWindow::newViewAboutToShow(void)
 
         connect(l_action, SIGNAL(triggered()), m_create_signal_mapper, SLOT(map()));
         m_create_signal_mapper->setMapping(l_action, j);
-        for(QWidgetList::iterator l_iterator=l_opened.begin(); l_iterator<l_opened.end(); l_iterator++)
+        for(QList<QMdiSubWindow *>::iterator l_iterator=l_opened.begin(); l_iterator<l_opened.end(); l_iterator++)
         {
             if(QString((*l_iterator)->metaObject()->className()) == g_view_data[j].get_class_name())
             {
@@ -1449,14 +1450,14 @@ bool MainWindow::loadViewGeometry(void)
 //------------------------------------------------------------------------------
 void MainWindow::saveViewGeometry(void)
 {
-    QWidgetList l_opened = m_the_workspace->windowList();
+    QList<QMdiSubWindow *> l_opened = m_the_workspace->subWindowList();
 
     for(int l_j = 0; l_j < NUM_VIEWS; l_j++)
     {
         QString l_base = QString("geometry/") + g_view_data[l_j].get_class_name();
 
         bool l_found = false;
-        for(QWidgetList::iterator l_iterator = l_opened.begin(); l_iterator < l_opened.end(); l_iterator++)
+        for(QList<QMdiSubWindow *>::iterator l_iterator = l_opened.begin(); l_iterator < l_opened.end(); l_iterator++)
         {
             if(QString((*l_iterator)->metaObject()->className()) == g_view_data[l_j].get_class_name())
             {
