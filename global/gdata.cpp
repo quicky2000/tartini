@@ -678,7 +678,7 @@ QString GData::saveFileAsk(QString p_old_filename)
     {
         return QString();
     }
-    l_new_filename = QDir::convertSeparators(l_new_filename);
+    l_new_filename = QDir::toNativeSeparators(l_new_filename);
     if(l_new_filename != p_old_filename && QFile::exists(l_new_filename))
     {
         if(QMessageBox::warning(g_main_window, tr("Overwrite File?"),
@@ -704,7 +704,7 @@ int GData::saveFile( SoundFile * p_sound_file
         return 1;
     }
     QString l_old_filename(p_sound_file->getFileName());
-    l_old_filename = QDir::convertSeparators(l_old_filename);
+    l_old_filename = QDir::toNativeSeparators(l_old_filename);
     int l_pos = p_sound_file->getStream().pos();
     p_sound_file->getStream().close();
   
@@ -767,7 +767,7 @@ int GData::closeFile( SoundFile * p_sound_file
     }
     QString l_new_filename;
     QString l_old_filename(p_sound_file->getFileName());
-    l_old_filename = QDir::convertSeparators(l_old_filename);
+    l_old_filename = QDir::toNativeSeparators(l_old_filename);
 
     if(g_data->m_audio_thread.playSoundFile() == p_sound_file || g_data->m_audio_thread.recSoundFile() == p_sound_file)
     {

@@ -28,7 +28,7 @@
 OpenDialog::OpenDialog(QWidget * p_parent)
 : QFileDialog( p_parent
              , tr("Open File")
-             , QDir::convertSeparators(g_data->getSettingsValue( "Dialogs/openFilesFolder"
+             , QDir::toNativeSeparators(g_data->getSettingsValue( "Dialogs/openFilesFolder"
                                                              , QDir::currentPath()
                                                              )
                                     )
