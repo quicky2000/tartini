@@ -10,7 +10,6 @@
 #define TARTINISETTINGSDIALOG_H
 
 #include <QColorDialog>
-#include <QCustomEvent>
 #include "mainwindow.h"
 #include <QDialog>
 #include "ui_settingsdialog.h"

@@ -7,7 +7,6 @@
 ** place of a destructor.
 *****************************************************************************/
 #include <QColorDialog>
-#include <QCustomEvent>
 #include "mainwindow.h"
 #include "tartinisettingsdialog.h"
 #include "gdata.h"

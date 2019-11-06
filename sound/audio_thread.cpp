@@ -15,7 +15,6 @@
 #include <stdio.h>
 #include <math.h>
 #include <QRect>
-#include <QCustomEvent>
 #include <QMutex>
 
 #include "audio_thread.h"

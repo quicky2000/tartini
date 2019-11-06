@@ -45,7 +45,6 @@
 #include <QEvent>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QCustomEvent>
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QDesktopServices>
