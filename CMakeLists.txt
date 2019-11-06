@@ -300,7 +300,7 @@ set(MY_SOURCE_FILES ${MY_SOURCE_FILES} ${MY_HEADER_FILES})
 
 # Qt Manangement
 #-----------------
-find_package( Qt5 COMPONENTS Core Widgets REQUIRED)
+find_package( Qt5 COMPONENTS Core Widgets OpenGL PrintSupport Gui REQUIRED)
 #include( ${QT_USE_FILE} )
 add_definitions( ${QT_DEFINITIONS} )
 include_directories( ${CMAKE_BINARY_DIR} )
@@ -346,7 +346,7 @@ set(MY_INCLUDE_DIRECTORIES
    )
 
 add_executable(${PROJECT_NAME} ${MY_SOURCE_FILES} ${DEPENDANCY_OBJECTS})
-target_link_libraries(${PROJECT_NAME} ${LINKED_LIBRARIES} Qt5::Widgets Qt5::Core -lfftw3f Qwt::Qwt -lasound OpenGL::GLU OpenGL::GL Threads::Threads)
+target_link_libraries(${PROJECT_NAME} ${LINKED_LIBRARIES} Qt5::Widgets Qt5::Core Qt5::OpenGL Qt5::PrintSupport Qt5::Gui -lfftw3f Qwt::Qwt -lasound OpenGL::GLU OpenGL::GL Threads::Threads)
 target_compile_options(${PROJECT_NAME} PUBLIC ${MY_CPP_FLAGS})
 target_include_directories(${PROJECT_NAME} PUBLIC ${MY_INCLUDE_DIRECTORIES})
 
