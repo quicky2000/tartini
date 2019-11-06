@@ -25,6 +25,7 @@
 #include <QEvent>
 #include <QLabel>
 #include <QSignalMapper>
+#include <QIcon>
 
 class Preferences;
 class QLabel;
