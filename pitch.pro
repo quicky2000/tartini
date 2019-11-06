@@ -20,13 +20,11 @@ unix{
     #MY_QWT_INCLUDE_PATH =  /usr/include/qwt-qt4/
     #end of Qwt5
     # QWT 6
-    MY_QWT_PATH = /usr/local/qwt-6.1.2
-    QWT_LIB_NAME = qwt
+    QWT_LIB_NAME = qwt-qt5
     MY_QWT_INCLUDE_PATH = /usr/include/qwt
-    MY_QWT_LIB_PATH = -L$$MY_QWT_PATH/lib
     # end of Qwt6
 
-    MY_LIB_PATH += -L$$MY_TARTINI_PATH/lib -L/usr/lib -L/usr/lib/x86_64-linux-gnu/ $$MY_QWT_LIB_PATH
+    MY_LIB_PATH += -L$$MY_TARTINI_PATH/lib -L/usr/lib -L/usr/lib/x86_64-linux-gnu/
     MY_INCLUDE_PATH += /usr/include/GL $$MY_TARTINI_PATH/include $$MY_QWT_INCLUDE_PATH
   }
 }
@@ -416,6 +414,7 @@ debug{
 
 #QT +=  opengl qt3support
 QT +=  opengl
+QT +=  printsupport gui widgets
 CONFIG += uic
 
 UI_DIR = dialogs
