@@ -38,6 +38,7 @@
 #include <QTextEdit>
 #include <QTextStream>
 #include <QTextBrowser>
+#include <QIcon>
 
 #include <QAction>
 #include <QKeyEvent>
