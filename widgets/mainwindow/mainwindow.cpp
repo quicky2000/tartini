@@ -102,19 +102,18 @@
 #include "mystring.h"
 #include <string.h>
 
-//include the icon .xpm pictures into the program directly
-#include "pics/record32x32.xpm"
-#include "pics/open.xpm"
-#include "pics/close32x32.xpm"
-#include "pics/save32x32.xpm"
+#define record32x32_xpm "pics/record32x32.xpm"
+#define iconOpen "pics/open.xpm"
+#define close32x32_xpm "pics/close32x32.xpm"
+#define save32x32_xpm "pics/save32x32.xpm"
 
-#include "pics/beginning32x32.xpm"
-#include "pics/rewind32x32.xpm"
-#include "pics/play32x32.xpm"
-#include "pics/playrecord32x32.xpm"
-#include "pics/stop32x32.xpm"
-#include "pics/fastforward32x32.xpm"
-#include "pics/end32x32.xpm"
+#define beginning32x32_xpm "pics/beginning32x32.xpm"
+#define rewind32x32_xpm "pics/rewind32x32.xpm"
+#define play32x32_xpm "pics/play32x32.xpm"
+#define playrecord32x32_xpm "pics/playrecord32x32.xpm"
+#define stop32x32_xpm "pics/stop32x32.xpm"
+#define fastforward32x32_xpm "pics/fastforward32x32.xpm"
+#define end32x32_xpm "pics/end32x32.xpm"
 
 #include "pics/autofollow32x32.xpm"
 #include "pics/shadingon32x32.xpm"
