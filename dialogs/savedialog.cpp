@@ -27,7 +27,7 @@
 SaveDialog::SaveDialog(QWidget * p_parent)
 : QFileDialog( p_parent
              , tr("Save file")
-             , QDir::convertSeparators( g_data->getSettingsValue( "Dialogs/saveFilesFolder"
+             , QDir::toNativeSeparators( g_data->getSettingsValue( "Dialogs/saveFilesFolder"
                                                                 , QDir::currentPath()
                                                                 )
                                       )
