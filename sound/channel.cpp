@@ -294,9 +294,6 @@ void Channel::calc_last_n_coefficients(int p_n)
     int l_start_pos = MAX(size() - p_n, 3);
     float * l_buf_pos = begin() + l_start_pos;
     float * l_coeff_pos = m_coefficients_table.begin() + l_start_pos * 4;
-#ifdef DEBUG_PRINTF
-    printf("toRead=%d, length()=%d, w=%d, start_pos=%d\n", toRead, g_data->mainBuffer->length(), g_data->m_coefficients_table.w(), l_start_pos);
-#endif // DEBUG_PRINTF
 
     for(; l_buf_pos < end(); l_buf_pos++)
     {
@@ -316,14 +313,14 @@ void Channel::processNewChunk(FilterState * p_filter_state)
 {
     myassert(locked());
 #ifdef DEBUG_PRINTF
-    printf("%d, %d, %d, %d\n", currentChunk(), m_parent->currentRawChunk(), m_parent->currentStreamChunk(), lookup.size());
+    printf("%d, %d, %d, %d\n", currentChunk(), m_parent->currentRawChunk(), m_parent->currentStreamChunk(), m_lookup.size());
 #endif // DEBUG_PRINTF
     myassert(m_parent->currentRawChunk() == MAX(0, m_parent->currentStreamChunk() - 1) ||
              m_parent->currentRawChunk() == MAX(0, m_parent->currentStreamChunk()));
     m_lookup.push_back(AnalysisData());
     m_lookup.back().setFilterState(*p_filter_state);
 #ifdef DEBUG_PRINTF
-    printf("lookup=%d\n", m_lookup.capacity());
+    printf("lookup=%d\n", m_lookup.size());
 #endif // DEBUG_PRINTF
     m_parent->calculateAnalysisData(/*begin(), */int(m_lookup.size()) - 1, this/*, threshold()*/);
 }
@@ -505,7 +502,7 @@ void Channel::backTrackNoteChange(int p_chunk)
 {
     int l_first = MAX(p_chunk - (int)ceil(g_long_time / timePerChunk()), getLastNote()->startChunk());
 #ifdef DEBUG_PRINTF
-    printf("ceil = %d, %d\n", (int)ceil(g_long_time / timePerChunk()), chunk-l_first);
+    printf("ceil = %d, %d\n", (int)ceil(g_long_time / timePerChunk()), p_chunk-l_first);
 #endif // DEBUG_PRINTF
     int l_last = p_chunk; //currentNote->endChunk();
     if(l_first >= l_last)
@@ -612,8 +609,8 @@ bool Channel::isNoteChanging(int p_chunk)
     { //if jumping to fast anywhere then note is changing
 #ifdef DEBUG_PRINTF
         printf("numChunks=%d\n", getCurrentNote()->numChunks());
-        printf("analysisData->pitch=%f, ", l_analysis_data->pitch);
-        printf("prevData->shortTermMean=%f\n", l_previous_data->shortTermMean);
+        printf("analysisData->pitch=%f, ", l_analysis_data->getPitch());
+        printf("prevData->shortTermMean=%f\n", l_previous_data->getShortTermMean());
 #endif // DEBUG_PRINTF
         l_analysis_data->setReason(2);
         return true;
@@ -702,7 +699,7 @@ void Channel::noteBeginning(int p_chunk)
     //initalise the aggregate NSDF data with the current NSDF data
     resetNSDFAggregate(l_analysis_data->getPeriod());
 #ifdef DEBUG_PRINTF
-    printf("Note Beginning: period = %f\n", l_analysis_data->period);
+    printf("Note Beginning: period = %f\n", l_analysis_data->getPeriod());
 #endif // DEBUG_PRINTF
 
     m_pitch_small_smoothing_filter->reset();
@@ -1027,8 +1024,8 @@ void Channel::addToNSDFAggregate( const float p_scaler
     float l_period_ratio = l_current_note->get_current_nsdf_period() / l_current_note->get_first_nsdf_period();
     l_analysis_data->setPeriodRatio(l_period_ratio);
 #ifdef DEBUG_PRINTF
-    printf("%f, periodDiff = %f\n", l_current_note->currentNsdfPeriod, periodDiff);
-    printf("currentNsdfPeriod = %f\n", l_current_note->currentNsdfPeriod);
+    printf("%f, periodDiff = %f\n", l_current_note->get_current_nsdf_period(), p_period_diff);
+    printf("currentNsdfPeriod = %f\n", l_current_note->get_current_nsdf_period());
     printf("ratio=%f\n", l_period_ratio);
 #endif // DEBUG_PRINTF
     int l_len = m_nsdf_data.size();
@@ -1047,8 +1044,8 @@ void Channel::addToNSDFAggregate( const float p_scaler
     printf("chunk = %d, ", currentChunk());
     printf("scaler = %f, ", p_scaler);
     printf("periodDiff = %f, ", p_period_diff);
-    printf("l_current_note->currentNsdfPeriod = %f, ", l_current_note->currentNsdfPeriod);
-    printf("l_current_note->firstNsdfPeriod = %f, ", l_current_note->firstNsdfPeriod);
+    printf("l_current_note->currentNsdfPeriod = %f, ", l_current_note->get_current_nsdf_period());
+    printf("l_current_note->firstNsdfPeriod = %f, ", l_current_note->get_first_nsdf_period());
     printf("l_period_ratio = %f\n", l_period_ratio);
 #endif // DEBUG_PRINTF
 
@@ -1126,7 +1123,7 @@ float Channel::calcDetailedPitch( float * p_input
         }
     }
 #ifdef DEBUG_PRINTF
-    printf("subwindow_size=%d, num=%d, period=%lf\n", l_subwindow_size, l_num, l_period);
+    printf("subwindow_size=%d, num=%d, period=%lf\n", l_subwindow_size, l_num, p_period);
 #endif // DEBUG_PRINTF
     //TODO: speed up this for loop
     int l_left1 = 0;
@@ -1222,7 +1219,7 @@ void Channel::exportChannel( int p_type
 {
     QString l_string = QFileDialog::getSaveFileName(g_main_window, "Choose a filename to save under", ".", p_type_string);
 #ifdef DEBUG_PRINTF
-    printf("file = %s\n", l_string.latin1());
+    printf("file = %s\n", l_string.toStdString().c_str());
 #endif // DEBUG_PRINTF
     if(l_string.isEmpty())
     {

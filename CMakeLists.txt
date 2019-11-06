@@ -5,6 +5,8 @@ project(tartini)
 #set(CMAKE_VERBOSE_MAKEFILE ON)
 #set(CMAKE_CXX_STANDARD 11)
 
+set(USE_DEBUG_PRINTF OFF)
+
 set(MY_HEADER_FILES
     main.h
     widgets/application.h
@@ -261,6 +263,9 @@ set(MY_INCLUDE_DIRECTORIES
     )
 
 set(MY_CPP_FLAGS -Wall -O0 -D_REENTRANT -DSINGLE_DRAWING_BUFFER -DMYDEBUG)
+if(${USE_DEBUG_PRINTF})
+    set(MY_CPP_FLAGS ${MY_CPP_FLAGS} -DDEBUG_PRINTF)
+endif(${USE_DEBUG_PRINTF})
 
 # Specific to Linux
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
