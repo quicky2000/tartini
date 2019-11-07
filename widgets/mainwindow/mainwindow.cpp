@@ -103,18 +103,18 @@
 #include "mystring.h"
 #include <string.h>
 
-#define record32x32_xpm "pics/record32x32.xpm"
-#define iconOpen "pics/open.xpm"
-#define close32x32_xpm "pics/close32x32.xpm"
-#define save32x32_xpm "pics/save32x32.xpm"
+#include "pics/record32x32.xpm"
+#include "pics/open.xpm"
+#include "pics/close32x32.xpm"
+#include "pics/save32x32.xpm"
 
-#define beginning32x32_xpm "pics/beginning32x32.xpm"
-#define rewind32x32_xpm "pics/rewind32x32.xpm"
-#define play32x32_xpm "pics/play32x32.xpm"
-#define playrecord32x32_xpm "pics/playrecord32x32.xpm"
-#define stop32x32_xpm "pics/stop32x32.xpm"
-#define fastforward32x32_xpm "pics/fastforward32x32.xpm"
-#define end32x32_xpm "pics/end32x32.xpm"
+#include "pics/beginning32x32.xpm"
+#include "pics/rewind32x32.xpm"
+#include "pics/play32x32.xpm"
+#include "pics/playrecord32x32.xpm"
+#include "pics/stop32x32.xpm"
+#include "pics/fastforward32x32.xpm"
+#include "pics/end32x32.xpm"
 
 #include "pics/autofollow32x32.xpm"
 #include "pics/shadingon32x32.xpm"
@@ -190,19 +190,25 @@ MainWindow::MainWindow(void)
     addToolBar(Qt::TopToolBarArea, l_file_tool_bar);
     l_file_tool_bar->setIconSize(QSize(32, 32));
 
-    QAction * l_open_action = new QAction(QIcon(iconOpen), tr("&Open"), this);
+    QIcon * l_open_icon = new QIcon();
+    l_open_icon->addPixmap(QPixmap(iconOpen), QIcon::Normal);
+    QAction * l_open_action = new QAction(*l_open_icon, tr("&Open"), this);
     l_open_action->setShortcut(tr("Ctrl+O"));
     l_open_action->setWhatsThis(tr("Open a sound from file and process it using the current preferences"));
     l_file_tool_bar->addAction(l_open_action);
     connect(l_open_action, SIGNAL(triggered()), this, SLOT(openFile()));
 
-    QAction * l_save_action = new QAction(QIcon(save32x32_xpm), tr("&Save"), this);
+    QIcon * l_save_icon = new QIcon();
+    l_save_icon->addPixmap(QPixmap(save32x32_xpm), QIcon::Normal);
+    QAction * l_save_action = new QAction(*l_save_icon, tr("&Save"), this);
     l_save_action->setShortcut(tr("Ctrl+S"));
     l_save_action->setWhatsThis(tr("Save the active sound to a file"));
     l_file_tool_bar->addAction(l_save_action);
     connect(l_save_action, SIGNAL(triggered()), g_data, SLOT(saveActiveFile()));
-  
-    QAction * l_close_action = new QAction(QIcon(close32x32_xpm), tr("&Close"), this);
+
+    QIcon * l_close_icon = new QIcon();
+    l_close_icon->addPixmap(QPixmap(close32x32_xpm), QIcon::Normal);
+    QAction * l_close_action = new QAction(*l_close_icon, tr("&Close"), this);
     l_close_action->setShortcut(tr("Ctrl+W"));
     l_close_action->setWhatsThis(tr("Close the active sound. If unsaved will ask to save. Note: Asking can be disabled in the preferences"));
     l_file_tool_bar->addAction(l_close_action);
@@ -222,7 +228,9 @@ MainWindow::MainWindow(void)
     addToolBar(Qt::BottomToolBarArea, l_sound_tool_bar);
     l_sound_tool_bar->setIconSize(QSize(32, 32));
 
-    QAction * l_beginning_action = new QAction(QIcon(beginning32x32_xpm),tr("Beginning"),l_sound_tool_bar);
+    QIcon * l_beginning_icon = new QIcon();
+    l_beginning_icon->addPixmap(QPixmap(beginning32x32_xpm), QIcon::Normal);
+    QAction * l_beginning_action = new QAction(*l_beginning_icon,tr("Beginning"),l_sound_tool_bar);
     l_beginning_action->setToolTip(tr("Rewind to the beginning"));
     l_beginning_action->setWhatsThis(tr("Jump to the beginning of the sound"));
     l_sound_tool_bar->addAction(l_beginning_action);
@@ -230,7 +238,9 @@ MainWindow::MainWindow(void)
 
     m_rewind_timer = new QTimer(this);
     connect(m_rewind_timer, SIGNAL(timeout()), g_data, SLOT(rewind()));
-    QAction * l_rewind_action = new QAction(QIcon(rewind32x32_xpm), tr("Rewind"), l_sound_tool_bar);
+    QIcon * l_rewind_icon = new QIcon();
+    l_rewind_icon->addPixmap(QPixmap(rewind32x32_xpm), QIcon::Normal);
+    QAction * l_rewind_action = new QAction(*l_rewind_icon, tr("Rewind"), l_sound_tool_bar);
     l_rewind_action->setToolTip(tr("Rewind"));
     l_rewind_action->setWhatsThis(tr("Rewind the sound"));
     QToolButton * l_rewind_button = new QToolButton(l_sound_tool_bar);
@@ -239,9 +249,12 @@ MainWindow::MainWindow(void)
     connect(l_rewind_button, SIGNAL(pressed()), this, SLOT(rewindPressed()));
     connect(l_rewind_button, SIGNAL(released()), this, SLOT(rewindReleased()));
 
-    m_play_icon_set = new QIcon(play32x32_xpm);
-    m_play_record_icon_set = new QIcon(playrecord32x32_xpm);
-    m_stop_icon_set = new QIcon(stop32x32_xpm);
+    m_play_icon_set = new QIcon();
+    m_play_icon_set->addPixmap(QPixmap(play32x32_xpm), QIcon::Normal);
+    m_play_record_icon_set = new QIcon();
+    m_play_record_icon_set->addPixmap(QPixmap(playrecord32x32_xpm), QIcon::Normal);
+    m_stop_icon_set = new QIcon();
+    m_stop_icon_set->addPixmap(QPixmap(stop32x32_xpm), QIcon::Normal);
     m_play_stop_action = new QAction(*m_play_icon_set, "&Play", this);
     m_play_stop_action->setShortcut(tr("Space"));
     m_play_stop_action->setWhatsThis(tr("Play/Stop the active sound"));
@@ -250,7 +263,9 @@ MainWindow::MainWindow(void)
 
     m_fast_forward_timer = new QTimer(this);
     connect(m_fast_forward_timer, SIGNAL(timeout()), g_data, SLOT(fastforward()));
-    QAction * l_fast_forward_action = new QAction(QIcon(fastforward32x32_xpm), tr("Fast-forward"), l_sound_tool_bar);
+    QIcon * l_fastforward_icon = new QIcon();
+    l_fastforward_icon->addPixmap(QPixmap(fastforward32x32_xpm), QIcon::Normal);
+    QAction * l_fast_forward_action = new QAction(*l_fastforward_icon, tr("Fast-forward"), l_sound_tool_bar);
     l_fast_forward_action->setToolTip(tr("Fast-forward"));
     l_fast_forward_action->setWhatsThis(tr("Fastfoward the sound"));
     QToolButton * l_fast_forward_button = new QToolButton(l_sound_tool_bar);
@@ -259,14 +274,17 @@ MainWindow::MainWindow(void)
     connect(l_fast_forward_button, SIGNAL(pressed()), this, SLOT(fastforwardPressed()));
     connect(l_fast_forward_button, SIGNAL(released()), this, SLOT(fastforwardReleased()));
 
-    QAction * l_end_action = new QAction(QIcon(end32x32_xpm), tr("&End"), this);
+    QIcon * l_end_icon = new QIcon();
+    l_end_icon->addPixmap(QPixmap(end32x32_xpm), QIcon::Normal);
+    QAction * l_end_action = new QAction(*l_end_icon, tr("&End"), this);
     l_end_action->setWhatsThis(tr("Jump to the end of the sound"));
     l_end_action->setShortcut(tr("Ctrl+E"));
     connect(l_end_action, SIGNAL(triggered()), g_data, SLOT(end()));
     l_sound_tool_bar->addAction(l_end_action);
 
     //Create the Actions, to be used in Menus and Toolbars
-    m_record_icon_set = new QIcon(record32x32_xpm);
+    m_record_icon_set = new QIcon();
+    m_record_icon_set->addPixmap(QPixmap(record32x32_xpm), QIcon::Normal);
     m_record_action = new QAction(*m_record_icon_set, tr("&Record"), this);
     m_record_action->setShortcut(tr("Return"));
     m_record_action->setWhatsThis(tr("Record a new sound, using the input device and settings selected in the preferences"));
