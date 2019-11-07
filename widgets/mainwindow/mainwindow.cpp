@@ -828,7 +828,7 @@ void MainWindow::windowMenuAboutToShow(void)
     }
 
     m_window_menu->addSeparator();
-    QAction * l_cascade = m_window_menu->addAction( "&Cascade", m_the_workspace, SLOT( cascade() ));
+    QAction * l_cascade = m_window_menu->addAction( "&Cascade", m_the_workspace, SLOT( cascadeSubWindows() ));
     QAction * l_close = m_window_menu->addAction( "Close &All", this, SLOT( closeAllWidgets() ));
 
     if(l_windows.isEmpty())
