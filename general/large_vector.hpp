@@ -18,14 +18,14 @@
 
 //------------------------------------------------------------------------------
 template<typename T>
-Array1d<std::vector<T> *> & large_vector<T>::buf_ptrs(void)
+Array1d<std::vector<T> *> & large_vector<T>::buf_ptrs()
 {
     return *m_buf_ptrs;
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-const Array1d<std::vector<T> *> & large_vector<T>::buf_ptrs(void) const
+const Array1d<std::vector<T> *> & large_vector<T>::buf_ptrs() const
 {
     return *m_buf_ptrs;
 }
@@ -40,7 +40,7 @@ void large_vector<T>::addBuffer(uint p_num)
 
 //------------------------------------------------------------------------------
 template<typename T>
-void large_vector<T>::removeBuffer(void)
+void large_vector<T>::removeBuffer()
 {
     delete buf_ptrs().back();
     buf_ptrs().pop_back();
@@ -108,7 +108,7 @@ void large_vector<T>::copyFrom( const T * p_src
 
 //------------------------------------------------------------------------------
 template<typename T>
-void large_vector<T>::clear(void)
+void large_vector<T>::clear()
 {
     for(int l_j = 0; l_j < buf_ptrs().size(); l_j++)
     {
@@ -120,14 +120,14 @@ void large_vector<T>::clear(void)
 
 //------------------------------------------------------------------------------
 template<typename T>
-typename large_vector<T>::iterator large_vector<T>::begin(void)
+typename large_vector<T>::iterator large_vector<T>::begin()
 {
     return iterator(this, 0);
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-typename large_vector<T>::iterator large_vector<T>::end(void)
+typename large_vector<T>::iterator large_vector<T>::end()
 {
     return iterator(this, size());
 }
@@ -141,14 +141,14 @@ typename large_vector<T>::iterator large_vector<T>::iterator_at(uint p_pos)
   
 //------------------------------------------------------------------------------
 template<typename T>
-uint large_vector<T>::bufferSize(void) const
+uint large_vector<T>::bufferSize() const
 {
     return m_buffer_size;
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-int large_vector<T>::numBuffers(void)
+int large_vector<T>::numBuffers()
 {
     return buf_ptrs().size();
 }
@@ -178,42 +178,42 @@ const T & large_vector<T>::at(uint p_pos) const
 
 //------------------------------------------------------------------------------
 template<typename T>
-T & large_vector<T>::front(void)
+T & large_vector<T>::front()
 {
     return at(0);
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-T & large_vector<T>::back(void)
+T & large_vector<T>::back()
 {
     return at(size() - 1);
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-const T & large_vector<T>::front(void) const
+const T & large_vector<T>::front() const
 {
     return at(0);
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-const T & large_vector<T>::back(void) const
+const T & large_vector<T>::back() const
 {
     return at(size() - 1);
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-uint large_vector<T>::size(void) const
+uint large_vector<T>::size() const
 {
     return (buf_ptrs().size() - 1) * m_buffer_size + buf_ptrs().back()->size();
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-bool large_vector<T>::empty(void) const
+bool large_vector<T>::empty() const
 {
     return (buf_ptrs().size() == 1) ? buf_ptrs().back()->empty() : false;
 }
@@ -231,7 +231,7 @@ void large_vector<T>::push_back(const T &p_new_element)
 
 //------------------------------------------------------------------------------
 template<typename T>
-T large_vector<T>::pop_back(void)
+T large_vector<T>::pop_back()
 {
     if(buf_ptrs().back()->empty())
     {
@@ -301,7 +301,7 @@ large_vector<T>::large_vector( uint p_size
 
 //------------------------------------------------------------------------------
 template<typename T>
-large_vector<T>::~large_vector(void)
+large_vector<T>::~large_vector()
 {
     if(m_buf_ptrs.getNumRef() == 1)
     {
@@ -346,7 +346,7 @@ large_vector<T>::iterator::iterator(const iterator & p_iter)
 
 //------------------------------------------------------------------------------
 template<typename T>
-uint large_vector<T>::iterator::pos(void) const
+uint large_vector<T>::iterator::pos() const
 {
     return m_pos;
 }

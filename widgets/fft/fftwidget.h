@@ -27,11 +27,11 @@ class FFTWidget: public DrawWidget
 
   public:
     FFTWidget(QWidget * p_parent);
-    virtual ~FFTWidget(void);
+    virtual ~FFTWidget();
 
     void paintEvent( QPaintEvent * );
 
-    QSize sizeHint(void) const;
+    QSize sizeHint() const;
 
   private:
     QPolygon m_point_array;

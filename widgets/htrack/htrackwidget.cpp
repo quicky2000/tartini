@@ -42,13 +42,13 @@ HTrackWidget::HTrackWidget( QWidget *p_parent
 }
 
 //------------------------------------------------------------------------------
-HTrackWidget::~HTrackWidget(void)
+HTrackWidget::~HTrackWidget()
 {
     delete m_piano_3d;
 }
 
 //------------------------------------------------------------------------------
-void HTrackWidget::initializeGL(void)
+void HTrackWidget::initializeGL()
 {
     setPeakThreshold(0.05f);
     setDistanceAway(1500.0);
@@ -82,7 +82,7 @@ void HTrackWidget::resizeGL( int p_w
 }
 
 //------------------------------------------------------------------------------
-void HTrackWidget::paintGL(void)
+void HTrackWidget::paintGL()
 {
     Channel *l_active_channel = g_data->getActiveChannel();
 
@@ -324,7 +324,7 @@ void HTrackWidget::rotateX(const double & p_angle)
 }
 
 //------------------------------------------------------------------------------
-void HTrackWidget::home(void)
+void HTrackWidget::home()
 {
     setPeakThreshold(0.05f);
     setDistanceAway(1500.0);

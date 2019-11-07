@@ -32,7 +32,7 @@ HBlockWidget::HBlockWidget(QWidget *p_parent)
 }
 
 //------------------------------------------------------------------------------
-HBlockWidget::~HBlockWidget(void)
+HBlockWidget::~HBlockWidget()
 {
 }
 
@@ -99,7 +99,7 @@ void HBlockWidget::paintEvent( QPaintEvent * )
 }
 
 //------------------------------------------------------------------------------
-QSize HBlockWidget::sizeHint(void) const
+QSize HBlockWidget::sizeHint() const
 {
     return QSize(300, 200);
 }

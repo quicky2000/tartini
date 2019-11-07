@@ -108,7 +108,7 @@ float phase_function(float p_x)
 }
 
 //------------------------------------------------------------------------------
-GData::GData(void)
+GData::GData()
 : m_settings(NULL)
 , m_sound_mode(SOUND_PLAY)
 , m_audio_stream(NULL)
@@ -191,7 +191,7 @@ GData::GData(void)
 }
 
 //------------------------------------------------------------------------------
-GData::~GData(void)
+GData::~GData()
 {
     m_audio_thread.stopAndWait();
 
@@ -224,13 +224,13 @@ GData::~GData(void)
 }
 
 //------------------------------------------------------------------------------
-SoundFile * GData::getActiveSoundFile(void)
+SoundFile * GData::getActiveSoundFile()
 {
     return (m_active_channel) ? m_active_channel->getParent() : NULL;
 }
 
 //------------------------------------------------------------------------------
-void GData::pauseSound(void)
+void GData::pauseSound()
 {
     if(m_running == STREAM_FORWARD)
     {
@@ -343,7 +343,7 @@ bool GData::playSound(SoundFile * p_sound_file)
 }
 
 //------------------------------------------------------------------------------
-void GData::updateViewLeftRightTimes(void)
+void GData::updateViewLeftRightTimes()
 {
     double l_left = 0.0; //in seconds
     double l_right = 0.0; //in seconds
@@ -433,7 +433,7 @@ void GData::setTopPitch(double p_y)
 }
 
 //------------------------------------------------------------------------------
-void GData::beginning(void)
+void GData::beginning()
 {
     updateActiveChunkTime(leftTime());
     m_view->doSlowUpdate();
@@ -441,7 +441,7 @@ void GData::beginning(void)
 
 
 //------------------------------------------------------------------------------
-void GData::rewind(void)
+void GData::rewind()
 {
     double l_speed = 16;
     double l_diff_time = m_view->zoomX() * l_speed;
@@ -454,19 +454,19 @@ void GData::rewind(void)
 }
 
 //------------------------------------------------------------------------------
-bool GData::play(void)
+bool GData::play()
 {
     return playSound(getActiveSoundFile());
 }
 
 //------------------------------------------------------------------------------
-void GData::stop(void)
+void GData::stop()
 {
     m_audio_thread.stopAndWait();
 }
 
 //------------------------------------------------------------------------------
-void GData::fastforward(void)
+void GData::fastforward()
 {
     double l_speed = 16;
     double l_diff_time = m_view->zoomX() * l_speed;
@@ -479,7 +479,7 @@ void GData::fastforward(void)
 }
   
 //------------------------------------------------------------------------------
-void GData::end(void)
+void GData::end()
 {
     updateActiveChunkTime(rightTime());
     m_view->doSlowUpdate();
@@ -520,7 +520,7 @@ int GData::getAnalysisStepSize(int p_rate)
 }
 
 //------------------------------------------------------------------------------
-void GData::updateQuickRefSettings(void)
+void GData::updateQuickRefSettings()
 {
     m_background_color.setNamedColor(m_settings->value("Display/theBackgroundColor", "#BBCDE2").toString());
     m_shading_1_color.setNamedColor(m_settings->value("Display/shading1Color", "#BBCDEF").toString());
@@ -565,7 +565,7 @@ void GData::updateQuickRefSettings(void)
 }
 
 //------------------------------------------------------------------------------
-QString GData::getFilenameString(void)
+QString GData::getFilenameString()
 {
     QString l_file_generating_string = m_settings->value("General/filenameGeneratingString", "Untitled").toString();
     QString l_filename;
@@ -583,7 +583,7 @@ QString GData::getFilenameString(void)
 }
 
 //------------------------------------------------------------------------------
-QColor GData::getNextColor(void)
+QColor GData::getNextColor()
 {
     return m_line_color.at((m_next_color_index++) % m_line_color.size());
 }
@@ -643,7 +643,7 @@ void GData::removeFileFromList(SoundFile * p_sound_file)
 }
 
 //------------------------------------------------------------------------------
-void GData::saveActiveFile(void)
+void GData::saveActiveFile()
 {
     SoundFile * l_sound_file = getActiveSoundFile();
     if(!l_sound_file)
@@ -727,7 +727,7 @@ int GData::saveFile( SoundFile * p_sound_file
 /**
   @return true if all the files were closed. false if cancelled
 */
-bool GData::closeAllFiles(void)
+bool GData::closeAllFiles()
 {
     while(!m_sound_files.empty())
     {
@@ -740,7 +740,7 @@ bool GData::closeAllFiles(void)
 }
 
 //------------------------------------------------------------------------------
-void GData::closeActiveFile(void)
+void GData::closeActiveFile()
 {
     SoundFile * l_sound_file = getActiveSoundFile();
     if(!l_sound_file)
@@ -828,7 +828,7 @@ int GData::closeFile( SoundFile * p_sound_file
 }
 
 //------------------------------------------------------------------------------
-void GData::clearFreqLookup(void)
+void GData::clearFreqLookup()
 {
     for(std::vector<Channel *>::iterator l_channel_iterator = m_channels.begin(); l_channel_iterator != m_channels.end(); l_channel_iterator++)
     {
@@ -857,7 +857,7 @@ void GData::setPitchContourMode(int p_pitch_contour_mode)
 }
 
 //------------------------------------------------------------------------------
-void GData::clearAmplitudeLookup(void)
+void GData::clearAmplitudeLookup()
 {
     for(std::vector<Channel *>::iterator l_channel_iter = m_channels.begin(); l_channel_iter != m_channels.end(); l_channel_iter++)
     {
@@ -866,7 +866,7 @@ void GData::clearAmplitudeLookup(void)
 }
   
 //------------------------------------------------------------------------------
-int GData::getActiveIntThreshold(void)
+int GData::getActiveIntThreshold()
 {
     Channel * l_active_channel = getActiveChannel();
     if(l_active_channel)
@@ -925,7 +925,7 @@ double GData::ampWeight(int p_mode)
 }
 
 //------------------------------------------------------------------------------
-void GData::recalcScoreThresholds(void)
+void GData::recalcScoreThresholds()
 {
     for(std::vector<Channel *>::iterator l_channel_iter = m_channels.begin(); l_channel_iter != m_channels.end(); l_channel_iter++)
     {
@@ -934,7 +934,7 @@ void GData::recalcScoreThresholds(void)
 }
 
 //------------------------------------------------------------------------------
-void GData::doChunkUpdate(void)
+void GData::doChunkUpdate()
 {
     emit onChunkUpdate();
 }

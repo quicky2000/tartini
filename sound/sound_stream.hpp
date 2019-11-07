@@ -19,24 +19,24 @@
 #include "sound_stream.h"
 
 //------------------------------------------------------------------------------
-SoundStream::SoundStream(void)
+SoundStream::SoundStream()
 : m_mode(F_NONE)
 {
 }
 
 //------------------------------------------------------------------------------
-SoundStream::~SoundStream(void)
+SoundStream::~SoundStream()
 {
 }
 
 //------------------------------------------------------------------------------
-int SoundStream::sample_size(void) const
+int SoundStream::sample_size() const
 {
     return (m_bits + 7) / 8;
 }
 
 //------------------------------------------------------------------------------
-int SoundStream::frame_size(void) const
+int SoundStream::frame_size() const
 {
     return sample_size() * m_channels;
 }

@@ -54,13 +54,13 @@ void Piano3d::setMidiKeyState( int p_key_num
 }
 
 //------------------------------------------------------------------------------
-int Piano3d::numKeys(void)
+int Piano3d::numKeys()
 {
     return m_num_keys;
 }
 
 //------------------------------------------------------------------------------
-int Piano3d::firstKey(void)
+int Piano3d::firstKey()
 {
     return m_first_key;
 }

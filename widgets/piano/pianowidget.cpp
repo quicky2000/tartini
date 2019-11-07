@@ -46,7 +46,7 @@ PianoWidget::PianoWidget(QWidget *p_parent)
 }
 
 //------------------------------------------------------------------------------
-PianoWidget::~PianoWidget(void)
+PianoWidget::~PianoWidget()
 {
 }
 

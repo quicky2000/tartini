@@ -46,7 +46,7 @@ VolumeMeterWidget::VolumeMeterWidget(QWidget * p_parent)
 }
 
 //------------------------------------------------------------------------------
-VolumeMeterWidget::~VolumeMeterWidget(void)
+VolumeMeterWidget::~VolumeMeterWidget()
 {
 }
 
@@ -182,7 +182,7 @@ void VolumeMeterWidget::paintEvent(QPaintEvent *)
 }
 
 //------------------------------------------------------------------------------
-QSize VolumeMeterWidget::sizeHint(void) const
+QSize VolumeMeterWidget::sizeHint() const
 {
     return QSize(256, 30);
 }

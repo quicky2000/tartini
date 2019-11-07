@@ -36,9 +36,9 @@ class VibratoView: public ViewWidget
                ,QWidget * p_parent = NULL
                );
 
-    virtual ~VibratoView(void);
+    virtual ~VibratoView();
 
-    QSize sizeHint(void) const;
+    QSize sizeHint() const;
 
     std::vector<LEDIndicator*> m_leds;
 

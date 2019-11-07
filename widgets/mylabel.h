@@ -36,7 +36,7 @@ class MyLabel : public DrawWidget
            );
 
     inline
-    QString text(void) const;
+    QString text() const;
 
     inline
     void setText(const QString & p_text);
@@ -44,7 +44,7 @@ class MyLabel : public DrawWidget
     void paintEvent( QPaintEvent * );
 
     inline
-    QSize sizeHint(void) const;
+    QSize sizeHint() const;
 
   private:
     QString m_text;

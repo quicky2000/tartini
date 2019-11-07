@@ -17,25 +17,25 @@
 */
 
 //------------------------------------------------------------------------------
-QSize TimeAxis::sizeHint(void) const
+QSize TimeAxis::sizeHint() const
 {
     return QSize(700, 20);
 }
 
 //------------------------------------------------------------------------------
-double TimeAxis::leftTime(void) const
+double TimeAxis::leftTime() const
 {
     return g_data->getView().viewLeft();
 }
 
 //------------------------------------------------------------------------------
-double TimeAxis::rightTime(void) const
+double TimeAxis::rightTime() const
 {
     return g_data->getView().viewRight();
 }
 
 //------------------------------------------------------------------------------
-double TimeAxis::timeWidth(void) const
+double TimeAxis::timeWidth() const
 {
     return g_data->getView().viewTotalTime();
 }

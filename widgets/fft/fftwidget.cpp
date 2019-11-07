@@ -32,7 +32,7 @@ FFTWidget::FFTWidget(QWidget *p_parent)
 }
 
 //------------------------------------------------------------------------------
-FFTWidget::~FFTWidget(void)
+FFTWidget::~FFTWidget()
 {
 }
 
@@ -120,7 +120,7 @@ void FFTWidget::paintEvent( QPaintEvent * )
 }
 
 //------------------------------------------------------------------------------
-QSize FFTWidget::sizeHint(void) const
+QSize FFTWidget::sizeHint() const
 {
     return QSize(500, 128);
 }

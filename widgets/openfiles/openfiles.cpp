@@ -60,12 +60,12 @@ OpenFiles::OpenFiles( int p_id
 }
 
 //------------------------------------------------------------------------------
-OpenFiles::~OpenFiles(void)
+OpenFiles::~OpenFiles()
 {
 }
   
 //------------------------------------------------------------------------------
-void OpenFiles::refreshChannelList(void)
+void OpenFiles::refreshChannelList()
 {
     m_table->clearContents();
 
@@ -144,7 +144,7 @@ void OpenFiles::resizeEvent(QResizeEvent *)
 }
 
 //------------------------------------------------------------------------------
-QSize OpenFiles::sizeHint(void) const
+QSize OpenFiles::sizeHint() const
 {
     return QSize(200, 300);
 }

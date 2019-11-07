@@ -26,9 +26,9 @@ class Filter
                        , float * p_output
                        , int p_n
                        ) = 0;
-    virtual void reset(void) = 0;
-    virtual int delay(void) const { return 0; }
-    virtual inline ~Filter(void) { }
+    virtual void reset() = 0;
+    virtual int delay() const { return 0; }
+    virtual inline ~Filter() { }
 };
 
 #endif // FILTER_H

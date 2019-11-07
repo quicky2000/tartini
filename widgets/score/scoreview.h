@@ -30,11 +30,11 @@ class ScoreView: public ViewWidget
   ScoreView(int p_view_id
            ,QWidget *p_parent = NULL
            );
-  virtual ~ScoreView(void);
+  virtual ~ScoreView();
 
   void resizeEvent(QResizeEvent *);
 
-  QSize sizeHint(void) const;
+  QSize sizeHint() const;
 
   private:
   ScoreWidget * m_score_widget;

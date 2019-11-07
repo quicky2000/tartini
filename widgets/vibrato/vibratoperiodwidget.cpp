@@ -37,7 +37,7 @@ VibratoPeriodWidget::VibratoPeriodWidget(QWidget *p_parent)
 }
 
 //------------------------------------------------------------------------------
-VibratoPeriodWidget::~VibratoPeriodWidget(void)
+VibratoPeriodWidget::~VibratoPeriodWidget()
 {
     // Remove display lists
     makeCurrent();
@@ -53,7 +53,7 @@ VibratoPeriodWidget::~VibratoPeriodWidget(void)
 }
 
 //------------------------------------------------------------------------------
-void VibratoPeriodWidget::initializeGL(void)
+void VibratoPeriodWidget::initializeGL()
 {
     QColor l_bg = g_data->backgroundColor();
     glClearColor( double(l_bg.red()) / 256.0, double(l_bg.green()) / 256.0, double(l_bg.blue()) / 256.0, 0.0 );
@@ -106,7 +106,7 @@ void VibratoPeriodWidget::resizeGL(int p_width
 }
 
 //------------------------------------------------------------------------------
-void VibratoPeriodWidget::paintGL(void)
+void VibratoPeriodWidget::paintGL()
 {
 	QColor l_bg = g_data->backgroundColor();
 	glClearColor( double(l_bg.red()) / 256.0, double(l_bg.green()) / 256.0, double(l_bg.blue()) / 256.0, 0.0 );
@@ -138,7 +138,7 @@ void VibratoPeriodWidget::paintGL(void)
 }
 
 //------------------------------------------------------------------------------
-void VibratoPeriodWidget::doUpdate(void)
+void VibratoPeriodWidget::doUpdate()
 {
 	Channel *l_active_channel = g_data->getActiveChannel();
 
@@ -511,7 +511,7 @@ void VibratoPeriodWidget::setDrawComparison(bool p_value)
 }
 
 //------------------------------------------------------------------------------
-QSize VibratoPeriodWidget::minimumSizeHint(void) const
+QSize VibratoPeriodWidget::minimumSizeHint() const
 {
     return QSize(100, 75);
 }

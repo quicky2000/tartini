@@ -33,14 +33,14 @@ class HTrackWidget : public QGLWidget
     HTrackWidget( QWidget *p_parent
                 , const char *p_name = NULL
                 );
-    ~HTrackWidget(void);
+    ~HTrackWidget();
 
   public slots:
     inline void setPeakThreshold(float p_peak_threshold);
     inline void setViewAngleHorizontal(const double & p_angle);
     inline void setViewAngleVertical(const double & p_angle);
     inline void setDistanceAway(const double & p_distance);
-    void home(void);
+    void home();
 
   signals:
     void distanceAwayChanged(double);
@@ -48,11 +48,11 @@ class HTrackWidget : public QGLWidget
     void viewAngleVerticalChanged(double);
 
   private:
-    void initializeGL(void);
+    void initializeGL();
     void resizeGL( int p_w
                  , int p_h
                  );
-    void paintGL(void);
+    void paintGL();
 
     void rotateX(const double & p_angle);
     void rotateY(const double & p_angle);
@@ -65,9 +65,9 @@ class HTrackWidget : public QGLWidget
     void mouseReleaseEvent(QMouseEvent * p_event);
     void wheelEvent(QWheelEvent * p_event);
   
-    inline float peakThreshold(void)const;
-    inline const double & viewAngleHorizontal(void)const;
-    inline const double & viewAngleVertical(void)const;
+    inline float peakThreshold()const;
+    inline const double & viewAngleHorizontal()const;
+    inline const double & viewAngleVertical()const;
 
     float m_peak_threshold;
     bool m_mouse_down;

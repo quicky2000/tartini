@@ -17,24 +17,24 @@
 */
 
 //------------------------------------------------------------------------------
-AudioThread::~AudioThread(void)
+AudioThread::~AudioThread()
 {
 }
 
 //------------------------------------------------------------------------------
-SoundFile * AudioThread::playSoundFile(void) const
+SoundFile * AudioThread::playSoundFile() const
 {
     return m_play_sound_file;
 }
 
 //------------------------------------------------------------------------------
-SoundFile * AudioThread::recSoundFile(void) const
+SoundFile * AudioThread::recSoundFile() const
 {
     return m_rec_sound_file;
 }
 
 //------------------------------------------------------------------------------
-SoundFile * AudioThread::curSoundFile(void) const
+SoundFile * AudioThread::curSoundFile() const
 {
     return (m_rec_sound_file) ? m_rec_sound_file : m_play_sound_file;
 }

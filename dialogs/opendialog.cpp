@@ -40,12 +40,12 @@ OpenDialog::OpenDialog(QWidget * p_parent)
 }
 
 //------------------------------------------------------------------------------
-OpenDialog::~OpenDialog(void)
+OpenDialog::~OpenDialog()
 {
 }
 
 //------------------------------------------------------------------------------
-void OpenDialog::accept(void)
+void OpenDialog::accept()
 {
     QFileDialog::accept();
 }

@@ -58,7 +58,7 @@ double logBaseN( const double & p_base_N
 }
 
 //------------------------------------------------------------------------------
-double prand(void)
+double prand()
 {
     return double(rand()) / double(RAND_MAX);
 }
@@ -212,7 +212,7 @@ inline void parabolaTurningPoint2( T p_y_1
 }
 
 //------------------------------------------------------------------------------
-MinMax::MinMax(void)
+MinMax::MinMax()
 : m_min(0.0)
 , m_max(0.0)
 {

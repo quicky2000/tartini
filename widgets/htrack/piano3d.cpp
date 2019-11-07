@@ -45,12 +45,12 @@ Piano3d::Piano3d( int p_num_keys
 }
 
 //------------------------------------------------------------------------------
-Piano3d::~Piano3d(void)
+Piano3d::~Piano3d()
 {
 }
 
 //------------------------------------------------------------------------------
-double Piano3d::pianoWidth(void)
+double Piano3d::pianoWidth()
 {
     return (isBlackNote(m_num_keys - 1) + m_first_key) ? m_key_offsets[m_num_keys - 1] + BLACK_KEY_WIDTH : m_key_offsets[m_num_keys - 1] + WHITE_KEY_WIDTH;
 }
@@ -90,13 +90,13 @@ void Piano3d::init( int p_num_keys
 }
 
 //------------------------------------------------------------------------------
-void Piano3d::setAllKeyStatesOff(void)
+void Piano3d::setAllKeyStatesOff()
 {
     std::fill(m_key_states.begin(), m_key_states.end(), false);
 }
 
 //------------------------------------------------------------------------------
-void Piano3d::drawWhiteKey(void)
+void Piano3d::drawWhiteKey()
 {
     glBegin(GL_QUAD_STRIP);
     //top surface
@@ -120,7 +120,7 @@ void Piano3d::drawWhiteKey(void)
 }
 
 //------------------------------------------------------------------------------
-void Piano3d::drawBlackKey(void)
+void Piano3d::drawBlackKey()
 {
     glBegin(GL_QUAD_STRIP);
     glNormal3f(-1.0, 0.0, 0.0);
@@ -147,21 +147,21 @@ void Piano3d::drawBlackKey(void)
 }
 
 //------------------------------------------------------------------------------
-void Piano3d::setMaterialWhiteKey(void)
+void Piano3d::setMaterialWhiteKey()
 {
     GLfloat l_piano_key_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, l_piano_key_diffuse);
 }
 
 //------------------------------------------------------------------------------
-void Piano3d::setMaterialBlackKey(void)
+void Piano3d::setMaterialBlackKey()
 {
     GLfloat l_piano_key_diffuse[] = { 0.3f, 0.3f, 0.3f, 1.0f };
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, l_piano_key_diffuse);
 }
 
 //------------------------------------------------------------------------------
-void Piano3d::draw(void)
+void Piano3d::draw()
 {
     int l_cur_key;
     int l_j;

@@ -18,18 +18,18 @@
 #include "zoomlookup.h"
 
 //------------------------------------------------------------------------------
-ZoomLookup::ZoomLookup(void)
+ZoomLookup::ZoomLookup()
 : m_size(0)
 {
 }
 
 //------------------------------------------------------------------------------
-ZoomLookup::~ZoomLookup(void)
+ZoomLookup::~ZoomLookup()
 {
 }
 
 //------------------------------------------------------------------------------
-void ZoomLookup::clear(void)
+void ZoomLookup::clear()
 {
     m_table.clear();
     m_size = 0;

@@ -25,7 +25,7 @@ VolumeMeterView::VolumeMeterView( int p_view_ID, QWidget * p_parent ):
 }
 
 //------------------------------------------------------------------------------
-VolumeMeterView::~VolumeMeterView(void)
+VolumeMeterView::~VolumeMeterView()
 {
   delete m_volume_meter_widget;
 }
@@ -37,7 +37,7 @@ void VolumeMeterView::resizeEvent(QResizeEvent *)
 }
 
 //------------------------------------------------------------------------------
-QSize VolumeMeterView::sizeHint(void) const
+QSize VolumeMeterView::sizeHint() const
 {
   return QSize(256, 30);
 }

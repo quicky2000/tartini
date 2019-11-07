@@ -54,73 +54,73 @@ extern double(* g_amp_mode_inv_func[NUM_AMP_MODES])( const double &
 class AnalysisData
 {
   public:
-    AnalysisData(void);
-    void calcScores(void);
+    AnalysisData();
+    void calcScores();
 
     inline float getValue(size_t p_index)const;
-    inline float getPeriod(void)const;
+    inline float getPeriod()const;
     inline void setPeriod(float p_period);
-    inline float getFundamentalFreq(void)const;
+    inline float getFundamentalFreq()const;
     inline void setFundamentalFreq(float p_fundamental_freq);
-    inline float getPitch(void)const;
+    inline float getPitch()const;
     inline void setPitch(float p_pitch);
-    inline float getFreqCentroid(void)const;
+    inline float getFreqCentroid()const;
     inline void setFreqCentroid(float p_value);
-    inline const double & getPitchSum(void)const;
+    inline const double & getPitchSum()const;
     inline void setPitchSum(const double & p_pitch_sum);
-    inline const double & getPitch2Sum(void)const;
+    inline const double & getPitch2Sum()const;
     inline void setPitch2Sum(const double & p_pitch_2_sum);
-    inline const double & getShortTermMean(void)const;
+    inline const double & getShortTermMean()const;
     inline void setShortTermMean(const double & p_short_term_mean);
-    inline const double & getShortTermDeviation(void)const;
+    inline const double & getShortTermDeviation()const;
     inline void setShortTermDeviation(const double & p_short_term_deviation);
-    inline const double & getLongTermMean(void)const;
+    inline const double & getLongTermMean()const;
     inline void setLongTermMean(const double & p_long_term_mean);
-    inline const double & getLongTermDeviation(void)const;
+    inline const double & getLongTermDeviation()const;
     inline void setLongTermDeviation(const double & p_long_term_deviation);
-    inline const double & getSpread(void)const;
+    inline const double & getSpread()const;
     inline void setSpread(const double & p_spread);
-    inline const double & getSpread2(void)const;
+    inline const double & getSpread2()const;
     inline void setSpread2(const double & p_spread2);
-    inline float getVibratoPitch(void)const;
+    inline float getVibratoPitch()const;
     inline void setVibratoPitch(float p_vibrato_pitch);
-    inline float getVibratoWidth(void)const;
+    inline float getVibratoWidth()const;
     inline void setVibratoWidth(float p_vibrato_width);
-    inline float getVibratoWidthAdjust(void)const;
+    inline float getVibratoWidthAdjust()const;
     inline void setVibratoWidthAdjust(float p_vibrato_width_adjust);
-    inline float getVibratoSpeed(void)const;
+    inline float getVibratoSpeed()const;
     inline void setVibratoSpeed(float p_vibrato_speed);
-    inline float getVibratoPhase(void)const;
+    inline float getVibratoPhase()const;
     inline void setVibratoPhase(float p_vibrato_phase);
-    inline float getVibratoError(void)const;
+    inline float getVibratoError()const;
     inline void setVibratoError(float p_vibrato_error);
-    inline int getReason(void)const;
+    inline int getReason()const;
     inline void setReason(int p_reason);
-    inline int getHighestCorrelationIndex(void)const;
+    inline int getHighestCorrelationIndex()const;
     inline void setHighestCorrelationIndex(int p_index);
-    inline int getChosenCorrelationIndex(void)const;
+    inline int getChosenCorrelationIndex()const;
     inline void setChosenCorrelationIndex(int p_index);
-    inline float getPeriodRatio(void)const;
+    inline float getPeriodRatio()const;
     inline void setPeriodRatio(float p_period_ratio);
-    inline int getCepstrumIndex(void)const;
+    inline int getCepstrumIndex()const;
     inline void setCepstrumIndex(int p_index);
-    inline float getCepstrumPitch(void)const;
+    inline float getCepstrumPitch()const;
     inline void setCepstrumPitch(float p_cepstrum_pitch);
 
-    inline bool isPeriodEstimatesEmpty(void)const;
-    inline size_t getPeriodEstimatesSize(void)const;
+    inline bool isPeriodEstimatesEmpty()const;
+    inline size_t getPeriodEstimatesSize()const;
     inline float getPeriodEstimatesAt(size_t p_index)const;
-    inline void clearPeriodEstimates(void);
+    inline void clearPeriodEstimates();
     inline void addPeriodEstimates(float p_value);
     inline float searchClosestPeriodEstimates(const float & p_value)const;
 
-    inline size_t getPeriodEstimatesAmpSize(void)const;
+    inline size_t getPeriodEstimatesAmpSize()const;
     inline float getPeriodEstimatesAmpAt(size_t p_index)const;
-    inline void clearPeriodEstimatesAmp(void);
+    inline void clearPeriodEstimatesAmp();
     inline void addPeriodEstimatesAmp(float p_value);
-    inline int getPeriodEstimatesAmpMaxElementIndex(void)const;
+    inline int getPeriodEstimatesAmpMaxElementIndex()const;
 
-    inline size_t getHarmonicAmpNoCutOffSize(void)const;
+    inline size_t getHarmonicAmpNoCutOffSize()const;
     inline float getHarmonicAmpNoCutOffAt(size_t p_index)const;
     inline void resizeHarmonicAmpNoCutOff(size_t p_size);
     inline void setHarmonicAmpNoCutOffAt( size_t p_index
@@ -128,7 +128,7 @@ class AnalysisData
                                         );
 
     inline float getHarmonicAmpRelativeAt(size_t p_index)const;
-    inline size_t getHarmonicAmpRelativeSize(void)const;
+    inline size_t getHarmonicAmpRelativeSize()const;
 
     inline float getHarmonicAmpAt(size_t p_index)const;
     inline void resizeHarmonicAmp(size_t p_size);
@@ -137,7 +137,7 @@ class AnalysisData
                                 );
 
     inline float getHarmonicFreqAt(size_t p_index)const;
-    inline size_t getHarmonicFreqSize(void)const;
+    inline size_t getHarmonicFreqSize()const;
     inline void resizeHarmonicFreq(size_t p_size);
     inline void setHarmonicFreqAt( size_t p_index
                                  , float p_value
@@ -150,21 +150,21 @@ class AnalysisData
                                   );
 
     inline void setFilterState(const FilterState & p_filter_state);
-    inline int getNoteIndex(void)const;
+    inline int getNoteIndex()const;
     inline void setNoteIndex(int p_node_index);
 
     inline void setNotePlaying(bool p_note_playing);
-    inline bool isNotePlaying(void)const;
+    inline bool isNotePlaying()const;
     inline void setDone(bool p_done);
-    inline bool isDone(void)const;
+    inline bool isDone()const;
 
-    inline float getLogRms(void)const;
+    inline float getLogRms()const;
     inline void setLogRms(float p_log_rms);
 
-    inline float getMaxIntensityDB(void)const;
+    inline float getMaxIntensityDB()const;
     inline void setMaxIntensityDB(float p_value);
 
-    inline float getCorrelation(void)const;
+    inline float getCorrelation()const;
     inline void setCorrelation(float p_value);
 
     inline void setChangeness(float p_value);
@@ -173,9 +173,9 @@ class AnalysisData
 
     inline float getVolumeValue(const GData & p_data)const;
 
-    inline float getNoteScore(void)const;
+    inline float getNoteScore()const;
 
-    inline float getNoteChangeScore(void)const;
+    inline float getNoteChangeScore()const;
 
   private:
     float m_values[NUM_AMP_MODES];

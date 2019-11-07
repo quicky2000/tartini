@@ -24,61 +24,61 @@ ScoreSegmentIterator::ScoreSegmentIterator( ScoreWidget *p_score_widget
 }
 
 //------------------------------------------------------------------------------
-bool ScoreSegmentIterator::isValid(void)
+bool ScoreSegmentIterator::isValid()
 {
     return m_is_valid;
 }
 
 //------------------------------------------------------------------------------
-double ScoreSegmentIterator::leftTime(void)
+double ScoreSegmentIterator::leftTime()
 {
     return m_left_time;
 }
 
 //------------------------------------------------------------------------------
-double ScoreSegmentIterator::rightTime(void)
+double ScoreSegmentIterator::rightTime()
 {
     return m_right_time;
 }
 
 //------------------------------------------------------------------------------
-double ScoreSegmentIterator::leftX(void)
+double ScoreSegmentIterator::leftX()
 {
     return m_left_X;
 }
 
 //------------------------------------------------------------------------------
-int ScoreSegmentIterator::lineCenterY(void)
+int ScoreSegmentIterator::lineCenterY()
 {
     return m_line_center_Y;
 }
 
 //------------------------------------------------------------------------------
-int ScoreSegmentIterator::staveTop(void)
+int ScoreSegmentIterator::staveTop()
 {
     return m_line_center_Y - m_half_stave_height;
 }
 
 //------------------------------------------------------------------------------
-int ScoreSegmentIterator::staveBottom(void)
+int ScoreSegmentIterator::staveBottom()
 {
     return staveTop() + m_stave_height;
 }
 
 //------------------------------------------------------------------------------
-double ScoreSegmentIterator::curTime(void)
+double ScoreSegmentIterator::curTime()
 {
     return m_cur_time;
 }
 
 //------------------------------------------------------------------------------
-int ScoreSegmentIterator::curPage(void)
+int ScoreSegmentIterator::curPage()
 {
     return m_cur_page;
 }
 
 //------------------------------------------------------------------------------
-int ScoreSegmentIterator::numPages(void)
+int ScoreSegmentIterator::numPages()
 {
     return m_num_pages;
 }

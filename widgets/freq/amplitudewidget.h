@@ -44,10 +44,10 @@ class AmplitudeWidget : public QGLWidget
     AmplitudeWidget( QWidget * p_parent
                    , const char * p_name = 0
                    );
-    virtual ~AmplitudeWidget(void);
+    virtual ~AmplitudeWidget();
 
-    inline QSize sizeHint(void) const;
-    inline const double & range(void)const;
+    inline QSize sizeHint() const;
+    inline const double & range()const;
 
   public slots:
     void setRange(double p_new_range);
@@ -59,16 +59,16 @@ class AmplitudeWidget : public QGLWidget
     void offsetInvChanged(double);
 
   private:
-    void initializeGL(void);
+    void initializeGL();
     void resizeGL( int p_width
                  , int p_height
                  );
-    void paintGL(void);
+    void paintGL();
 
     void setLineWidth(float p_width);
-    void drawVerticalRefLines(void);
+    void drawVerticalRefLines();
     double getCurrentThreshold(int p_index);
-    QString getCurrentThresholdString(void)const;
+    QString getCurrentThresholdString()const;
     void drawChannelAmplitudeGL(Channel * p_channel);
     void drawChannelAmplitudeFilledGL(Channel * p_channel);
 
@@ -90,13 +90,13 @@ class AmplitudeWidget : public QGLWidget
     void mouseReleaseEvent( QMouseEvent * p_mouse_event);
     void wheelEvent(QWheelEvent * p_mouse_event);
 
-    inline double leftTime(void)const;
-    inline double rightTime(void)const;
-    inline double timeWidth(void)const;
+    inline double leftTime()const;
+    inline double rightTime()const;
+    inline double timeWidth()const;
 
-    inline double maxOffset(void)const;
-    inline const double & offset(void)const;
-    inline const double & offsetInv(void)const;
+    inline double maxOffset()const;
+    inline const double & offset()const;
+    inline const double & offsetInv()const;
 
     int m_drag_mode;
     int m_mouse_X;

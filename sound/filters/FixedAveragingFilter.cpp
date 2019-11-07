@@ -69,7 +69,7 @@ void FixedAverageFilter::filter( const float * p_input
 }
 
 //------------------------------------------------------------------------------
-void FixedAverageFilter::reset(void)
+void FixedAverageFilter::reset()
 {
     m_total_sum = 0.0;
     m_x.fill(0.0f);

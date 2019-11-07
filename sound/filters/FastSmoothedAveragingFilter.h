@@ -32,15 +32,15 @@ class FastSmoothedAveragingFilter : public Filter
        Construct a FastSmoothedAverageFilter
        @param size The total width of the hanning window. To keep data centered use an odd size
     */
-    FastSmoothedAveragingFilter(void) { }
+    FastSmoothedAveragingFilter() { }
     FastSmoothedAveragingFilter(int p_size);
     void init(int p_size);
     void filter( const float * p_input
                , float * p_output
                , int p_n
                );
-    void reset(void);
-    inline int delay(void) const { return m_size / 2; }
+    void reset();
+    inline int delay() const { return m_size / 2; }
 
   private:
     int m_size;

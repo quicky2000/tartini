@@ -25,9 +25,9 @@ class VibratoTimeAxis: public DrawWidget
 
   public:
     VibratoTimeAxis(QWidget * p_parent, int p_nls);
-    virtual ~VibratoTimeAxis(void);
+    virtual ~VibratoTimeAxis();
 
-    QSize sizeHint(void) const;
+    QSize sizeHint() const;
 
     void paintEvent(QPaintEvent *);
     void resizeEvent( QResizeEvent *);
@@ -56,7 +56,7 @@ class VibratoTimeAxis: public DrawWidget
     double m_zoom_factor_X;
 
  public slots:
-    void doUpdate(void);
+    void doUpdate();
 
     void setZoomFactorX(double p_x);
 };

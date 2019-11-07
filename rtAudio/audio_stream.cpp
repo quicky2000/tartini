@@ -18,7 +18,7 @@
 #include "gdata.h"
 
 //------------------------------------------------------------------------------
-AudioStream::AudioStream(void)
+AudioStream::AudioStream()
 {
     m_buffer_size = 1024;
     m_num_buffers = 0;
@@ -29,14 +29,14 @@ AudioStream::AudioStream(void)
 }
 
 //------------------------------------------------------------------------------
-AudioStream::~AudioStream(void)
+AudioStream::~AudioStream()
 {
     close();
     if(m_audio) delete m_audio;
 }
 
 //------------------------------------------------------------------------------
-void AudioStream::close(void)
+void AudioStream::close()
 {
     if(m_audio)
     {
@@ -268,7 +268,7 @@ int AudioStream::writeReadFloats( float ** p_out_channel_data
 }
 
 //------------------------------------------------------------------------------
-QStringList AudioStream::getInputDeviceNames(void)
+QStringList AudioStream::getInputDeviceNames()
 {
     QStringList l_to_return;
     l_to_return << "Default";
@@ -313,7 +313,7 @@ QStringList AudioStream::getInputDeviceNames(void)
 }
 
 //------------------------------------------------------------------------------
-QStringList AudioStream::getOutputDeviceNames(void)
+QStringList AudioStream::getOutputDeviceNames()
 {
     QStringList l_to_return;
     l_to_return << "Default";

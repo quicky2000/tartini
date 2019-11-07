@@ -32,7 +32,7 @@ PitchCompassView::PitchCompassView( int p_view_id
 }
 
 //------------------------------------------------------------------------------
-PitchCompassView::~PitchCompassView(void)
+PitchCompassView::~PitchCompassView()
 {
 }
 
@@ -51,7 +51,7 @@ void PitchCompassView::changeMode(int p_mode)
 }
 
 //------------------------------------------------------------------------------
-QSize PitchCompassView::sizeHint(void) const
+QSize PitchCompassView::sizeHint() const
 {
     return QSize(200, 200);
 }

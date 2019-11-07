@@ -66,12 +66,12 @@ NoteData::NoteData( const Channel & p_channel
 }
 
 //------------------------------------------------------------------------------
-NoteData::~NoteData(void)
+NoteData::~NoteData()
 {
 }
 
 //------------------------------------------------------------------------------
-void NoteData::resetData(void)
+void NoteData::resetData()
 {
     m_num_periods = 0;
 }
@@ -91,13 +91,13 @@ void NoteData::addData( const AnalysisData & p_analysis_data
 }
 
 //------------------------------------------------------------------------------
-double NoteData::noteLength(void) const
+double NoteData::noteLength() const
 {
     return double(numChunks()) * double(m_channel->framesPerChunk()) / double(m_channel->rate());
 }
 
 //------------------------------------------------------------------------------
-float NoteData::avgPitch(void) const
+float NoteData::avgPitch() const
 {
     return m_avg_pitch;
 }
@@ -244,7 +244,7 @@ void NoteData::addVibratoData(int p_chunk)
 }
 
 //------------------------------------------------------------------------------
-void NoteData::recalcAvgPitch(void)
+void NoteData::recalcAvgPitch()
 {
     m_num_periods = 0.0f;
     for(int l_j = startChunk(); l_j < endChunk(); l_j++)

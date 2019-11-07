@@ -38,7 +38,7 @@ SummaryDrawWidget::SummaryDrawWidget(QWidget *p_parent)
 }
 
 //------------------------------------------------------------------------------
-SummaryDrawWidget::~SummaryDrawWidget(void)
+SummaryDrawWidget::~SummaryDrawWidget()
 {
 }
 

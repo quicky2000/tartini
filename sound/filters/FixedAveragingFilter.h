@@ -27,15 +27,15 @@
 class FixedAverageFilter : public Filter
 {
   public:
-    inline FixedAverageFilter(void) { }
+    inline FixedAverageFilter() { }
     FixedAverageFilter(int p_size);
     void init(int p_size);
     void filter( const float * p_input
                , float * p_output
                , int p_n
                );
-    void reset(void);
-    int delay(void) const { return m_size / 2; }
+    void reset();
+    int delay() const { return m_size / 2; }
 
   private:
     int m_size;

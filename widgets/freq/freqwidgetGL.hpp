@@ -17,25 +17,25 @@
 */
 
 //------------------------------------------------------------------------------
-double FreqWidgetGL::leftTime(void) const
+double FreqWidgetGL::leftTime() const
 {
     return g_data->getView().viewLeft();
 }
 
 //------------------------------------------------------------------------------
-double FreqWidgetGL::rightTime(void) const
+double FreqWidgetGL::rightTime() const
 {
     return g_data->getView().viewRight();
 }
 
 //------------------------------------------------------------------------------
-double FreqWidgetGL::timeWidth(void) const
+double FreqWidgetGL::timeWidth() const
 {
     return g_data->getView().viewTotalTime();
 }
 
 //------------------------------------------------------------------------------
-QSize FreqWidgetGL::sizeHint(void) const
+QSize FreqWidgetGL::sizeHint() const
 {
     return QSize(400, 350);
 }

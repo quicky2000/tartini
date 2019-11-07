@@ -50,7 +50,7 @@ VibratoTunerWidget::~VibratoTunerWidget()
 }
 
 //------------------------------------------------------------------------------
-void VibratoTunerWidget::initializeGL(void)
+void VibratoTunerWidget::initializeGL()
 {
   QColor l_background = g_data->backgroundColor();
   glClearColor( double(l_background.red()) / 256.0, double(l_background.green()) / 256.0, double(l_background.blue()) / 256.0, 0.0 );
@@ -370,7 +370,7 @@ void VibratoTunerWidget::resetLeds()
 }
 
 //------------------------------------------------------------------------------
-QSize VibratoTunerWidget::minimumSizeHint(void) const
+QSize VibratoTunerWidget::minimumSizeHint() const
 {
   return QSize(100, 75);
 }

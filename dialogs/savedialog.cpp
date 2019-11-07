@@ -56,12 +56,12 @@ SaveDialog::SaveDialog(QWidget * p_parent)
 }
 
 //------------------------------------------------------------------------------
-SaveDialog::~SaveDialog(void)
+SaveDialog::~SaveDialog()
 {
 }
 
 //------------------------------------------------------------------------------
-void SaveDialog::accept(void)
+void SaveDialog::accept()
 {
     bool l_remember = m_remember_folder_check_box->isChecked();
     g_data->setSettingsValue("Dialogs/rememberSaveFolder", l_remember);

@@ -32,11 +32,11 @@ class HTrackView : public ViewWidget
     HTrackView( int p_view_ID
               , QWidget *p_parent = NULL
               );
-    virtual ~HTrackView(void);
+    virtual ~HTrackView();
 
     void resizeEvent(QResizeEvent *);
 
-    QSize sizeHint(void) const;
+    QSize sizeHint() const;
 
   public slots:
     void setPeakThreshold(int p_value);

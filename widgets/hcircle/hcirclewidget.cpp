@@ -37,7 +37,7 @@ HCircleWidget::HCircleWidget(QWidget *p_parent)
 }
 
 //------------------------------------------------------------------------------
-HCircleWidget::~HCircleWidget(void)
+HCircleWidget::~HCircleWidget()
 {
 } 
 
@@ -153,7 +153,7 @@ void HCircleWidget::paintEvent( QPaintEvent * )
 }
 
 //------------------------------------------------------------------------------
-QSize HCircleWidget::sizeHint(void) const
+QSize HCircleWidget::sizeHint() const
 {
     return QSize(300, 200);
 }

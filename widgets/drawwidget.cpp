@@ -61,7 +61,7 @@ DrawWidget::DrawWidget(QWidget * p_parent, const char * p_name):
 }
 
 //------------------------------------------------------------------------------
-DrawWidget::~DrawWidget(void)
+DrawWidget::~DrawWidget()
 {
 #ifdef SHARED_DRAWING_BUFFER
 #elif SINGLE_DRAWING_BUFFER
@@ -95,7 +95,7 @@ void DrawWidget::endDrawing(bool p_draw_to_screen)
 }
 
 //------------------------------------------------------------------------------
-void DrawWidget::drawToScreen(void)
+void DrawWidget::drawToScreen()
 {
 #ifndef SINGLE_DRAWING_BUFFER
   bitBlt(this, 0, 0, m_buffer, 0, 0, width(), height());
@@ -103,7 +103,7 @@ void DrawWidget::drawToScreen(void)
 }
 
 //------------------------------------------------------------------------------
-void DrawWidget::clearBackground(void)
+void DrawWidget::clearBackground()
 {
   m_painter.fillRect(0, 0, width(), height(), g_data->backgroundColor());
 }
@@ -115,7 +115,7 @@ void DrawWidget::fillBackground(const QColor & p_color)
 }
 
 //------------------------------------------------------------------------------
-void DrawWidget::checkSize(void)
+void DrawWidget::checkSize()
 {
 #ifdef SHARED_DRAWING_BUFFER
   if(width() > m_buffer->width() || height() > m_buffer->height())

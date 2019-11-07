@@ -17,7 +17,7 @@
 */
 
 //------------------------------------------------------------------------------
-QString MyLabel::text(void) const
+QString MyLabel::text() const
 {
     return m_text;
 }
@@ -30,7 +30,7 @@ void MyLabel::setText(const QString & p_text)
 }
   
 //------------------------------------------------------------------------------
-QSize MyLabel::sizeHint(void) const
+QSize MyLabel::sizeHint() const
 {
     return QSize(m_text_width + 8, m_font_height + 4);
 }

@@ -29,11 +29,11 @@ class SoundStream
 {
   public:
 
-    inline SoundStream(void);
-    virtual inline ~SoundStream(void);
+    inline SoundStream();
+    virtual inline ~SoundStream();
 
-    inline int sample_size(void) const;
-    inline int frame_size(void) const;
+    inline int sample_size() const;
+    inline int frame_size() const;
 
     virtual long read_bytes( void * p_data
                            , long p_length

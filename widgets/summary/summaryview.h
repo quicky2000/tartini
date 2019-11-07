@@ -31,11 +31,11 @@ class SummaryView: public ViewWidget
     SummaryView(int p_view_id
                ,QWidget *p_parent = NULL
                );
-    virtual ~SummaryView(void);
+    virtual ~SummaryView();
 
     void resizeEvent(QResizeEvent *);
 
-    QSize sizeHint(void) const;
+    QSize sizeHint() const;
 
   private:
 

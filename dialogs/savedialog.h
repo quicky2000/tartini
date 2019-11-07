@@ -29,8 +29,8 @@ class SaveDialog : public QFileDialog
   Q_OBJECT
   public:
     SaveDialog(QWidget * p_parent = 0);
-    ~SaveDialog(void);
-    void accept(void);
+    ~SaveDialog();
+    void accept();
 
     static QString getSaveWavFileName(QWidget * p_parent = 0);
 

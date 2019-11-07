@@ -30,11 +30,11 @@ class HBubbleWidget : public DrawWidget
 
   public:
     HBubbleWidget(QWidget *p_parent);
-    virtual ~HBubbleWidget(void);
+    virtual ~HBubbleWidget();
 
     void paintEvent(QPaintEvent *);
 
-    QSize sizeHint(void) const;
+    QSize sizeHint() const;
 
   public slots:
     void setNumHarmonics(double);

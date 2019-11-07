@@ -44,7 +44,7 @@ FFTView::FFTView( int p_view_id
 }
 
 //------------------------------------------------------------------------------
-FFTView::~FFTView(void)
+FFTView::~FFTView()
 {
     g_data->setDoingActiveFFT(false);
     delete m_fft_widget;
@@ -57,7 +57,7 @@ void FFTView::resizeEvent(QResizeEvent *)
 }
 
 //------------------------------------------------------------------------------
-QSize FFTView::sizeHint(void) const
+QSize FFTView::sizeHint() const
 {
     return QSize(400, 128);
 }

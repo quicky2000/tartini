@@ -80,7 +80,7 @@ void GrowingAverageFilter::filter(const float *p_input, float *p_output, int p_n
 }
 
 //------------------------------------------------------------------------------
-void GrowingAverageFilter::reset(void)
+void GrowingAverageFilter::reset()
 {
     m_count = 0;
     m_total_sum = 0.0;

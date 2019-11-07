@@ -40,7 +40,7 @@ LEDIndicator::LEDIndicator(QWidget *p_parent
 }
 
 //------------------------------------------------------------------------------
-LEDIndicator::~LEDIndicator(void)
+LEDIndicator::~LEDIndicator()
 {
 }
 
@@ -55,13 +55,13 @@ void LEDIndicator::setOn(bool p_on)
 }
 
 //------------------------------------------------------------------------------
-void LEDIndicator::toggle(void)
+void LEDIndicator::toggle()
 {
     m_active = !m_active;
 }
 
 //------------------------------------------------------------------------------
-bool LEDIndicator::lit(void)
+bool LEDIndicator::lit()
 {
     return m_active;
 }
@@ -85,7 +85,7 @@ void LEDIndicator::paintEvent(QPaintEvent *)
 }
 
 //------------------------------------------------------------------------------
-QSize LEDIndicator::sizeHint(void) const
+QSize LEDIndicator::sizeHint() const
 {
     return QSize(15, 25);
 }

@@ -33,7 +33,7 @@ HBlockView::HBlockView( int p_view_id
 }
 
 //------------------------------------------------------------------------------
-HBlockView::~HBlockView(void)
+HBlockView::~HBlockView()
 {
     delete m_h_block_widget;
 }
@@ -45,7 +45,7 @@ void HBlockView::resizeEvent(QResizeEvent *)
 }
 
 //------------------------------------------------------------------------------
-QSize HBlockView::sizeHint(void) const
+QSize HBlockView::sizeHint() const
 {
     return QSize(200, 180);
 }

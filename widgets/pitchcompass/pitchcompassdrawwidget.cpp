@@ -117,7 +117,7 @@ PitchCompassDrawWidget::PitchCompassDrawWidget( QWidget *p_parent
 }
 
 //------------------------------------------------------------------------------
-PitchCompassDrawWidget::~PitchCompassDrawWidget(void)
+PitchCompassDrawWidget::~PitchCompassDrawWidget()
 {
 }
 
@@ -214,7 +214,7 @@ void PitchCompassDrawWidget::updateCompass(double p_time)
 }
 
 //------------------------------------------------------------------------------
-void PitchCompassDrawWidget::blank(void)
+void PitchCompassDrawWidget::blank()
 {
     if(++m_blank_count % 10 == 0)
     {

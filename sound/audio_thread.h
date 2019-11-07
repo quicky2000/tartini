@@ -38,27 +38,27 @@ class AudioThread : public QThread
 {
 
   public:
-    AudioThread(void);
-    inline virtual ~AudioThread(void);
+    AudioThread();
+    inline virtual ~AudioThread();
 
-    virtual void run(void);
-    void start(void);
+    virtual void run();
+    void start();
     void start(SoundFile *p_s_play, SoundFile *p_s_rec);
 
     /**
        Causes the audio thread to stop at the end of the next loop
     */
-    void stop(void);
+    void stop();
 
     /**
        Stop the audio thread and waits for it to finish
     */
-    void stopAndWait(void);
+    void stopAndWait();
       
-    int doStuff(void);
-    inline SoundFile * playSoundFile(void) const;
-    inline SoundFile * recSoundFile(void) const;
-    inline SoundFile * curSoundFile(void) const;
+    int doStuff();
+    inline SoundFile * playSoundFile() const;
+    inline SoundFile * recSoundFile() const;
+    inline SoundFile * curSoundFile() const;
   
   private:
     SoundFile * m_play_sound_file;

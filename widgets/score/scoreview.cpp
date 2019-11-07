@@ -156,7 +156,7 @@ ScoreView::ScoreView(int p_view_id
 }
 
 //------------------------------------------------------------------------------
-ScoreView::~ScoreView(void)
+ScoreView::~ScoreView()
 {
     delete m_score_widget;
 }
@@ -167,7 +167,7 @@ void ScoreView::resizeEvent(QResizeEvent *)
 }
 
 //------------------------------------------------------------------------------
-QSize ScoreView::sizeHint(void) const
+QSize ScoreView::sizeHint() const
 {
     return QSize(800, 240);
 }

@@ -60,7 +60,7 @@ void HStackWidget::setDBRange(double p_range)
 
 
 //------------------------------------------------------------------------------
-HStackWidget::~HStackWidget(void)
+HStackWidget::~HStackWidget()
 {
 } 
 

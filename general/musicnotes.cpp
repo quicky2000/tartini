@@ -89,7 +89,7 @@ const QString noteNames[12] =
 */
 
 //------------------------------------------------------------------------------
-void initMusicStuff(void)
+void initMusicStuff()
 {
     double l_even_tempered_scale[12]  = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0 };
     /**
@@ -173,7 +173,7 @@ bool isBlackNote(int p_pitch)
 }
 
 //------------------------------------------------------------------------------
-MusicScale::~MusicScale(void)
+MusicScale::~MusicScale()
 {
     if(m_p_name)
     {
@@ -204,7 +204,7 @@ void MusicScale::addScale( const char * p_name
 }
 
 //------------------------------------------------------------------------------
-MusicKey::~MusicKey(void)
+MusicKey::~MusicKey()
 {
     if(m_name)
     {

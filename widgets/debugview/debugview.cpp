@@ -33,7 +33,7 @@ DebugView::DebugView( int p_view_id
 }
 
 //------------------------------------------------------------------------------
-DebugView::~DebugView(void)
+DebugView::~DebugView()
 {
     delete m_debug_widget;
 }
@@ -45,7 +45,7 @@ void DebugView::resizeEvent(QResizeEvent *)
 }
 
 //------------------------------------------------------------------------------
-QSize DebugView::sizeHint(void) const
+QSize DebugView::sizeHint() const
 {
     return QSize(250, 500);
 }

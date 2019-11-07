@@ -63,7 +63,7 @@ FreqDrawWidget::FreqDrawWidget( QWidget *p_parent
 }
 
 //------------------------------------------------------------------------------
-FreqDrawWidget::~FreqDrawWidget(void)
+FreqDrawWidget::~FreqDrawWidget()
 {
 }
 
@@ -238,7 +238,7 @@ Channel * FreqDrawWidget::channelAtPixel( int p_x
 }
 
 //------------------------------------------------------------------------------
-QSize FreqDrawWidget::sizeHint(void) const
+QSize FreqDrawWidget::sizeHint() const
 {
     return QSize(400, 350);
 }

@@ -23,11 +23,11 @@ class QStringList;
 class WaveStream : public SoundFileStream
 {
   public:
-    WaveStream(void);
-    virtual ~WaveStream(void);
+    WaveStream();
+    virtual ~WaveStream();
 
     int open_read(const char * p_filename);
-    int read_header(void);
+    int read_header();
     long read_bytes( void * p_data
                    , long p_length
                    );
@@ -41,7 +41,7 @@ class WaveStream : public SoundFileStream
                   , int p_bits = 16
                   );
 
-    void write_header(void);
+    void write_header();
 
     long write_bytes( void * p_data
                     , long p_length
@@ -51,9 +51,9 @@ class WaveStream : public SoundFileStream
                      , long p_length
                      );
 
-    QStringList getOutputDeviceNames(void);
+    QStringList getOutputDeviceNames();
 
-    void close(void);
+    void close();
 
     void jump_to_frame(int p_frame);
     void jump_back(int p_frames);

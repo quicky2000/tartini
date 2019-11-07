@@ -24,12 +24,12 @@ class SoundFileStream : public SoundStream
 {
   public:
 
-    inline SoundFileStream(void);
-    virtual inline ~SoundFileStream(void);
+    inline SoundFileStream();
+    virtual inline ~SoundFileStream();
 
-    inline int data_length(void) const;
-    inline int totalFrames(void) const;
-    inline int pos(void) const;
+    inline int data_length() const;
+    inline int totalFrames() const;
+    inline int pos() const;
   
     virtual inline int open_read(const char * /*filename*/);
     virtual inline long read_bytes( void * /*data*/
@@ -53,7 +53,7 @@ class SoundFileStream : public SoundStream
                                     , long /*length*/
                                     );
 
-    virtual inline void close(void);
+    virtual inline void close();
 
     virtual inline void jump_to_frame(int /*frame*/);
     virtual inline void jump_back(int /*frames*/);

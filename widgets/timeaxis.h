@@ -41,21 +41,21 @@ class TimeAxis : public DrawWidget
             ,bool p_numbers_on_top = true
             );
 
-    ~TimeAxis(void);
+    ~TimeAxis();
 
     inline
-    QSize sizeHint(void) const;
+    QSize sizeHint() const;
 
-    void init(void);
-
-    inline
-    double leftTime(void) const;
+    void init();
 
     inline
-    double rightTime(void) const;
+    double leftTime() const;
 
     inline
-    double timeWidth(void) const;
+    double rightTime() const;
+
+    inline
+    double timeWidth() const;
 
     void setFontSize(int p_font_size);
 

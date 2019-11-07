@@ -25,20 +25,20 @@ class VibratoCircleWidget: public QGLWidget
 
   public:
     VibratoCircleWidget(QWidget * p_parent);
-    virtual ~VibratoCircleWidget(void);
+    virtual ~VibratoCircleWidget();
 
-    void initializeGL(void);
+    void initializeGL();
     void resizeGL(int p_width
                  ,int p_height
                  );
-    void paintGL(void);
+    void paintGL();
 
-    QSize minimumSizeHint(void) const;
-    int getType(void);
+    QSize minimumSizeHint() const;
+    int getType();
 
   public slots:
 
-    void doUpdate(void);
+    void doUpdate();
     void setAccuracy(int p_value);
     void setType(int p_value);
 

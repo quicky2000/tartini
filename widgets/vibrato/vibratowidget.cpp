@@ -45,7 +45,7 @@ VibratoWidget::VibratoWidget(QWidget * p_parent, int p_nls):
 }
 
 //------------------------------------------------------------------------------
-VibratoWidget::~VibratoWidget(void)
+VibratoWidget::~VibratoWidget()
 {
   // Remove display lists
   makeCurrent();
@@ -62,7 +62,7 @@ VibratoWidget::~VibratoWidget(void)
 }
 
 //------------------------------------------------------------------------------
-void VibratoWidget::initializeGL(void)
+void VibratoWidget::initializeGL()
 {
   qglClearColor(g_data->backgroundColor());
 
@@ -95,7 +95,7 @@ void VibratoWidget::resizeGL(int w, int h)
 }
 
 //------------------------------------------------------------------------------
-void VibratoWidget::paintGL(void)
+void VibratoWidget::paintGL()
 {
 
   doUpdate();
@@ -157,7 +157,7 @@ void VibratoWidget::paintGL(void)
 }
 
 //------------------------------------------------------------------------------
-void VibratoWidget::doUpdate(void)
+void VibratoWidget::doUpdate()
 {
   m_note_label_counter = 0;
 
@@ -924,7 +924,7 @@ void VibratoWidget::setOffsetY(int p_value)
 }
 
 //------------------------------------------------------------------------------
-QSize VibratoWidget::sizeHint(void) const
+QSize VibratoWidget::sizeHint() const
 {
   return QSize(300, 100);
 }

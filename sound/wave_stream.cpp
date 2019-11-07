@@ -20,20 +20,20 @@
 #include "useful.h"
 
 //------------------------------------------------------------------------------
-WaveStream::WaveStream(void)
+WaveStream::WaveStream()
 : m_file(NULL)
 , m_header_length(0)
 {
 }
 
 //------------------------------------------------------------------------------
-WaveStream::~WaveStream(void)
+WaveStream::~WaveStream()
 {
     close();
 }
 
 //------------------------------------------------------------------------------
-void WaveStream::close(void)
+void WaveStream::close()
 {
     if(m_file)
     {
@@ -60,7 +60,7 @@ int WaveStream::open_read(const char *p_filename)
 }
 
 //------------------------------------------------------------------------------
-int WaveStream::read_header(void)
+int WaveStream::read_header()
 {
     if(!m_file || !(get_mode() & F_READ))
     {
@@ -234,7 +234,7 @@ int WaveStream::open_write(const char *p_filename, int p_freq, int p_channels, i
 }
 
 //------------------------------------------------------------------------------
-void WaveStream::write_header(void)
+void WaveStream::write_header()
 {
     if(!m_file || !(get_mode() & F_WRITE))
     {

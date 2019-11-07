@@ -347,13 +347,13 @@ VibratoView::VibratoView(int p_view_ID
 }
 
 //------------------------------------------------------------------------------
-VibratoView::~VibratoView(void)
+VibratoView::~VibratoView()
 {
     delete m_vibrato_widget;
 }
 
 //------------------------------------------------------------------------------
-QSize VibratoView::sizeHint(void) const
+QSize VibratoView::sizeHint() const
 {
     return QSize(500, 300);
 }

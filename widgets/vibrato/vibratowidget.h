@@ -23,16 +23,16 @@ class VibratoWidget :public QGLWidget
 
  public:
   VibratoWidget(QWidget * parent, int nls);
-  virtual ~VibratoWidget(void);
+  virtual ~VibratoWidget();
 
-  void initializeGL(void);
+  void initializeGL();
   void resizeGL(int w, int h);
-  void paintGL(void);
+  void paintGL();
 
-  QSize sizeHint(void) const;
+  QSize sizeHint() const;
 
  public slots:
-  void doUpdate(void);
+  void doUpdate();
   void setZoomFactorX(double x);
   void setZoomFactorY(double y);
   void setOffsetY(int value);

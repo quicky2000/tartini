@@ -104,8 +104,8 @@ class MainWindow : public QMainWindow
 
   public:
 
-    MainWindow(void);
-    virtual ~MainWindow(void);
+    MainWindow();
+    virtual ~MainWindow();
 
     void keyPressEvent(QKeyEvent * p_event);
     void message(QString p_string, int p_msec);
@@ -141,23 +141,23 @@ class MainWindow : public QMainWindow
 
   signals:
     void changedMusicFolder(const QString &);
-    void zoomInPressed(void);
-    void zoomOutPressed(void);
+    void zoomInPressed();
+    void zoomOutPressed();
 
   public slots:
-    void openFile(void);
+    void openFile();
     void openFile(const char *p_file_name);
 
-    void openRecord(void);
-    void openPlayRecord(void);
+    void openRecord();
+    void openPlayRecord();
     void openRecord(bool p_and_play);
-    void closeAllWidgets(void);
+    void closeAllWidgets();
     void closeEvent(QCloseEvent *p_event);
-    void menuPreferences(void);
+    void menuPreferences();
 
-    void windowMenuAboutToShow(void);
-    void windowMenuActivated(void);
-    void newViewAboutToShow(void);
+    void windowMenuAboutToShow();
+    void windowMenuActivated();
+    void newViewAboutToShow();
 
     /**
      * Opens a view based on a viewId (which should be #defined).
@@ -167,27 +167,27 @@ class MainWindow : public QMainWindow
      */
     QWidget *openView(int p_view_id);
     void setTimeLabel(double p_t);
-    void setChunkLabel(void);
-    void setNoteLabel(void);
+    void setChunkLabel();
+    void setNoteLabel();
     void setTimeRange(double p_min, double p_max);
 
-    void rewindPressed(void);
-    void rewindReleased(void);
-    void playStopClicked(void);
-    void fastforwardPressed(void);
-    void fastforwardReleased(void);
+    void rewindPressed();
+    void rewindReleased();
+    void playStopClicked();
+    void fastforwardPressed();
+    void fastforwardReleased();
     void setTitle(Channel *p_channel);
-    void aboutTartini(void);
-    void aboutGPL(void);
-    void aboutQt(void);
-    void showDocumentation(void);
-    void printPitch(void);
+    void aboutTartini();
+    void aboutGPL();
+    void aboutQt();
+    void showDocumentation();
+    void printPitch();
     void exportChannel(int p_type, QString p_type_string);
-    void exportChannelPlainText(void);
-    void exportChannelMatlab(void);
+    void exportChannelPlainText();
+    void exportChannelMatlab();
 
-    bool loadViewGeometry(void);
-    void saveViewGeometry(void);
+    bool loadViewGeometry();
+    void saveViewGeometry();
 };
 
 class TartiniDialog :public QDialog
@@ -196,7 +196,7 @@ class TartiniDialog :public QDialog
 
   public:
     TartiniDialog(QWidget *p_parent = NULL);
-    QSize sizeHint(void) const;
+    QSize sizeHint() const;
 };
 
 class GPLDialog :public QDialog
@@ -205,7 +205,7 @@ class GPLDialog :public QDialog
 
   public:
     GPLDialog(QWidget *p_parent = NULL);
-    QSize sizeHint(void) const;
+    QSize sizeHint() const;
 };
 
 extern MainWindow * g_main_window;

@@ -66,7 +66,7 @@ FreqWidgetGL::FreqWidgetGL( QWidget * /*parent*/
 }
 
 //------------------------------------------------------------------------------
-void FreqWidgetGL::initializeGL(void)
+void FreqWidgetGL::initializeGL()
 {
     qglClearColor(g_data->backgroundColor());
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -84,7 +84,7 @@ void FreqWidgetGL::resizeGL( int p_w
 }
 
 //------------------------------------------------------------------------------
-FreqWidgetGL::~FreqWidgetGL(void)
+FreqWidgetGL::~FreqWidgetGL()
 {
 }
 
@@ -235,7 +235,7 @@ void FreqWidgetGL::drawReferenceLinesGL( const double & /* p_left_time*/
 }
 
 //------------------------------------------------------------------------------
-void FreqWidgetGL::paintGL(void)
+void FreqWidgetGL::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT);
     View & l_view = g_data->getView();

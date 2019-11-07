@@ -36,7 +36,7 @@ PianoView::PianoView( int p_view_id
 }
 
 //------------------------------------------------------------------------------
-PianoView::~PianoView(void)
+PianoView::~PianoView()
 {
     delete m_piano_widget;
 }
@@ -48,7 +48,7 @@ void PianoView::resizeEvent(QResizeEvent *)
 }
 
 //------------------------------------------------------------------------------
-void PianoView::changeKey(void)
+void PianoView::changeKey()
 {
     Channel * l_active_channel = g_data->getActiveChannel();
     if(l_active_channel)
@@ -72,7 +72,7 @@ void PianoView::changeKey(void)
 }
 
 //------------------------------------------------------------------------------
-QSize PianoView::sizeHint(void) const
+QSize PianoView::sizeHint() const
 {
     return QSize(200, 100);
 }

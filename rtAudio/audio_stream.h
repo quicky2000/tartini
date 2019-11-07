@@ -26,16 +26,16 @@ class AudioStream: public SoundStream
 {
   public:
 
-    AudioStream(void);
-    virtual ~AudioStream(void);
+    AudioStream();
+    virtual ~AudioStream();
 
-    int bufferSize(void) { return m_buffer_size; }
-    int numBuffers(void) { return m_num_buffers; }
-    int totalBufferFrames(void) { return m_buffer_size * m_num_buffers; }
-    int inTotalBufferFrames(void) { return totalBufferFrames(); }
-    int outTotalBufferFrames(void) { return totalBufferFrames(); }
+    int bufferSize() { return m_buffer_size; }
+    int numBuffers() { return m_num_buffers; }
+    int totalBufferFrames() { return m_buffer_size * m_num_buffers; }
+    int inTotalBufferFrames() { return totalBufferFrames(); }
+    int outTotalBufferFrames() { return totalBufferFrames(); }
 
-    void close(void);
+    void close();
 
     int open( int p_mode
             , int p_freq = 44100
@@ -98,13 +98,13 @@ class AudioStream: public SoundStream
                        , int p_length
                        );
 
-    bool isSameInOutDevice(void)
+    bool isSameInOutDevice()
     {
         return m_in_device == m_out_device;
     }
 
-    static QStringList getInputDeviceNames(void);
-    static QStringList getOutputDeviceNames(void);
+    static QStringList getInputDeviceNames();
+    static QStringList getOutputDeviceNames();
 
     /**
        @param p_device_name The name of a device as given from get*DeviceNames

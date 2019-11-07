@@ -59,7 +59,7 @@ double(*g_amp_mode_inv_func[NUM_AMP_MODES])(const double &, const GData &) =
 };
 
 //------------------------------------------------------------------------------
-AnalysisData::AnalysisData(void)
+AnalysisData::AnalysisData()
 : m_period(0.0f)
 , m_fundamental_freq(0.0f)
 , m_pitch(0.0f)
@@ -92,7 +92,7 @@ AnalysisData::AnalysisData(void)
 }
 
 //------------------------------------------------------------------------------
-void AnalysisData::calcScores(void)
+void AnalysisData::calcScores()
 {
     double l_a[NUM_AMP_MODES - 2];
     for(int l_j = 0; l_j < NUM_AMP_MODES - 2 ; l_j++)

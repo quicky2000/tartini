@@ -27,7 +27,7 @@ float AnalysisData::getValue(size_t p_index)const
 }
 
 //------------------------------------------------------------------------------
-float AnalysisData::getPeriod(void)const
+float AnalysisData::getPeriod()const
 {
     return m_period;
 }
@@ -39,7 +39,7 @@ void AnalysisData::setPeriod(float p_period)
 }
 
 //------------------------------------------------------------------------------
-float AnalysisData::getFundamentalFreq(void)const
+float AnalysisData::getFundamentalFreq()const
 {
     return m_fundamental_freq;
 }
@@ -51,7 +51,7 @@ void AnalysisData::setFundamentalFreq(float p_fundamental_freq)
 }
 
 //------------------------------------------------------------------------------
-float AnalysisData::getFreqCentroid(void)const
+float AnalysisData::getFreqCentroid()const
 {
     return m_freq_centroid;
 }
@@ -63,7 +63,7 @@ void AnalysisData::setFreqCentroid(float p_value)
 }
 
 //------------------------------------------------------------------------------
-float AnalysisData::getPitch(void)const
+float AnalysisData::getPitch()const
 {
     return m_pitch;
 }
@@ -75,7 +75,7 @@ void AnalysisData::setPitch(float p_pitch)
 }
 
 //------------------------------------------------------------------------------
-const double & AnalysisData::getPitchSum(void)const
+const double & AnalysisData::getPitchSum()const
 {
     return m_pitch_sum;
 }
@@ -87,7 +87,7 @@ void AnalysisData::setPitchSum(const double & p_pitch_sum)
 }
 
 //------------------------------------------------------------------------------
-const double & AnalysisData::getPitch2Sum(void)const
+const double & AnalysisData::getPitch2Sum()const
 {
     return m_pitch_squared_sum;
 }
@@ -99,7 +99,7 @@ void AnalysisData::setPitch2Sum(const double & p_pitch_2_sum)
 }
 
 //------------------------------------------------------------------------------
-const double & AnalysisData::getShortTermMean(void)const
+const double & AnalysisData::getShortTermMean()const
 {
     return m_short_term_mean;
 }
@@ -111,7 +111,7 @@ void AnalysisData::setShortTermMean(const double & p_short_term_mean)
 }
 
 //------------------------------------------------------------------------------
-const double & AnalysisData::getShortTermDeviation(void)const
+const double & AnalysisData::getShortTermDeviation()const
 {
     return m_short_term_deviation;
 }
@@ -123,7 +123,7 @@ void AnalysisData::setShortTermDeviation(const double & p_short_term_deviation)
 }
 
 //------------------------------------------------------------------------------
-const double & AnalysisData::getLongTermMean(void)const
+const double & AnalysisData::getLongTermMean()const
 {
     return m_long_term_mean;
 }
@@ -135,7 +135,7 @@ void AnalysisData::setLongTermMean(const double & p_long_term_mean)
 }
 
 //------------------------------------------------------------------------------
-const double & AnalysisData::getLongTermDeviation(void)const
+const double & AnalysisData::getLongTermDeviation()const
 {
     return m_long_term_deviation;
 }
@@ -147,7 +147,7 @@ void AnalysisData::setLongTermDeviation(const double & p_long_term_deviation)
 }
 
 //------------------------------------------------------------------------------
-const double & AnalysisData::getSpread(void)const
+const double & AnalysisData::getSpread()const
 {
     return m_spread;
 }
@@ -159,7 +159,7 @@ void AnalysisData::setSpread(const double & p_spread)
 }
 
 //------------------------------------------------------------------------------
-const double & AnalysisData::getSpread2(void)const
+const double & AnalysisData::getSpread2()const
 {
     return m_spread_2;
 }
@@ -171,7 +171,7 @@ void AnalysisData::setSpread2(const double & p_spread2)
 }
 
 //------------------------------------------------------------------------------
-float AnalysisData::getVibratoPitch(void)const
+float AnalysisData::getVibratoPitch()const
 {
     return m_vibrato_pitch;
 }
@@ -183,7 +183,7 @@ void AnalysisData::setVibratoPitch(float p_vibrato_pitch)
 }
 
 //------------------------------------------------------------------------------
-float AnalysisData::getVibratoWidth(void)const
+float AnalysisData::getVibratoWidth()const
 {
     return m_vibrato_width;
 }
@@ -195,7 +195,7 @@ void AnalysisData::setVibratoWidth(float p_vibrato_width)
 }
 
 //------------------------------------------------------------------------------
-float AnalysisData::getVibratoWidthAdjust(void)const
+float AnalysisData::getVibratoWidthAdjust()const
 {
     return m_vibrato_width_adjust;
 }
@@ -207,7 +207,7 @@ void AnalysisData::setVibratoWidthAdjust(float p_vibrato_width_adjust)
 }
 
 //------------------------------------------------------------------------------
-float AnalysisData::getVibratoSpeed(void)const
+float AnalysisData::getVibratoSpeed()const
 {
     return m_vibrato_speed;
 }
@@ -219,7 +219,7 @@ void AnalysisData::setVibratoSpeed(float p_vibrato_speed)
 }
 
 //------------------------------------------------------------------------------
-float AnalysisData::getVibratoPhase(void)const
+float AnalysisData::getVibratoPhase()const
 {
     return m_vibrato_phase;
 }
@@ -231,7 +231,7 @@ void AnalysisData::setVibratoPhase(float p_vibrato_phase)
 }
 
 //------------------------------------------------------------------------------
-float AnalysisData::getVibratoError(void)const
+float AnalysisData::getVibratoError()const
 {
     return m_vibrato_error;
 }
@@ -243,7 +243,7 @@ void AnalysisData::setVibratoError(float p_vibrato_error)
 }
 
 //------------------------------------------------------------------------------
-int AnalysisData::getReason(void)const
+int AnalysisData::getReason()const
 {
     return m_reason;
 }
@@ -255,7 +255,7 @@ void AnalysisData::setReason(int p_reason)
 }
 
 //------------------------------------------------------------------------------
-int AnalysisData::getHighestCorrelationIndex(void)const
+int AnalysisData::getHighestCorrelationIndex()const
 {
     return m_highest_correlation_index;
 }
@@ -267,7 +267,7 @@ void AnalysisData::setHighestCorrelationIndex(int p_index)
 }
 
 //------------------------------------------------------------------------------
-int AnalysisData::getChosenCorrelationIndex(void)const
+int AnalysisData::getChosenCorrelationIndex()const
 {
     return m_chosen_correlation_index;
 }
@@ -279,7 +279,7 @@ void AnalysisData::setChosenCorrelationIndex(int p_index)
 }
 
 //------------------------------------------------------------------------------
-float AnalysisData::getPeriodRatio(void)const
+float AnalysisData::getPeriodRatio()const
 {
     return m_period_ratio;
 }
@@ -291,7 +291,7 @@ void AnalysisData::setPeriodRatio(float p_period_ratio)
 }
 
 //------------------------------------------------------------------------------
-int AnalysisData::getCepstrumIndex(void)const
+int AnalysisData::getCepstrumIndex()const
 {
     return m_cepstrum_index;
 }
@@ -303,7 +303,7 @@ void AnalysisData::setCepstrumIndex(int p_index)
 }
 
 //------------------------------------------------------------------------------
-float AnalysisData::getCepstrumPitch(void)const
+float AnalysisData::getCepstrumPitch()const
 {
     return m_cepstrum_pitch;
 }
@@ -315,13 +315,13 @@ void AnalysisData::setCepstrumPitch(float p_cepstrum_pitch)
 }
 
 //------------------------------------------------------------------------------
-bool AnalysisData::isPeriodEstimatesEmpty(void)const
+bool AnalysisData::isPeriodEstimatesEmpty()const
 {
     return m_period_estimates.empty();
 }
 
 //------------------------------------------------------------------------------
-size_t AnalysisData::getPeriodEstimatesSize(void)const
+size_t AnalysisData::getPeriodEstimatesSize()const
 {
     return m_period_estimates.size();
 }
@@ -337,7 +337,7 @@ float AnalysisData::getPeriodEstimatesAt(size_t p_index)const
 }
 
 //------------------------------------------------------------------------------
-void AnalysisData::clearPeriodEstimates(void)
+void AnalysisData::clearPeriodEstimates()
 {
     m_period_estimates.clear();
 }
@@ -356,7 +356,7 @@ float AnalysisData::searchClosestPeriodEstimates(const float & p_value)const
 }
 
 //------------------------------------------------------------------------------
-size_t AnalysisData::getPeriodEstimatesAmpSize(void)const
+size_t AnalysisData::getPeriodEstimatesAmpSize()const
 {
     return m_period_estimates_amp.size();
 }
@@ -372,7 +372,7 @@ float AnalysisData::getPeriodEstimatesAmpAt(size_t p_index)const
 }
 
 //------------------------------------------------------------------------------
-void AnalysisData::clearPeriodEstimatesAmp(void)
+void AnalysisData::clearPeriodEstimatesAmp()
 {
     m_period_estimates_amp.clear();
 }
@@ -384,13 +384,13 @@ void AnalysisData::addPeriodEstimatesAmp(float p_value)
 }
 
 //------------------------------------------------------------------------------
-int AnalysisData::getPeriodEstimatesAmpMaxElementIndex(void)const
+int AnalysisData::getPeriodEstimatesAmpMaxElementIndex()const
 {
     return int(std::max_element(m_period_estimates_amp.begin(), m_period_estimates_amp.end()) - m_period_estimates_amp.begin());
 }
 
 //------------------------------------------------------------------------------
-size_t AnalysisData::getHarmonicAmpNoCutOffSize(void)const
+size_t AnalysisData::getHarmonicAmpNoCutOffSize()const
 {
     return m_harmonic_amp_no_cut_off.size();
 }
@@ -434,7 +434,7 @@ float AnalysisData::getHarmonicAmpRelativeAt(size_t p_index)const
 }
 
 //------------------------------------------------------------------------------
-size_t AnalysisData::getHarmonicAmpRelativeSize(void)const
+size_t AnalysisData::getHarmonicAmpRelativeSize()const
 {
     return m_harmonic_amp_relative.size();
 }
@@ -478,7 +478,7 @@ float AnalysisData::getHarmonicFreqAt(size_t p_index)const
 }
 
 //------------------------------------------------------------------------------
-size_t AnalysisData::getHarmonicFreqSize(void)const
+size_t AnalysisData::getHarmonicFreqSize()const
 {
     return m_harmonic_freq.size();
 }
@@ -536,7 +536,7 @@ void AnalysisData::setFilterState(const FilterState & p_filter_state)
 }
 
 //------------------------------------------------------------------------------
-int AnalysisData::getNoteIndex(void)const
+int AnalysisData::getNoteIndex()const
 {
     return m_note_index;
 }
@@ -554,7 +554,7 @@ void AnalysisData::setNotePlaying(bool p_note_playing)
 }
 
 //------------------------------------------------------------------------------
-bool AnalysisData::isNotePlaying(void)const
+bool AnalysisData::isNotePlaying()const
 {
     return m_note_playing;
 }
@@ -566,13 +566,13 @@ void AnalysisData::setDone(bool p_done)
 }
 
 //------------------------------------------------------------------------------
-bool AnalysisData::isDone(void)const
+bool AnalysisData::isDone()const
 {
     return m_done;
 }
 
 //------------------------------------------------------------------------------
-float AnalysisData::getLogRms(void)const
+float AnalysisData::getLogRms()const
 {
     return m_values[AMPLITUDE_RMS];
 }
@@ -584,7 +584,7 @@ void AnalysisData::setLogRms(float p_log_rms)
 }
 
 //------------------------------------------------------------------------------
-float AnalysisData::getMaxIntensityDB(void)const
+float AnalysisData::getMaxIntensityDB()const
 {
     return m_values[AMPLITUDE_MAX_INTENSITY];
 }
@@ -596,7 +596,7 @@ void AnalysisData::setMaxIntensityDB(float p_value)
 }
 
 //------------------------------------------------------------------------------
-float AnalysisData::getCorrelation(void)const
+float AnalysisData::getCorrelation()const
 {
     return m_values[AMPLITUDE_CORRELATION];
 }
@@ -626,13 +626,13 @@ float AnalysisData::getVolumeValue(const GData & p_data)const
 }
 
 //------------------------------------------------------------------------------
-float AnalysisData::getNoteScore(void)const
+float AnalysisData::getNoteScore()const
 {
     return m_values[NOTE_SCORE];
 }
 
 //------------------------------------------------------------------------------
-float AnalysisData::getNoteChangeScore(void)const
+float AnalysisData::getNoteChangeScore()const
 {
     return m_values[NOTE_CHANGE_SCORE];
 }

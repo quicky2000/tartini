@@ -231,13 +231,13 @@ FreqView::FreqView( int p_view_id
 }
 
 //------------------------------------------------------------------------------
-FreqView::~FreqView(void)
+FreqView::~FreqView()
 {
     //Qt deletes the child widgets automatically
 }
 
 //------------------------------------------------------------------------------
-void FreqView::zoomIn(void)
+void FreqView::zoomIn()
 {
     bool l_done_it = false;
     if(g_data->getRunning() != STREAM_FORWARD)
@@ -266,7 +266,7 @@ void FreqView::zoomIn(void)
 }
 
 //------------------------------------------------------------------------------
-void FreqView::zoomOut(void)
+void FreqView::zoomOut()
 {
     g_data->getView().setZoomFactorX(g_data->getView().logZoomX() - 0.1);
     if(!m_amplitude_widget->testAttribute(Qt::WA_UnderMouse))
@@ -283,7 +283,7 @@ void FreqView::setAmplitudeZoom(double newRange)
 }
 
 //------------------------------------------------------------------------------
-QSize FreqView::sizeHint(void) const
+QSize FreqView::sizeHint() const
 {
     return QSize(600, 560);
 }

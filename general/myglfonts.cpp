@@ -44,7 +44,7 @@ void MyGLFont::init(const QFont p_font)
 }
 
 //------------------------------------------------------------------------------
-MyGLFont::~MyGLFont(void)
+MyGLFont::~MyGLFont()
 {
     if(m_been_init)
     {
@@ -111,7 +111,7 @@ void MyGLFont::beginGLtext( int p_width
 }
 
 //------------------------------------------------------------------------------
-void MyGLFont::endGLtext(void) const
+void MyGLFont::endGLtext() const
 {
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();

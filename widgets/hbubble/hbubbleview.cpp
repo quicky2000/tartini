@@ -100,13 +100,13 @@ HBubbleView::HBubbleView( int p_view_id
 }
 
 //------------------------------------------------------------------------------
-HBubbleView::~HBubbleView(void)
+HBubbleView::~HBubbleView()
 {
     delete m_h_bubble_widget;
 }
 
 //------------------------------------------------------------------------------
-QSize HBubbleView::sizeHint(void) const
+QSize HBubbleView::sizeHint() const
 {
     return QSize(300, 200);
 }

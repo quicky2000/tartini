@@ -39,7 +39,7 @@ VibratoTimeAxis::VibratoTimeAxis(QWidget * p_parent, int p_nls)
 }
 
 //------------------------------------------------------------------------------
-VibratoTimeAxis::~VibratoTimeAxis(void)
+VibratoTimeAxis::~VibratoTimeAxis()
 {
 }
 
@@ -155,7 +155,7 @@ void VibratoTimeAxis::resizeEvent(QResizeEvent *)
 }
 
 //------------------------------------------------------------------------------
-void VibratoTimeAxis::doUpdate(void)
+void VibratoTimeAxis::doUpdate()
 {
     Channel * l_active_channel = g_data->getActiveChannel();
 
@@ -254,7 +254,7 @@ void VibratoTimeAxis::setZoomFactorX(double p_x)
 }
 
 //------------------------------------------------------------------------------
-QSize VibratoTimeAxis::sizeHint(void) const
+QSize VibratoTimeAxis::sizeHint() const
 {
     return QSize(100, 20);
 }

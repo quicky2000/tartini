@@ -26,13 +26,13 @@ class VibratoTunerWidget: public QGLWidget
   public:
     VibratoTunerWidget(QWidget *p_parent);
 
-    virtual ~VibratoTunerWidget(void);
+    virtual ~VibratoTunerWidget();
 
-    void initializeGL(void);
+    void initializeGL();
     void resizeGL(int p_width, int p_height);
-    void paintGL(void);
+    void paintGL();
 
-    QSize minimumSizeHint(void) const;
+    QSize minimumSizeHint() const;
 
   signals:
 
@@ -44,7 +44,7 @@ class VibratoTunerWidget: public QGLWidget
 
   private:
 
-    void resetLeds(void);
+    void resetLeds();
 
 
     //data goes here

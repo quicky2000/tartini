@@ -42,7 +42,7 @@ class Array1d
     /**
        Construct an empty Array1d
     */
-    Array1d(void);
+    Array1d();
 
     /**
        Construct an Array1d of size length. The values are uninitialised
@@ -81,7 +81,7 @@ class Array1d
     */
     Array1d<T> &operator =(Array1d<T> const & p_r);
 
-    ~Array1d(void);
+    ~Array1d();
 
     T & operator()(int p_x);
 
@@ -95,19 +95,19 @@ class Array1d
 
     const T & at(int p_x) const;
 
-    int size(void) const;
+    int size() const;
 
-    T * begin(void) const;
+    T * begin() const;
 
-    T * end(void) const;
+    T * end() const;
 
-    bool isEmpty(void) const;
+    bool isEmpty() const;
 
-    T & front(void) const;
+    T & front() const;
 
-    T & back(void) const;
+    T & back() const;
 
-    int capacity(void) const;
+    int capacity() const;
 
     int getIndex(T * p_element) const;
 
@@ -149,7 +149,7 @@ class Array1d
        Note: Use back() to get the value before pop_back() if needed
        Note: The array should not be empty. I.e no checking is done
     */
-    void pop_back(void);
+    void pop_back();
 
     /**
        Copies data from src to this, assuming this is large enough to hold it
@@ -161,7 +161,7 @@ class Array1d
     /**
        Empites the array back to size 0
     */
-    void clear(void);
+    void clear();
 
     /**
        Fill the whole array with val

@@ -18,7 +18,7 @@
 
 //------------------------------------------------------------------------------
 template<class T>
-Array1d<T>::Array1d(void)
+Array1d<T>::Array1d()
 : m_data_size(0)
 , m_allocated_size(0)
 , m_data(NULL)
@@ -85,7 +85,7 @@ Array1d<T> & Array1d<T>::operator =(Array1d<T> const & p_r)
 
 //------------------------------------------------------------------------------
 template<class T>
-Array1d<T>::~Array1d(void)
+Array1d<T>::~Array1d()
 {
     if(m_data)
     {
@@ -141,49 +141,49 @@ const T& Array1d<T>::at(int p_x) const
 
 //------------------------------------------------------------------------------
 template<class T>
-int Array1d<T>::size(void) const
+int Array1d<T>::size() const
 {
     return m_data_size;
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-T * Array1d<T>::begin(void) const
+T * Array1d<T>::begin() const
 {
     return m_data;
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-T * Array1d<T>::end(void) const
+T * Array1d<T>::end() const
 {
     return m_data + m_data_size;
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-bool Array1d<T>::isEmpty(void) const
+bool Array1d<T>::isEmpty() const
 {
     return (m_data == NULL);
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-T & Array1d<T>::front(void) const
+T & Array1d<T>::front() const
 {
     return *m_data;
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-T & Array1d<T>::back(void) const
+T & Array1d<T>::back() const
 {
     return m_data[m_data_size - 1];
 }
 
 //------------------------------------------------------------------------------
 template<class T>
-int Array1d<T>::capacity(void) const
+int Array1d<T>::capacity() const
 {
     return m_allocated_size;
 }
@@ -273,7 +273,7 @@ void Array1d<T>::push_back(const T & p_val)
 
 //------------------------------------------------------------------------------
 template<class T>
-void Array1d<T>::pop_back(void)
+void Array1d<T>::pop_back()
 {
     m_data_size--;
 }
@@ -291,7 +291,7 @@ void Array1d<T>::copy_raw(const T * p_src)
 
 //------------------------------------------------------------------------------
 template<class T>
-void Array1d<T>::clear(void)
+void Array1d<T>::clear()
 {
     if(m_data)
     {

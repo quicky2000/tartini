@@ -155,7 +155,7 @@ ViewData g_view_data[NUM_VIEWS] =
         };
 
 //------------------------------------------------------------------------------
-MainWindow::MainWindow(void)
+MainWindow::MainWindow()
 : QMainWindow(NULL)
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -538,7 +538,7 @@ MainWindow::MainWindow(void)
 }
 
 //------------------------------------------------------------------------------
-MainWindow::~MainWindow(void)
+MainWindow::~MainWindow()
 {
     delete m_rewind_timer;
     delete m_fast_forward_timer;
@@ -709,7 +709,7 @@ void MainWindow::keyPressEvent (QKeyEvent * p_event)
 }
 
 //------------------------------------------------------------------------------
-void MainWindow::openFile(void)
+void MainWindow::openFile()
 {
     QString l_last_folder = QDir::toNativeSeparators(g_data->getSettingsValue("Dialogs/openFilesFolder", QDir::currentPath()));
     QString l_file_name = QFileDialog::getOpenFileName(this, "Open File", l_last_folder, "Sounds (*.wav)");
@@ -743,13 +743,13 @@ void MainWindow::openFile(const char *p_file_name)
 }
 
 //------------------------------------------------------------------------------
-void MainWindow::openRecord(void)
+void MainWindow::openRecord()
 {
     openRecord(false);
 }
 
 //------------------------------------------------------------------------------
-void MainWindow::openPlayRecord(void)
+void MainWindow::openPlayRecord()
 {
     openRecord(true);
 }
@@ -833,7 +833,7 @@ void MainWindow::openRecord(bool p_and_play)
 }
 
 //------------------------------------------------------------------------------
-void MainWindow::windowMenuAboutToShow(void)
+void MainWindow::windowMenuAboutToShow()
 {
     m_window_menu->clear();
 
@@ -857,7 +857,7 @@ void MainWindow::windowMenuAboutToShow(void)
 }
 
 //------------------------------------------------------------------------------
-void MainWindow::windowMenuActivated(void)
+void MainWindow::windowMenuActivated()
 {
     int l_id = static_cast<QAction*>(sender())->data().toInt();
     std::cout << "windowMenuActivated " << l_id << std::endl ;
@@ -882,7 +882,7 @@ void MainWindow::message( QString p_string
 }
 
 //------------------------------------------------------------------------------
-void MainWindow::closeAllWidgets(void)
+void MainWindow::closeAllWidgets()
 {
     QList<QMdiSubWindow *> l_opened = m_the_workspace->subWindowList();
     for(QList<QMdiSubWindow *>::iterator l_iterator = l_opened.begin(); l_iterator < l_opened.end(); l_iterator++)
@@ -892,7 +892,7 @@ void MainWindow::closeAllWidgets(void)
 }
 
 //------------------------------------------------------------------------------
-void MainWindow::menuPreferences(void)
+void MainWindow::menuPreferences()
 {
     TartiniSettingsDialog *l_settings = new TartiniSettingsDialog(this);
     l_settings->show();
@@ -983,7 +983,7 @@ QWidget * MainWindow::openView(int p_view_id)
 }
 
 //------------------------------------------------------------------------------
-void MainWindow::newViewAboutToShow(void)
+void MainWindow::newViewAboutToShow()
 {
     m_new_view_menu->clear();
 
@@ -1051,7 +1051,7 @@ void MainWindow::setTimeLabel(double p_t)
 }
 
 //------------------------------------------------------------------------------
-void MainWindow::setChunkLabel(void)
+void MainWindow::setChunkLabel()
 {
     char l_temp[128];
     Channel *l_active_channel = g_data->getActiveChannel();
@@ -1067,7 +1067,7 @@ void MainWindow::setChunkLabel(void)
 }
 
 //------------------------------------------------------------------------------
-void MainWindow::setNoteLabel(void)
+void MainWindow::setNoteLabel()
 {
     char l_temp[128];
     Channel *l_active_channel = g_data->getActiveChannel();
@@ -1115,7 +1115,7 @@ void MainWindow::setTimeRange( double p_min
 }
 
 //------------------------------------------------------------------------------
-void MainWindow::rewindPressed(void)
+void MainWindow::rewindPressed()
 {
     g_data->rewind();
     //every 0.2 seconds
@@ -1123,14 +1123,14 @@ void MainWindow::rewindPressed(void)
 }
 
 //------------------------------------------------------------------------------
-void MainWindow::rewindReleased(void)
+void MainWindow::rewindReleased()
 {
     //every 0.2 seconds
     m_rewind_timer->stop();
 }
 
 //------------------------------------------------------------------------------
-void MainWindow::playStopClicked(void)
+void MainWindow::playStopClicked()
 {
     if(g_data->getRunning())
     {
@@ -1143,7 +1143,7 @@ void MainWindow::playStopClicked(void)
 }
 
 //------------------------------------------------------------------------------
-void MainWindow::fastforwardPressed(void)
+void MainWindow::fastforwardPressed()
 {
     g_data->fastforward();
     //every 0.2 seconds
@@ -1151,7 +1151,7 @@ void MainWindow::fastforwardPressed(void)
 }
 
 //------------------------------------------------------------------------------
-void MainWindow::fastforwardReleased(void)
+void MainWindow::fastforwardReleased()
 {
     //every 0.2 seconds
     m_fast_forward_timer->stop();
@@ -1182,7 +1182,7 @@ void MainWindow::setTitle(Channel *p_channel)
 }
 
 //------------------------------------------------------------------------------
-void MainWindow::aboutTartini(void)
+void MainWindow::aboutTartini()
 {
     TartiniDialog *l_tartini_dialog = new TartiniDialog(this);
     l_tartini_dialog->exec();
@@ -1190,7 +1190,7 @@ void MainWindow::aboutTartini(void)
 }
 
 //------------------------------------------------------------------------------
-void MainWindow::aboutGPL(void)
+void MainWindow::aboutGPL()
 {
     GPLDialog *l_gpl_dialog = new GPLDialog(this);
     l_gpl_dialog->exec();
@@ -1198,13 +1198,13 @@ void MainWindow::aboutGPL(void)
 }
 
 //------------------------------------------------------------------------------
-void MainWindow::aboutQt(void)
+void MainWindow::aboutQt()
 {
     QMessageBox::aboutQt(this, "About Qt");
 }
 
 //------------------------------------------------------------------------------
-void MainWindow::showDocumentation(void)
+void MainWindow::showDocumentation()
 {
     QDesktopServices::openUrl(QUrl("http://www.tartini.net/doc"));
 }
@@ -1355,7 +1355,7 @@ GPLDialog::GPLDialog(QWidget *p_parent)
 #include "drawwidget.h"
 
 //------------------------------------------------------------------------------
-void MainWindow::printPitch(void)
+void MainWindow::printPitch()
 {
     QPrinter l_printer(QPrinter::HighResolution);
     l_printer.setOrientation(QPrinter::Landscape);
@@ -1417,19 +1417,19 @@ void MainWindow::exportChannel(int p_type, QString p_type_string)
 }
 
 //------------------------------------------------------------------------------
-void MainWindow::exportChannelPlainText(void)
+void MainWindow::exportChannelPlainText()
 {
     exportChannel(0, "Text (*.txt)");
 }
 
 //------------------------------------------------------------------------------
-void MainWindow::exportChannelMatlab(void)
+void MainWindow::exportChannelMatlab()
 {
     exportChannel(1, "Matlab code (*.m)");
 }
 
 //------------------------------------------------------------------------------
-bool MainWindow::loadViewGeometry(void)
+bool MainWindow::loadViewGeometry()
 {
     QPoint l_pos;
     QSize l_size;
@@ -1466,7 +1466,7 @@ bool MainWindow::loadViewGeometry(void)
 }
 
 //------------------------------------------------------------------------------
-void MainWindow::saveViewGeometry(void)
+void MainWindow::saveViewGeometry()
 {
     QList<QMdiSubWindow *> l_opened = m_the_workspace->subWindowList();
 
@@ -1528,13 +1528,13 @@ ViewData::get_class_name() const
 }
 
 //------------------------------------------------------------------------------
-QSize TartiniDialog::sizeHint(void) const
+QSize TartiniDialog::sizeHint() const
 {
     return QSize(600, 600);
 }
 
 //------------------------------------------------------------------------------
-QSize GPLDialog::sizeHint(void) const
+QSize GPLDialog::sizeHint() const
 {
     return QSize(600, 480);
 }

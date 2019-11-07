@@ -28,7 +28,7 @@ BaseWidget::BaseWidget(QWidget * p_parent)
 }
 
 //------------------------------------------------------------------------------
-BaseWidget::~BaseWidget(void)
+BaseWidget::~BaseWidget()
 {
 }
 
@@ -46,7 +46,7 @@ void BaseWidget::paintEvent( QPaintEvent * )
 }
 
 //------------------------------------------------------------------------------
-QSize BaseWidget::sizeHint(void) const
+QSize BaseWidget::sizeHint() const
 {
     return QSize(300, 200);
 }

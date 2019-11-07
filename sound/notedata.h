@@ -32,66 +32,66 @@ class Channel;
 class NoteData
 {
   public:
-    inline NoteData(void);
+    inline NoteData();
     NoteData(const Channel & p_channel);
     NoteData( const Channel  & p_channel
             , int p_start_chunk
             , const AnalysisData & p_analysis_data
             );
-    ~NoteData(void);
+    ~NoteData();
 
 
-    void resetData(void);
-    inline bool isValid(void) const;
+    void resetData();
+    inline bool isValid() const;
     inline void setStartChunk(int p_start_chunk);
     inline void setEndChunk(int p_end_chunk);
-    inline int startChunk(void) const;
-    inline int endChunk(void) const;
+    inline int startChunk() const;
+    inline int endChunk() const;
     void addData( const AnalysisData & p_analysis_data
                 , float p_periods
                 );
-    inline int numChunks(void) const;
+    inline int numChunks() const;
 
     /**
        @return The length of the note (in seconds)
 
     */
-    double noteLength(void) const;
+    double noteLength() const;
 
-    inline float numPeriods(void) const;
+    inline float numPeriods() const;
 
     /**
        @return in Hertz
     */
-    inline double avgFreq(void) const;
+    inline double avgFreq() const;
 
     /**
        @return The average of this note, in fractions of semi-tones.
 
     */
-    float avgPitch(void) const;
+    float avgPitch() const;
     inline void setPeriodOctaveEstimate(float p_period_octave_estimate);
-    inline float periodOctaveEstimate(void) const;
+    inline float periodOctaveEstimate() const;
     void addVibratoData(int p_chunk);
-    inline float volume(void) const;
-    void recalcAvgPitch(void);
+    inline float volume() const;
+    void recalcAvgPitch();
 
-    inline const SmartPtr<Array1d<int> > get_maxima(void) const;
-    inline const SmartPtr<Array1d<int> > get_minima(void) const;
+    inline const SmartPtr<Array1d<int> > get_maxima() const;
+    inline const SmartPtr<Array1d<int> > get_minima() const;
 
     inline void set_nsdf_aggregate_roof(const double & p_value);
     inline void add_nsdf_aggregate_roof(const double & p_value);
-    inline const double & get_nsdf_aggregate_roof(void)const;
+    inline const double & get_nsdf_aggregate_roof()const;
 
     inline void set_first_nsdf_period(float p_period);
-    inline float get_first_nsdf_period(void)const;
+    inline float get_first_nsdf_period()const;
 
     inline void set_current_nsdf_period(float p_period);
     inline void add_current_nsdf_period(float p_period_diff);
-    inline float get_current_nsdf_period(void) const;
+    inline float get_current_nsdf_period() const;
 
-    inline const Array1d<float> & get_nsdf_aggregate_data(void)const;
-    inline const Array1d<float> & get_nsdf_aggregate_data_scaled(void)const;
+    inline const Array1d<float> & get_nsdf_aggregate_data()const;
+    inline const Array1d<float> & get_nsdf_aggregate_data_scaled()const;
 
   private:
     Array1d<float> m_nsdf_aggregate_data;

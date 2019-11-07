@@ -17,19 +17,19 @@
 */
 
 //------------------------------------------------------------------------------
-float HTrackWidget::peakThreshold(void)const
+float HTrackWidget::peakThreshold()const
 {
     return m_peak_threshold;
 }
 
 //------------------------------------------------------------------------------
-const double & HTrackWidget::viewAngleHorizontal(void)const
+const double & HTrackWidget::viewAngleHorizontal()const
 {
     return m_view_angle_horizontal;
 }
 
 //------------------------------------------------------------------------------
-const double & HTrackWidget::viewAngleVertical(void)const
+const double & HTrackWidget::viewAngleVertical()const
 {
     return m_view_angle_vertical;
 }

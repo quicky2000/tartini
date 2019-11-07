@@ -50,7 +50,7 @@ class large_vector
                 , int p_pos
                 );
         iterator(const iterator & p_iter);
-        uint pos(void) const;
+        uint pos() const;
         iterator & operator++();
         iterator & operator++(int);
         iterator & operator--();
@@ -74,30 +74,30 @@ class large_vector
     large_vector( uint p_size = 0
                 , uint p_buffer_size = 2048
                 );
-    ~large_vector(void);
+    ~large_vector();
   
     T & operator[](uint p_pos);
     const T & operator[](uint p_pos) const;
 
     T & at(uint p_pos);
     const T & at(uint p_pos) const;
-    T & front(void);
-    const T & front(void) const;
-    T & back(void);
-    const T & back(void) const;
-    uint size(void) const;
-    bool empty(void) const;
+    T & front();
+    const T & front() const;
+    T & back();
+    const T & back() const;
+    uint size() const;
+    bool empty() const;
     void push_back(const T & p_new_element);
-    T pop_back(void);
+    T pop_back();
     void push_back(const T * p_src, uint p_length);
     void increase_size(uint p_num);
-    void clear(void);
-    iterator begin(void);
-    iterator end(void);
+    void clear();
+    iterator begin();
+    iterator end();
     iterator iterator_at(uint p_pos);
   
-    uint bufferSize(void) const;
-    int numBuffers(void);
+    uint bufferSize() const;
+    int numBuffers();
     std::vector<T> & getBuffer(uint p_buffer_num);
 
     /**
@@ -118,11 +118,11 @@ class large_vector
 
   private:
 
-    Array1d<std::vector<T> *> & buf_ptrs(void);
-    const Array1d<std::vector<T> *> & buf_ptrs(void) const;
+    Array1d<std::vector<T> *> & buf_ptrs();
+    const Array1d<std::vector<T> *> & buf_ptrs() const;
 
     void addBuffer(uint p_num = 0);
-    void removeBuffer(void);
+    void removeBuffer();
 
     uint m_buffer_size;
     //std::vector<std::vector<T> *> buf_ptrs();

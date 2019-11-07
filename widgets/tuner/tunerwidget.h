@@ -30,10 +30,10 @@ class TunerWidget : public DrawWidget
 
   public:
     TunerWidget(QWidget *p_parent);
-    virtual ~TunerWidget(void);
+    virtual ~TunerWidget();
 
     void paintEvent(QPaintEvent *);
-    QSize minimumSizeHint(void) const;
+    QSize minimumSizeHint() const;
 
     /**
        Sets the value of the widget.
@@ -44,7 +44,7 @@ class TunerWidget : public DrawWidget
     void setValue(float p_value
                  ,float p_intensity
                  );
-    double value(void);
+    double value();
 
   private:
     QPixmap *m_buffer;

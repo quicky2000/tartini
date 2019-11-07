@@ -32,7 +32,7 @@ DebugWidget::DebugWidget(QWidget * p_parent)
 }
 
 //------------------------------------------------------------------------------
-DebugWidget::~DebugWidget(void)
+DebugWidget::~DebugWidget()
 {
 }
 
@@ -96,7 +96,7 @@ void DebugWidget::paintEvent( QPaintEvent * )
 }
 
 //------------------------------------------------------------------------------
-QSize DebugWidget::sizeHint(void) const
+QSize DebugWidget::sizeHint() const
 {
     return QSize(250, 500);
 }

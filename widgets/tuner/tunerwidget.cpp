@@ -33,7 +33,7 @@ TunerWidget::TunerWidget(QWidget *p_parent)
 }
 
 //------------------------------------------------------------------------------
-TunerWidget::~TunerWidget(void)
+TunerWidget::~TunerWidget()
 {
 }
 
@@ -194,13 +194,13 @@ void TunerWidget::setValue(float p_value
 }
 
 //------------------------------------------------------------------------------
-double TunerWidget::value(void)
+double TunerWidget::value()
 {
     return m_value;
 }
 
 //------------------------------------------------------------------------------
-QSize TunerWidget::minimumSizeHint(void) const
+QSize TunerWidget::minimumSizeHint() const
 {
     return QSize(100, 75);
 }

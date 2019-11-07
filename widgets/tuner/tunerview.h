@@ -39,12 +39,12 @@ class TunerView : public ViewWidget
     TunerView(int p_view_iD_
              ,QWidget *p_parent = NULL
              );
-    virtual ~TunerView(void);
+    virtual ~TunerView();
 
     void resizeEvent(QResizeEvent *);
     void paintEvent( QPaintEvent* );
 
-    QSize sizeHint(void) const;
+    QSize sizeHint() const;
 
   public slots:
 
@@ -52,11 +52,11 @@ class TunerView : public ViewWidget
     void setLed(int p_index
                ,bool p_value
                );
-    void doUpdate(void);
+    void doUpdate();
 
   private:
 
-    void resetLeds(void);
+    void resetLeds();
 
     VibratoTunerWidget *m_tuner_widget;
     std::vector<LEDIndicator*> m_leds;

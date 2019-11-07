@@ -31,7 +31,7 @@ VibratoCircleWidget::VibratoCircleWidget(QWidget *p_parent)
 }
 
 //------------------------------------------------------------------------------
-VibratoCircleWidget::~VibratoCircleWidget(void)
+VibratoCircleWidget::~VibratoCircleWidget()
 {
 	// Remove display lists
 	makeCurrent();
@@ -45,7 +45,7 @@ VibratoCircleWidget::~VibratoCircleWidget(void)
 }
 
 //------------------------------------------------------------------------------
-void VibratoCircleWidget::initializeGL(void)
+void VibratoCircleWidget::initializeGL()
 {
 	QColor l_bg = g_data->backgroundColor();
 	glClearColor( double(l_bg.red()) / 256.0, double(l_bg.green()) / 256.0, double(l_bg.blue()) / 256.0, 0.0 );
@@ -120,7 +120,7 @@ void VibratoCircleWidget::resizeGL(int p_width
 }
 
 //------------------------------------------------------------------------------
-void VibratoCircleWidget::paintGL(void)
+void VibratoCircleWidget::paintGL()
 {
 	QColor l_bg = g_data->backgroundColor();
 	glClearColor( double(l_bg.red()) / 256.0, double(l_bg.green()) / 256.0, double(l_bg.blue()) / 256.0, 0.0 );
@@ -150,7 +150,7 @@ void VibratoCircleWidget::paintGL(void)
 }
 
 //------------------------------------------------------------------------------
-void VibratoCircleWidget::doUpdate(void)
+void VibratoCircleWidget::doUpdate()
 {
 	makeCurrent();
 
@@ -639,13 +639,13 @@ void VibratoCircleWidget::setType(int p_value)
 }
 
 //------------------------------------------------------------------------------
-QSize VibratoCircleWidget::minimumSizeHint(void) const
+QSize VibratoCircleWidget::minimumSizeHint() const
 {
 	return QSize(100, 75);
 }
 
 //------------------------------------------------------------------------------
-int VibratoCircleWidget::getType(void)
+int VibratoCircleWidget::getType()
 {
 	return m_type;
 }

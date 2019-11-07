@@ -19,31 +19,31 @@
 #include "sound_file_stream.h"
 
 //------------------------------------------------------------------------------
-SoundFileStream::SoundFileStream(void)
+SoundFileStream::SoundFileStream()
 : m_total_frames(-1)
 , m_pos(0)
 {
 }
 
 //------------------------------------------------------------------------------
-SoundFileStream::~SoundFileStream(void)
+SoundFileStream::~SoundFileStream()
 {
 }
 
 //------------------------------------------------------------------------------
-int SoundFileStream::data_length(void) const
+int SoundFileStream::data_length() const
 {
     return totalFrames() * frame_size();
 }
 
 //------------------------------------------------------------------------------
-int SoundFileStream::totalFrames(void) const
+int SoundFileStream::totalFrames() const
 {
     return m_total_frames;
 }
 
 //------------------------------------------------------------------------------
-int SoundFileStream::pos(void) const
+int SoundFileStream::pos() const
 {
     return m_pos;
 }
@@ -105,7 +105,7 @@ long SoundFileStream::write_frames( void * /*data*/
 
 
 //------------------------------------------------------------------------------
-void SoundFileStream::close(void)
+void SoundFileStream::close()
 {
 };
 

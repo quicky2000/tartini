@@ -23,7 +23,7 @@
 #include "conversions.h"
 
 //------------------------------------------------------------------------------
-View::View(void)
+View::View()
 : m_current_time(1.0) //to force a change in the setCurrentTime call
 , m_view_bottom(0.0)
 , m_view_offset(0.0) //to force a change in the setViewOffset call
@@ -55,7 +55,7 @@ View::View(void)
 }
 
 //------------------------------------------------------------------------------
-View::~View(void)
+View::~View()
 {
     delete m_fast_update_timer;
     delete m_slow_update_timer;
@@ -63,20 +63,20 @@ View::~View(void)
 
 // please call this after a window has been created
 //------------------------------------------------------------------------------
-void View::init(void)
+void View::init()
 {
     setViewOffset(viewWidth() / 2.0);
 }
 
 //------------------------------------------------------------------------------
-void View::doUpdate(void)
+void View::doUpdate()
 {
     doSlowUpdate();
     doFastUpdate();
 }
 
 //------------------------------------------------------------------------------
-void View::doSlowUpdate(void)
+void View::doSlowUpdate()
 {
     m_need_slow_update = false;
     if(!m_slow_update_timer->isActive())
@@ -87,7 +87,7 @@ void View::doSlowUpdate(void)
 }
 
 //------------------------------------------------------------------------------
-void View::doFastUpdate(void)
+void View::doFastUpdate()
 {
     m_need_fast_update = false;
     if(!m_fast_update_timer->isActive())
@@ -98,7 +98,7 @@ void View::doFastUpdate(void)
 }
 
 //------------------------------------------------------------------------------
-void View::newUpdate(void)
+void View::newUpdate()
 {
     if(m_slow_update_timer->isActive())
     {
@@ -123,7 +123,7 @@ void View::newUpdate(void)
 }
 
 //------------------------------------------------------------------------------
-void View::nextFastUpdate(void)
+void View::nextFastUpdate()
 {
     if(m_need_fast_update)
     {
@@ -134,7 +134,7 @@ void View::nextFastUpdate(void)
 }
 
 //------------------------------------------------------------------------------
-void View::nextSlowUpdate(void)
+void View::nextSlowUpdate()
 {
     if(m_need_slow_update)
     {
@@ -336,7 +336,7 @@ void View::setZoomFactorY( const double & p_y
 }
 
 //------------------------------------------------------------------------------
-void View::doAutoFollowing(void)
+void View::doAutoFollowing()
 {
     if(!autoFollow())
     {

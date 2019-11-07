@@ -37,7 +37,7 @@ class SummaryDrawWidget: public DrawWidget
   public:
 
     SummaryDrawWidget(QWidget * p_parent);
-    virtual ~SummaryDrawWidget(void);
+    virtual ~SummaryDrawWidget();
 
     void paintEvent(QPaintEvent *);
 

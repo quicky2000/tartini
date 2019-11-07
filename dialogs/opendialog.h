@@ -29,8 +29,8 @@ class OpenDialog : public QFileDialog
   public:
 
     OpenDialog(QWidget * p_parent);
-    ~OpenDialog(void);
-    void accept(void);
+    ~OpenDialog();
+    void accept();
   
     static QString getOpenWavFileName(QWidget * p_parent = 0);
 

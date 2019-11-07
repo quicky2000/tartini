@@ -50,7 +50,7 @@ TimeAxis::TimeAxis(QWidget * p_parent
 }
 
 //------------------------------------------------------------------------------
-void TimeAxis::init(void)
+void TimeAxis::init()
 {
     QSizePolicy l_size_policy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     l_size_policy.setHeightForWidth(false);
@@ -64,7 +64,7 @@ void TimeAxis::init(void)
 }
 
 //------------------------------------------------------------------------------
-TimeAxis::~TimeAxis(void)
+TimeAxis::~TimeAxis()
 {
 }
 

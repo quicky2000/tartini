@@ -32,32 +32,32 @@
 class Channel
 {
   public:
-    inline void lock(void);
-    inline void unlock(void);
-    inline bool locked(void) const; // For same thread testing of asserts only
+    inline void lock();
+    inline void unlock();
+    inline bool locked() const; // For same thread testing of asserts only
 
     Channel( SoundFile * p_parent
            , int p_size
            , int p_k = 0
            );
-    virtual ~Channel(void);
+    virtual ~Channel();
 
-    inline float * begin(void);
-    inline float * end(void);
-    inline int size(void) const;
+    inline float * begin();
+    inline float * end();
+    inline int size() const;
     inline const float & at(int p_pos) const;
-    inline int rate(void) const;
+    inline int rate() const;
 
     virtual void resize( int p_new_size
                        , int p_k = 0
                        );
     virtual void shift_left(int p_n);
 
-    inline int framesPerChunk(void) const;
+    inline int framesPerChunk() const;
     inline void setParent(SoundFile * p_parent);
-    inline SoundFile * getParent(void) const;
+    inline SoundFile * getParent() const;
     inline void setPitchMethod(int p_pitch_method);
-    inline int pitchMethod(void) const;
+    inline int pitchMethod() const;
 
     void calc_last_n_coefficients(int p_n);
 
@@ -73,34 +73,34 @@ class Channel
        @param p_chunk The chunk number to store the data at
     */
     void processChunk(int p_chunk);
-    inline bool isVisible(void) const;
+    inline bool isVisible() const;
     inline void setVisible(bool p_state = true);
-    void reset(void);
-    inline double timePerChunk(void) const;
-    inline double startTime(void) const;
+    void reset();
+    inline double timePerChunk() const;
+    inline double startTime() const;
     inline void setStartTime(double p_new_start_time);
-    inline int totalChunks(void) const;
-    inline double finishTime(void) const;
-    inline double totalTime(void) const;
+    inline int totalChunks() const;
+    inline double finishTime() const;
+    inline double totalTime() const;
     inline void jumpToTime(double p_time);
     inline int chunkAtTime(double p_time) const;
     inline double chunkFractionAtTime(double p_time) const;
-    inline int chunkAtCurrentTime(void) const;
-    inline int currentChunk(void) const;
+    inline int chunkAtCurrentTime() const;
+    inline int currentChunk() const;
     inline double timeAtChunk(int p_chunk) const;
 
     inline const AnalysisData * dataAtChunk(int p_chunk) const;
     inline AnalysisData * dataAtChunk(int p_chunk);
-    inline const AnalysisData * dataAtCurrentChunk(void) const;
-    inline AnalysisData * dataAtCurrentChunk(void);
+    inline const AnalysisData * dataAtCurrentChunk() const;
+    inline AnalysisData * dataAtCurrentChunk();
     inline const AnalysisData * dataAtTime(double p_time) const;
     inline large_vector<AnalysisData>::iterator dataIteratorAtChunk(int p_chunk);
-    static const AnalysisData * getActiveChannelCurrentChunkData(void);
+    static const AnalysisData * getActiveChannelCurrentChunkData();
   
-    inline bool hasAnalysisData(void) const;
+    inline bool hasAnalysisData() const;
     inline bool isValidChunk(int p_chunk) const;
     inline bool isValidTime(double p_time) const;
-    inline bool isValidCurrentTime(void) const;
+    inline bool isValidCurrentTime() const;
   
     /**
        Returns the average pitch for a given channel between two frames.
@@ -116,12 +116,12 @@ class Channel
                                , int p_end
                                ) const;
 
-    inline float threshold(void) const;
+    inline float threshold() const;
     inline void setIntThreshold(int p_threshold_percentage);
     void resetIntThreshold(int p_threshold_percentage);
     inline void setColor(QColor p_color);
 
-    inline bool isNotePlaying(void) const;
+    inline bool isNotePlaying() const;
 
     /**
        @param p_note_index the index of the note to inquire about
@@ -143,18 +143,18 @@ class Channel
        @return true if the note is long enough
     */
     bool isLabelNote(int p_note_index) const;
-    void clearFreqLookup(void);
-    void clearAmplitudeLookup(void);
-    void recalcScoreThresholds(void);
+    void clearFreqLookup();
+    void clearAmplitudeLookup();
+    void recalcScoreThresholds();
 
-    QString getUniqueFilename(void) const;
+    QString getUniqueFilename() const;
 
-    const NoteData * getLastNote(void) const;
-    NoteData * getLastNote(void);
+    const NoteData * getLastNote() const;
+    NoteData * getLastNote();
 
-    const NoteData * getCurrentNote(void) const;
+    const NoteData * getCurrentNote() const;
     const NoteData * getNote(int p_note_index) const;
-    inline int getCurrentNoteIndex(void) const;
+    inline int getCurrentNoteIndex() const;
     void backTrackNoteChange(int p_chunk);
     void processNoteDecisions( int p_chunk
                              , float p_period_diff
@@ -168,7 +168,7 @@ class Channel
        This can be used to help determine the correct octave throughout the note
        @return the estimated note period, or -1.0 if none found
     */
-    float calcOctaveEstimate(void);
+    float calcOctaveEstimate();
     void recalcNotePitches(int p_chunk);
 
     /**
@@ -202,8 +202,8 @@ class Channel
                            , double p_period
                            , int p_chunk
                            );
-    inline bool firstTimeThrough(void) const;
-    inline bool doingDetailedPitch(void) const;
+    inline bool firstTimeThrough() const;
+    inline bool doingDetailedPitch() const;
 
     void calcVibratoData(int p_chunk);
     float periodOctaveEstimate(int p_chunk) const; /*< A estimate from over the whole duration of the note, to help get the correct octave */
@@ -212,39 +212,39 @@ class Channel
                       , QString p_type_string
                       ) const;
     void doPronyFit(int p_chunk);
-    inline int pronyDelay(void) const;
+    inline int pronyDelay() const;
 
-    inline const large_vector<float> & get_pitch_lookup(void) const;
-    inline large_vector<float> & get_pitch_lookup(void);
-    inline const large_vector<float> & get_pitch_lookup_smoothed(void) const;
-    inline large_vector<float> & get_pitch_lookup_smoothed(void);
-    inline const QColor & get_color(void) const;
-    inline const Array1d<float> & get_direct_input(void) const;
-    inline const Array1d<float> & get_filtered_input(void) const;
-    inline const Array1d<float> & get_nsdf_data(void) const;
-    inline const Array1d<float> & get_fft_data1(void) const;
-    inline Array1d<float> & get_fft_data1(void);
-    inline const Array1d<float> & get_fft_data2(void) const;
-    inline Array1d<float> & get_fft_data2(void);
+    inline const large_vector<float> & get_pitch_lookup() const;
+    inline large_vector<float> & get_pitch_lookup();
+    inline const large_vector<float> & get_pitch_lookup_smoothed() const;
+    inline large_vector<float> & get_pitch_lookup_smoothed();
+    inline const QColor & get_color() const;
+    inline const Array1d<float> & get_direct_input() const;
+    inline const Array1d<float> & get_filtered_input() const;
+    inline const Array1d<float> & get_nsdf_data() const;
+    inline const Array1d<float> & get_fft_data1() const;
+    inline Array1d<float> & get_fft_data1();
+    inline const Array1d<float> & get_fft_data2() const;
+    inline Array1d<float> & get_fft_data2();
 
-    inline Array1d<float> & get_cepstrum_data(void);
-    inline const Array1d<float> & get_detailed_pitch_data(void) const;
-    inline const Array1d<float> & get_detailed_pitch_data_smoothed(void) const;
-    inline const large_vector<NoteData> & get_note_data(void) const;
+    inline Array1d<float> & get_cepstrum_data();
+    inline const Array1d<float> & get_detailed_pitch_data() const;
+    inline const Array1d<float> & get_detailed_pitch_data_smoothed() const;
+    inline const large_vector<NoteData> & get_note_data() const;
     inline void apply_highpass_filter( const float * p_input
                                      , float * p_output
                                      , int p_n
                                      );
-    inline const Filter & get_pitch_small_smoothing_filter(void)const;
-    inline const Filter & get_pitch_big_smoothing_filter(void)const;
-    inline const double & get_rms_floor(void)const;
+    inline const Filter & get_pitch_small_smoothing_filter()const;
+    inline const Filter & get_pitch_big_smoothing_filter()const;
+    inline const double & get_rms_floor()const;
     inline void set_rms_floor(const double &);
 
-    inline const double & get_rms_ceiling(void)const;
+    inline const double & get_rms_ceiling()const;
     inline void set_rms_ceiling(const double &);
-    inline ZoomLookup & get_summary_zoom_lookup(void);
-    inline ZoomLookup & get_normal_zoom_lookup(void);
-    inline ZoomLookup & get_amplitude_zoom_lookup(void);
+    inline ZoomLookup & get_summary_zoom_lookup();
+    inline ZoomLookup & get_normal_zoom_lookup();
+    inline ZoomLookup & get_amplitude_zoom_lookup();
 
   private:
     SoundFile * m_parent;
@@ -300,7 +300,7 @@ class ChannelLocker
 {
   public:
     inline ChannelLocker(Channel * p_channel);
-    inline ~ChannelLocker(void);
+    inline ~ChannelLocker();
 
   private:
     Channel * m_channel;

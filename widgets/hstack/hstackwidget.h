@@ -30,7 +30,7 @@ class HStackWidget : public DrawWidget
 
   public:
     HStackWidget(QWidget * p_parent);
-    virtual ~HStackWidget(void);
+    virtual ~HStackWidget();
 
     void paintEvent(QPaintEvent *);
 

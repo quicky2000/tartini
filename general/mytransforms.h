@@ -29,8 +29,8 @@ class MyTransforms
 {  
   public:
 
-    MyTransforms(void);
-    virtual ~MyTransforms(void);
+    MyTransforms();
+    virtual ~MyTransforms();
 
     /**
        init() Initalises the parameters of a class instance. This must be called before use
@@ -46,7 +46,7 @@ class MyTransforms
              , int p_num_harmonics = 40
              );
 
-    void uninit(void);
+    void uninit();
 
     /**
         Performs an autocorrelation on the input
@@ -175,7 +175,7 @@ class MyTransforms
                                                    , int p_len
                                                    );
 
-    inline bool getEqualLoudness(void) const;
+    inline bool getEqualLoudness() const;
 
   private:
 

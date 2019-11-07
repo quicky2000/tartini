@@ -234,7 +234,7 @@ Channel::Channel( SoundFile * p_parent
 }
 
 //------------------------------------------------------------------------------
-Channel::~Channel(void)
+Channel::~Channel()
 {
     delete m_fast_smooth;
     delete m_mutex;
@@ -336,7 +336,7 @@ void Channel::processChunk(int p_chunk)
 }
 
 //------------------------------------------------------------------------------
-void Channel::reset(void)
+void Channel::reset()
 {
     std::fill(begin(), end(), 0.0f);
     std::fill(m_filtered_input.begin(), m_filtered_input.end(), 0.0f);
@@ -344,7 +344,7 @@ void Channel::reset(void)
 }
 
 //------------------------------------------------------------------------------
-QString Channel::getUniqueFilename(void) const
+QString Channel::getUniqueFilename() const
 {
     QString l_ending_star = (m_parent->saved()) ? QString("") : QString("*");
 
@@ -426,14 +426,14 @@ float Channel::averageMaxCorrelation( int p_begin
 }
 
 //------------------------------------------------------------------------------
-const AnalysisData * Channel::getActiveChannelCurrentChunkData(void)
+const AnalysisData * Channel::getActiveChannelCurrentChunkData()
 {
     Channel * l_active_channel = g_data->getActiveChannel();
     return (l_active_channel) ? l_active_channel->dataAtCurrentChunk() : NULL;
 }
 
 //------------------------------------------------------------------------------
-void Channel::clearFreqLookup(void)
+void Channel::clearFreqLookup()
 {
     ChannelLocker l_channel_locker(this);
     m_summary_zoom_lookup.clear();
@@ -441,14 +441,14 @@ void Channel::clearFreqLookup(void)
 }
 
 //------------------------------------------------------------------------------
-void Channel::clearAmplitudeLookup(void)
+void Channel::clearAmplitudeLookup()
 {
     ChannelLocker l_channel_locker(this);
     m_amplitude_zoom_lookup.clear();
 }
 
 //------------------------------------------------------------------------------
-void Channel::recalcScoreThresholds(void)
+void Channel::recalcScoreThresholds()
 {
     AnalysisData * l_analysis_data;
     ChannelLocker l_channel_locker(this);
@@ -718,7 +718,7 @@ void Channel::noteEnding(int p_chunk)
 }
 
 //------------------------------------------------------------------------------
-float Channel::calcOctaveEstimate(void)
+float Channel::calcOctaveEstimate()
 {
     Array1d<float> l_ag_data = m_nsdf_aggregate_data_scaled;
     std::vector<int> l_nsdf_aggregate_max_positions;
@@ -790,19 +790,19 @@ void Channel::recalcNotePitches(int p_chunk)
 }
 
 //------------------------------------------------------------------------------
-const NoteData * Channel::getLastNote(void) const
+const NoteData * Channel::getLastNote() const
 {
     return (m_note_data.empty()) ? NULL : &m_note_data.back();
 }
 
 //------------------------------------------------------------------------------
-NoteData * Channel::getLastNote(void)
+NoteData * Channel::getLastNote()
 {
     return (m_note_data.empty()) ? NULL : &m_note_data.back();
 }
 
 //------------------------------------------------------------------------------
-const NoteData * Channel::getCurrentNote(void) const
+const NoteData * Channel::getCurrentNote() const
 {
     const AnalysisData *l_analysis_data = dataAtCurrentChunk();
     if(l_analysis_data)

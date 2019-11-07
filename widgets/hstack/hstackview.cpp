@@ -97,13 +97,13 @@ HStackView::HStackView( int p_view_id
 }
 
 //------------------------------------------------------------------------------
-HStackView::~HStackView(void)
+HStackView::~HStackView()
 {
     delete m_h_stack_widget;
 }
 
 //------------------------------------------------------------------------------
-QSize HStackView::sizeHint(void) const
+QSize HStackView::sizeHint() const
 {
     return QSize(300, 200);
 }

@@ -17,31 +17,31 @@
 */
 
 //------------------------------------------------------------------------------
-int ScoreWidget::getStaveHeight(void)
+int ScoreWidget::getStaveHeight()
 {
     return toInt(m_scale_Y * (m_show_base_clef ? 16 : 8));
 }
 
 //------------------------------------------------------------------------------
-int ScoreWidget::getStaveCenterY(void)
+int ScoreWidget::getStaveCenterY()
 {
     return toInt(m_scale_Y * (m_show_base_clef ? 8 : 7));
 }
 
 //------------------------------------------------------------------------------
-QSize ScoreWidget::sizeHint(void) const
+QSize ScoreWidget::sizeHint() const
 {
     return QSize(300, 200);
 }
  
 //------------------------------------------------------------------------------
-double ScoreWidget::scaleX(void)
+double ScoreWidget::scaleX()
 {
     return m_scale_X;
 }
 
 //------------------------------------------------------------------------------
-double ScoreWidget::scaleY(void)
+double ScoreWidget::scaleY()
 {
     return m_scale_Y;
 }

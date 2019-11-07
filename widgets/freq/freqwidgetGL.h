@@ -43,7 +43,7 @@ class FreqWidgetGL : public QGLWidget
     FreqWidgetGL( QWidget *p_parent
                 , const char* p_name = NULL
                 );
-    virtual ~FreqWidgetGL(void);
+    virtual ~FreqWidgetGL();
 
   private:
 
@@ -54,7 +54,7 @@ class FreqWidgetGL : public QGLWidget
     , DragTimeBar = 3
     };
 
-    void initializeGL(void);
+    void initializeGL();
     void resizeGL( int p_w
                  , int p_h
                  );
@@ -93,8 +93,8 @@ class FreqWidgetGL : public QGLWidget
                         , int p_base_element
                         , const double & p_base_X
                         );
-    void paintGL(void);
-    inline QSize sizeHint(void)const;
+    void paintGL();
+    inline QSize sizeHint()const;
 
     /*
      * Changes the cursor icon to be one of the zoom ones depending on if the control or alt keys were pressed.
@@ -146,9 +146,9 @@ class FreqWidgetGL : public QGLWidget
                                , const double & p_zoom_Y
                                );
 
-    inline double leftTime(void)const;
-    inline double rightTime(void)const;
-    inline double timeWidth(void)const;
+    inline double leftTime()const;
+    inline double rightTime()const;
+    inline double timeWidth()const;
 
     int m_drag_mode;
     int m_mouse_X;

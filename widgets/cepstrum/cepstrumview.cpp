@@ -45,7 +45,7 @@ CepstrumView::CepstrumView( int p_view_id
 }
 
 //------------------------------------------------------------------------------
-CepstrumView::~CepstrumView(void)
+CepstrumView::~CepstrumView()
 {
     g_data->setDoingActiveCepstrum(false);
     delete m_cepstrum_widget;
@@ -58,7 +58,7 @@ void CepstrumView::resizeEvent(QResizeEvent *)
 }
 
 //------------------------------------------------------------------------------
-QSize CepstrumView::sizeHint(void) const
+QSize CepstrumView::sizeHint() const
 {
     return QSize(400, 128);
 }

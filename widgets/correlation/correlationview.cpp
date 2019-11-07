@@ -61,14 +61,14 @@ CorrelationView::CorrelationView( int p_view_ID
 }
 
 //------------------------------------------------------------------------------
-CorrelationView::~CorrelationView(void)
+CorrelationView::~CorrelationView()
 {
     g_data->setDoingActiveAnalysis(false);
     delete m_correlation_widget;
 }
 
 //------------------------------------------------------------------------------
-QSize CorrelationView::sizeHint(void) const
+QSize CorrelationView::sizeHint() const
 {
     return QSize(400, 128);
 }

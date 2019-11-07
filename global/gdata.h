@@ -95,15 +95,15 @@ class GData : public QObject
     , ALWAYS_SAVE
     };
 
-    GData(void);
-    virtual ~GData(void);
+    GData();
+    virtual ~GData();
 
     /**
        Empty methods just defined to avoid unused parameters warning
        assuming that will be removed at ocmpile time during optimisation
        phase
     */
-    inline void do_nothing(void)const;
+    inline void do_nothing()const;
     inline bool settingsContains(const QString & p_key)const;
     inline int getSettingsValue( const QString & p_key
                                , const int & p_default_value
@@ -132,39 +132,39 @@ class GData : public QObject
   inline void setSettingsValue( const QString & p_key
                               , const QSize & p_value
                               );
-  inline void clearSettings(void);
-  inline void syncSettings(void);
+  inline void clearSettings();
+  inline void syncSettings();
   inline int getSettingsIntValue(const QString & p_key)const;
   inline bool getSettingsBoolValue(const QString & p_key)const;
   inline QString getSettingsStringValue(const QString & p_key)const;
 
-  inline int getSoundMode(void)const;
+  inline int getSoundMode()const;
   inline void setSoundMode(const int & p_mode);
 
-  inline AudioStream * getAudioStream(void)const;
+  inline AudioStream * getAudioStream()const;
   inline void setAudioStream(AudioStream * p_audio_stream);
 
-  inline bool needUpdate(void)const;
+  inline bool needUpdate()const;
   inline void setNeedUpdate(bool p_need_update);
 
-  inline const AudioThread & getAudioThread(void)const;
-  inline void stopAndWaitAudioThread(void);
+  inline const AudioThread & getAudioThread()const;
+  inline void stopAndWaitAudioThread();
 
   inline void setRunning(int p_running);
-  inline int getRunning(void)const;
+  inline int getRunning()const;
 
-  inline size_t getChannelsSize(void)const;
+  inline size_t getChannelsSize()const;
   inline Channel * getChannelAt(size_t p_index)const;
 
-  inline const View & getView(void)const;
-  inline View & getView(void);
+  inline const View & getView()const;
+  inline View & getView();
   inline void setView(View & p_view);
 
   void setActiveChannel(Channel * p_to_active);
-  inline Channel * getActiveChannel(void);
-  SoundFile * getActiveSoundFile(void);
+  inline Channel * getActiveChannel();
+  SoundFile * getActiveSoundFile();
 
-  inline QPixmap * drawingBuffer(void);
+  inline QPixmap * drawingBuffer();
 
   /**
      Allows you to specify the leftmost time a file starts
@@ -179,22 +179,22 @@ class GData : public QObject
   /**
      Returns the leftmost time a file starts
   */
-  inline const double & leftTime(void)const; 
+  inline const double & leftTime()const;
 
   /**
      Returns the rightmost time a file stops
    */
-  inline const double & rightTime(void)const;
+  inline const double & rightTime()const;
 
   /**
      Returns the total number of seconds the files take up
   */
-  inline double totalTime(void)const;
+  inline double totalTime()const;
 
   /**
      Returns the top note pitch the programme allows
   */
-  inline const double & topPitch(void)const;
+  inline const double & topPitch()const;
 
   /**
      Allows you to specify the top note pitch the programme should allow
@@ -206,26 +206,26 @@ class GData : public QObject
   inline void setDoingActiveCepstrum(bool p_x);
   inline void setDoingDetailedPitch(bool p_x);
 
-  QColor getNextColor(void);
+  QColor getNextColor();
 
   int getAnalysisBufferSize(int p_rate);
   int getAnalysisStepSize(int p_rate);
 
-  inline bool doingHarmonicAnalysis(void)const;
-  inline bool doingAutoNoiseFloor(void)const;
-  inline bool doingEqualLoudness(void)const;
-  inline bool doingFreqAnalysis(void)const;
-  inline bool doingActiveAnalysis(void)const;
-  inline bool doingActiveFFT(void)const;
-  inline bool doingActiveCepstrum(void)const;
-  inline bool doingDetailedPitch(void)const;
-  inline bool doingActive(void)const;
-  inline bool vibratoSineStyle(void)const;
-  inline int amplitudeMode(void)const;
-  inline int pitchContourMode(void)const;
-  inline int fastUpdateSpeed(void)const;
-  inline int slowUpdateSpeed(void)const;
-  inline bool mouseWheelZooms(void)const;
+  inline bool doingHarmonicAnalysis()const;
+  inline bool doingAutoNoiseFloor()const;
+  inline bool doingEqualLoudness()const;
+  inline bool doingFreqAnalysis()const;
+  inline bool doingActiveAnalysis()const;
+  inline bool doingActiveFFT()const;
+  inline bool doingActiveCepstrum()const;
+  inline bool doingDetailedPitch()const;
+  inline bool doingActive()const;
+  inline bool vibratoSineStyle()const;
+  inline int amplitudeMode()const;
+  inline int pitchContourMode()const;
+  inline int fastUpdateSpeed()const;
+  inline int slowUpdateSpeed()const;
+  inline bool mouseWheelZooms()const;
 
   void setAmpThreshold( int p_mode
                       , int p_index
@@ -239,35 +239,35 @@ class GData : public QObject
                    );
   double ampWeight(int p_mode);
 
-  inline int analysisType(void)const;
-  inline bool polish(void)const;
-  inline bool showMeanVarianceBars(void)const;
-  inline int savingMode(void)const;
+  inline int analysisType()const;
+  inline bool polish()const;
+  inline bool showMeanVarianceBars()const;
+  inline int savingMode()const;
 
-  inline const QColor & backgroundColor(void)const;
-  inline const QColor & shading1Color(void)const;
-  inline const QColor & shading2Color(void)const;
+  inline const QColor & backgroundColor()const;
+  inline const QColor & shading1Color()const;
+  inline const QColor & shading2Color()const;
 
-  QString getFilenameString(void);
+  QString getFilenameString();
   void addFileToList(SoundFile * p_sound_file);
   void removeFileFromList(SoundFile * p_sound_file);
-  void clearFreqLookup(void);
-  void clearAmplitudeLookup(void);
-  void recalcScoreThresholds(void);
-  int getActiveIntThreshold(void);
+  void clearFreqLookup();
+  void clearAmplitudeLookup();
+  void recalcScoreThresholds();
+  int getActiveIntThreshold();
 
-  inline const double & dBFloor(void)const;
+  inline const double & dBFloor()const;
   inline void setDBFloor(double p_dB_floor);
-  inline const double & rmsFloor(void)const;
-  inline const double & rmsCeiling(void)const;
+  inline const double & rmsFloor()const;
+  inline const double & rmsCeiling()const;
   inline void set_rms_floor(const double &);
   inline void set_rms_ceiling(const double &);
 
-  inline int musicKey(void)const;
-  inline int musicKeyType(void)const;
-  inline int temperedType(void)const;
-  inline const double & freqA(void)const;
-  inline const double & semitoneOffset(void)const;
+  inline int musicKey()const;
+  inline int musicKeyType()const;
+  inline int temperedType()const;
+  inline const double & freqA()const;
+  inline const double & semitoneOffset()const;
 
 signals:
   void activeChannelChanged(Channel * p_active_channel);
@@ -277,8 +277,8 @@ signals:
   void timeRangeChanged( double p_left_time
                        , double p_right_time
                        );
-  void channelsChanged(void);
-  void onChunkUpdate(void);
+  void channelsChanged();
+  void onChunkUpdate();
 
   void musicKeyChanged(int p_key);
   void musicKeyTypeChanged(int p_type);
@@ -294,25 +294,25 @@ public slots:
   void setFreqA(double p_x);
   inline void setFreqA(int p_x);
 
-  void pauseSound(void);
+  void pauseSound();
   bool openPlayRecord( SoundFile * p_sound_file_rec
                      , SoundFile * p_soundfile_play
                      );
   bool playSound(SoundFile * p_sound_file);
-  void updateViewLeftRightTimes(void);
+  void updateViewLeftRightTimes();
   void updateActiveChunkTime(double p_time);
-  void updateQuickRefSettings(void);
+  void updateQuickRefSettings();
   
-  void beginning(void);
-  void rewind(void);
-  bool play(void);
-  void stop(void);
-  void end(void);
-  void fastforward(void);
+  void beginning();
+  void rewind();
+  bool play();
+  void stop();
+  void end();
+  void fastforward();
 
-  bool closeAllFiles(void);
-  void saveActiveFile(void);
-  void closeActiveFile(void);
+  bool closeAllFiles();
+  void saveActiveFile();
+  void closeActiveFile();
   QString saveFileAsk(QString p_old_filename);
   int saveFile( SoundFile * p_sound_file
               , QString p_new_filename
@@ -323,7 +323,7 @@ public slots:
                );
   void resetActiveIntThreshold(int p_threshold_percentage);
 
-  void doChunkUpdate(void);
+  void doChunkUpdate();
 
  private:
   QSettings * m_settings;

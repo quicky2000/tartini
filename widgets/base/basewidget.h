@@ -23,11 +23,11 @@ class BaseWidget : public DrawWidget
 
   public:
     BaseWidget(QWidget * p_parent);
-    virtual ~BaseWidget(void);
+    virtual ~BaseWidget();
 
     void paintEvent( QPaintEvent * );
 
-    QSize sizeHint(void) const;
+    QSize sizeHint() const;
 
   private:
     //data goes here

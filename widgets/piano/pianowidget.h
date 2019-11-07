@@ -29,19 +29,19 @@ public DrawWidget
   public:
 
     PianoWidget(QWidget * p_parent);
-    ~PianoWidget(void);
+    ~PianoWidget();
 
     void paintEvent(QPaintEvent *);
   
 
-    inline QSize sizeHint(void) const;
-    inline int currentNote(void);
+    inline QSize sizeHint() const;
+    inline int currentNote();
     void setCurrentNote( int p_n
                        , float p_amount_pressed = 1.0
                        );
-    inline void setNoNote(void);
-    inline bool isNote(void);
-    inline float amountPressed(void);
+    inline void setNoNote();
+    inline bool isNote();
+    inline float amountPressed();
     inline void setAmountPressed(float p_amount_pressed);
 
     QPixmap * m_buffer;

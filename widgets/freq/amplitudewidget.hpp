@@ -17,49 +17,49 @@
 */
 
 //------------------------------------------------------------------------------
-QSize AmplitudeWidget::sizeHint(void)const
+QSize AmplitudeWidget::sizeHint()const
 {
     return QSize(400, 100);
 }
 
 //------------------------------------------------------------------------------
-double AmplitudeWidget::leftTime(void)const
+double AmplitudeWidget::leftTime()const
 {
     return g_data->getView().viewLeft();
 }
 
 //------------------------------------------------------------------------------
-double AmplitudeWidget::rightTime(void)const
+double AmplitudeWidget::rightTime()const
 {
     return g_data->getView().viewRight();
 }
 
 //------------------------------------------------------------------------------
-double AmplitudeWidget::timeWidth(void)const
+double AmplitudeWidget::timeWidth()const
 {
     return g_data->getView().viewTotalTime();
 }
 
 //------------------------------------------------------------------------------
-const double & AmplitudeWidget::range(void)const
+const double & AmplitudeWidget::range()const
 {
     return m_range;
 }
 
 //------------------------------------------------------------------------------
-double AmplitudeWidget::maxOffset(void)const
+double AmplitudeWidget::maxOffset()const
 {
     return 1.0 - m_range;
 }
 
 //------------------------------------------------------------------------------
-const double & AmplitudeWidget::offset(void)const
+const double & AmplitudeWidget::offset()const
 {
     return m_offset;
 }
 
 //------------------------------------------------------------------------------
-const double & AmplitudeWidget::offsetInv(void)const
+const double & AmplitudeWidget::offsetInv()const
 {
     return m_offset_inv;
 }

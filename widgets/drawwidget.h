@@ -42,7 +42,7 @@ class DrawWidget : public QWidget
 
 public:
   DrawWidget(QWidget * p_parent, const char * p_name);
-  virtual ~DrawWidget(void);
+  virtual ~DrawWidget();
 
 
   /**
@@ -78,10 +78,10 @@ public:
   
   void beginDrawing(bool p_clear_background_=true);
   void endDrawing(bool p_draw_to_screen_=true);
-  void clearBackground(void);
+  void clearBackground();
   void fillBackground(const QColor & p_color);
-  void checkSize(void);
-  void drawToScreen(void);
+  void checkSize();
+  void drawToScreen();
 
   /**
      calculates elements in the zoom lookup table
@@ -103,7 +103,7 @@ public:
 		 );
   
  protected:
-  inline QPainter & get_painter(void);
+  inline QPainter & get_painter();
  private:
   static int m_line_width;
   static int m_line_top_half_width;

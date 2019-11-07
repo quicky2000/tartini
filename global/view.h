@@ -30,32 +30,32 @@ class View : public QObject
 
   public:
 
-    View(void);
-    virtual ~View(void);
+    View();
+    virtual ~View();
 
-    void init(void); //please call this after a window has been created
+    void init(); //please call this after a window has been created
 
     // Relates to the views
 
     /**
        Returns the current time in seconds
     */
-    inline const double & currentTime(void)const;
+    inline const double & currentTime()const;
 
     /**
        Returns how long the view is in seconds
     */
-    inline double viewWidth(void)const;
+    inline double viewWidth()const;
 
     /**
        Returns how many semitones fit in the view
     */
-    inline double viewHeight(void)const;
+    inline double viewHeight()const;
 
     /**
        Returns how many seconds are visible before the current time
     */
-    inline const double & viewOffset(void)const;
+    inline const double & viewOffset()const;
 
     /**
        Allows you to specify how many seconds should be visible before the current time
@@ -65,7 +65,7 @@ class View : public QObject
     /**
        Returns the lowest note visible in the view
     */
-    inline const double & viewBottom(void)const;
+    inline const double & viewBottom()const;
 
     /**
        Allows you to specify the lowest note that should be visible in the view
@@ -76,22 +76,22 @@ class View : public QObject
     /**
        Returns the time at the left edge of the view
     */
-    inline double viewLeft(void)const;
+    inline double viewLeft()const;
 
     /**
        Returns the time at the right edge of the view
     */
-    inline double viewRight(void)const;
+    inline double viewRight()const;
 
     /**
        Returns how long the view is in seconds
     */
-    inline double viewTotalTime(void)const;
+    inline double viewTotalTime()const;
 
     /**
        Returns how many semitones are visible in the view
     */
-    inline double viewTop(void)const;
+    inline double viewTop()const;
 
     /**
        Returns the screen pixel for the time t will be drawn
@@ -103,15 +103,15 @@ class View : public QObject
     /**
        Returns the x zoom factor in seconds per pixel
     */
-    inline const double & zoomX(void)const;
+    inline const double & zoomX()const;
 
     /**
        Returns the y zoom factor in semitones per pixel
     */
-    inline const double & zoomY(void)const;
+    inline const double & zoomY()const;
   
-    inline const double & logZoomX(void)const;
-    inline const double & logZoomY(void)const;
+    inline const double & logZoomX()const;
+    inline const double & logZoomY()const;
 
     void setPixelHeight(int p_h);
     void setPixelWidth(int p_w);
@@ -119,12 +119,12 @@ class View : public QObject
     
   public slots:
 
-    void doUpdate(void);
-    void doSlowUpdate(void);
-    void doFastUpdate(void);
-    void newUpdate(void);
-    void nextFastUpdate(void);
-    void nextSlowUpdate(void);
+    void doUpdate();
+    void doSlowUpdate();
+    void doFastUpdate();
+    void newUpdate();
+    void nextFastUpdate();
+    void nextSlowUpdate();
     void setCurrentTimeRaw(double p_x);
     void setCurrentTime(double p_x);
     void changeViewX(const double & p_x);
@@ -138,17 +138,17 @@ class View : public QObject
                        , int p_fixed_y
                        );
   
-    void doAutoFollowing(void);
-    inline bool autoFollow(void)const;
+    void doAutoFollowing();
+    inline bool autoFollow()const;
     void setAutoFollow(bool);
     void setBackgroundShading(bool);
-    inline bool backgroundShading(void)const;
+    inline bool backgroundShading()const;
   
   signals:
 
     void onSlowUpdate(double p_current_time);
     void onFastUpdate(double p_current_time);
-    void viewChanged(void);
+    void viewChanged();
     void scrollableYChanged(double p_x);
     void currentTimeChanged(double p_x);
     void viewBottomChanged(double p_x);

@@ -30,11 +30,11 @@ class DebugView: public ViewWidget
     DebugView( int p_view_id
              , QWidget *p_parent = 0
              );
-    virtual ~DebugView(void);
+    virtual ~DebugView();
 
     void resizeEvent(QResizeEvent *);
 
-    QSize sizeHint(void) const;
+    QSize sizeHint() const;
 
   private:
     DebugWidget *m_debug_widget;

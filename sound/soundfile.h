@@ -33,11 +33,11 @@ extern const double g_v32;
 class SoundFile
 {
   public:
-    SoundFile(void);
-    ~SoundFile(void);
+    SoundFile();
+    ~SoundFile();
 
     void setFilename(const char * p_filename);
-    inline int numChannels(void) const;
+    inline int numChannels() const;
     bool openRead(const char * p_filename);
     bool openWrite( const char * p_filename
                   , int p_rate
@@ -53,26 +53,26 @@ class SoundFile
        A progress bar is displayed in the toolbar, because this can
        be time consuming.
     */
-    void preProcess(void);
+    void preProcess();
 
-    void rec2play(void);
+    void rec2play();
 
     /**
        Lock the mutex's of all the channels
     */
-    void lock(void);
+    void lock();
 
     /**
        Unlock the mutex's of all the channels
 
     */
-    void unlock(void);
+    void unlock();
 
     /**
        Plays one chunk of sound to the associated stream
        @return true on success. false for end of file or error
     */
-    bool playChunk(void);
+    bool playChunk();
 
     void recordChunk(int p_n);
 
@@ -89,47 +89,47 @@ class SoundFile
        Increment the chunkNum.
     */
     // Check if really used
-    void processNewChunk(void);
+    void processNewChunk();
     // End of check
 
-    inline const double & startTime(void) const;
+    inline const double & startTime() const;
     // Check if really used
     inline void setStartTime(const double & p_start_time);
     // End of check
 
-    inline int currentStreamChunk(void) const;
-    inline int currentRawChunk(void) const;
-    inline int currentChunk(void) const;
+    inline int currentStreamChunk() const;
+    inline int currentRawChunk() const;
+    inline int currentChunk() const;
 
-    inline int offset(void) const;
-    inline double timePerChunk(void) const;
+    inline int offset() const;
+    inline double timePerChunk() const;
     inline int chunkAtTime(const double & p_time) const;
     inline double chunkFractionAtTime(const double & p_time) const;
     inline double timeAtChunk(int p_chunk) const;
-    inline double timeAtCurrentChunk(void) const;
-    inline int chunkAtCurrentTime(void) const;
+    inline double timeAtCurrentChunk() const;
+    inline int chunkAtCurrentTime() const;
     void jumpToChunk(int p_chunk);
     inline void jumpToTime(const double & p_time);
   
-    inline int rate(void) const;
-    inline int bits(void) const;
-    inline int framesPerChunk(void) const;
-    int bufferSize(void) const;
-    int totalChunks(void) const;
+    inline int rate() const;
+    inline int bits() const;
+    inline int framesPerChunk() const;
+    int bufferSize() const;
+    int totalChunks() const;
 
-    inline bool saved(void) const;
+    inline bool saved() const;
     inline void setSaved(bool p_new_state);
-    inline bool doingDetailedPitch(void) const;
+    inline bool doingDetailedPitch() const;
 
-    inline bool isFirstTimeThrough(void) const;
+    inline bool isFirstTimeThrough() const;
     inline void setFirstTimeThrough(bool);
-    inline const char * getFileName(void) const;
+    inline const char * getFileName() const;
     inline void calculateAnalysisData( int p_chunk
                                      , Channel *p_channel
                                      );
     inline int getChannelIndex(const Channel &)const;
     inline Channel & getChannel(int p_index);
-    inline SoundFileStream & getStream(void);
+    inline SoundFileStream & getStream();
 
   protected:
 
@@ -142,16 +142,16 @@ class SoundFile
     /**
        free up all the memory of everything used
     */
-    void uninit(void);
+    void uninit();
     void setFilteredFilename(const char * p_filtered_filename);
-    QString getNextTempFilename(void) const;
+    QString getNextTempFilename() const;
 
     // Check if really used
-    void close(void);
+    void close();
     // End of check
 
     int readN(int p_n);
-    bool setupPlayChunk(void);
+    bool setupPlayChunk();
     void finishRecordChunk(int p_n);
     void applyEqualLoudnessFilter(int p_n);
 
@@ -167,7 +167,7 @@ class SoundFile
 
     inline void setCurrentChunk(int p_x);
     // Check if really used
-    inline void incrementChunkNum(void);
+    inline void incrementChunkNum();
     // End of check
 
     /**
@@ -180,10 +180,10 @@ class SoundFile
     inline void setFramesPerChunk(int p_step_size);
 
     // Check if really used
-    bool inFile(void) const; /**< Returns false if past end of file */
+    bool inFile() const; /**< Returns false if past end of file */
     // End of check
 
-    inline bool equalLoudness(void) const;
+    inline bool equalLoudness() const;
 
     /**
        Waits until there is n frames of data to read from s,

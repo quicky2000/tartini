@@ -43,29 +43,29 @@ class MyScrollBar : public QWidget
                ,const char * name = 0
                );
 
-    virtual ~MyScrollBar(void);
+    virtual ~MyScrollBar();
 
-    QSize sizeHint(void) const;
+    QSize sizeHint() const;
 
     void resizeEvent(QResizeEvent *q);
 
     inline
-    double minValue(void) const;
+    double minValue() const;
 
     inline
-    double maxValue(void) const;
+    double maxValue() const;
 
     inline
-    double lineStep(void) const;
+    double lineStep() const;
 
     inline
-    double pageStep(void) const;
+    double pageStep() const;
 
     inline
-    double value(void) const;
+    double value() const;
 
     inline
-    double step(void) const;
+    double step() const;
 
   public slots:
 
@@ -87,7 +87,7 @@ class MyScrollBar : public QWidget
 
     void sliderMoving(int p_value);
 
-    void sliderMoving(void);
+    void sliderMoving();
 
     void setStep(double p_step);
 

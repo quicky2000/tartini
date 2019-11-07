@@ -44,7 +44,7 @@ Q_OBJECT
     FreqDrawWidget( QWidget * p_parent
                   , const char* p_name = 0
                   );
-    virtual ~FreqDrawWidget(void);
+    virtual ~FreqDrawWidget();
 
     static
     void drawReferenceLines( QPaintDevice & p_paint_device
@@ -56,7 +56,7 @@ Q_OBJECT
                            , int p_view_type
                            );
     void paintEvent(QPaintEvent *);
-    QSize sizeHint(void) const;
+    QSize sizeHint() const;
 
   private:
 

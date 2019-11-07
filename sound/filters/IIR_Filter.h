@@ -30,7 +30,7 @@ class IIR_Filter : public Filter
 
   public:
 
-    inline IIR_Filter(void) { }
+    inline IIR_Filter() { }
 
     /**
        Create an IIR Filter from the coeff's a direct form II transposed structure
@@ -41,7 +41,7 @@ class IIR_Filter : public Filter
               , int p_n
               , int p_m = -1
               );
-    inline ~IIR_Filter(void) { }
+    inline ~IIR_Filter() { }
 
 
     /**
@@ -53,7 +53,7 @@ class IIR_Filter : public Filter
              , int p_n
              , int p_m = -1
              );
-    void print(void);
+    void print();
 
     /**
        Apply the filter to a block of data
@@ -69,7 +69,7 @@ class IIR_Filter : public Filter
     /**
        Resets the filter back to an initial state of zeros
     */
-    void reset(void);
+    void reset();
     void getState(FilterState * p_filter_state) const;
     void setState(const FilterState * p_filter_state);
 

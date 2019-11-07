@@ -35,13 +35,13 @@ class FreqView: public ViewWidget
     FreqView( int p_view_id
             , QWidget *p_parent = NULL
             );
-    virtual ~FreqView(void);
+    virtual ~FreqView();
 
-    QSize sizeHint(void) const;
+    QSize sizeHint() const;
 
   public slots:
-    void zoomIn(void);
-    void zoomOut(void);
+    void zoomIn();
+    void zoomOut();
     void setAmplitudeZoom(double);
 
   private:

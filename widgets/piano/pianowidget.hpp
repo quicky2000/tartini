@@ -18,31 +18,31 @@
 
 
 //------------------------------------------------------------------------------
-QSize PianoWidget::sizeHint(void) const
+QSize PianoWidget::sizeHint() const
 {
     return QSize(165, 100);
 }
 
 //------------------------------------------------------------------------------
-int PianoWidget::currentNote(void)
+int PianoWidget::currentNote()
 {
     return m_current_note;
 }
 
 //------------------------------------------------------------------------------
-void PianoWidget::setNoNote(void)
+void PianoWidget::setNoNote()
 {
     m_current_note = -1;
 }
 
 //------------------------------------------------------------------------------
-bool PianoWidget::isNote(void)
+bool PianoWidget::isNote()
 {
     return m_current_note >= 0;
 }
 
 //------------------------------------------------------------------------------
-float PianoWidget::amountPressed(void)
+float PianoWidget::amountPressed()
 {
     return m_amount_pressed;
 }

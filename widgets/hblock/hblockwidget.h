@@ -28,11 +28,11 @@ class HBlockWidget : public DrawWidget
 
   public:
     HBlockWidget(QWidget *p_parent);
-    virtual ~HBlockWidget(void);
+    virtual ~HBlockWidget();
 
     void paintEvent(QPaintEvent * );
 
-    QSize sizeHint(void) const;
+    QSize sizeHint() const;
 
   private:
 };

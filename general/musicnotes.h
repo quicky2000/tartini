@@ -68,8 +68,8 @@ class MusicScale
             , MelodicMinor
             };
 
-    inline MusicScale(void);
-    ~MusicScale(void);
+    inline MusicScale();
+    ~MusicScale();
 
     void addScale( const char *p_name
                  , const int * p_notes
@@ -77,11 +77,11 @@ class MusicScale
                  , int p_semitone_offset
                  );
 
-    inline int size(void)const;
+    inline int size()const;
     inline int note(int j)const;
     inline bool hasSemitone(int p_j)const;
-    inline const char * name(void)const;
-    inline int semitoneOffset(void)const;
+    inline const char * name()const;
+    inline int semitoneOffset()const;
 
   private:
 
@@ -98,8 +98,8 @@ class MusicScale
 class MusicKey
 {
   public:
-    inline MusicKey(void);
-    ~MusicKey(void);
+    inline MusicKey();
+    ~MusicKey();
 
     /**
        @param a the array of ratios
@@ -132,8 +132,8 @@ class MusicKey
                        );
 
     void setName(const char * p_name);
-    inline const char * name(void)const;
-    inline int size(void) const;
+    inline const char * name()const;
+    inline int size() const;
     inline double noteOffset(int p_j) const;
     inline int noteType(int p_j) const;
     int nearestNoteIndex(const double & p_x)const;
@@ -151,7 +151,7 @@ class MusicKey
 
 };
 
-void initMusicStuff(void);
+void initMusicStuff();
 
 #define NUM_MUSIC_KEYS 12
 extern std::vector<MusicKey> g_music_keys;

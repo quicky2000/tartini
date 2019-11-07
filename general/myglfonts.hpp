@@ -30,31 +30,31 @@ MyGLChar::MyGLChar( int p_width
 }
 
 //------------------------------------------------------------------------------
-const GLubyte * MyGLChar::data(void) const
+const GLubyte * MyGLChar::data() const
 {
     return m_data;
 }
 
 //------------------------------------------------------------------------------
-int MyGLChar::w(void) const
+int MyGLChar::w() const
 {
     return m_width;
 }
 
 //------------------------------------------------------------------------------
-int MyGLChar::h(void) const
+int MyGLChar::h() const
 {
     return m_height;
 }
 
 //------------------------------------------------------------------------------
-int MyGLChar::w_raw(void) const
+int MyGLChar::w_raw() const
 {
     return m_width_raw;
 }
 
 //------------------------------------------------------------------------------
-MyGLFont::MyGLFont(void)
+MyGLFont::MyGLFont()
 : m_been_init(false)
 {
 }

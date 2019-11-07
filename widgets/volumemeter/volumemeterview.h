@@ -26,11 +26,11 @@ class VolumeMeterView: public ViewWidget
 
  public:
   VolumeMeterView(int viewID_, QWidget * parent = NULL);
-  virtual ~VolumeMeterView(void);
+  virtual ~VolumeMeterView();
 
   void resizeEvent(QResizeEvent *);
 
-  QSize sizeHint(void) const;
+  QSize sizeHint() const;
     
  private:
   VolumeMeterWidget *m_volume_meter_widget;

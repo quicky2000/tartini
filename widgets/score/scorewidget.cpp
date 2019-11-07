@@ -73,7 +73,7 @@ ScoreWidget::ScoreWidget(QWidget *p_parent)
 }
 
 //------------------------------------------------------------------------------
-ScoreWidget::~ScoreWidget(void)
+ScoreWidget::~ScoreWidget()
 {
 }
 

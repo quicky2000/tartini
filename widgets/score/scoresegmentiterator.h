@@ -41,19 +41,19 @@ class ScoreSegmentIterator
      move to the next score segment
      @return true, if their was another score segment
     */
-    bool next(void);
-    inline bool isValid(void);
+    bool next();
+    inline bool isValid();
 
-    inline double leftTime(void);
-    inline double rightTime(void);
-    inline double leftX(void);
-    inline int lineCenterY(void);
-    inline int staveTop(void);
-    inline int staveBottom(void);
-    double widthX(void);
-    inline double curTime(void);
-    inline int curPage(void);
-    inline int numPages(void);
+    inline double leftTime();
+    inline double rightTime();
+    inline double leftX();
+    inline int lineCenterY();
+    inline int staveTop();
+    inline int staveBottom();
+    double widthX();
+    inline double curTime();
+    inline int curPage();
+    inline int numPages();
     inline bool contains(double p_t);
 
   private:

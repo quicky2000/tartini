@@ -68,7 +68,7 @@ WaveView::WaveView(int p_view_ID
 }
 
 //------------------------------------------------------------------------------
-WaveView::~WaveView(void)
+WaveView::~WaveView()
 {
 }
 
@@ -79,7 +79,7 @@ void WaveView::resizeEvent(QResizeEvent *)
 }
 
 //------------------------------------------------------------------------------
-QSize WaveView::sizeHint(void) const
+QSize WaveView::sizeHint() const
 {
     return QSize(400, 128);
 }

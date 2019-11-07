@@ -30,11 +30,11 @@ class HCircleWidget : public DrawWidget
 
   public:
     HCircleWidget(QWidget *p_parent);
-    virtual ~HCircleWidget(void);
+    virtual ~HCircleWidget();
 
     void paintEvent(QPaintEvent *);
  
-    QSize sizeHint(void) const;
+    QSize sizeHint() const;
   
   public slots:
     void setZoom(double);

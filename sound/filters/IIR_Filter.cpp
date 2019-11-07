@@ -59,14 +59,14 @@ void IIR_Filter::init( double * p_b
 }
 
 //------------------------------------------------------------------------------
-void IIR_Filter::reset(void)
+void IIR_Filter::reset()
 {
     m_x.fill(0.0);
     m_y.fill(0.0);
 }
 
 //------------------------------------------------------------------------------
-void IIR_Filter::print(void)
+void IIR_Filter::print()
 {
     int l_j;
     for(l_j = 0; l_j < m_b.size(); ++l_j)

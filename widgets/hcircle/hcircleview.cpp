@@ -119,13 +119,13 @@ HCircleView::HCircleView( int p_view_id
 }
 
 //------------------------------------------------------------------------------
-HCircleView::~HCircleView(void)
+HCircleView::~HCircleView()
 {
     delete m_h_circle_widget;
 }
 
 //------------------------------------------------------------------------------
-QSize HCircleView::sizeHint(void) const
+QSize HCircleView::sizeHint() const
 {
     return QSize(300, 200);
 }

@@ -33,7 +33,7 @@ WaveWidget::WaveWidget(QWidget *parent)
 }
 
 //------------------------------------------------------------------------------
-WaveWidget::~WaveWidget(void)
+WaveWidget::~WaveWidget()
 {
 }
 
@@ -153,13 +153,13 @@ void WaveWidget::paintEvent(QPaintEvent *)
 }
 
 //------------------------------------------------------------------------------
-QSize WaveWidget::sizeHint(void) const
+QSize WaveWidget::sizeHint() const
 {
     return QSize(500, 128);
 }
 
 //------------------------------------------------------------------------------
-const double & WaveWidget::zoomY(void) const
+const double & WaveWidget::zoomY() const
 {
     return m_zoom_Y;
 }

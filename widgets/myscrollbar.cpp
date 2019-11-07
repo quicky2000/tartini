@@ -63,13 +63,13 @@ MyScrollBar::MyScrollBar(double p_min_value
 }
 
 //------------------------------------------------------------------------------
-MyScrollBar::~MyScrollBar(void)
+MyScrollBar::~MyScrollBar()
 {
     delete m_bar;
 }
 
 //------------------------------------------------------------------------------
-QSize MyScrollBar::sizeHint(void) const
+QSize MyScrollBar::sizeHint() const
 {
     return m_bar->sizeHint();
 }

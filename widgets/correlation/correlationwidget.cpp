@@ -34,7 +34,7 @@ CorrelationWidget::CorrelationWidget(QWidget * p_parent)
 }
 
 //------------------------------------------------------------------------------
-CorrelationWidget::~CorrelationWidget(void)
+CorrelationWidget::~CorrelationWidget()
 {
 }
 
@@ -211,7 +211,7 @@ void CorrelationWidget::setAggregateMode(int p_mode)
 }
 
 //------------------------------------------------------------------------------
-QSize CorrelationWidget::sizeHint(void) const
+QSize CorrelationWidget::sizeHint() const
 {
     return QSize(500, 128);
 }

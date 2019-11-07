@@ -44,7 +44,7 @@
 typedef unsigned char byte;
 
 //------------------------------------------------------------------------------
-SoundFile::SoundFile(void)
+SoundFile::SoundFile()
 {
     m_filename = NULL;
     m_filtered_filename = NULL;
@@ -65,14 +65,14 @@ SoundFile::SoundFile(void)
 }
 
 //------------------------------------------------------------------------------
-SoundFile::~SoundFile(void)
+SoundFile::~SoundFile()
 {
     uninit();
     delete m_mutex;
 }
 
 //------------------------------------------------------------------------------
-void SoundFile::uninit(void)
+void SoundFile::uninit()
 {
     if(g_data->getAudioThread().playSoundFile() == this || g_data->getAudioThread().recSoundFile() == this)
     {
@@ -143,7 +143,7 @@ void SoundFile::setFilteredFilename(const char * p_filtered_filename)
 }
 
 //------------------------------------------------------------------------------
-QString SoundFile::getNextTempFilename(void) const
+QString SoundFile::getNextTempFilename() const
 {
     QString l_temp_file_folder = g_data->getSettingsValue("General/tempFilesFolder", QDir::toNativeSeparators(QDir::currentPath()));
     QDir l_dir = QDir(l_temp_file_folder);
@@ -336,7 +336,7 @@ bool SoundFile::openWrite( const char * p_filename
 }
 
 //------------------------------------------------------------------------------
-void SoundFile::rec2play(void)
+void SoundFile::rec2play()
 {
     m_stream->close();
     m_stream->open_read(m_filename);
@@ -348,7 +348,7 @@ void SoundFile::rec2play(void)
 }
 
 //------------------------------------------------------------------------------
-void SoundFile::lock(void)
+void SoundFile::lock()
 {
     m_mutex->lock();
     for(int l_j = 0; l_j < numChannels(); l_j++)
@@ -358,7 +358,7 @@ void SoundFile::lock(void)
 }
 
 //------------------------------------------------------------------------------
-void SoundFile::unlock(void)
+void SoundFile::unlock()
 {
     for(int l_j = 0; l_j < numChannels(); l_j++)
     {
@@ -368,7 +368,7 @@ void SoundFile::unlock(void)
 }
 
 //------------------------------------------------------------------------------
-bool SoundFile::playChunk(void)
+bool SoundFile::playChunk()
 {
     if(!setupPlayChunk())
     {
@@ -451,7 +451,7 @@ void SoundFile::finishRecordChunk(int p_n)
 }
 
 //------------------------------------------------------------------------------
-bool SoundFile::setupPlayChunk(void)
+bool SoundFile::setupPlayChunk()
 {
     int l_c;
     int l_n = framesPerChunk();
@@ -634,7 +634,7 @@ int SoundFile::readN(int p_n)
 }
 
 //------------------------------------------------------------------------------
-void SoundFile::preProcess(void)
+void SoundFile::preProcess()
 {
     g_data->setDoingActiveAnalysis(true);
     myassert(m_first_time_through == true);
@@ -728,34 +728,34 @@ void SoundFile::jumpToChunk(int p_chunk)
 }
 
 //------------------------------------------------------------------------------
-int SoundFile::bufferSize(void) const
+int SoundFile::bufferSize() const
 {
     myassert(!m_channels.isEmpty());
     return m_channels(0)->size();
 }
 
 //------------------------------------------------------------------------------
-int SoundFile::totalChunks(void) const
+int SoundFile::totalChunks() const
 {
     myassert(!m_channels.isEmpty());
     return m_channels(0)->totalChunks();
 }
 
 //------------------------------------------------------------------------------
-bool SoundFile::inFile(void) const
+bool SoundFile::inFile() const
 {
     int l_c = currentChunk();
     return (l_c >= 0 && l_c < totalChunks());
 }
 
 //------------------------------------------------------------------------------
-void SoundFile::close(void)
+void SoundFile::close()
 {
     uninit();
 }
 
 //------------------------------------------------------------------------------
-void SoundFile::processNewChunk(void)
+void SoundFile::processNewChunk()
 {
     FilterState l_filter_state;
     for(int l_j = 0; l_j < numChannels(); l_j++)

@@ -131,7 +131,7 @@ HTrackView::HTrackView( int p_view_ID
 }
 
 //------------------------------------------------------------------------------
-HTrackView::~HTrackView(void)
+HTrackView::~HTrackView()
 {
     delete m_h_track_widget;
 }
@@ -150,7 +150,7 @@ void HTrackView::setPeakThreshold(int value)
 }
 
 //------------------------------------------------------------------------------
-QSize HTrackView::sizeHint(void) const
+QSize HTrackView::sizeHint() const
 {
     return QSize(500, 400);
 }

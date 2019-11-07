@@ -44,7 +44,7 @@ VibratoSpeedWidget::VibratoSpeedWidget(QWidget * p_parent)
 }
 
 //------------------------------------------------------------------------------
-VibratoSpeedWidget::~VibratoSpeedWidget(void)
+VibratoSpeedWidget::~VibratoSpeedWidget()
 {
     // Remove display lists
     makeCurrent();
@@ -56,7 +56,7 @@ VibratoSpeedWidget::~VibratoSpeedWidget(void)
 }
 
 //------------------------------------------------------------------------------
-void VibratoSpeedWidget::initializeGL(void)
+void VibratoSpeedWidget::initializeGL()
 {
     QColor l_bg = g_data->backgroundColor();
     glClearColor( double(l_bg.red()) / 256.0, double(l_bg.green()) / 256.0, double(l_bg.blue()) / 256.0, 0.0 );
@@ -394,7 +394,7 @@ void VibratoSpeedWidget::resizeGL(int p_width
 }
 
 //------------------------------------------------------------------------------
-void VibratoSpeedWidget::paintGL(void)
+void VibratoSpeedWidget::paintGL()
 {
     QColor l_bg = g_data->backgroundColor();
     glClearColor( double(l_bg.red()) / 256.0, double(l_bg.green()) / 256.0, double(l_bg.blue()) / 256.0, 0.0 );
@@ -451,7 +451,7 @@ void VibratoSpeedWidget::paintGL(void)
 }
 
 //------------------------------------------------------------------------------
-void VibratoSpeedWidget::doUpdate(void)
+void VibratoSpeedWidget::doUpdate()
 {
     Channel * l_active_channel = g_data->getActiveChannel();
 
@@ -690,7 +690,7 @@ void VibratoSpeedWidget::setUseProny(bool p_value)
 }
 
 //------------------------------------------------------------------------------
-QSize VibratoSpeedWidget::minimumSizeHint(void) const
+QSize VibratoSpeedWidget::minimumSizeHint() const
 {
     return QSize(100, 75);
 }

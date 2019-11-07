@@ -29,7 +29,7 @@
 #include "channel.h"
 
 //------------------------------------------------------------------------------
-AudioThread::AudioThread(void)
+AudioThread::AudioThread()
 : m_play_sound_file(NULL)
 , m_rec_sound_file(NULL)
 , m_sleep_count(0)
@@ -38,7 +38,7 @@ AudioThread::AudioThread(void)
 }
 
 //------------------------------------------------------------------------------
-void AudioThread::start(void)
+void AudioThread::start()
 {
     fprintf(stderr, "Warning - audio thread created with no sound file specified.\n");
     m_play_sound_file = NULL;
@@ -70,20 +70,20 @@ void AudioThread::start( SoundFile *p_s_play
 }
 
 //------------------------------------------------------------------------------
-void AudioThread::stop(void)
+void AudioThread::stop()
 {
     m_stopping = true;
 }
 
 //------------------------------------------------------------------------------
-void AudioThread::stopAndWait(void)
+void AudioThread::stopAndWait()
 {
     stop();
     wait();
 }
 
 //------------------------------------------------------------------------------
-void AudioThread::run(void)
+void AudioThread::run()
 {
 #ifndef WINDOWS
     //setup stuff for multi-threaded profiling
@@ -145,7 +145,7 @@ void AudioThread::run(void)
 }
 
 //------------------------------------------------------------------------------
-int AudioThread::doStuff(void)
+int AudioThread::doStuff()
 {
     int l_force_update = false;
     if(g_data->getRunning() == STREAM_PAUSE)

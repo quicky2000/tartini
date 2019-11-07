@@ -31,14 +31,14 @@ class PianoView : public ViewWidget
     PianoView( int p_view_id
              , QWidget *p_parent = 0
              );
-    virtual ~PianoView(void);
+    virtual ~PianoView();
 
     void resizeEvent(QResizeEvent *);
 
-    QSize sizeHint(void) const;
+    QSize sizeHint() const;
 
   public slots:
-    void changeKey(void);
+    void changeKey();
 
   private:
     PianoWidget * m_piano_widget;

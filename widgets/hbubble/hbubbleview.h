@@ -29,9 +29,9 @@ class HBubbleView : public ViewWidget
   HBubbleView( int p_view_id
              , QWidget * p_parent = NULL
              );
-  virtual ~HBubbleView(void);
+  virtual ~HBubbleView();
 
-  QSize sizeHint(void) const;
+  QSize sizeHint() const;
 
   private:
     void resizeEvent(QResizeEvent *);

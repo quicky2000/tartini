@@ -35,13 +35,13 @@
 #include <complex>
 
 //------------------------------------------------------------------------------
-MyTransforms::MyTransforms(void)
+MyTransforms::MyTransforms()
 {
     m_been_init = false;
 }
   
 //------------------------------------------------------------------------------
-MyTransforms::~MyTransforms(void)
+MyTransforms::~MyTransforms()
 {
     uninit();
 }
@@ -108,7 +108,7 @@ void MyTransforms::init( int p_n
 }
 
 //------------------------------------------------------------------------------
-void MyTransforms::uninit(void)
+void MyTransforms::uninit()
 {
     if(m_been_init)
     {

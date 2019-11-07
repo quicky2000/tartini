@@ -17,49 +17,49 @@
 */
 
 //------------------------------------------------------------------------------
-ZoomElement::ZoomElement(void)
+ZoomElement::ZoomElement()
 : m_is_valid(false)
 {
 }
 
 //------------------------------------------------------------------------------
-float ZoomElement::low(void) const
+float ZoomElement::low() const
 {
     return m_low;
 }
 
 //------------------------------------------------------------------------------
-float ZoomElement::high(void) const
+float ZoomElement::high() const
 {
     return m_high;
 }
 
 //------------------------------------------------------------------------------
-float ZoomElement::corr(void) const
+float ZoomElement::corr() const
 {
     return m_corr;
 }
 
 //------------------------------------------------------------------------------
-const QColor & ZoomElement::color(void) const
+const QColor & ZoomElement::color() const
 {
     return m_color;
 }
 
 //------------------------------------------------------------------------------
-int ZoomElement::noteIndex(void) const
+int ZoomElement::noteIndex() const
 {
     return m_note_index;
 }
 
 //------------------------------------------------------------------------------
-int ZoomElement::midChunk(void) const
+int ZoomElement::midChunk() const
 {
     return m_mid_chunk;
 }
 
 //------------------------------------------------------------------------------
-bool ZoomElement::isValid(void) const
+bool ZoomElement::isValid() const
 {
     return m_is_valid;
 }
@@ -83,7 +83,7 @@ void ZoomElement::set( float p_low
 }
 
 //------------------------------------------------------------------------------
-int ZoomLookup::size(void) const
+int ZoomLookup::size() const
 {
     return m_size;
 }

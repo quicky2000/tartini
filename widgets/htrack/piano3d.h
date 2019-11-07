@@ -39,12 +39,12 @@ class Piano3d
     Piano3d( int p_num_keys = 85
            , int p_first_key = 21
            );
-    ~Piano3d(void);
+    ~Piano3d();
 
-    static void drawWhiteKey(void);
-    static void drawBlackKey(void);
+    static void drawWhiteKey();
+    static void drawBlackKey();
   
-    void draw(void);
+    void draw();
   
     /** Initialises the piano.
         This can be called again to reinitialise the piano to a different size
@@ -53,8 +53,8 @@ class Piano3d
     */
     void init(int p_num_keys = 85, int p_first_key = 21);
   
-    void setMaterialWhiteKey(void);
-    void setMaterialBlackKey(void);
+    void setMaterialWhiteKey();
+    void setMaterialBlackKey();
 
   
     /**
@@ -69,14 +69,14 @@ class Piano3d
     inline void setMidiKeyState( int p_key_num
                                , bool p_state
                                );
-    void setAllKeyStatesOff(void);
+    void setAllKeyStatesOff();
 
     /**
        @return The width of the current piano keyboard in mm
     */
-    double pianoWidth(void);
-    inline int numKeys(void);
-    inline int firstKey(void);
+    double pianoWidth();
+    inline int numKeys();
+    inline int firstKey();
     inline const double & get_first_key_offset() const;
 
   private:

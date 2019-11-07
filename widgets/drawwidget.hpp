@@ -17,7 +17,7 @@
 */
 
 //------------------------------------------------------------------------------
-QPainter & DrawWidget::get_painter(void)
+QPainter & DrawWidget::get_painter()
 {
   return m_painter;
 }

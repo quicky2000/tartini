@@ -51,10 +51,10 @@ class MyGLChar
                    , GLubyte * p_data
                    , int p_width_raw
                    );
-    inline const GLubyte * data(void) const;
-    inline int w(void) const;
-    inline int h(void) const;
-    inline int w_raw(void) const;
+    inline const GLubyte * data() const;
+    inline int w() const;
+    inline int h() const;
+    inline int w_raw() const;
 
   private:
     int m_width;
@@ -67,9 +67,9 @@ class MyGLFont
 {
   public:
 
-    inline MyGLFont(void);
+    inline MyGLFont();
     inline MyGLFont(const QFont p_font);
-    ~MyGLFont(void);
+    ~MyGLFont();
 
     void beginGLtext( int p_width
                     , int p_height
@@ -78,7 +78,7 @@ class MyGLFont
                       , float p_y
                       , QString p_string
                       ) const;
-    void endGLtext(void) const;
+    void endGLtext() const;
 
   private:
 

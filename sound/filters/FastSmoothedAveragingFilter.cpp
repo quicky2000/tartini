@@ -92,7 +92,7 @@ void FastSmoothedAveragingFilter::filter( const float * p_input
 }
 
 //------------------------------------------------------------------------------
-void FastSmoothedAveragingFilter::reset(void)
+void FastSmoothedAveragingFilter::reset()
 {
     m_cos_sum = m_sin_sum = m_total_sum = 0.0;
     m_x.fill(0.0f);

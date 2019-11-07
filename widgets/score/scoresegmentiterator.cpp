@@ -21,7 +21,7 @@
 #include "scoresegmentiterator.h"
 
 //------------------------------------------------------------------------------
-double ScoreSegmentIterator::widthX(void)
+double ScoreSegmentIterator::widthX()
 {
     return (m_right_time - m_left_time) * m_score_widget->m_scale_X;
 }
@@ -64,7 +64,7 @@ void ScoreSegmentIterator::reset(ScoreWidget * p_score_widget, Channel * p_chann
 }
 
 //------------------------------------------------------------------------------
-bool ScoreSegmentIterator::next(void)
+bool ScoreSegmentIterator::next()
 {
     if(m_channel)
     {

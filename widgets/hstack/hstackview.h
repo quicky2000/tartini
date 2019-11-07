@@ -29,9 +29,9 @@ class HStackView : public ViewWidget
     HStackView( int p_view_id
               , QWidget * p_parent = NULL
               );
-    virtual ~HStackView(void);
+    virtual ~HStackView();
 
-    QSize sizeHint(void) const;
+    QSize sizeHint() const;
 
  private:
     void resizeEvent(QResizeEvent *);

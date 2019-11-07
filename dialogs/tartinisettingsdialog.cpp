@@ -85,7 +85,7 @@ void TartiniSettingsDialog::loadSetting( QObject * p_object
 }
 
 //------------------------------------------------------------------------------
-void TartiniSettingsDialog::init(void)
+void TartiniSettingsDialog::init()
 {
     // Go through all the categories on the left, and insert all the preferences we can into the fields.
     // Combo boxes must be done separately.
@@ -116,7 +116,7 @@ QString TartiniSettingsDialog::getPath(const QString p_initial_path)
 }
 
 //------------------------------------------------------------------------------
-void TartiniSettingsDialog::changeTempFolder(void)
+void TartiniSettingsDialog::changeTempFolder()
 {
     if(tempFilesFolder)
     {
@@ -129,7 +129,7 @@ void TartiniSettingsDialog::changeTempFolder(void)
 }
 
 //------------------------------------------------------------------------------
-void TartiniSettingsDialog::fileNameChanged(void)
+void TartiniSettingsDialog::fileNameChanged()
 {
     QString l_filename;
     int l_digits = fileNumberOfDigits->value();
@@ -145,7 +145,7 @@ void TartiniSettingsDialog::fileNameChanged(void)
 }
 
 //------------------------------------------------------------------------------
-void TartiniSettingsDialog::getBackgroundColor(void)
+void TartiniSettingsDialog::getBackgroundColor()
 {
     QColor l_color = QColorDialog::getColor(theBackgroundColor->palette().color(QPalette::Window));
     if(l_color.isValid())
@@ -157,7 +157,7 @@ void TartiniSettingsDialog::getBackgroundColor(void)
 }
 
 //------------------------------------------------------------------------------
-void TartiniSettingsDialog::getShading1Color(void)
+void TartiniSettingsDialog::getShading1Color()
 {
     QColor l_color = QColorDialog::getColor(shading1Color->palette().color(QPalette::Window));
     if(l_color.isValid())
@@ -169,7 +169,7 @@ void TartiniSettingsDialog::getShading1Color(void)
 }
 
 //------------------------------------------------------------------------------
-void TartiniSettingsDialog::getShading2Color(void)
+void TartiniSettingsDialog::getShading2Color()
 {
     QColor l_color = QColorDialog::getColor(shading2Color->palette().color(QPalette::Window));
     if(l_color.isValid())
@@ -224,7 +224,7 @@ void TartiniSettingsDialog::saveSetting(QObject *p_object, const QString p_group
 }
 
 //------------------------------------------------------------------------------
-void TartiniSettingsDialog::saveSettings(void)
+void TartiniSettingsDialog::saveSettings()
 {
     // Go through all the categories on the left, and save all the preferences we can from the fields.
     // Combo boxes must be done separately.
@@ -246,7 +246,7 @@ void TartiniSettingsDialog::saveSettings(void)
 }
 
 //------------------------------------------------------------------------------
-void TartiniSettingsDialog::checkAnalysisEnabled(void)
+void TartiniSettingsDialog::checkAnalysisEnabled()
 {
     QComboBox * l_note_range_choice = tabWidget->widget(0)->findChild<QComboBox *>("noteRangeChoice");
     myassert(l_note_range_choice);
@@ -375,7 +375,7 @@ void TartiniSettingsDialog::setUnknownsToDefault(GData & p_gdata)
 }
 
 //------------------------------------------------------------------------------
-void TartiniSettingsDialog::resetDefaults(void)
+void TartiniSettingsDialog::resetDefaults()
 {
     g_data->clearSettings();
     setUnknownsToDefault(*g_data);

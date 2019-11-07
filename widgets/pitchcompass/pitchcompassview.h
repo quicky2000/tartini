@@ -33,9 +33,9 @@ class PitchCompassView: public ViewWidget
                     , QWidget * p_parent = NULL
                     , int p_mode = 2
                     );
-    virtual ~PitchCompassView(void);
+    virtual ~PitchCompassView();
 
-    QSize sizeHint(void) const;
+    QSize sizeHint() const;
 
     void resizeEvent(QResizeEvent *);
 

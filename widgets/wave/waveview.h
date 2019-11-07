@@ -31,11 +31,11 @@ class WaveView: public ViewWidget
             ,QWidget * p_parent = NULL
             );
 
-    virtual ~WaveView(void);
+    virtual ~WaveView();
 
     void resizeEvent(QResizeEvent *);
 
-    QSize sizeHint(void) const;
+    QSize sizeHint() const;
 
   private:
     WaveWidget * m_wave_widget;

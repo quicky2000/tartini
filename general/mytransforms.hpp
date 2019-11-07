@@ -17,7 +17,7 @@
 */
 
 //------------------------------------------------------------------------------
-bool MyTransforms::getEqualLoudness(void) const
+bool MyTransforms::getEqualLoudness() const
 {
     return m_equal_loudness;
 }

@@ -114,7 +114,7 @@ TunerView::TunerView(int p_view_iD_
 }
 
 //------------------------------------------------------------------------------
-TunerView::~TunerView(void)
+TunerView::~TunerView()
 {
     delete m_slider;
     for(uint l_index = 0; l_index < m_leds.size(); l_index++)
@@ -131,7 +131,7 @@ void TunerView::resizeEvent(QResizeEvent *)
 }
 
 //------------------------------------------------------------------------------
-void TunerView::resetLeds(void)
+void TunerView::resetLeds()
 {
     for(uint l_index = 0; l_index < m_leds.size(); l_index++)
     {
@@ -156,7 +156,7 @@ void TunerView::setLed(int p_index, bool p_value)
 }
 
 //------------------------------------------------------------------------------
-void TunerView::doUpdate(void)
+void TunerView::doUpdate()
 {
     Channel *l_active_channel = g_data->getActiveChannel();
     if(l_active_channel == NULL || !l_active_channel->hasAnalysisData())
@@ -202,7 +202,7 @@ void TunerView::doUpdate(void)
 }
 
 //------------------------------------------------------------------------------
-QSize TunerView::sizeHint(void) const
+QSize TunerView::sizeHint() const
 {
     return QSize(200, 200);
 }

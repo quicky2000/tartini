@@ -30,7 +30,7 @@ SummaryView::SummaryView(int p_view_id
 }
 
 //------------------------------------------------------------------------------
-SummaryView::~SummaryView(void)
+SummaryView::~SummaryView()
 {
     delete m_summary_draw_widget;
 }
@@ -42,7 +42,7 @@ void SummaryView::resizeEvent(QResizeEvent *)
 }
  
 //------------------------------------------------------------------------------
-QSize SummaryView::sizeHint(void) const
+QSize SummaryView::sizeHint() const
 {
     return QSize(512, 256);
 }

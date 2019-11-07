@@ -17,13 +17,13 @@
 */
 
 //------------------------------------------------------------------------------
-NoteData::NoteData(void)
+NoteData::NoteData()
 : m_channel(NULL)
 {
 }
 
 //------------------------------------------------------------------------------
-bool NoteData::isValid(void) const
+bool NoteData::isValid() const
 {
     return (numChunks() > 2);
 }
@@ -41,25 +41,25 @@ void NoteData::setEndChunk(int p_end_chunk)
 }
 
 //------------------------------------------------------------------------------
-int NoteData::startChunk(void) const
+int NoteData::startChunk() const
 {
     return m_start_chunk;
 }
 
 //------------------------------------------------------------------------------
-int NoteData::endChunk(void) const
+int NoteData::endChunk() const
 {
     return m_end_chunk;
 }
 
 //------------------------------------------------------------------------------
-int NoteData::numChunks(void) const
+int NoteData::numChunks() const
 {
     return m_end_chunk - m_start_chunk;
 }
 
 //------------------------------------------------------------------------------
-float NoteData::numPeriods(void) const
+float NoteData::numPeriods() const
 {
     return m_num_periods;
 }
@@ -71,31 +71,31 @@ void NoteData::setPeriodOctaveEstimate(float p_period_octave_estimate)
 }
 
 //------------------------------------------------------------------------------
-float NoteData::periodOctaveEstimate(void) const
+float NoteData::periodOctaveEstimate() const
 {
     return m_period_octave_estimate;
 }
 
 //------------------------------------------------------------------------------
-float NoteData::volume(void) const
+float NoteData::volume() const
 {
     return m_volume;
 }
 
 //------------------------------------------------------------------------------
-double NoteData::avgFreq(void) const
+double NoteData::avgFreq() const
 {
     return numPeriods() / noteLength();
 }
 
 //------------------------------------------------------------------------------
-const SmartPtr<Array1d<int> > NoteData::get_maxima(void) const
+const SmartPtr<Array1d<int> > NoteData::get_maxima() const
 {
     return m_maxima;
 }
 
 //------------------------------------------------------------------------------
-const SmartPtr<Array1d<int> > NoteData::get_minima(void) const
+const SmartPtr<Array1d<int> > NoteData::get_minima() const
 {
     return m_minima;
 }
@@ -107,7 +107,7 @@ void NoteData::set_first_nsdf_period(float p_period)
 }
 
 //------------------------------------------------------------------------------
-float NoteData::get_first_nsdf_period(void)const
+float NoteData::get_first_nsdf_period()const
 {
     return m_first_nsdf_period;
 }
@@ -125,7 +125,7 @@ void NoteData::add_current_nsdf_period(float p_period_diff)
 }
 
 //------------------------------------------------------------------------------
-float NoteData::get_current_nsdf_period(void) const
+float NoteData::get_current_nsdf_period() const
 {
     return m_current_nsdf_period;
 }
@@ -143,19 +143,19 @@ void NoteData::add_nsdf_aggregate_roof(const double & p_value)
 }
 
 //------------------------------------------------------------------------------
-const double & NoteData::get_nsdf_aggregate_roof(void)const
+const double & NoteData::get_nsdf_aggregate_roof()const
 {
     return m_nsdf_aggregate_roof;
 }
 
 //------------------------------------------------------------------------------
-const Array1d<float> & NoteData::get_nsdf_aggregate_data(void)const
+const Array1d<float> & NoteData::get_nsdf_aggregate_data()const
 {
     return m_nsdf_aggregate_data;
 }
 
 //------------------------------------------------------------------------------
-const Array1d<float> & NoteData::get_nsdf_aggregate_data_scaled(void)const
+const Array1d<float> & NoteData::get_nsdf_aggregate_data_scaled()const
 {
     return m_nsdf_aggregate_data_scaled;
 }

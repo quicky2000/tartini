@@ -28,14 +28,14 @@ class AnalysisData;
 class ZoomElement
 {
   public:
-    inline ZoomElement(void);
-    inline float low(void) const;
-    inline float high(void) const;
-    inline float corr(void) const;
-    inline const QColor & color(void) const;
-    inline int noteIndex(void) const;
-    inline int midChunk(void) const;
-    inline bool isValid(void) const;
+    inline ZoomElement();
+    inline float low() const;
+    inline float high() const;
+    inline float corr() const;
+    inline const QColor & color() const;
+    inline int noteIndex() const;
+    inline int midChunk() const;
+    inline bool isValid() const;
     inline void set( float p_low
                    , float p_high
                    , float p_corr
@@ -58,12 +58,12 @@ class ZoomLookup
 {
   public:
 
-    ZoomLookup(void);
-    virtual ~ZoomLookup(void);
+    ZoomLookup();
+    virtual ~ZoomLookup();
 
-    void clear(void);
+    void clear();
     void setZoomLevel(double p_zoom_level);
-    inline int size(void) const;
+    inline int size() const;
     void setSize(int p_size);
     inline ZoomElement & at(int p_x);
 

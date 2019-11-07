@@ -56,7 +56,7 @@ AmplitudeWidget::AmplitudeWidget(QWidget * /*parent*/, const char* /*name*/)
 }
 
 //------------------------------------------------------------------------------
-void AmplitudeWidget::initializeGL(void)
+void AmplitudeWidget::initializeGL()
 {
     qglClearColor(g_data->backgroundColor());
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -74,7 +74,7 @@ void AmplitudeWidget::resizeGL( int p_width
 }
 
 //------------------------------------------------------------------------------
-AmplitudeWidget::~AmplitudeWidget(void)
+AmplitudeWidget::~AmplitudeWidget()
 {
 }
 
@@ -100,7 +100,7 @@ void AmplitudeWidget::setOffset(double p_new_offset)
 }
 
 //------------------------------------------------------------------------------
-void AmplitudeWidget::paintGL(void)
+void AmplitudeWidget::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -159,7 +159,7 @@ void AmplitudeWidget::paintGL(void)
 }
 
 //------------------------------------------------------------------------------
-void AmplitudeWidget::drawVerticalRefLines(void)
+void AmplitudeWidget::drawVerticalRefLines()
 {
     //Draw the vertical reference lines
     //time per 150 pixels
@@ -263,7 +263,7 @@ void AmplitudeWidget::setCurrentThreshold(double p_new_threshold, int p_index)
 }
 
 //------------------------------------------------------------------------------
-QString AmplitudeWidget::getCurrentThresholdString(void)const
+QString AmplitudeWidget::getCurrentThresholdString()const
 {
     QString l_threshold_str;
     l_threshold_str.sprintf(g_amp_display_string[g_data->amplitudeMode()], g_data->ampThreshold(g_data->amplitudeMode(), 0), g_data->ampThreshold(g_data->amplitudeMode(), 1));

@@ -44,7 +44,7 @@ BaseView::BaseView( int p_view_id
 }
 
 //------------------------------------------------------------------------------
-BaseView::~BaseView(void)
+BaseView::~BaseView()
 {
     delete m_base_widget;
 }
@@ -56,7 +56,7 @@ void BaseView::resizeEvent(QResizeEvent *)
 }
 
 //------------------------------------------------------------------------------
-QSize BaseView::sizeHint(void) const
+QSize BaseView::sizeHint() const
 {
     return QSize(300, 200);
 }

@@ -32,7 +32,7 @@ CepstrumWidget::CepstrumWidget(QWidget * p_parent)
 }
 
 //------------------------------------------------------------------------------
-CepstrumWidget::~CepstrumWidget(void)
+CepstrumWidget::~CepstrumWidget()
 {
 }
 
@@ -131,7 +131,7 @@ void CepstrumWidget::paintEvent( QPaintEvent * )
 }
 
 //------------------------------------------------------------------------------
-QSize CepstrumWidget::sizeHint(void) const
+QSize CepstrumWidget::sizeHint() const
 {
     return QSize(500, 128);
 }

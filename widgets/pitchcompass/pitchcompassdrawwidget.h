@@ -27,7 +27,7 @@ class PitchCompassDrawWidget: public QWidget
                           , const char * p_name = NULL
                           , int p_mode = 0
                           );
-    virtual ~PitchCompassDrawWidget(void);
+    virtual ~PitchCompassDrawWidget();
 
     void resizeEvent(QResizeEvent *);
 
@@ -37,7 +37,7 @@ class PitchCompassDrawWidget: public QWidget
 
   private:
 
-    void blank(void);
+    void blank();
 
     QwtCompass * m_compass;
 

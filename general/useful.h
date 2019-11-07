@@ -97,7 +97,7 @@ inline double logBaseN( const double & p_base_N
 /**
    return a random number between 0 and 1 (inclusive)
 */
-inline double prand(void);
+inline double prand();
 
 /**
    cycle is like mod except it deals with negative numbers nicely
@@ -184,7 +184,7 @@ class MinMax
 {
   public:
 
-    inline MinMax(void);
+    inline MinMax();
     inline MinMax( float p_min
                  , float p_max
                  );

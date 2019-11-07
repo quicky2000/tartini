@@ -39,7 +39,7 @@ HBubbleWidget::HBubbleWidget(QWidget *p_parent)
 }
 
 //------------------------------------------------------------------------------
-HBubbleWidget::~HBubbleWidget(void)
+HBubbleWidget::~HBubbleWidget()
 {
 } 
 
@@ -117,7 +117,7 @@ void HBubbleWidget::paintEvent( QPaintEvent * )
 }
 
 //------------------------------------------------------------------------------
-QSize HBubbleWidget::sizeHint(void) const
+QSize HBubbleWidget::sizeHint() const
 {
     return QSize(300, 200);
 }

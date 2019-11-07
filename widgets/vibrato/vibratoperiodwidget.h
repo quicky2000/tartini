@@ -25,16 +25,16 @@ class VibratoPeriodWidget: public QGLWidget
 
   public:
     VibratoPeriodWidget(QWidget * p_parent);
-    virtual ~VibratoPeriodWidget(void);
+    virtual ~VibratoPeriodWidget();
 
-    void initializeGL(void);
+    void initializeGL();
     void resizeGL(int p_width, int p_height);
-    void paintGL(void);
+    void paintGL();
 
-    QSize minimumSizeHint(void) const;
+    QSize minimumSizeHint() const;
 
   public slots:
-    void doUpdate(void);
+    void doUpdate();
     void setSmoothedPeriods(bool p_value);
     void setDrawSineReference(bool p_value);
     void setSineStyle(bool p_value);

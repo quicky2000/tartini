@@ -28,11 +28,11 @@ class CorrelationWidget : public DrawWidget
 
   public:
     CorrelationWidget(QWidget * p_parent);
-    virtual ~CorrelationWidget(void);
+    virtual ~CorrelationWidget();
 
     void paintEvent( QPaintEvent * );
 
-    QSize sizeHint(void) const;
+    QSize sizeHint() const;
 
   public slots:
     void setAggregateMode(int p_mode);
