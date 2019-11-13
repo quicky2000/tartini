@@ -349,7 +349,16 @@ set(MY_INCLUDE_DIRECTORIES
    )
 
 add_executable(${PROJECT_NAME} ${MY_SOURCE_FILES} ${DEPENDANCY_OBJECTS})
-target_link_libraries(${PROJECT_NAME} ${LINKED_LIBRARIES} Qt5::Widgets Qt5::Core Qt5::OpenGL Qt5::PrintSupport Qt5::Gui -lfftw3f Qwt::Qwt -lasound OpenGL::GLU OpenGL::GL Threads::Threads)
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+    find_library(COCOA_LIBRARY Cocoa)
+    find_library(COREAUDIO_LIBRARY CoreAudio)
+    set(LINKED_LIBRARIES ${LINKED_LIBRARIES} ${COCOA_LIBRARY} ${COREAUDIO_LIBRARY})
+endif(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+    set(LINKED_LIBRARIES ${LINKED_LIBRARIES} -lasound)
+endif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+
+target_link_libraries(${PROJECT_NAME} ${LINKED_LIBRARIES} Qt5::Widgets Qt5::Core Qt5::OpenGL Qt5::PrintSupport Qt5::Gui -lfftw3f Qwt::Qwt OpenGL::GLU OpenGL::GL Threads::Threads)
 target_compile_options(${PROJECT_NAME} PUBLIC ${MY_CPP_FLAGS})
 target_include_directories(${PROJECT_NAME} PUBLIC ${MY_INCLUDE_DIRECTORIES})
 
