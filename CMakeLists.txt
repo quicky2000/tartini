@@ -267,8 +267,8 @@ if(${USE_DEBUG_PRINTF})
     set(MY_CPP_FLAGS ${MY_CPP_FLAGS} -DDEBUG_PRINTF)
 endif(${USE_DEBUG_PRINTF})
 
-# Specific to Linux
-if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+# Specific to Linux and MacOs
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux" OR ${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
     set(MY_HEADER_FILES
         ${MY_HEADER_FILES}
         rtAudio/audio_stream.h
@@ -284,6 +284,9 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
         ${MY_INCLUDE_DIRECTORIES}
         rtAudio
        )
+endif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux" OR ${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+# Specific to Linux
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
     set(MY_CPP_FLAGS
         ${MY_CPP_FLAGS}
         -D__LINUX_OSS__ -D__LINUX_ALSA__ -DLINUX
