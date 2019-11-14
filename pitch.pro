@@ -9,8 +9,10 @@
 
 unix{
   macx{ #MacOSX
-    MY_LIB_PATH += -L/Users/student/usr/local/lib
-    MY_INCLUDE_PATH += /Users/student/usr/local/include
+    MY_INCLUDE_PATH += /usr/local/Cellar/qwt/6.1.4/lib/qwt.framework/Versions/6/Headers/
+    MY_INCLUDE_PATH += /usr/local/include
+    LIBS+= -F/usr/local/Cellar/qwt/6.1.4/lib
+    LIBS+= -L/usr/local/lib
   }else{ #Linux
     MY_TARTINI_PATH += .
 
@@ -337,9 +339,8 @@ unix{
 
     QMAKE_LFLAGS_SONAME = -W1,-install_name,@executable_path/..Frameworks/
     INCLUDEPATH += $$MY_INCLUDE_PATH
-    LIBS += -framework CoreAudio $$MY_LIB_PATH -lfftw3f -lqwt
+    LIBS += -framework CoreAudio $$MY_LIB_PATH -lfftw3f -framework qwt -framework Cocoa
     # -framework CoreFoundation -framework ApplicationServices -framework CoreData -framework System -framework Carbon -framework CoreServices -framework AppKit -framework AGL -framework Quartz -framework Foundation
-    RC_FILE = icons/pitch.icns
     DEFINES += MACX
     DEFINES += __MACOSX_CORE__
 
