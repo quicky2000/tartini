@@ -17,8 +17,8 @@
 #ifndef GDATA_H
 #define GDATA_H
 
-#define TARTINI_NAME_STR      "Tartini1.2"
-#define TARTINI_VERSION_STR   "1.2.0"
+#define TARTINI_NAME_STR      "Tartini1.2.1"
+#define TARTINI_VERSION_STR   "1.2.1"
 //#define TARTINI_VERSION       1.2
 
 #include <Qt>

@@ -48,7 +48,7 @@ CONFIG += precompile_header
 DEFINES += SINGLE_DRAWING_BUFFER
 LANGUAGE = C++
 TARGET = tartini
-VERSION = 1.2.0
+VERSION = 1.2.1
 
 FORMS += dialogs/settingsdialog.ui
 
