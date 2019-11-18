@@ -20,11 +20,13 @@
 
 #ifdef MYDEBUG // Cause a crash in debug mode so you can trace it with your debugger
 
+#include <cstdlib>
+
 #define myassert(expr) if(!(expr))                                                                              \
   {                                                                                                             \
       fprintf(stderr, "Assert Failed: %s in %s line %u.\nCausing a trace crash.\n", #expr, __FILE__, __LINE__); \
       fflush(stderr);                                                                                           \
-      *((int*)0) = 0;                                                                                           \
+      abort();                                                                                                  \
   } //cause a crash
 
 #else // Do nothing when not in debug mode
@@ -35,7 +37,7 @@
   {                                                                                                             \
       fprintf(stderr, "Assert Failed: %s in %s line %u.\nCausing a trace crash.\n", #expr, __FILE__, __LINE__); \
       fflush(stderr);                                                                                           \
-      *((int*)0) = 0;                                                                                           \
+      abort();                                                                                                  \
   } //cause a crash
 
 #endif //MYASSERT_H
