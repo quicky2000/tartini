@@ -16,10 +16,7 @@ script:
   - qmake pitch.pro
   - make
   - mkdir cmake-build; cd cmake-build
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ln -sf /usr/local/Cellar/qwt/6.1.4/lib/qwt.framework/Versions/6/Headers /usr/local/Cellar/qwt/6.1.4/include ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ln -sf /usr/local/Cellar/qwt/6.1.4/lib/qwt.framework/qwt /usr/local/Cellar/qwt/6.1.4/libqwt.dylib ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rm /usr/local/lib/qwt.framework ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cmake .. ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export QWT_INSTALL=/usr/local/Cellar/qwt/6.1.4; cmake -d -DCMAKE_PREFIX_PATH=$(brew --prefix qt5) .. ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export QWT_INSTALL=/usr/local/opt/qwt/lib; cmake -d -DCMAKE_PREFIX_PATH=$(brew --prefix qt5) .. ; fi
   - make
 #EOF
