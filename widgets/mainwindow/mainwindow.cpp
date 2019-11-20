@@ -993,24 +993,24 @@ void MainWindow::newViewAboutToShow()
 
     QList<QMdiSubWindow *> l_opened = m_the_workspace->subWindowList();
 
-    for(int j = 0; j < NUM_VIEWS; j++)
+    for(int l_j = 0; l_j < NUM_VIEWS; l_j++)
     {
         QAction *l_action;
-        if(g_view_data[j].get_menu_type() == 0)
+        if(g_view_data[l_j].get_menu_type() == 0)
         {
-            l_action = m_new_view_menu->addAction(g_view_data[j].get_menu_name());
+            l_action = m_new_view_menu->addAction(g_view_data[l_j].get_menu_name());
         }
-        else if(g_view_data[j].get_menu_type() == 1)
+        else if(g_view_data[l_j].get_menu_type() == 1)
         {
-            l_action = l_technical_menu->addAction(g_view_data[j].get_menu_name());
+            l_action = l_technical_menu->addAction(g_view_data[l_j].get_menu_name());
         }
-        else if(g_view_data[j].get_menu_type() == 2)
+        else if(g_view_data[l_j].get_menu_type() == 2)
         {
-            l_action = l_experimental_menu->addAction(g_view_data[j].get_menu_name());
+            l_action = l_experimental_menu->addAction(g_view_data[l_j].get_menu_name());
         }
-        else if(g_view_data[j].get_menu_type() == 3)
+        else if(g_view_data[l_j].get_menu_type() == 3)
         {
-            l_action = l_other_menu->addAction(g_view_data[j].get_menu_name());
+            l_action = l_other_menu->addAction(g_view_data[l_j].get_menu_name());
         }
         else
         {
@@ -1018,11 +1018,11 @@ void MainWindow::newViewAboutToShow()
         }
 
         connect(l_action, SIGNAL(triggered()), m_create_signal_mapper, SLOT(map()));
-        m_create_signal_mapper->setMapping(l_action, j);
+        m_create_signal_mapper->setMapping(l_action, l_j);
         for(QList<QMdiSubWindow *>::iterator l_iterator=l_opened.begin(); l_iterator<l_opened.end(); l_iterator++)
         {
             const std::string l_widget_class_name = (*l_iterator)->widget()->metaObject()->className();
-            const std::string l_view_class_name = g_view_data[j].get_class_name().toStdString();
+            const std::string l_view_class_name = g_view_data[l_j].get_class_name().toStdString();
             if(l_widget_class_name == l_view_class_name)
             {
                 l_action->setEnabled(false);
