@@ -1021,7 +1021,9 @@ void MainWindow::newViewAboutToShow()
         m_create_signal_mapper->setMapping(l_action, j);
         for(QList<QMdiSubWindow *>::iterator l_iterator=l_opened.begin(); l_iterator<l_opened.end(); l_iterator++)
         {
-            if(QString((*l_iterator)->metaObject()->className()) == g_view_data[j].get_class_name())
+            const std::string l_widget_class_name = (*l_iterator)->widget()->metaObject()->className();
+            const std::string l_view_class_name = g_view_data[j].get_class_name().toStdString();
+            if(l_widget_class_name == l_view_class_name)
             {
                 l_action->setEnabled(false);
                 break;
@@ -1477,17 +1479,13 @@ void MainWindow::saveViewGeometry()
         bool l_found = false;
         for(QList<QMdiSubWindow *>::iterator l_iterator = l_opened.begin(); l_iterator < l_opened.end(); l_iterator++)
         {
-            if(QString((*l_iterator)->metaObject()->className()) == g_view_data[l_j].get_class_name())
+            const std::string l_widget_class_name = (*l_iterator)->widget()->metaObject()->className();
+            const std::string l_view_class_name = g_view_data[l_j].get_class_name().toStdString();
+            if(l_widget_class_name == l_view_class_name)
             {
-                //get the subwindow frame
-                QWidget * l_parent_widget = (QWidget*)((*l_iterator)->parent());
-                if(!l_parent_widget)
-                {
-                    break;
-                }
                 g_data->setSettingsValue(l_base + "/visible", true);
-                g_data->setSettingsValue(l_base + "/pos", l_parent_widget->pos());
-                g_data->setSettingsValue(l_base + "/size", l_parent_widget->size());
+                g_data->setSettingsValue(l_base + "/pos", (*l_iterator)->pos());
+                g_data->setSettingsValue(l_base + "/size", (*l_iterator)->size());
                 l_found = true;
                 break;
             }
