@@ -108,6 +108,7 @@ HEADERS += main.h \
   widgets/myscrollbar.h \
   widgets/myscrollbar.hpp \
   widgets/mainwindow/mainwindow.h \
+  widgets/mainwindow/viewdata.h \
   widgets/openfiles/openfiles.h \
   widgets/freq/freqdrawwidget.h \
   widgets/freq/freqwidgetGL.h \
@@ -235,6 +236,7 @@ SOURCES += main.cpp \
   widgets/myscrollbar.cpp \
   widgets/viewwidget.cpp \
   widgets/mainwindow/mainwindow.cpp \
+  widgets/mainwindow/viewdata.cpp \
   widgets/openfiles/openfiles.cpp \
   widgets/freq/freqdrawwidget.cpp \
   widgets/freq/freqwidgetGL.cpp \

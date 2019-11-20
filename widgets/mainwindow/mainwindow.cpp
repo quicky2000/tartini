@@ -1497,34 +1497,6 @@ void MainWindow::saveViewGeometry()
     }
 }
 
-//-----------------------------------------------------------------------------
-const QString &
-ViewData::get_title() const
-{
-    return m_title;
-}
-
-//-----------------------------------------------------------------------------
-const QString &
-ViewData::get_menu_name() const
-{
-    return m_menu_name;
-}
-
-//-----------------------------------------------------------------------------
-int
-ViewData::get_menu_type() const
-{
-    return m_menu_type;
-}
-
-//-----------------------------------------------------------------------------
-const QString &
-ViewData::get_class_name() const
-{
-    return m_class_name;
-}
-
 //------------------------------------------------------------------------------
 QSize TartiniDialog::sizeHint() const
 {

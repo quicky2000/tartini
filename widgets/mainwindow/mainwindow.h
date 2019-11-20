@@ -18,6 +18,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "viewdata.h"
 #include <QMainWindow>
 #include <QMdiArea>
 #include <QDialog>
@@ -37,34 +38,6 @@ class QToolButton;
 class Channel;
 class MyLabel;
 class QComboBox;
-
-class ViewData
-{
-  public:
-
-    ViewData( QString p_title
-            , QString p_menu_name
-            , QString p_class_name
-            , int p_menu_type
-            )
-    {
-        m_title = p_title;
-        m_menu_name = p_menu_name;
-        m_class_name = p_class_name;
-        m_menu_type = p_menu_type;
-    };
-
-    const QString & get_title() const;
-    const QString & get_menu_name() const;
-    const QString & get_class_name() const;
-    int get_menu_type() const;
-
-  private:
-    QString m_title;
-    QString m_menu_name;
-    QString m_class_name;
-    int m_menu_type;
-};
 
 enum VIEW_MENU_TYPES
   { MENU_TYPE_MAIN
