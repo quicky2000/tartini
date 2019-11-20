@@ -131,7 +131,7 @@
 MainWindow *g_main_window;
 MyGLFont *g_mygl_font;
 
-ViewData g_view_data[NUM_VIEWS] =
+ViewData g_view_data[g_view_number] =
         //ViewData(title,                            menuName,                           className,           menu type);
         { ViewData(QObject::tr("File List"),         QObject::tr("&File List"),          "OpenFiles",         0)
         , ViewData(QObject::tr("Pitch Contour"),     QObject::tr("&Pitch Contour"),      "FreqView",          0)
@@ -993,7 +993,7 @@ void MainWindow::newViewAboutToShow()
 
     QList<QMdiSubWindow *> l_opened = m_the_workspace->subWindowList();
 
-    for(unsigned int l_j = 0; l_j < NUM_VIEWS; l_j++)
+    for(unsigned int l_j = 0; l_j < g_view_number; l_j++)
     {
         QAction *l_action;
         if(g_view_data[l_j].get_menu_type() == 0)
@@ -1437,7 +1437,7 @@ bool MainWindow::loadViewGeometry()
     QSize l_size;
     int l_counter = 0;
 
-    for(unsigned int l_j = 0; l_j < NUM_VIEWS; l_j++)
+    for(unsigned int l_j = 0; l_j < g_view_number; l_j++)
     {
         QString l_base = QString("geometry/") + g_view_data[l_j].get_class_name();
         QString l_key = l_base+"/visible";
@@ -1472,7 +1472,7 @@ void MainWindow::saveViewGeometry()
 {
     QList<QMdiSubWindow *> l_opened = m_the_workspace->subWindowList();
 
-    for(unsigned int l_j = 0; l_j < NUM_VIEWS; l_j++)
+    for(unsigned int l_j = 0; l_j < g_view_number; l_j++)
     {
         QString l_base = QString("geometry/") + g_view_data[l_j].get_class_name();
 

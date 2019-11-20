@@ -72,7 +72,7 @@ enum VIEW_MENU_TYPES
   , MENU_TYPE_EXPERIMENTAL
   };
 
-const size_t NUM_VIEWS = 19;
+const size_t g_view_number = 19;
 enum VIEW_NAMES
   { VIEW_OPEN_FILES
   , VIEW_FREQ
@@ -95,7 +95,7 @@ enum VIEW_NAMES
   , VIEW_VOLUME_METER
 };
 
-extern ViewData g_view_data[NUM_VIEWS];
+extern ViewData g_view_data[g_view_number];
 
                          
 class MainWindow : public QMainWindow
