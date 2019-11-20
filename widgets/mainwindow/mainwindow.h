@@ -72,7 +72,7 @@ enum VIEW_MENU_TYPES
   , MENU_TYPE_EXPERIMENTAL
   };
 
-#define NUM_VIEWS 19
+const size_t NUM_VIEWS = 19;
 enum VIEW_NAMES
   { VIEW_OPEN_FILES
   , VIEW_FREQ
