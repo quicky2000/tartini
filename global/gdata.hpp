@@ -22,86 +22,92 @@ void GData::do_nothing()const
 }
 
 //------------------------------------------------------------------------------
-bool GData::settingsContains(const QString & p_key)const
+bool GData::settingsContains(const std::string & p_key)const
 {
-    return m_settings->contains(p_key);
+    return m_settings->contains(QString::fromStdString(p_key));
 }
 
 //------------------------------------------------------------------------------
-int GData::getSettingsValue( const QString & p_key
+int GData::getSettingsValue( const std::string & p_key
                            , const int & p_default_value
                            )const
 {
-    assert(m_settings->contains(p_key));
-    return m_settings->value(p_key, p_default_value).toInt();
+    QString l_key = QString::fromStdString(p_key);
+    assert(m_settings->contains(l_key));
+    return m_settings->value(l_key, p_default_value).toInt();
 }
 
 //------------------------------------------------------------------------------
-bool GData::getSettingsValue( const QString & p_key
+bool GData::getSettingsValue( const std::string & p_key
                             , const bool & p_default_value
                             )const
 {
-    assert(m_settings->contains(p_key));
-    return m_settings->value(p_key, p_default_value).toBool();
+    QString l_key = QString::fromStdString(p_key);
+    assert(m_settings->contains(l_key));
+    return m_settings->value(l_key, p_default_value).toBool();
 }
 
 //------------------------------------------------------------------------------
-QString GData::getSettingsValue( const QString & p_key
-                               , const QString & p_default_value
-                               )const
+std::string GData::getSettingsValue( const std::string & p_key
+                                   , const std::string & p_default_value
+                                   )const
 {
-    assert(m_settings->contains(p_key));
-    return m_settings->value(p_key, p_default_value).toString();
+    QString l_key = QString::fromStdString(p_key);
+    assert(m_settings->contains(l_key));
+    std::string l_result = m_settings->value(l_key, QString::fromStdString(p_default_value)).toString().toStdString();
+    return l_result;
 }
 
 //------------------------------------------------------------------------------
-QPoint GData::getSettingsValue( const QString & p_key
+QPoint GData::getSettingsValue( const std::string & p_key
                               , const QPoint & p_default_value
                               )const
 {
-    assert(m_settings->contains(p_key));
-    return m_settings->value(p_key, p_default_value).toPoint();
+    QString l_key = QString::fromStdString(p_key);
+    assert(m_settings->contains(l_key));
+    return m_settings->value(l_key, p_default_value).toPoint();
 }
 
 //------------------------------------------------------------------------------
-QSize GData::getSettingsValue( const QString & p_key
+QSize GData::getSettingsValue( const std::string & p_key
                              , const QSize & p_default_value
                              )const
 {
-    assert(m_settings->contains(p_key));
-    return m_settings->value(p_key, p_default_value).toSize();
+    QString l_key = QString::fromStdString(p_key);
+    assert(m_settings->contains(l_key));
+    return m_settings->value(l_key, p_default_value).toSize();
 }
 
 //------------------------------------------------------------------------------
-void GData::setSettingsValue( const QString & p_key
-                            , const QString & p_value
+void GData::setSettingsValue( const std::string & p_key
+                            , const std::string & p_value
                             )
 {
-    m_settings->setValue(p_key, p_value);
+    m_settings->setValue(QString::fromStdString(p_key), QString::fromStdString(p_value));
 }
 
 //------------------------------------------------------------------------------
-void GData::setSettingsValue( const QString & p_key
+void GData::setSettingsValue( const std::string & p_key
                             , const int & p_value
                             )
 {
-    m_settings->setValue(p_key, p_value);
+    m_settings->setValue(QString::fromStdString(p_key), p_value);
 }
 
 //------------------------------------------------------------------------------
-void GData::setSettingsValue( const QString & p_key
+void GData::setSettingsValue( const std::string & p_key
                             , const QPoint & p_value
                             )
 {
-    m_settings->setValue(p_key, p_value);
+    m_settings->setValue(QString::fromStdString(p_key), p_value);
 }
 
 //------------------------------------------------------------------------------
-void GData::setSettingsValue( const QString & p_key
+void GData::setSettingsValue( const std::string & p_key
                             , const QSize & p_value
                             )
 {
-    m_settings->setValue(p_key, p_value);
+    m_settings->setValue(QString::fromStdString(p_key), p_value);
 }
 
 //------------------------------------------------------------------------------
@@ -117,24 +123,28 @@ void GData::syncSettings()
 }
 
 //------------------------------------------------------------------------------
-int GData::getSettingsIntValue(const QString & p_key)const
+int GData::getSettingsIntValue(const std::string & p_key)const
 {
-    assert(m_settings->contains(p_key));
-    return m_settings->value(p_key).toInt();
+    QString l_key = QString::fromStdString(p_key);
+    assert(m_settings->contains(l_key));
+    return m_settings->value(l_key).toInt();
 }
 
 //------------------------------------------------------------------------------
-bool GData::getSettingsBoolValue(const QString & p_key)const
+bool GData::getSettingsBoolValue(const std::string & p_key)const
 {
-    assert(m_settings->contains(p_key));
-    return m_settings->value(p_key).toBool();
+    QString l_key = QString::fromStdString(p_key);
+    assert(m_settings->contains(l_key));
+    return m_settings->value(l_key).toBool();
 }
 
 //------------------------------------------------------------------------------
-QString GData::getSettingsStringValue(const QString & p_key)const
+std::string GData::getSettingsStringValue(const std::string & p_key)const
 {
-    assert(m_settings->contains(p_key));
-    return m_settings->value(p_key).toString();
+    QString l_key = QString::fromStdString(p_key);
+    assert(m_settings->contains(l_key));
+    std::string l_result = m_settings->value(l_key).toString().toStdString();
+    return l_result;
 }
 
 //------------------------------------------------------------------------------

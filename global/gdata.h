@@ -104,39 +104,39 @@ class GData : public QObject
        phase
     */
     inline void do_nothing()const;
-    inline bool settingsContains(const QString & p_key)const;
-    inline int getSettingsValue( const QString & p_key
+    inline bool settingsContains(const std::string & p_key)const;
+    inline int getSettingsValue( const std::string & p_key
                                , const int & p_default_value
                                )const;
-    inline bool getSettingsValue( const QString & p_key
+    inline bool getSettingsValue( const std::string & p_key
                                 , const bool & p_default_value
                                 )const;
-  inline QString getSettingsValue( const QString & p_key
-                                 , const QString & p_default_value
-                                 )const;
-  inline QPoint getSettingsValue( const QString & p_key
+  inline std::string getSettingsValue( const std::string & p_key
+                                     , const std::string & p_default_value
+                                     )const;
+  inline QPoint getSettingsValue( const std::string & p_key
                                 , const QPoint & p_default_value
                                 )const;
-  inline QSize getSettingsValue( const QString & p_key
+  inline QSize getSettingsValue( const std::string & p_key
                                , const QSize & p_default_value
                                )const;
-  inline void setSettingsValue( const QString & p_key
-                              , const QString & p_value
+  inline void setSettingsValue( const std::string & p_key
+                              , const std::string & p_value
                               );
-  inline void setSettingsValue( const QString & p_key
+  inline void setSettingsValue( const std::string & p_key
                               , const int & p_value
                               );
-  inline void setSettingsValue( const QString & p_key
+  inline void setSettingsValue( const std::string & p_key
                               , const QPoint & p_value
                               );
-  inline void setSettingsValue( const QString & p_key
+  inline void setSettingsValue( const std::string & p_key
                               , const QSize & p_value
                               );
   inline void clearSettings();
   inline void syncSettings();
-  inline int getSettingsIntValue(const QString & p_key)const;
-  inline bool getSettingsBoolValue(const QString & p_key)const;
-  inline QString getSettingsStringValue(const QString & p_key)const;
+  inline int getSettingsIntValue(const std::string & p_key)const;
+  inline bool getSettingsBoolValue(const std::string & p_key)const;
+  inline std::string getSettingsStringValue(const std::string & p_key)const;
 
   inline int getSoundMode()const;
   inline void setSoundMode(const int & p_mode);

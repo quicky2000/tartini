@@ -711,14 +711,14 @@ void MainWindow::keyPressEvent (QKeyEvent * p_event)
 //------------------------------------------------------------------------------
 void MainWindow::openFile()
 {
-    QString l_last_folder = QDir::toNativeSeparators(g_data->getSettingsValue("Dialogs/openFilesFolder", QDir::currentPath()));
+    QString l_last_folder = QDir::toNativeSeparators(QString::fromStdString(g_data->getSettingsValue("Dialogs/openFilesFolder", QDir::currentPath().toStdString())));
     QString l_file_name = QFileDialog::getOpenFileName(this, "Open File", l_last_folder, "Sounds (*.wav)");
     if(l_file_name.isEmpty())
     {
         return;
     }
     l_file_name = QDir::toNativeSeparators(l_file_name);
-    g_data->setSettingsValue("Dialogs/openFilesFolder", l_file_name);
+    g_data->setSettingsValue("Dialogs/openFilesFolder", l_file_name.toStdString());
     openFile(l_file_name.toStdString().c_str());
 }
 
@@ -766,9 +766,9 @@ void MainWindow::openRecord(bool p_and_play)
     SoundFile * l_play_sound_file = (p_and_play) ? g_data->getActiveSoundFile() : NULL;
 
     int l_rate = g_data->getSettingsValue("Sound/sampleRate", 44100);
-    QString l_number_of_channels = g_data->getSettingsValue("Sound/numberOfChannels", QString("mono"));
+    std::string l_number_of_channels = g_data->getSettingsValue("Sound/numberOfChannels", std::string("mono"));
     int l_channels;
-    if(l_number_of_channels.toLower() == "mono")
+    if(QString::fromStdString(l_number_of_channels).toLower() == "mono")
     {
         l_channels = 1;
     }
@@ -790,8 +790,8 @@ void MainWindow::openRecord(bool p_and_play)
         l_step_size = l_play_sound_file->bufferSize()/2;
     }
 
-    QString l_temp_file_folder = g_data->getSettingsValue("General/tempFilesFolder", QDir::toNativeSeparators(QDir::currentPath()));
-    QDir l_dir = QDir(l_temp_file_folder);
+    std::string l_temp_file_folder = g_data->getSettingsValue("General/tempFilesFolder", QDir::toNativeSeparators(QDir::currentPath()).toStdString());
+    QDir l_dir = QDir(QString::fromStdString(l_temp_file_folder));
     QFileInfo l_file_info;
     QString l_file_name;
     bool l_file_exists;
@@ -1441,10 +1441,10 @@ bool MainWindow::loadViewGeometry()
     {
         QString l_base = QString("geometry/") + g_view_data[l_j].get_class_name();
         QString l_key = l_base+"/visible";
-        if(g_data->settingsContains(l_key) && g_data->getSettingsValue(l_key, false) == true)
+        if(g_data->settingsContains(l_key.toStdString()) && g_data->getSettingsValue(l_key.toStdString(), false) == true)
         {
-            l_pos = g_data->getSettingsValue(l_base+"/pos", QPoint(0, 0));
-            l_size = g_data->getSettingsValue(l_base+"/size", QSize(100, 100));
+            l_pos = g_data->getSettingsValue((l_base + "/pos").toStdString(), QPoint(0, 0));
+            l_size = g_data->getSettingsValue((l_base + "/size").toStdString(), QSize(100, 100));
             QWidget * l_widget = openView(l_j);
             //get the subwindow frame
             QWidget * l_parent_widget = (QWidget*)(l_widget->parent());
@@ -1483,16 +1483,16 @@ void MainWindow::saveViewGeometry()
             const std::string l_view_class_name = g_view_data[l_j].get_class_name().toStdString();
             if(l_widget_class_name == l_view_class_name)
             {
-                g_data->setSettingsValue(l_base + "/visible", true);
-                g_data->setSettingsValue(l_base + "/pos", (*l_iterator)->pos());
-                g_data->setSettingsValue(l_base + "/size", (*l_iterator)->size());
+                g_data->setSettingsValue((l_base + "/visible").toStdString(), true);
+                g_data->setSettingsValue((l_base + "/pos").toStdString(), (*l_iterator)->pos());
+                g_data->setSettingsValue((l_base + "/size").toStdString(), (*l_iterator)->size());
                 l_found = true;
                 break;
             }
         }
         if(!l_found)
         {
-            g_data->setSettingsValue(l_base+"/visible", false);
+            g_data->setSettingsValue((l_base + "/visible").toStdString(), false);
         }
     }
 }

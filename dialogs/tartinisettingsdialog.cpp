@@ -56,28 +56,28 @@ void TartiniSettingsDialog::loadSetting( QObject * p_object
     }
     else if(l_class_name == "QLineEdit")
     {
-         ((QLineEdit*)p_object)->setText(g_data->getSettingsStringValue(l_full_key));
+         ((QLineEdit*)p_object)->setText(QString::fromStdString(g_data->getSettingsStringValue(l_full_key.toStdString())));
     }
     else if(l_class_name == "QComboBox")
     {
-         ((QComboBox*)p_object)->setCurrentIndex(((QComboBox*)p_object)->findText(g_data->getSettingsStringValue(l_full_key)));
+         ((QComboBox*)p_object)->setCurrentIndex(((QComboBox*)p_object)->findText(QString::fromStdString(g_data->getSettingsStringValue(l_full_key.toStdString()))));
     }
     else if(l_class_name == "QPushButton" && ((QPushButton*)p_object)->isCheckable())
     {
-        ((QPushButton*)p_object)->setChecked(g_data->getSettingsBoolValue(l_full_key));
+        ((QPushButton*)p_object)->setChecked(g_data->getSettingsBoolValue(l_full_key.toStdString()));
     }
     else if(l_class_name == "QCheckBox")
     {
-         ((QCheckBox*)p_object)->setChecked(g_data->getSettingsBoolValue(l_full_key));
+         ((QCheckBox*)p_object)->setChecked(g_data->getSettingsBoolValue(l_full_key.toStdString()));
     }
     else if(l_class_name == "QSpinBox")
     {
-        ((QSpinBox*)p_object)->setValue(g_data->getSettingsBoolValue(l_full_key));
+        ((QSpinBox*)p_object)->setValue(g_data->getSettingsBoolValue(l_full_key.toStdString()));
     }
     else if(l_class_name == "QFrame")
     {
         QColor l_color;
-        l_color.setNamedColor(g_data->getSettingsStringValue(l_full_key));
+        l_color.setNamedColor(QString::fromStdString(g_data->getSettingsStringValue(l_full_key.toStdString())));
         QPalette l_palette = ((QFrame*)p_object)->palette();
         l_palette.setColor(l_palette.currentColorGroup(),QPalette::Window,l_color);
         ((QFrame*)p_object)->setPalette(l_palette);
@@ -207,28 +207,28 @@ void TartiniSettingsDialog::saveSetting(QObject *p_object, const QString p_group
     }
     else if(l_class_name == "QLineEdit")
     {
-        g_data->setSettingsValue(l_full_key, ((QLineEdit*)p_object)->text());
+        g_data->setSettingsValue(l_full_key.toStdString(), ((QLineEdit*)p_object)->text().toStdString());
     }
     else if(l_class_name == "QComboBox")
     {
-        g_data->setSettingsValue(l_full_key, ((QComboBox*)p_object)->currentText());
+        g_data->setSettingsValue(l_full_key.toStdString(), ((QComboBox*)p_object)->currentText().toStdString());
     }
     else if(l_class_name == "QPushButton" && ((QPushButton*)p_object)->isCheckable())
     {
-        g_data->setSettingsValue(l_full_key, ((QPushButton*)p_object)->isChecked());
+        g_data->setSettingsValue(l_full_key.toStdString(), ((QPushButton*)p_object)->isChecked());
     }
     else if(l_class_name == "QCheckBox")
     {
-        g_data->setSettingsValue(l_full_key, ((QCheckBox*)p_object)->isChecked());
+        g_data->setSettingsValue(l_full_key.toStdString(), ((QCheckBox*)p_object)->isChecked());
     }
     else if(l_class_name == "QSpinBox")
     {
-        g_data->setSettingsValue(l_full_key, ((QSpinBox*)p_object)->value());
+        g_data->setSettingsValue(l_full_key.toStdString(), ((QSpinBox*)p_object)->value());
     }
     else if(l_class_name == "QFrame")
     {
         QColor l_color =  ((QFrame*)p_object)->palette().color(QPalette::Window);
-        g_data->setSettingsValue(l_full_key,l_color.name());
+        g_data->setSettingsValue(l_full_key.toStdString(),l_color.name().toStdString());
     }
     else if("QVBoxLayout" != l_class_name &&
             "QHBoxLayout" != l_class_name &&
@@ -340,7 +340,7 @@ void TartiniSettingsDialog::onNoteRangeChoice(int p_choice)
 void TartiniSettingsDialog::setUnknownsToDefault(GData & p_gdata)
 {
     SetIfMissing("General/bindOpenSaveFolders", true);
-    SetIfMissing("General/tempFilesFolder", QDir::toNativeSeparators(QDir::currentPath()));
+    SetIfMissing("General/tempFilesFolder", QDir::toNativeSeparators(QDir::currentPath()).toStdString());
     SetIfMissing("General/filenameGeneratingString", "Untitled");
     SetIfMissing("General/fileGeneratingNumber", 1);
     SetIfMissing("General/fileNumberOfDigits", 2);
@@ -381,9 +381,9 @@ void TartiniSettingsDialog::setUnknownsToDefault(GData & p_gdata)
     SetIfMissing("Display/useTopLevelWidgets", false);
 
     SetIfMissing("Dialogs/rememberOpenFolder", true);
-    SetIfMissing("Dialogs/openFilesFolder", QDir::toNativeSeparators(QDir::currentPath()));
+    SetIfMissing("Dialogs/openFilesFolder", QDir::toNativeSeparators(QDir::currentPath()).toStdString());
     SetIfMissing("Dialogs/rememberSaveFolder", true);
-    SetIfMissing("Dialogs/saveFilesFolder", QDir::toNativeSeparators(QDir::currentPath()));
+    SetIfMissing("Dialogs/saveFilesFolder", QDir::toNativeSeparators(QDir::currentPath()).toStdString());
     SetIfMissing("Dialogs/appendWav", true);
 
     SetIfMissing("Advanced/showMeanVarianceBars", false);
