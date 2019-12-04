@@ -82,6 +82,15 @@ void TartiniSettingsDialog::loadSetting( QObject * p_object
         l_palette.setColor(l_palette.currentColorGroup(),QPalette::Window,l_color);
         ((QFrame*)p_object)->setPalette(l_palette);
     }
+    else if("QVBoxLayout" != l_class_name &&
+            "QHBoxLayout" != l_class_name &&
+            "QLabel" != l_class_name &&
+            "QPushButton" != l_class_name &&
+            "QGridLayout" != l_class_name
+            )
+    {
+        abort();
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -220,6 +229,15 @@ void TartiniSettingsDialog::saveSetting(QObject *p_object, const QString p_group
     {
         QColor l_color =  ((QFrame*)p_object)->palette().color(QPalette::Window);
         g_data->setSettingsValue(l_full_key,l_color.name());
+    }
+    else if("QVBoxLayout" != l_class_name &&
+            "QHBoxLayout" != l_class_name &&
+            "QLabel" != l_class_name &&
+            "QPushButton" != l_class_name &&
+            "QGridLayout" != l_class_name
+           )
+    {
+        abort();
     }
 }
 
