@@ -41,8 +41,8 @@ void TartiniSettingsDialog::loadSetting( QObject * p_object
                                        , const QString & p_group
                                        )
 {
-    QString l_key = p_object->objectName();
-    QString l_full_key = p_group + "/" + l_key;
+    std::string l_key = p_object->objectName().toStdString();
+    std::string l_full_key = p_group.toStdString() + "/" + l_key;
     std::string l_class_name = p_object->metaObject()->className();
 
     if(l_class_name == "QGroupBox")
@@ -56,28 +56,28 @@ void TartiniSettingsDialog::loadSetting( QObject * p_object
     }
     else if(l_class_name == "QLineEdit")
     {
-         ((QLineEdit*)p_object)->setText(QString::fromStdString(g_data->getSettingsStringValue(l_full_key.toStdString())));
+         ((QLineEdit*)p_object)->setText(QString::fromStdString(g_data->getSettingsStringValue(l_full_key)));
     }
     else if(l_class_name == "QComboBox")
     {
-         ((QComboBox*)p_object)->setCurrentIndex(((QComboBox*)p_object)->findText(QString::fromStdString(g_data->getSettingsStringValue(l_full_key.toStdString()))));
+         ((QComboBox*)p_object)->setCurrentIndex(((QComboBox*)p_object)->findText(QString::fromStdString(g_data->getSettingsStringValue(l_full_key))));
     }
     else if(l_class_name == "QPushButton" && ((QPushButton*)p_object)->isCheckable())
     {
-        ((QPushButton*)p_object)->setChecked(g_data->getSettingsBoolValue(l_full_key.toStdString()));
+        ((QPushButton*)p_object)->setChecked(g_data->getSettingsBoolValue(l_full_key));
     }
     else if(l_class_name == "QCheckBox")
     {
-         ((QCheckBox*)p_object)->setChecked(g_data->getSettingsBoolValue(l_full_key.toStdString()));
+         ((QCheckBox*)p_object)->setChecked(g_data->getSettingsBoolValue(l_full_key));
     }
     else if(l_class_name == "QSpinBox")
     {
-        ((QSpinBox*)p_object)->setValue(g_data->getSettingsBoolValue(l_full_key.toStdString()));
+        ((QSpinBox*)p_object)->setValue(g_data->getSettingsBoolValue(l_full_key));
     }
     else if(l_class_name == "QFrame")
     {
         QColor l_color;
-        l_color.setNamedColor(QString::fromStdString(g_data->getSettingsStringValue(l_full_key.toStdString())));
+        l_color.setNamedColor(QString::fromStdString(g_data->getSettingsStringValue(l_full_key)));
         QPalette l_palette = ((QFrame*)p_object)->palette();
         l_palette.setColor(l_palette.currentColorGroup(),QPalette::Window,l_color);
         ((QFrame*)p_object)->setPalette(l_palette);
@@ -109,6 +109,7 @@ void TartiniSettingsDialog::init()
     {
         //Iterate over all widgets in the current group and load their settings
         l_group = tabWidget->tabText(l_i);
+        std::string l_group_string = l_group.toStdString();
         const QList<QObject*> & l_widgets = tabWidget->widget(l_i)->children();
         for(QList<QObject*>::const_iterator l_widget_iter = l_widgets.begin(); l_widget_iter < l_widgets.end(); ++l_widget_iter)
         {
@@ -192,8 +193,8 @@ void TartiniSettingsDialog::getShading2Color()
 //------------------------------------------------------------------------------
 void TartiniSettingsDialog::saveSetting(QObject *p_object, const QString p_group)
 {
-    QString l_key = p_object->objectName();
-    QString l_full_key = p_group + "/" + l_key;
+    std::string l_key = p_object->objectName().toStdString();
+    std::string l_full_key = p_group.toStdString() + "/" + l_key;
     std::string l_class_name = p_object->metaObject()->className();
 
     if(l_class_name == "QGroupBox")
@@ -207,28 +208,28 @@ void TartiniSettingsDialog::saveSetting(QObject *p_object, const QString p_group
     }
     else if(l_class_name == "QLineEdit")
     {
-        g_data->setSettingsValue(l_full_key.toStdString(), ((QLineEdit*)p_object)->text().toStdString());
+        g_data->setSettingsValue(l_full_key, ((QLineEdit*)p_object)->text().toStdString());
     }
     else if(l_class_name == "QComboBox")
     {
-        g_data->setSettingsValue(l_full_key.toStdString(), ((QComboBox*)p_object)->currentText().toStdString());
+        g_data->setSettingsValue(l_full_key, ((QComboBox*)p_object)->currentText().toStdString());
     }
     else if(l_class_name == "QPushButton" && ((QPushButton*)p_object)->isCheckable())
     {
-        g_data->setSettingsValue(l_full_key.toStdString(), ((QPushButton*)p_object)->isChecked());
+        g_data->setSettingsValue(l_full_key, ((QPushButton*)p_object)->isChecked());
     }
     else if(l_class_name == "QCheckBox")
     {
-        g_data->setSettingsValue(l_full_key.toStdString(), ((QCheckBox*)p_object)->isChecked());
+        g_data->setSettingsValue(l_full_key, ((QCheckBox*)p_object)->isChecked());
     }
     else if(l_class_name == "QSpinBox")
     {
-        g_data->setSettingsValue(l_full_key.toStdString(), ((QSpinBox*)p_object)->value());
+        g_data->setSettingsValue(l_full_key, ((QSpinBox*)p_object)->value());
     }
     else if(l_class_name == "QFrame")
     {
         QColor l_color =  ((QFrame*)p_object)->palette().color(QPalette::Window);
-        g_data->setSettingsValue(l_full_key.toStdString(),l_color.name().toStdString());
+        g_data->setSettingsValue(l_full_key,l_color.name().toStdString());
     }
     else if("QVBoxLayout" != l_class_name &&
             "QHBoxLayout" != l_class_name &&
