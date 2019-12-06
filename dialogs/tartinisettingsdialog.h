@@ -14,6 +14,7 @@
 #include <QDialog>
 #include "ui_settingsdialog.h"
 #include <QSettings>
+#include <map>
 
 class GData;
 
@@ -45,6 +46,14 @@ class TartiniSettingsDialog : public QDialog, private Ui_SettingsDialog
     void onNoteRangeChoice(int p_choice);
     static void setUnknownsToDefault(GData & p_gdata);
     void resetDefaults();
+
+  private:
+
+    /**
+     * Store tab names to avoid issues due to memory corruption that change tab
+     * names when calling save settings
+     */
+    static std::map<int, std::string> m_tab_names;
 };
 
 #endif // TARTINISETTINGSDIALOG_H

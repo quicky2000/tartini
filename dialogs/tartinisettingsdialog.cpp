@@ -103,11 +103,16 @@ void TartiniSettingsDialog::init()
     soundOutput->clear();
     soundOutput->insertItems(0,AudioStream::getOutputDeviceNames());
 
+    bool l_tab_names_empty = m_tab_names.empty();
     //Iterate over all groups
     for(int l_i = 0; l_i < tabWidget->count(); l_i++)
     {
         //Iterate over all widgets in the current group and load their settings
         std::string l_group(tabWidget->tabText(l_i).toStdString());
+        if(l_tab_names_empty)
+        {
+            m_tab_names.insert(std::map<int, std::string>::value_type(l_i, l_group));
+        }
         const QList<QObject*> & l_widgets = tabWidget->widget(l_i)->children();
         for(QList<QObject*>::const_iterator l_widget_iter = l_widgets.begin(); l_widget_iter < l_widgets.end(); ++l_widget_iter)
         {
@@ -250,6 +255,16 @@ void TartiniSettingsDialog::saveSettings()
     {
         //Iterate over all widgets in the current group and save their settings
         std::string l_group(tabWidget->tabText(l_i).toStdString());
+        // Search group in tab names saved during load settings and if not
+        // found replace it with the one save, this is certainly due to a memory issue
+        auto l_iter = m_tab_names.find(l_i);
+        assert(m_tab_names.end() != l_iter);
+        if(l_iter->second != l_group)
+        {
+            std::cerr << "Warning wrong tab name \"" << l_group << "\" should be \"" << l_iter->second << "\"" << std::endl;
+            l_group = l_iter->second;
+        }
+
         const QList<QObject*> & l_widgets = tabWidget->widget(l_i)->children();
         for(QList<QObject*>::const_iterator l_widget_iterator=l_widgets.begin(); l_widget_iterator < l_widgets.end(); ++l_widget_iterator)
         {
@@ -399,4 +414,5 @@ void TartiniSettingsDialog::resetDefaults()
     init();
 }
 
+std::map<int, std::string> TartiniSettingsDialog::m_tab_names;
 // EOF
