@@ -511,7 +511,6 @@ MainWindow::MainWindow()
     l_freq_A_tool_bar->addWidget(l_freq_A_spin_box);
     connect(l_freq_A_spin_box, SIGNAL(valueChanged(int)), g_data, SLOT(setFreqA(int)));
     connect(l_freq_A_spin_box, SIGNAL(valueChanged(int)), &(g_data->getView()), SLOT(doUpdate()));
-    QFont l_font("Courier", 12, QFont::Bold);
 
     m_note_label = new MyLabel("Note: 9999", statusBar(), "notelabel");
     statusBar()->addPermanentWidget(m_note_label, 0);
