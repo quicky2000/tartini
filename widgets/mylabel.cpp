@@ -26,6 +26,8 @@ MyLabel::MyLabel(const QString & p_text
                 )
 : DrawWidget(p_parent, p_name)
 , m_text(p_text)
+, m_font_height(0)
+, m_text_width(0)
 {
     QFontMetrics l_font_metric = QFontMetrics(get_painter().font());
     m_font_height = l_font_metric.height();
