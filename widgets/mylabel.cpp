@@ -29,7 +29,7 @@ MyLabel::MyLabel(const QString & p_text
 , m_font_height(0)
 , m_text_width(0)
 {
-    QFontMetrics l_font_metric = QFontMetrics(get_painter().font());
+    const QFontMetrics & l_font_metric = get_painter().fontMetrics();
     m_font_height = l_font_metric.height();
     m_text_width = l_font_metric.width(m_text);
 }
