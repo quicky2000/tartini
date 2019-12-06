@@ -25,7 +25,7 @@ class TartiniSettingsDialog : public QDialog, private Ui_SettingsDialog
     TartiniSettingsDialog(QWidget * p_parent = 0);
 
     void loadSetting( QObject * p_object
-                    , const QString & p_group
+                    , const std::string & p_group
                     );
     void init();
 
@@ -38,7 +38,7 @@ class TartiniSettingsDialog : public QDialog, private Ui_SettingsDialog
     void getShading1Color();
     void getShading2Color();
     void saveSetting( QObject * p_object
-                    , const QString p_group
+                    , const std::string & p_group
                     );
     void saveSettings();
     void checkAnalysisEnabled();

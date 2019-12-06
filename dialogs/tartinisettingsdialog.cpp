@@ -38,11 +38,11 @@ TartiniSettingsDialog::TartiniSettingsDialog(QWidget * p_parent)
 
 //------------------------------------------------------------------------------
 void TartiniSettingsDialog::loadSetting( QObject * p_object
-                                       , const QString & p_group
+                                       , const std::string & p_group
                                        )
 {
     std::string l_key = p_object->objectName().toStdString();
-    std::string l_full_key = p_group.toStdString() + "/" + l_key;
+    std::string l_full_key = p_group + "/" + l_key;
     std::string l_class_name = p_object->metaObject()->className();
 
     if(l_class_name == "QGroupBox")
@@ -103,13 +103,11 @@ void TartiniSettingsDialog::init()
     soundOutput->clear();
     soundOutput->insertItems(0,AudioStream::getOutputDeviceNames());
 
-    QString l_group;
     //Iterate over all groups
     for(int l_i = 0; l_i < tabWidget->count(); l_i++)
     {
         //Iterate over all widgets in the current group and load their settings
-        l_group = tabWidget->tabText(l_i);
-        std::string l_group_string = l_group.toStdString();
+        std::string l_group(tabWidget->tabText(l_i).toStdString());
         const QList<QObject*> & l_widgets = tabWidget->widget(l_i)->children();
         for(QList<QObject*>::const_iterator l_widget_iter = l_widgets.begin(); l_widget_iter < l_widgets.end(); ++l_widget_iter)
         {
@@ -191,10 +189,10 @@ void TartiniSettingsDialog::getShading2Color()
 }
 
 //------------------------------------------------------------------------------
-void TartiniSettingsDialog::saveSetting(QObject *p_object, const QString p_group)
+void TartiniSettingsDialog::saveSetting(QObject *p_object, const std::string  & p_group)
 {
     std::string l_key = p_object->objectName().toStdString();
-    std::string l_full_key = p_group.toStdString() + "/" + l_key;
+    std::string l_full_key = p_group + "/" + l_key;
     std::string l_class_name = p_object->metaObject()->className();
 
     if(l_class_name == "QGroupBox")
@@ -247,12 +245,11 @@ void TartiniSettingsDialog::saveSettings()
 {
     // Go through all the categories on the left, and save all the preferences we can from the fields.
     // Combo boxes must be done separately.
-    QString l_group;
     //Iterate over all the groups
     for(int l_i = 0; l_i < tabWidget->count(); l_i++)
     {
         //Iterate over all widgets in the current group and save their settings
-        l_group = tabWidget->tabText(l_i);
+        std::string l_group(tabWidget->tabText(l_i).toStdString());
         const QList<QObject*> & l_widgets = tabWidget->widget(l_i)->children();
         for(QList<QObject*>::const_iterator l_widget_iterator=l_widgets.begin(); l_widget_iterator < l_widgets.end(); ++l_widget_iterator)
         {
