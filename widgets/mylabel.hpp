@@ -17,13 +17,13 @@
 */
 
 //------------------------------------------------------------------------------
-QString MyLabel::text() const
+const std::string & MyLabel::text() const
 {
     return m_text;
 }
 
 //------------------------------------------------------------------------------
-void MyLabel::setText(const QString & p_text)
+void MyLabel::setText(const std::string & p_text)
 {
     m_text = p_text;
     update();

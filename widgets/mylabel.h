@@ -30,16 +30,16 @@
 class MyLabel : public DrawWidget
 {
   public:
-    MyLabel(const QString & p_text
+    MyLabel(const std::string & p_text
            ,QWidget * p_parent
            ,const char * p_name = 0
            );
 
     inline
-    QString text() const;
+    const std::string & text() const;
 
     inline
-    void setText(const QString & p_text);
+    void setText(const std::string & p_text);
 
     void paintEvent( QPaintEvent * );
 
@@ -47,7 +47,7 @@ class MyLabel : public DrawWidget
     QSize sizeHint() const;
 
   private:
-    QString m_text;
+    std::string m_text;
     int m_font_height;
     int m_text_width;
 };

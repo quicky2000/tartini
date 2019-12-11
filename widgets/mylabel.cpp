@@ -20,7 +20,7 @@
 #include <QPaintEvent>
 
 //------------------------------------------------------------------------------
-MyLabel::MyLabel(const QString & p_text
+MyLabel::MyLabel(const std::string & p_text
                 ,QWidget * p_parent
                 ,const char * p_name
                 )
@@ -40,7 +40,7 @@ void MyLabel::paintEvent( QPaintEvent * )
     beginDrawing(false);
     QPalette l_palette;
     fillBackground(l_palette.color(QPalette::Window));
-    get_painter().drawText(4, m_font_height - 2, m_text);
+    get_painter().drawText(4, m_font_height - 2, QString::fromStdString(m_text));
     endDrawing();
 }
 

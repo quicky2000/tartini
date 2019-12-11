@@ -1047,7 +1047,7 @@ void MainWindow::setTimeLabel(double p_t)
         int l_secs = int(floor(p_t - double(l_mins * 60)));
         int l_milli_secs = int(floor((p_t - double(l_mins * 60) - double(l_secs))*1000.0));
         sprintf(l_temp, "Time: %s%02d:%02d.%03d", (l_sign == -1) ? "-" : " ", l_mins, l_secs, l_milli_secs);
-        m_time_label->setText(QString(l_temp));
+        m_time_label->setText(l_temp);
     }
 }
 
@@ -1064,7 +1064,7 @@ void MainWindow::setChunkLabel()
     {
         sprintf(l_temp, "Chunk: 0");
     }
-    m_chunk_label->setText(QString(l_temp));
+    m_chunk_label->setText(l_temp);
 }
 
 //------------------------------------------------------------------------------
@@ -1090,7 +1090,7 @@ void MainWindow::setNoteLabel()
     {
         sprintf(l_temp, "Note:    ");
     }
-    m_note_label->setText(QString(l_temp));
+    m_note_label->setText(l_temp);
 }
 
 //------------------------------------------------------------------------------
