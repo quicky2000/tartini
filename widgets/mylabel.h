@@ -47,9 +47,14 @@ class MyLabel : public DrawWidget
     QSize sizeHint() const;
 
   private:
+
+    inline
+    void compute_text_width();
+
     std::string m_text;
     int m_font_height;
     int m_text_width;
+    bool m_size_computed;
 };
 
 #include "mylabel.hpp"

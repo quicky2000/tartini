@@ -26,13 +26,32 @@ const std::string & MyLabel::text() const
 void MyLabel::setText(const std::string & p_text)
 {
     m_text = p_text;
+    compute_text_width();
     update();
 }
   
 //------------------------------------------------------------------------------
 QSize MyLabel::sizeHint() const
 {
-    return QSize(m_text_width + 8, m_font_height + 4);
+    return QSize(m_text_width + 18, m_font_height + 4);
 }
 
+//------------------------------------------------------------------------------
+void MyLabel::compute_text_width()
+{
+    if(get_painter().isActive())
+    {
+        const QFontMetrics & l_font_metric = get_painter().fontMetrics();
+        m_font_height = l_font_metric.height();
+        m_text_width = l_font_metric.width(QString::fromStdString(m_text));
+        m_size_computed = true;
+    }
+    else
+    {
+        // Compute size with default font size values
+        m_font_height = 18;
+        m_text_width = m_text.length() * 10;
+        m_size_computed = false;
+    }
+}
 // EOF
