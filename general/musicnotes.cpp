@@ -39,7 +39,7 @@ char *g_music_key_name[NUM_MUSIC_KEYS] =
 int g_music_key_root[NUM_MUSIC_KEYS] = {9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8      };
 int g_music_key = 3; //C
 //                     0    1     2    3     4    5    6     7    8     9    10    11
-const QString noteNames[12] =
+const QString g_note_names[12] =
   {
     QObject::tr("C"),
     QObject::tr("C#"),
@@ -141,7 +141,7 @@ void initMusicStuff()
 //------------------------------------------------------------------------------
 const char * noteName(int p_pitch)
 {
-    return noteNames[cycle(p_pitch, 12)].toStdString().c_str();
+    return g_note_names[cycle(p_pitch, 12)].toStdString().c_str();
 }
 
 //------------------------------------------------------------------------------
