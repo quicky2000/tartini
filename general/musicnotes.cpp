@@ -21,7 +21,7 @@
 #include "music_key.h"
 #include <QObject>
 
-const QString g_note_names[12] =
+const QString music_notes::m_note_names[12] =
   {
     QObject::tr("C"),
     QObject::tr("C#"),
@@ -121,9 +121,9 @@ void initMusicStuff()
 */
 
 //------------------------------------------------------------------------------
-const char * noteName(int p_pitch)
+const char * music_notes::noteName(int p_pitch)
 {
-    return g_note_names[cycle(p_pitch, 12)].toStdString().c_str();
+    return m_note_names[cycle(p_pitch, 12)].toStdString().c_str();
 }
 
 //------------------------------------------------------------------------------

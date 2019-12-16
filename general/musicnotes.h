@@ -21,6 +21,20 @@
 #include "array1d.h"
 #include "gdata.h"
 
+class music_notes
+{
+  public:
+
+    static
+    const char * noteName(int p_pitch);
+
+    static inline
+    const char * noteName(const double & p_pitch);
+
+  private:
+    static const QString m_note_names[12];
+};
+
 /**
    Converts the frequencies freq (in hertz) into their note number on the midi scale
    i.e. the number of semi-tones above C0
@@ -35,9 +49,6 @@ inline double freq2pitch(const double & p_freq);
    Does the opposite of the function above
 */
 inline double pitch2freq(const double & p_note);
-
-const char * noteName(int p_pitch);
-inline const char * noteName(const double & p_pitch);
 
 /**
    @param note The midi note number

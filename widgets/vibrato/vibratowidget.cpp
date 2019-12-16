@@ -935,11 +935,11 @@ void VibratoWidget::compose_note_label(QString & p_note_label, const int & p_not
   std::stringstream l_composed_note_label;
   if ((noteOctave(p_note) >= 0) && (noteOctave(p_note) <= 9))
     {
-      l_composed_note_label << noteName(p_note) << noteOctave(p_note);
+      l_composed_note_label << music_notes::noteName(p_note) << noteOctave(p_note);
     }
   else
     {
-      l_composed_note_label << noteName(p_note) << " ";
+      l_composed_note_label << music_notes::noteName(p_note) << " ";
     }
   p_note_label = l_composed_note_label.str().c_str();
 }

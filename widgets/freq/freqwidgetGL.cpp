@@ -178,7 +178,7 @@ void FreqWidgetGL::drawReferenceLinesGL( const double & /* p_left_time*/
                 l_name_index = toInt(l_cur_pitch);
                 glColor3ub(0, 0, 0);
                 std::stringstream l_stream ;
-                l_stream << noteName(l_name_index) << noteOctave(l_name_index);
+                l_stream << music_notes::noteName(l_name_index) << noteOctave(l_name_index);
                 l_note_label = QString(l_stream.str().c_str());
                 renderText(2, toInt(l_line_Y) + l_font_height_space, l_note_label);
             }

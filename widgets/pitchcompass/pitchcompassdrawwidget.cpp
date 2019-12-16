@@ -76,7 +76,7 @@ PitchCompassDrawWidget::PitchCompassDrawWidget( QWidget *p_parent
         m_compass->setSingleSteps(30);
         for(int l_index = 0; l_index < 12; l_index++)
         {
-            l_notes[l_index] = noteName(l_index);
+            l_notes[l_index] = music_notes::noteName(l_index);
         }
         l_scale_draw->setLabelMap(l_notes);
 #else
@@ -159,9 +159,9 @@ void PitchCompassDrawWidget::updateCompass(double p_time)
             unsigned int l_div = 1;
 #endif // QWT_VERSION >= 0x060000
 
-            l_notes[(INTERVAL * 3 ) / l_div] = noteName(toInt(l_zero_val));
-            l_notes[0 / l_div] = noteName(toInt(l_zero_val += 2));
-            l_notes[INTERVAL / l_div] = noteName(toInt(l_zero_val));
+            l_notes[(INTERVAL * 3 ) / l_div] = music_notes::noteName(toInt(l_zero_val));
+            l_notes[0 / l_div] = music_notes::noteName(toInt(l_zero_val += 2));
+            l_notes[INTERVAL / l_div] = music_notes::noteName(toInt(l_zero_val));
 
 #if QWT_VERSION >= 0x060000
             QwtCompassScaleDraw * l_scale_draw = dynamic_cast<QwtCompassScaleDraw*>(m_compass->scaleDraw());
@@ -186,9 +186,9 @@ void PitchCompassDrawWidget::updateCompass(double p_time)
                 l_start = fmod(l_start, 360.0);
             }
 
-            l_notes[l_start] = noteName(toInt(l_close_pitch));
-            l_notes[l_start - INTERVAL] = noteName(toInt(l_close_pitch - 1));
-            l_notes[l_start + INTERVAL] = noteName(toInt(l_close_pitch + 1));
+            l_notes[l_start] = music_notes::noteName(toInt(l_close_pitch));
+            l_notes[l_start - INTERVAL] = music_notes::noteName(toInt(l_close_pitch - 1));
+            l_notes[l_start + INTERVAL] = music_notes::noteName(toInt(l_close_pitch + 1));
 
 #if QWT_VERSION >= 0x060000
             QwtCompassScaleDraw * l_scale_draw = dynamic_cast<QwtCompassScaleDraw*>(m_compass->scaleDraw());
