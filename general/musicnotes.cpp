@@ -21,20 +21,19 @@
 #include "music_key.h"
 #include <QObject>
 
-const QString music_notes::m_note_names[12] =
-  {
-    QObject::tr("C"),
-    QObject::tr("C#"),
-    QObject::tr("D"),
-    QObject::tr("D#"),
-    QObject::tr("E"),
-    QObject::tr("F"),
-    QObject::tr("F#"),
-    QObject::tr("G"),
-    QObject::tr("G#"),
-    QObject::tr("A"),
-    QObject::tr("A#"),
-    QObject::tr("B")
+std::string music_notes::m_note_names[12] =
+  { "C"
+  , "C#"
+  , "D"
+  , "D#"
+  , "E"
+  , "F"
+  , "F#"
+  , "G"
+  , "G#"
+  , "A"
+  , "A#"
+  , "B"
   };
 
 /**
@@ -73,6 +72,7 @@ const QString music_notes::m_note_names[12] =
 //------------------------------------------------------------------------------
 void initMusicStuff()
 {
+    music_notes::init_note_names();
     double l_even_tempered_scale[12]  = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0 };
     /**
        Note types: 0x01=Major Scale Note, 0x02=Minor Scale Note, 0x04=Root Note
@@ -123,7 +123,18 @@ void initMusicStuff()
 //------------------------------------------------------------------------------
 const char * music_notes::noteName(int p_pitch)
 {
-    return m_note_names[cycle(p_pitch, 12)].toStdString().c_str();
+    return m_note_names[cycle(p_pitch, 12)].c_str();
+}
+
+//------------------------------------------------------------------------------
+void
+music_notes::init_note_names()
+{
+    for(unsigned int l_index = 0; l_index < 12; ++l_index)
+    {
+        std::string l_translated_name = QObject::tr(m_note_names[l_index].c_str()).toStdString();
+        m_note_names[l_index] = l_translated_name;
+    }
 }
 
 //------------------------------------------------------------------------------

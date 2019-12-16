@@ -20,6 +20,7 @@
 #include "useful.h"
 #include "array1d.h"
 #include "gdata.h"
+#include <string>
 
 class music_notes
 {
@@ -31,8 +32,11 @@ class music_notes
     static inline
     const char * noteName(const double & p_pitch);
 
+    static
+    void init_note_names();
+
   private:
-    static const QString m_note_names[12];
+    static std::string m_note_names[12];
 };
 
 /**
