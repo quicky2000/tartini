@@ -45,7 +45,6 @@ enum VIEW_MENU_TYPES
   , MENU_TYPE_EXPERIMENTAL
   };
 
-const size_t g_view_number = 19;
 enum VIEW_NAMES
   { VIEW_OPEN_FILES
   , VIEW_FREQ
@@ -68,9 +67,6 @@ enum VIEW_NAMES
   , VIEW_VOLUME_METER
 };
 
-extern ViewData g_view_data[g_view_number];
-
-                         
 class MainWindow : public QMainWindow
 {
   Q_OBJECT
@@ -161,6 +157,11 @@ class MainWindow : public QMainWindow
 
     bool loadViewGeometry();
     void saveViewGeometry();
+
+  public:
+    static const size_t m_view_number = 19;
+    static ViewData m_view_data[m_view_number];
+
 };
 
 class TartiniDialog :public QDialog

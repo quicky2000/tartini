@@ -133,7 +133,7 @@
 MainWindow *g_main_window;
 MyGLFont *g_mygl_font;
 
-ViewData g_view_data[g_view_number] =
+ViewData MainWindow::m_view_data[MainWindow::m_view_number] =
         //ViewData(title,                            menuName,                           className,           menu type);
         { ViewData(QObject::tr("File List"),         QObject::tr("&File List"),          "OpenFiles",         0)
         , ViewData(QObject::tr("Pitch Contour"),     QObject::tr("&Pitch Contour"),      "FreqView",          0)
@@ -994,24 +994,24 @@ void MainWindow::newViewAboutToShow()
 
     QList<QMdiSubWindow *> l_opened = m_the_workspace->subWindowList();
 
-    for(unsigned int l_j = 0; l_j < g_view_number; l_j++)
+    for(unsigned int l_j = 0; l_j < m_view_number; l_j++)
     {
         QAction *l_action;
-        if(g_view_data[l_j].get_menu_type() == 0)
+        if(m_view_data[l_j].get_menu_type() == 0)
         {
-            l_action = m_new_view_menu->addAction(g_view_data[l_j].get_menu_name());
+            l_action = m_new_view_menu->addAction(m_view_data[l_j].get_menu_name());
         }
-        else if(g_view_data[l_j].get_menu_type() == 1)
+        else if(m_view_data[l_j].get_menu_type() == 1)
         {
-            l_action = l_technical_menu->addAction(g_view_data[l_j].get_menu_name());
+            l_action = l_technical_menu->addAction(m_view_data[l_j].get_menu_name());
         }
-        else if(g_view_data[l_j].get_menu_type() == 2)
+        else if(m_view_data[l_j].get_menu_type() == 2)
         {
-            l_action = l_experimental_menu->addAction(g_view_data[l_j].get_menu_name());
+            l_action = l_experimental_menu->addAction(m_view_data[l_j].get_menu_name());
         }
-        else if(g_view_data[l_j].get_menu_type() == 3)
+        else if(m_view_data[l_j].get_menu_type() == 3)
         {
-            l_action = l_other_menu->addAction(g_view_data[l_j].get_menu_name());
+            l_action = l_other_menu->addAction(m_view_data[l_j].get_menu_name());
         }
         else
         {
@@ -1023,7 +1023,7 @@ void MainWindow::newViewAboutToShow()
         for(QList<QMdiSubWindow *>::iterator l_iterator=l_opened.begin(); l_iterator<l_opened.end(); l_iterator++)
         {
             const std::string l_widget_class_name = (*l_iterator)->widget()->metaObject()->className();
-            const std::string l_view_class_name = g_view_data[l_j].get_class_name().toStdString();
+            const std::string l_view_class_name = m_view_data[l_j].get_class_name().toStdString();
             if(l_widget_class_name == l_view_class_name)
             {
                 l_action->setEnabled(false);
@@ -1438,9 +1438,9 @@ bool MainWindow::loadViewGeometry()
     QSize l_size;
     int l_counter = 0;
 
-    for(unsigned int l_j = 0; l_j < g_view_number; l_j++)
+    for(unsigned int l_j = 0; l_j < m_view_number; l_j++)
     {
-        QString l_base = QString("geometry/") + g_view_data[l_j].get_class_name();
+        QString l_base = QString("geometry/") + m_view_data[l_j].get_class_name();
         QString l_key = l_base+"/visible";
         if(g_data->settingsContains(l_key.toStdString()) && g_data->getSettingsValue(l_key.toStdString(), false) == true)
         {
@@ -1473,15 +1473,15 @@ void MainWindow::saveViewGeometry()
 {
     QList<QMdiSubWindow *> l_opened = m_the_workspace->subWindowList();
 
-    for(unsigned int l_j = 0; l_j < g_view_number; l_j++)
+    for(unsigned int l_j = 0; l_j < m_view_number; l_j++)
     {
-        QString l_base = QString("geometry/") + g_view_data[l_j].get_class_name();
+        QString l_base = QString("geometry/") + m_view_data[l_j].get_class_name();
 
         bool l_found = false;
         for(QList<QMdiSubWindow *>::iterator l_iterator = l_opened.begin(); l_iterator < l_opened.end(); l_iterator++)
         {
             const std::string l_widget_class_name = (*l_iterator)->widget()->metaObject()->className();
-            const std::string l_view_class_name = g_view_data[l_j].get_class_name().toStdString();
+            const std::string l_view_class_name = m_view_data[l_j].get_class_name().toStdString();
             if(l_widget_class_name == l_view_class_name)
             {
                 g_data->setSettingsValue((l_base + "/visible").toStdString(), true);
