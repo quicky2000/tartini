@@ -56,42 +56,6 @@ inline int noteValue(const double & p_pitch);
 bool isBlackNote(int p_pitch);
 inline bool isBlackNote(const double & p_pitch);
 
-class MusicScale
-{
-  public:
-
-    enum MusicScale_t
-            { Chromatic
-            , Major
-            , NaturalMinor
-            , HarmonicMinor
-            , MelodicMinor
-            };
-
-    inline MusicScale();
-    ~MusicScale();
-
-    void addScale( const char *p_name
-                 , const int * p_notes
-                 , int p_length
-                 , int p_semitone_offset
-                 );
-
-    inline int size()const;
-    inline int note(int j)const;
-    inline bool hasSemitone(int p_j)const;
-    inline const char * name()const;
-    inline int semitoneOffset()const;
-
-  private:
-
-    Array1d<int> m_p_notes;
-    std::vector<bool> m_p_semitone_lookup;
-    char * m_p_name;
-    int m_semitone_offset;
-
-};
-
 /**
    This defines the notes relative to the root for 1 octave of the scale
 */
@@ -155,7 +119,6 @@ void initMusicStuff();
 
 #define NUM_MUSIC_KEYS 12
 extern std::vector<MusicKey> g_music_keys;
-extern std::vector<MusicScale> g_music_scales;
 
 extern char * g_music_key_name[NUM_MUSIC_KEYS];
 extern int g_music_key_root[NUM_MUSIC_KEYS];

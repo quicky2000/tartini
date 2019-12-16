@@ -62,51 +62,6 @@ bool isBlackNote(const double & p_pitch)
 }
 
 //------------------------------------------------------------------------------
-MusicScale::MusicScale()
-: m_p_name(NULL)
-, m_semitone_offset(0)
-{
-}
-
-//------------------------------------------------------------------------------
-int MusicScale::size()const
-{
-    return m_p_notes.size();
-}
-
-//------------------------------------------------------------------------------
-int MusicScale::note(int j)const
-{
-#ifdef MYDEBUG
-    return m_p_notes.at(j);
-#else // MYDEBUG
-    return m_p_notes[j];
-#endif // MYDEBUG
-}
-
-//------------------------------------------------------------------------------
-bool MusicScale::hasSemitone(int p_j)const
-{
-#ifdef MYDEBUG
-    return m_p_semitone_lookup.at(p_j);
-#else // MYDEBUG
-    return m_p_semitone_lookup[p_j];
-#endif // MYDEBUG
-}
-
-//------------------------------------------------------------------------------
-const char * MusicScale::name()const
-{
-    return m_p_name;
-}
-
-//------------------------------------------------------------------------------
-int MusicScale::semitoneOffset()const
-{
-    return m_semitone_offset;
-}
-
-//------------------------------------------------------------------------------
 MusicKey::MusicKey()
 : m_name(NULL)
 {

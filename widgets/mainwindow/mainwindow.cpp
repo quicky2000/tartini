@@ -58,6 +58,7 @@
 #include "channel.h"
 #include "myscrollbar.h"
 #include "mylabel.h"
+#include "music_scale.h"
 
 // Views
 #include "openfiles.h"

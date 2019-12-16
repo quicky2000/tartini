@@ -41,6 +41,7 @@
 #include "myqt.h"
 #include "array1d.h"
 #include "musicnotes.h"
+#include "music_scale.h"
 
 #include <sstream>
 

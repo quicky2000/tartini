@@ -42,6 +42,7 @@
 #include "savedialog.h"
 #include "conversions.h"
 #include "musicnotes.h"
+#include "music_scale.h"
 
 #ifndef WINDOWS
 //for multi-threaded profiling

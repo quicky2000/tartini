@@ -17,10 +17,10 @@
 #include "musicnotes.h"
 #include "mystring.h"
 #include "myassert.h"
+#include "music_scale.h"
 #include <QObject>
 
 std::vector<MusicKey> g_music_keys;
-std::vector<MusicScale> g_music_scales;
 
 char *g_music_key_name[NUM_MUSIC_KEYS] =
   {(char*)"A             ",
@@ -170,37 +170,6 @@ bool isBlackNote(int p_pitch)
         default:
             return false;
     }
-}
-
-//------------------------------------------------------------------------------
-MusicScale::~MusicScale()
-{
-    if(m_p_name)
-    {
-        free(m_p_name);
-    }
-}
-
-//------------------------------------------------------------------------------
-void MusicScale::addScale( const char * p_name
-                         , const int * p_notes
-                         , int p_length
-                         , int p_semitone_offset
-                         )
-{
-    if(m_p_name)
-    {
-        free(m_p_name);
-    }
-    m_p_notes.resize_copy(p_notes, p_length);
-    m_p_semitone_lookup.resize(12, false);
-    for(int l_j = 0; l_j < p_length; l_j++)
-    {
-        myassert(p_notes[l_j] >= 0 && p_notes[l_j] < 12);
-        m_p_semitone_lookup[p_notes[l_j]] = true;
-    }
-    m_p_name = copy_string(p_name);
-    m_semitone_offset = p_semitone_offset;
 }
 
 //------------------------------------------------------------------------------
