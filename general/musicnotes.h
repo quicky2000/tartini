@@ -56,73 +56,8 @@ inline int noteValue(const double & p_pitch);
 bool isBlackNote(int p_pitch);
 inline bool isBlackNote(const double & p_pitch);
 
-/**
-   This defines the notes relative to the root for 1 octave of the scale
-*/
-class MusicKey
-{
-  public:
-    inline MusicKey();
-    ~MusicKey();
-
-    /**
-       @param a the array of ratios
-       @param p_n the size of the array
-       e.g. [0.0, 1.0, 2.0, 3.0, 4.0, ... 11.0] for equal tempered
-    */
-    void setScaleMidi( double * p_note_offsets
-                     , int * p_types
-                     , int p_n
-                     );
-
-    /**
-       @param a the array of ratios
-       @param p_n the size of the array
-       e.g. [0, 100, 200, 300, 400, ... 1100] for equal tempered
-    */
-    void setScaleCents( double * p_note_offsets
-                      , int * p_types
-                      , int p_n
-                      );
-
-    /**
-       @param a the array of ratios
-       @param p_n the size of the array
-       e.g. [1.0, 5.0/4, 4.0/3, 3.0/2]
-    */
-    void setScaleRatios( double * p_note_offsets
-                       , int * p_types
-                       , int p_n
-                       );
-
-    void setName(const char * p_name);
-    inline const char * name()const;
-    inline int size() const;
-    inline double noteOffset(int p_j) const;
-    inline int noteType(int p_j) const;
-    int nearestNoteIndex(const double & p_x)const;
-    double nearestNote(const double & p_x)const;
-    double nearestNoteDistance(const double & p_x)const;
-
-  private:
-
-    /**
-     * ordered midi values of the notes in 1 octave
-     */
-    Array1d<double> m_note_offsets;
-    Array1d<int> m_note_types;
-    char * m_name;
-
-};
 
 void initMusicStuff();
-
-#define NUM_MUSIC_KEYS 12
-extern std::vector<MusicKey> g_music_keys;
-
-extern char * g_music_key_name[NUM_MUSIC_KEYS];
-extern int g_music_key_root[NUM_MUSIC_KEYS];
-extern int g_music_key;
 
 #include "musicnotes.hpp"
 

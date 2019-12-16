@@ -216,6 +216,8 @@ HEADERS += main.h \
   general/musicnotes.hpp \
   general/music_scale.h \
   general/music_scale.hpp \
+  general/music_key.h \
+  general/music_key.hpp \
   general/myalgo.h \
   include/RingBuffer.h
 
@@ -307,6 +309,7 @@ SOURCES += main.cpp \
   general/myqt.cpp \
   general/musicnotes.cpp \
   general/music_scale.cpp \
+  general/music_key.cpp \
   general/myalgo.cpp
  
 RESOURCES += pitch.qrc

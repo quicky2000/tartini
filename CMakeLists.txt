@@ -141,6 +141,8 @@ set(MY_HEADER_FILES
     include/RingBuffer.h
     general/music_scale.h
     general/music_scale.hpp
+    general/music_key.h
+    general/music_key.hpp
    )
 
 set(MY_SOURCE_FILES
@@ -233,6 +235,7 @@ set(MY_SOURCE_FILES
     general/musicnotes.cpp
     general/myalgo.cpp
     general/music_scale.cpp
+    general/music_key.cpp
    )
 
 # List header directories in project

@@ -61,41 +61,4 @@ bool isBlackNote(const double & p_pitch)
     return isBlackNote(toInt(p_pitch));
 }
 
-//------------------------------------------------------------------------------
-MusicKey::MusicKey()
-: m_name(NULL)
-{
-}
-
-//------------------------------------------------------------------------------
-const char * MusicKey::name()const
-{
-    return m_name;
-}
-
-//------------------------------------------------------------------------------
-int MusicKey::size() const
-{
-    return m_note_offsets.size();
-}
-
-//------------------------------------------------------------------------------
-double MusicKey::noteOffset(int p_j) const
-{
-#ifdef MYDEBUG
-    return m_note_offsets.at(p_j);
-#else // MYDEBUG
-    return m_note_offsets[p_j];
-#endif // MYDEBUG
-}
-
-//------------------------------------------------------------------------------
-int MusicKey::noteType(int p_j) const
-{
-#ifdef MYDEBUG
-    return m_note_types.at(p_j);
-#else // MYDEBUG
-    return m_note_types[p_j];
-#endif // MYDEBUG
-}
 //EOF

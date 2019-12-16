@@ -59,6 +59,7 @@
 #include "myscrollbar.h"
 #include "mylabel.h"
 #include "music_scale.h"
+#include "music_key.h"
 
 // Views
 #include "openfiles.h"
