@@ -979,19 +979,19 @@ void MainWindow::newViewAboutToShow()
         QAction *l_action;
         if(m_view_data[l_j].get_menu_type() == 0)
         {
-            l_action = m_new_view_menu->addAction(m_view_data[l_j].get_menu_name());
+            l_action = m_new_view_menu->addAction(QString::fromStdString(m_view_data[l_j].get_menu_name()));
         }
         else if(m_view_data[l_j].get_menu_type() == 1)
         {
-            l_action = l_technical_menu->addAction(m_view_data[l_j].get_menu_name());
+            l_action = l_technical_menu->addAction(QString::fromStdString(m_view_data[l_j].get_menu_name()));
         }
         else if(m_view_data[l_j].get_menu_type() == 2)
         {
-            l_action = l_experimental_menu->addAction(m_view_data[l_j].get_menu_name());
+            l_action = l_experimental_menu->addAction(QString::fromStdString(m_view_data[l_j].get_menu_name()));
         }
         else if(m_view_data[l_j].get_menu_type() == 3)
         {
-            l_action = l_other_menu->addAction(m_view_data[l_j].get_menu_name());
+            l_action = l_other_menu->addAction(QString::fromStdString(m_view_data[l_j].get_menu_name()));
         }
         else
         {
@@ -1003,7 +1003,7 @@ void MainWindow::newViewAboutToShow()
         for(QList<QMdiSubWindow *>::iterator l_iterator=l_opened.begin(); l_iterator<l_opened.end(); l_iterator++)
         {
             const std::string l_widget_class_name = (*l_iterator)->widget()->metaObject()->className();
-            const std::string l_view_class_name = m_view_data[l_j].get_class_name().toStdString();
+            const std::string l_view_class_name = m_view_data[l_j].get_class_name();
             if(l_widget_class_name == l_view_class_name)
             {
                 l_action->setEnabled(false);
@@ -1420,7 +1420,7 @@ bool MainWindow::loadViewGeometry()
 
     for(unsigned int l_j = 0; l_j < m_view_number; l_j++)
     {
-        QString l_base = QString("geometry/") + m_view_data[l_j].get_class_name();
+        QString l_base = QString("geometry/") + QString::fromStdString(m_view_data[l_j].get_class_name());
         QString l_key = l_base+"/visible";
         if(g_data->settingsContains(l_key.toStdString()) && g_data->getSettingsValue(l_key.toStdString(), false) == true)
         {
@@ -1455,13 +1455,13 @@ void MainWindow::saveViewGeometry()
 
     for(unsigned int l_j = 0; l_j < m_view_number; l_j++)
     {
-        QString l_base = QString("geometry/") + m_view_data[l_j].get_class_name();
+        QString l_base = QString("geometry/") + QString::fromStdString(m_view_data[l_j].get_class_name());
 
         bool l_found = false;
         for(QList<QMdiSubWindow *>::iterator l_iterator = l_opened.begin(); l_iterator < l_opened.end(); l_iterator++)
         {
             const std::string l_widget_class_name = (*l_iterator)->widget()->metaObject()->className();
-            const std::string l_view_class_name = m_view_data[l_j].get_class_name().toStdString();
+            const std::string l_view_class_name = m_view_data[l_j].get_class_name();
             if(l_widget_class_name == l_view_class_name)
             {
                 g_data->setSettingsValue((l_base + "/visible").toStdString(), true);
@@ -1482,25 +1482,25 @@ void MainWindow::saveViewGeometry()
 void
 MainWindow::init_view_data()
 {
-    m_view_data[0] = ViewData(QObject::tr("File List"),         QObject::tr("&File List"),          "OpenFiles",         0);
-    m_view_data[1] = ViewData(QObject::tr("Pitch Contour"),     QObject::tr("&Pitch Contour"),      "FreqView",          0);
-    m_view_data[2] = ViewData(QObject::tr("Chromatic Tuner"),   QObject::tr("&Chromatic Tuner"),    "TunerView",         0);
-    m_view_data[3] = ViewData(QObject::tr("Harmonic Track"),    QObject::tr("3D Harmonic &Track"),  "HTrackView",        0);
-    m_view_data[4] = ViewData(QObject::tr("Vibrato View"),      QObject::tr("V&ibrato View"),       "VibratoView",       0);
-    m_view_data[5] = ViewData(QObject::tr("Musical Score"),     QObject::tr("&Musical Score"),      "ScoreView",         0);
-    m_view_data[6] = ViewData(QObject::tr("Oscilloscope"),      QObject::tr("&Oscilloscope"),       "WaveView",          1);
-    m_view_data[7] = ViewData(QObject::tr("Correlation View"),  QObject::tr("Corre&lation View"),   "CorrelationView",   1);
-    m_view_data[8] = ViewData(QObject::tr("FFT View"),          QObject::tr("FF&T View"),           "FFTView",           1);
-    m_view_data[9] = ViewData(QObject::tr("Cepstrum View"),     QObject::tr("C&epstrum View"),      "CepstrumView",      1);
-    m_view_data[10] = ViewData(QObject::tr("Debug View"),        QObject::tr("&Debug View"),         "DebugView",         1);
-    m_view_data[11] = ViewData(QObject::tr("Harmonic Block"),    QObject::tr("Harmonic &Block"),     "HBlockView",        2);
-    m_view_data[12] = ViewData(QObject::tr("Harmonic Stack"),    QObject::tr("&Harmonic Stack"),     "HStackView",        2);
-    m_view_data[13] = ViewData(QObject::tr("Harmonic Bubbles"),  QObject::tr("H&armonic Bubbles"),   "HBubbleView",       2);
-    m_view_data[14] = ViewData(QObject::tr("Harmonic Circle"),   QObject::tr("Ha&rmonic Circle"),    "HCircleView",       2);
-    m_view_data[15] = ViewData(QObject::tr("Pitch Compass"),     QObject::tr("Pitch &Compass"),      "PitchCompassView",  2);
-    m_view_data[16] = ViewData(QObject::tr("Piano Keyboard"),    QObject::tr("2D Piano &Keyboard"),  "PianoView",         3);
-    m_view_data[17] = ViewData(QObject::tr("Summary View"),      QObject::tr("&Summary View"),       "SummaryView",       3);
-    m_view_data[18] = ViewData(QObject::tr("Volume Meter"),      QObject::tr("&Volume Meter"),       "VolumeMeterView",   3);
+    m_view_data[0] = ViewData(QObject::tr("File List").toStdString(),         QObject::tr("&File List").toStdString(),          "OpenFiles",         0);
+    m_view_data[1] = ViewData(QObject::tr("Pitch Contour").toStdString(),     QObject::tr("&Pitch Contour").toStdString(),      "FreqView",          0);
+    m_view_data[2] = ViewData(QObject::tr("Chromatic Tuner").toStdString(),   QObject::tr("&Chromatic Tuner").toStdString(),    "TunerView",         0);
+    m_view_data[3] = ViewData(QObject::tr("Harmonic Track").toStdString(),    QObject::tr("3D Harmonic &Track").toStdString(),  "HTrackView",        0);
+    m_view_data[4] = ViewData(QObject::tr("Vibrato View").toStdString(),      QObject::tr("V&ibrato View").toStdString(),       "VibratoView",       0);
+    m_view_data[5] = ViewData(QObject::tr("Musical Score").toStdString(),     QObject::tr("&Musical Score").toStdString(),      "ScoreView",         0);
+    m_view_data[6] = ViewData(QObject::tr("Oscilloscope").toStdString(),      QObject::tr("&Oscilloscope").toStdString(),       "WaveView",          1);
+    m_view_data[7] = ViewData(QObject::tr("Correlation View").toStdString(),  QObject::tr("Corre&lation View").toStdString(),   "CorrelationView",   1);
+    m_view_data[8] = ViewData(QObject::tr("FFT View").toStdString(),          QObject::tr("FF&T View").toStdString(),           "FFTView",           1);
+    m_view_data[9] = ViewData(QObject::tr("Cepstrum View").toStdString(),     QObject::tr("C&epstrum View").toStdString(),      "CepstrumView",      1);
+    m_view_data[10] = ViewData(QObject::tr("Debug View").toStdString(),        QObject::tr("&Debug View").toStdString(),         "DebugView",         1);
+    m_view_data[11] = ViewData(QObject::tr("Harmonic Block").toStdString(),    QObject::tr("Harmonic &Block").toStdString(),     "HBlockView",        2);
+    m_view_data[12] = ViewData(QObject::tr("Harmonic Stack").toStdString(),    QObject::tr("&Harmonic Stack").toStdString(),     "HStackView",        2);
+    m_view_data[13] = ViewData(QObject::tr("Harmonic Bubbles").toStdString(),  QObject::tr("H&armonic Bubbles").toStdString(),   "HBubbleView",       2);
+    m_view_data[14] = ViewData(QObject::tr("Harmonic Circle").toStdString(),   QObject::tr("Ha&rmonic Circle").toStdString(),    "HCircleView",       2);
+    m_view_data[15] = ViewData(QObject::tr("Pitch Compass").toStdString(),     QObject::tr("Pitch &Compass").toStdString(),      "PitchCompassView",  2);
+    m_view_data[16] = ViewData(QObject::tr("Piano Keyboard").toStdString(),    QObject::tr("2D Piano &Keyboard").toStdString(),  "PianoView",         3);
+    m_view_data[17] = ViewData(QObject::tr("Summary View").toStdString(),      QObject::tr("&Summary View").toStdString(),       "SummaryView",       3);
+    m_view_data[18] = ViewData(QObject::tr("Volume Meter").toStdString(),      QObject::tr("&Volume Meter").toStdString(),       "VolumeMeterView",   3);
 }
 
 //------------------------------------------------------------------------------

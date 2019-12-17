@@ -15,29 +15,29 @@
 #ifndef VIEWDATA_H
 #define VIEWDATA_H
 
-#include <QString>
+#include <string>
 
 class ViewData
 {
   public:
 
-    ViewData( QString p_title
-            , QString p_menu_name
-            , QString p_class_name
+    ViewData( std::string p_title
+            , std::string p_menu_name
+            , std::string p_class_name
             , int p_menu_type
             );
 
     ViewData();
 
-    const QString & get_title() const;
-    const QString & get_menu_name() const;
-    const QString & get_class_name() const;
+    const std::string & get_title() const;
+    const std::string & get_menu_name() const;
+    const std::string & get_class_name() const;
     int get_menu_type() const;
 
   private:
-    QString m_title;
-    QString m_menu_name;
-    QString m_class_name;
+    std::string m_title;
+    std::string m_menu_name;
+    std::string m_class_name;
     int m_menu_type;
 };
 

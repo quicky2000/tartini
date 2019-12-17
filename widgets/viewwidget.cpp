@@ -21,7 +21,7 @@ ViewWidget::ViewWidget( int p_view_ID, QWidget * /*p_parent*/):
   m_view_ID(p_view_ID)
 {
   setAttribute(Qt::WA_DeleteOnClose);
-  setWindowTitle(MainWindow::m_view_data[m_view_ID].get_title());
+  setWindowTitle(QString::fromStdString(MainWindow::m_view_data[m_view_ID].get_title()));
   setAutoFillBackground(true);
 }
 

@@ -15,9 +15,9 @@
 #include "viewdata.h"
 
 //-----------------------------------------------------------------------------
-ViewData::ViewData( QString p_title
-                  , QString p_menu_name
-                  , QString p_class_name
+ViewData::ViewData( std::string p_title
+                  , std::string p_menu_name
+                  , std::string p_class_name
                   , int p_menu_type
                   )
 {
@@ -28,14 +28,14 @@ m_menu_type = p_menu_type;
 };
 
 //-----------------------------------------------------------------------------
-const QString &
+const std::string &
 ViewData::get_title() const
 {
     return m_title;
 }
 
 //-----------------------------------------------------------------------------
-const QString &
+const std::string &
 ViewData::get_menu_name() const
 {
     return m_menu_name;
@@ -49,7 +49,7 @@ ViewData::get_menu_type() const
 }
 
 //-----------------------------------------------------------------------------
-const QString &
+const std::string &
 ViewData::get_class_name() const
 {
     return m_class_name;
