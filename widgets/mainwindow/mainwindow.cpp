@@ -1504,6 +1504,14 @@ MainWindow::init_view_data()
 }
 
 //------------------------------------------------------------------------------
+const ViewData &
+MainWindow::get_view_data(unsigned int p_index)
+{
+    assert(p_index < m_view_number);
+    return m_view_data[p_index];
+}
+
+//------------------------------------------------------------------------------
 QSize TartiniDialog::sizeHint() const
 {
     return QSize(600, 600);
