@@ -21,20 +21,7 @@
 #include "music_key.h"
 #include <QObject>
 
-std::string music_notes::m_note_names[12] =
-  { "C"
-  , "C#"
-  , "D"
-  , "D#"
-  , "E"
-  , "F"
-  , "F#"
-  , "G"
-  , "G#"
-  , "A"
-  , "A#"
-  , "B"
-  };
+std::string music_notes::m_note_names[12];
 
 /**
    Just Intonation
@@ -130,11 +117,18 @@ const char * music_notes::noteName(int p_pitch)
 void
 music_notes::init_note_names()
 {
-    for(unsigned int l_index = 0; l_index < 12; ++l_index)
-    {
-        std::string l_translated_name = QObject::tr(m_note_names[l_index].c_str()).toStdString();
-        m_note_names[l_index] = l_translated_name;
-    }
+    m_note_names[0] = QObject::tr("C").toStdString();
+    m_note_names[1] = QObject::tr("C#").toStdString();
+    m_note_names[2] = QObject::tr("D").toStdString();
+    m_note_names[3] = QObject::tr("D#").toStdString();
+    m_note_names[4] = QObject::tr("E").toStdString();
+    m_note_names[5] = QObject::tr("F").toStdString();
+    m_note_names[6] = QObject::tr("F#").toStdString();
+    m_note_names[7] = QObject::tr("G").toStdString();
+    m_note_names[8] = QObject::tr("G#").toStdString();
+    m_note_names[9] = QObject::tr("A").toStdString();
+    m_note_names[10] = QObject::tr("A#").toStdString();
+    m_note_names[11] = QObject::tr("B").toStdString();
 }
 
 //------------------------------------------------------------------------------
