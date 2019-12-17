@@ -133,33 +133,13 @@
 MainWindow *g_main_window;
 MyGLFont *g_mygl_font;
 
-ViewData MainWindow::m_view_data[MainWindow::m_view_number] =
-        //ViewData(title,                            menuName,                           className,           menu type);
-        { ViewData(QObject::tr("File List"),         QObject::tr("&File List"),          "OpenFiles",         0)
-        , ViewData(QObject::tr("Pitch Contour"),     QObject::tr("&Pitch Contour"),      "FreqView",          0)
-        , ViewData(QObject::tr("Chromatic Tuner"),   QObject::tr("&Chromatic Tuner"),    "TunerView",         0)
-        , ViewData(QObject::tr("Harmonic Track"),    QObject::tr("3D Harmonic &Track"),  "HTrackView",        0)
-        , ViewData(QObject::tr("Vibrato View"),      QObject::tr("V&ibrato View"),       "VibratoView",       0)
-        , ViewData(QObject::tr("Musical Score"),     QObject::tr("&Musical Score"),      "ScoreView",         0)
-        , ViewData(QObject::tr("Oscilloscope"),      QObject::tr("&Oscilloscope"),       "WaveView",          1)
-        , ViewData(QObject::tr("Correlation View"),  QObject::tr("Corre&lation View"),   "CorrelationView",   1)
-        , ViewData(QObject::tr("FFT View"),          QObject::tr("FF&T View"),           "FFTView",           1)
-        , ViewData(QObject::tr("Cepstrum View"),     QObject::tr("C&epstrum View"),      "CepstrumView",      1)
-        , ViewData(QObject::tr("Debug View"),        QObject::tr("&Debug View"),         "DebugView",         1)
-        , ViewData(QObject::tr("Harmonic Block"),    QObject::tr("Harmonic &Block"),     "HBlockView",        2)
-        , ViewData(QObject::tr("Harmonic Stack"),    QObject::tr("&Harmonic Stack"),     "HStackView",        2)
-        , ViewData(QObject::tr("Harmonic Bubbles"),  QObject::tr("H&armonic Bubbles"),   "HBubbleView",       2)
-        , ViewData(QObject::tr("Harmonic Circle"),   QObject::tr("Ha&rmonic Circle"),    "HCircleView",       2)
-        , ViewData(QObject::tr("Pitch Compass"),     QObject::tr("Pitch &Compass"),      "PitchCompassView",  2)
-        , ViewData(QObject::tr("Piano Keyboard"),    QObject::tr("2D Piano &Keyboard"),  "PianoView",         3)
-        , ViewData(QObject::tr("Summary View"),      QObject::tr("&Summary View"),       "SummaryView",       3)
-        , ViewData(QObject::tr("Volume Meter"),      QObject::tr("&Volume Meter"),       "VolumeMeterView",   3)
-        };
+ViewData MainWindow::m_view_data[MainWindow::m_view_number];
 
 //------------------------------------------------------------------------------
 MainWindow::MainWindow()
 : QMainWindow(NULL)
 {
+    init_view_data();
     setAttribute(Qt::WA_DeleteOnClose);
     m_create_signal_mapper = new QSignalMapper(this);
     connect(m_create_signal_mapper, SIGNAL(mapped(int)), SLOT(openView(int)));
@@ -1496,6 +1476,31 @@ void MainWindow::saveViewGeometry()
             g_data->setSettingsValue((l_base + "/visible").toStdString(), false);
         }
     }
+}
+
+//------------------------------------------------------------------------------
+void
+MainWindow::init_view_data()
+{
+    m_view_data[0] = ViewData(QObject::tr("File List"),         QObject::tr("&File List"),          "OpenFiles",         0);
+    m_view_data[1] = ViewData(QObject::tr("Pitch Contour"),     QObject::tr("&Pitch Contour"),      "FreqView",          0);
+    m_view_data[2] = ViewData(QObject::tr("Chromatic Tuner"),   QObject::tr("&Chromatic Tuner"),    "TunerView",         0);
+    m_view_data[3] = ViewData(QObject::tr("Harmonic Track"),    QObject::tr("3D Harmonic &Track"),  "HTrackView",        0);
+    m_view_data[4] = ViewData(QObject::tr("Vibrato View"),      QObject::tr("V&ibrato View"),       "VibratoView",       0);
+    m_view_data[5] = ViewData(QObject::tr("Musical Score"),     QObject::tr("&Musical Score"),      "ScoreView",         0);
+    m_view_data[6] = ViewData(QObject::tr("Oscilloscope"),      QObject::tr("&Oscilloscope"),       "WaveView",          1);
+    m_view_data[7] = ViewData(QObject::tr("Correlation View"),  QObject::tr("Corre&lation View"),   "CorrelationView",   1);
+    m_view_data[8] = ViewData(QObject::tr("FFT View"),          QObject::tr("FF&T View"),           "FFTView",           1);
+    m_view_data[9] = ViewData(QObject::tr("Cepstrum View"),     QObject::tr("C&epstrum View"),      "CepstrumView",      1);
+    m_view_data[10] = ViewData(QObject::tr("Debug View"),        QObject::tr("&Debug View"),         "DebugView",         1);
+    m_view_data[11] = ViewData(QObject::tr("Harmonic Block"),    QObject::tr("Harmonic &Block"),     "HBlockView",        2);
+    m_view_data[12] = ViewData(QObject::tr("Harmonic Stack"),    QObject::tr("&Harmonic Stack"),     "HStackView",        2);
+    m_view_data[13] = ViewData(QObject::tr("Harmonic Bubbles"),  QObject::tr("H&armonic Bubbles"),   "HBubbleView",       2);
+    m_view_data[14] = ViewData(QObject::tr("Harmonic Circle"),   QObject::tr("Ha&rmonic Circle"),    "HCircleView",       2);
+    m_view_data[15] = ViewData(QObject::tr("Pitch Compass"),     QObject::tr("Pitch &Compass"),      "PitchCompassView",  2);
+    m_view_data[16] = ViewData(QObject::tr("Piano Keyboard"),    QObject::tr("2D Piano &Keyboard"),  "PianoView",         3);
+    m_view_data[17] = ViewData(QObject::tr("Summary View"),      QObject::tr("&Summary View"),       "SummaryView",       3);
+    m_view_data[18] = ViewData(QObject::tr("Volume Meter"),      QObject::tr("&Volume Meter"),       "VolumeMeterView",   3);
 }
 
 //------------------------------------------------------------------------------

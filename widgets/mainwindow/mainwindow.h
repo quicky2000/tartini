@@ -159,6 +159,8 @@ class MainWindow : public QMainWindow
     void saveViewGeometry();
 
   public:
+    void init_view_data();
+
     static const size_t m_view_number = 19;
     static ViewData m_view_data[m_view_number];
 

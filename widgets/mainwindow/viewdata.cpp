@@ -55,4 +55,11 @@ ViewData::get_class_name() const
     return m_class_name;
 }
 
+//-----------------------------------------------------------------------------
+ViewData::ViewData()
+: m_menu_type(0)
+{
+
+}
+
 //EOF

@@ -27,6 +27,8 @@ class ViewData
             , int p_menu_type
             );
 
+    ViewData();
+
     const QString & get_title() const;
     const QString & get_menu_name() const;
     const QString & get_class_name() const;
