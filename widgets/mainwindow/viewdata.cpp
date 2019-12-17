@@ -20,11 +20,11 @@ ViewData::ViewData( std::string p_title
                   , std::string p_class_name
                   , int p_menu_type
                   )
+: m_title(p_title)
+, m_menu_name(p_menu_name)
+, m_class_name(p_class_name)
+, m_menu_type(p_menu_type)
 {
-m_title = p_title;
-m_menu_name = p_menu_name;
-m_class_name = p_class_name;
-m_menu_type = p_menu_type;
 };
 
 //-----------------------------------------------------------------------------
