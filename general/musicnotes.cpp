@@ -108,9 +108,9 @@ void initMusicStuff()
 */
 
 //------------------------------------------------------------------------------
-const char * music_notes::noteName(int p_pitch)
+const std::string & music_notes::noteName(int p_pitch)
 {
-    return m_note_names[cycle(p_pitch, 12)].c_str();
+    return m_note_names[cycle(p_pitch, 12)];
 }
 
 //------------------------------------------------------------------------------

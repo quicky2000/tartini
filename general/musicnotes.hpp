@@ -38,7 +38,7 @@ double pitch2freq(const double & p_note)
 }
 
 //------------------------------------------------------------------------------
-const char * music_notes::noteName(const double & p_pitch)
+const std::string & music_notes::noteName(const double & p_pitch)
 {
     return noteName(toInt(p_pitch));
 }

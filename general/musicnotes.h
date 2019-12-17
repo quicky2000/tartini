@@ -27,10 +27,10 @@ class music_notes
   public:
 
     static
-    const char * noteName(int p_pitch);
+    const std::string & noteName(int p_pitch);
 
     static inline
-    const char * noteName(const double & p_pitch);
+    const std::string & noteName(const double & p_pitch);
 
     static
     void init_note_names();
