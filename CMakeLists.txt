@@ -143,6 +143,7 @@ set(MY_HEADER_FILES
     general/music_scale.hpp
     general/music_key.h
     general/music_key.hpp
+    dialogs/tartinidialog.h
    )
 
 set(MY_SOURCE_FILES
@@ -236,6 +237,7 @@ set(MY_SOURCE_FILES
     general/myalgo.cpp
     general/music_scale.cpp
     general/music_key.cpp
+    dialogs/tartinidialog.cpp
    )
 
 # List header directories in project

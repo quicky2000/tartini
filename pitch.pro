@@ -161,6 +161,7 @@ HEADERS += main.h \
   sound/zoomlookup.hpp \
   dialogs/savedialog.h \
   dialogs/opendialog.h \
+  dialogs/tartinidialog.h \
   general/equalloudness.h \
   widgets/piano/pianowidget.h \
   widgets/piano/pianowidget.hpp \
@@ -273,6 +274,7 @@ SOURCES += main.cpp \
   sound/zoomlookup.cpp \
   dialogs/savedialog.cpp \
   dialogs/opendialog.cpp \
+  dialogs/tartinidialog.cpp \
   general/equalloudness.cpp \
   widgets/piano/pianowidget.cpp \
   widgets/freq/amplitudewidget.cpp \

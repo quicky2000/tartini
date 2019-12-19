@@ -169,15 +169,6 @@ class MainWindow : public QMainWindow
 
 };
 
-class TartiniDialog :public QDialog
-{
-  Q_OBJECT
-
-  public:
-    TartiniDialog(QWidget *p_parent = NULL);
-    QSize sizeHint() const;
-};
-
 class GPLDialog :public QDialog
 {
   Q_OBJECT
