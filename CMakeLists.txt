@@ -144,6 +144,7 @@ set(MY_HEADER_FILES
     general/music_key.h
     general/music_key.hpp
     dialogs/tartinidialog.h
+    dialogs/gpldialog.h
    )
 
 set(MY_SOURCE_FILES
@@ -238,6 +239,7 @@ set(MY_SOURCE_FILES
     general/music_scale.cpp
     general/music_key.cpp
     dialogs/tartinidialog.cpp
+    dialogs/gpldialog.cpp
    )
 
 # List header directories in project

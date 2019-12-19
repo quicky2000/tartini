@@ -162,6 +162,7 @@ HEADERS += main.h \
   dialogs/savedialog.h \
   dialogs/opendialog.h \
   dialogs/tartinidialog.h \
+  dialogs/gpldialog.h \
   general/equalloudness.h \
   widgets/piano/pianowidget.h \
   widgets/piano/pianowidget.hpp \
@@ -275,6 +276,7 @@ SOURCES += main.cpp \
   dialogs/savedialog.cpp \
   dialogs/opendialog.cpp \
   dialogs/tartinidialog.cpp \
+  dialogs/gpldialog.cpp \
   general/equalloudness.cpp \
   widgets/piano/pianowidget.cpp \
   widgets/freq/amplitudewidget.cpp \

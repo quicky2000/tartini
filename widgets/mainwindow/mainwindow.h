@@ -169,15 +169,6 @@ class MainWindow : public QMainWindow
 
 };
 
-class GPLDialog :public QDialog
-{
-  Q_OBJECT
-
-  public:
-    GPLDialog(QWidget *p_parent = NULL);
-    QSize sizeHint() const;
-};
-
 extern MainWindow * g_main_window;
 class MyGLFont;
 extern MyGLFont * g_mygl_font;
