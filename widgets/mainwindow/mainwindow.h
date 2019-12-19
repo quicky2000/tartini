@@ -39,12 +39,6 @@ class Channel;
 class MyLabel;
 class QComboBox;
 
-enum VIEW_MENU_TYPES
-  { MENU_TYPE_MAIN
-  , MENU_TYPE_TECHNICAL
-  , MENU_TYPE_EXPERIMENTAL
-  };
-
 enum VIEW_NAMES
   { VIEW_OPEN_FILES
   , VIEW_FREQ

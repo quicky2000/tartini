@@ -21,10 +21,18 @@ class ViewData
 {
   public:
 
+    typedef enum class VIEW_MENU_TYPES
+    { MENU_TYPE_MAIN = 0
+    , MENU_TYPE_TECHNICAL
+    , MENU_TYPE_EXPERIMENTAL
+    , MENU_TYPE_OTHERS
+    } t_view_menu;
+
+
     ViewData( std::string p_title
             , std::string p_menu_name
             , std::string p_class_name
-            , int p_menu_type
+            , t_view_menu p_menu_type
             );
 
     ViewData();
@@ -32,13 +40,13 @@ class ViewData
     const std::string & get_title() const;
     const std::string & get_menu_name() const;
     const std::string & get_class_name() const;
-    int get_menu_type() const;
+    t_view_menu get_menu_type() const;
 
   private:
     std::string m_title;
     std::string m_menu_name;
     std::string m_class_name;
-    int m_menu_type;
+    t_view_menu m_menu_type;
 };
 
 

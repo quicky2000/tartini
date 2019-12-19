@@ -18,7 +18,7 @@
 ViewData::ViewData( std::string p_title
                   , std::string p_menu_name
                   , std::string p_class_name
-                  , int p_menu_type
+                  , t_view_menu p_menu_type
                   )
 : m_title(p_title)
 , m_menu_name(p_menu_name)
@@ -42,7 +42,7 @@ ViewData::get_menu_name() const
 }
 
 //-----------------------------------------------------------------------------
-int
+ViewData::t_view_menu
 ViewData::get_menu_type() const
 {
     return m_menu_type;
@@ -57,7 +57,7 @@ ViewData::get_class_name() const
 
 //-----------------------------------------------------------------------------
 ViewData::ViewData()
-: m_menu_type(0)
+: m_menu_type(t_view_menu::MENU_TYPE_OTHERS)
 {
 
 }
