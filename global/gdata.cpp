@@ -954,7 +954,7 @@ void GData::setTemperedType(int p_type)
             }
             for(int l_j = g_music_scales.size() - 1; l_j >= 2; l_j--)
             {
-                g_main_window->m_key_type_combo_box->removeItem(l_j);
+                g_main_window->remove_key_type(l_j);
             }
         }
         else if(m_tempered_type > 0 && p_type == 0)
@@ -964,7 +964,7 @@ void GData::setTemperedType(int p_type)
             {
                 l_string_list << g_music_scales[l_j].name();
             }
-            g_main_window->m_key_type_combo_box->addItems(l_string_list);
+            g_main_window->add_key_types(l_string_list);
         }
         m_tempered_type = p_type; emit temperedTypeChanged(p_type);
     }

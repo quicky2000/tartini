@@ -78,32 +78,8 @@ class MainWindow : public QMainWindow
 
     void keyPressEvent(QKeyEvent * p_event);
     void message(QString p_string, int p_msec);
-
-    QMdiArea * m_the_workspace;
-
-    QMenu * m_new_view_menu;
-    QMenu * m_window_menu;
-    QMenu * m_options_menu;
-    QMenu * m_help_menu;
-
-    MyLabel * m_time_label;
-    MyLabel * m_chunk_label;
-    MyLabel * m_note_label;
-    QwtSlider * m_time_slider;
-    MyScrollBar * m_time_scroll_bar;
-    QComboBox * m_key_type_combo_box;
-
-    QAction * m_play_stop_action;
-    QAction * m_record_action;
-    QAction * m_play_record_action;
-    QIcon * m_play_icon_set;
-    QIcon * m_play_record_icon_set;
-    QIcon * m_stop_icon_set;
-    QIcon * m_record_icon_set;
-    QTimer * m_rewind_timer;
-    QTimer * m_fast_forward_timer;
-
-    QSignalMapper * m_create_signal_mapper;
+    void remove_key_type(int p_index);
+    void add_key_types(const QStringList & p_list);
 
   protected:
     bool event(QEvent * p_event);
@@ -163,6 +139,32 @@ class MainWindow : public QMainWindow
 
   private:
     void init_view_data();
+
+    QMdiArea * m_the_workspace;
+
+    QMenu * m_new_view_menu;
+    QMenu * m_window_menu;
+    QMenu * m_options_menu;
+    QMenu * m_help_menu;
+
+    MyLabel * m_time_label;
+    MyLabel * m_chunk_label;
+    MyLabel * m_note_label;
+    QwtSlider * m_time_slider;
+    MyScrollBar * m_time_scroll_bar;
+    QComboBox * m_key_type_combo_box;
+
+    QAction * m_play_stop_action;
+    QAction * m_record_action;
+    QAction * m_play_record_action;
+    QIcon * m_play_icon_set;
+    QIcon * m_play_record_icon_set;
+    QIcon * m_stop_icon_set;
+    QIcon * m_record_icon_set;
+    QTimer * m_rewind_timer;
+    QTimer * m_fast_forward_timer;
+
+    QSignalMapper * m_create_signal_mapper;
 
     static const size_t m_view_number = 19;
     static ViewData m_view_data[m_view_number];

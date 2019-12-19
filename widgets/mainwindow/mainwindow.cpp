@@ -1371,4 +1371,19 @@ MainWindow::get_view_data(unsigned int p_index)
     return m_view_data[p_index];
 }
 
+//------------------------------------------------------------------------------
+void
+MainWindow::remove_key_type(int p_index)
+{
+    assert(p_index < m_key_type_combo_box->count());
+    m_key_type_combo_box->removeItem(p_index);
+}
+
+//------------------------------------------------------------------------------
+void
+MainWindow::add_key_types(const QStringList & p_list)
+{
+    m_key_type_combo_box->addItems(p_list);
+}
+
 // EOF
