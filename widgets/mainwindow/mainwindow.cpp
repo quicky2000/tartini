@@ -174,25 +174,25 @@ MainWindow::MainWindow()
     addToolBar(Qt::TopToolBarArea, l_file_tool_bar);
     l_file_tool_bar->setIconSize(QSize(32, 32));
 
-    QIcon * l_open_icon = new QIcon();
-    l_open_icon->addPixmap(QPixmap(iconOpen), QIcon::Normal);
-    QAction * l_open_action = new QAction(*l_open_icon, tr("&Open"), this);
+    QIcon l_open_icon;
+    l_open_icon.addPixmap(QPixmap(iconOpen), QIcon::Normal);
+    QAction * l_open_action = new QAction(l_open_icon, tr("&Open"), this);
     l_open_action->setShortcut(tr("Ctrl+O"));
     l_open_action->setWhatsThis(tr("Open a sound from file and process it using the current preferences"));
     l_file_tool_bar->addAction(l_open_action);
     connect(l_open_action, SIGNAL(triggered()), this, SLOT(openFile()));
 
-    QIcon * l_save_icon = new QIcon();
-    l_save_icon->addPixmap(QPixmap(save32x32_xpm), QIcon::Normal);
-    QAction * l_save_action = new QAction(*l_save_icon, tr("&Save"), this);
+    QIcon l_save_icon;
+    l_save_icon.addPixmap(QPixmap(save32x32_xpm), QIcon::Normal);
+    QAction * l_save_action = new QAction(l_save_icon, tr("&Save"), this);
     l_save_action->setShortcut(tr("Ctrl+S"));
     l_save_action->setWhatsThis(tr("Save the active sound to a file"));
     l_file_tool_bar->addAction(l_save_action);
     connect(l_save_action, SIGNAL(triggered()), g_data, SLOT(saveActiveFile()));
 
-    QIcon * l_close_icon = new QIcon();
-    l_close_icon->addPixmap(QPixmap(close32x32_xpm), QIcon::Normal);
-    QAction * l_close_action = new QAction(*l_close_icon, tr("&Close"), this);
+    QIcon l_close_icon;
+    l_close_icon.addPixmap(QPixmap(close32x32_xpm), QIcon::Normal);
+    QAction * l_close_action = new QAction(l_close_icon, tr("&Close"), this);
     l_close_action->setShortcut(tr("Ctrl+W"));
     l_close_action->setWhatsThis(tr("Close the active sound. If unsaved will ask to save. Note: Asking can be disabled in the preferences"));
     l_file_tool_bar->addAction(l_close_action);
@@ -212,9 +212,9 @@ MainWindow::MainWindow()
     addToolBar(Qt::BottomToolBarArea, l_sound_tool_bar);
     l_sound_tool_bar->setIconSize(QSize(32, 32));
 
-    QIcon * l_beginning_icon = new QIcon();
-    l_beginning_icon->addPixmap(QPixmap(beginning32x32_xpm), QIcon::Normal);
-    QAction * l_beginning_action = new QAction(*l_beginning_icon,tr("Beginning"),l_sound_tool_bar);
+    QIcon l_beginning_icon;
+    l_beginning_icon.addPixmap(QPixmap(beginning32x32_xpm), QIcon::Normal);
+    QAction * l_beginning_action = new QAction(l_beginning_icon,tr("Beginning"),l_sound_tool_bar);
     l_beginning_action->setToolTip(tr("Rewind to the beginning"));
     l_beginning_action->setWhatsThis(tr("Jump to the beginning of the sound"));
     l_sound_tool_bar->addAction(l_beginning_action);
@@ -222,9 +222,9 @@ MainWindow::MainWindow()
 
     m_rewind_timer = new QTimer(this);
     connect(m_rewind_timer, SIGNAL(timeout()), g_data, SLOT(rewind()));
-    QIcon * l_rewind_icon = new QIcon();
-    l_rewind_icon->addPixmap(QPixmap(rewind32x32_xpm), QIcon::Normal);
-    QAction * l_rewind_action = new QAction(*l_rewind_icon, tr("Rewind"), l_sound_tool_bar);
+    QIcon l_rewind_icon;
+    l_rewind_icon.addPixmap(QPixmap(rewind32x32_xpm), QIcon::Normal);
+    QAction * l_rewind_action = new QAction(l_rewind_icon, tr("Rewind"), l_sound_tool_bar);
     l_rewind_action->setToolTip(tr("Rewind"));
     l_rewind_action->setWhatsThis(tr("Rewind the sound"));
     QToolButton * l_rewind_button = new QToolButton(l_sound_tool_bar);
@@ -247,9 +247,9 @@ MainWindow::MainWindow()
 
     m_fast_forward_timer = new QTimer(this);
     connect(m_fast_forward_timer, SIGNAL(timeout()), g_data, SLOT(fastforward()));
-    QIcon * l_fastforward_icon = new QIcon();
-    l_fastforward_icon->addPixmap(QPixmap(fastforward32x32_xpm), QIcon::Normal);
-    QAction * l_fast_forward_action = new QAction(*l_fastforward_icon, tr("Fast-forward"), l_sound_tool_bar);
+    QIcon l_fastforward_icon;
+    l_fastforward_icon.addPixmap(QPixmap(fastforward32x32_xpm), QIcon::Normal);
+    QAction * l_fast_forward_action = new QAction(l_fastforward_icon, tr("Fast-forward"), l_sound_tool_bar);
     l_fast_forward_action->setToolTip(tr("Fast-forward"));
     l_fast_forward_action->setWhatsThis(tr("Fastfoward the sound"));
     QToolButton * l_fast_forward_button = new QToolButton(l_sound_tool_bar);
@@ -258,9 +258,9 @@ MainWindow::MainWindow()
     connect(l_fast_forward_button, SIGNAL(pressed()), this, SLOT(fastforwardPressed()));
     connect(l_fast_forward_button, SIGNAL(released()), this, SLOT(fastforwardReleased()));
 
-    QIcon * l_end_icon = new QIcon();
-    l_end_icon->addPixmap(QPixmap(end32x32_xpm), QIcon::Normal);
-    QAction * l_end_action = new QAction(*l_end_icon, tr("&End"), this);
+    QIcon l_end_icon;
+    l_end_icon.addPixmap(QPixmap(end32x32_xpm), QIcon::Normal);
+    QAction * l_end_action = new QAction(l_end_icon, tr("&End"), this);
     l_end_action->setWhatsThis(tr("Jump to the end of the sound"));
     l_end_action->setShortcut(tr("Ctrl+E"));
     connect(l_end_action, SIGNAL(triggered()), g_data, SLOT(end()));
@@ -340,9 +340,9 @@ MainWindow::MainWindow()
     addToolBar(l_analysis_tool_bar);
     l_analysis_tool_bar->setIconSize(QSize(32, 32));
 
-    QIcon * l_auto_follow_icon_set = new QIcon();
-    l_auto_follow_icon_set->addPixmap(QPixmap(autofollow32x32_xpm), QIcon::Normal);
-    QAction * l_auto_follow_action = new QAction(*l_auto_follow_icon_set, tr("Auto Follow"),l_analysis_tool_bar);
+    QIcon l_auto_follow_icon_set;
+    l_auto_follow_icon_set.addPixmap(QPixmap(autofollow32x32_xpm), QIcon::Normal);
+    QAction * l_auto_follow_action = new QAction(l_auto_follow_icon_set, tr("Auto Follow"),l_analysis_tool_bar);
     l_auto_follow_action->setToolTip(tr("Moves the view up and down automaticlly with the active channel when playing or recording"));
     l_auto_follow_action->setCheckable(true);
     l_auto_follow_action->setChecked(g_data->getView().autoFollow());
@@ -353,11 +353,11 @@ MainWindow::MainWindow()
     l_analysis_tool_bar->addWidget(l_auto_follow_button);
     connect(l_auto_follow_action, SIGNAL(toggled(bool)), &(g_data->getView()), SLOT(setAutoFollow(bool)));
 
-    QIcon * l_background_shading_icon_set = new QIcon();
-    l_background_shading_icon_set->addPixmap(QPixmap(shadingon32x32_xpm), QIcon::Normal, QIcon::On);
-    l_background_shading_icon_set->addPixmap(QPixmap(shadingoff32x32_xpm), QIcon::Normal, QIcon::Off);
+    QIcon l_background_shading_icon_set;
+    l_background_shading_icon_set.addPixmap(QPixmap(shadingon32x32_xpm), QIcon::Normal, QIcon::On);
+    l_background_shading_icon_set.addPixmap(QPixmap(shadingoff32x32_xpm), QIcon::Normal, QIcon::Off);
 
-    QAction * l_background_shading_action = new QAction(*l_background_shading_icon_set, "Background Shading",l_analysis_tool_bar);
+    QAction * l_background_shading_action = new QAction(l_background_shading_icon_set, "Background Shading",l_analysis_tool_bar);
     l_background_shading_action->setToolTip("Toggle background shading on/off");
     l_background_shading_action->setCheckable(true);
     l_background_shading_action->setChecked(g_data->getView().backgroundShading());
@@ -525,6 +525,10 @@ MainWindow::~MainWindow()
 {
     delete m_rewind_timer;
     delete m_fast_forward_timer;
+    delete m_play_record_icon_set;
+    delete m_play_icon_set;
+    delete m_stop_icon_set;
+    delete m_record_icon_set;
     fprintf(stderr, "Has pending events = %s\n", (qApp->hasPendingEvents()) ? "Yes" : "No");
 }
 
