@@ -13,7 +13,8 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; brew install -v glfw fftw qt5 qwt ; brew link qt5 --force ; fi
 
 script:
-  - qmake pitch.pro
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then qmake pitch.pro ;fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then qmake -Wnone pitch.pro ;fi
   - make
   - mkdir cmake-build; cd cmake-build
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cmake .. ; fi
