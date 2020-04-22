@@ -1,3 +1,6 @@
+Tartini 1.2.2
+    Correction of compilation issue with CLang 11.0.3 ( https://github.com/quicky2000/tartini/issues/29 )
+
 Tartini 1.2.1
 
     Correct of of a SEGFAULT in mytransforms ( https://wiki.logre.eu/index.php/Tartini/en#Bug_1 )

@@ -21,6 +21,7 @@
 #include <vector>
 #include "array1d.h"
 #include "SmartPtr.h"
+#include <iterator>
 
 /**
    large_vector works like vector.
@@ -42,7 +43,7 @@ class large_vector
 {
   public:
 
-    class iterator
+  class iterator: public std::iterator<std::bidirectional_iterator_tag, T, uint>
     {
       public:
 
