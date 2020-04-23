@@ -72,7 +72,7 @@ void TartiniSettingsDialog::loadSetting( QObject * p_object
     }
     else if(l_class_name == "QSpinBox")
     {
-        ((QSpinBox*)p_object)->setValue(g_data->getSettingsBoolValue(l_full_key));
+        ((QSpinBox*)p_object)->setValue(g_data->getSettingsIntValue(l_full_key));
     }
     else if(l_class_name == "QFrame")
     {
