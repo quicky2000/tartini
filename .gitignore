@@ -13,4 +13,11 @@ syntax: glob
 .moc/*
 *~
 *.qm
+
+.qmake.stash
+Debug/
+Release/
+Info.plist
+tartini.app/
+tartini.xcodeproj/
 #EOF
