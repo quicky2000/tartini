@@ -16,6 +16,13 @@ Website for QWT : http://qwt.sourceforge.net/
 For Ubuntu users the previous packages can be installed using
 apt and the following packet names: qt5-default libqwt-qt5-dev libfftw3-dev libglu1-mesa-dev libasound2-dev libqt5opengl5-dev
 
+For MacOS, the packages can be installed using Homebrew:
+- brew install qt (tested with 5.14.1)
+- brew install qwt (tested with 6.1.4)
+- brew install ffftw (tested with 3.3.8_1) Note: comes pre-configured with --enable-float
+No need to install GLU or Alsa
+To enable building/running with Xcode, run 'qmake -spec macx-xcode pitch.pro' and open tartini.xcodeproj
+
 Step 2.
 Edit pitch.pro and edit MY_TARTINI_PATH if you want to build from another directory
 
