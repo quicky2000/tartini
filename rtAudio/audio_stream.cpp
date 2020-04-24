@@ -62,15 +62,15 @@ int AudioStream::open( int p_mode
     m_num_buffers = 4;
 
     QStringList l_in_names = getInputDeviceNames();
-    const char * l_audio_input = g_data->getSettingsValue("Sound/soundInput", std::string("Default")).c_str();
-    m_in_device = getDeviceNumber(l_audio_input);
+    const std::string l_audio_input = g_data->getSettingsValue("Sound/soundInput", std::string("Default"));
+    m_in_device = getDeviceNumber(l_audio_input.c_str());
 
     QStringList l_out_names = getOutputDeviceNames();
-    const char * l_audio_output = g_data->getSettingsValue("Sound/soundOutput", std::string("Default")).c_str();
-    m_out_device = getDeviceNumber(l_audio_output);
+    const std::string l_audio_output = g_data->getSettingsValue("Sound/soundOutput", std::string("Default"));
+    m_out_device = getDeviceNumber(l_audio_output.c_str());
 
-    fprintf(stderr, "Input Device %d: %s\n", m_in_device, l_audio_input);
-    fprintf(stderr, "Output Device %d: %s\n", m_out_device, l_audio_output);
+    fprintf(stderr, "Input Device %d: %s\n", m_in_device, l_audio_input.c_str());
+    fprintf(stderr, "Output Device %d: %s\n", m_out_device, l_audio_output.c_str());
 
     try
     {
