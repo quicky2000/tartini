@@ -163,7 +163,7 @@ RingBuffer<T>::~RingBuffer()
 {
     if(m_bufffer)
     {
-        delete m_bufffer;
+        delete[] m_bufffer;
     }
 }
 
@@ -173,7 +173,7 @@ void RingBuffer<T>::resize_clear(int p_buf_size)
 {
     if(m_bufffer)
     {
-        delete m_bufffer;
+        delete[] m_bufffer;
     }
 
     m_buffer_size = std::max(p_buf_size, 0);
@@ -440,7 +440,7 @@ void RingBuffer<T>::resize(int p_new_size)
     m_start = 0;
     if(m_bufffer)
     {
-        delete m_bufffer;
+        delete[] m_bufffer;
     }
     m_bufffer = l_new_buffer;
     m_buffer_size = p_new_size;
