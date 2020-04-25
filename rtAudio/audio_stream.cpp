@@ -16,6 +16,8 @@
  ***************************************************************************/
 #include "audio_stream.h"
 #include "gdata.h"
+#include "myassert.h"
+#include <QThread>
 
 //------------------------------------------------------------------------------
 AudioStream::AudioStream()
@@ -23,8 +25,8 @@ AudioStream::AudioStream()
     m_buffer_size = 1024;
     m_num_buffers = 0;
     m_audio = NULL;
-    m_buffer = NULL;
-    m_flow_buffer.setAutoGrow(true);
+    m_in_buffer.setAutoGrow(true);
+    m_out_buffer.setAutoGrow(true);
     m_in_device = m_out_device = 0;
 }
 
@@ -38,6 +40,8 @@ AudioStream::~AudioStream()
 //------------------------------------------------------------------------------
 void AudioStream::close()
 {
+    printf("AudioStream::close()\n");
+    
     if(m_audio)
     {
         m_audio->stopStream();
@@ -53,46 +57,63 @@ int AudioStream::open( int p_mode
                      , int p_buffer_size
                      )
 {
+    printf("AudioStream::open(p_mode = %d, p_freq = %d, p_channels = %d, p_buffer_size = %d\n",
+           p_mode, p_freq, p_channels, p_buffer_size);
+    
     set_mode(p_mode);
     set_frequency(p_freq);
     set_channels(p_channels);
     //bits_; //ignored, just use floats and let rtAudio do the conversion
     set_bits(32);
     m_buffer_size = p_buffer_size;
-    m_num_buffers = 4;
+    m_num_buffers = 4; // not used (also ignored in the settings dialog?)
 
-    QStringList l_in_names = getInputDeviceNames();
-    const std::string l_audio_input = g_data->getSettingsValue("Sound/soundInput", std::string("Default"));
-    m_in_device = getDeviceNumber(l_audio_input.c_str());
+    RtAudio::StreamParameters *inputParamPtr = NULL;
+    RtAudio::StreamParameters *outputParamPtr = NULL;
+    
+    RtAudio::StreamParameters inputParameters;
+    if(get_mode() == F_READ || get_mode() == F_RDWR)
+    {
+        QStringList l_in_names = getInputDeviceNames();
+        const std::string l_audio_input = g_data->getSettingsValue("Sound/soundInput", std::string("Default"));
+        m_in_device = getDeviceNumber(l_audio_input.c_str());
+        
+        inputParameters.deviceId = m_in_device;
+        inputParameters.nChannels = get_channels();
+        inputParamPtr = &inputParameters;
+        
+        fprintf(stderr, "Input Device %d: %s\n", m_in_device, l_audio_input.c_str());
+    }
 
-    QStringList l_out_names = getOutputDeviceNames();
-    const std::string l_audio_output = g_data->getSettingsValue("Sound/soundOutput", std::string("Default"));
-    m_out_device = getDeviceNumber(l_audio_output.c_str());
+    RtAudio::StreamParameters outputParameters;
+    if(get_mode() == F_WRITE || get_mode() == F_RDWR)
+    {
+        QStringList l_out_names = getOutputDeviceNames();
+        const std::string l_audio_output = g_data->getSettingsValue("Sound/soundOutput", std::string("Default"));
+        m_out_device = getDeviceNumber(l_audio_output.c_str());
+        
+        outputParameters.deviceId = m_out_device;
+        outputParameters.nChannels = get_channels();
+        outputParamPtr = &outputParameters;
 
-    fprintf(stderr, "Input Device %d: %s\n", m_in_device, l_audio_input.c_str());
-    fprintf(stderr, "Output Device %d: %s\n", m_out_device, l_audio_output.c_str());
+        fprintf(stderr, "Output Device %d: %s\n", m_out_device, l_audio_output.c_str());
+    }
+
+    if(!inputParamPtr && !outputParamPtr)
+    {
+        fprintf(stderr, "No mode selected\n");
+        return -1;
+    }
 
     try
     {
-        if(get_mode() == F_READ)
-        {
-            m_audio = new RtAudio(0, 0, m_in_device, get_channels(), RTAUDIO_FLOAT32, get_frequency(), &m_buffer_size, m_num_buffers);
-        }
-        else if(get_mode() == F_WRITE)
-        {
-            m_audio = new RtAudio(m_out_device, get_channels(), 0, 0, RTAUDIO_FLOAT32, get_frequency(), &m_buffer_size, m_num_buffers);
-        }
-        else if(get_mode() == F_RDWR)
-        {
-            m_audio = new RtAudio(m_out_device, get_channels(), m_in_device, get_channels(), RTAUDIO_FLOAT32, get_frequency(), &m_buffer_size, m_num_buffers);
-        }
-        else
-        {
-            fprintf(stderr, "No mode selected\n");
-            return -1;
-        }
+        // Just leave api as UNSPECIFIED.
+        m_audio = new RtAudio();
+
+        // TODO: Could pass m_num_buffers via RtAudio::StreamOptions, but the docs say it is usually ignored anyway.
+        m_audio->openStream(outputParamPtr, inputParamPtr, RTAUDIO_FLOAT32, get_frequency(), (unsigned int *)&m_buffer_size, callback, this);
     }
-    catch (RtError &error)
+    catch (RtAudioError &error)
     {
         error.printMessage();
         m_audio = NULL;
@@ -106,11 +127,10 @@ int AudioStream::open( int p_mode
 
     try
     {
-        // Get a pointer to the stream buffer
-        m_buffer = (float *) m_audio->getStreamBuffer();
+        // The callback function will be called (on another thread) when data is available or required.
         m_audio->startStream();
     }
-    catch (RtError &error)
+    catch (RtAudioError &error)
     {
         error.printMessage();
         delete m_audio;
@@ -120,63 +140,97 @@ int AudioStream::open( int p_mode
 }
 
 //------------------------------------------------------------------------------
+// This static function is called when data is availble or required.  The userData is a pointer to the AudioStream object.
+int AudioStream::callback( void *outputBuffer
+                         , void *inputBuffer
+                         , unsigned int nBufferFrames
+                         , double streamTime
+                         , RtAudioStreamStatus status
+                         , void *userData
+                         )
+{
+    AudioStream * self = (AudioStream *)userData;
+    
+    // Call the callback instance method on "this" object.
+    return self->callback(outputBuffer, inputBuffer, nBufferFrames, streamTime, status);
+}
+
+//------------------------------------------------------------------------------
+// This instance method is called when data is availble or required.
+int AudioStream::callback( void *outputBuffer
+                         , void *inputBuffer
+                         , unsigned int nBufferFrames
+                         , double streamTime
+                         , RtAudioStreamStatus status
+                         )
+{
+    printf("AudioStream::callback(nBufferFrames=%d, streamTime=%f, m_out_buffer.size()=%d, m_in_buffer.size()=%d)\n",
+           nBufferFrames, streamTime, m_out_buffer.size(), m_in_buffer.size());
+
+    // unsigned int i, j;
+    float *outBuffer = (float *) outputBuffer;
+    float *inBuffer = (float *) inputBuffer;
+
+    if ( status )
+      std::cout << "Stream underflow detected!" << std::endl;
+
+    unsigned int i;
+    if ( outBuffer )
+    {
+        // Copy nBufferFrames of data from the output RingBuffer to the audio output.
+        // FIXME: Need a mutex around access to m_out_buffer.
+        // This could be faster with:  m_out_buffer.get(outBuffer, nBufferFrames * p_ch);
+        for(i = 0; i < nBufferFrames * get_channels(); i++)
+        {
+            bool success = m_out_buffer.get(&outBuffer[i]);
+            myassert(success);
+        }
+    }
+    
+    if ( inBuffer )
+    {
+        // Copy nBufferFrames of data from the audio input to the input RingBuffer.
+        // FIXME: Need a mutex around access to m_in_buffer.
+        for(i = 0; i < nBufferFrames * get_channels(); i++)
+        {
+            bool success = m_in_buffer.put(inBuffer[i]);
+            myassert(success);
+        }
+    }
+    
+    return 0;
+}
+
+//------------------------------------------------------------------------------
 int AudioStream::writeFloats( float ** p_channel_data
                             , int p_length
                             , int p_ch
                             )
 {
-    float * l_buffer_ptr = m_buffer;
+    printf("AudioStream::writeFloats(p_length=%d, p_ch=%d, m_out_buffer.size()=%d)\n", p_length, p_ch, m_out_buffer.size());
+
+    myassert(p_ch == get_channels());
+    
     int l_c;
     int l_j;
-    if(p_length == m_buffer_size)
+    // Copy p_length frames of data to the output RingBuffer.
+    // FIXME: Need a mutex around access to m_out_buffer.
+    for(l_j = 0; l_j < p_length; l_j++)
     {
-        for(l_j = 0; l_j < p_length; l_j++)
+        for(l_c = 0; l_c < p_ch; l_c++)
         {
-            for(l_c = 0; l_c < p_ch; l_c++)
-            {
-                *l_buffer_ptr++ = p_channel_data[l_c][l_j];
-            }
+            bool success = m_out_buffer.put(p_channel_data[l_c][l_j]);
+            myassert(success);
         }
+    }
 
-        // Trigger the output of the data buffer
-        try
-        {
-            m_audio->tickStream();
-        }
-        catch (RtError &error)
-        {
-            error.printMessage();
-            return 0;
-        }
-    }
-    else
+    // Block until all of the output data has been sent.
+    while (m_out_buffer.size() > 0)
     {
-        for(l_j = 0; l_j < p_length; l_j++)
-        {
-            for(l_c = 0; l_c < p_ch; l_c++)
-            {
-                m_flow_buffer.put(p_channel_data[l_c][l_j]);
-            }
-        }
-        while(m_flow_buffer.size() >= m_buffer_size * p_ch)
-        {
-            int l_received = m_flow_buffer.get(m_buffer, m_buffer_size * p_ch);
-            if(l_received != m_buffer_size * p_ch)
-            {
-                fprintf(stderr, "AudioStream::writeFloats: Error l_received != buffer_size*p_ch\n");
-            }
-            // Trigger the output of the data buffer
-            try
-            {
-                m_audio->tickStream();
-            }
-            catch (RtError &l_error)
-            {
-                l_error.printMessage();
-                return 0;
-            }
-        }
+        printf(".");
+        QThread::msleep(1);
     }
+    
     return p_length;
 }
 
@@ -186,33 +240,31 @@ int AudioStream::readFloats( float ** p_channel_data
                            , int p_ch
                            )
 {
-    float * l_buffer_ptr = m_buffer;
+    myassert(p_ch == get_channels());
+    
     int l_c;
     int l_j;
-    if(p_length == m_buffer_size)
+    
+    printf("AudioStream::readFloats(p_length=%d, p_ch=%d, m_in_buffer.size()=%d)\n", p_length, p_ch, m_in_buffer.size());
+
+    // Block until there is enough input data to read.
+    while (m_in_buffer.size() < p_length * p_ch)
     {
-        // Trigger the input of the data buffer
-        try
+        printf(".");
+        QThread::msleep(1);
+    }
+
+    // Copy p_length frames of data from the input RingBuffer.
+    // FIXME: Need a mutex around access to m_in_buffer.
+    for(l_j = 0; l_j < p_length; l_j++)
+    {
+        for(l_c = 0; l_c < p_ch; l_c++)
         {
-            m_audio->tickStream();
-        }
-        catch (RtError &l_error)
-        {
-            l_error.printMessage();
-            return 0;
-        }
-        for(l_j = 0; l_j < p_length; l_j++)
-        {
-            for(l_c = 0; l_c < p_ch; l_c++)
-            {
-                p_channel_data[l_c][l_j] = *l_buffer_ptr++;
-            }
+            bool success = m_in_buffer.get(&(p_channel_data[l_c][l_j]));
+            myassert(success);
         }
     }
-    else
-    {
-        fprintf(stderr, "Error reading floats\n");
-    }
+    
     return p_length;
 }
 
@@ -224,52 +276,58 @@ int AudioStream::writeReadFloats( float ** p_out_channel_data
                                 , int p_length
                                 )
 {
-    float * l_buffer_ptr = m_buffer;
+    printf("AudioStream::writeReadFloats(p_out_channel=%d, p_in_channel=%d, p_length=%d, m_out_buffer.size()=%d, m_in_buffer.size()=%d)\n",
+           p_out_channel, p_in_channel, p_length, m_out_buffer.size(), m_in_buffer.size());
+
+    myassert(p_out_channel == get_channels());
+    myassert(p_in_channel == get_channels());
+
     int l_c;
     int l_j;
-
-    //put the p_out_channel_data into the Audio buffer to be written out
-    if(p_length == m_buffer_size)
+    // Copy p_length frames of data to the output RingBuffer.
+    // FIXME: Need a mutex around access to m_out_buffer.
+    for(l_j = 0; l_j < p_length; l_j++)
     {
-        for(l_j = 0; l_j < p_length; l_j++)
+        for(l_c = 0; l_c < p_out_channel; l_c++)
         {
-            for(l_c = 0; l_c < p_out_channel; l_c++)
-            {
-                *l_buffer_ptr++ = p_out_channel_data[l_c][l_j];
-            }
-        }
-        // Trigger the input/output of the data buffer
-        try
-        {
-            m_audio->tickStream();
-        }
-        catch (RtError &l_error)
-        {
-            l_error.printMessage();
-            return 0;
-        }
-
-        //get the new data from the Audio buffer and put it in p_in_channel_data
-        l_buffer_ptr = m_buffer;
-        for(l_j = 0; l_j < p_length; l_j++)
-        {
-            for(l_c = 0; l_c < p_in_channel; l_c++)
-            {
-                p_in_channel_data[l_c][l_j] = *l_buffer_ptr++;
-            }
+            bool success = m_out_buffer.put(p_out_channel_data[l_c][l_j]);
+            myassert(success);
         }
     }
-    else
+
+    // Block until there is enough input data to read.
+    while (m_in_buffer.size() < p_length * p_in_channel)
     {
-        fprintf(stderr, "Error: audio buffer length is a different size than the data chunk buffer\n");
-        fprintf(stderr, "Not supported on Read/Write yet. Try changing the buffer size in preferences\n");
+        printf(".");
+        QThread::msleep(1);
     }
+
+    // Copy p_length frames of data from the input RingBuffer.
+    // FIXME: Need a mutex around access to m_in_buffer.
+    for(l_j = 0; l_j < p_length; l_j++)
+    {
+        for(l_c = 0; l_c < p_in_channel; l_c++)
+        {
+            bool success = m_in_buffer.get(&(p_in_channel_data[l_c][l_j]));
+            myassert(success);
+        }
+    }
+
+    // Block until all of the output data has been sent.
+    while (m_out_buffer.size() > 0)
+    {
+        printf(".");
+        QThread::msleep(1);
+    }
+    
     return p_length;
 }
 
 //------------------------------------------------------------------------------
 QStringList AudioStream::getInputDeviceNames()
 {
+    printf("AudioStream::getInputDeviceNames()\n");
+
     QStringList l_to_return;
     l_to_return << "Default";
 
@@ -278,7 +336,7 @@ QStringList AudioStream::getInputDeviceNames()
     {
         l_temp_audio = new RtAudio();
     }
-    catch (RtError &l_error)
+    catch (RtAudioError &l_error)
     {
         l_error.printMessage();
         return l_to_return;
@@ -288,14 +346,14 @@ QStringList AudioStream::getInputDeviceNames()
     int l_num_devices = l_temp_audio->getDeviceCount();
 
     // Scan through devices for various capabilities
-    RtAudioDeviceInfo l_info;
+    RtAudio::DeviceInfo l_info;
     for(int l_i = 1; l_i <= l_num_devices; l_i++)
     {
         try
         {
             l_info = l_temp_audio->getDeviceInfo(l_i);
         }
-        catch (RtError &l_error)
+        catch (RtAudioError &l_error)
         {
             l_error.printMessage();
             break;
@@ -315,6 +373,8 @@ QStringList AudioStream::getInputDeviceNames()
 //------------------------------------------------------------------------------
 QStringList AudioStream::getOutputDeviceNames()
 {
+    printf("AudioStream::getOutputDeviceNames()\n");
+
     QStringList l_to_return;
     l_to_return << "Default";
 
@@ -323,7 +383,7 @@ QStringList AudioStream::getOutputDeviceNames()
     {
         l_temp_audio = new RtAudio();
     }
-    catch (RtError &l_error)
+    catch (RtAudioError &l_error)
     {
         l_error.printMessage();
         return l_to_return;
@@ -333,14 +393,14 @@ QStringList AudioStream::getOutputDeviceNames()
     int l_num_devices = l_temp_audio->getDeviceCount();
 
     // Scan through devices for various capabilities
-    RtAudioDeviceInfo l_info;
+    RtAudio::DeviceInfo l_info;
     for(int l_i = 1; l_i <= l_num_devices; l_i++)
     {
         try
         {
             l_info = l_temp_audio->getDeviceInfo(l_i);
         }
-        catch (RtError &l_error)
+        catch (RtAudioError &l_error)
         {
             l_error.printMessage();
             break;
@@ -359,6 +419,8 @@ QStringList AudioStream::getOutputDeviceNames()
 //------------------------------------------------------------------------------
 int AudioStream::getDeviceNumber(const char * p_device_name)
 {
+    printf("AudioStream::getDeviceNumber(p_device_name=\"%s\")\n", p_device_name);
+
     int l_device_number = -1;
     if(strcmp("Default", p_device_name) == 0)
     {
@@ -370,7 +432,7 @@ int AudioStream::getDeviceNumber(const char * p_device_name)
     {
         l_temp_audio = new RtAudio();
     }
-    catch (RtError &l_error)
+    catch (RtAudioError &l_error)
     {
         l_error.printMessage();
         return -1;
@@ -380,14 +442,14 @@ int AudioStream::getDeviceNumber(const char * p_device_name)
     int l_num_devices = l_temp_audio->getDeviceCount();
 
     // Scan through devices for various capabilities
-    RtAudioDeviceInfo l_info;
+    RtAudio::DeviceInfo l_info;
     for(int l_i = 1; l_i <= l_num_devices; l_i++)
     {
         try
         {
             l_info = l_temp_audio->getDeviceInfo(l_i);
         }
-        catch (RtError &l_error)
+        catch (RtAudioError &l_error)
         {
             l_error.printMessage();
             break;
