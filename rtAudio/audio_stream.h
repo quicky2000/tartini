@@ -113,11 +113,26 @@ class AudioStream: public SoundStream
     static int getDeviceNumber(const char * p_device_name);
 
   private:
+    static int callback(void *outputBuffer
+                      , void *inputBuffer
+                      , unsigned int nBufferFrames
+                      , double streamTime
+                      , RtAudioStreamStatus status
+                      , void *userData
+                      );
+    
+    int callback(void *outputBuffer
+               , void *inputBuffer
+               , unsigned int nBufferFrames
+               , double streamTime
+               , RtAudioStreamStatus status
+               );
+    
     int m_buffer_size; //in frames
-    int m_num_buffers;
+    int m_num_buffers; //ignored
     RtAudio * m_audio;
-    float * m_buffer;
-    RingBuffer<float> m_flow_buffer;
+    RingBuffer<float> m_in_buffer;
+    RingBuffer<float> m_out_buffer;
     int m_in_device;
     int m_out_device;
 

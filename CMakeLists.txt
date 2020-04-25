@@ -285,7 +285,6 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux" OR ${CMAKE_SYSTEM_NAME} STREQUAL "Darwi
         ${MY_HEADER_FILES}
         rtAudio/audio_stream.h
         rtAudio/RtAudio.h
-        rtAudio/RtError.h
        )
     set(MY_SOURCE_FILES
         ${MY_SOURCE_FILES}

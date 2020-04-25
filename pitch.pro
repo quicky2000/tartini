@@ -349,7 +349,7 @@ unix{
 
     INCLUDEPATH += rtAudio/
     DEPENDPATH += rtAudio/
-    HEADERS += rtAudio/audio_stream.h rtAudio/RtAudio.h rtAudio/RtError.h
+    HEADERS += rtAudio/audio_stream.h rtAudio/RtAudio.h
     SOURCES += rtAudio/audio_stream.cpp rtAudio/rtAudio.cpp
 
     QMAKE_LFLAGS_SONAME = -W1,-install_name,@executable_path/..Frameworks/
@@ -378,7 +378,7 @@ unix{
     #RtAudio sound library routines
     INCLUDEPATH += rtAudio/
     DEPENDPATH += rtAudio/
-    HEADERS += rtAudio/audio_stream.h rtAudio/RtAudio.h rtAudio/RtError.h
+    HEADERS += rtAudio/audio_stream.h rtAudio/RtAudio.h
     SOURCES += rtAudio/audio_stream.cpp rtAudio/rtAudio.cpp
     DEFINES += __LINUX_OSS__
     DEFINES += __LINUX_ALSA__
@@ -412,7 +412,7 @@ win32{
   #to use rtAudio uncomment the following block
   #INCLUDEPATH += rtAudio/
   #DEPENDPATH += rtAudio/
-  #HEADERS += rtAudio/audio_stream.h rtAudio/RtAudio.h rtAudio/RtError.h
+  #HEADERS += rtAudio/audio_stream.h rtAudio/RtAudio.h
   #SOURCES += rtAudio/audio_stream.cpp
   ##DEFINES += __WINDOWS_DS__   #untested under MinGW
   #DEFINES += __WINDOWS_ASIO__  #tested successfully. Note requires ASIO sound drivers
