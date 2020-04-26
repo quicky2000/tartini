@@ -177,6 +177,13 @@ int AudioStream::callback( void *outputBuffer
     unsigned int i;
     if ( outBuffer )
     {
+        // Block until there is enough output data to send.
+        while (m_out_buffer.size() < (int)nBufferFrames * get_channels())
+        {
+            printf("+");
+            QThread::msleep(1);
+        }
+
         // Copy nBufferFrames of data from the output RingBuffer to the audio output.
         // FIXME: Need a mutex around access to m_out_buffer.
         // This could be faster with:  m_out_buffer.get(outBuffer, nBufferFrames * p_ch);
