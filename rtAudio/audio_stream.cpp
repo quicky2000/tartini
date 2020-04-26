@@ -75,7 +75,7 @@ int AudioStream::open( int p_mode
     if(get_mode() == F_READ || get_mode() == F_RDWR)
     {
         QStringList l_in_names = getInputDeviceNames();
-        const std::string l_audio_input = g_data->getSettingsValue("Sound/soundInput", std::string("Default"));
+        const std::string l_audio_input = g_data->getSettingsValue("Sound/soundInput", std::string("Default Input"));
         m_in_device = getDeviceNumber(l_audio_input.c_str());
         
         inputParameters.deviceId = m_in_device;
@@ -89,7 +89,7 @@ int AudioStream::open( int p_mode
     if(get_mode() == F_WRITE || get_mode() == F_RDWR)
     {
         QStringList l_out_names = getOutputDeviceNames();
-        const std::string l_audio_output = g_data->getSettingsValue("Sound/soundOutput", std::string("Default"));
+        const std::string l_audio_output = g_data->getSettingsValue("Sound/soundOutput", std::string("Default Output"));
         m_out_device = getDeviceNumber(l_audio_output.c_str());
         
         outputParameters.deviceId = m_out_device;
@@ -329,7 +329,7 @@ QStringList AudioStream::getInputDeviceNames()
     printf("AudioStream::getInputDeviceNames()\n");
 
     QStringList l_to_return;
-    l_to_return << "Default";
+    l_to_return << "Default Input";
 
     RtAudio * l_temp_audio = NULL;
     try
@@ -344,13 +344,15 @@ QStringList AudioStream::getInputDeviceNames()
 
     // Determine the number of devices available
     int l_num_devices = l_temp_audio->getDeviceCount();
+    printf("num devices = %d\n", l_num_devices);
 
     // Scan through devices for various capabilities
     RtAudio::DeviceInfo l_info;
-    for(int l_i = 1; l_i <= l_num_devices; l_i++)
+    for(int l_i = 0; l_i < l_num_devices; l_i++)
     {
         try
         {
+            printf("Probing device %d\n", l_i);
             l_info = l_temp_audio->getDeviceInfo(l_i);
         }
         catch (RtAudioError &l_error)
@@ -358,8 +360,17 @@ QStringList AudioStream::getInputDeviceNames()
             l_error.printMessage();
             break;
         }
+        if (l_info.probed == false)
+        {
+            printf("Probe failed on device %d\n", l_i);
+            continue;
+        }
+        printf("Device %d: %s\n", l_i, l_info.name.c_str());
+        printf("  outs %d, ins: %d, duplex: %d, default out: %d, default in: %d, preferred rate: %d\n",
+               l_info.outputChannels, l_info.inputChannels, l_info.duplexChannels, l_info.isDefaultOutput, l_info.isDefaultInput, l_info.preferredSampleRate);
         if(l_info.inputChannels > 0)
         {
+            printf("  found input device\n");
             l_to_return << l_info.name.c_str();
 
         }
@@ -376,7 +387,7 @@ QStringList AudioStream::getOutputDeviceNames()
     printf("AudioStream::getOutputDeviceNames()\n");
 
     QStringList l_to_return;
-    l_to_return << "Default";
+    l_to_return << "Default Output";
 
     RtAudio * l_temp_audio = NULL;
     try
@@ -391,13 +402,15 @@ QStringList AudioStream::getOutputDeviceNames()
 
     // Determine the number of devices available
     int l_num_devices = l_temp_audio->getDeviceCount();
+    printf("num devices = %d\n", l_num_devices);
 
     // Scan through devices for various capabilities
     RtAudio::DeviceInfo l_info;
-    for(int l_i = 1; l_i <= l_num_devices; l_i++)
+    for(int l_i = 0; l_i < l_num_devices; l_i++)
     {
         try
         {
+            printf("Probing device %d\n", l_i);
             l_info = l_temp_audio->getDeviceInfo(l_i);
         }
         catch (RtAudioError &l_error)
@@ -406,8 +419,17 @@ QStringList AudioStream::getOutputDeviceNames()
             break;
         }
 
+        if (l_info.probed == false)
+        {
+            printf("Probe failed on device %d\n", l_i);
+            continue;
+        }
+        printf("Device %d: %s\n", l_i, l_info.name.c_str());
+        printf("  outs %d, ins: %d, duplex: %d, default out: %d, default in: %d, preferred rate: %d\n",
+               l_info.outputChannels, l_info.inputChannels, l_info.duplexChannels, l_info.isDefaultOutput, l_info.isDefaultInput, l_info.preferredSampleRate);
         if(l_info.outputChannels > 0)
         {
+            printf("  found output device\n");
             l_to_return << l_info.name.c_str();
         }
     }
@@ -422,10 +444,6 @@ int AudioStream::getDeviceNumber(const char * p_device_name)
     printf("AudioStream::getDeviceNumber(p_device_name=\"%s\")\n", p_device_name);
 
     int l_device_number = -1;
-    if(strcmp("Default", p_device_name) == 0)
-    {
-        return 0;
-    }
 
     RtAudio * l_temp_audio = NULL;
     try
@@ -438,26 +456,48 @@ int AudioStream::getDeviceNumber(const char * p_device_name)
         return -1;
     }
 
-    // Determine the number of devices available
-    int l_num_devices = l_temp_audio->getDeviceCount();
-
-    // Scan through devices for various capabilities
-    RtAudio::DeviceInfo l_info;
-    for(int l_i = 1; l_i <= l_num_devices; l_i++)
+    if(strcmp("Default Input", p_device_name) == 0)
     {
-        try
+        l_device_number = l_temp_audio->getDefaultInputDevice();
+    }
+    else if(strcmp("Default Output", p_device_name) == 0)
+    {
+        l_device_number = l_temp_audio->getDefaultOutputDevice();
+    }
+    else
+    {
+        // Determine the number of devices available
+        int l_num_devices = l_temp_audio->getDeviceCount();
+        printf("num devices = %d\n", l_num_devices);
+
+        // Scan through devices for various capabilities
+        RtAudio::DeviceInfo l_info;
+        for(int l_i = 0; l_i < l_num_devices; l_i++)
         {
-            l_info = l_temp_audio->getDeviceInfo(l_i);
-        }
-        catch (RtAudioError &l_error)
-        {
-            l_error.printMessage();
-            break;
-        }
-        if(strcmp(l_info.name.c_str(), p_device_name) == 0)
-        {
-            l_device_number = l_i;
-            break;
+            try
+            {
+                printf("Probing device %d\n", l_i);
+                l_info = l_temp_audio->getDeviceInfo(l_i);
+            }
+            catch (RtAudioError &l_error)
+            {
+                l_error.printMessage();
+                break;
+            }
+            if (l_info.probed == false)
+            {
+                printf("Probe failed on device %d\n", l_i);
+                continue;
+            }
+            printf("Device %d: %s\n", l_i, l_info.name.c_str());
+            printf("  outs %d, ins: %d, duplex: %d, default out: %d, default in: %d, preferred rate: %d\n",
+                   l_info.outputChannels, l_info.inputChannels, l_info.duplexChannels, l_info.isDefaultOutput, l_info.isDefaultInput, l_info.preferredSampleRate);
+            if(strcmp(l_info.name.c_str(), p_device_name) == 0)
+            {
+                printf("  found matching device\n");
+                l_device_number = l_i;
+                break;
+            }
         }
     }
     // Clean up
