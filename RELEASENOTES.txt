@@ -1,5 +1,6 @@
 Tartini 1.2.2
     Correction of compilation issue with CLang 11.0.3 ( https://github.com/quicky2000/tartini/issues/29 )
+    Fix endianess bug on Mac ( https://github.com/quicky2000/tartini/pull/38 )
 
 Tartini 1.2.1
 
