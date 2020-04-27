@@ -64,9 +64,9 @@ int SoundStream::writeFloats( float ** p_channel_data
             {
                 *l_pos1 = (short)(*l_pos * g_v16);
 //#ifdef Q_OS_MACX //reverse endieness
-#ifdef MACX //reverse endieness
-                *l_pos1 = ((*l_pos1 & 0xFF00) >> 8) | ((*l_pos1 & 0x00FF) << 8);
-#endif
+//#ifdef MACX //reverse endieness
+//                *l_pos1 = ((*l_pos1 & 0xFF00) >> 8) | ((*l_pos1 & 0x00FF) << 8);
+//#endif
             }
         }
         l_written = write_bytes(l_temp, p_length * m_channels * sizeof(short));
@@ -118,9 +118,9 @@ int SoundStream::readFloats(float ** p_channel_data
             for(l_pos = p_channel_data[l_c % p_ch]; l_pos < l_end; l_pos++, l_pos1 += m_channels)
             {
 //#ifdef Q_OS_MACX //reverse endieness
-#ifdef MACX //reverse endieness
-                *l_pos1 = ((*l_pos1 & 0xFF00) >> 8) | ((*l_pos1 & 0x00FF) << 8);
-#endif
+//#ifdef MACX //reverse endieness
+//                *l_pos1 = ((*l_pos1 & 0xFF00) >> 8) | ((*l_pos1 & 0x00FF) << 8);
+//#endif
                 *l_pos = float(double(*l_pos1) / g_v16);
             }
         }
