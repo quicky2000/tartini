@@ -175,6 +175,17 @@ int AudioStream::callback( void *outputBuffer
       std::cout << "Stream underflow detected!" << std::endl;
 
     unsigned int i;
+    if ( inBuffer )
+    {
+        // Copy nBufferFrames of data from the audio input to the input RingBuffer.
+        // FIXME: Need a mutex around access to m_in_buffer.
+        for(i = 0; i < nBufferFrames * get_channels(); i++)
+        {
+            bool success = m_in_buffer.put(inBuffer[i]);
+            myassert(success);
+        }
+    }
+    
     if ( outBuffer )
     {
         // Block until there is enough output data to send.
@@ -190,17 +201,6 @@ int AudioStream::callback( void *outputBuffer
         for(i = 0; i < nBufferFrames * get_channels(); i++)
         {
             bool success = m_out_buffer.get(&outBuffer[i]);
-            myassert(success);
-        }
-    }
-    
-    if ( inBuffer )
-    {
-        // Copy nBufferFrames of data from the audio input to the input RingBuffer.
-        // FIXME: Need a mutex around access to m_in_buffer.
-        for(i = 0; i < nBufferFrames * get_channels(); i++)
-        {
-            bool success = m_in_buffer.put(inBuffer[i]);
             myassert(success);
         }
     }
