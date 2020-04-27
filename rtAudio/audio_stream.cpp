@@ -171,8 +171,14 @@ int AudioStream::callback( void *outputBuffer
     float *outBuffer = (float *) outputBuffer;
     float *inBuffer = (float *) inputBuffer;
 
-    if ( status )
-      std::cout << "Stream underflow detected!" << std::endl;
+    if (status == RTAUDIO_INPUT_OVERFLOW)
+    {
+        printf("Stream input overflow!\n");
+    }
+    else if (status == RTAUDIO_OUTPUT_UNDERFLOW)
+    {
+        printf("Stream output underflow!\n");
+    }
 
     unsigned int i;
     if ( inBuffer )
@@ -191,8 +197,13 @@ int AudioStream::callback( void *outputBuffer
         // Block until there is enough output data to send.
         while (m_out_buffer.size() < (int)nBufferFrames * get_channels())
         {
-            printf("+");
+            printf(".");
             QThread::msleep(1);
+            if(!m_audio->isStreamRunning())
+            {
+                printf("Stream not running\n");
+                return 0;
+            }
         }
 
         // Copy nBufferFrames of data from the output RingBuffer to the audio output.
@@ -234,7 +245,7 @@ int AudioStream::writeFloats( float ** p_channel_data
     // Block until all of the output data has been sent.
     while (m_out_buffer.size() > 0)
     {
-        printf(".");
+        printf(">");
         QThread::msleep(1);
     }
     
@@ -257,7 +268,7 @@ int AudioStream::readFloats( float ** p_channel_data
     // Block until there is enough input data to read.
     while (m_in_buffer.size() < p_length * p_ch)
     {
-        printf(".");
+        printf("<");
         QThread::msleep(1);
     }
 
@@ -305,7 +316,7 @@ int AudioStream::writeReadFloats( float ** p_out_channel_data
     // Block until there is enough input data to read.
     while (m_in_buffer.size() < p_length * p_in_channel)
     {
-        printf(".");
+        printf("<");
         QThread::msleep(1);
     }
 
@@ -323,7 +334,7 @@ int AudioStream::writeReadFloats( float ** p_out_channel_data
     // Block until all of the output data has been sent.
     while (m_out_buffer.size() > 0)
     {
-        printf(".");
+        printf(">");
         QThread::msleep(1);
     }
     
