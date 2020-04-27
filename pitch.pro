@@ -380,7 +380,7 @@ unix{
     DEPENDPATH += rtAudio/
     HEADERS += rtAudio/audio_stream.h rtAudio/RtAudio.h
     SOURCES += rtAudio/audio_stream.cpp rtAudio/rtAudio.cpp
-    DEFINES += __LINUX_OSS__
+    #DEFINES += __LINUX_OSS__
     DEFINES += __LINUX_ALSA__
     #DEFINES += __LINUX_JACK__  #Uncomment to use Jack. Note untested.
 
