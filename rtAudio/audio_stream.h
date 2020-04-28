@@ -98,11 +98,6 @@ class AudioStream: public SoundStream
                        , int p_length
                        );
 
-    bool isSameInOutDevice()
-    {
-        return m_in_device == m_out_device;
-    }
-
     static QStringList getInputDeviceNames();
     static QStringList getOutputDeviceNames();
 
@@ -135,8 +130,6 @@ class AudioStream: public SoundStream
     QMutex m_out_mutex;
     RingBuffer<float> m_in_buffer;
     RingBuffer<float> m_out_buffer;
-    int m_in_device;
-    int m_out_device;
 
 };
 #endif // AUDIO_STREAM_H

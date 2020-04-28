@@ -27,7 +27,6 @@ AudioStream::AudioStream()
     m_audio = NULL;
     m_in_buffer.setAutoGrow(true);
     m_out_buffer.setAutoGrow(true);
-    m_in_device = m_out_device = 0;
 }
 
 //------------------------------------------------------------------------------
@@ -80,13 +79,13 @@ int AudioStream::open( int p_mode
     {
         QStringList l_in_names = getInputDeviceNames();
         const std::string l_audio_input = g_data->getSettingsValue("Sound/soundInput", std::string("Default"));
-        m_in_device = getDeviceNumber(l_audio_input.c_str(), true);
+        int in_device = getDeviceNumber(l_audio_input.c_str(), true);
         
-        inputParameters.deviceId = m_in_device;
+        inputParameters.deviceId = in_device;
         inputParameters.nChannels = get_channels();
         inputParamPtr = &inputParameters;
         
-        fprintf(stderr, "Input Device %d: %s\n", m_in_device, l_audio_input.c_str());
+        fprintf(stderr, "Input Device %d: %s\n", in_device, l_audio_input.c_str());
     }
 
     RtAudio::StreamParameters outputParameters;
@@ -94,13 +93,13 @@ int AudioStream::open( int p_mode
     {
         QStringList l_out_names = getOutputDeviceNames();
         const std::string l_audio_output = g_data->getSettingsValue("Sound/soundOutput", std::string("Default"));
-        m_out_device = getDeviceNumber(l_audio_output.c_str(), false);
+        int out_device = getDeviceNumber(l_audio_output.c_str(), false);
         
-        outputParameters.deviceId = m_out_device;
+        outputParameters.deviceId = out_device;
         outputParameters.nChannels = get_channels();
         outputParamPtr = &outputParameters;
 
-        fprintf(stderr, "Output Device %d: %s\n", m_out_device, l_audio_output.c_str());
+        fprintf(stderr, "Output Device %d: %s\n", out_device, l_audio_output.c_str());
     }
 
     if(!inputParamPtr && !outputParamPtr)
