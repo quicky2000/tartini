@@ -131,6 +131,8 @@ class AudioStream: public SoundStream
     int m_buffer_size; //in frames
     int m_num_buffers; //ignored
     RtAudio * m_audio;
+    QMutex m_in_mutex;
+    QMutex m_out_mutex;
     RingBuffer<float> m_in_buffer;
     RingBuffer<float> m_out_buffer;
     int m_in_device;

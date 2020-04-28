@@ -190,7 +190,7 @@ int AudioStream::callback( void *outputBuffer
     if ( inBuffer )
     {
         // Copy nBufferFrames of data from the audio input to the input RingBuffer.
-        // FIXME: Need a mutex around access to m_in_buffer.
+        QMutexLocker ml(&m_in_mutex);
         int result = m_in_buffer.put(inBuffer, numFloats);
         myassert(result == numFloats);
     }
@@ -212,9 +212,11 @@ int AudioStream::callback( void *outputBuffer
         }
 
         // Copy nBufferFrames of data from the output RingBuffer to the audio output.
-        // FIXME: Need a mutex around access to m_out_buffer.
-        int result = m_out_buffer.get(outBuffer, numFloats);
-        myassert(result == numFloats);
+        {
+            QMutexLocker ml(&m_out_mutex);
+            int result = m_out_buffer.get(outBuffer, numFloats);
+            myassert(result == numFloats);
+        }
 }
     
     return 0;
@@ -235,13 +237,15 @@ int AudioStream::writeFloats( float ** p_channel_data
     int l_c;
     int l_j;
     // Copy p_length frames of data to the output RingBuffer.
-    // FIXME: Need a mutex around access to m_out_buffer.
-    for(l_j = 0; l_j < p_length; l_j++)
     {
-        for(l_c = 0; l_c < p_ch; l_c++)
+        QMutexLocker ml(&m_out_mutex);
+        for(l_j = 0; l_j < p_length; l_j++)
         {
-            bool success = m_out_buffer.put(p_channel_data[l_c][l_j]);
-            myassert(success);
+            for(l_c = 0; l_c < p_ch; l_c++)
+            {
+                bool success = m_out_buffer.put(p_channel_data[l_c][l_j]);
+                myassert(success);
+            }
         }
     }
 
@@ -282,13 +286,15 @@ int AudioStream::readFloats( float ** p_channel_data
     }
 
     // Copy p_length frames of data from the input RingBuffer.
-    // FIXME: Need a mutex around access to m_in_buffer.
-    for(l_j = 0; l_j < p_length; l_j++)
     {
-        for(l_c = 0; l_c < p_ch; l_c++)
+        QMutexLocker ml(&m_in_mutex);
+        for(l_j = 0; l_j < p_length; l_j++)
         {
-            bool success = m_in_buffer.get(&(p_channel_data[l_c][l_j]));
-            myassert(success);
+            for(l_c = 0; l_c < p_ch; l_c++)
+            {
+                bool success = m_in_buffer.get(&(p_channel_data[l_c][l_j]));
+                myassert(success);
+            }
         }
     }
     
@@ -314,16 +320,18 @@ int AudioStream::writeReadFloats( float ** p_out_channel_data
     int l_c;
     int l_j;
     // Copy p_length frames of data to the output RingBuffer.
-    // FIXME: Need a mutex around access to m_out_buffer.
-    for(l_j = 0; l_j < p_length; l_j++)
     {
-        for(l_c = 0; l_c < p_out_channel; l_c++)
+        QMutexLocker ml(&m_out_mutex);
+        for(l_j = 0; l_j < p_length; l_j++)
         {
-            bool success = m_out_buffer.put(p_out_channel_data[l_c][l_j]);
-            myassert(success);
+            for(l_c = 0; l_c < p_out_channel; l_c++)
+            {
+                bool success = m_out_buffer.put(p_out_channel_data[l_c][l_j]);
+                myassert(success);
+            }
         }
     }
-
+    
     // Block until there is enough input data to read.
     while (m_in_buffer.size() < p_length * p_in_channel)
     {
@@ -334,13 +342,15 @@ int AudioStream::writeReadFloats( float ** p_out_channel_data
     }
 
     // Copy p_length frames of data from the input RingBuffer.
-    // FIXME: Need a mutex around access to m_in_buffer.
-    for(l_j = 0; l_j < p_length; l_j++)
     {
-        for(l_c = 0; l_c < p_in_channel; l_c++)
+        QMutexLocker ml(&m_in_mutex);
+        for(l_j = 0; l_j < p_length; l_j++)
         {
-            bool success = m_in_buffer.get(&(p_in_channel_data[l_c][l_j]));
-            myassert(success);
+            for(l_c = 0; l_c < p_in_channel; l_c++)
+            {
+                bool success = m_in_buffer.get(&(p_in_channel_data[l_c][l_j]));
+                myassert(success);
+            }
         }
     }
 
