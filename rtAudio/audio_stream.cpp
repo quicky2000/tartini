@@ -75,8 +75,8 @@ int AudioStream::open( int p_mode
     if(get_mode() == F_READ || get_mode() == F_RDWR)
     {
         QStringList l_in_names = getInputDeviceNames();
-        const std::string l_audio_input = g_data->getSettingsValue("Sound/soundInput", std::string("Default Input"));
-        m_in_device = getDeviceNumber(l_audio_input.c_str());
+        const std::string l_audio_input = g_data->getSettingsValue("Sound/soundInput", std::string("Default"));
+        m_in_device = getDeviceNumber(l_audio_input.c_str(), true);
         
         inputParameters.deviceId = m_in_device;
         inputParameters.nChannels = get_channels();
@@ -89,8 +89,8 @@ int AudioStream::open( int p_mode
     if(get_mode() == F_WRITE || get_mode() == F_RDWR)
     {
         QStringList l_out_names = getOutputDeviceNames();
-        const std::string l_audio_output = g_data->getSettingsValue("Sound/soundOutput", std::string("Default Output"));
-        m_out_device = getDeviceNumber(l_audio_output.c_str());
+        const std::string l_audio_output = g_data->getSettingsValue("Sound/soundOutput", std::string("Default"));
+        m_out_device = getDeviceNumber(l_audio_output.c_str(), false);
         
         outputParameters.deviceId = m_out_device;
         outputParameters.nChannels = get_channels();
@@ -347,7 +347,7 @@ QStringList AudioStream::getInputDeviceNames()
     printf("AudioStream::getInputDeviceNames()\n");
 
     QStringList l_to_return;
-    l_to_return << "Default Input";
+    l_to_return << "Default";
 
     RtAudio * l_temp_audio = NULL;
     try
@@ -405,7 +405,7 @@ QStringList AudioStream::getOutputDeviceNames()
     printf("AudioStream::getOutputDeviceNames()\n");
 
     QStringList l_to_return;
-    l_to_return << "Default Output";
+    l_to_return << "Default";
 
     RtAudio * l_temp_audio = NULL;
     try
@@ -457,9 +457,9 @@ QStringList AudioStream::getOutputDeviceNames()
 }
 
 //------------------------------------------------------------------------------
-int AudioStream::getDeviceNumber(const char * p_device_name)
+int AudioStream::getDeviceNumber(const char * p_device_name, bool p_input)
 {
-    printf("AudioStream::getDeviceNumber(p_device_name=\"%s\")\n", p_device_name);
+    printf("AudioStream::getDeviceNumber(p_device_name=\"%s\", p_input=%d)\n", p_device_name, p_input);
 
     int l_device_number = -1;
 
@@ -474,48 +474,50 @@ int AudioStream::getDeviceNumber(const char * p_device_name)
         return -1;
     }
 
-    if(strcmp("Default Input", p_device_name) == 0)
-    {
-        l_device_number = l_temp_audio->getDefaultInputDevice();
-    }
-    else if(strcmp("Default Output", p_device_name) == 0)
-    {
-        l_device_number = l_temp_audio->getDefaultOutputDevice();
-    }
-    else
-    {
-        // Determine the number of devices available
-        int l_num_devices = l_temp_audio->getDeviceCount();
-        printf("num devices = %d\n", l_num_devices);
+    // Determine the number of devices available
+    int l_num_devices = l_temp_audio->getDeviceCount();
+    printf("num devices = %d\n", l_num_devices);
 
-        // Scan through devices for various capabilities
-        RtAudio::DeviceInfo l_info;
-        for(int l_i = 0; l_i < l_num_devices; l_i++)
+    // Scan through devices for various capabilities
+    RtAudio::DeviceInfo l_info;
+    for(int l_i = 0; l_i < l_num_devices; l_i++)
+    {
+        try
         {
-            try
-            {
-                printf("Probing device %d\n", l_i);
-                l_info = l_temp_audio->getDeviceInfo(l_i);
-            }
-            catch (RtAudioError &l_error)
-            {
-                l_error.printMessage();
-                break;
-            }
-            if (l_info.probed == false)
-            {
-                printf("Probe failed on device %d\n", l_i);
-                continue;
-            }
-            printf("Device %d: %s\n", l_i, l_info.name.c_str());
-            printf("  outs %d, ins: %d, duplex: %d, default out: %d, default in: %d, preferred rate: %d\n",
-                   l_info.outputChannels, l_info.inputChannels, l_info.duplexChannels, l_info.isDefaultOutput, l_info.isDefaultInput, l_info.preferredSampleRate);
-            if(strcmp(l_info.name.c_str(), p_device_name) == 0)
-            {
-                printf("  found matching device\n");
-                l_device_number = l_i;
-                break;
-            }
+            printf("Probing device %d\n", l_i);
+            l_info = l_temp_audio->getDeviceInfo(l_i);
+        }
+        catch (RtAudioError &l_error)
+        {
+            l_error.printMessage();
+            break;
+        }
+        if (l_info.probed == false)
+        {
+            printf("Probe failed on device %d\n", l_i);
+            continue;
+        }
+        printf("Device %d: %s\n", l_i, l_info.name.c_str());
+        printf("  outs %d, ins: %d, duplex: %d, default out: %d, default in: %d, preferred rate: %d\n",
+               l_info.outputChannels, l_info.inputChannels, l_info.duplexChannels, l_info.isDefaultOutput, l_info.isDefaultInput, l_info.preferredSampleRate);
+        if(strcmp(l_info.name.c_str(), p_device_name) == 0)
+        {
+            printf("  found matching device\n");
+            l_device_number = l_i;
+            break;
+        }
+    }
+    if (l_device_number == -1)
+    {
+        if (p_input)
+        {
+            l_device_number = l_temp_audio->getDefaultInputDevice();
+            printf("Using default input device: %d\n", l_device_number);
+        }
+        else
+        {
+            l_device_number = l_temp_audio->getDefaultOutputDevice();
+            printf("Using default output device: %d\n", l_device_number);
         }
     }
     // Clean up

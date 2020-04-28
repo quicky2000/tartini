@@ -110,7 +110,7 @@ class AudioStream: public SoundStream
        @param p_device_name The name of a device as given from get*DeviceNames
        @return The device number that matches the name, or -1 if the device name is not found
     */
-    static int getDeviceNumber(const char * p_device_name);
+    static int getDeviceNumber(const char * p_device_name, bool p_input);
 
   private:
     static int callback(void *outputBuffer
