@@ -186,22 +186,19 @@ int AudioStream::callback( void *outputBuffer
         printf("Stream output underflow!\n");
     }
 
-    unsigned int i;
+    int numFloats = nBufferFrames * get_channels();
     if ( inBuffer )
     {
         // Copy nBufferFrames of data from the audio input to the input RingBuffer.
         // FIXME: Need a mutex around access to m_in_buffer.
-        for(i = 0; i < nBufferFrames * get_channels(); i++)
-        {
-            bool success = m_in_buffer.put(inBuffer[i]);
-            myassert(success);
-        }
+        int result = m_in_buffer.put(inBuffer, numFloats);
+        myassert(result == numFloats);
     }
     
     if ( outBuffer )
     {
         // Block until there is enough output data to send.
-        while (m_out_buffer.size() < (int)nBufferFrames * get_channels())
+        while (m_out_buffer.size() < numFloats)
         {
             #ifdef DEBUG_PRINTF
             printf(".");
@@ -216,13 +213,9 @@ int AudioStream::callback( void *outputBuffer
 
         // Copy nBufferFrames of data from the output RingBuffer to the audio output.
         // FIXME: Need a mutex around access to m_out_buffer.
-        // This could be faster with:  m_out_buffer.get(outBuffer, nBufferFrames * p_ch);
-        for(i = 0; i < nBufferFrames * get_channels(); i++)
-        {
-            bool success = m_out_buffer.get(&outBuffer[i]);
-            myassert(success);
-        }
-    }
+        int result = m_out_buffer.get(outBuffer, numFloats);
+        myassert(result == numFloats);
+}
     
     return 0;
 }
