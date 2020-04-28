@@ -9,12 +9,8 @@
 
 unix{
   macx{ #MacOSX
-    ICON = icons/pitch.icns
-
-    # Copy the custom Info.plist to the app bundle
-    plist.path = "$$DESTDIR/$$join(TARGET,,,.app)/Contents"
-    plist.files = Info.plist
-    INSTALLS += plist
+    QMAKE_INFO_PLIST = mac/Info.plist
+    ICON = mac/pitch.icns
 
     MY_INCLUDE_PATH += /usr/local/Cellar/qwt/6.1.4/lib/qwt.framework/Versions/6/Headers/
     MY_INCLUDE_PATH += /usr/local/include
@@ -60,7 +56,6 @@ VERSION = 1.2.1
 FORMS += dialogs/settingsdialog.ui
 
 DISTFILES += INSTALL.txt \
-  Info.plist \
   LICENSE.txt \
   README.txt \
   pics/open.xpm \
