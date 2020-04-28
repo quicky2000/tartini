@@ -160,6 +160,7 @@ int AudioStream::callback( void *outputBuffer
 
 //------------------------------------------------------------------------------
 // This instance method is called when data is availble or required.
+// It copies data between the audio devices and the input and output RingBuffers.
 int AudioStream::callback( void *outputBuffer
                          , void *inputBuffer
                          , unsigned int nBufferFrames
@@ -188,7 +189,7 @@ int AudioStream::callback( void *outputBuffer
     int numFloats = nBufferFrames * get_channels();
     if ( inBuffer )
     {
-        // Copy nBufferFrames of data from the audio input to the input RingBuffer.
+        // Copy nBufferFrames of data from the input device to the input RingBuffer.
         QMutexLocker ml(&m_in_mutex);
         int result = m_in_buffer.put(inBuffer, numFloats);
         myassert(result == numFloats);
@@ -210,7 +211,7 @@ int AudioStream::callback( void *outputBuffer
             }
         }
 
-        // Copy nBufferFrames of data from the output RingBuffer to the audio output.
+        // Copy nBufferFrames of data from the output RingBuffer to the output device.
         {
             QMutexLocker ml(&m_out_mutex);
             int result = m_out_buffer.get(outBuffer, numFloats);
@@ -222,6 +223,7 @@ int AudioStream::callback( void *outputBuffer
 }
 
 //------------------------------------------------------------------------------
+// Writes data to the output RingBuffer, blocking until the data has been sent to the output device.
 int AudioStream::writeFloats( float ** p_channel_data
                             , int p_length
                             , int p_ch
@@ -261,6 +263,7 @@ int AudioStream::writeFloats( float ** p_channel_data
 }
 
 //------------------------------------------------------------------------------
+// Reads data from the input RingBuffer, blocking until the data is available from the input device.
 int AudioStream::readFloats( float ** p_channel_data
                            , int p_length
                            , int p_ch
@@ -301,6 +304,8 @@ int AudioStream::readFloats( float ** p_channel_data
 }
 
 //------------------------------------------------------------------------------
+// Writes data to the output RingBuffer and reads data from the input RingBuffer.
+// Blocks until the input data is available from the input device and the output data has been sent to the output device.
 int AudioStream::writeReadFloats( float ** p_out_channel_data
                                 , int p_out_channel
                                 , float ** p_in_channel_data
