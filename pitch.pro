@@ -9,6 +9,9 @@
 
 unix{
   macx{ #MacOSX
+    QMAKE_INFO_PLIST = mac/Info.plist
+    ICON = mac/pitch.icns
+
     MY_INCLUDE_PATH += /usr/local/Cellar/qwt/6.1.4/lib/qwt.framework/Versions/6/Headers/
     MY_INCLUDE_PATH += /usr/local/include
     LIBS+= -F/usr/local/Cellar/qwt/6.1.4/lib
