@@ -248,7 +248,7 @@ class Channel
 
   private:
     SoundFile * m_parent;
-    float m_freq; /**< Channel's frequency */
+    //float m_freq; /**< Channel's frequency */
     int m_pitch_method;
     bool m_visible;
     bool m_note_is_playing;
