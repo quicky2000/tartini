@@ -168,7 +168,6 @@ Channel::Channel( SoundFile * p_parent
                 , int p_k
                 )
 : m_parent(p_parent)
-, m_freq(0.0)
 , m_pitch_method(2)
 , m_visible(true)
 , m_note_is_playing(false)
