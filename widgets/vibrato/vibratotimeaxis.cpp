@@ -170,8 +170,7 @@ void VibratoTimeAxis::doUpdate()
         AnalysisData * l_data = l_active_channel->dataAtCurrentChunk();
         if(l_data && l_active_channel->isVisibleNote(l_data->getNoteIndex()) && l_active_channel->isLabelNote(l_data->getNoteIndex()))
         {
-            const NoteData * l_note = new NoteData();
-            l_note = &l_active_channel->get_note_data()[l_data->getNoteIndex()];
+            const NoteData * l_note = &l_active_channel->get_note_data()[l_data->getNoteIndex()];
 
             l_my_start_chunk = l_note->startChunk();
             l_my_current_chunk = l_active_channel->chunkAtCurrentTime();

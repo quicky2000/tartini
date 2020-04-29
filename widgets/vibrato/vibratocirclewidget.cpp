@@ -176,8 +176,7 @@ void VibratoCircleWidget::doUpdate()
 		AnalysisData * l_data = l_active_channel->dataAtCurrentChunk();
 		if(l_data && l_active_channel->isVisibleNote(l_data->getNoteIndex()) && l_active_channel->isLabelNote(l_data->getNoteIndex()))
 		{
-			const NoteData * l_note = new NoteData();
-			l_note = &(l_active_channel->get_note_data()[l_data->getNoteIndex()]);
+			const NoteData * l_note = &(l_active_channel->get_note_data()[l_data->getNoteIndex()]);
 
 			// Determine which delay to use
 			int l_smooth_delay = l_active_channel->get_pitch_big_smoothing_filter().delay();
