@@ -70,38 +70,38 @@ int AudioStream::open( int p_mode
     m_buffer_size = p_buffer_size;
     m_num_buffers = 4; // not used (also ignored in the settings dialog?)
 
-    RtAudio::StreamParameters *inputParamPtr = NULL;
-    RtAudio::StreamParameters *outputParamPtr = NULL;
+    RtAudio::StreamParameters * l_input_param_ptr = NULL;
+    RtAudio::StreamParameters * l_output_param_ptr = NULL;
     
-    RtAudio::StreamParameters inputParameters;
+    RtAudio::StreamParameters l_input_parameters;
     if(get_mode() == F_READ || get_mode() == F_RDWR)
     {
         QStringList l_in_names = getInputDeviceNames();
         const std::string l_audio_input = g_data->getSettingsValue("Sound/soundInput", std::string("Default"));
-        int in_device = getDeviceNumber(l_audio_input.c_str(), true);
+        int l_in_device = getDeviceNumber(l_audio_input.c_str(), true);
+
+        l_input_parameters.deviceId = l_in_device;
+        l_input_parameters.nChannels = get_channels();
+        l_input_param_ptr = &l_input_parameters;
         
-        inputParameters.deviceId = in_device;
-        inputParameters.nChannels = get_channels();
-        inputParamPtr = &inputParameters;
-        
-        std::cerr << "Input Device " << in_device << ": " << l_audio_input.c_str() << std::endl;
+        std::cerr << "Input Device " << l_in_device << ": " << l_audio_input.c_str() << std::endl;
     }
 
-    RtAudio::StreamParameters outputParameters;
+    RtAudio::StreamParameters l_output_parameters;
     if(get_mode() == F_WRITE || get_mode() == F_RDWR)
     {
         QStringList l_out_names = getOutputDeviceNames();
         const std::string l_audio_output = g_data->getSettingsValue("Sound/soundOutput", std::string("Default"));
-        int out_device = getDeviceNumber(l_audio_output.c_str(), false);
-        
-        outputParameters.deviceId = out_device;
-        outputParameters.nChannels = get_channels();
-        outputParamPtr = &outputParameters;
+        int l_out_device = getDeviceNumber(l_audio_output.c_str(), false);
 
-        std::cerr << "Output Device " << out_device << ": " << l_audio_output.c_str() << std::endl;
+        l_output_parameters.deviceId = l_out_device;
+        l_output_parameters.nChannels = get_channels();
+        l_output_param_ptr = &l_output_parameters;
+
+        std::cerr << "Output Device " << l_out_device << ": " << l_audio_output.c_str() << std::endl;
     }
 
-    if(!inputParamPtr && !outputParamPtr)
+    if(!l_input_param_ptr && !l_output_param_ptr)
     {
         std::cerr << "No mode selected" << std::endl;
         return -1;
@@ -113,11 +113,11 @@ int AudioStream::open( int p_mode
         m_audio = new RtAudio();
 
         // TODO: Could pass m_num_buffers via RtAudio::StreamOptions, but the docs say it is usually ignored anyway.
-        m_audio->openStream(outputParamPtr, inputParamPtr, RTAUDIO_FLOAT32, get_frequency(), (unsigned int *)&m_buffer_size, callback, this);
+        m_audio->openStream(l_output_param_ptr, l_input_param_ptr, RTAUDIO_FLOAT32, get_frequency(), (unsigned int *)&m_buffer_size, callback, this);
     }
-    catch (RtAudioError &error)
+    catch (RtAudioError & l_error)
     {
-        error.printMessage();
+        l_error.printMessage();
         m_audio = NULL;
         return -1;
     }
@@ -132,9 +132,9 @@ int AudioStream::open( int p_mode
         // The callback function will be called (on another thread) when data is available or required.
         m_audio->startStream();
     }
-    catch (RtAudioError &error)
+    catch (RtAudioError & l_error)
     {
-        error.printMessage();
+        l_error.printMessage();
         delete m_audio;
         return -1;
     }
@@ -142,61 +142,58 @@ int AudioStream::open( int p_mode
 }
 
 //------------------------------------------------------------------------------
-// This static function is called when data is availble or required.  The userData is a pointer to the AudioStream object.
-int AudioStream::callback( void *outputBuffer
-                         , void *inputBuffer
-                         , unsigned int nBufferFrames
-                         , double streamTime
-                         , RtAudioStreamStatus status
-                         , void *userData
+int AudioStream::callback( void * p_output_buffer
+                         , void * p_input_buffer
+                         , unsigned int p_n_buffer_frames
+                         , double p_stream_time
+                         , RtAudioStreamStatus p_status
+                         , void * p_user_data
                          )
 {
-    AudioStream * self = (AudioStream *)userData;
+    AudioStream * l_self = (AudioStream *) p_user_data;
     
     // Call the callback instance method on "this" object.
-    return self->callback(outputBuffer, inputBuffer, nBufferFrames, streamTime, status);
+    return l_self->callback(p_output_buffer, p_input_buffer, p_n_buffer_frames, p_stream_time, p_status);
 }
 
 //------------------------------------------------------------------------------
-// This instance method is called when data is availble or required.
-// It copies data between the audio devices and the input and output RingBuffers.
-int AudioStream::callback( void *outputBuffer
-                         , void *inputBuffer
-                         , unsigned int nBufferFrames
-                         , double streamTime
-                         , RtAudioStreamStatus status
+int AudioStream::callback( void * p_output_buffer
+                         , void * p_input_buffer
+                         , unsigned int p_n_buffer_frames
+                         , double p_stream_time
+                         , RtAudioStreamStatus p_status
                          )
 {
 #ifdef DEBUG_PRINTF
-    std::cout << "AudioStream::callback(nBufferFrames=" << nBufferFrames << ", streamTime=" << streamTime << ", m_out_buffer.size()=" << m_out_buffer.size() <<", m_in_buffer.size()=" << m_in_buffer.size() << std::endl;
+    std::cout << "AudioStream::callback(nBufferFrames=" << p_n_buffer_frames << ", streamTime=" << p_stream_time << ", m_out_buffer.size()=" << m_out_buffer.size() <<", m_in_buffer.size()=" << m_in_buffer.size() << std::endl;
 #endif // DEBUG_PRINTF
 
     // unsigned int i, j;
-    float *outBuffer = (float *) outputBuffer;
-    float *inBuffer = (float *) inputBuffer;
+    float * l_out_buffer = (float *) p_output_buffer;
+    float * l_in_buffer = (float *) p_input_buffer;
 
-    if (status == RTAUDIO_INPUT_OVERFLOW)
+    if (p_status == RTAUDIO_INPUT_OVERFLOW)
     {
         std::cout << "Stream input overflow!" << std::endl;
     }
-    else if (status == RTAUDIO_OUTPUT_UNDERFLOW)
+    else if (p_status == RTAUDIO_OUTPUT_UNDERFLOW)
     {
         std::cout << "Stream output underflow!" << std::endl;
     }
 
-    int numFloats = nBufferFrames * get_channels();
-    if ( inBuffer )
+    int l_num_floats = p_n_buffer_frames * get_channels();
+    if ( l_in_buffer )
     {
         // Copy nBufferFrames of data from the input device to the input RingBuffer.
-        QMutexLocker ml(&m_in_mutex);
-        int result = m_in_buffer.put(inBuffer, numFloats);
-        myassert(result == numFloats);
+        QMutexLocker l_mutex_locker(&m_in_mutex);
+        int l_result = m_in_buffer.put(l_in_buffer, l_num_floats);
+        myassert(l_result == l_num_floats);
     }
     
-    if ( outBuffer )
+    if ( l_out_buffer )
     {
         // Block until there is enough output data to send.
-        while (m_out_buffer.size() < numFloats)
+        while (m_out_buffer.size() < l_num_floats)
         {
 #ifdef DEBUG_PRINTF
             std::cout << ".";
@@ -211,9 +208,9 @@ int AudioStream::callback( void *outputBuffer
 
         // Copy nBufferFrames of data from the output RingBuffer to the output device.
         {
-            QMutexLocker ml(&m_out_mutex);
-            int result = m_out_buffer.get(outBuffer, numFloats);
-            myassert(result == numFloats);
+            QMutexLocker l_mutex_locker(&m_out_mutex);
+            int l_result = m_out_buffer.get(l_out_buffer, l_num_floats);
+            myassert(l_result == l_num_floats);
         }
 }
     
@@ -237,13 +234,13 @@ int AudioStream::writeFloats( float ** p_channel_data
     int l_j;
     // Copy p_length frames of data to the output RingBuffer.
     {
-        QMutexLocker ml(&m_out_mutex);
+        QMutexLocker l_mutex_locker(&m_out_mutex);
         for(l_j = 0; l_j < p_length; l_j++)
         {
             for(l_c = 0; l_c < p_ch; l_c++)
             {
-                bool success = m_out_buffer.put(p_channel_data[l_c][l_j]);
-                myassert(success);
+                bool l_success = m_out_buffer.put(p_channel_data[l_c][l_j]);
+                myassert(l_success);
             }
         }
     }
@@ -287,13 +284,13 @@ int AudioStream::readFloats( float ** p_channel_data
 
     // Copy p_length frames of data from the input RingBuffer.
     {
-        QMutexLocker ml(&m_in_mutex);
+        QMutexLocker l_mutex_locker(&m_in_mutex);
         for(l_j = 0; l_j < p_length; l_j++)
         {
             for(l_c = 0; l_c < p_ch; l_c++)
             {
-                bool success = m_in_buffer.get(&(p_channel_data[l_c][l_j]));
-                myassert(success);
+                bool l_success = m_in_buffer.get(&(p_channel_data[l_c][l_j]));
+                myassert(l_success);
             }
         }
     }
@@ -322,13 +319,13 @@ int AudioStream::writeReadFloats( float ** p_out_channel_data
     int l_j;
     // Copy p_length frames of data to the output RingBuffer.
     {
-        QMutexLocker ml(&m_out_mutex);
+        QMutexLocker l_mutex_locker(&m_out_mutex);
         for(l_j = 0; l_j < p_length; l_j++)
         {
             for(l_c = 0; l_c < p_out_channel; l_c++)
             {
-                bool success = m_out_buffer.put(p_out_channel_data[l_c][l_j]);
-                myassert(success);
+                bool l_success = m_out_buffer.put(p_out_channel_data[l_c][l_j]);
+                myassert(l_success);
             }
         }
     }
@@ -344,13 +341,13 @@ int AudioStream::writeReadFloats( float ** p_out_channel_data
 
     // Copy p_length frames of data from the input RingBuffer.
     {
-        QMutexLocker ml(&m_in_mutex);
+        QMutexLocker l_mutex_locker(&m_in_mutex);
         for(l_j = 0; l_j < p_length; l_j++)
         {
             for(l_c = 0; l_c < p_in_channel; l_c++)
             {
-                bool success = m_in_buffer.get(&(p_in_channel_data[l_c][l_j]));
-                myassert(success);
+                bool l_success = m_in_buffer.get(&(p_in_channel_data[l_c][l_j]));
+                myassert(l_success);
             }
         }
     }

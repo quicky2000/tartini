@@ -105,23 +105,33 @@ class AudioStream: public SoundStream
        @param p_device_name The name of a device as given from get*DeviceNames
        @return The device number that matches the name, or -1 if the device name is not found
     */
-    static int getDeviceNumber(const char * p_device_name, bool p_input);
+    static int getDeviceNumber( const char * p_device_name
+                              , bool p_input
+                              );
 
   private:
-    static int callback(void *outputBuffer
-                      , void *inputBuffer
-                      , unsigned int nBufferFrames
-                      , double streamTime
-                      , RtAudioStreamStatus status
-                      , void *userData
-                      );
-    
-    int callback(void *outputBuffer
-               , void *inputBuffer
-               , unsigned int nBufferFrames
-               , double streamTime
-               , RtAudioStreamStatus status
-               );
+
+    /**
+     * This static function is called when data is availble or required.  The p_user_data is a pointer to the AudioStream object.
+     */
+    static int callback( void * p_output_buffer
+                       , void * p_input_buffer
+                       , unsigned int p_n_buffer_frames
+                       , double p_stream_time
+                       , RtAudioStreamStatus p_status
+                       , void * p_user_data
+                       );
+
+    /**
+     * This instance method is called when data is available or required.
+     * It copies data between the audio devices and the input and output RingBuffers.
+     */
+    int callback( void * p_output_buffer
+                , void * p_input_buffer
+                , unsigned int p_n_buffer_frames
+                , double p_stream_time
+                , RtAudioStreamStatus p_status
+                );
     
     int m_buffer_size; //in frames
     int m_num_buffers; //ignored
