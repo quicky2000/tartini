@@ -65,6 +65,7 @@ HStackView::HStackView( int p_view_id
     l_db_range_wheel->setSingleStep(0.1);
     // Multiplicator value is 1000 = 100 * 0.1
     l_db_range_wheel->setPageStepCount(1000);
+    l_db_range_wheel->setMass(0.1);
 #else
     l_db_range_wheel->setRange(5, 160.0, 0.1, 100);
 #endif // QWT_VERSION >= 0x060000
@@ -81,6 +82,7 @@ HStackView::HStackView( int p_view_id
     l_window_size_wheel->setSingleStep(2);
     // Sould be 0.5 but put to 1 because 0 zero value disable page stepping
     l_window_size_wheel->setPageStepCount(1);
+    l_window_size_wheel->setMass(0.1);
 #else
     l_window_size_wheel->setRange(32, 1024, 2, 1);
 #endif // QWT_VERSION >= 0x060000

@@ -88,6 +88,7 @@ FreqView::FreqView( int p_view_id
     m_freq_wheel_Y->setSingleStep(0.001);
     // Use 1000 value for multiplicator so that PageStep has size 1
     m_freq_wheel_Y->setPageStepCount(1000);
+    m_freq_wheel_Y->setMass(0.1);
 #else
     m_freq_wheel_Y->setRange(1.6, 5.0, 0.001, 1);
 #endif // QWT_VERSION >= 0x060000
@@ -131,6 +132,7 @@ FreqView::FreqView( int p_view_id
     m_amplitude_wheel_Y->setSingleStep(0.01);
     // Use 100 value for multiplicator so that PageStep has size 1
     m_amplitude_wheel_Y->setPageStepCount(100);
+    m_amplitude_wheel_Y->setMass(0.1);
 #else
     m_amplitude_wheel_Y->setRange(0.2, 1.00, 0.01, 1);
 #endif // QWT_VERSION >= 0x060000
@@ -175,6 +177,7 @@ FreqView::FreqView( int p_view_id
     m_freq_wheel_X->setSingleStep(0.001);
     // Use 1000 value for multiplicator so that PageStep has size 1
     m_freq_wheel_X->setPageStepCount(1000);
+    m_freq_wheel_X->setMass(0.1);
 #else
     m_freq_wheel_X->setRange(0.5, 9.0, 0.001, 1);
 #endif // QWT_VERSION >= 0x060000
@@ -208,11 +211,15 @@ FreqView::FreqView( int p_view_id
 
     connect(&l_view, SIGNAL(viewBottomChanged(double)), m_freq_scroll_bar, SLOT(setValue(double)));
     connect(m_freq_wheel_Y, SIGNAL(valueChanged(double)), &l_view, SLOT(setZoomFactorY(double)));
-    connect(&l_view, SIGNAL(logZoomYChanged(double)), m_freq_wheel_Y, SLOT(setValue(double)));
+    // Connecting the wheel widget to the view and the view back to the wheel makes the wheel unresponsive.
+    // Setting the value on the wheel interrupts the curerent interaction with the mouse, so the wheel only advances one tick.
+    // connect(&l_view, SIGNAL(logZoomYChanged(double)), m_freq_wheel_Y, SLOT(setValue(double)));
 
     //horizontal
     connect(m_freq_wheel_X, SIGNAL(valueChanged(double)), &l_view, SLOT(setZoomFactorX(double)));
-    connect(&l_view, SIGNAL(logZoomXChanged(double)), m_freq_wheel_X, SLOT(setValue(double)));
+    // Connecting the wheel widget to the view and the view back to the wheel makes the wheel unresponsive.
+    // Setting the value on the wheel interrupts the curerent interaction with the mouse, so the wheel only advances one tick.
+    // connect(&l_view, SIGNAL(logZoomXChanged(double)), m_freq_wheel_X, SLOT(setValue(double)));
     connect(m_amplitude_wheel_Y, SIGNAL(valueChanged(double)), m_amplitude_widget, SLOT(setRange(double)));
     connect(m_amplitude_wheel_Y, SIGNAL(valueChanged(double)), m_amplitude_widget, SLOT(update()));
 
@@ -220,7 +227,9 @@ FreqView::FreqView( int p_view_id
     connect(m_amplitude_scroll_bar, SIGNAL(sliderMoved(double)), m_amplitude_widget, SLOT(update()));
 
     connect(m_amplitude_widget, SIGNAL(rangeChanged(double)), this, SLOT(setAmplitudeZoom(double)));
-    connect(m_amplitude_widget, SIGNAL(rangeChanged(double)), m_amplitude_wheel_Y, SLOT(setValue(double)));
+    // Connecting the wheel widget to the view and the view back to the wheel makes the wheel unresponsive.
+    // Setting the value on the wheel interrupts the curerent interaction with the mouse, so the wheel only advances one tick.
+    // connect(m_amplitude_widget, SIGNAL(rangeChanged(double)), m_amplitude_wheel_Y, SLOT(setValue(double)));
     connect(m_amplitude_widget, SIGNAL(offsetChanged(double)), m_amplitude_scroll_bar, SLOT(setValue(double)));
 
     //make the widgets get updated when the view changes

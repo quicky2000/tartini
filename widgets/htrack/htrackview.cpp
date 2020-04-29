@@ -63,6 +63,7 @@ HTrackView::HTrackView( int p_view_ID
     m_rotate_X_wheel->setSingleStep(0.1);
     // Multiplicator value is 10 = 1 / 0.1
     m_rotate_X_wheel->setPageStepCount(10);
+    m_rotate_X_wheel->setMass(0.1);
 #else
     m_rotate_X_wheel->setRange(-180, 180, 0.1, 1);
 #endif // QWT_VERSION >= 0x060000
@@ -76,6 +77,7 @@ HTrackView::HTrackView( int p_view_ID
     m_rotate_Y_wheel->setSingleStep(0.1);
     // Multiplicator value is 10 = 1 / 0.1
     m_rotate_Y_wheel->setPageStepCount(10);
+    m_rotate_Y_wheel->setMass(0.1);
 #else
     m_rotate_Y_wheel->setRange(-90, 0, 0.1, 1);
 #endif // QWT_VERSION >= 0x060000
@@ -88,6 +90,7 @@ HTrackView::HTrackView( int p_view_ID
     m_distance_wheel->setSingleStep(10);
     // Multiplicator value is 2 = 20 / 10
     m_distance_wheel->setPageStepCount(2);
+    m_distance_wheel->setMass(0.1);
 #else
     m_distance_wheel->setRange(100, 5000, 10, 20);
 #endif // QWT_VERSION >= 0x060000
@@ -120,13 +123,19 @@ HTrackView::HTrackView( int p_view_ID
     connect(m_peak_threshold_slider, SIGNAL(valueChanged(int)), this, SLOT(setPeakThreshold(int)));
     connect(m_rotate_Y_wheel, SIGNAL(valueChanged(double)), m_h_track_widget, SLOT(setViewAngleVertical(double)));
     connect(m_rotate_Y_wheel, SIGNAL(valueChanged(double)), m_h_track_widget, SLOT(update()));
-    connect(m_h_track_widget, SIGNAL(viewAngleVerticalChanged(double)), m_rotate_Y_wheel, SLOT(setValue(double)));
+    // Connecting the wheel widget to the view and the view back to the wheel makes the wheel unresponsive.
+    // Setting the value on the wheel interrupts the curerent interaction with the mouse, so the wheel only advances one tick.
+    // connect(m_h_track_widget, SIGNAL(viewAngleVerticalChanged(double)), m_rotate_Y_wheel, SLOT(setValue(double)));
     connect(m_distance_wheel, SIGNAL(valueChanged(double)), m_h_track_widget, SLOT(setDistanceAway(double)));
     connect(m_distance_wheel, SIGNAL(valueChanged(double)), m_h_track_widget, SLOT(update()));
-    connect(m_h_track_widget, SIGNAL(distanceAwayChanged(double)), m_distance_wheel, SLOT(setValue(double)));
+    // Connecting the wheel widget to the view and the view back to the wheel makes the wheel unresponsive.
+    // Setting the value on the wheel interrupts the curerent interaction with the mouse, so the wheel only advances one tick.
+    // connect(m_h_track_widget, SIGNAL(distanceAwayChanged(double)), m_distance_wheel, SLOT(setValue(double)));
     connect(m_rotate_X_wheel, SIGNAL(valueChanged(double)), m_h_track_widget, SLOT(setViewAngleHorizontal(double)));
     connect(m_rotate_X_wheel, SIGNAL(valueChanged(double)), m_h_track_widget, SLOT(update()));
-    connect(m_h_track_widget, SIGNAL(viewAngleHorizontalChanged(double)), m_rotate_X_wheel, SLOT(setValue(double)));
+    // Connecting the wheel widget to the view and the view back to the wheel makes the wheel unresponsive.
+    // Setting the value on the wheel interrupts the curerent interaction with the mouse, so the wheel only advances one tick.
+    // connect(m_h_track_widget, SIGNAL(viewAngleHorizontalChanged(double)), m_rotate_X_wheel, SLOT(setValue(double)));
     connect(l_home_button, SIGNAL(clicked()), m_h_track_widget, SLOT(home()));
 }
 

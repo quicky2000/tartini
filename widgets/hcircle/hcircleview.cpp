@@ -66,6 +66,7 @@ HCircleView::HCircleView( int p_view_id
     l_zoom_wheel->setSingleStep(0.001);
     // Multiplicator value is 1000 = 1 / 0.001
     l_zoom_wheel->setPageStepCount(1000);
+    l_zoom_wheel->setMass(0.1);
 #else
     l_zoom_wheel->setRange(0.001, 0.1, 0.001, 1);
 #endif // QWT_VERSION >= 0x060000
@@ -82,6 +83,7 @@ HCircleView::HCircleView( int p_view_id
     l_lowest_value_wheel->setSingleStep(0.01);
     // Multiplicator value is 100 = 1 / 0.01
     l_lowest_value_wheel->setPageStepCount(100);
+    l_lowest_value_wheel->setMass(0.1);
 #else
     l_lowest_value_wheel->setRange(-160, 10, 0.01, 1);
 #endif // QWT_VERSION >= 0x060000
@@ -99,6 +101,7 @@ HCircleView::HCircleView( int p_view_id
     l_threshold_wheel->setSingleStep(0.01);
     // Multiplicator value is 100 = 1 / 0.01
     l_threshold_wheel->setPageStepCount(100);
+    l_threshold_wheel->setMass(0.1);
 #else
     l_threshold_wheel->setRange(-160, 10, 0.01, 1);
 #endif // QWT_VERSION >= 0x060000

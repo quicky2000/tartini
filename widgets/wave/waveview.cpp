@@ -51,6 +51,7 @@ WaveView::WaveView(int p_view_ID
     l_freq_wheel_Y->setSingleStep(0.1);
     // Multiplicator value is 10 = 1 / 0.1
     l_freq_wheel_Y->setPageStepCount(10);
+    l_freq_wheel_Y->setMass(0.1);
 #else
     l_freq_wheel_Y->setRange(1.0, 20.0, 0.1, 1);
 #endif // QWT_VERSION >= 0x060000
