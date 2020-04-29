@@ -152,8 +152,7 @@ void VibratoPeriodWidget::doUpdate()
 		AnalysisData * l_data = l_active_channel->dataAtCurrentChunk();
 		if(l_data && l_active_channel->isVisibleNote(l_data->getNoteIndex()) && l_active_channel->isLabelNote(l_data->getNoteIndex()))
 		{
-			const NoteData * l_note = new NoteData();
-			l_note = &(l_active_channel->get_note_data()[l_data->getNoteIndex()]);
+			const NoteData * l_note = &(l_active_channel->get_note_data()[l_data->getNoteIndex()]);
 
 			int l_smooth_delay = l_active_channel->get_pitch_big_smoothing_filter().delay();
 			int l_current_time = l_active_channel->chunkAtCurrentTime() * l_active_channel->framesPerChunk() + l_smooth_delay;
@@ -253,8 +252,7 @@ void VibratoPeriodWidget::doUpdate()
             glEndList();
 
             AnalysisData * l_data = l_active_channel->dataAtCurrentChunk();
-            const NoteData * l_note = new NoteData();
-            l_note = &(l_active_channel->get_note_data()[l_data->getNoteIndex()]);
+            const NoteData * l_note = &(l_active_channel->get_note_data()[l_data->getNoteIndex()]);
 
             large_vector<float> l_the_pitch_lookup;
             int l_the_delay;

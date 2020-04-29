@@ -198,8 +198,7 @@ void VibratoWidget::doUpdate()
       AnalysisData * l_data = l_active->dataAtCurrentChunk();
       if(l_data && l_active->isVisibleNote(l_data->getNoteIndex()) && l_active->isLabelNote(l_data->getNoteIndex()))
 	{
-	  const NoteData * l_note = new NoteData();
-	  l_note = &(l_active->get_note_data()[l_data->getNoteIndex()]);
+	  const NoteData * l_note = &(l_active->get_note_data()[l_data->getNoteIndex()]);
 
 	  const int l_my_start_chunk = l_note->startChunk();
 	  const int l_my_end_chunk = l_note->endChunk();

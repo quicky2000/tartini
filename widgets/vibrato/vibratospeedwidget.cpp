@@ -472,8 +472,7 @@ void VibratoSpeedWidget::doUpdate()
         }
         if(l_data && l_active_channel->isVisibleNote(l_data->getNoteIndex()) && l_active_channel->isLabelNote(l_data->getNoteIndex()))
         {
-            const NoteData * l_note = new NoteData();
-            l_note = &(l_active_channel->get_note_data()[l_data->getNoteIndex()]);
+            const NoteData * l_note = &(l_active_channel->get_note_data()[l_data->getNoteIndex()]);
 
             l_current_note_number = l_data->getNoteIndex();
             if (m_use_prony)
