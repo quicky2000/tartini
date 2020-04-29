@@ -39,9 +39,9 @@ AudioStream::~AudioStream()
 //------------------------------------------------------------------------------
 void AudioStream::close()
 {
-    #ifdef DEBUG_PRINTF
-    printf("AudioStream::close()\n");
-    #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+    std::cout << "AudioStream::close()" << std::endl;
+#endif // DEBUG_PRINTF
     
     if(m_audio)
     {
@@ -58,10 +58,9 @@ int AudioStream::open( int p_mode
                      , int p_buffer_size
                      )
 {
-    #ifdef DEBUG_PRINTF
-    printf("AudioStream::open(p_mode = %d, p_freq = %d, p_channels = %d, p_buffer_size = %d\n",
-           p_mode, p_freq, p_channels, p_buffer_size);
-    #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+    std::cout << "AudioStream::open(p_mode = " << p_mode << ", p_freq = " << p_freq << ", p_channels = " << p_channels << ", p_buffer_size = " << p_buffer_size << std::endl;
+#endif // DEBUG_PRINTF
     
     set_mode(p_mode);
     set_frequency(p_freq);
@@ -85,7 +84,7 @@ int AudioStream::open( int p_mode
         inputParameters.nChannels = get_channels();
         inputParamPtr = &inputParameters;
         
-        fprintf(stderr, "Input Device %d: %s\n", in_device, l_audio_input.c_str());
+        std::cerr << "Input Device " << in_device << ": " << l_audio_input.c_str() << std::endl;
     }
 
     RtAudio::StreamParameters outputParameters;
@@ -99,12 +98,12 @@ int AudioStream::open( int p_mode
         outputParameters.nChannels = get_channels();
         outputParamPtr = &outputParameters;
 
-        fprintf(stderr, "Output Device %d: %s\n", out_device, l_audio_output.c_str());
+        std::cerr << "Output Device " << out_device << ": " << l_audio_output.c_str() << std::endl;
     }
 
     if(!inputParamPtr && !outputParamPtr)
     {
-        fprintf(stderr, "No mode selected\n");
+        std::cerr << "No mode selected" << std::endl;
         return -1;
     }
 
@@ -125,7 +124,7 @@ int AudioStream::open( int p_mode
 
     if(m_buffer_size != p_buffer_size)
     {
-        fprintf(stderr, "Warning: Got buffer_size of %d instead of %d\n", m_buffer_size, p_buffer_size);
+        std::cerr << "Warning: Got buffer_size of " << m_buffer_size << " instead of " << p_buffer_size << std::endl;
     }
 
     try
@@ -168,10 +167,9 @@ int AudioStream::callback( void *outputBuffer
                          , RtAudioStreamStatus status
                          )
 {
-    #ifdef DEBUG_PRINTF
-    printf("AudioStream::callback(nBufferFrames=%d, streamTime=%f, m_out_buffer.size()=%d, m_in_buffer.size()=%d)\n",
-           nBufferFrames, streamTime, m_out_buffer.size(), m_in_buffer.size());
-    #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+    std::cout << "AudioStream::callback(nBufferFrames=" << nBufferFrames << ", streamTime=" << streamTime << ", m_out_buffer.size()=" << m_out_buffer.size() <<", m_in_buffer.size()=" << m_in_buffer.size() << std::endl;
+#endif // DEBUG_PRINTF
 
     // unsigned int i, j;
     float *outBuffer = (float *) outputBuffer;
@@ -179,11 +177,11 @@ int AudioStream::callback( void *outputBuffer
 
     if (status == RTAUDIO_INPUT_OVERFLOW)
     {
-        printf("Stream input overflow!\n");
+        std::cout << "Stream input overflow!" << std::endl;
     }
     else if (status == RTAUDIO_OUTPUT_UNDERFLOW)
     {
-        printf("Stream output underflow!\n");
+        std::cout << "Stream output underflow!" << std::endl;
     }
 
     int numFloats = nBufferFrames * get_channels();
@@ -200,13 +198,13 @@ int AudioStream::callback( void *outputBuffer
         // Block until there is enough output data to send.
         while (m_out_buffer.size() < numFloats)
         {
-            #ifdef DEBUG_PRINTF
-            printf(".");
-            #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+            std::cout << ".";
+#endif // DEBUG_PRINTF
             QThread::msleep(1);
             if(!m_audio->isStreamRunning())
             {
-                printf("Stream not running\n");
+                std::cout << "Stream not running" << std::endl;
                 return 0;
             }
         }
@@ -229,9 +227,9 @@ int AudioStream::writeFloats( float ** p_channel_data
                             , int p_ch
                             )
 {
-    #ifdef DEBUG_PRINTF
-    printf("AudioStream::writeFloats(p_length=%d, p_ch=%d, m_out_buffer.size()=%d)\n", p_length, p_ch, m_out_buffer.size());
-    #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+    std::cout << "AudioStream::writeFloats(p_length=" << p_length << ", p_ch=" << p_ch << ", m_out_buffer.size()=" << m_out_buffer.size() << std::endl;
+#endif // DEBUG_PRINTF
 
     myassert(p_ch == get_channels());
     
@@ -253,9 +251,9 @@ int AudioStream::writeFloats( float ** p_channel_data
     // Block until all of the output data has been sent.
     while (m_out_buffer.size() > 0)
     {
-        #ifdef DEBUG_PRINTF
-        printf(">");
-        #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+        std::cout << ">";
+#endif // DEBUG_PRINTF
         QThread::msleep(1);
     }
     
@@ -274,16 +272,16 @@ int AudioStream::readFloats( float ** p_channel_data
     int l_c;
     int l_j;
     
-    #ifdef DEBUG_PRINTF
-    printf("AudioStream::readFloats(p_length=%d, p_ch=%d, m_in_buffer.size()=%d)\n", p_length, p_ch, m_in_buffer.size());
-    #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+    std::cout << "AudioStream::readFloats(p_length=" << p_length << ", p_ch=" << p_ch << ", m_in_buffer.size()=" << m_in_buffer.size() << std::endl;
+#endif // DEBUG_PRINTF
 
     // Block until there is enough input data to read.
     while (m_in_buffer.size() < p_length * p_ch)
     {
-        #ifdef DEBUG_PRINTF
-        printf("<");
-        #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+        std::cout << "<";
+#endif // DEBUG_PRINTF
         QThread::msleep(1);
     }
 
@@ -313,10 +311,9 @@ int AudioStream::writeReadFloats( float ** p_out_channel_data
                                 , int p_length
                                 )
 {
-    #ifdef DEBUG_PRINTF
-    printf("AudioStream::writeReadFloats(p_out_channel=%d, p_in_channel=%d, p_length=%d, m_out_buffer.size()=%d, m_in_buffer.size()=%d)\n",
-           p_out_channel, p_in_channel, p_length, m_out_buffer.size(), m_in_buffer.size());
-    #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+    std::cout << "AudioStream::writeReadFloats(p_out_channel=" << p_out_channel << ", p_in_channel=" << p_in_channel << ", p_length=" << p_length << ", m_out_buffer.size()=" << m_out_buffer.size() << ", m_in_buffer.size()=" << m_in_buffer.size() << std::endl;
+#endif // DEBUG_PRINTF
 
     myassert(p_out_channel == get_channels());
     myassert(p_in_channel == get_channels());
@@ -339,9 +336,9 @@ int AudioStream::writeReadFloats( float ** p_out_channel_data
     // Block until there is enough input data to read.
     while (m_in_buffer.size() < p_length * p_in_channel)
     {
-        #ifdef DEBUG_PRINTF
-        printf("<");
-        #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+        std::cout << "<";
+#endif // DEBUG_PRINTF
         QThread::msleep(1);
     }
 
@@ -361,9 +358,9 @@ int AudioStream::writeReadFloats( float ** p_out_channel_data
     // Block until all of the output data has been sent.
     while (m_out_buffer.size() > 0)
     {
-        #ifdef DEBUG_PRINTF
-        printf(">");
-        #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+        std::cout << ">";
+#endif // DEBUG_PRINTF
         QThread::msleep(1);
     }
     
@@ -373,9 +370,9 @@ int AudioStream::writeReadFloats( float ** p_out_channel_data
 //------------------------------------------------------------------------------
 QStringList AudioStream::getInputDeviceNames()
 {
-    #ifdef DEBUG_PRINTF
-    printf("AudioStream::getInputDeviceNames()\n");
-    #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+    std::cout << "AudioStream::getInputDeviceNames()" << std::endl;
+#endif // DEBUG_PRINTF
 
     QStringList l_to_return;
     l_to_return << "Default";
@@ -393,9 +390,9 @@ QStringList AudioStream::getInputDeviceNames()
 
     // Determine the number of devices available
     int l_num_devices = l_temp_audio->getDeviceCount();
-    #ifdef DEBUG_PRINTF
-    printf("num devices = %d\n", l_num_devices);
-    #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+    std::cout << "num devices = " << l_num_devices << std::endl;
+#endif // DEBUG_PRINTF
 
     // Scan through devices for various capabilities
     RtAudio::DeviceInfo l_info;
@@ -403,9 +400,9 @@ QStringList AudioStream::getInputDeviceNames()
     {
         try
         {
-            #ifdef DEBUG_PRINTF
-            printf("Probing device %d\n", l_i);
-            #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+            std::cout << "Probing device " << l_i << std::endl;
+#endif // DEBUG_PRINTF
             l_info = l_temp_audio->getDeviceInfo(l_i);
         }
         catch (RtAudioError &l_error)
@@ -415,19 +412,18 @@ QStringList AudioStream::getInputDeviceNames()
         }
         if (l_info.probed == false)
         {
-            printf("Probe failed on device %d\n", l_i);
+            std::cout << "Probe failed on device " << l_i << std::endl;
             continue;
         }
-        #ifdef DEBUG_PRINTF
-        printf("Device %d: %s\n", l_i, l_info.name.c_str());
-        printf("  outs %d, ins: %d, duplex: %d, default out: %d, default in: %d, preferred rate: %d\n",
-               l_info.outputChannels, l_info.inputChannels, l_info.duplexChannels, l_info.isDefaultOutput, l_info.isDefaultInput, l_info.preferredSampleRate);
-        #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+        std::cout << "Device " << l_i << ": " << l_info.name << std::endl;
+        std::cout << "  outs " << l_info.outputChannels << ", ins: " << l_info.inputChannels << ", duplex: " << l_info.duplexChannels << ", default out: " << l_info.isDefaultOutput << ", default in: " << l_info.isDefaultInput << ", preferred rate: " << l_info.preferredSampleRate << std::endl;
+#endif // DEBUG_PRINTF
         if(l_info.inputChannels > 0)
         {
-            #ifdef DEBUG_PRINTF
-            printf("  found input device\n");
-            #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+            std::cout << "  found input device" << std::endl;
+#endif // DEBUG_PRINTF
             l_to_return << l_info.name.c_str();
 
         }
@@ -441,9 +437,9 @@ QStringList AudioStream::getInputDeviceNames()
 //------------------------------------------------------------------------------
 QStringList AudioStream::getOutputDeviceNames()
 {
-    #ifdef DEBUG_PRINTF
-    printf("AudioStream::getOutputDeviceNames()\n");
-    #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+    std::cout << "AudioStream::getOutputDeviceNames()" << std::endl;
+#endif // DEBUG_PRINTF
 
     QStringList l_to_return;
     l_to_return << "Default";
@@ -461,9 +457,9 @@ QStringList AudioStream::getOutputDeviceNames()
 
     // Determine the number of devices available
     int l_num_devices = l_temp_audio->getDeviceCount();
-    #ifdef DEBUG_PRINTF
-    printf("num devices = %d\n", l_num_devices);
-    #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+    std::cout << "num devices = " << l_num_devices << std::endl;
+#endif // DEBUG_PRINTF
 
     // Scan through devices for various capabilities
     RtAudio::DeviceInfo l_info;
@@ -471,9 +467,9 @@ QStringList AudioStream::getOutputDeviceNames()
     {
         try
         {
-            #ifdef DEBUG_PRINTF
-            printf("Probing device %d\n", l_i);
-            #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+            std::cout << "Probing device " << l_i << std::endl;
+#endif // DEBUG_PRINTF
             l_info = l_temp_audio->getDeviceInfo(l_i);
         }
         catch (RtAudioError &l_error)
@@ -484,19 +480,18 @@ QStringList AudioStream::getOutputDeviceNames()
 
         if (l_info.probed == false)
         {
-            printf("Probe failed on device %d\n", l_i);
+            std::cout << "Probe failed on device " << l_i << std::endl;
             continue;
         }
-        #ifdef DEBUG_PRINTF
-        printf("Device %d: %s\n", l_i, l_info.name.c_str());
-        printf("  outs %d, ins: %d, duplex: %d, default out: %d, default in: %d, preferred rate: %d\n",
-               l_info.outputChannels, l_info.inputChannels, l_info.duplexChannels, l_info.isDefaultOutput, l_info.isDefaultInput, l_info.preferredSampleRate);
-        #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+        std::cout << "Device " << l_i << ": " << l_info.name << std::endl;
+        std::cout << "  outs " << l_info.outputChannels << ", ins: " << l_info.inputChannels << ", duplex: " << l_info.duplexChannels << ", default out: " << l_info.isDefaultOutput << ", default in: " << l_info.isDefaultInput << ", preferred rate: " << l_info.preferredSampleRate << std::endl;
+#endif // DEBUG_PRINTF
         if(l_info.outputChannels > 0)
         {
-            #ifdef DEBUG_PRINTF
-            printf("  found output device\n");
-            #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+            std::cout << "  found output device" << std::endl;
+#endif // DEBUG_PRINTF
             l_to_return << l_info.name.c_str();
         }
     }
@@ -508,9 +503,9 @@ QStringList AudioStream::getOutputDeviceNames()
 //------------------------------------------------------------------------------
 int AudioStream::getDeviceNumber(const char * p_device_name, bool p_input)
 {
-    #ifdef DEBUG_PRINTF
-    printf("AudioStream::getDeviceNumber(p_device_name=\"%s\", p_input=%d)\n", p_device_name, p_input);
-    #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+    std::cout << "AudioStream::getDeviceNumber(p_device_name=\"" << p_device_name << "\", p_input=" << p_input << ")" << std::endl;
+#endif // DEBUG_PRINTF
 
     int l_device_number = -1;
 
@@ -537,9 +532,9 @@ int AudioStream::getDeviceNumber(const char * p_device_name, bool p_input)
     {
         try
         {
-            #ifdef DEBUG_PRINTF
-            printf("Probing device %d\n", l_i);
-            #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+            std::cout << "Probing device " << l_i << std::endl;
+#endif // DEBUG_PRINTF
             l_info = l_temp_audio->getDeviceInfo(l_i);
         }
         catch (RtAudioError &l_error)
@@ -549,19 +544,18 @@ int AudioStream::getDeviceNumber(const char * p_device_name, bool p_input)
         }
         if (l_info.probed == false)
         {
-            printf("Probe failed on device %d\n", l_i);
+            std::cout << "Probe failed on device " << l_i << std::endl;
             continue;
         }
-        #ifdef DEBUG_PRINTF
-        printf("Device %d: %s\n", l_i, l_info.name.c_str());
-        printf("  outs %d, ins: %d, duplex: %d, default out: %d, default in: %d, preferred rate: %d\n",
-               l_info.outputChannels, l_info.inputChannels, l_info.duplexChannels, l_info.isDefaultOutput, l_info.isDefaultInput, l_info.preferredSampleRate);
-        #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+        std::cout << "Device " << l_i << ": " << l_info.name << std::endl;
+        std::cout << "  outs " << l_info.outputChannels << ", ins: " << l_info.inputChannels << ", duplex: " << l_info.duplexChannels << ", default out: " << l_info.isDefaultOutput << ", default in: " << l_info.isDefaultInput << ", preferred rate: " << l_info.preferredSampleRate << std::endl;
+#endif // DEBUG_PRINTF
         if(strcmp(l_info.name.c_str(), p_device_name) == 0)
         {
-            #ifdef DEBUG_PRINTF
-            printf("  found matching device\n");
-            #endif // DEBUG_PRINTF
+#ifdef DEBUG_PRINTF
+            std::cout << "  found matching device" << std::endl;
+#endif // DEBUG_PRINTF
             l_device_number = l_i;
             break;
         }
