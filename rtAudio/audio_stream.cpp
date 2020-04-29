@@ -68,7 +68,7 @@ int AudioStream::open( int p_mode
     //bits_; //ignored, just use floats and let rtAudio do the conversion
     set_bits(32);
     m_buffer_size = p_buffer_size;
-    m_num_buffers = 4; // not used (also ignored in the settings dialog?)
+    m_num_buffers = g_data->getSettingsValue("Sound/numberOfBuffers", 4);
 
     RtAudio::StreamParameters * l_input_param_ptr = NULL;
     RtAudio::StreamParameters * l_output_param_ptr = NULL;
@@ -107,13 +107,14 @@ int AudioStream::open( int p_mode
         return -1;
     }
 
+    RtAudio::StreamOptions l_options;
     try
     {
         // Just leave api as UNSPECIFIED.
         m_audio = new RtAudio();
 
-        // TODO: Could pass m_num_buffers via RtAudio::StreamOptions, but the docs say it is usually ignored anyway.
-        m_audio->openStream(l_output_param_ptr, l_input_param_ptr, RTAUDIO_FLOAT32, get_frequency(), (unsigned int *)&m_buffer_size, callback, this);
+        m_audio->openStream(l_output_param_ptr, l_input_param_ptr, RTAUDIO_FLOAT32, get_frequency(), (unsigned int *)&m_buffer_size, callback, this, &l_options);
+        // The value in options.numberOfBuffers is updated to the actual number of buffers used.
     }
     catch (RtAudioError & l_error)
     {
@@ -126,6 +127,9 @@ int AudioStream::open( int p_mode
     {
         std::cerr << "Warning: Got buffer_size of " << m_buffer_size << " instead of " << p_buffer_size << std::endl;
     }
+    std::cout << "Buffer size: " << m_buffer_size << " frames" << std::endl;
+    std::cout << "Number of buffers: " << l_options.numberOfBuffers << " (requested " << m_num_buffers << ")" << std::endl;
+    std::cout << "Stream latency: " << m_audio->getStreamLatency() << " frames" << std::endl;
 
     try
     {
