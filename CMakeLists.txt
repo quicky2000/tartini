@@ -285,7 +285,6 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux" OR ${CMAKE_SYSTEM_NAME} STREQUAL "Darwi
         ${MY_HEADER_FILES}
         rtAudio/audio_stream.h
         rtAudio/RtAudio.h
-        rtAudio/RtError.h
        )
     set(MY_SOURCE_FILES
         ${MY_SOURCE_FILES}
@@ -301,7 +300,7 @@ endif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux" OR ${CMAKE_SYSTEM_NAME} STREQUAL "Da
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
     set(MY_CPP_FLAGS
         ${MY_CPP_FLAGS}
-        -D__LINUX_OSS__ -D__LINUX_ALSA__ -DLINUX
+        -D__LINUX_ALSA__ -DLINUX
        )
 endif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 

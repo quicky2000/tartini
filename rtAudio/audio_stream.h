@@ -98,11 +98,6 @@ class AudioStream: public SoundStream
                        , int p_length
                        );
 
-    bool isSameInOutDevice()
-    {
-        return m_in_device == m_out_device;
-    }
-
     static QStringList getInputDeviceNames();
     static QStringList getOutputDeviceNames();
 
@@ -110,16 +105,31 @@ class AudioStream: public SoundStream
        @param p_device_name The name of a device as given from get*DeviceNames
        @return The device number that matches the name, or -1 if the device name is not found
     */
-    static int getDeviceNumber(const char * p_device_name);
+    static int getDeviceNumber(const char * p_device_name, bool p_input);
 
   private:
+    static int callback(void *outputBuffer
+                      , void *inputBuffer
+                      , unsigned int nBufferFrames
+                      , double streamTime
+                      , RtAudioStreamStatus status
+                      , void *userData
+                      );
+    
+    int callback(void *outputBuffer
+               , void *inputBuffer
+               , unsigned int nBufferFrames
+               , double streamTime
+               , RtAudioStreamStatus status
+               );
+    
     int m_buffer_size; //in frames
-    int m_num_buffers;
+    int m_num_buffers; //ignored
     RtAudio * m_audio;
-    float * m_buffer;
-    RingBuffer<float> m_flow_buffer;
-    int m_in_device;
-    int m_out_device;
+    QMutex m_in_mutex;
+    QMutex m_out_mutex;
+    RingBuffer<float> m_in_buffer;
+    RingBuffer<float> m_out_buffer;
 
 };
 #endif // AUDIO_STREAM_H
