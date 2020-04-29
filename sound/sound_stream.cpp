@@ -20,7 +20,7 @@
 
 const double g_v8=0x7F;
 const double g_v16=0x7FFF;
-const double g_v32=0x7FFFFFFF;
+//const double g_v32=0x7FFFFFFF;
 
 //-----------------------------------------------------------------------------
 int SoundStream::writeFloats( float ** p_channel_data
