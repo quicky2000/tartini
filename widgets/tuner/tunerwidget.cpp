@@ -17,6 +17,7 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QtGlobal>
 
 #include "tunerwidget.h"
 #include "gdata.h"
@@ -128,7 +129,11 @@ void TunerWidget::paintEvent(QPaintEvent *)
             QPoint l_start(l_x, l_y);
             double l_t = 0.08; //0.025;
             QPoint l_pt = l_start + l_t * (l_center - l_start);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+            l_half_font_width = l_font_metrics.horizontalAdvance(l_the_names[l_j]) / 2;
+#else // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
             l_half_font_width = l_font_metrics.width(l_the_names[l_j]) / 2;
+#endif // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
 
             get_painter().drawText(l_pt.x() - l_half_font_width, l_pt.y() + l_half_font_height, l_the_names[l_j]);
             if(l_radius < 300)
@@ -140,7 +145,11 @@ void TunerWidget::paintEvent(QPaintEvent *)
                 l_j++;
             }
         }
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+        l_half_font_width = l_font_metrics.horizontalAdvance("Cents") / 2;
+#else // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
         l_half_font_width = l_font_metrics.width("Cents") / 2;
+#endif // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
         get_painter().drawText(l_center.x() - l_half_font_width, toInt(l_center.y() * 0.2) + l_half_font_height, "Cents");
     }
 

@@ -22,6 +22,7 @@
 #include <math.h>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QtGlobal>
 
 //------------------------------------------------------------------------------
 TimeAxis::TimeAxis(QWidget * p_parent
@@ -179,7 +180,11 @@ void TimeAxis::paintEvent(QPaintEvent *)
 
             QString l_num_string = l_mins + ":" + l_seconds;
             l_x = l_frame_width + toInt((l_time_pos - leftTime()) / (timeWidth() / double(l_w)));
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+            get_painter().drawText(l_x - (get_painter().fontMetrics().horizontalAdvance(l_num_string) / 2), l_text_bottom, l_num_string);
+#else // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
             get_painter().drawText(l_x - (get_painter().fontMetrics().width(l_num_string) / 2), l_text_bottom, l_num_string);
+#endif // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
             get_painter().drawLine(l_x, l_big_line_top, l_x, l_big_line_bottom);
         }
         else

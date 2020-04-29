@@ -19,6 +19,7 @@
 
 #include <QPixmap>
 #include <QPaintEvent>
+#include <QtGlobal>
 
 //------------------------------------------------------------------------------
 LEDIndicator::LEDIndicator(QWidget *p_parent
@@ -78,7 +79,11 @@ void LEDIndicator::paintEvent(QPaintEvent *)
 
     QFontMetrics l_font_metric = l_painter.fontMetrics();
     int l_font_Height = l_font_metric.height() / 4;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+    int l_font_width = l_font_metric.horizontalAdvance(objectName()) / 2;
+#else // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
     int l_font_width = l_font_metric.width(objectName()) / 2;
+#endif // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
 
     l_painter.drawText(QWidget::width() / 2 - l_font_width, QWidget::height() / 2 + l_font_Height, objectName());
     l_painter.end();

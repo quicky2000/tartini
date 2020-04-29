@@ -18,6 +18,7 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <QPaintEvent>
+#include <QtGlobal>
 
 #include "scorewidget.h"
 #include "gdata.h"
@@ -45,7 +46,11 @@ ScoreWidget::ScoreWidget(QWidget *p_parent)
     m_font_height = 14;
     m_pitch_offset = 0; //-12; //display 1 octave down
     m_font = QFont(tr("AnyStyle"), m_font_height);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+    m_font_width = QFontMetrics(m_font).horizontalAdvance('#');
+#else // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
     m_font_width = QFontMetrics(m_font).width('#');
+#endif // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
     //half a page look ahead
     m_look_ahead = 0.5;
     m_look_ahead_gap = 0.2;

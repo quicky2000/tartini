@@ -2,6 +2,7 @@
 #include <QImage>
 #include <QPainter>
 #include <QColor>
+#include <QtGlobal>
 
 //------------------------------------------------------------------------------
 void MyGLFont::init(const QFont p_font)
@@ -19,7 +20,11 @@ void MyGLFont::init(const QFont p_font)
     {
         unsigned char l_char = l_j;
         l_string = l_char;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+        l_width = l_font_metric.horizontalAdvance(l_char);
+#else // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
         l_width = l_font_metric.width(l_char);
+#endif // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
         l_width_raw = l_width + 3;
         l_width_raw -= (l_width_raw % 4); //round length up to multiple of 4
         l_data = (GLubyte*)malloc(l_width_raw * l_height * sizeof(GLubyte));

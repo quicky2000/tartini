@@ -45,6 +45,7 @@
 #include "music_key.h"
 
 #include <sstream>
+#include <QtGlobal>
 
 #ifndef WHEEL_DELTA
 #define WHEEL_DELTA 120
@@ -102,7 +103,11 @@ void FreqWidgetGL::drawReferenceLinesGL( const double & /* p_left_time*/
     // Draw the lines and notes
     QFontMetrics l_font_metric = fontMetrics();
     int l_font_height_space = l_font_metric.height() / 4;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+    int l_font_width = l_font_metric.horizontalAdvance("C#0") + 3;
+#else // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
     int l_font_width = l_font_metric.width("C#0") + 3;
+#endif // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
 
     MusicKey &l_music_key = g_music_keys[g_data->temperedType()];
     MusicScale &l_music_scale = g_music_scales[g_data->musicKeyType()];

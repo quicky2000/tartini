@@ -17,7 +17,7 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QPaintEvent>
-
+#include <QtGlobal>
 #include <vector>
 
 #include "volumemeterwidget.h"
@@ -71,9 +71,15 @@ void VolumeMeterWidget::paintEvent(QPaintEvent *)
     // Work out how many labels we can draw
     QFontMetrics l_font_metric = get_painter().fontMetrics();
     // Since we'll have two characters normally
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+    int l_label_width = l_font_metric.horizontalAdvance("-60");
+    int l_stopWidth = l_font_metric.horizontalAdvance("0dB") / 2;
+#else // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
     int l_label_width = l_font_metric.width("-60");
-    int l_half_label_width = l_label_width / 2;
     int l_stopWidth = l_font_metric.width("0dB") / 2;
+#endif // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+
+    int l_half_label_width = l_label_width / 2;
     // The actual width of the data
     int l_real_width = width() - l_stopWidth - l_half_label_width;
     // How many labels we should have

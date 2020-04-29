@@ -18,6 +18,7 @@
 #include "gdata.h"
 #include "channel.h"
 #include "analysisdata.h"
+#include <QtGlobal>
 
 //------------------------------------------------------------------------------
 VibratoTimeAxis::VibratoTimeAxis(QWidget * p_parent, int p_nls)
@@ -130,7 +131,11 @@ void VibratoTimeAxis::paintEvent(QPaintEvent *)
                         // Label: m:ss.hhh
                         l_string.sprintf("%1d:%02d.%03d", l_minutes, l_seconds, l_thousandth_seconds);
                     }
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+                    get_painter().drawText(l_x - l_font_metrics.horizontalAdvance(l_string) / 2, 12, l_string);
+#else // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
                     get_painter().drawText(l_x - l_font_metrics.width(l_string) / 2, 12, l_string);
+#endif // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
                 }
                 else
                 {

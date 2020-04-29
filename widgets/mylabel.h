@@ -21,6 +21,7 @@
 #include "drawwidget.h"
 #include <QString>
 #include <QPaintEvent>
+#include <QtGlobal>
 
 /**
    MyLabel uses double buffering to draw simple text.

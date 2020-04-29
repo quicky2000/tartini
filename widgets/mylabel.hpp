@@ -43,7 +43,11 @@ void MyLabel::compute_text_width()
     {
         const QFontMetrics & l_font_metric = get_painter().fontMetrics();
         m_font_height = l_font_metric.height();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+        m_text_width = l_font_metric.horizontalAdvance(QString::fromStdString(m_text));
+#else // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
         m_text_width = l_font_metric.width(QString::fromStdString(m_text));
+#endif // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
         m_size_computed = true;
     }
     else

@@ -26,6 +26,7 @@
 #include <QEvent>
 #include <QPaintEvent>
 #include <QPalette>
+#include <QtGlobal>
 
 // zoom cursors
 #include "pics/zoomx.xpm"
@@ -80,8 +81,12 @@ void FreqDrawWidget::drawReferenceLines( QPaintDevice & p_paint_device
     // Draw the lines and notes
     QFontMetrics l_font_metric = p_painter.fontMetrics();
     int l_font_height_space = l_font_metric.height() / 4;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+    int l_font_width = l_font_metric.horizontalAdvance("C#0") + 3;
+#else // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
     int l_font_width = l_font_metric.width("C#0") + 3;
-  
+#endif // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+
     //number of pixels to jump between each line
     double l_step = 1.0 / p_zoom_Y;
     //in semi-tones

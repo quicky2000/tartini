@@ -20,6 +20,7 @@
 #include "analysisdata.h"
 #include <glu.h>
 #include <gl.h>
+#include <QtGlobal>
 
 //------------------------------------------------------------------------------
 VibratoSpeedWidget::VibratoSpeedWidget(QWidget * p_parent)
@@ -408,10 +409,19 @@ void VibratoSpeedWidget::paintGL()
 
     // Draw the labels for the speed dial
     glColor3ub(0,0,0);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+    renderText(m_hz_label_X - (0.5 * l_font_metric.horizontalAdvance("Hz")), m_hz_label_Y, 0, "Hz", m_speed_width_font);
+#else // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
     renderText(m_hz_label_X - (0.5 * l_font_metric.width("Hz")), m_hz_label_Y, 0, "Hz", m_speed_width_font);
+#endif // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
     for (int l_index = 0; l_index < m_speed_label_counter; l_index++)
     {
-        renderText(m_speed_labels[l_index].get_x() - (0.5 * l_font_metric.width(m_speed_labels[l_index].get_label()))
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+        int l_label_width = l_font_metric.horizontalAdvance(m_speed_labels[l_index].get_label());
+#else // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+        int l_label_width = l_font_metric.width(m_speed_labels[l_index].get_label());
+#endif // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+        renderText(m_speed_labels[l_index].get_x() - (0.5 * l_label_width)
                   ,m_speed_labels[l_index].get_y() - 8
                   ,0
                   ,m_speed_labels[l_index].get_label()
@@ -429,7 +439,12 @@ void VibratoSpeedWidget::paintGL()
 
     // Draw the labels for the width dial
     glColor3ub(0,0,0);
-    renderText(m_cents_label_X - (0.5 * l_font_metric.width("Cents"))
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+    int l_cents_width = l_font_metric.horizontalAdvance("Cents");
+#else // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+    int l_cents_width = l_font_metric.width("Cents");
+#endif // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+    renderText(m_cents_label_X - (0.5 * l_cents_width)
               ,m_cents_label_Y
               ,0
               ,"Cents"
@@ -437,7 +452,12 @@ void VibratoSpeedWidget::paintGL()
               );
     for(int l_index = 0; l_index < m_width_label_counter; l_index++)
     {
-        renderText(m_width_labels[l_index].get_x() - (0.5 * l_font_metric.width(m_width_labels[l_index].get_label()))
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+        int l_label_width = l_font_metric.horizontalAdvance(m_width_labels[l_index].get_label());
+#else // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+        int l_label_width = l_font_metric.width(m_width_labels[l_index].get_label());
+#endif // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+        renderText(m_width_labels[l_index].get_x() - (0.5 * l_label_width)
                   ,m_width_labels[l_index].get_y() - 8
                   ,0
                   ,m_width_labels[l_index].get_label()
