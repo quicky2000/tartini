@@ -250,6 +250,7 @@ VibratoView::VibratoView(int p_view_ID
     l_zoom_wheel_V->setSingleStep(0.1);
     // Multiplicator value is 10 = 1 / 0.1
     l_zoom_wheel_V->setPageStepCount(10);
+    l_zoom_wheel_V->setMass(0.1);
 #else
     l_zoom_wheel_V->setRange(0.3, 25.0, 0.1, 1);
 #endif // QWT_VERSION >= 0x060000
@@ -288,6 +289,7 @@ VibratoView::VibratoView(int p_view_ID
     l_zoom_wheel_H->setRange(1, 100);
     l_zoom_wheel_H->setSingleStep(1);
     l_zoom_wheel_H->setPageStepCount(1);
+    l_zoom_wheel_H->setMass(0.1);
 #else
     l_zoom_wheel_H->setRange(1, 100, 1, 1);
 #endif // QWT_VERSION >= 0x060000

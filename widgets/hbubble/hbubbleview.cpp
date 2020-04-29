@@ -65,6 +65,7 @@ HBubbleView::HBubbleView( int p_view_id
     l_harmonics_wheel->setRange(1, 40);
     l_harmonics_wheel->setSingleStep(1);
     l_harmonics_wheel->setPageStepCount(1);
+    l_harmonics_wheel->setMass(0.1);
 #else
     l_harmonics_wheel->setRange(1, 40, 1, 1);
 #endif // QWT_VERSION >= 0x060000
@@ -82,6 +83,7 @@ HBubbleView::HBubbleView( int p_view_id
     l_window_size_wheel->setSingleStep(2);
     // Sould be 0.5 but put to 1 because 0 zero value disable page stepping
     l_window_size_wheel->setPageStepCount(1);
+    l_window_size_wheel->setMass(0.1);
 #else
     l_window_size_wheel->setRange(32, 1024, 2, 1);
 #endif // QWT_VERSION >= 0x060000

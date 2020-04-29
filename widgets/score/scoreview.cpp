@@ -55,6 +55,7 @@ ScoreView::ScoreView(int p_view_id
     l_scale_wheel_Y->setSingleStep(0.1);
     // Multiplicator value is 100 = 1 / 0.01
     l_scale_wheel_Y->setPageStepCount(10);
+    l_scale_wheel_Y->setMass(0.1);
 #else
     l_scale_wheel_Y->setRange(1.0, 30.0, 0.1, 1);
 #endif // QWT_VERSION >= 0x060000
@@ -73,6 +74,7 @@ ScoreView::ScoreView(int p_view_id
     l_scale_wheel_X->setRange(1.0, 100.0);
     l_scale_wheel_X->setSingleStep(1.1);
     l_scale_wheel_X->setPageStepCount(1);
+    l_scale_wheel_X->setMass(0.1);
 #else
     l_scale_wheel_X->setRange(1.0, 100.0, 1.1, 1);
 #endif // QWT_VERSION >= 0x060000
