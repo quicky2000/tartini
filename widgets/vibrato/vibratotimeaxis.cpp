@@ -85,7 +85,6 @@ void VibratoTimeAxis::paintEvent(QPaintEvent *)
                     break;
                     case 2:
                         l_notches_divider = 2;
-                        l_seconds_per_notch = l_seconds_per_notch;
                         l_calculation_step = 3;
                     break;
                     case 3:
