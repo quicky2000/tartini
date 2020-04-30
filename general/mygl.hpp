@@ -95,7 +95,11 @@ void mygl_resize2d( int p_width
     glViewport(0, 0, (GLint)p_width, (GLint)p_height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
+#ifdef MACX
+    GLKMatrix4MakeOrtho(0, p_width, p_height, 0, 0, 0);
+#else // MACX
     gluOrtho2D(0, p_width, p_height, 0);
+#endif // MACX
 }
 
 //------------------------------------------------------------------------------

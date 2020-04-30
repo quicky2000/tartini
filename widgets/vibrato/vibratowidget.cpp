@@ -25,6 +25,9 @@
 #include <glu.h>
 #include <gl.h>
 #include <sstream>
+#ifdef MACX
+#include <GLKit/GLKMatrix4.h>
+#endif // MACX
 
 //------------------------------------------------------------------------------
 VibratoWidget::VibratoWidget(QWidget * p_parent, int p_nls):
@@ -89,7 +92,11 @@ void VibratoWidget::resizeGL(int w, int h)
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
+#ifdef MACX
+  GLKMatrix4MakeOrtho(0, w, 0, h, 0, 0);
+#else // MACX
   gluOrtho2D(0, w, 0, h);
+#endif // MACX
 
   update();
 }

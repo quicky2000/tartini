@@ -22,6 +22,9 @@
 #include <glu.h>
 #include <gl.h>
 #include <QtGlobal>
+#ifdef MACX
+#include <GLKit/GLKMatrix4.h>
+#endif // MACX
 
 //------------------------------------------------------------------------------
 VibratoTunerWidget::VibratoTunerWidget(QWidget *parent):
@@ -81,7 +84,11 @@ void VibratoTunerWidget::resizeGL(int p_width
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
+#ifdef MACX
+  GLKMatrix4MakeOrtho(0, p_width, 0, p_height, 0, 0);
+#else // MACX
   gluOrtho2D(0, p_width, 0, p_height);
+#endif // MACX
 
   // Calculate the dial with the new width & height
   const float l_half_width = 0.5 * width();

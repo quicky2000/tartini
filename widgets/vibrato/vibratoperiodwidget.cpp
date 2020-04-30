@@ -20,6 +20,9 @@
 #include "analysisdata.h"
 #include <glu.h>
 #include <gl.h>
+#ifdef MACX
+#include <GLKit/GLKMatrix4.h>
+#endif // MACX
 
 //------------------------------------------------------------------------------
 VibratoPeriodWidget::VibratoPeriodWidget(QWidget *p_parent)
@@ -87,7 +90,11 @@ void VibratoPeriodWidget::resizeGL(int p_width
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
+#ifdef MACX
+    GLKMatrix4MakeOrtho(0, p_width, 0, p_height, 0, 0);
+#else // MACX
 	gluOrtho2D(0, p_width, 0, p_height);
+#endif // MACX
 
 	// Calculate the horizontal reference line
 	const float halfHeight = 0.5 * height();

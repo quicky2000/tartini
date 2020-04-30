@@ -3,6 +3,9 @@
 #include <QPainter>
 #include <QColor>
 #include <QtGlobal>
+#ifdef MACX
+#include <GLKit/GLKMatrix4.h>
+#endif // MACX
 
 //------------------------------------------------------------------------------
 void MyGLFont::init(const QFont p_font)
@@ -105,7 +108,11 @@ void MyGLFont::beginGLtext( int p_width
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
+#ifdef MACX
+    GLKMatrix4MakeOrtho(0, p_width, 0, p_height, 0, 0);
+#else // MACX
     gluOrtho2D(0, p_width, 0, p_height);
+#endif // MACX
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
