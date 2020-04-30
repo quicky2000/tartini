@@ -164,7 +164,7 @@ int AudioStream::callback( void * p_output_buffer
 int AudioStream::callback( void * p_output_buffer
                          , void * p_input_buffer
                          , unsigned int p_n_buffer_frames
-                         , double p_stream_time
+                         , double // p_stream_time
                          , RtAudioStreamStatus p_status
                          )
 {
