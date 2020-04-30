@@ -313,10 +313,19 @@ MainWindow::MainWindow()
 
     // Create actions for the new view menu
     m_new_view_menu = menuBar()->addMenu(tr("&Create"));
+#ifdef MACX
+    // On Mac, Qt's automatic "menu bar merging" feature will not create any menu that is empty.
+    // See https://doc.qt.io/qt-5/qmenubar.html#qmenubar-as-a-global-menu-bar
+    // So, load the menu with actions now.
+    newViewAboutToShow();
+#endif // MACX
     connect(m_new_view_menu, SIGNAL(aboutToShow()), this, SLOT(newViewAboutToShow()));
 
     //Create the Window Menu
     m_window_menu = menuBar()->addMenu(tr("&Windows"));
+#ifdef MACX
+    windowMenuAboutToShow();
+#endif // MACX
     connect(m_window_menu, SIGNAL( aboutToShow() ), this, SLOT( windowMenuAboutToShow() ) );
 
     //Create the Options Menu
