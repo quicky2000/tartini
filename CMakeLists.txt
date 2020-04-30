@@ -296,6 +296,13 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux" OR ${CMAKE_SYSTEM_NAME} STREQUAL "Darwi
         rtAudio
        )
 endif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux" OR ${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+# Specific to MacOS
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+    set(MY_CPP_FLAGS
+        ${MY_CPP_FLAGS}
+        -DMACX -D__MACOSX_CORE__
+        )
+endif(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
 # Specific to Linux
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
     set(MY_CPP_FLAGS
