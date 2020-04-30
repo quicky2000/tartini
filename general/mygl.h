@@ -20,6 +20,9 @@
 #include <QGLWidget>
 #include <glu.h>
 #include <gl.h>
+#ifdef MACX
+#include <GLKit/GLKMatrix4.h>
+#endif // MACX
 
 class MyGLfloat2d
 {
