@@ -529,7 +529,6 @@ MainWindow::~MainWindow()
     delete m_play_icon_set;
     delete m_stop_icon_set;
     delete m_record_icon_set;
-    fprintf(stderr, "Has pending events = %s\n", (qApp->hasPendingEvents()) ? "Yes" : "No");
 }
 
 //------------------------------------------------------------------------------
