@@ -275,7 +275,7 @@ void ScoreWidget::drawNoteAtPitch( int p_x
     }
     else
     {
-      get_painter().drawRoundRect(p_x, p_y - l_y_offset - toInt(l_note_height / 2), toInt(p_note_length * m_scale_X) - 1, toInt(l_note_height), 3, 3);
+      get_painter().drawRoundedRect(p_x, p_y - l_y_offset - toInt(l_note_height / 2), toInt(p_note_length * m_scale_X) - 1, toInt(l_note_height), 3, 3, Qt::RelativeSize);
     }
 }
 
