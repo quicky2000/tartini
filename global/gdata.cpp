@@ -684,7 +684,7 @@ QString GData::saveFileAsk(QString p_old_filename)
     {
         if(QMessageBox::warning(g_main_window, tr("Overwrite File?"),
                                 QString("A file called '") + l_new_filename + QString("' already exists.\n Do you want to overwrite it?"),
-			      tr("&Yes"), tr("&No"), QString::null, 0, 1 )
+			      tr("&Yes"), tr("&No"), QString(), 0, 1 )
 		  )
         {
             return QString(); //user canceled overwrite
