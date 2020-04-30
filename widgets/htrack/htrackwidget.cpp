@@ -31,6 +31,9 @@
 #ifndef WHEEL_DELTA
 #define WHEEL_DELTA 120
 #endif
+#ifdef MACX
+#include <GLKit/GLKMatrix4.h>
+#endif // MACX
 
 //------------------------------------------------------------------------------
 HTrackWidget::HTrackWidget( QWidget *p_parent
@@ -103,7 +106,11 @@ void HTrackWidget::paintGL()
 
     double l_center_x = 0.0;
     double l_center_z = 0.0;
+#ifdef MACX
+    GLKMatrix4MakeLookAt(0.0, 0.0/*m_distance_away*/, m_distance_away, l_center_x, 0.0, l_center_z, 0.0, 1.0, 0.0);
+#else // MACX
     gluLookAt(0.0, 0.0/*m_distance_away*/, m_distance_away, l_center_x, 0.0, l_center_z, 0.0, 1.0, 0.0);
+#endif // MACX
     glRotated(-viewAngleVertical(), 1.0, 0.0, 0.0);
     glRotated(viewAngleHorizontal(), 0.0, 1.0, 0.0);
 
