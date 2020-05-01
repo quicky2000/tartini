@@ -494,6 +494,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */
             //calc the l_period_diff
             if(p_chunk > 0)
             {
+                myassert(l_prev_analysis_data);
                 float l_prev_period = l_prev_analysis_data->getHighestCorrelationIndex() != -1 ? l_prev_analysis_data->getPeriodEstimatesAt(l_prev_analysis_data->getHighestCorrelationIndex()) : 0;
                 l_period_diff = l_analysis_data.searchClosestPeriodEstimates(l_prev_period) - l_prev_period;
                 if(absolute(l_period_diff) > 8.0f)
