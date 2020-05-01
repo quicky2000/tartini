@@ -1478,7 +1478,6 @@ void RtApiCore :: closeStream( void )
         errorText_ = "RtApiCore::closeStream(): error removing property listener!";
         error( RtAudioError::WARNING );
       }
-    }
     if ( stream_.state == STREAM_RUNNING )
       AudioDeviceStop( handle->id[0], callbackHandler );
 #if defined( MAC_OS_X_VERSION_10_5 ) && ( MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5 )
@@ -1487,6 +1486,7 @@ void RtApiCore :: closeStream( void )
     // deprecated in favor of AudioDeviceDestroyIOProcID()
     AudioDeviceRemoveIOProc( handle->id[0], callbackHandler );
 #endif
+    }
   }
 
   if ( stream_.mode == INPUT || ( stream_.mode == DUPLEX && stream_.device[0] != stream_.device[1] ) ) {
@@ -1501,7 +1501,6 @@ void RtApiCore :: closeStream( void )
         errorText_ = "RtApiCore::closeStream(): error removing property listener!";
         error( RtAudioError::WARNING );
       }
-    }
     if ( stream_.state == STREAM_RUNNING )
       AudioDeviceStop( handle->id[1], callbackHandler );
 #if defined( MAC_OS_X_VERSION_10_5 ) && ( MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5 )
@@ -1510,6 +1509,7 @@ void RtApiCore :: closeStream( void )
     // deprecated in favor of AudioDeviceDestroyIOProcID()
     AudioDeviceRemoveIOProc( handle->id[1], callbackHandler );
 #endif
+    }
   }
 
   for ( int i=0; i<2; i++ ) {
