@@ -33,7 +33,7 @@ int SoundStream::writeFloats( float ** p_channel_data
     if(m_bits == 8)
     {
         unsigned char * l_temp = new unsigned char[p_length * m_channels];
-        unsigned char * l_pos1 = l_temp;
+        unsigned char * l_pos1; // = l_temp;
         float * l_pos;
         float * l_end;
         for(l_c = 0; l_c < m_channels; l_c++)
@@ -52,7 +52,7 @@ int SoundStream::writeFloats( float ** p_channel_data
     else if(m_bits == 16)
     {
         short * l_temp = new short[p_length * m_channels * sizeof(short)];
-        short * l_pos1 = l_temp;
+        short * l_pos1; // = l_temp;
         float * l_pos;
         float *l_end;
         for(l_c = 0; l_c < m_channels; l_c++)
@@ -87,7 +87,7 @@ int SoundStream::readFloats(float ** p_channel_data
     {
         unsigned char * l_temp = new unsigned char[p_length * m_channels];
         l_read = read_bytes(l_temp, p_length * m_channels);
-        unsigned char * l_pos1 = l_temp;
+        unsigned char * l_pos1; // = l_temp;
         float * l_pos;
         float * l_end;
         for(l_c = 0; l_c < m_channels; l_c++)
@@ -106,7 +106,7 @@ int SoundStream::readFloats(float ** p_channel_data
     {
         short * l_temp = new short[p_length * m_channels * sizeof(short)];
         l_read = read_bytes(l_temp, p_length * m_channels * sizeof(short));
-        short * l_pos1 = l_temp;
+        short * l_pos1; // = l_temp;
         float * l_pos;
         float * l_end;
         for(l_c = 0; l_c < m_channels; l_c++)
@@ -128,7 +128,7 @@ int SoundStream::readFloats(float ** p_channel_data
     {
         long * l_temp = new long[p_length * m_channels * sizeof(long)];
         l_read = read_bytes(l_temp, p_length * m_channels * sizeof(long));
-        long * l_pos1 = l_temp;
+        long * l_pos1; // = l_temp;
         float * l_pos;
         float * l_end;
         for(l_c = 0; l_c < m_channels; l_c++)

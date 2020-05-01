@@ -619,7 +619,7 @@ void FreqWidgetGL::drawChannelGL( Channel *p_channel
     qglColor(l_current_color);
 
     int l_view_bottom_offset = toInt(p_view_bottom / p_zoom_Y);
-    p_view_bottom = double(l_view_bottom_offset) * p_zoom_Y;
+    // p_view_bottom = double(l_view_bottom_offset) * p_zoom_Y;
   
     // l_base_X is the no. of chunks a pixel must represent.
     double l_base_X = p_zoom_X / p_channel->timePerChunk();
@@ -776,7 +776,7 @@ void FreqWidgetGL::drawChannelFilledGL( Channel *p_channel
     qglColor(l_current_color);
 
     int l_view_bottom_offset = toInt(p_view_bottom / p_zoom_Y);
-    p_view_bottom = double(l_view_bottom_offset) * p_zoom_Y;
+    // p_view_bottom = double(l_view_bottom_offset) * p_zoom_Y;
   
     // l_base_X is the no. of chunks a pixel must represent.
     double l_base_X = p_zoom_X / p_channel->timePerChunk();
@@ -1088,16 +1088,16 @@ void FreqWidgetGL::setChannelVerticalView( Channel * p_channel
                                          , const double & p_left_time
                                          , const double & p_current_time
                                          , const double & p_zoom_X
-                                         , double p_view_bottom
-                                         , const double & p_zoom_Y
+                                         , double // p_view_bottom
+                                         , const double & // p_zoom_Y
                                          )
 {
     ZoomLookup * l_zoom_lookup = &p_channel->get_normal_zoom_lookup();
     
     ChannelLocker l_channel_locker(p_channel);
 
-    int l_view_bottom_offset = toInt(p_view_bottom / p_zoom_Y);
-    p_view_bottom = double(l_view_bottom_offset) * p_zoom_Y;
+    // int l_view_bottom_offset = toInt(p_view_bottom / p_zoom_Y);
+    // p_view_bottom = double(l_view_bottom_offset) * p_zoom_Y;
 
     std::vector<float> l_ys;
     l_ys.reserve(width());
@@ -1234,6 +1234,8 @@ void FreqWidgetGL::setChannelVerticalView( Channel * p_channel
     if(!l_ys.empty() > 0)
     {
         float l_mean_Y = l_total_Y / l_num_Y;
+#if 0
+        // l_spred is never used?
         double l_spred = 0.0;
         myassert(l_ys.size() == l_weightings.size());
         //use a linear spred function. not a squared one like standard deviation
@@ -1247,6 +1249,7 @@ void FreqWidgetGL::setChannelVerticalView( Channel * p_channel
             //show a minimum of 12 semi-tones
             l_spred = 12.0;
         }
+#endif
         g_data->getView().setViewBottomRaw(l_mean_Y - g_data->getView().viewHeight() / 2.0);
     }
 }
