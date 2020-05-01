@@ -209,6 +209,12 @@ SmartPtr<T>::SmartPtr(SmartPtr<T> const & p_r)
 template <class T>
 SmartPtr<T>::~SmartPtr()
 {
+    // The clang static analyzer gets confused by Smart Pointers.
+    // It incorrectly reports that memory might be used after it is freed.
+    // Because it doesn't track the reference counts, the static analyzer assumes that *any* time
+    // ~SmartPtr() is called the object could be deleted.
+    // Suppress these warnings by hiding the code in ~SmartPtr() from the static analyzer.
+#ifndef __clang_analyzer__
     if(m_ptr)
     {
         if(--(*m_ref_counter) == 0)
@@ -219,6 +225,7 @@ SmartPtr<T>::~SmartPtr()
             m_ref_counter = NULL;
         }
     }
+#endif // __clang_analyzer__
 }
 
 //-----------------------------------------------------------------------------
