@@ -29,6 +29,8 @@
 #include "conversions.h"
 
 #include <QPixmap>
+#include <sstream>
+#include <iomanip>
 
 #ifndef WHEEL_DELTA
 #define WHEEL_DELTA 120
@@ -265,9 +267,10 @@ void AmplitudeWidget::setCurrentThreshold(double p_new_threshold, int p_index)
 //------------------------------------------------------------------------------
 QString AmplitudeWidget::getCurrentThresholdString()const
 {
-    QString l_threshold_str;
-    l_threshold_str.sprintf(g_amp_display_string[g_data->amplitudeMode()], g_data->ampThreshold(g_data->amplitudeMode(), 0), g_data->ampThreshold(g_data->amplitudeMode(), 1));
-    return l_threshold_str;
+    std::stringstream l_stream;
+    l_stream << std::fixed << std::setprecision(2) << g_data->ampThreshold(g_data->amplitudeMode(), 0) << " " << g_data->ampThreshold(g_data->amplitudeMode(), 1);
+    std::string l_threshold_str = g_amp_display_string[g_data->amplitudeMode()] + " = " + l_stream.str();
+    return QString::fromStdString(l_threshold_str);
 }
 
 //------------------------------------------------------------------------------

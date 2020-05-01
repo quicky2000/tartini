@@ -90,10 +90,10 @@ void CepstrumWidget::paintEvent( QPaintEvent * )
             {
                 clearBackground();
             }
-            QString l_num_periods_text;
-            l_num_periods_text.sprintf("Period = %lf", l_period);
+            std::string l_num_periods_text("Period = ");
+            l_num_periods_text += std::to_string(l_period);
             get_painter().setPen(Qt::black);
-            get_painter().drawText(5, height() - 8, l_num_periods_text);
+            get_painter().drawText(5, height() - 8, QString::fromStdString(l_num_periods_text));
 
             get_painter().drawLine(0, height() / 2, width(), height() / 2);
 

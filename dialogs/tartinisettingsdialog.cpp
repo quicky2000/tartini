@@ -12,6 +12,8 @@
 #include "gdata.h"
 #include "audio_stream.h"
 #include <QFileDialog>
+#include <sstream>
+#include <iomanip>
 
 //------------------------------------------------------------------------------
 TartiniSettingsDialog::TartiniSettingsDialog(QWidget * p_parent)
@@ -148,11 +150,13 @@ void TartiniSettingsDialog::fileNameChanged()
     int l_digits = fileNumberOfDigits->value();
     if(l_digits == 0)
     {
-        l_filename.sprintf("%s.wav", filenameGeneratingString->text().toStdString().c_str());
+        l_filename = QString::fromStdString(filenameGeneratingString->text().toStdString() + ".wav");
     }
     else
     {
-        l_filename.sprintf("%s%0*d.wav", filenameGeneratingString->text().toStdString().c_str(), l_digits, fileGeneratingNumber->value());
+        std::stringstream l_stream;
+        l_stream << filenameGeneratingString->text().toStdString() << std::setfill('0') << std::setw(l_digits) << fileGeneratingNumber->value();
+        l_filename = QString::fromStdString(l_stream.str() + ".wav");
     }
     filenameExample->setText(l_filename);
 }

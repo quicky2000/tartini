@@ -43,6 +43,8 @@
 #include "conversions.h"
 #include "musicnotes.h"
 #include "music_scale.h"
+#include <sstream>
+#include <iomanip>
 
 #ifndef WINDOWS
 //for multi-threaded profiling
@@ -574,11 +576,13 @@ QString GData::getFilenameString()
     int l_digits = m_settings->value("General/fileNumberOfDigits", 2).toInt();
     if(l_digits == 0)
     {
-        l_filename.sprintf("%s.wav", l_file_generating_string.toStdString().c_str());
+        l_filename = QString::fromStdString(l_file_generating_string.toStdString() + ".wav");
     }
     else
     {
-        l_filename.sprintf("%s%0*d.wav", l_file_generating_string.toStdString().c_str(), l_digits, l_file_generating_number);
+        std::stringstream l_stream;
+        l_stream << l_file_generating_string.toStdString() << std::setfill('0') << std::setw(l_digits) << l_file_generating_number;
+        l_filename = QString::fromStdString(l_stream.str() + ".wav");
     }
     return l_filename;
 }

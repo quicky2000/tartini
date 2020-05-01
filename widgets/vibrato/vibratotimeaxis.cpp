@@ -19,6 +19,8 @@
 #include "channel.h"
 #include "analysisdata.h"
 #include <QtGlobal>
+#include <sstream>
+#include <iomanip>
 
 //------------------------------------------------------------------------------
 VibratoTimeAxis::VibratoTimeAxis(QWidget * p_parent, int p_nls)
@@ -57,7 +59,6 @@ void VibratoTimeAxis::paintEvent(QPaintEvent *)
     if(m_current_chunk_to_use >= 0)
     {
         QFontMetrics l_font_metrics = get_painter().fontMetrics();
-        QString l_string;
         get_painter().setBrush(Qt::black);
         get_painter().setFont(QFont("AnyStyle", 12));
 
@@ -110,26 +111,26 @@ void VibratoTimeAxis::paintEvent(QPaintEvent *)
                     int l_minutes = intFloor(l_index * l_seconds_per_notch * 1.000001) / 60;
                     int l_seconds = intFloor(l_index * l_seconds_per_notch * 1.000001) % 60;
                     int l_thousandth_seconds = intFloor(1000 * l_index *l_seconds_per_notch * 1.000001) % 1000;
-                    if(l_thousandth_seconds == 0)
-                    {
-                        // Label: m:ss
-                        l_string.sprintf("%1d:%02d", l_minutes, l_seconds);
-                    }
-                    else if (l_thousandth_seconds % 100 == 0)
+
+                    std::stringstream l_stream;
+                    l_stream << std::setw(1) << l_minutes << ":" << std::setfill('0') << std::setw(2) << l_seconds;
+
+                    if (l_thousandth_seconds % 100 == 0)
                     {
                         // Label: m:ss.h
-                        l_string.sprintf("%1d:%02d.%01d", l_minutes, l_seconds, l_thousandth_seconds / 100);
+                        l_stream << "." << std::setw(1) << l_thousandth_seconds / 100;
                     }
                     else if (l_thousandth_seconds % 10 == 0)
                     {
                         // Label: m:ss.hh
-                        l_string.sprintf("%1d:%02d.%02d", l_minutes, l_seconds, l_thousandth_seconds / 10);
+                        l_stream << "." << std::setw(2) << l_thousandth_seconds / 10;
                     }
                     else
                     {
                         // Label: m:ss.hhh
-                        l_string.sprintf("%1d:%02d.%03d", l_minutes, l_seconds, l_thousandth_seconds);
+                        l_stream << "." << std::setw(3) << l_thousandth_seconds;
                     }
+                    QString l_string = QString::fromStdString(l_stream.str());
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
                     get_painter().drawText(l_x - l_font_metrics.horizontalAdvance(l_string) / 2, 12, l_string);
 #else // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)

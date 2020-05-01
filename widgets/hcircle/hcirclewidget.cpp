@@ -24,6 +24,8 @@
 #include "analysisdata.h"
 #include "useful.h"
 #include "myqt.h"
+#include <sstream>
+#include <iomanip>
 
 //------------------------------------------------------------------------------
 HCircleWidget::HCircleWidget(QWidget *p_parent)
@@ -88,7 +90,7 @@ void HCircleWidget::paintEvent( QPaintEvent * )
         get_painter().setPen(QPen(colorBetween(g_data->backgroundColor(), qRgb(128,128,128), 0.3), 2));
         int l_radius = toInt((double)height() * m_zoom * (m_threshold - m_lowest_value));
         get_painter().drawEllipse(width() / 2 - l_radius, height() / 2 - l_radius, 2 * l_radius, 2 * l_radius);
-        get_painter().drawText(width() / 2 - l_radius + 5, height() / 2, l_string.sprintf("Threshold"));
+        get_painter().drawText(width() / 2 - l_radius + 5, height() / 2, "Threshold");
     }
 
     get_painter().setPen(QPen(QColor(128,128,128),1));
@@ -101,8 +103,10 @@ void HCircleWidget::paintEvent( QPaintEvent * )
         {
             int l_radius = toInt((double)height() * m_zoom * (l_scale - m_lowest_value));
             get_painter().drawEllipse(width() / 2 - l_radius,height() / 2 - l_radius, 2 * l_radius, 2 * l_radius);
-	  
-            get_painter().drawText(width() / 2 + l_radius, height() / 2, l_string.sprintf("%1.1f", l_scale));
+	        std::stringstream l_stream;
+	        l_stream << std::fixed << std::setprecision(1) << l_scale;
+	        std::string l_scale_string = l_stream.str();
+            get_painter().drawText(width() / 2 + l_radius, height() / 2, QString::fromStdString(l_scale_string));
         }
     }
 
@@ -144,7 +148,7 @@ void HCircleWidget::paintEvent( QPaintEvent * )
 
                     get_painter().drawLine(width() / 2 + l_x1, height() / 2 + l_y1, width() / 2 + l_x, height() / 2 + l_y);
                     get_painter().drawEllipse(width() / 2 + l_x - l_half_dot_size, height() / 2 + l_y - l_half_dot_size, l_dot_size, l_dot_size);
-                    get_painter().drawText(width() / 2 + l_x + 5, height() / 2 + l_y, l_string.sprintf("%d", l_i + 1));
+                    get_painter().drawText(width() / 2 + l_x + 5, height() / 2 + l_y, QString::fromStdString(std::to_string(l_i + 1)));
                 }
             }
         }

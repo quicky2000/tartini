@@ -28,14 +28,14 @@ const char *g_amp_mode_names[NUM_AMP_MODES] =
   , "Note Change Score"
   };
 
-const char *g_amp_display_string[NUM_AMP_MODES] =
-  { "RMS Amp Threshold = %0.2f, %0.2f"
-  , "Max Amp Threshold = %0.2f, %0.2f"
-  , "Amp Corr Threshold = %0.2f, %0.2f"
-  , "Freq Changeness Threshold = %0.2f, %0.2f"
-  , "Delta Freq Centroid Threshold = %0.2f, %0.2f"
-  , "Note Score Threshold = %0.2f, %0.2f"
-  , "Note Change Score Threshold = %0.2f, %0.2f"
+const std::string g_amp_display_string[NUM_AMP_MODES] =
+  { "RMS Amp Threshold"
+  , "Max Amp Threshold"
+  , "Amp Corr Threshold"
+  , "Freq Changeness Threshold"
+  , "Delta Freq Centroid Threshold"
+  , "Note Score Threshold"
+  , "Note Change Score Threshold"
   };
 
 double(*g_amp_mode_func[NUM_AMP_MODES])(const double &, const GData &) =

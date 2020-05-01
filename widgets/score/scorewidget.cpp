@@ -356,8 +356,9 @@ void ScoreWidget::paintEvent(QPaintEvent *)
     ScoreSegmentIterator l_score_segment_iter(this, l_active_channel);
     if(l_active_channel)
     {
-        QString l_page_string;
-        get_painter().drawText(m_font_width, height() - 4, l_page_string.sprintf("Page %d of %d", l_score_segment_iter.curPage() + 1, l_score_segment_iter.numPages()));
+        std::string l_page_string{"Page "};
+        l_page_string += std::to_string(l_score_segment_iter.curPage() + 1) + " of " + std::to_string(l_score_segment_iter.numPages());
+        get_painter().drawText(m_font_width, height() - 4, QString::fromStdString(l_page_string));
         while(l_score_segment_iter.next())
         {
             drawScoreSegment(l_active_channel, l_score_segment_iter.leftX(), l_score_segment_iter.lineCenterY(), l_score_segment_iter.leftTime(), l_score_segment_iter.rightTime());

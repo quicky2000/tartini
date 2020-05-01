@@ -119,7 +119,7 @@ void FreqDrawWidget::drawReferenceLines( QPaintDevice & p_paint_device
         if(!isBlackNote(l_name_index))
         {
             p_painter.setPen(Qt::black);
-            l_note_label.sprintf("%s%d", music_notes::noteName(l_name_index).c_str(), noteOctave(l_name_index));
+            l_note_label = QString::fromStdString(music_notes::noteName(l_name_index) + std::to_string(noteOctave(l_name_index)));
             p_painter.drawText(2, l_line_Y + l_font_height_space, l_note_label);
             if(noteValue(l_name_index) == 0)
             {

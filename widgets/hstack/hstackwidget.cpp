@@ -25,6 +25,8 @@
 #include "analysisdata.h"
 #include "useful.h"
 #include "myqt.h"
+#include <sstream>
+#include <iomanip>
 
 //------------------------------------------------------------------------------
 HStackWidget::HStackWidget(QWidget *p_parent)
@@ -62,7 +64,24 @@ void HStackWidget::setDBRange(double p_range)
 //------------------------------------------------------------------------------
 HStackWidget::~HStackWidget()
 {
-} 
+}
+
+//------------------------------------------------------------------------------
+std::string HStackWidget::format_label(float p_label)
+{
+    std::stringstream l_stream;
+    l_stream << std::fixed;
+    if(m_view_height < 10)
+    {
+        l_stream << std::setprecision(2);
+    }
+    else
+    {
+        l_stream << std::setprecision(1);
+    }
+    l_stream << p_label;
+    return l_stream.str();
+}
 
 //------------------------------------------------------------------------------
 void HStackWidget::paintEvent(QPaintEvent *)
@@ -97,7 +116,6 @@ void HStackWidget::paintEvent(QPaintEvent *)
 
         float l_lbl;
 
-        char * l_txt = (char*)"%1.1f";
         float l_increase = 10;
 
         if(m_view_height < 50) 
@@ -106,17 +124,16 @@ void HStackWidget::paintEvent(QPaintEvent *)
         }
         if (m_view_height < 10) 
         { 
-            l_txt = (char*)"%1.2f";
-            l_increase = 1; 
+            l_increase = 1;
         }
         
         for(l_lbl = 0; l_lbl < m_view_height; l_lbl += l_increase)
         {
             get_painter().drawLine(0, -toInt((-m_top + l_lbl) * l_scale_Y), width(), -toInt((-m_top + l_lbl) * l_scale_Y));
-            get_painter().drawText(0, -toInt((-m_top + l_lbl) * l_scale_Y), l_string.sprintf(l_txt, l_lbl));
+            get_painter().drawText(0, -toInt((-m_top + l_lbl) * l_scale_Y), QString::fromStdString(format_label(l_lbl)));
 
             get_painter().drawLine(0, -toInt((-m_top - l_lbl) * l_scale_Y), width(), -toInt((-m_top - l_lbl) * l_scale_Y));
-            get_painter().drawText(0, -toInt((-m_top - l_lbl) * l_scale_Y), l_string.sprintf(l_txt, -l_lbl)); 
+            get_painter().drawText(0, -toInt((-m_top - l_lbl) * l_scale_Y), QString::fromStdString(format_label(-l_lbl)));
         }
         
         for(l_i = -1; l_i <= m_window_size + 1; l_i++) 

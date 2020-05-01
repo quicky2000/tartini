@@ -91,10 +91,11 @@ void FFTWidget::paintEvent( QPaintEvent * )
             {
                 clearBackground();
             }
-            QString l_fund_freq_text;
-            l_fund_freq_text.sprintf("Fundamental Frequency = %lf", l_freq);
+            std::string l_fund_freq_text("Fundamental Frequency = ");
+            l_fund_freq_text += std::to_string(l_freq);
+
             get_painter().setPen(Qt::black);
-            get_painter().drawText(5, 15, l_fund_freq_text);
+            get_painter().drawText(5, 15, QString::fromStdString(l_fund_freq_text));
         }
         else
         {

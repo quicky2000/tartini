@@ -40,6 +40,8 @@
 #endif
 
 #include "QMessageBox"
+#include <sstream>
+#include <iomanip>
 
 typedef unsigned char byte;
 
@@ -150,11 +152,13 @@ QString SoundFile::getNextTempFilename() const
     QFileInfo l_file_info;
     QString l_file_name;
     bool l_file_exists;
-    int index = 1;
+    int l_index = 1;
     do
     {
         l_file_exists = false;
-        l_file_name.sprintf("temp%03d.wav", index);
+        std::stringstream l_stream;
+        l_stream << "temp" << std::setfill('0') << std::setw(3) << l_index << ".wav";
+        l_file_name = QString::fromStdString(l_stream.str());
 #ifdef PRINTF_DEBUG
         printf("trying %s\n", fileName.latin1());
 #endif // PRINTF_DEBUG
@@ -162,7 +166,7 @@ QString SoundFile::getNextTempFilename() const
         if(l_file_info.exists())
         {
             l_file_exists = true;
-            index++;
+            l_index++;
         }
     }
     while(l_file_exists);

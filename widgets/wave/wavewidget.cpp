@@ -24,6 +24,7 @@
 #include "analysisdata.h"
 #include "useful.h"
 #include "myqt.h"
+#include <sstream>
 
 //------------------------------------------------------------------------------
 WaveWidget::WaveWidget(QWidget *parent)
@@ -91,10 +92,10 @@ void WaveWidget::paintEvent(QPaintEvent *)
             {
                 clearBackground();
             }
-            QString l_num_periods_text;
-            l_num_periods_text.sprintf("# Periods = %lf", l_num_periods);
+            std::string l_num_periods_text("# Periods = ");
+            l_num_periods_text += std::to_string(l_num_periods);
             get_painter().setPen(Qt::black);
-            get_painter().drawText(5, 15, l_num_periods_text);
+            get_painter().drawText(5, 15, QString::fromStdString(l_num_periods_text));
         }
         else
         {
