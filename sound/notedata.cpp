@@ -25,8 +25,8 @@
 
 //------------------------------------------------------------------------------
 NoteData::NoteData(const Channel & p_channel)
-: m_maxima(new Array1d<int>())
-, m_minima(new Array1d<int>())
+: m_maxima(std::make_shared<Array1d<int>>())
+, m_minima(std::make_shared<Array1d<int>>())
 , m_channel(&p_channel)
 , m_max_log_RMS(g_data->dBFloor())
 , m_num_periods(0)
@@ -42,8 +42,8 @@ NoteData::NoteData( const Channel & p_channel
 : m_nsdf_aggregate_roof(0.0)
 , m_first_nsdf_period(0.0f)
 , m_current_nsdf_period(0.0f)
-, m_maxima(new Array1d<int>())
-, m_minima(new Array1d<int>())
+, m_maxima(std::make_shared<Array1d<int>>())
+, m_minima(std::make_shared<Array1d<int>>())
 , m_channel(&p_channel)
 , m_start_chunk(p_start_chunk)
 , m_end_chunk(p_start_chunk + 1)

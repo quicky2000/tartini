@@ -208,7 +208,6 @@ HEADERS += main.h \
   widgets/vibrato/vibratoperiodwidget.h \
   widgets/vibrato/vibratocirclewidget.h \
   include/safe_bool.h \
-  include/SmartPtr.h \
   general/prony.h \
   general/mymatrix.h \
   general/mymatrix.hpp \

@@ -20,7 +20,7 @@
 
 #include <vector>
 #include "array1d.h"
-#include "SmartPtr.h"
+#include <memory>
 #include <iterator>
 
 /**
@@ -127,7 +127,7 @@ class large_vector
 
     uint m_buffer_size;
     //std::vector<std::vector<T> *> buf_ptrs();
-    SmartPtr<Array1d<std::vector<T> *> > m_buf_ptrs;
+    std::shared_ptr<Array1d<std::vector<T> *> > m_buf_ptrs;
 
 };
 
