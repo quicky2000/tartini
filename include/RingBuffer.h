@@ -450,6 +450,7 @@ void RingBuffer<T>::resize(int p_new_size)
 template<class T>
 int RingBuffer<T>::end()
 {
+    myassert(m_buffer_size > 0);  // This assert suppresses static analyzer warnings about possible division by zero.
     return (m_start + m_current_size) % m_buffer_size;
 }
 
