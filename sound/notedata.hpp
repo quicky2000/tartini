@@ -89,13 +89,13 @@ double NoteData::avgFreq() const
 }
 
 //------------------------------------------------------------------------------
-const SmartPtr<Array1d<int> > NoteData::get_maxima() const
+const std::shared_ptr<Array1d<int> > NoteData::get_maxima() const
 {
     return m_maxima;
 }
 
 //------------------------------------------------------------------------------
-const SmartPtr<Array1d<int> > NoteData::get_minima() const
+const std::shared_ptr<Array1d<int> > NoteData::get_minima() const
 {
     return m_minima;
 }

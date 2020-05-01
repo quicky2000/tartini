@@ -288,9 +288,9 @@ template<typename T>
 large_vector<T>::large_vector( uint p_size
                              , uint p_buffer_size
                              )
+: m_buffer_size(p_buffer_size)
+, m_buf_ptrs(std::make_shared<Array1d<std::vector<T> *>>())
 {
-    m_buf_ptrs = new Array1d<std::vector<T> *>();
-    m_buffer_size = p_buffer_size;
     while(p_size > m_buffer_size)
     {
         buf_ptrs().push_back(new std::vector<T>(m_buffer_size));
@@ -303,7 +303,7 @@ large_vector<T>::large_vector( uint p_size
 template<typename T>
 large_vector<T>::~large_vector()
 {
-    if(m_buf_ptrs.getNumRef() == 1)
+    if(m_buf_ptrs.use_count() == 1)
     {
         for(int l_j = 0; l_j < buf_ptrs().size(); l_j++)
         {
