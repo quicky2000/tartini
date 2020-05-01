@@ -176,6 +176,7 @@ int AudioThread::doStuff()
     //This is the main block of code for reading or write the next chunk to the soundcard or file
     if(g_data->getSoundMode() == SOUND_PLAY)
     {
+        myassert(m_play_sound_file);
         if(!m_play_sound_file->playChunk())
         {
             //end of file
