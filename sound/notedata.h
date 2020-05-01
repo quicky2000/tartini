@@ -19,7 +19,7 @@
 #define NOTEDATA_H
 
 #include "analysisdata.h"
-#include "SmartPtr.h"
+#include <memory>
 #include "array1d.h"
 #include <vector>
 
@@ -76,8 +76,8 @@ class NoteData
     inline float volume() const;
     void recalcAvgPitch();
 
-    inline const SmartPtr<Array1d<int> > get_maxima() const;
-    inline const SmartPtr<Array1d<int> > get_minima() const;
+    inline const std::shared_ptr<Array1d<int> > get_maxima() const;
+    inline const std::shared_ptr<Array1d<int> > get_minima() const;
 
     inline void set_nsdf_aggregate_roof(const double & p_value);
     inline void add_nsdf_aggregate_roof(const double & p_value);
@@ -105,8 +105,8 @@ class NoteData
     float m_first_nsdf_period;
     float m_current_nsdf_period;
 
-    SmartPtr<Array1d<int> > m_maxima;
-    SmartPtr<Array1d<int> > m_minima;
+    std::shared_ptr<Array1d<int> > m_maxima;
+    std::shared_ptr<Array1d<int> > m_minima;
 
     const Channel * m_channel;
 
