@@ -616,7 +616,7 @@ void MainWindow::keyPressEvent (QKeyEvent * p_event)
 #ifdef MYDEBUG
         case Qt::Key_Escape:
             g_data->stopAndWaitAudioThread();
-            qApp->closeAllWindows();
+            close();
         break;
 #endif // MYDEBUG
         case Qt::Key_Left:
