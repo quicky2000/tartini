@@ -46,7 +46,6 @@ class HStackWidget : public DrawWidget
  private:
     std::string format_label(float p_label);
 
-    QPixmap * m_buffer;
     int m_window_size;
     float m_view_height;
     float m_top;

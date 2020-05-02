@@ -47,7 +47,6 @@ class TunerWidget : public DrawWidget
     double value();
 
   private:
-    QPixmap *m_buffer;
     float m_value;
     float m_intensity;
 };

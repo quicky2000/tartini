@@ -45,7 +45,6 @@ class HCircleWidget : public DrawWidget
     double  m_zoom;
     double  m_lowest_value;
     double  m_threshold;
-    QPixmap * m_buffer;
 
 };
 #endif // HCIRCLEWIDGET_H
