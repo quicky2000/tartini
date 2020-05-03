@@ -26,6 +26,11 @@
 //------------------------------------------------------------------------------
 VibratoTunerWidget::VibratoTunerWidget(QWidget *parent)
 : QGLWidget(parent)
+, m_cents_label_X(0.0)
+, m_cents_label_Y(0.0)
+, m_dial(0)
+, m_needle(0)
+
 {
     m_needle_value_to_draw = -999;
     m_prev_needle_value = -999;
