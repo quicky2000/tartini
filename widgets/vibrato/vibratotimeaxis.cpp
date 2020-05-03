@@ -25,6 +25,7 @@
 //------------------------------------------------------------------------------
 VibratoTimeAxis::VibratoTimeAxis(QWidget * p_parent, int p_nls)
 : DrawWidget(p_parent,"VibratoTimeAxis")
+, m_window_offset_to_use(0)
 {
     QSizePolicy l_size_policy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     l_size_policy.setHeightForWidth(false);
