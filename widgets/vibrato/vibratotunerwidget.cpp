@@ -26,17 +26,17 @@
 //------------------------------------------------------------------------------
 VibratoTunerWidget::VibratoTunerWidget(QWidget *parent)
 : QGLWidget(parent)
+, m_needle_value_to_draw(-999)
+, m_prev_needle_value(-999)
+, m_prev_close_pitch(0)
+, m_cur_pitch(0.0)
 , m_cents_label_X(0.0)
 , m_cents_label_Y(0.0)
+, m_tuner_label_counter(0)
 , m_dial(0)
 , m_needle(0)
 
 {
-    m_needle_value_to_draw = -999;
-    m_prev_needle_value = -999;
-    m_prev_close_pitch = 0;
-    m_cur_pitch = 0.0;
-    m_tuner_label_counter = 0;
     for (int l_index = 0; l_index < 100; l_index++)
     {
         m_tuner_labels[l_index].set(QString(8, ' '), 0.0f, 0.0f);
