@@ -52,7 +52,6 @@ class VibratoTunerWidget: public QGLWidget
     float m_needle_value_to_draw;
     float m_prev_needle_value;
     int m_prev_close_pitch;
-    bool m_prev_is_pitch_black_note;
     double m_cur_pitch;
 
     QFont m_tuner_font;

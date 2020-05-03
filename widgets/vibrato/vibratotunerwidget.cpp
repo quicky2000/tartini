@@ -320,7 +320,6 @@ void VibratoTunerWidget::doUpdate(double p_pitch)
 
 	  m_prev_needle_value = l_needle_value;
 	  m_prev_close_pitch = l_close_pitch;
-	  m_prev_is_pitch_black_note = l_is_pitch_black_note;
 
 	  m_needle_value_to_draw = l_needle_value;
 
