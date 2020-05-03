@@ -101,9 +101,9 @@ void MyTransforms::init( int p_n
     m_hanning_scalar /= 2;
 
     m_fast_smooth = new fast_smooth(m_n / 8);
-#ifdef PRINTF_DEBUG
-    printf("fast_smooth size = %d\n", n / 8);
-#endif // PRINTF_DEBUG
+#ifdef DEBUG_PRINTF
+    printf("m_fast_smooth size = %d\n", m_n / 8);
+#endif // DEBUG_PRINTF
     m_been_init = true;
 }
 
@@ -590,10 +590,6 @@ void MyTransforms::calculateAnalysisData(/*float *input, */
 //------------------------------------------------------------------------------
 float MyTransforms::get_fine_clarity_measure(double p_period)
 {
-#ifdef PRINTF_DEBUG
-    printf("%f, ", analysisData.m_period_estimates[choosenMaxIndex]);
-    printf("%f, ", analysisData.m_period_estimates_amp[choosenMaxIndex]);
-#endif // PRINTF_DEBUG
     int l_temp_N = m_n - int(ceil(p_period));
     float * l_temp_data = new float[l_temp_N];
     float l_big_sum = 0;
@@ -610,9 +606,9 @@ float MyTransforms::get_fine_clarity_measure(double p_period)
         l_corr_sum += m_data_time[l_j] * l_temp_data[l_j];
     }
     l_match_min = (2.0 * l_corr_sum) / l_big_sum;
-#ifdef PRINTF_DEBUG
+#ifdef DEBUG_PRINTF
     printf("%f, ", l_match_min);
-#endif // PRINTF_DEBUG
+#endif // DEBUG_PRINTF
     for(int l_j = 0; l_j < l_temp_N - l_dN; l_j++)
     {
         l_big_sum -= sq(m_data_time[l_j]) + sq(l_temp_data[l_j]);
@@ -625,9 +621,9 @@ float MyTransforms::get_fine_clarity_measure(double p_period)
             l_match_min = l_match_val;
         }
     }
-#ifdef PRINTF_DEBUG
+#ifdef DEBUG_PRINTF
     printf("%f\n", l_match_min);
-#endif // PRINTF_DEBUG
+#endif // DEBUG_PRINTF
     delete[] l_temp_data;
 
     return l_match_min;
@@ -721,9 +717,9 @@ double MyTransforms::get_max_note_change( float * p_input
             l_err[l_i] += sq(p_input[l_j] - p_input[l_j2]);
         }
     }
-#ifdef PRINTF_DEBUG
-    printf("subwindow_size=%d, num=%d, period=%lf\n", subwindow_size, num, period);
-#endif // PRINTF_DEBUG
+#ifdef DEBUG_PRINTF
+    printf("l_subwindow_size=%d, l_num=%d, p_period=%lf\n", l_subwindow_size, l_num, p_period);
+#endif // DEBUG_PRINTF
     /*matlab code
       for j = 1:(num-1)
         for i = 1:ln
@@ -782,17 +778,17 @@ double MyTransforms::get_max_note_change( float * p_input
     for(l_j = 0; l_j < l_num - 2; l_j++)
     {
         l_smoothed_diff[l_j] = fabs(l_smoothed[l_j + 1] - l_smoothed[l_j]);
-#ifdef PRINTF_DEBUG
-        printf("%f ", smoothed[j]);
-#endif // PRINTF_DEBUG
+#ifdef DEBUG_PRINTF
+        printf("%f ", l_smoothed[l_j]);
+#endif // DEBUG_PRINTF
         if(l_smoothed_diff[l_j] > l_smoothed_diff[l_max_pos])
         {
             l_max_pos = l_j;
         }
     }
-#ifdef PRINTF_DEBUG
-    printf("\nsmooted_diff=%f\n", smoothed_diff[l_max_pos]);
-#endif // PRINTF_DEBUG
+#ifdef DEBUG_PRINTF
+    printf("\l_smoothed_diff=%f\n", l_smoothed_diff[l_max_pos]);
+#endif // DEBUG_PRINTF
     double l_ret = l_smoothed_diff[l_max_pos] / p_period * double(m_rate) * double(l_subwindow_size) / 10000.0;
     return l_ret;
 }
@@ -880,9 +876,9 @@ void MyTransforms::doChannelDataFFT( Channel * p_channel
         p_channel->get_fft_data1()[0] = g_data->dBFloor();
     }
 
-#ifdef PRINTF_DEBUG
+#ifdef DEBUG_PRINTF
     printf("n = %d, fff = %f\n", l_n_div_2, *std::max_element(p_channel->get_fft_data2().begin(), p_channel->get_fft_data2().end()));
-#endif // PRINTF_DEBUG
+#endif // DEBUG_PRINTF
 
     if(g_data->analysisType() == MPM_MODIFIED_CEPSTRUM)
     {
@@ -943,9 +939,9 @@ void MyTransforms::doHarmonicAnalysis( float * p_input
     double l_num_periods_use = l_num_periods_fit - 1.0;
     int l_int_num_periods_use = int(l_num_periods_use);
     double l_center_X = float(m_n) / 2.0;
-#ifdef PRINTF_DEBUG
+#ifdef DEBUG_PRINTF
     printf("l_int_num_periods_use = %d\n", l_int_num_periods_use);
-#endif // PRINTF_DEBUG
+#endif // DEBUG_PRINTF
     //do left
     double l_start = l_center_X - (l_num_periods_fit / 2.0) * p_period;
     double l_length = (l_num_periods_use) * p_period;
@@ -953,14 +949,14 @@ void MyTransforms::doHarmonicAnalysis( float * p_input
     applyHanningWindow(m_data_time);
     fftwf_execute(m_plan_data_time_2_FFT);
     calcHarmonicAmpPhase(m_harmonics_amp_left, m_harmonics_phase_left, l_int_num_periods_use);
-#ifdef PRINTF_DEBUG
+#ifdef DEBUG_PRINTF
     printf("left\n");
     for(int jj = 0; jj < 6; jj++)
     {
         printf("[%d %lf %lf]", jj, m_harmonics_amp_left[jj], m_harmonics_phase_left[jj]);
     }
     printf("\n");
-#endif // PRINTF_DEBUG
+#endif // DEBUG_PRINTF
   
     //do center
     l_start += p_period / 2.0;
@@ -968,14 +964,14 @@ void MyTransforms::doHarmonicAnalysis( float * p_input
     applyHanningWindow(m_data_time);
     fftwf_execute(m_plan_data_time_2_FFT);
     calcHarmonicAmpPhase(m_harmonics_amp_center, m_harmonics_phase_center, l_int_num_periods_use);
-#ifdef PRINTF_DEBUG
+#ifdef DEBUG_PRINTF
     printf("centre\n");
     for(int jj = 0; jj < 6; jj++)
     {
         printf("[%d %lf %lf]", jj, m_harmonics_amp_center[jj], m_harmonics_phase_center[jj]);
     }
     printf("\n");
-#endif // PRINTF_DEBUG
+#endif // DEBUG_PRINTF
   
     //do right
     l_start += p_period / 2.0;
@@ -983,14 +979,14 @@ void MyTransforms::doHarmonicAnalysis( float * p_input
     applyHanningWindow(m_data_time);
     fftwf_execute(m_plan_data_time_2_FFT);
     calcHarmonicAmpPhase(m_harmonics_amp_right, m_harmonics_phase_right, l_int_num_periods_use);
-#ifdef PRINTF_DEBUG
+#ifdef DEBUG_PRINTF
     printf("right\n");
     for(int jj = 0; jj < 6; jj++)
     {
         printf("[%d %lf %lf]", jj, m_harmonics_amp_right[jj], m_harmonics_phase_right[jj]);
     }
     printf("\n");
-#endif // PRINTF_DEBUG
+#endif // DEBUG_PRINTF
   
     double l_freq = m_rate / p_period;
   

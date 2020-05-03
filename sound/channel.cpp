@@ -607,7 +607,7 @@ bool Channel::isNoteChanging(int p_chunk)
     if(l_num_chunks > 1 && l_diff > 2)
     { //if jumping to fast anywhere then note is changing
 #ifdef DEBUG_PRINTF
-        printf("numChunks=%d\n", getCurrentNote()->numChunks());
+        printf("numChunks=%d\n", l_num_chunks);
         printf("analysisData->pitch=%f, ", l_analysis_data->getPitch());
         printf("prevData->shortTermMean=%f\n", l_previous_data->getShortTermMean());
 #endif // DEBUG_PRINTF
