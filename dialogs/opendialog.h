@@ -36,7 +36,6 @@ class OpenDialog : public QFileDialog
 
   private:
 
-    QCheckBox * m_remember_folder_check_box;
 };
 
 #endif // OPENDIALOG_H
