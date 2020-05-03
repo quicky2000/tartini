@@ -728,7 +728,17 @@ void MainWindow::openFile(const char *p_file_name)
         return;
     }
 
+#ifdef TIME_PREPROCESS
+    QElapsedTimer l_timer;
+    l_timer.start();
+#endif // TIME_PREPROCESS
     l_new_sound_file->preProcess();
+#ifdef TIME_PREPROCESS
+    double l_ms_per_chunk = (double)l_timer.elapsed() / l_new_sound_file->totalChunks();
+    double l_frames_per_sec = 1000 * l_new_sound_file->totalChunks() * l_new_sound_file->framesPerChunk() / (double)l_timer.elapsed();
+    std::cout << "Pre-processing took " << l_timer.elapsed() << " ms for " << l_new_sound_file->totalChunks() << " chunks (" <<
+        l_ms_per_chunk << " ms per chunk, " << l_frames_per_sec << " frames/sec)" << std::endl;
+#endif // TIME_PREPROCESS
     g_data->updateViewLeftRightTimes();
 
     g_data->addFileToList(l_new_sound_file);
