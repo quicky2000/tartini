@@ -159,9 +159,9 @@ QString SoundFile::getNextTempFilename() const
         std::stringstream l_stream;
         l_stream << "temp" << std::setfill('0') << std::setw(3) << l_index << ".wav";
         l_file_name = QString::fromStdString(l_stream.str());
-#ifdef PRINTF_DEBUG
-        printf("trying %s\n", fileName.latin1());
-#endif // PRINTF_DEBUG
+#ifdef DEBUG_PRINTF
+        printf("trying %s\n", l_file_name.toStdString().c_str());
+#endif // DEBUG_PRINTF
         l_file_info.setFile(l_dir, l_file_name);
         if(l_file_info.exists())
         {
@@ -306,10 +306,10 @@ bool SoundFile::openWrite( const char * p_filename
         g_main_window->menuPreferences();
         return false;
     }
-#ifdef PRINTF_DEBUG
-    printf("in_channels = %d\n", g_data->in_channels);
-    printf("stream->channels=%d\n", stream->channels);
-#endif // PRINTF_DEBUG
+#ifdef DEBUG_PRINTF
+    printf("in_channels = %zu\n", g_data->getChannelsSize());
+    printf("m_stream->channels=%d\n", m_stream->get_channels());
+#endif // DEBUG_PRINTF
 
     m_channels.resize(m_stream->get_channels());
     fprintf(stderr, "channels = %d\n", numChannels());
@@ -393,13 +393,6 @@ void SoundFile::applyEqualLoudnessFilter(int p_n)
     int l_j;
     for(l_c = 0; l_c < numChannels(); l_c++)
     {
-#ifdef PRINTF_DEBUG
-        printf("before: %f == %f\n", channels(l_c)->filterStateX1, channels(c)->m_high_pass_filter->m_x[0]);
-        printf("before: %f == %f\n", channels(l_c)->filterStateX2, channels(c)->m_high_pass_filter->m_x[1]);
-        printf("before: %f == %f\n", channels(l_c)->filterStateY1, channels(c)->m_high_pass_filter->m_y[0]);
-        printf("before: %f == %f\n", channels(l_c)->filterStateY2, channels(c)->m_high_pass_filter->m_y[1]);
-#endif // PRINTF_DEBUG
-
         m_channels(l_c)->apply_highpass_filter(m_temp_window_buffer[l_c], m_temp_window_buffer_filtered[l_c], p_n);
         for(l_j = 0; l_j < p_n; l_j++)
         {
@@ -666,9 +659,9 @@ void SoundFile::preProcess()
     while(readChunk(framesPerChunk()) == framesPerChunk())
     {
         // put data in channels
-#ifdef PRINTF_DEBUG
-        printf("pos = %d\n", stream->pos);
-#endif // PRINTF_DEBUG
+#ifdef DEBUG_PRINTF
+        printf("pos = %d\n", m_stream->pos());
+#endif // DEBUG_PRINTF
         l_frame_count++;
 
         if(l_frame_count % l_update_interval == 0)
@@ -678,10 +671,10 @@ void SoundFile::preProcess()
             l_frame_count = 1;
         }
     }
-#ifdef PRINTF_DEBUG
+#ifdef DEBUG_PRINTF
     printf("totalChunks=%d\n", totalChunks());
     printf("currentChunks=%d\n", currentChunk());
-#endif // PRINTF_DEBUG
+#endif // DEBUG_PRINTF
     m_filtered_stream->close();
     m_filtered_stream->open_read(m_filtered_filename);
     jumpToChunk(0);
@@ -694,9 +687,6 @@ void SoundFile::preProcess()
 
     g_data->setDoingActiveAnalysis(false);
     m_first_time_through = false;
-#ifdef PRINTF_DEBUG
-    printf("freqLookup.size()=%d\n", channels(0)->freqLookup.size());
-#endif // PRINTF_DEBUG
 }
 
 //------------------------------------------------------------------------------

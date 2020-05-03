@@ -165,9 +165,9 @@ int WaveStream::read_header()
             }
         }
     }
-#ifdef PRINTF_DEBUG
-    printf("header_length=%d\n", m_header_length);
-#endif // PRINTF_DEBUG
+#ifdef DEBUG_PRINTF
+    printf("m_header_length=%d\n", m_header_length);
+#endif // DEBUG_PRINTF
     set_total_frames(l_len / frame_size());
 
     return 0;
