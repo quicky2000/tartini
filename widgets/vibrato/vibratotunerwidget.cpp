@@ -273,7 +273,6 @@ void VibratoTunerWidget::doUpdate(double p_pitch)
 
     float l_needle_value = 0;
     int l_close_pitch = 0;
-    bool l_is_pitch_black_note = true;
 
     if (l_active_channel)
     {
@@ -284,7 +283,6 @@ void VibratoTunerWidget::doUpdate(double p_pitch)
     }
   
     l_close_pitch = toInt(p_pitch);
-    l_is_pitch_black_note = isBlackNote(l_close_pitch);
     l_needle_value = 100 * (p_pitch - float(l_close_pitch));
 
     if ((fabs(m_prev_needle_value - l_needle_value) < 0.05) && (m_prev_close_pitch == l_close_pitch))
