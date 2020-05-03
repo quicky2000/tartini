@@ -356,11 +356,6 @@ QString Channel::getUniqueFilename() const
         int l_index = getParent()->getChannelIndex(*this);
         return QString(getFilenamePart(getParent()->getFileName())) + " (" + QString::number(l_index + 1) + ")" + l_ending_star;
     }
-
-    // If we're here, we didn't find the channel in the parent's channels array.
-    // This should never happen!
-    myassert(false);
-    return QString(getFilenamePart(getParent()->getFileName())) + l_ending_star;
 }
 
 //------------------------------------------------------------------------------
