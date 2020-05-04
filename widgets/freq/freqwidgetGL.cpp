@@ -244,6 +244,11 @@ void FreqWidgetGL::drawReferenceLinesGL( const double & /* p_left_time*/
 //------------------------------------------------------------------------------
 void FreqWidgetGL::paintGL()
 {
+#ifdef TIME_PAINT
+    QElapsedTimer l_timer;
+    l_timer.start();
+#endif // TIME_PAINT
+    
     glClear(GL_COLOR_BUFFER_BIT);
     View & l_view = g_data->getView();
 
@@ -297,6 +302,10 @@ void FreqWidgetGL::paintGL()
     qglColor(l_foreground);
     glLineWidth(1.0f);
     mygl_line(l_cur_time_pixel, 0, l_cur_time_pixel, height() - 1);
+
+#ifdef TIME_PAINT
+    std::cout << l_timer.elapsed() << " ms: FreqWidgetGL::paintGL()" << std::endl;
+#endif // TIME_PAINT
 }
 
 //------------------------------------------------------------------------------

@@ -47,6 +47,11 @@ void DebugWidget::printString(const QString & p_string)
 //------------------------------------------------------------------------------
 void DebugWidget::paintEvent( QPaintEvent * )
 {
+#ifdef TIME_PAINT
+    QElapsedTimer l_timer;
+    l_timer.start();
+#endif // TIME_PAINT
+
     Channel *l_active_channel = g_data->getActiveChannel();
 
     beginDrawing();
@@ -93,6 +98,10 @@ void DebugWidget::paintEvent( QPaintEvent * )
         printString(QString::fromStdString(std::string("m_period_ratio = ") + std::to_string(l_data.getPeriodRatio())));
     }
     endDrawing();
+
+#ifdef TIME_PAINT
+    std::cout << l_timer.elapsed() << " ms: DebugWidget::paintEvent()" << std::endl;
+#endif // TIME_PAINT
 }
 
 //------------------------------------------------------------------------------

@@ -397,6 +397,11 @@ void VibratoSpeedWidget::resizeGL(int p_width
 //------------------------------------------------------------------------------
 void VibratoSpeedWidget::paintGL()
 {
+#ifdef TIME_PAINT
+    QElapsedTimer l_timer;
+    l_timer.start();
+#endif // TIME_PAINT
+
     QColor l_bg = g_data->backgroundColor();
     glClearColor( double(l_bg.red()) / 256.0, double(l_bg.green()) / 256.0, double(l_bg.blue()) / 256.0, 0.0 );
     glClear(GL_COLOR_BUFFER_BIT);
@@ -468,6 +473,10 @@ void VibratoSpeedWidget::paintGL()
     // Draw the width needle
     glLineWidth(1.0);
     glCallList(m_width_needle);
+
+#ifdef TIME_PAINT
+    std::cout << l_timer.elapsed() << " ms: VibratoSpeedWidget::paintGL()" << std::endl;
+#endif // TIME_PAINT
 }
 
 //------------------------------------------------------------------------------

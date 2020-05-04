@@ -50,6 +50,11 @@ VibratoTimeAxis::~VibratoTimeAxis()
 //------------------------------------------------------------------------------
 void VibratoTimeAxis::paintEvent(QPaintEvent *)
 {
+#ifdef TIME_PAINT
+    QElapsedTimer l_timer;
+    l_timer.start();
+#endif // TIME_PAINT
+
     beginDrawing(false);
 
     QPalette l_palette;
@@ -150,6 +155,10 @@ void VibratoTimeAxis::paintEvent(QPaintEvent *)
         get_painter().drawLine(0, height() - 1, width(), height() - 1);
     }
     endDrawing();
+
+#ifdef TIME_PAINT
+    std::cout << l_timer.elapsed() << " ms: VibratoTimeAxis::paintEvent()" << std::endl;
+#endif // TIME_PAINT
 }
 
 //------------------------------------------------------------------------------

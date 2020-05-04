@@ -97,6 +97,10 @@ void VibratoWidget::resizeGL(int w, int h)
 //------------------------------------------------------------------------------
 void VibratoWidget::paintGL()
 {
+#ifdef TIME_PAINT
+    QElapsedTimer l_timer;
+    l_timer.start();
+#endif // TIME_PAINT
 
   doUpdate();
 
@@ -154,6 +158,10 @@ void VibratoWidget::paintGL()
       g_mygl_font->drawGLtextRaw(width() - m_note_label_offset + 3, m_note_labels[l_index].get_y() - 4, m_note_labels[l_index].get_label());
     }
   g_mygl_font->endGLtext();
+
+#ifdef TIME_PAINT
+    std::cout << l_timer.elapsed() << " ms: VibratoWidget::paintGL()" << std::endl;
+#endif // TIME_PAINT
 }
 
 //------------------------------------------------------------------------------

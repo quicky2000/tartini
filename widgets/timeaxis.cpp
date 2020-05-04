@@ -79,6 +79,11 @@ void TimeAxis::setFontSize(int p_font_size)
 //------------------------------------------------------------------------------
 void TimeAxis::paintEvent(QPaintEvent *)
 {
+#ifdef TIME_PAINT
+    QElapsedTimer l_timer;
+    l_timer.start();
+#endif // TIME_PAINT
+
     int l_frame_width = 2;
     const int l_h = height();
     const int l_w = width() - 2 * l_frame_width;
@@ -204,6 +209,10 @@ void TimeAxis::paintEvent(QPaintEvent *)
         get_painter().drawLine(0, 0, width(), 0);
     }
     endDrawing();
+
+#ifdef TIME_PAINT
+    std::cout << l_timer.elapsed() << " ms: TimeAxis::paintEvent()" << std::endl;
+#endif // TIME_PAINT
 }
 
 // EOF

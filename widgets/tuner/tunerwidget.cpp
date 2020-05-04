@@ -42,6 +42,11 @@ TunerWidget::~TunerWidget()
 //------------------------------------------------------------------------------
 void TunerWidget::paintEvent(QPaintEvent *)
 {
+#ifdef TIME_PAINT
+    QElapsedTimer l_timer;
+    l_timer.start();
+#endif // TIME_PAINT
+
     beginDrawing();
 
     /*
@@ -184,6 +189,10 @@ void TunerWidget::paintEvent(QPaintEvent *)
         }
     }
     endDrawing();
+
+#ifdef TIME_PAINT
+    std::cout << l_timer.elapsed() << " ms: TunerWidget::paintEvent()" << std::endl;
+#endif // TIME_PAINT
 }
 
 //------------------------------------------------------------------------------
