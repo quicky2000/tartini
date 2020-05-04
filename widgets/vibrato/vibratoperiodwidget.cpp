@@ -24,6 +24,11 @@
 //------------------------------------------------------------------------------
 VibratoPeriodWidget::VibratoPeriodWidget(QWidget *p_parent)
 : QGLWidget(p_parent)
+, m_sine_reference(0)
+, m_previous_poly{0, 0, 0, 0, 0}
+, m_current_period(0)
+, m_comparison_poly(0)
+, m_comparison_reference(0)
 {
     m_prev_left_minimum_time = -1;
     m_last_period_to_draw = -1;
