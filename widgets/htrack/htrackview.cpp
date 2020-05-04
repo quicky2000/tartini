@@ -43,8 +43,12 @@ HTrackView::HTrackView( int p_view_ID
 
     QFrame * l_frame = new QFrame(this);
     l_frame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
-    QWidget * l_a_widget = new QWidget(l_frame);
-    m_h_track_widget = new HTrackWidget(l_a_widget);
+    QVBoxLayout *l_frame_layout = new QVBoxLayout;
+    m_h_track_widget = new HTrackWidget(NULL);
+    l_frame_layout->addWidget(m_h_track_widget);
+    l_frame_layout->setMargin(0);
+    l_frame_layout->setSpacing(0);
+    l_frame->setLayout(l_frame_layout);
     m_h_track_widget->setWhatsThis("Shows a 3D keyboard with the current note coloured. "
     "Vertical columns (or tracks), each representing a harmonic (or component frequency), protrude from the back, and move further away over time. "
     "The height of each track is related to how much energy is at that frequency. "
@@ -63,6 +67,7 @@ HTrackView::HTrackView( int p_view_ID
     m_rotate_X_wheel->setSingleStep(0.1);
     // Multiplicator value is 10 = 1 / 0.1
     m_rotate_X_wheel->setPageStepCount(10);
+    m_rotate_X_wheel->setValue(20);
     m_rotate_X_wheel->setMass(0.1);
 #else
     m_rotate_X_wheel->setRange(-180, 180, 0.1, 1);
@@ -77,6 +82,7 @@ HTrackView::HTrackView( int p_view_ID
     m_rotate_Y_wheel->setSingleStep(0.1);
     // Multiplicator value is 10 = 1 / 0.1
     m_rotate_Y_wheel->setPageStepCount(10);
+    m_rotate_Y_wheel->setValue(-35);
     m_rotate_Y_wheel->setMass(0.1);
 #else
     m_rotate_Y_wheel->setRange(-90, 0, 0.1, 1);
@@ -90,6 +96,7 @@ HTrackView::HTrackView( int p_view_ID
     m_distance_wheel->setSingleStep(10);
     // Multiplicator value is 2 = 20 / 10
     m_distance_wheel->setPageStepCount(2);
+    m_distance_wheel->setValue(1500);
     m_distance_wheel->setMass(0.1);
 #else
     m_distance_wheel->setRange(100, 5000, 10, 20);
@@ -137,6 +144,7 @@ HTrackView::HTrackView( int p_view_ID
     // Setting the value on the wheel interrupts the curerent interaction with the mouse, so the wheel only advances one tick.
     // connect(m_h_track_widget, SIGNAL(viewAngleHorizontalChanged(double)), m_rotate_X_wheel, SLOT(setValue(double)));
     connect(l_home_button, SIGNAL(clicked()), m_h_track_widget, SLOT(home()));
+    connect(l_home_button, SIGNAL(clicked()), m_h_track_widget, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------
