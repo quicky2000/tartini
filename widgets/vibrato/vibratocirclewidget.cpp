@@ -24,6 +24,9 @@
 //------------------------------------------------------------------------------
 VibratoCircleWidget::VibratoCircleWidget(QWidget *p_parent)
 : QGLWidget(p_parent)
+, m_reference_circle(0)
+, m_current_period(0)
+, m_prev_periods{0, 0, 0, 0, 0, 0}
 {
     m_accuracy = 1.0;
     m_type = 5;
