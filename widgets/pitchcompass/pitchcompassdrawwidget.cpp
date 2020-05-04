@@ -71,7 +71,7 @@ PitchCompassDrawWidget::PitchCompassDrawWidget( QWidget *p_parent
         m_compass->setMode(QwtCompass::RotateNeedle);
         QMap< double, QString > l_notes;
 #if QWT_VERSION >= 0x060000
-        m_compass->setScale(11, 2);
+        m_compass->setScale(0, 12);
         // Stepping is now defined by qwt_abstract_slider
         m_compass->setSingleSteps(30);
         for(int l_index = 0; l_index < 12; l_index++)
@@ -201,8 +201,7 @@ void PitchCompassDrawWidget::updateCompass(double p_time)
         else
         {
             // mode == 2
-            double l_value = l_pitch * 30;
-            m_compass->setValue(l_value);
+            m_compass->setValue(noteValue(l_pitch) + l_pitch - toInt(l_pitch));
         }
 
         m_compass->setValid(true);
