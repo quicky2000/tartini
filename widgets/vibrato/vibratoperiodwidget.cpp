@@ -24,21 +24,20 @@
 //------------------------------------------------------------------------------
 VibratoPeriodWidget::VibratoPeriodWidget(QWidget *p_parent)
 : QGLWidget(p_parent)
+, m_prev_left_minimum_time(-1)
+, m_smoothed_periods(true)
+, m_draw_sine_reference(false)
+, m_sine_style(false)
+, m_draw_prev_periods(false)
+, m_period_scaling(false)
+, m_draw_comparison(false)
 , m_sine_reference(0)
 , m_previous_poly{0, 0, 0, 0, 0}
 , m_current_period(0)
 , m_comparison_poly(0)
 , m_comparison_reference(0)
+, m_last_period_to_draw(-1)
 {
-    m_prev_left_minimum_time = -1;
-    m_last_period_to_draw = -1;
-
-    m_smoothed_periods = true;
-    m_draw_sine_reference = false;
-    m_sine_style = false;
-    m_draw_prev_periods = false;
-    m_period_scaling = false;
-    m_draw_comparison = false;
 }
 
 //------------------------------------------------------------------------------
