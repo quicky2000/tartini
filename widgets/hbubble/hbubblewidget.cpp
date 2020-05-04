@@ -70,6 +70,11 @@ void HBubbleWidget::setHistoryChunks(double num)
 //------------------------------------------------------------------------------
 void HBubbleWidget::paintEvent( QPaintEvent * )
 {
+#ifdef TIME_PAINT
+    QElapsedTimer l_timer;
+    l_timer.start();
+#endif // TIME_PAINT
+
     Channel * l_active_channel = g_data->getActiveChannel();
     AnalysisData * l_data;
     int l_i;
@@ -114,6 +119,10 @@ void HBubbleWidget::paintEvent( QPaintEvent * )
         }
     }
     endDrawing();
+
+#ifdef TIME_PAINT
+    std::cout << l_timer.elapsed() << " ms: HBubbleWidget::paintEvent()" << std::endl;
+#endif // TIME_PAINT
 }
 
 //------------------------------------------------------------------------------

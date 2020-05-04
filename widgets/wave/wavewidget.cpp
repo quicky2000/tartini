@@ -51,6 +51,11 @@ void WaveWidget::setZoomY(const double & p_zoom_Y)
 //------------------------------------------------------------------------------
 void WaveWidget::paintEvent(QPaintEvent *)
 {
+#ifdef TIME_PAINT
+    QElapsedTimer l_timer;
+    l_timer.start();
+#endif // TIME_PAINT
+
     Channel * l_active = g_data->getActiveChannel();
 
     beginDrawing(false);
@@ -151,6 +156,10 @@ void WaveWidget::paintEvent(QPaintEvent *)
         l_active->unlock();
     }
     endDrawing();
+
+#ifdef TIME_PAINT
+    std::cout << l_timer.elapsed() << " ms: WaveWidget::paintEvent()" << std::endl;
+#endif // TIME_PAINT
 }
 
 //------------------------------------------------------------------------------

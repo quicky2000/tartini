@@ -159,6 +159,11 @@ void FreqDrawWidget::drawReferenceLines( QPaintDevice & p_paint_device
 //------------------------------------------------------------------------------
 void FreqDrawWidget::paintEvent(QPaintEvent *)
 {
+#ifdef TIME_PAINT
+    QElapsedTimer l_timer;
+    l_timer.start();
+#endif // TIME_PAINT
+
     View & l_view = g_data->getView();
 
     if(l_view.autoFollow() && g_data->getActiveChannel() && g_data->getRunning() == STREAM_FORWARD)
@@ -211,6 +216,10 @@ void FreqDrawWidget::paintEvent(QPaintEvent *)
     get_painter().drawLine(l_cur_time_pixel, 0, l_cur_time_pixel, height() - 1);
 
     endDrawing();
+
+#ifdef TIME_PAINT
+    std::cout << l_timer.elapsed() << " ms: FreqDrawWidget::paintEvent()" << std::endl;
+#endif // TIME_PAINT
 }
 
 //------------------------------------------------------------------------------

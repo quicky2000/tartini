@@ -69,6 +69,11 @@ void PianoWidget::setCurrentNote( int p_n
 //------------------------------------------------------------------------------
 void PianoWidget::paintEvent(QPaintEvent *)
 {
+#ifdef TIME_PAINT
+    QElapsedTimer l_timer;
+    l_timer.start();
+#endif // TIME_PAINT
+
     int l_j;
     beginDrawing(false);
     fillBackground(Qt::white);
@@ -120,6 +125,10 @@ void PianoWidget::paintEvent(QPaintEvent *)
         }
     }
     endDrawing();
+
+#ifdef TIME_PAINT
+    std::cout << l_timer.elapsed() << " ms: PianoWidget::paintEvent()" << std::endl;
+#endif // TIME_PAINT
 }
 
 // EOF

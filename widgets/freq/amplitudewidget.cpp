@@ -104,6 +104,11 @@ void AmplitudeWidget::setOffset(double p_new_offset)
 //------------------------------------------------------------------------------
 void AmplitudeWidget::paintGL()
 {
+#ifdef TIME_PAINT
+    QElapsedTimer l_timer;
+    l_timer.start();
+#endif // TIME_PAINT
+
     glClear(GL_COLOR_BUFFER_BIT);
 
     setLineWidth(3.0);
@@ -158,6 +163,10 @@ void AmplitudeWidget::paintGL()
 
     qglColor(Qt::black);
     renderText(2, height() - 3, getCurrentThresholdString());
+
+#ifdef TIME_PAINT
+    std::cout << l_timer.elapsed() << " ms: AmplitudeWidget::paintGL()" << std::endl;
+#endif // TIME_PAINT
 }
 
 //------------------------------------------------------------------------------

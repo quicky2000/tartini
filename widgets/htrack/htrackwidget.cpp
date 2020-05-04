@@ -84,6 +84,11 @@ void HTrackWidget::resizeGL( int p_w
 //------------------------------------------------------------------------------
 void HTrackWidget::paintGL()
 {
+#ifdef TIME_PAINT
+    QElapsedTimer l_timer;
+    l_timer.start();
+#endif // TIME_PAINT
+
     Channel *l_active_channel = g_data->getActiveChannel();
 
     QColor l_background = g_data->backgroundColor();
@@ -307,6 +312,10 @@ void HTrackWidget::paintGL()
         l_active_channel->unlock();
     }
     glPopMatrix();
+
+#ifdef TIME_PAINT
+    std::cout << l_timer.elapsed() << " ms: HTrackWidget::paintGL()" << std::endl;
+#endif // TIME_PAINT
 }
 
 //------------------------------------------------------------------------------

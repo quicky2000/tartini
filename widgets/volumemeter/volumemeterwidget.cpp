@@ -60,6 +60,11 @@ void VolumeMeterWidget::setFontSize(int p_font_size)
 //------------------------------------------------------------------------------
 void VolumeMeterWidget::paintEvent(QPaintEvent *)
 {
+#ifdef TIME_PAINT
+    QElapsedTimer l_timer;
+    l_timer.start();
+#endif // TIME_PAINT
+
     Channel * l_active = g_data->getActiveChannel();
 
     beginDrawing(false);
@@ -185,6 +190,10 @@ void VolumeMeterWidget::paintEvent(QPaintEvent *)
         }
     }
     endDrawing();
+
+#ifdef TIME_PAINT
+    std::cout << l_timer.elapsed() << " ms: VolumeMeterWidget::paintEvent()" << std::endl;
+#endif // TIME_PAINT
 }
 
 //------------------------------------------------------------------------------

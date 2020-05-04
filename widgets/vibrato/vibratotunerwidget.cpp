@@ -235,6 +235,11 @@ void VibratoTunerWidget::resizeGL( int p_width
 //------------------------------------------------------------------------------
 void VibratoTunerWidget::paintGL()
 {
+#ifdef TIME_PAINT
+    QElapsedTimer l_timer;
+    l_timer.start();
+#endif // TIME_PAINT
+
     QColor l_background = g_data->backgroundColor();
     glClearColor( double(l_background.red()) / 256.0, double(l_background.green()) / 256.0, double(l_background.blue()) / 256.0, 0.0 );
     glClear(GL_COLOR_BUFFER_BIT);
@@ -267,6 +272,9 @@ void VibratoTunerWidget::paintGL()
     glLineWidth(1.0);
     glCallList(m_needle);
 
+#ifdef TIME_PAINT
+    std::cout << l_timer.elapsed() << " ms: VibratoTunerWidget::paintGL()" << std::endl;
+#endif // TIME_PAINT
 }
 
 //------------------------------------------------------------------------------

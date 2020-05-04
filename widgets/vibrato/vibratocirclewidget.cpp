@@ -122,6 +122,11 @@ void VibratoCircleWidget::resizeGL(int p_width
 //------------------------------------------------------------------------------
 void VibratoCircleWidget::paintGL()
 {
+#ifdef TIME_PAINT
+    QElapsedTimer l_timer;
+    l_timer.start();
+#endif // TIME_PAINT
+        
 	QColor l_bg = g_data->backgroundColor();
 	glClearColor( double(l_bg.red()) / 256.0, double(l_bg.green()) / 256.0, double(l_bg.blue()) / 256.0, 0.0 );
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -147,6 +152,10 @@ void VibratoCircleWidget::paintGL()
     		}
     	}
     }
+
+#ifdef TIME_PAINT
+    std::cout << l_timer.elapsed() << " ms: VibratoCircleWidget::paintGL()" << std::endl;
+#endif // TIME_PAINT
 }
 
 //------------------------------------------------------------------------------
