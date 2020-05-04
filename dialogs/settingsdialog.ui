@@ -1221,7 +1221,7 @@
           <property name="spacing" >
            <number>6</number>
           </property>
-          <item row="1" column="1" >
+          <item row="2" column="1" >
            <widget class="QSpinBox" name="slowUpdateSpeed" >
             <property name="toolTip" >
              <string>&lt;qt>This is how often most widgets are updated. e.g. the pitch contour. A smaller value requires more CPU time. 100 is reasonable for a 1GHz machine.&lt;/qt></string>
@@ -1231,7 +1231,7 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1" >
+          <item row="1" column="1" >
            <widget class="QSpinBox" name="fastUpdateSpeed" >
             <property name="toolTip" >
              <string>&lt;qt>This is how often the smoothest widgets are updated. e.g. the tuner dial. A smaller value requires more CPU time. 50 is reasonable for a 1GHz machine.&lt;/qt></string>
@@ -1241,15 +1241,25 @@
             </property>
            </widget>
           </item>
+          <item row="0" column="1" >
+           <widget class="QSpinBox" name="veryFastUpdateSpeed" >
+            <property name="toolTip" >
+             <string>&lt;qt>This is how often the vibrato widgets are updated. A smaller value requires more CPU time. 25 is reasonable for a 1GHz machine.&lt;/qt></string>
+            </property>
+            <property name="maximum" >
+             <number>99999</number>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="0" >
-           <widget class="QLabel" name="fastUpdateLabel" >
+           <widget class="QLabel" name="veryFastUpdateLabel" >
             <property name="text" >
-             <string>Do fast updates every</string>
+             <string>Do very fast updates every</string>
             </property>
            </widget>
           </item>
           <item row="0" column="2" >
-           <widget class="QLabel" name="milliSecondsLabel1" >
+           <widget class="QLabel" name="milliSecondsLabel3" >
             <property name="text" >
              <string>milli-seconds</string>
             </property>
@@ -1269,20 +1279,47 @@
            </spacer>
           </item>
           <item row="1" column="0" >
-           <widget class="QLabel" name="slowUpdateLabel" >
+           <widget class="QLabel" name="fastUpdateLabel" >
             <property name="text" >
-             <string>Do slow updates every</string>
+             <string>Do fast updates every</string>
             </property>
            </widget>
           </item>
           <item row="1" column="2" >
-           <widget class="QLabel" name="milliSecondsLabel2" >
+           <widget class="QLabel" name="milliSecondsLabel1" >
             <property name="text" >
              <string>milli-seconds</string>
             </property>
            </widget>
           </item>
           <item row="1" column="3" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="2" column="0" >
+           <widget class="QLabel" name="slowUpdateLabel" >
+            <property name="text" >
+             <string>Do slow updates every</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2" >
+           <widget class="QLabel" name="milliSecondsLabel2" >
+            <property name="text" >
+             <string>milli-seconds</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3" >
            <spacer>
             <property name="orientation" >
              <enum>Qt::Horizontal</enum>

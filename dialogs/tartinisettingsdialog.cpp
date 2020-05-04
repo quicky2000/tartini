@@ -389,6 +389,7 @@ void TartiniSettingsDialog::setUnknownsToDefault(GData & p_gdata)
     SetIfMissing("Analysis/analysisType", "MPM");
     SetIfMissing("Analysis/thresholdValue", 93);
 
+    SetIfMissing("Display/veryFastUpdateSpeed", 25);
     SetIfMissing("Display/fastUpdateSpeed", 75);
     SetIfMissing("Display/slowUpdateSpeed", 150);
     SetIfMissing("Display/theBackgroundColor", "#BBCDE2");

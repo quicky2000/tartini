@@ -223,6 +223,7 @@ class GData : public QObject
   inline bool vibratoSineStyle()const;
   inline int amplitudeMode()const;
   inline int pitchContourMode()const;
+  inline int veryFastUpdateSpeed()const;
   inline int fastUpdateSpeed()const;
   inline int slowUpdateSpeed()const;
   inline bool mouseWheelZooms()const;
@@ -365,6 +366,7 @@ public slots:
   int m_doing_active_FFT;
   int m_doing_active_cepstrum;
   bool m_doing_detailed_pitch;
+  int m_very_fast_update_speed;
   int m_fast_update_speed;
   int m_slow_update_speed;
   bool m_polish;

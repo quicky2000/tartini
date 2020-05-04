@@ -122,7 +122,9 @@ class View : public QObject
     void doUpdate();
     void doSlowUpdate();
     void doFastUpdate();
+    void doVeryFastUpdate();
     void newUpdate();
+    void nextVeryFastUpdate();
     void nextFastUpdate();
     void nextSlowUpdate();
     void setCurrentTimeRaw(double p_x);
@@ -148,6 +150,7 @@ class View : public QObject
 
     void onSlowUpdate(double p_current_time);
     void onFastUpdate(double p_current_time);
+    void onVeryFastUpdate(double p_current_time);
     void viewChanged();
     void scrollableYChanged(double p_x);
     void currentTimeChanged(double p_x);
@@ -218,10 +221,12 @@ class View : public QObject
     inline void setLogZoomX(double p_x);
     inline void setLogZoomY(double p_y);
 
+    QTimer * m_very_fast_update_timer;
     QTimer * m_fast_update_timer;
     QTimer * m_slow_update_timer;
     bool m_need_slow_update;
     bool m_need_fast_update;
+    bool m_need_very_fast_update;
 
 };
 

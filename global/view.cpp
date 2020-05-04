@@ -35,10 +35,12 @@ View::View()
 , m_zoom_Y(0.0)
 , m_auto_follow(g_data->getSettingsValue("View/autoFollow", true))
 , m_background_shading(g_data->getSettingsValue("View/backgroundShading", true))
+, m_very_fast_update_timer(new QTimer(this))
 , m_fast_update_timer(new QTimer(this))
 , m_slow_update_timer(new QTimer(this))
 , m_need_slow_update(false)
 , m_need_fast_update(false)
+, m_need_very_fast_update(false)
 {
     setCurrentTime(0.0); //in seconds
 
@@ -49,6 +51,7 @@ View::View()
     setZoomFactorY(3.2);
     setViewBottom(62.0); //the lowest note visible (in semitones) from C0
 
+    connect(m_very_fast_update_timer, SIGNAL(timeout()), this, SLOT(nextVeryFastUpdate()));
     connect(m_fast_update_timer, SIGNAL(timeout()), this, SLOT(nextFastUpdate()));
     connect(m_slow_update_timer, SIGNAL(timeout()), this, SLOT(nextSlowUpdate()));
     connect(this, SIGNAL(viewChanged()), this, SLOT(newUpdate()));
@@ -57,6 +60,7 @@ View::View()
 //------------------------------------------------------------------------------
 View::~View()
 {
+    delete m_very_fast_update_timer;
     delete m_fast_update_timer;
     delete m_slow_update_timer;
 }
@@ -98,6 +102,17 @@ void View::doFastUpdate()
 }
 
 //------------------------------------------------------------------------------
+void View::doVeryFastUpdate()
+{
+    m_need_very_fast_update = false;
+    if(!m_very_fast_update_timer->isActive())
+    {
+        m_very_fast_update_timer->start(g_data->veryFastUpdateSpeed());
+    }
+    emit onVeryFastUpdate(m_current_time);
+}
+
+//------------------------------------------------------------------------------
 void View::newUpdate()
 {
     if(m_slow_update_timer->isActive())
@@ -119,6 +134,27 @@ void View::newUpdate()
         m_need_fast_update = false;
         m_fast_update_timer->start(g_data->fastUpdateSpeed());
         emit onFastUpdate(m_current_time);
+    }
+    if(m_very_fast_update_timer->isActive())
+    {
+        m_need_very_fast_update = true;
+    }
+    else
+    {
+        m_need_very_fast_update = false;
+        m_very_fast_update_timer->start(g_data->veryFastUpdateSpeed());
+        emit onVeryFastUpdate(m_current_time);
+    }
+}
+
+//------------------------------------------------------------------------------
+void View::nextVeryFastUpdate()
+{
+    if(m_need_very_fast_update)
+    {
+        m_need_very_fast_update = false;
+        m_very_fast_update_timer->start(g_data->veryFastUpdateSpeed());
+        emit onVeryFastUpdate(m_current_time);
     }
 }
 

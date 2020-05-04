@@ -95,6 +95,7 @@ void AudioThread::run()
 #endif // WINDOWS
 
     m_first = true;
+    m_very_fast_update_count = 0;
     m_fast_update_count = 0;
     m_slow_update_count = 0;
     m_frame_num = 0;
@@ -216,11 +217,13 @@ int AudioThread::doStuff()
     }
 
     //Set some flags to cause an update of views, every now and then
+    m_very_fast_update_count++;
     m_fast_update_count++;
     m_slow_update_count++;
 
     int l_slow_update_after = toInt(double(g_data->slowUpdateSpeed()) / 1000.0 / curSoundFile()->timePerChunk());
     int l_fast_update_after = toInt(double(g_data->fastUpdateSpeed()) / 1000.0 / curSoundFile()->timePerChunk());
+    int l_very_fast_update_after = toInt(double(g_data->veryFastUpdateSpeed()) / 1000.0 / curSoundFile()->timePerChunk());
     if(!g_data->needUpdate())
     {
         if((m_slow_update_count >= l_slow_update_after) || l_force_update)
@@ -236,8 +239,14 @@ int AudioThread::doStuff()
             m_fast_update_count = 0;
             QApplication::postEvent(g_main_window, new QEvent(static_cast<QEvent::Type>(UPDATE_FAST)));
         }
+        else if(m_very_fast_update_count >= l_very_fast_update_after)
+        {
+            g_data->setNeedUpdate(true);
+            m_very_fast_update_count = 0;
+            QApplication::postEvent(g_main_window, new QEvent(static_cast<QEvent::Type>(UPDATE_VERY_FAST)));
+        }
     }
-    g_data->doChunkUpdate();
+    // g_data->doChunkUpdate();
 
     return 1;
 }

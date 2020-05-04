@@ -557,7 +557,7 @@ void MainWindow::closeEvent(QCloseEvent *p_event)
 //------------------------------------------------------------------------------
 bool MainWindow::event(QEvent * p_event)
 {
-    if(p_event->type() == UPDATE_FAST || p_event->type() == UPDATE_SLOW)
+    if(p_event->type() == UPDATE_VERY_FAST || p_event->type() == UPDATE_FAST || p_event->type() == UPDATE_SLOW)
     {
         SoundFile * l_sound_file = g_data->getAudioThread().curSoundFile();
         if(l_sound_file)

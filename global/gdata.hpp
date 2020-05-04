@@ -373,6 +373,12 @@ int GData::pitchContourMode()const
 }
 
 //------------------------------------------------------------------------------
+int GData::veryFastUpdateSpeed()const
+{
+    return m_very_fast_update_speed;
+}
+
+//------------------------------------------------------------------------------
 int GData::fastUpdateSpeed()const
 {
     return m_fast_update_speed;

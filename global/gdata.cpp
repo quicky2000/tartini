@@ -127,6 +127,7 @@ GData::GData()
 , m_doing_active_analysis(false)
 , m_doing_active_FFT(false)
 , m_doing_active_cepstrum(false)
+, m_very_fast_update_speed(0)
 , m_fast_update_speed(0)
 , m_slow_update_speed(0)
 , m_polish(true)
@@ -533,6 +534,7 @@ void GData::updateQuickRefSettings()
     m_doing_equal_loudness = m_settings->value("Analysis/doingEqualLoudness", true).toBool();
     m_doing_auto_noise_floor = m_settings->value("Analysis/doingAutoNoiseFloor", true).toBool();
     m_doing_detailed_pitch = m_settings->value("Analysis/doingDetailedPitch", false).toBool();
+    m_very_fast_update_speed = m_settings->value("Display/veryFastUpdateSpeed", 25).toInt();
     m_fast_update_speed = m_settings->value("Display/fastUpdateSpeed", 75).toInt();
     m_slow_update_speed = m_settings->value("Display/slowUpdateSpeed", 150).toInt();
     m_vibrato_sine_style = m_settings->value("Advanced/vibratoSineStyle", false).toBool();

@@ -30,6 +30,7 @@
 #define SOUND_STARTED    QEvent::User + 3
 #define SOUND_STOPPED    QEvent::User + 4
 #define SETTINGS_CHANGED QEvent::User + 5
+#define UPDATE_VERY_FAST QEvent::User + 6
 
 class GData;
 class SoundFile;
@@ -66,6 +67,7 @@ class AudioThread : public QThread
   
     bool m_stopping;
     bool m_first;
+    int m_very_fast_update_count;
     int m_fast_update_count;
     int m_slow_update_count;
     int m_frame_num;

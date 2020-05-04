@@ -109,7 +109,7 @@ TunerView::TunerView(int p_view_iD_
     l_layout->setRowStretch( 1, 1 );
     l_layout->setRowStretch( 2, 0 );
 
-    connect(g_data, SIGNAL(onChunkUpdate()), this, SLOT(doUpdate()));
+    connect(&(g_data->getView()), SIGNAL(onVeryFastUpdate(double)), this, SLOT(doUpdate()));
     connect(m_tuner_widget, SIGNAL(ledSet(int, bool)), this, SLOT(setLed(int, bool)));
 }
 
