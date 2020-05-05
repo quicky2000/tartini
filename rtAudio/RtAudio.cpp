@@ -7122,11 +7122,11 @@ struct AlsaHandle {
   snd_pcm_t *handles[2];
   bool synchronized;
   bool xrun[2];
-  pthread_cond_t runnable_cv;
+  pthread_cond_t runnable_cv; //-V730_NOINIT
   bool runnable;
 
   AlsaHandle()
-    :synchronized(false), runnable(false) { xrun[0] = false; xrun[1] = false; }
+    :handles{nullptr, nullptr}, synchronized(false), runnable(false) { xrun[0] = false; xrun[1] = false; }
 };
 
 static void *alsaCallbackHandler( void * ptr );
