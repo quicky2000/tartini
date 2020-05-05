@@ -229,6 +229,7 @@ int AudioThread::doStuff()
         if((m_slow_update_count >= l_slow_update_after) || l_force_update)
         {
             g_data->setNeedUpdate(true);
+            m_very_fast_update_count = 0;
             m_fast_update_count = 0;
             m_slow_update_count = 0;
             QApplication::postEvent(g_main_window, new QEvent(static_cast<QEvent::Type>(UPDATE_SLOW)));
@@ -236,6 +237,7 @@ int AudioThread::doStuff()
         else if(m_fast_update_count >= l_fast_update_after)
         {
             g_data->setNeedUpdate(true);
+            m_very_fast_update_count = 0;
             m_fast_update_count = 0;
             QApplication::postEvent(g_main_window, new QEvent(static_cast<QEvent::Type>(UPDATE_FAST)));
         }
