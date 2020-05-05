@@ -426,7 +426,8 @@ MainWindow::MainWindow()
     m_time_slider->setMinimumWidth(200);
     m_time_slider->setWhatsThis("Drag the time slider to move back and forward through the sound file");
     connect(m_time_slider, SIGNAL(sliderMoved(double)), g_data, SLOT(updateActiveChunkTime(double)));
-    connect(m_time_slider, SIGNAL(sliderMoved(double)), &l_view, SLOT(doSlowUpdate()));
+    // This is no longer needed, since View::setCurrentTime() now calls doUpdate() to update all views (fast and slow ones).
+    // connect(m_time_slider, SIGNAL(sliderMoved(double)), &l_view, SLOT(doSlowUpdate()));
     connect(&l_view, SIGNAL(onSlowUpdate(double)), m_time_slider, SLOT(setValue(double)));
     connect(g_data, SIGNAL(timeRangeChanged(double, double)), this, SLOT(setTimeRange(double, double)));
     l_time_bar_dock->addWidget(m_time_slider);
