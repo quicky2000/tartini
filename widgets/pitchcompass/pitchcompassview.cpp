@@ -27,7 +27,7 @@ PitchCompassView::PitchCompassView( int p_view_id
 : ViewWidget(p_view_id, p_parent)
 {
     m_pitch_compass_draw_widget = new PitchCompassDrawWidget(this, "compass", p_mode);
-    connect(&(g_data->getView()), SIGNAL(currentTimeChanged(double)), m_pitch_compass_draw_widget, SLOT(updateCompass(double)));
+    connect(&(g_data->getView()), SIGNAL(onSlowUpdate(double)), m_pitch_compass_draw_widget, SLOT(updateCompass(double)));
     m_pitch_compass_draw_widget->show();
 }
 

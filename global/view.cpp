@@ -77,6 +77,7 @@ void View::doUpdate()
 {
     doSlowUpdate();
     doFastUpdate();
+    doVeryFastUpdate();
 }
 
 //------------------------------------------------------------------------------
@@ -209,6 +210,7 @@ void View::setCurrentTime(double p_x)
         emit currentTimeChanged(p_x);
         emit timeViewRangeChanged(viewLeft(), viewRight());
         emit viewChanged();
+        doUpdate();
     }
 }
 
