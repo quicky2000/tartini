@@ -98,6 +98,8 @@ class GData : public QObject
     GData();
     virtual ~GData();
 
+    inline void set_play_or_record(bool p_value) { m_play_or_record = p_value & m_chunk_update_only_for_slider;}
+
     /**
        Empty methods just defined to avoid unused parameters warning
        assuming that will be removed at ocmpile time during optimisation
@@ -323,10 +325,13 @@ public slots:
                );
   void resetActiveIntThreshold(int p_threshold_percentage);
 
-  void doChunkUpdate();
+    void doChunkUpdate();
+    void doFakeChunkUpdate();
 
- private:
+  private:
   QSettings * m_settings;
+    bool m_play_or_record;
+    bool m_chunk_update_only_for_slider;
   int m_sound_mode;
   AudioStream * m_audio_stream;
   bool m_need_update;

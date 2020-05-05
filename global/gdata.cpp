@@ -113,6 +113,8 @@ float phase_function(float p_x)
 //------------------------------------------------------------------------------
 GData::GData()
 : m_settings(NULL)
+, m_play_or_record(false)
+, m_chunk_update_only_for_slider(true)
 , m_sound_mode(SOUND_PLAY)
 , m_audio_stream(NULL)
 , m_need_update(false)
@@ -259,6 +261,8 @@ bool GData::openPlayRecord( SoundFile * p_sound_file_rec
 
     stop();
 
+    set_play_or_record(true);
+
     int l_rate = p_sound_file_rec->rate();
     int l_num_channels = p_sound_file_rec->numChannels();
     int l_bits = p_sound_file_rec->bits();
@@ -321,7 +325,7 @@ bool GData::playSound(SoundFile * p_sound_file)
     }
 
     stop();
-  
+    set_play_or_record(true);
     int l_chunk = p_sound_file->currentChunk();
     if(l_chunk < 0 || l_chunk + 1 >= p_sound_file->totalChunks())
     {
@@ -465,6 +469,7 @@ bool GData::play()
 //------------------------------------------------------------------------------
 void GData::stop()
 {
+    set_play_or_record(false);
     m_audio_thread.stopAndWait();
 }
 
@@ -941,7 +946,19 @@ void GData::recalcScoreThresholds()
 //------------------------------------------------------------------------------
 void GData::doChunkUpdate()
 {
-    emit onChunkUpdate();
+    if(!m_play_or_record)
+    {
+        emit onChunkUpdate();
+    }
+}
+
+//------------------------------------------------------------------------------
+void GData::doFakeChunkUpdate()
+{
+    if(m_play_or_record)
+    {
+        emit onChunkUpdate();
+    }
 }
 
 //------------------------------------------------------------------------------

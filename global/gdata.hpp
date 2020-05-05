@@ -237,6 +237,7 @@ View & GData::getView()
 void GData::setView(View & p_view)
 {
     m_view = &p_view;
+    connect(m_view, SIGNAL(onFastUpdate(double)), this, SLOT(doFakeChunkUpdate()));
 }
 
 //------------------------------------------------------------------------------
