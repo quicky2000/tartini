@@ -391,6 +391,7 @@ void TartiniSettingsDialog::setUnknownsToDefault(GData & p_gdata)
 
     SetIfMissing("Display/fastUpdateSpeed", 75);
     SetIfMissing("Display/slowUpdateSpeed", 150);
+    SetIfMissing("Display/updateForEachChunk", false);
     SetIfMissing("Display/theBackgroundColor", "#BBCDE2");
     SetIfMissing("Display/shading1Color", "#BBCDEF");
     SetIfMissing("Display/shading2Color", "#CBCDE2");

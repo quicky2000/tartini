@@ -17,6 +17,12 @@
 */
 
 //------------------------------------------------------------------------------
+void GData::set_play_or_record(bool p_value)
+{
+    m_play_or_record = p_value & !getSettingsBoolValue("Display/updateForEachChunk");
+}
+
+//------------------------------------------------------------------------------
 void GData::do_nothing()const
 {
 }
@@ -237,6 +243,7 @@ View & GData::getView()
 void GData::setView(View & p_view)
 {
     m_view = &p_view;
+    connect(m_view, SIGNAL(onFastUpdate(double)), this, SLOT(doFastChunkUpdate()));
 }
 
 //------------------------------------------------------------------------------

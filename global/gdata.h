@@ -98,6 +98,9 @@ class GData : public QObject
     GData();
     virtual ~GData();
 
+    inline
+    void set_play_or_record(bool p_value);
+
     /**
        Empty methods just defined to avoid unused parameters warning
        assuming that will be removed at ocmpile time during optimisation
@@ -323,10 +326,27 @@ public slots:
                );
   void resetActiveIntThreshold(int p_threshold_percentage);
 
-  void doChunkUpdate();
+    /**
+     * Slot used when vibrato views are refresh on Chunk event
+     */
+    void doChunkUpdate();
 
- private:
+    /**
+     * Slot used when vibrato views are refresh on FastUpdate event instead of Chunk event
+     */
+    void doFastChunkUpdate();
+
+  private:
   QSettings * m_settings;
+
+  /**
+   * Indicate if playing of recording mode is on going when we wnat to refresh
+   * vibrato view only on slider event
+   * true : play or record mode started
+   * false : play or record mode not started
+   */
+    bool m_play_or_record;
+
   int m_sound_mode;
   AudioStream * m_audio_stream;
   bool m_need_update;
