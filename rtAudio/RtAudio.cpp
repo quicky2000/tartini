@@ -8024,6 +8024,13 @@ void RtApiAlsa :: closeStream()
   stream_.callbackInfo.isRunning = false;
   MUTEX_LOCK( &stream_.mutex );
   if ( stream_.state == STREAM_STOPPED ) {
+      if(nullptr == apiInfo)
+      {
+          MUTEX_UNLOCK( &stream_.mutex );
+          errorText_ = "apiInfo is NULL!";
+          error( RtAudioError::MEMORY_ERROR );
+          return;
+      }
     apiInfo->runnable = true;
     pthread_cond_signal( &apiInfo->runnable_cv );
   }
@@ -8032,6 +8039,12 @@ void RtApiAlsa :: closeStream()
 
   if ( stream_.state == STREAM_RUNNING ) {
     stream_.state = STREAM_STOPPED;
+      if(nullptr == apiInfo)
+      {
+          errorText_ = "apiInfo is NULL!";
+          error( RtAudioError::MEMORY_ERROR );
+          return;
+      }
     if ( stream_.mode == OUTPUT || stream_.mode == DUPLEX )
       snd_pcm_drop( apiInfo->handles[0] );
     if ( stream_.mode == INPUT || stream_.mode == DUPLEX )
