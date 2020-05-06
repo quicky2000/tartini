@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include "myassert.h"
+#include <new>
 
 //------------------------------------------------------------------------------
 //return a pointer to a 2d array with each element of size size
@@ -31,9 +32,19 @@ void ** malloc2d( const int p_row
                 )
 {
     void ** l_ptr = (void **)malloc(sizeof(void *) * p_row);
-    for(int l_j=0; l_j < p_row; l_j++)
+    if(nullptr == l_ptr)
+    {
+        throw std::bad_alloc();
+    }
+    for(int l_j = 0; l_j < p_row; l_j++)
     {
         l_ptr[l_j] = (void *)malloc(p_size * p_col);
+        if(nullptr == l_ptr[l_j])
+        {
+            // Release previously allocated memory
+            free2d(l_ptr, l_j);
+            throw std::bad_alloc();
+        }
     }
     return l_ptr;
 }
@@ -58,29 +69,59 @@ void ** realloc2d( void ** p_ptr
             {
                 free(p_ptr[l_j]);
             }
-            p_ptr = (void **)realloc(p_ptr, sizeof(void *) * p_row);
+
+            {
+                void **l_new_ptr = (void **) realloc(p_ptr, sizeof(void *) * p_row);
+                if (nullptr == l_new_ptr)
+                {
+                    throw std::bad_alloc();
+                }
+                p_ptr = l_new_ptr;
+            }
+
             if(p_col != p_old_col)
             {
                 for(l_j = 0; l_j < p_row; l_j++)
                 {
-                    p_ptr[l_j] = (void *)realloc(p_ptr[l_j], p_size * p_col);
+                    void * l_new_ptr = (void *)realloc(p_ptr[l_j], p_size * p_col);
+                    if (nullptr == l_new_ptr)
+                    {
+                        throw std::bad_alloc();
+                    }
+                    p_ptr[l_j] = l_new_ptr;
                 }
             }
         }
         //grow
         else if(p_row > p_old_row)
         {
-            p_ptr = (void **)realloc(p_ptr, sizeof(void *) * p_row);
+            {
+                void **l_new_ptr = (void **) realloc(p_ptr, sizeof(void *) * p_row);
+                if (nullptr == l_new_ptr)
+                {
+                    throw std::bad_alloc();
+                }
+                p_ptr = l_new_ptr;
+            }
             if(p_col != p_old_col)
             {
                 for(l_j = 0; l_j < p_old_row; l_j++)
                 {
-                    p_ptr[l_j] = (void *)realloc(p_ptr[l_j], p_size * p_col);
+                    void * l_new_ptr = (void *)realloc(p_ptr[l_j], p_size * p_col);
+                    if (nullptr == l_new_ptr)
+                    {
+                        throw std::bad_alloc();
+                    }
+                    p_ptr[l_j] = l_new_ptr;
                 }
             }
             for(l_j = p_old_row; l_j < p_row; l_j++)
             {
                 p_ptr[l_j] = (void *)malloc(p_size * p_col);
+                if(nullptr == p_ptr[l_j])
+                {
+                    throw std::bad_alloc();
+                }
             }
         }
         else
@@ -90,7 +131,12 @@ void ** realloc2d( void ** p_ptr
             {
                 for(l_j = 0; l_j < p_row; l_j++)
                 {
-                    p_ptr[l_j] = (void *)realloc(p_ptr[l_j], p_size * p_col);
+                    void * l_new_ptr = (void *)realloc(p_ptr[l_j], p_size * p_col);
+                    if(nullptr == l_new_ptr)
+                    {
+                        throw std::bad_alloc();
+                    }
+                    p_ptr[l_j] = l_new_ptr;
                 }
             }
         }
