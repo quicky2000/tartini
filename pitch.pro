@@ -82,10 +82,6 @@ DISTFILES += INSTALL.txt \
   pics/tartinilogo.jpg \
   gomacx \
   gowindows.bat \
-  widgets/base/baseview.h \
-  widgets/base/baseview.cpp \
-  widgets/base/basewidget.cpp \
-  widgets/base/basewidget.h \
   include/static.h
 
 HEADERS += main.h \
@@ -122,7 +118,6 @@ HEADERS += main.h \
   widgets/summary/summarydrawwidget.h \
   widgets/summary/summaryview.h \
   widgets/tuner/tunerview.h \
-  widgets/tuner/tunerwidget.h \
   widgets/hblock/hblockview.h \
   widgets/hblock/hblockwidget.h \
   widgets/hstack/hstackview.h \
@@ -254,7 +249,6 @@ SOURCES += main.cpp \
   widgets/summary/summarydrawwidget.cpp \
   widgets/summary/summaryview.cpp \
   widgets/tuner/tunerview.cpp \
-  widgets/tuner/tunerwidget.cpp \
   widgets/hblock/hblockview.cpp \
   widgets/hblock/hblockwidget.cpp \
   widgets/hstack/hstackview.cpp \
