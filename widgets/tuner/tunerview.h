@@ -26,7 +26,6 @@
 #include "vibratotunerwidget.h"
 
 class QPixmap;
-class TunerWidget;
 class LEDIndicator;
 class QwtSlider;
 class Channel;

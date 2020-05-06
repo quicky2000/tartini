@@ -23,7 +23,6 @@
 #include <QPaintEvent>
 
 #include "tunerview.h"
-#include "tunerwidget.h"
 #include "ledindicator.h"
 #include "useful.h"
 #include "gdata.h"

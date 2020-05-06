@@ -42,7 +42,6 @@ set(MY_HEADER_FILES
     widgets/summary/summarydrawwidget.h
     widgets/summary/summaryview.h
     widgets/tuner/tunerview.h
-    widgets/tuner/tunerwidget.h
     widgets/hblock/hblockview.h
     widgets/hblock/hblockwidget.h
     widgets/hstack/hstackview.h
@@ -176,7 +175,6 @@ set(MY_SOURCE_FILES
     widgets/summary/summarydrawwidget.cpp
     widgets/summary/summaryview.cpp
     widgets/tuner/tunerview.cpp
-    widgets/tuner/tunerwidget.cpp
     widgets/hblock/hblockview.cpp
     widgets/hblock/hblockwidget.cpp
     widgets/hstack/hstackview.cpp
