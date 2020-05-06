@@ -222,7 +222,12 @@ void Array1d<T>::resize(int p_new_size)
     if(p_new_size > m_allocated_size)
     {
         m_allocated_size = nextPowerOf2(p_new_size);
-        m_data = (T*)realloc(m_data, m_allocated_size * sizeof(T));
+        T * l_new_data_ptr = (T*)realloc(m_data, m_allocated_size * sizeof(T));
+        if(nullptr == l_new_data_ptr)
+        {
+            throw std::bad_alloc();
+        }
+        m_data = l_new_data_ptr;
     }
     m_data_size = p_new_size;
 }
@@ -236,7 +241,12 @@ void Array1d<T>::resize( int p_new_size
     if(p_new_size > m_allocated_size)
     {
         m_allocated_size = nextPowerOf2(p_new_size);
-        m_data = (T*)realloc(m_data, m_allocated_size * sizeof(T));
+        T * l_new_data_ptr = (T*)realloc(m_data, m_allocated_size * sizeof(T));
+        if(nullptr == l_new_data_ptr)
+        {
+            throw std::bad_alloc();
+        }
+        m_data = l_new_data_ptr;
     }
     if(p_new_size > m_data_size)
     {
@@ -266,7 +276,12 @@ void Array1d<T>::push_back(const T & p_val)
     if(++m_data_size > m_allocated_size)
     {
         m_allocated_size = nextPowerOf2(m_data_size);
-        m_data = (T*)realloc(m_data, m_allocated_size * sizeof(T));
+        T * l_new_data_ptr = (T*)realloc(m_data, m_allocated_size * sizeof(T));
+        if(nullptr == l_new_data_ptr)
+        {
+            throw std::bad_alloc();
+        }
+        m_data = l_new_data_ptr;
     }
     back() = p_val;
 }

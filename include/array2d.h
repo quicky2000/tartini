@@ -38,6 +38,7 @@ int *ptr = &*it;
 #include <iostream>
 //#define NDEBUG //removes the asserts
 #include "myassert.h"
+#include <new>
 
 #ifndef MIN
 #define MIN(x,y)    ((x)<(y) ? (x) : (y))
@@ -271,7 +272,12 @@ void Array2d<T>::resize_raw( int p_width
     p_height = std::max(p_height, 0);
     m_width = p_width;
     m_height = p_height;
-    m_data = (T *)realloc(m_data, size() * sizeof(T));
+    T * l_new_data_ptr = (T *)realloc(m_data, size() * sizeof(T));
+    if(nullptr == l_new_data_ptr)
+    {
+        throw std::bad_alloc();
+    }
+    m_data = l_new_data_ptr;
 }
 
 //-----------------------------------------------------------------------------

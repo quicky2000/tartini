@@ -24,6 +24,7 @@
 #include "myassert.h"
 #include <stdlib.h>
 #include "useful.h"
+#include <new>
 
 /**
    Warning!: Use only for arrays of basic types or pointers
