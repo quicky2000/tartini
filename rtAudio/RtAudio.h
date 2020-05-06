@@ -659,7 +659,11 @@ struct CallbackInfo {
 
   // Default constructor.
   CallbackInfo()
-  :object(0), callback(0), userData(0), errorCallback(0), apiInfo(0), isRunning(false), doRealtime(false), priority(0) {}
+#if defined(__WINDOWS_DS__) || defined(__WINDOWS_ASIO__) || defined(__WINDOWS_WASAPI__)
+   :object(0), thread(nullptr), callback(0), userData(0), errorCallback(0), apiInfo(0), isRunning(false), doRealtime(false), priority(0) {}
+#else
+   :object(0), thread(0), callback(0), userData(0), errorCallback(0), apiInfo(0), isRunning(false), doRealtime(false), priority(0) {}
+#endif
 };
 
 // **************************************************************** //
