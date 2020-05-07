@@ -27,6 +27,14 @@ GrowingAverageFilter::GrowingAverageFilter(int p_size)
 }
 
 //------------------------------------------------------------------------------
+GrowingAverageFilter::GrowingAverageFilter()
+: m_size(0)
+, m_count(0)
+, m_total_sum(0.0)
+{
+}
+
+//------------------------------------------------------------------------------
 void GrowingAverageFilter::init(int p_size)
 {
     m_size = p_size;

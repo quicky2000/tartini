@@ -27,7 +27,7 @@
 class GrowingAverageFilter : public Filter
 {
   public:
-    GrowingAverageFilter() { }
+    GrowingAverageFilter();
     GrowingAverageFilter(int p_size);
     void init(int p_size);
     void filter( const float * p_input
