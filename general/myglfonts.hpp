@@ -55,7 +55,8 @@ int MyGLChar::w_raw() const
 
 //------------------------------------------------------------------------------
 MyGLFont::MyGLFont()
-: m_been_init(false)
+: m_chars{ nullptr}
+, m_been_init(false)
 {
 }
 
