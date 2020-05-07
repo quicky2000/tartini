@@ -65,7 +65,6 @@ class AudioThread : public QThread
     SoundFile * m_rec_sound_file;
   
     bool m_stopping;
-    bool m_first;
     int m_fast_update_count;
     int m_slow_update_count;
     int m_frame_num;

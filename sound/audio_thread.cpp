@@ -93,7 +93,6 @@ void AudioThread::run()
     setitimer(ITIMER_PROF, &g_profiler_value, &g_profiler_ovalue); //for running multi-threaded profiling
 #endif // WINDOWS
 
-    m_first = true;
     m_fast_update_count = 0;
     m_slow_update_count = 0;
     m_frame_num = 0;
