@@ -55,10 +55,13 @@
 FreqWidgetGL::FreqWidgetGL( QWidget * /*parent*/
                           , const char* /*name*/
                           )
+: m_drag_mode(t_drag_modes::DragNone)
+, m_mouse_X(0)
+, m_mouse_Y(0)
+, m_down_time(0.0)
+, m_down_note(0.0)
 {
     setMouseTracking(true);
-
-    m_drag_mode = t_drag_modes::DragNone;
 
     QSizePolicy l_size_policy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     l_size_policy.setHeightForWidth(false);
