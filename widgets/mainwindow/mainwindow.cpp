@@ -53,7 +53,6 @@
 #include "gdata.h"
 #include "mainwindow.h"
 
-#include "freqpair.h"
 #include "soundfile.h"
 #include "channel.h"
 #include "myscrollbar.h"

@@ -100,7 +100,6 @@ HEADERS += main.h \
   general/mystring.h \
   general/settings.h \
   general/bspline.h \
-  include/freqpair.h \
   widgets/ledindicator.h \
   widgets/drawwidget.h \
   widgets/viewwidget.h \

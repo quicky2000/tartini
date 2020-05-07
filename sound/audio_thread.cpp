@@ -20,7 +20,6 @@
 #include "audio_thread.h"
 #include "audio_stream.h"
 #include "sound_file_stream.h"
-#include "freqpair.h"
 #include "main.h"
 #include "gdata.h"
 #include "Filter.h"
