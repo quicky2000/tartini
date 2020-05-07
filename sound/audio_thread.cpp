@@ -31,6 +31,10 @@
 AudioThread::AudioThread()
 : m_play_sound_file(NULL)
 , m_rec_sound_file(NULL)
+, m_stopping(false)
+, m_fast_update_count(0)
+, m_slow_update_count(0)
+, m_frame_num(0)
 , m_sleep_count(0)
 {
     //printf("Warning - audio thread created with no sound file specified.\n");
