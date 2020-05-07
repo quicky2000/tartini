@@ -160,15 +160,15 @@ class NoteData
     int m_prev_extremum_time;
     float m_prev_extremum_pitch;
 
-    enum PrevExtremum
+    typedef enum class PrevExtremum
     { NONE
     , FIRST_MAXIMUM
     , FIRST_MINIMUM
     , MAXIMUM
     , MINIMUM
-    };
+    } t_prev_extremum;
 
-    PrevExtremum m_prev_extremum;
+    t_prev_extremum m_prev_extremum;
 
 };
 
