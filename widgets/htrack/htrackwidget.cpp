@@ -151,7 +151,7 @@ void HTrackWidget::paintGL()
         l_active_channel->lock();
         double l_pos;
         int l_j;
-        uint l_num_harmonics = 40;
+        unsigned int l_num_harmonics = 40;
         int l_visible_chunks = 512; //128;
         Array2d<float> l_pitches(l_num_harmonics, l_visible_chunks);
         Array2d<float> l_amps(l_num_harmonics, l_visible_chunks);
@@ -159,7 +159,7 @@ void HTrackWidget::paintGL()
         AnalysisData *l_data;
         int l_finish_chunk = l_active_channel->currentChunk();
         int l_start_chunk = l_finish_chunk - l_visible_chunks;
-        uint l_harmonic;
+        unsigned int l_harmonic;
         int l_chunk_offset;
     
         //draw the time ref lines

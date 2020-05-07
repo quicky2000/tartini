@@ -17,8 +17,6 @@
 #ifndef FILTER_H
 #define FILTER_H
 
-typedef unsigned int uint;
-
 class Filter
 {
   public:

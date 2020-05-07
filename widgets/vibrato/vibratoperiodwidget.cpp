@@ -314,8 +314,8 @@ void VibratoPeriodWidget::doUpdate()
             // Calculate the sinewave
             if(m_draw_sine_reference && (width() > 0) && (height() > 0))
             {
-                uint l_v = 0;
-                uint l_c = 0;
+                unsigned int l_v = 0;
+                unsigned int l_c = 0;
                 if(m_sine_style)
                 {
                     for(float l_xx = 0; l_xx < width(); l_xx++)
@@ -357,8 +357,8 @@ void VibratoPeriodWidget::doUpdate()
                         break;
                     }
 
-                    uint l_v = 0;
-                    uint l_c = 0;
+                    unsigned int l_v = 0;
+                    unsigned int l_c = 0;
                     int l_this_prev_left_minimum_time = l_note->get_minima()->at(l_left_minimum_at - (l_index + 1)) - l_the_delay;
                     int l_this_prev_right_minimum_time = l_note->get_minima()->at(l_left_minimum_at - l_index) - l_the_delay;
                     int l_this_prev_duration = l_this_prev_right_minimum_time - l_this_prev_left_minimum_time;
@@ -423,8 +423,8 @@ void VibratoPeriodWidget::doUpdate()
             // Calculate the current period
             if((width() > 0) && (height() > 0))
             {
-                uint l_v = 0;
-                uint l_c = 0;
+                unsigned int l_v = 0;
+                unsigned int l_c = 0;
                 for(float l_xx = 0; l_xx < width(); l_xx++)
                 {
                     l_vertices[l_v++] = 0.05 * width() + 0.9 * l_xx;
@@ -443,8 +443,8 @@ void VibratoPeriodWidget::doUpdate()
             // Calculate the comparison
             if(m_draw_comparison && m_draw_sine_reference && (width() > 0) && (height() > 0))
             {
-                uint l_v = 0;
-                uint l_c = 0;
+                unsigned int l_v = 0;
+                unsigned int l_c = 0;
                 for(int l_xx = 0; l_xx < width(); l_xx++)
                 {
                     l_vertices[l_v++] = 0.05 * width() + 0.9 * l_xx;

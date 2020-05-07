@@ -78,7 +78,7 @@ void HBlockWidget::paintEvent( QPaintEvent * )
              * The harmonic frequencies are defined as f, 2f, 3f, 4f, 5f...
              * m_harmonic_freq stores what the harmonics have been calculated to be.
              */
-            for(uint l_index = 0; l_index < l_data.getHarmonicFreqSize(); l_index++)
+            for(unsigned int l_index = 0; l_index < l_data.getHarmonicFreqSize(); l_index++)
             {
                 get_painter().setPen(l_outline_color);
                 get_painter().setBrush(colorBetween(l_fill_color, Qt::black, l_data.getHarmonicNoiseAt(l_index)));

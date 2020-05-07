@@ -203,7 +203,7 @@ GData::~GData()
 
     //Note: The m_sound_files is responsible for cleaning up the data the channels point to
     m_channels.clear();
-    for(uint l_j = 0; l_j < m_sound_files.size(); l_j++)
+    for(unsigned int l_j = 0; l_j < m_sound_files.size(); l_j++)
     {
         delete m_sound_files[l_j];
     }
@@ -354,7 +354,7 @@ void GData::updateViewLeftRightTimes()
     double l_left = 0.0; //in seconds
     double l_right = 0.0; //in seconds
     Channel * l_channel;
-    for(uint l_j = 0; l_j < m_channels.size(); l_j++)
+    for(unsigned int l_j = 0; l_j < m_channels.size(); l_j++)
     {
         l_channel = m_channels.at(l_j);
         if(l_channel->startTime() < l_left)

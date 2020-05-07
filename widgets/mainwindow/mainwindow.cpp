@@ -462,7 +462,7 @@ MainWindow::MainWindow()
     m_key_type_combo_box = new QComboBox(l_key_tool_bar);
     m_key_type_combo_box->setWindowTitle(tr("Scale type"));
     l_string_list.clear();
-    for(uint l_j = 0; l_j < g_music_scales.size(); l_j++)
+    for(unsigned int l_j = 0; l_j < g_music_scales.size(); l_j++)
     {
         l_string_list << g_music_scales[l_j].name();
     }
@@ -476,7 +476,7 @@ MainWindow::MainWindow()
     QComboBox * l_tempered_combo_box = new QComboBox(l_key_tool_bar);
     l_tempered_combo_box->setWindowTitle(tr("Tempered type"));
     l_string_list.clear();
-    for(uint j = 0; j < g_music_keys.size(); j++)
+    for(unsigned int j = 0; j < g_music_keys.size(); j++)
     {
         l_string_list << g_music_keys[j].name();
     }
@@ -1242,7 +1242,7 @@ void MainWindow::printPitch()
         //1mm thick line
         DrawWidget::setLineWidth(toInt(std::min(l_dots_per_MM * 1.0, l_dots_per_line_step_Y * 0.2)));
         //draw all the visible channels
-        for (uint l_i = 0; l_i < g_data->getChannelsSize(); l_i++)
+        for (unsigned int l_i = 0; l_i < g_data->getChannelsSize(); l_i++)
         {
             Channel *l_channel = g_data->getChannelAt(l_i);
             if(!l_channel->isVisible())

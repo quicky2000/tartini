@@ -246,7 +246,7 @@ Channel::~Channel()
 void Channel::resetIntThreshold(int p_threshold_percentage)
 {
     m_threshold = float(p_threshold_percentage) / 100.0f;
-    uint l_j;
+    unsigned int l_j;
     for(l_j = 0; l_j < m_lookup.size(); l_j++)
     {
         chooseCorrelationIndex(l_j, periodOctaveEstimate(l_j));
@@ -723,7 +723,7 @@ float Channel::calcOctaveEstimate()
     }
   
     //get the highest nsdfAggregateMaxPosition
-    uint l_j;
+    unsigned int l_j;
     int l_nsdf_aggregate_max_index = 0;
     for(l_j = 1; l_j < l_nsdf_aggregate_max_positions.size(); l_j++)
     {
@@ -828,7 +828,7 @@ void Channel::chooseCorrelationIndex1(int p_chunk)
 {
     myassert(dataAtChunk(p_chunk));
     AnalysisData & l_analysis_data = *dataAtChunk(p_chunk);
-    uint l_iter_pos;
+    unsigned int l_iter_pos;
     int l_choosen_max_index = 0;
     if(l_analysis_data.isPeriodEstimatesEmpty())
     { //no period found
@@ -864,7 +864,7 @@ bool Channel::chooseCorrelationIndex( int p_chunk
 {
     myassert(dataAtChunk(p_chunk));
     AnalysisData & l_analysis_data = *dataAtChunk(p_chunk);
-    uint l_iter_pos;
+    unsigned int l_iter_pos;
     int l_choosen_max_index = 0;
     bool l_is_different_index = false;
     if(l_analysis_data.isPeriodEstimatesEmpty())

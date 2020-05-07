@@ -43,7 +43,7 @@ class large_vector
 {
   public:
 
-  class iterator: public std::iterator<std::bidirectional_iterator_tag, T, uint>
+  class iterator: public std::iterator<std::bidirectional_iterator_tag, T, unsigned int>
     {
       public:
 
@@ -53,7 +53,7 @@ class large_vector
         iterator(const iterator & p_iter) = default;
         iterator & operator=(const iterator &) = default;
 
-        uint pos() const;
+        unsigned int pos() const;
         iterator & operator++();
         iterator & operator++(int);
         iterator & operator--();
@@ -70,53 +70,53 @@ class large_vector
 
       private:
         large_vector<T> * m_parent;
-        uint m_pos;
+        unsigned int m_pos;
 
     };
 
-    large_vector( uint p_size = 0
-                , uint p_buffer_size = 2048
+    large_vector( unsigned int p_size = 0
+                , unsigned int p_buffer_size = 2048
                 );
     ~large_vector();
   
-    T & operator[](uint p_pos);
-    const T & operator[](uint p_pos) const;
+    T & operator[](unsigned int p_pos);
+    const T & operator[](unsigned int p_pos) const;
 
-    T & at(uint p_pos);
-    const T & at(uint p_pos) const;
+    T & at(unsigned int p_pos);
+    const T & at(unsigned int p_pos) const;
     T & front();
     const T & front() const;
     T & back();
     const T & back() const;
-    uint size() const;
+    unsigned int size() const;
     bool empty() const;
     void push_back(const T & p_new_element);
     T pop_back();
-    void push_back(const T * p_src, uint p_length);
-    void increase_size(uint p_num);
+    void push_back(const T * p_src, unsigned int p_length);
+    void increase_size(unsigned int p_num);
     void clear();
     iterator begin();
     iterator end();
-    iterator iterator_at(uint p_pos);
+    iterator iterator_at(unsigned int p_pos);
   
-    uint bufferSize() const;
+    unsigned int bufferSize() const;
     int numBuffers();
-    std::vector<T> & getBuffer(uint p_buffer_num);
+    std::vector<T> & getBuffer(unsigned int p_buffer_num);
 
     /**
        efficient copy to a single block of memory (ie array or vector)
     */
     void copyTo( T * p_dest
-               , uint p_start
-               , uint p_length
+               , unsigned int p_start
+               , unsigned int p_length
                );
 
     /**
        efficient copy from a single block of memory (ie array or vector)
     */
     void copyFrom( const T * p_src
-                 , uint p_start
-                 , uint p_length
+                 , unsigned int p_start
+                 , unsigned int p_length
                  );
 
   private:
@@ -124,10 +124,10 @@ class large_vector
     Array1d<std::vector<T> *> & buf_ptrs();
     const Array1d<std::vector<T> *> & buf_ptrs() const;
 
-    void addBuffer(uint p_num = 0);
+    void addBuffer(unsigned int p_num = 0);
     void removeBuffer();
 
-    uint m_buffer_size;
+    unsigned int m_buffer_size;
     //std::vector<std::vector<T> *> buf_ptrs();
     std::shared_ptr<Array1d<std::vector<T> *> > m_buf_ptrs;
 

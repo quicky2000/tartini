@@ -315,7 +315,7 @@ void ScoreWidget::drawScoreSegment( Channel * p_channel
                                   )
 {
     myassert(p_channel);
-    uint l_j;
+    unsigned int l_j;
 
     drawStaveSegment(toInt(p_left_X), p_line_center_Y, toInt((p_right_time - p_left_time) * m_scale_X));
 

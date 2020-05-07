@@ -131,7 +131,7 @@ void AmplitudeWidget::paintGL()
     glEnable(GL_LINE_SMOOTH);
 
     //draw all the visible channels
-    for(uint l_i = 0; l_i < g_data->getChannelsSize(); l_i++)
+    for(unsigned int l_i = 0; l_i < g_data->getChannelsSize(); l_i++)
     {
         Channel *l_channel = g_data->getChannelAt(l_i);
         if(!l_channel->isVisible())

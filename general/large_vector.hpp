@@ -32,7 +32,7 @@ const Array1d<std::vector<T> *> & large_vector<T>::buf_ptrs() const
 
 //------------------------------------------------------------------------------
 template<typename T>
-void large_vector<T>::addBuffer(uint p_num)
+void large_vector<T>::addBuffer(unsigned int p_num)
 {
     buf_ptrs().push_back(new std::vector<T>(p_num));
     buf_ptrs().back()->reserve(m_buffer_size);
@@ -49,14 +49,14 @@ void large_vector<T>::removeBuffer()
 //------------------------------------------------------------------------------
 template<typename T>
 void large_vector<T>::copyTo( T * p_dest
-                            , uint p_start
-                            , uint p_length
+                            , unsigned int p_start
+                            , unsigned int p_length
                             )
 {
     myassert(p_start + p_length <= size());
     T * l_ending = p_dest + p_length;
-    uint l_cur_buf = p_start / bufferSize();
-    uint l_offset = p_start % bufferSize();
+    unsigned int l_cur_buf = p_start / bufferSize();
+    unsigned int l_offset = p_start % bufferSize();
     if(p_length <= bufferSize() - l_offset)
     {
         std::copy(getBuffer(l_cur_buf).begin() + l_offset, getBuffer(l_cur_buf).begin() + l_offset + p_length, p_dest);
@@ -66,7 +66,7 @@ void large_vector<T>::copyTo( T * p_dest
         std::copy(getBuffer(l_cur_buf).begin() + l_offset, getBuffer(l_cur_buf).end(), p_dest);
         p_dest += bufferSize() - l_offset;
         l_cur_buf++;
-        while(uint(l_ending - p_dest) > bufferSize())
+        while(((unsigned int)(l_ending - p_dest)) > bufferSize())
         {
             std::copy(getBuffer(l_cur_buf).begin(), getBuffer(l_cur_buf).end(), p_dest);
             p_dest += bufferSize();
@@ -79,14 +79,14 @@ void large_vector<T>::copyTo( T * p_dest
 //------------------------------------------------------------------------------
 template<typename T>
 void large_vector<T>::copyFrom( const T * p_src
-                              , uint p_start
-                              , uint p_length
+                              , unsigned int p_start
+                              , unsigned int p_length
                               )
 {
     myassert(p_start + p_length <= size());
     const T * l_ending = p_src + p_length;
-    uint l_cur_buf = p_start / bufferSize();
-    uint l_offset = p_start % bufferSize();
+    unsigned int l_cur_buf = p_start / bufferSize();
+    unsigned int l_offset = p_start % bufferSize();
     if(p_length <= bufferSize() - l_offset)
     {
         std::copy(p_src, p_src + p_length, getBuffer(l_cur_buf).begin() + l_offset);
@@ -96,7 +96,7 @@ void large_vector<T>::copyFrom( const T * p_src
         std::copy(p_src, p_src + (bufferSize() - l_offset), getBuffer(l_cur_buf).begin() + l_offset);
         p_src += bufferSize() - l_offset;
         l_cur_buf++;
-        while(uint(l_ending - p_src) > bufferSize())
+        while(((unsigned int)(l_ending - p_src)) > bufferSize())
         {
             std::copy(p_src, p_src + bufferSize(), getBuffer(l_cur_buf).begin());
             p_src += bufferSize();
@@ -134,14 +134,14 @@ typename large_vector<T>::iterator large_vector<T>::end()
 
 //------------------------------------------------------------------------------
 template<typename T>
-typename large_vector<T>::iterator large_vector<T>::iterator_at(uint p_pos)
+typename large_vector<T>::iterator large_vector<T>::iterator_at(unsigned int p_pos)
 {
     return iterator(this, p_pos);
 }
   
 //------------------------------------------------------------------------------
 template<typename T>
-uint large_vector<T>::bufferSize() const
+unsigned int large_vector<T>::bufferSize() const
 {
     return m_buffer_size;
 }
@@ -155,14 +155,14 @@ int large_vector<T>::numBuffers()
 
 //------------------------------------------------------------------------------
 template<typename T>
-std::vector<T> & large_vector<T>::getBuffer(uint p_buffer_num)
+std::vector<T> & large_vector<T>::getBuffer(unsigned int p_buffer_num)
 {
     return *buf_ptrs()[p_buffer_num];
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-T & large_vector<T>::at(uint p_pos)
+T & large_vector<T>::at(unsigned int p_pos)
 {
     myassert(empty() || p_pos < size());
     return (*buf_ptrs()[p_pos / m_buffer_size])[p_pos % m_buffer_size];
@@ -170,7 +170,7 @@ T & large_vector<T>::at(uint p_pos)
 
 //------------------------------------------------------------------------------
 template<typename T>
-const T & large_vector<T>::at(uint p_pos) const
+const T & large_vector<T>::at(unsigned int p_pos) const
 {
     myassert(empty() || p_pos < size());
     return (*buf_ptrs()[p_pos / m_buffer_size])[p_pos % m_buffer_size];
@@ -206,7 +206,7 @@ const T & large_vector<T>::back() const
 
 //------------------------------------------------------------------------------
 template<typename T>
-uint large_vector<T>::size() const
+unsigned int large_vector<T>::size() const
 {
     return (buf_ptrs().size() - 1) * m_buffer_size + buf_ptrs().back()->size();
 }
@@ -252,17 +252,17 @@ T large_vector<T>::pop_back()
 //------------------------------------------------------------------------------
 template<typename T>
 void large_vector<T>::push_back( const T * p_src
-                               , uint p_length
+                               , unsigned int p_length
                                )
 {
-    uint l_size_before = size();
+    unsigned int l_size_before = size();
     increase_size(p_length);
     copyFrom(p_src, l_size_before, p_length);
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-void large_vector<T>::increase_size(uint p_num)
+void large_vector<T>::increase_size(unsigned int p_num)
 {
     if(p_num < bufferSize() - buf_ptrs().back()->size())
     {
@@ -285,8 +285,8 @@ void large_vector<T>::increase_size(uint p_num)
 
 //------------------------------------------------------------------------------
 template<typename T>
-large_vector<T>::large_vector( uint p_size
-                             , uint p_buffer_size
+large_vector<T>::large_vector( unsigned int p_size
+                             , unsigned int p_buffer_size
                              )
 : m_buffer_size(p_buffer_size)
 , m_buf_ptrs(std::make_shared<Array1d<std::vector<T> *>>())
@@ -314,14 +314,14 @@ large_vector<T>::~large_vector()
   
 //------------------------------------------------------------------------------
 template<typename T>
-T & large_vector<T>::operator[](uint p_pos)
+T & large_vector<T>::operator[](unsigned int p_pos)
 {
     return (*buf_ptrs()[p_pos / m_buffer_size])[p_pos % m_buffer_size];
 }
 
 //------------------------------------------------------------------------------
 template<typename T>
-const T & large_vector<T>::operator[](uint p_pos) const
+const T & large_vector<T>::operator[](unsigned int p_pos) const
 {
     return (*buf_ptrs()[p_pos / m_buffer_size])[p_pos % m_buffer_size];
 }
@@ -338,7 +338,7 @@ large_vector<T>::iterator::iterator( large_vector<T> * p_parent
 
 //------------------------------------------------------------------------------
 template<typename T>
-uint large_vector<T>::iterator::pos() const
+unsigned int large_vector<T>::iterator::pos() const
 {
     return m_pos;
 }

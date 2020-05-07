@@ -249,8 +249,8 @@ void VibratoWidget::doUpdate()
 
 	  GLfloat * l_vertices;
 	  GLubyte * l_colors;
-	  uint l_vertices_counter = 0;
-	  uint l_colors_counter = 0;
+	  unsigned int l_vertices_counter = 0;
+	  unsigned int l_colors_counter = 0;
 
 	  glEnableClientState(GL_VERTEX_ARRAY);
 	  glEnableClientState(GL_COLOR_ARRAY);

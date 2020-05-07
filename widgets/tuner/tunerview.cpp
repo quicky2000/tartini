@@ -116,7 +116,7 @@ TunerView::TunerView(int p_view_iD_
 TunerView::~TunerView()
 {
     delete m_slider;
-    for(uint l_index = 0; l_index < m_leds.size(); l_index++)
+    for(unsigned int l_index = 0; l_index < m_leds.size(); l_index++)
     {
         delete m_leds[l_index];
     }
@@ -132,7 +132,7 @@ void TunerView::resizeEvent(QResizeEvent *)
 //------------------------------------------------------------------------------
 void TunerView::resetLeds()
 {
-    for(uint l_index = 0; l_index < m_leds.size(); l_index++)
+    for(unsigned int l_index = 0; l_index < m_leds.size(); l_index++)
     {
         m_leds[l_index]->setOn(false);
     }

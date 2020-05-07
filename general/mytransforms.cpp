@@ -377,7 +377,7 @@ int MyTransforms::findNSDFsubMaximum( float * p_input
     int l_overall_max_index = findNSDFMaxima(p_input, p_len, l_indices);
     p_threshold += (1.0 - p_threshold) * (1.0 - p_input[l_overall_max_index]);
     float l_cutoff = p_input[l_overall_max_index] * p_threshold;
-    for(uint l_j = 0; l_j < l_indices.size(); l_j++)
+    for(unsigned int l_j = 0; l_j < l_indices.size(); l_j++)
     {
         if(p_input[l_indices[l_j]] >= l_cutoff)
         {

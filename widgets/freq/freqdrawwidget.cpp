@@ -187,7 +187,7 @@ void FreqDrawWidget::paintEvent(QPaintEvent *)
     drawReferenceLines(*this, get_painter(), l_view.currentTime(), l_view.zoomX(), l_view.viewBottom(), l_view.zoomY(), DRAW_VIEW_NORMAL);
 
     //draw all the visible channels
-    for(uint l_i = 0; l_i < g_data->getChannelsSize(); l_i++)
+    for(unsigned int l_i = 0; l_i < g_data->getChannelsSize(); l_i++)
     {
         Channel * l_channel = g_data->getChannelAt(l_i);
         if(!l_channel->isVisible())

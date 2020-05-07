@@ -246,7 +246,7 @@ void VibratoCircleWidget::doUpdate()
 				const float l_half_width = 0.5 * width();
 				const float l_half_height = 0.5 * height();
 
-				uint l_vertices_counter, l_colors_counter;
+				unsigned int l_vertices_counter, l_colors_counter;
 
 				if((m_type == 1) || (m_type == 2))
 				{
