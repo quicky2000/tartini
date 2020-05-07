@@ -33,13 +33,13 @@ class AmplitudeWidget : public QGLWidget
   Q_OBJECT
 
   public:
-    enum DragModes
+    typedef enum class DragModes
     { DragNone = 0
     , DragChannel = 1
     , DragBackground = 2
     , DragTimeBar = 3
     , DragNoiseThreshold = 4
-    };
+    } t_drag_modes;
 
     AmplitudeWidget( QWidget * p_parent
                    , const char * p_name = 0
@@ -98,7 +98,7 @@ class AmplitudeWidget : public QGLWidget
     inline const double & offset()const;
     inline const double & offsetInv()const;
 
-    int m_drag_mode;
+    t_drag_modes m_drag_mode;
     int m_mouse_X;
     int m_mouse_Y;
     double m_down_time;
