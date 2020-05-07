@@ -142,7 +142,6 @@ HEADERS += main.h \
   sound/soundfile.h \
   global/view.h \
   global/view.hpp \
-  include/myqmutex.h \
   general/mytransforms.h \
   general/mytransforms.hpp \
   widgets/timeaxis.h \
@@ -201,7 +200,6 @@ HEADERS += main.h \
   widgets/vibrato/vibratospeedwidget.h \
   widgets/vibrato/vibratoperiodwidget.h \
   widgets/vibrato/vibratocirclewidget.h \
-  include/safe_bool.h \
   general/prony.h \
   general/mymatrix.h \
   general/mymatrix.hpp \
