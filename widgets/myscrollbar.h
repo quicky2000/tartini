@@ -32,22 +32,22 @@ class MyScrollBar : public QWidget
                ,const char * p_name = 0
                );
 
-    MyScrollBar(double minValue_
-               ,double maxValue_
-               ,double linesPerPage_
-               ,double pageStep_
-               ,double value_
-               ,double step_
-               ,Qt::Orientation orientation
-               ,QWidget * parent
-               ,const char * name = 0
+    MyScrollBar(double p_min_value
+               ,double p_max_value
+               ,double p_lines_per_page
+               ,double p_page_step
+               ,double p_value
+               ,double p_step
+               ,Qt::Orientation p_orientation
+               ,QWidget * p_parent
+               ,const char * p_name = 0
                );
 
     virtual ~MyScrollBar();
 
     QSize sizeHint() const;
 
-    void resizeEvent(QResizeEvent *q);
+    void resizeEvent(QResizeEvent * p_event);
 
     inline
     double minValue() const;
