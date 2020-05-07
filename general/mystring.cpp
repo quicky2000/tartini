@@ -21,6 +21,7 @@
 #else
 #include <strings.h>
 #endif
+#include <new>
 
 // return the index of the first occurance of char c in string s.
 // or -1 if not found
@@ -50,6 +51,10 @@ char * copy_string(const char * p_s)
         return NULL;
     }
     char * l_t = (char *)malloc(strlen(p_s) + 1);
+    if(nullptr == l_t)
+    {
+        throw std::bad_alloc();
+    }
     strcpy(l_t, p_s);
     return l_t;
 }

@@ -3,6 +3,7 @@
 #include <QPainter>
 #include <QColor>
 #include <QtGlobal>
+#include <new>
 
 //------------------------------------------------------------------------------
 void MyGLFont::init(const QFont p_font)
@@ -28,6 +29,10 @@ void MyGLFont::init(const QFont p_font)
         l_width_raw = l_width + 3;
         l_width_raw -= (l_width_raw % 4); //round length up to multiple of 4
         l_data = (GLubyte*)malloc(l_width_raw * l_height * sizeof(GLubyte));
+        if(nullptr == l_data)
+        {
+            throw std::bad_alloc();
+        }
         for(int l_y = 0; l_y < l_height; l_y++)
         {
             for(int l_x = 0; l_x < l_width_raw; l_x++)
