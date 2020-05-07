@@ -18,7 +18,12 @@
 
 //------------------------------------------------------------------------------
 ZoomElement::ZoomElement()
-: m_is_valid(false)
+: m_low(0.0)
+, m_high(0.0)
+, m_corr(0.0)
+, m_note_index(0)
+, m_mid_chunk(0)
+, m_is_valid(false)
 {
 }
 
