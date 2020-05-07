@@ -132,7 +132,7 @@ GData::GData()
 , m_slow_update_speed(0)
 , m_polish(true)
 , m_show_mean_variance_bars(false)
-, m_saving_mode(0)
+, m_saving_mode(SavingModes::ALWAYS_ASK)
 , m_vibrato_sine_style(false)
 , m_music_key_type(0) //ALL_NOTES
 , m_tempered_type(0) //EVEN_TEMPERED
@@ -557,15 +557,15 @@ void GData::updateQuickRefSettings()
     QString l_string = m_settings->value("Advanced/savingMode", "Ask when closing unsaved files (normal)").toString();
     if(l_string == "Ask when closing unsaved files (normal)")
     {
-        m_saving_mode = 0;
+        m_saving_mode = SavingModes::ALWAYS_ASK;
     }
     else if(l_string == "Don't ask when closing unsaved files (use with care)")
     {
-        m_saving_mode = 1;
+        m_saving_mode = SavingModes::NEVER_SAVE;
     }
     else
     {
-        m_saving_mode = 2;
+        m_saving_mode = SavingModes::ALWAYS_SAVE;
     }
     m_mouse_wheel_zooms = m_settings->value("Advanced/mouseWheelZooms", false).toBool();
     setFreqA(m_settings->value("View/freqA", 440).toInt());
@@ -767,7 +767,7 @@ void GData::closeActiveFile()
   @return 0 if the file was closed, 1 if canclled, -1 if error
 */
 int GData::closeFile( SoundFile * p_sound_file
-                    , int p_saving_mode
+                    , t_saving_modes p_saving_mode
                     )
 {
     if(p_sound_file == NULL)
@@ -791,7 +791,7 @@ int GData::closeFile( SoundFile * p_sound_file
         return 0;
     }
 
-    if(p_saving_mode == ALWAYS_ASK)
+    if(p_saving_mode == SavingModes::ALWAYS_ASK)
     {
         QString l_filename = QString(getFilenamePart(l_old_filename.toStdString().c_str()));
         int l_option = QMessageBox::question(NULL
@@ -823,12 +823,12 @@ int GData::closeFile( SoundFile * p_sound_file
                 return 1;
         }
     }
-    else if(p_saving_mode == NEVER_SAVE)
+    else if(p_saving_mode == SavingModes::NEVER_SAVE)
     {
         removeFileFromList(p_sound_file);
         delete p_sound_file;
     }
-    else if(p_saving_mode == ALWAYS_SAVE)
+    else if(p_saving_mode == SavingModes::ALWAYS_SAVE)
     {
         removeFileFromList(p_sound_file);
         delete p_sound_file;

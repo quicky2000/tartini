@@ -89,11 +89,11 @@ class GData : public QObject
 
   public:
 
-    enum SavingModes
+    typedef enum class SavingModes
     { ALWAYS_ASK
     , NEVER_SAVE
     , ALWAYS_SAVE
-    };
+    } t_saving_modes;
 
     GData();
     virtual ~GData();
@@ -245,7 +245,7 @@ class GData : public QObject
   inline t_analysis_modes analysisType()const;
   inline bool polish()const;
   inline bool showMeanVarianceBars()const;
-  inline int savingMode()const;
+  inline t_saving_modes savingMode()const;
 
   inline const QColor & backgroundColor()const;
   inline const QColor & shading1Color()const;
@@ -321,7 +321,7 @@ public slots:
               , QString p_new_filename
               );
   int closeFile(SoundFile * p_sound_file
-               , int p_saving_mode
+               , t_saving_modes p_saving_mode
                /*, bool ask=true*/
                );
   void resetActiveIntThreshold(int p_threshold_percentage);
@@ -389,7 +389,7 @@ public slots:
   int m_slow_update_speed;
   bool m_polish;
   bool m_show_mean_variance_bars;
-  int m_saving_mode;
+  t_saving_modes m_saving_mode;
   bool m_vibrato_sine_style;
   int m_music_key_type;
   int m_tempered_type;
