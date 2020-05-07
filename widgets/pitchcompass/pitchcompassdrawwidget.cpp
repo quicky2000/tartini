@@ -165,7 +165,7 @@ void PitchCompassDrawWidget::updateCompass(double p_time)
 
 #if QWT_VERSION >= 0x060000
             QwtCompassScaleDraw * l_scale_draw = dynamic_cast<QwtCompassScaleDraw*>(m_compass->scaleDraw());
-            assert(l_scale_draw);
+            myassert(l_scale_draw);
             l_scale_draw->setLabelMap(l_notes);
 #else
             m_compass->setLabelMap(l_notes);
@@ -192,7 +192,7 @@ void PitchCompassDrawWidget::updateCompass(double p_time)
 
 #if QWT_VERSION >= 0x060000
             QwtCompassScaleDraw * l_scale_draw = dynamic_cast<QwtCompassScaleDraw*>(m_compass->scaleDraw());
-            assert(l_scale_draw);
+            myassert(l_scale_draw);
             l_scale_draw->setLabelMap(l_notes);
 #else
             m_compass->setLabelMap(l_notes);
@@ -222,7 +222,7 @@ void PitchCompassDrawWidget::blank()
             QMap< double, QString > l_notes;
 #if QWT_VERSION >= 0x060000
             QwtCompassScaleDraw * l_scale_draw = dynamic_cast<QwtCompassScaleDraw*>(m_compass->scaleDraw());
-            assert(l_scale_draw);
+            myassert(l_scale_draw);
             l_scale_draw->setLabelMap(l_notes);
 #else
             m_compass->setLabelMap(l_notes);
