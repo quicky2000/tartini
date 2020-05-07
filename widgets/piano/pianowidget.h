@@ -44,8 +44,6 @@ public DrawWidget
     inline float amountPressed();
     inline void setAmountPressed(float p_amount_pressed);
 
-    QPixmap * m_buffer;
-
     //-1=no note, 0=C, 1=C#, 2=D ... 11=B
     int m_current_note;
 
