@@ -21,6 +21,13 @@
 #include "useful.h"
 
 //------------------------------------------------------------------------------
+FixedAverageFilter::FixedAverageFilter()
+: m_size(0)
+, m_total_sum(0.0)
+{
+}
+
+//------------------------------------------------------------------------------
 FixedAverageFilter::FixedAverageFilter(int p_size)
 {
     init(p_size);
