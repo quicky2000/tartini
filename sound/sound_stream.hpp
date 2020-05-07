@@ -20,7 +20,10 @@
 
 //------------------------------------------------------------------------------
 SoundStream::SoundStream()
-: m_mode(F_NONE)
+: m_freq(0)
+, m_channels(0)
+, m_bits(0)
+, m_mode(F_NONE)
 {
 }
 
