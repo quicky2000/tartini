@@ -59,7 +59,7 @@ NoteData::NoteData( const Channel & p_channel
 , m_loop_start(m_start_chunk * m_channel->framesPerChunk() + m_loop_step)
 , m_prev_extremum_time(-1)
 , m_prev_extremum_pitch(-1)
-, m_prev_extremum(NONE)
+, m_prev_extremum(PrevExtremum::NONE)
 {
     m_nsdf_aggregate_data.resize(p_channel.get_nsdf_data().size(), 0.0f);
     m_nsdf_aggregate_data_scaled.resize(p_channel.get_nsdf_data().size(), 0.0f);
@@ -120,15 +120,15 @@ void NoteData::addVibratoData(int p_chunk)
             if((l_prev_pitch < l_current_pitch) && (l_current_pitch >= l_next_pitch))
             {
                 // Maximum
-                if(m_prev_extremum == NONE)
+                if(m_prev_extremum == PrevExtremum::NONE)
                 {
                     m_maxima->push_back(l_current_time);
                     m_prev_extremum_time = l_current_time;
                     m_prev_extremum_pitch = l_current_pitch;
-                    m_prev_extremum = FIRST_MAXIMUM;
+                    m_prev_extremum = PrevExtremum::FIRST_MAXIMUM;
                     continue;
                 }
-                if((m_prev_extremum == FIRST_MAXIMUM) || (m_prev_extremum == MAXIMUM))
+                if((m_prev_extremum == PrevExtremum::FIRST_MAXIMUM) || (m_prev_extremum == PrevExtremum::MAXIMUM))
                 {
                     if(l_current_pitch >= m_prev_extremum_pitch)
                     {
@@ -144,12 +144,12 @@ void NoteData::addVibratoData(int p_chunk)
                    (l_current_time - m_prev_extremum_time > 42 * m_loop_step)
                   )
                 {
-                    if(m_prev_extremum == MINIMUM)
+                    if(m_prev_extremum == PrevExtremum::MINIMUM)
                     {
                         m_maxima->push_back(l_current_time);
                         m_prev_extremum_time = l_current_time;
                         m_prev_extremum_pitch = l_current_pitch;
-                        m_prev_extremum = MAXIMUM;
+                        m_prev_extremum = PrevExtremum::MAXIMUM;
                         continue;
                     }
                     else
@@ -160,7 +160,7 @@ void NoteData::addVibratoData(int p_chunk)
                             m_maxima->push_back(l_current_time);
                             m_prev_extremum_time = l_current_time;
                             m_prev_extremum_pitch = l_current_pitch;
-                            m_prev_extremum = MAXIMUM;
+                            m_prev_extremum = PrevExtremum::MAXIMUM;
                             continue;
                         }
                         else
@@ -171,7 +171,7 @@ void NoteData::addVibratoData(int p_chunk)
                             m_maxima->push_back(l_current_time);
                             m_prev_extremum_time = l_current_time;
                             m_prev_extremum_pitch = l_current_pitch;
-                            m_prev_extremum = FIRST_MAXIMUM;
+                            m_prev_extremum = PrevExtremum::FIRST_MAXIMUM;
                             continue;
                         }
                     }
@@ -180,15 +180,15 @@ void NoteData::addVibratoData(int p_chunk)
             else if((l_prev_pitch > l_current_pitch) && (l_current_pitch <= l_next_pitch))
             {
                 // Minimum
-                if(m_prev_extremum == NONE)
+                if(m_prev_extremum == PrevExtremum::NONE)
                 {
                     m_minima->push_back(l_current_time);
                     m_prev_extremum_time = l_current_time;
                     m_prev_extremum_pitch = l_current_pitch;
-                    m_prev_extremum = FIRST_MINIMUM;
+                    m_prev_extremum = PrevExtremum::FIRST_MINIMUM;
                     continue;
                 }
-                if((m_prev_extremum == FIRST_MINIMUM) || (m_prev_extremum == MINIMUM))
+                if((m_prev_extremum == PrevExtremum::FIRST_MINIMUM) || (m_prev_extremum == PrevExtremum::MINIMUM))
                 {
                     if(l_current_pitch <= m_prev_extremum_pitch)
                     {
@@ -204,12 +204,12 @@ void NoteData::addVibratoData(int p_chunk)
                    (l_current_time - m_prev_extremum_time > 42 * m_loop_step)
                   )
                 {
-                    if(m_prev_extremum == MAXIMUM)
+                    if(m_prev_extremum == PrevExtremum::MAXIMUM)
                     {
                         m_minima->push_back(l_current_time);
                         m_prev_extremum_time = l_current_time;
                         m_prev_extremum_pitch = l_current_pitch;
-                        m_prev_extremum = MINIMUM;
+                        m_prev_extremum = PrevExtremum::MINIMUM;
                         continue;
                     }
                     else
@@ -220,7 +220,7 @@ void NoteData::addVibratoData(int p_chunk)
                             m_minima->push_back(l_current_time);
                             m_prev_extremum_time = l_current_time;
                             m_prev_extremum_pitch = l_current_pitch;
-                            m_prev_extremum = MINIMUM;
+                            m_prev_extremum = PrevExtremum::MINIMUM;
                             continue;
                         }
                         else
@@ -231,7 +231,7 @@ void NoteData::addVibratoData(int p_chunk)
                             m_minima->push_back(l_current_time);
                             m_prev_extremum_time = l_current_time;
                             m_prev_extremum_pitch = l_current_pitch;
-                            m_prev_extremum = FIRST_MINIMUM;
+                            m_prev_extremum = PrevExtremum::FIRST_MINIMUM;
                             continue;
                         }
                     }
