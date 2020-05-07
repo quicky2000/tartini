@@ -49,11 +49,15 @@ FreqDrawWidget::FreqDrawWidget( QWidget *p_parent
                               , const char* p_name
                               )
 : DrawWidget(p_parent, p_name)
+, m_drag_mode(DragNone)
+, m_mouse_X(0)
+, m_mouse_Y(0)
+, m_down_time(0.0)
+, m_down_note(0.0)
 {
     setMouseTracking(true);
     setAttribute(Qt::WA_DeleteOnClose);
 
-    m_drag_mode = DragNone;
 
     QSizePolicy l_size_policy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     l_size_policy.setHeightForWidth(false);
