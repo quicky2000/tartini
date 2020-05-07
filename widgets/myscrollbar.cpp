@@ -26,6 +26,12 @@ MyScrollBar::MyScrollBar(Qt::Orientation p_orientation
                         ,const char * p_name
                         )
 : QWidget(p_parent)
+, m_min_value(0.0)
+, m_max_value(0.0)
+, m_value(0.0)
+, m_line_step(0.0)
+, m_page_step(0.0)
+, m_step(0.0)
 , m_bar(new QScrollBar(p_orientation, this))
 {
     setObjectName(p_name);
