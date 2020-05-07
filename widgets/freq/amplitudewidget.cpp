@@ -41,7 +41,7 @@ AmplitudeWidget::AmplitudeWidget(QWidget * /*parent*/, const char* /*name*/)
 // Replace call to setRange(0.8); and setOffset(0.0) by final value assignations
 // to avoid issue with non initialised values. We don't care about signal emissions
 // because at construction time there are still not bound to slots
-: m_drag_mode(DragNone)
+: m_drag_mode(DragModes::DragNone)
 , m_mouse_X(0)
 , m_mouse_Y(0)
 , m_down_time(0.0)
@@ -501,12 +501,12 @@ void AmplitudeWidget::mousePressEvent(QMouseEvent * p_mouse_event)
     View & l_view = g_data->getView();
     int l_time_X = toInt(l_view.viewOffset() / l_view.zoomX());
     int l_pixel_at_current_noise_threshold_Y;
-    m_drag_mode = DragNone;
+    m_drag_mode = DragModes::DragNone;
 
     //Check if user clicked on center bar, to drag it
     if(within(4, p_mouse_event->x(), l_time_X))
     {
-        m_drag_mode = DragTimeBar;
+        m_drag_mode = DragModes::DragTimeBar;
         m_mouse_X = p_mouse_event->x();
         return;
     }
@@ -516,7 +516,7 @@ void AmplitudeWidget::mousePressEvent(QMouseEvent * p_mouse_event)
         l_pixel_at_current_noise_threshold_Y = height() - 1 - toInt((getCurrentThreshold(l_j) - offsetInv()) / range() * double(height()));
         if(within(4, p_mouse_event->y(), l_pixel_at_current_noise_threshold_Y))
         {
-            m_drag_mode = DragNoiseThreshold;
+            m_drag_mode = DragModes::DragNoiseThreshold;
             //remember which m_threshold_index the user clicked
             m_threshold_index = l_j;
             m_mouse_Y = p_mouse_event->y();
@@ -527,7 +527,7 @@ void AmplitudeWidget::mousePressEvent(QMouseEvent * p_mouse_event)
     {
         m_mouse_X = p_mouse_event->x();
         m_mouse_Y = p_mouse_event->y();
-        m_drag_mode = DragBackground;
+        m_drag_mode = DragModes::DragBackground;
         m_down_time = l_view.currentTime();
         m_down_offset = offset();
     }
@@ -542,7 +542,7 @@ void AmplitudeWidget::mouseMoveEvent(QMouseEvent *p_mouse_event)
   
     switch(m_drag_mode)
     {
-        case DragTimeBar:
+        case DragModes::DragTimeBar:
         {
             int l_new_X = l_pixel_at_current_time_X + (p_mouse_event->x() - m_mouse_X);
             l_view.setViewOffset(double(l_new_X) * l_view.zoomX());
@@ -550,7 +550,7 @@ void AmplitudeWidget::mouseMoveEvent(QMouseEvent *p_mouse_event)
             l_view.doSlowUpdate();
         }
         break;
-        case DragNoiseThreshold:
+        case DragModes::DragNoiseThreshold:
         {
             int l_new_Y = p_mouse_event->y();
             setCurrentThreshold(double(height() - 1 - l_new_Y) / double(height()) * range() + offsetInv(), m_threshold_index);
@@ -558,12 +558,12 @@ void AmplitudeWidget::mouseMoveEvent(QMouseEvent *p_mouse_event)
             g_data->getView().doSlowUpdate();
         }
         break;
-        case DragBackground:
+        case DragModes::DragBackground:
             g_data->updateActiveChunkTime(m_down_time - (p_mouse_event->x() - m_mouse_X) * l_view.zoomX());
             setOffset(m_down_offset - (double(p_mouse_event->y() - m_mouse_Y) / double(height()) * range()));
             l_view.doSlowUpdate();
         break;
-        case DragNone:
+        case DragModes::DragNone:
             if(within(4, p_mouse_event->x(), l_pixel_at_current_time_X))
             {
                 setCursor(QCursor(Qt::SplitHCursor));
@@ -588,13 +588,15 @@ void AmplitudeWidget::mouseMoveEvent(QMouseEvent *p_mouse_event)
                     unsetCursor();
                 }
             }
+        case DragModes::DragChannel:
+        break;
     }
 }
 
 //------------------------------------------------------------------------------
 void AmplitudeWidget::mouseReleaseEvent(QMouseEvent *)
 {
-    m_drag_mode = DragNone;
+    m_drag_mode = DragModes::DragNone;
 }
 
 //------------------------------------------------------------------------------
