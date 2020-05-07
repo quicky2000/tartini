@@ -398,7 +398,7 @@ bool GData::mouseWheelZooms()const
 }
 
 //------------------------------------------------------------------------------
-int GData::analysisType()const
+t_analysis_modes GData::analysisType()const
 {
     return m_analysis_type;
 }

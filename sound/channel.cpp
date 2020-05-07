@@ -675,7 +675,7 @@ void Channel::processNoteDecisions( int p_chunk
 
         l_current_note->addData(l_analysis_data, float(framesPerChunk()) / float(l_analysis_data.getPeriod()));
         l_current_note->setPeriodOctaveEstimate(calcOctaveEstimate());
-        if(g_data->analysisType() != MPM_MODIFIED_CEPSTRUM)
+        if(g_data->analysisType() != AnalysisModes::MPM_MODIFIED_CEPSTRUM)
         {
             recalcNotePitches(p_chunk);
         }
@@ -872,7 +872,7 @@ bool Channel::chooseCorrelationIndex( int p_chunk
         //no period found
         return false;
     }
-    if(g_data->analysisType() == MPM || g_data->analysisType() == MPM_MODIFIED_CEPSTRUM)
+    if(g_data->analysisType() == AnalysisModes::MPM || g_data->analysisType() == AnalysisModes::MPM_MODIFIED_CEPSTRUM)
     {
         //choose the periodEstimate which is closest to the periodOctaveEstimate
         float l_min_dist = fabs(l_analysis_data.getPeriodEstimatesAt(0) - p_period_octave_estimate);

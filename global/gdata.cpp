@@ -141,7 +141,7 @@ GData::GData()
 , m_semitone_offset(0.0)
 , m_amplitude_mode(0)
 , m_pitch_contour_mode(0)
-, m_analysis_type(0)
+, m_analysis_type(AnalysisModes::MPM)
 , m_dB_floor(-150.0)
 , m_drawing_buffer(new QPixmap(1, 1))
 , m_left_time(1.0) // Put a dummy value so that setLeftTime will be completely executed
@@ -543,15 +543,15 @@ void GData::updateQuickRefSettings()
     QString l_analysis_string = m_settings->value("Analysis/analysisType", "MPM").toString();
     if(l_analysis_string == QString("MPM"))
     {
-        m_analysis_type = MPM;
+        m_analysis_type = AnalysisModes::MPM;
     }
     else if(l_analysis_string == QString("AUTOCORRELATION"))
     {
-        m_analysis_type = AUTOCORRELATION;
+        m_analysis_type = AnalysisModes::AUTOCORRELATION;
     }
     else
     {
-        m_analysis_type = MPM_MODIFIED_CEPSTRUM;
+        m_analysis_type = AnalysisModes::MPM_MODIFIED_CEPSTRUM;
     }
     m_show_mean_variance_bars = m_settings->value("Advanced/showMeanVarianceBars", false).toBool();
     QString l_string = m_settings->value("Advanced/savingMode", "Ask when closing unsaved files (normal)").toString();

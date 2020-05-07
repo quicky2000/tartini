@@ -239,7 +239,7 @@ double MyTransforms::nsdf( float * p_input
     double l_sum_sq = autocorr(p_input, p_output);
 
     double l_total_sum_sq = l_sum_sq * 2.0;
-    if(g_data->analysisType() == MPM || g_data->analysisType() == MPM_MODIFIED_CEPSTRUM)
+    if(g_data->analysisType() == AnalysisModes::MPM || g_data->analysisType() == AnalysisModes::MPM_MODIFIED_CEPSTRUM)
     {
         //nsdf
         for(int l_j = 0; l_j < m_k; l_j++)
@@ -508,7 +508,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */
 
             if(!l_analysis_data.isDone())
             {
-                if(g_data->analysisType() == MPM_MODIFIED_CEPSTRUM)
+                if(g_data->analysisType() == AnalysisModes::MPM_MODIFIED_CEPSTRUM)
                 {
                     //calculate pitch
                     p_channel->chooseCorrelationIndex(p_chunk, float(l_analysis_data.getCepstrumIndex()));
@@ -880,7 +880,7 @@ void MyTransforms::doChannelDataFFT( Channel * p_channel
     printf("n = %d, fff = %f\n", l_n_div_2, *std::max_element(p_channel->get_fft_data2().begin(), p_channel->get_fft_data2().end()));
 #endif // DEBUG_PRINTF
 
-    if(g_data->analysisType() == MPM_MODIFIED_CEPSTRUM)
+    if(g_data->analysisType() == AnalysisModes::MPM_MODIFIED_CEPSTRUM)
     {
         for(int l_j = 1; l_j < l_n_div_2; l_j++)
         {

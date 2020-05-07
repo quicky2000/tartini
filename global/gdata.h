@@ -61,7 +61,7 @@ extern struct itimerval g_profiler_ovalue;
 #define SOUND_REC       0x02
 #define SOUND_PLAY_REC  0x03
 
-enum AnalysisModes { MPM, AUTOCORRELATION, MPM_MODIFIED_CEPSTRUM };
+typedef enum class AnalysisModes { MPM, AUTOCORRELATION, MPM_MODIFIED_CEPSTRUM } t_analysis_modes;
 
 #define NUM_WIN_SIZES 5
 extern int g_frame_window_sizes[NUM_WIN_SIZES];
@@ -242,7 +242,7 @@ class GData : public QObject
                    );
   double ampWeight(int p_mode);
 
-  inline int analysisType()const;
+  inline t_analysis_modes analysisType()const;
   inline bool polish()const;
   inline bool showMeanVarianceBars()const;
   inline int savingMode()const;
@@ -399,7 +399,7 @@ public slots:
 
   int m_amplitude_mode;
   int m_pitch_contour_mode;
-  int m_analysis_type;
+  t_analysis_modes m_analysis_type;
   double m_dB_floor;
   double m_amp_thresholds[NUM_AMP_MODES][2];
   double m_amp_weights[NUM_AMP_MODES];
