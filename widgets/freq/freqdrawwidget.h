@@ -34,12 +34,12 @@ class FreqDrawWidget : public DrawWidget
 Q_OBJECT
 
   public:
-    enum DragModes
+    typedef enum class DragModes
     { DragNone = 0
     , DragChannel = 1
     , DragBackground = 2
     , DragTimeBar = 3
-    };
+    } t_drag_modes;
 
     FreqDrawWidget( QWidget * p_parent
                   , const char* p_name = 0
@@ -103,7 +103,7 @@ Q_OBJECT
     double mousePitch(int p_y);
     Channel *channelAtPixel(int p_x, int p_y);
 
-    int m_drag_mode;
+    t_drag_modes m_drag_mode;
     int m_mouse_X;
     int m_mouse_Y;
     double m_down_time;

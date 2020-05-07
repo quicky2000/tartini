@@ -58,7 +58,7 @@ FreqWidgetGL::FreqWidgetGL( QWidget * /*parent*/
 {
     setMouseTracking(true);
 
-    m_drag_mode = DragNone;
+    m_drag_mode = t_drag_modes::DragNone;
 
     QSizePolicy l_size_policy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     l_size_policy.setHeightForWidth(false);
@@ -342,12 +342,12 @@ void FreqWidgetGL::mousePressEvent( QMouseEvent *p_mouse_event)
 {
     View & l_view = g_data->getView();
     int l_time_X = toInt(l_view.viewOffset() / l_view.zoomX());
-    m_drag_mode = DragNone;
+    m_drag_mode = t_drag_modes::DragNone;
 
     //Check if user clicked on center bar, to drag it
     if(within(4, p_mouse_event->x(), l_time_X))
     {
-        m_drag_mode = DragTimeBar;
+        m_drag_mode = t_drag_modes::DragTimeBar;
         m_mouse_X = p_mouse_event->x();
         return;
     }
@@ -384,12 +384,12 @@ void FreqWidgetGL::mousePressEvent( QMouseEvent *p_mouse_event)
         {
             //Clicked on a channel
             g_data->setActiveChannel(l_channel);
-            m_drag_mode = DragChannel;
+            m_drag_mode = t_drag_modes::DragChannel;
         }
         else
         {
             //Must have clicked on background
-            m_drag_mode = DragBackground;
+            m_drag_mode = t_drag_modes::DragBackground;
             m_down_time = l_view.currentTime();
             m_down_note = l_view.viewBottom();
         }
@@ -404,20 +404,7 @@ void FreqWidgetGL::mouseMoveEvent( QMouseEvent *p_mouse_event )
 
     switch(m_drag_mode)
     {
-        case DragTimeBar:
-        {
-            int l_new_X = l_pixel_at_current_time_X + (p_mouse_event->x() - m_mouse_X);
-            l_view.setViewOffset(double(l_new_X) * l_view.zoomX());
-            m_mouse_X = p_mouse_event->x();
-            l_view.doSlowUpdate();
-        }
-        break;
-        case DragBackground:
-            l_view.setViewBottom(m_down_note - (m_mouse_Y - p_mouse_event->y()) * l_view.zoomY());
-            g_data->updateActiveChunkTime(m_down_time - (p_mouse_event->x() - m_mouse_X) * l_view.zoomX());
-            l_view.doSlowUpdate();
-            break;
-        case DragNone:
+        case t_drag_modes::DragNone:
             if(within(4, p_mouse_event->x(), l_pixel_at_current_time_X))
             {
                 setCursor(QCursor(Qt::SplitHCursor));
@@ -430,13 +417,30 @@ void FreqWidgetGL::mouseMoveEvent( QMouseEvent *p_mouse_event )
             {
                 unsetCursor();
             }
+            break;
+        case t_drag_modes::DragChannel:
+            // Nothing implemented
+            break;
+        case t_drag_modes::DragBackground:
+            l_view.setViewBottom(m_down_note - (m_mouse_Y - p_mouse_event->y()) * l_view.zoomY());
+            g_data->updateActiveChunkTime(m_down_time - (p_mouse_event->x() - m_mouse_X) * l_view.zoomX());
+            l_view.doSlowUpdate();
+            break;
+        case t_drag_modes::DragTimeBar:
+        {
+            int l_new_X = l_pixel_at_current_time_X + (p_mouse_event->x() - m_mouse_X);
+            l_view.setViewOffset(double(l_new_X) * l_view.zoomX());
+            m_mouse_X = p_mouse_event->x();
+            l_view.doSlowUpdate();
+        }
+        break;
     }
 }
 
 //------------------------------------------------------------------------------
 void FreqWidgetGL::mouseReleaseEvent( QMouseEvent * )
 {
-    m_drag_mode = DragNone;
+    m_drag_mode = t_drag_modes::DragNone;
 }
 
 //------------------------------------------------------------------------------

@@ -47,12 +47,12 @@ class FreqWidgetGL : public QGLWidget
 
   private:
 
-    enum DragModes
+    typedef enum class DragModes
     { DragNone = 0
     , DragChannel = 1
     , DragBackground = 2
     , DragTimeBar = 3
-    };
+    } t_drag_modes;
 
     void initializeGL();
     void resizeGL( int p_w
@@ -150,7 +150,7 @@ class FreqWidgetGL : public QGLWidget
     inline double rightTime()const;
     inline double timeWidth()const;
 
-    int m_drag_mode;
+    t_drag_modes m_drag_mode;
     int m_mouse_X;
     int m_mouse_Y;
     double m_down_time;
