@@ -825,7 +825,7 @@ void MainWindow::openRecord(bool p_and_play)
 
     if(!g_data->openPlayRecord(l_new_sound_file, l_play_sound_file))
     {
-        g_data->closeFile(l_new_sound_file, GData::NEVER_SAVE);
+        g_data->closeFile(l_new_sound_file, GData::SavingModes::NEVER_SAVE);
         QMessageBox::warning(g_main_window, "Error", QString("Error opening sound device for recording"), QMessageBox::Ok, QMessageBox::NoButton);
         return;
     }

@@ -416,7 +416,7 @@ bool GData::showMeanVarianceBars()const
 }
 
 //------------------------------------------------------------------------------
-int GData::savingMode()const
+GData::t_saving_modes GData::savingMode()const
 {
     return m_saving_mode;
 }
