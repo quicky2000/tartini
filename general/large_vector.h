@@ -50,7 +50,9 @@ class large_vector
         iterator(large_vector<T> * p_parent
                 , int p_pos
                 );
-        iterator(const iterator & p_iter);
+        iterator(const iterator & p_iter) = default;
+        iterator & operator=(const iterator &) = default;
+
         uint pos() const;
         iterator & operator++();
         iterator & operator++(int);

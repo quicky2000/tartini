@@ -338,14 +338,6 @@ large_vector<T>::iterator::iterator( large_vector<T> * p_parent
 
 //------------------------------------------------------------------------------
 template<typename T>
-large_vector<T>::iterator::iterator(const iterator & p_iter)
-: m_parent(p_iter.m_parent)
-, m_pos(p_iter.m_pos)
-{
-}
-
-//------------------------------------------------------------------------------
-template<typename T>
 uint large_vector<T>::iterator::pos() const
 {
     return m_pos;
