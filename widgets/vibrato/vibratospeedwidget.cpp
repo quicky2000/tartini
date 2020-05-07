@@ -25,22 +25,21 @@
 //------------------------------------------------------------------------------
 VibratoSpeedWidget::VibratoSpeedWidget(QWidget * p_parent)
 : QGLWidget(p_parent)
+, m_speed_value_to_draw(0.0)
+, m_width_value_to_draw(0.0)
+, m_prev_vibrato_speed(0.0)
+, m_prev_vibrato_width(0.0)
+, m_use_prony(true)
+, m_width_limit(50)
+, m_prev_note_number(-1)
+, m_speed_label_counter(0)
+, m_width_label_counter(0)
 {
-    m_speed_value_to_draw = 0;
-    m_width_value_to_draw = 0;
-    m_prev_vibrato_speed = 0;
-    m_prev_vibrato_width = 0;
-    m_use_prony = true;
-    m_width_limit = 50;
-    m_prev_note_number = -1;
-    m_speed_label_counter = 0;
-    m_width_label_counter = 0;
     for (int l_index = 0; l_index < 100; l_index++)
     {
         m_speed_labels[l_index].set( QString(8,' '), 0.0f, 0.0f);
         m_width_labels[l_index].set( QString(8,' '), 0.0f, 0.0f);
     }
-    m_speed_width_font = QFont();
     m_speed_width_font.setPointSize(9);
 }
 
