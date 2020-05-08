@@ -87,7 +87,7 @@ void VibratoPeriodWidget::resizeGL(int p_width
 		                          ,int p_height
 		                          )
 {
-	glViewport(0, 0, (GLint)p_width, (GLint)p_height);
+	glViewport(0, 0, static_cast<GLint>(p_width), static_cast<GLint>(p_height));
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();

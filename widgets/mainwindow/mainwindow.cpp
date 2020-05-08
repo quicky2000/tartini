@@ -398,7 +398,7 @@ MainWindow::MainWindow()
 
     // the parameters defining how the slider behave inside the scale is now defined in class qwt_abstract_slider
     double l_range_wdith = ( g_data->leftTime() < g_data->rightTime() ? g_data->rightTime() - g_data->leftTime() : g_data->leftTime() - g_data->rightTime());
-    unsigned int l_nb_steps = ((unsigned int)(l_range_wdith * 10000.0));
+    unsigned int l_nb_steps = (static_cast<unsigned int>(l_range_wdith * 10000.0));
     m_time_slider->setTotalSteps(l_nb_steps);
     m_time_slider->setPageSteps(1000);
 
@@ -734,8 +734,8 @@ void MainWindow::openFile(const char *p_file_name)
 #endif // TIME_PREPROCESS
     l_new_sound_file->preProcess();
 #ifdef TIME_PREPROCESS
-    double l_ms_per_chunk = (double)l_timer.elapsed() / l_new_sound_file->totalChunks();
-    double l_frames_per_sec = 1000 * l_new_sound_file->totalChunks() * l_new_sound_file->framesPerChunk() / (double)l_timer.elapsed();
+    double l_ms_per_chunk = static_cast<double>(l_timer.elapsed()) / l_new_sound_file->totalChunks();
+    double l_frames_per_sec = 1000 * l_new_sound_file->totalChunks() * l_new_sound_file->framesPerChunk() / static_cast<double>(l_timer.elapsed());
     std::cout << "Pre-processing took " << l_timer.elapsed() << " ms for " << l_new_sound_file->totalChunks() << " chunks (" <<
         l_ms_per_chunk << " ms per chunk, " << l_frames_per_sec << " frames/sec)" << std::endl;
 #endif // TIME_PREPROCESS
@@ -1109,7 +1109,7 @@ void MainWindow::setTimeRange( double p_min
         m_time_slider->setScale(p_min, p_max);
         // and steps and pages are managed by qwt_abstract_slider class
         double l_range_wdith = ( p_min < p_max ? p_max - p_min : p_min - p_max);
-        unsigned int l_nb_steps = ((unsigned int)(l_range_wdith * 10000.0));
+        unsigned int l_nb_steps = (static_cast<unsigned int>(l_range_wdith * 10000.0));
         m_time_slider->setTotalSteps(l_nb_steps > m_time_slider->totalSteps() ? l_nb_steps : m_time_slider->totalSteps());
         m_time_slider->setPageSteps(1000);
 #else // QWT_VERSION >= 0x060000
@@ -1307,7 +1307,7 @@ bool MainWindow::loadViewGeometry()
             l_size = g_data->getSettingsValue((l_base + "/size").toStdString(), QSize(100, 100));
             QWidget * l_widget = openView(l_j);
             //get the subwindow frame
-            QWidget * l_parent_widget = (QWidget*)(l_widget->parent());
+            QWidget * l_parent_widget = static_cast<QWidget*>(l_widget->parent());
             if(l_parent_widget)
             {
                 l_parent_widget->resize(l_size);

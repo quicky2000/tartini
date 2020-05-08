@@ -34,19 +34,19 @@ void ScoreSegmentIterator::reset(ScoreWidget * p_score_widget, Channel * p_chann
     m_stave_height = m_score_widget->getStaveHeight();
     m_half_stave_height = m_score_widget->getStaveCenterY();
     m_num_rows = std::max((m_score_widget->height() - toInt(m_score_widget->m_boarder_Y * 2)) / m_stave_height, 1);
-    m_total_row_time = (double)(m_score_widget->width() - m_score_widget->m_boarder_X * 2) / m_score_widget->m_scale_X;
+    m_total_row_time = static_cast<double>(m_score_widget->width() - m_score_widget->m_boarder_X * 2) / m_score_widget->m_scale_X;
     m_total_page_time = m_total_row_time * m_num_rows;
     if(m_channel)
     {
         m_cur_time = m_channel->timeAtChunk(m_channel->currentChunk());
-        m_cur_page = (int)floor(m_cur_time / m_total_page_time);
+        m_cur_page = static_cast<int>(floor(m_cur_time / m_total_page_time));
         m_look_ahead_gap_time = m_score_widget->m_look_ahead_gap * m_total_page_time;
         m_look_ahead_time = m_cur_time + m_score_widget->m_look_ahead * m_total_page_time;
         m_look_behind_time = m_look_ahead_time - m_total_page_time;
         m_start_of_page_time = floor(m_cur_time / m_total_page_time) * m_total_page_time;
         m_cur_rel_page_time = m_cur_time - m_start_of_page_time;
         m_end_time = m_channel->totalTime();
-        m_num_pages = (int)ceil(m_end_time / m_total_page_time);
+        m_num_pages = static_cast<int>(ceil(m_end_time / m_total_page_time));
         m_end_of_last_page_time = m_num_pages * m_total_page_time;
         m_look_ahead_time2 = (m_cur_page == m_num_pages - 1) ? std::min(m_end_time, m_look_ahead_time) : m_look_ahead_time;
         m_look_ahead_time2 = (m_cur_page == 0) ? m_end_of_last_page_time : m_look_ahead_time2;
@@ -54,7 +54,7 @@ void ScoreSegmentIterator::reset(ScoreWidget * p_score_widget, Channel * p_chann
         //FIXME: The ending page isn't drawn correctly
         m_look_behind_time2 = (m_cur_page == 0) ? m_look_behind_time + m_total_page_time : m_look_behind_time2;
         m_look_behind_time3 = std::min(m_look_behind_time, m_end_time - m_total_page_time);
-        m_cur_row = (int)floor(m_cur_rel_page_time / m_total_row_time);
+        m_cur_row = static_cast<int>(floor(m_cur_rel_page_time / m_total_row_time));
     }
     m_row_counter = 0;
     m_sub_row_counter = -1;
@@ -84,7 +84,7 @@ bool ScoreSegmentIterator::next()
                             //draw any parts of the next page
                             m_left_time = l_start_of_row_time + m_total_page_time;
                             m_right_time = std::min(l_end_of_row_time, m_look_behind_time3) + m_total_page_time;
-                            m_left_X = (double)m_score_widget->m_boarder_X;
+                            m_left_X = static_cast<double>(m_score_widget->m_boarder_X);
                             return (m_is_valid = true);
                         }
                     break;
@@ -94,7 +94,7 @@ bool ScoreSegmentIterator::next()
                             //normal case
                             m_left_time = std::max(l_start_of_row_time, m_look_behind_time3 + m_look_ahead_gap_time);
                             m_right_time = std::min(l_start_of_row_time + m_total_row_time, m_look_ahead_time2);
-                            m_left_X = (double)m_score_widget->m_boarder_X + (m_left_time - l_start_of_row_time) * m_score_widget->m_scale_X;
+                            m_left_X = static_cast<double>(m_score_widget->m_boarder_X) + (m_left_time - l_start_of_row_time) * m_score_widget->m_scale_X;
                             return (m_is_valid = true);
                         }
                         break;
@@ -104,7 +104,7 @@ bool ScoreSegmentIterator::next()
                             m_left_time = std::max(l_start_of_row_time - m_total_page_time, m_look_behind_time2 + m_look_ahead_gap_time);
                             m_left_time = std::min(m_left_time, l_end_of_row_time - m_total_page_time);
                             m_right_time = l_end_of_row_time - m_total_page_time;
-                            m_left_X = (double)m_score_widget->m_boarder_X + (m_left_time -(l_start_of_row_time - m_total_page_time)) * m_score_widget->m_scale_X;
+                            m_left_X = static_cast<double>(m_score_widget->m_boarder_X) + (m_left_time -(l_start_of_row_time - m_total_page_time)) * m_score_widget->m_scale_X;
                             return (m_is_valid = true);
                         }
                 }

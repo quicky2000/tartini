@@ -84,7 +84,7 @@ class MusicKey
 #define NUM_MUSIC_KEYS 12
 extern std::vector<MusicKey> g_music_keys;
 
-extern char * g_music_key_name[NUM_MUSIC_KEYS];
+extern const char * g_music_key_name[NUM_MUSIC_KEYS];
 extern int g_music_key_root[NUM_MUSIC_KEYS];
 extern int g_music_key;
 

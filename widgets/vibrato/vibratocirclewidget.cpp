@@ -78,7 +78,7 @@ void VibratoCircleWidget::resizeGL(int p_width
 		                          ,int p_height
 		                          )
 {
-	glViewport(0, 0, (GLint)p_width, (GLint)p_height);
+	glViewport(0, 0, static_cast<GLint>(p_width), static_cast<GLint>(p_height));
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -111,7 +111,7 @@ void VibratoCircleWidget::resizeGL(int p_width
 	glBegin(GL_LINE_LOOP);
 	for(int l_index = 0; l_index < 360; l_index = l_index + 1)
 	{
-		float l_deg_in_rad = (float)l_index * l_DEG2RAD;
+		float l_deg_in_rad = static_cast<float>(l_index) * l_DEG2RAD;
 		glVertex2f(l_half_width + 0.8 * l_half_width * cos(l_deg_in_rad), l_half_height + 0.8 * l_half_height * sin(l_deg_in_rad));
 	}
 	glEnd();
@@ -276,10 +276,10 @@ void VibratoCircleWidget::doUpdate()
 					l_vertices_counter = 0;
 					l_colors_counter = 0;
 
-					int l_end_i = std::min((l_current_chunk + 1) * l_active_channel->framesPerChunk() + l_smooth_delay, (int)l_pitch_lookup_used.size());
+					int l_end_i = std::min((l_current_chunk + 1) * l_active_channel->framesPerChunk() + l_smooth_delay, static_cast<int>(l_pitch_lookup_used.size()));
 					for(int l_index = l_right_minimum_time; l_index < l_end_i; l_index += l_step_size)
 					{
-						if(l_index > (int)l_pitch_lookup_used.size())
+						if(l_index > static_cast<int>(l_pitch_lookup_used.size()))
 						{
 							// Break out of loop when end of smoothed pitchlookup is reached
 							break;

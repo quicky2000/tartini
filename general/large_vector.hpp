@@ -66,7 +66,7 @@ void large_vector<T>::copyTo( T * p_dest
         std::copy(getBuffer(l_cur_buf).begin() + l_offset, getBuffer(l_cur_buf).end(), p_dest);
         p_dest += bufferSize() - l_offset;
         l_cur_buf++;
-        while(((unsigned int)(l_ending - p_dest)) > bufferSize())
+        while((static_cast<unsigned int>(l_ending - p_dest)) > bufferSize())
         {
             std::copy(getBuffer(l_cur_buf).begin(), getBuffer(l_cur_buf).end(), p_dest);
             p_dest += bufferSize();
@@ -96,7 +96,7 @@ void large_vector<T>::copyFrom( const T * p_src
         std::copy(p_src, p_src + (bufferSize() - l_offset), getBuffer(l_cur_buf).begin() + l_offset);
         p_src += bufferSize() - l_offset;
         l_cur_buf++;
-        while(((unsigned int)(l_ending - p_src)) > bufferSize())
+        while((static_cast<unsigned int>(l_ending - p_src)) > bufferSize())
         {
             std::copy(p_src, p_src + bufferSize(), getBuffer(l_cur_buf).begin());
             p_src += bufferSize();

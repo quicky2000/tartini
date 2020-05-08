@@ -64,14 +64,14 @@ void SummaryDrawWidget::paintEvent(QPaintEvent *)
     beginDrawing();
 
     //draw all the channels
-    for(int l_j = 0; l_j < (int)g_data->getChannelsSize(); l_j++)
+    for(int l_j = 0; l_j < static_cast<int>(g_data->getChannelsSize()); l_j++)
     {
         l_channel = g_data->getChannelAt(l_j);
         if(!l_channel->isVisible())
         {
             continue;
         }
-        drawChannel(*this, l_channel, get_painter(), g_data->leftTime(), l_view.currentTime(), (g_data->totalTime() / (double) width()), 0.0f, (double) g_data->topPitch() / (double) height(), DRAW_VIEW_SUMMARY);
+        drawChannel(*this, l_channel, get_painter(), g_data->leftTime(), l_view.currentTime(), (g_data->totalTime() / static_cast<double>(width())), 0.0f, static_cast<double>(g_data->topPitch()) / static_cast<double>(height()), DRAW_VIEW_SUMMARY);
     }
 
     //draw the view rectangle

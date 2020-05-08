@@ -111,7 +111,7 @@ void NoteData::addVibratoData(int p_chunk)
         int l_loop_limit = ((p_chunk + 1) * m_channel->framesPerChunk()) - m_loop_step;
         for(int l_current_time = m_loop_start; l_current_time < l_loop_limit; l_current_time += m_loop_step)
         {
-            myassert(l_current_time + m_loop_step < (int)m_channel->get_pitch_lookup_smoothed().size());
+            myassert(l_current_time + m_loop_step < static_cast<int>(m_channel->get_pitch_lookup_smoothed().size()));
             myassert(l_current_time - m_loop_step >= 0);
             float l_prev_pitch = m_channel->get_pitch_lookup_smoothed().at(l_current_time - m_loop_step);
             float l_current_pitch = m_channel->get_pitch_lookup_smoothed().at(l_current_time);

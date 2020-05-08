@@ -223,7 +223,7 @@ void DrawWidget::drawChannel(QPaintDevice & p_paint_device,
       float l_err = 0.0, l_pitch = 0.0, l_prev_pitch = 0.0, vol;
 
       // Integer version of frame time
-      int l_int_chunk = (int) floor(l_frame_time);
+      int l_int_chunk = static_cast<int>(floor(l_frame_time));
       if(l_int_chunk < 0)
 	{
 	  l_int_chunk = 0;
@@ -241,7 +241,7 @@ void DrawWidget::drawChannel(QPaintDevice & p_paint_device,
       int l_half_square_size = l_square_size / 2;
       int l_pen_X = 0, l_pen_Y = 0;
 
-      for (double l_n = l_start; l_n < l_stop && l_int_chunk < (int)p_channel->totalChunks(); l_n += l_step_size, l_int_chunk++)
+      for (double l_n = l_start; l_n < l_stop && l_int_chunk < static_cast<int>(p_channel->totalChunks()); l_n += l_step_size, l_int_chunk++)
 	{
 	  myassert(l_int_chunk >= 0);
 	  AnalysisData * l_data = p_channel->dataAtChunk(l_int_chunk);
@@ -466,7 +466,7 @@ void DrawWidget::drawChannelFilled(Channel * p_channel,
       float l_err = 0.0;
       float l_pitch = 0.0;
       // Integer version of frame time
-      int l_int_chunk = (int) floor(l_frame_time);
+      int l_int_chunk = static_cast<int>(floor(l_frame_time));
       if(l_int_chunk < 0)
 	{
 	  l_int_chunk = 0;
@@ -479,7 +479,7 @@ void DrawWidget::drawChannelFilled(Channel * p_channel,
       double l_stop = width() + (2 * l_step_size);
       l_bottom_points.setPoint(l_point_index++, toInt(l_start), height());
       l_last_N = l_first_N = toInt(l_start);
-      for (double l_n = l_start; l_n < l_stop && l_int_chunk < (int)p_channel->totalChunks(); l_n += l_step_size, l_int_chunk++)
+      for (double l_n = l_start; l_n < l_stop && l_int_chunk < static_cast<int>(p_channel->totalChunks()); l_n += l_step_size, l_int_chunk++)
 	{
 	  myassert(l_int_chunk >= 0);
 	  AnalysisData * l_data = p_channel->dataAtChunk(l_int_chunk);
@@ -677,7 +677,7 @@ void DrawWidget::setChannelVerticalView(Channel * p_channel,
       // More pixels than samples
     float l_pitch = 0.0;
     // Integer version of frame time
-    int l_int_chunk = (int) floor(l_frame_time);
+    int l_int_chunk = static_cast<int>(floor(l_frame_time));
     if(l_int_chunk < 0)
       {
 	l_int_chunk = 0;
@@ -688,7 +688,7 @@ void DrawWidget::setChannelVerticalView(Channel * p_channel,
     
     double l_start = (double(l_int_chunk) - l_frame_time) * l_step_size;
     double l_stop = width() + (2 * l_step_size);
-    for (double l_current_value = l_start; l_current_value < l_stop && l_int_chunk < (int)p_channel->totalChunks(); l_current_value += l_step_size, l_int_chunk++)
+    for (double l_current_value = l_start; l_current_value < l_stop && l_int_chunk < static_cast<int>(p_channel->totalChunks()); l_current_value += l_step_size, l_int_chunk++)
       {
 	myassert(l_int_chunk >= 0);
 	AnalysisData * l_data = p_channel->dataAtChunk(l_int_chunk);
@@ -731,12 +731,12 @@ bool DrawWidget::calcZoomElement(Channel * p_channel,
 {
   int l_start_chunk = toInt(double(p_base_element) * p_base_X);
   int l_finish_chunk = toInt(double(p_base_element + 1) * p_base_X) + 1;
-  if(l_finish_chunk >= (int)p_channel->totalChunks())
+  if(l_finish_chunk >= static_cast<int>(p_channel->totalChunks()))
     {
       //dont go off the end
       l_finish_chunk--;
     }
-  if(l_finish_chunk >= (int)p_channel->totalChunks())
+  if(l_finish_chunk >= static_cast<int>(p_channel->totalChunks()))
     {
       //that data doesn't exist yet
       return false;

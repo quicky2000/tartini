@@ -85,7 +85,7 @@ void VibratoWidget::initializeGL()
 //------------------------------------------------------------------------------
 void VibratoWidget::resizeGL(int w, int h)
 {
-  glViewport(0, 0, (GLint)w, (GLint)h);
+  glViewport(0, 0, static_cast<GLint>(w), static_cast<GLint>(h));
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -306,7 +306,7 @@ void VibratoWidget::doUpdate()
 
 	      for(int l_index = 0; l_index < l_color1_bars; l_index++)
 		{
-		  l_x1 = ((((float)l_note->get_maxima()->at(l_index) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
+		  l_x1 = (((static_cast<float>(l_note->get_maxima()->at(l_index)) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
 		  if (l_x1 < m_note_label_offset)
 		    {
 		      l_x1 = m_note_label_offset;
@@ -317,11 +317,11 @@ void VibratoWidget::doUpdate()
 		    }
 		  if (l_maximum_first)
 		    {
-		      l_x2 = ((((float)l_note->get_minima()->at(l_index) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
+		      l_x2 = (((static_cast<float>(l_note->get_minima()->at(l_index)) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
 		    }
 		  else
 		    {
-		      l_x2 = ((((float)l_note->get_minima()->at(l_index + 1) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
+		      l_x2 = (((static_cast<float>(l_note->get_minima()->at(l_index + 1)) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
 		    }
 		  if (l_x2 < m_note_label_offset)
 		    {
@@ -356,7 +356,7 @@ void VibratoWidget::doUpdate()
 
 	      for(int l_index = 0; l_index < l_color2_bars; l_index++)
 		{
-		  l_x1 = ((((float)l_note->get_minima()->at(l_index) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
+		  l_x1 = (((static_cast<float>(l_note->get_minima()->at(l_index)) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
 		  if (l_x1 < m_note_label_offset)
 		    {
 		      l_x1 = m_note_label_offset;
@@ -367,11 +367,11 @@ void VibratoWidget::doUpdate()
 		    }
 		  if (l_maximum_first)
 		    {
-		      l_x2 = ((((float)l_note->get_maxima()->at(l_index + 1) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
+		      l_x2 = (((static_cast<float>(l_note->get_maxima()->at(l_index + 1)) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
 		    }
 		  else
 		    {
-		      l_x2 = ((((float)l_note->get_maxima()->at(l_index) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
+		      l_x2 = (((static_cast<float>(l_note->get_maxima()->at(l_index)) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
 		    }
 		  if (l_x2 < m_note_label_offset)
 		    {
@@ -418,7 +418,7 @@ void VibratoWidget::doUpdate()
 
 	      for(int l_index = 0; l_index < l_maxima_size; l_index++)
 		{
-		  l_x1 = ((((float)l_note->get_maxima()->at(l_index) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
+		  l_x1 = (((static_cast<float>(l_note->get_maxima()->at(l_index)) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
 		  if (l_x1 < m_note_label_offset)
 		    {
 		      continue;
@@ -444,7 +444,7 @@ void VibratoWidget::doUpdate()
 	      // Calculate the vertical separator lines through the minima
 	      for(int l_index = 0; l_index < l_minima_size; l_index++)
 		{
-		  l_x1 = ((((float)l_note->get_minima()->at(l_index) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
+		  l_x1 = (((static_cast<float>(l_note->get_minima()->at(l_index)) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
 		  if (l_x1 < m_note_label_offset)
 		    {
 		      continue;
@@ -704,7 +704,7 @@ void VibratoWidget::doUpdate()
 			  int l_time_at_zero = l_beginning_of_note + l_smooth_delay;
 			  float l_scale_X = (l_offset - l_time_at_zero) / float(2 * l_smooth_delay);
 			  float l_pitch_at_zero = l_active->dataAtChunk(l_my_start_chunk)->getPitch();
-			  int l_smooth_delay_pos3 = std::min(l_beginning_of_note + 3 * l_smooth_delay, (int)l_pitch_lookup_used.size() - 1);
+			  int l_smooth_delay_pos3 = std::min(l_beginning_of_note + 3 * l_smooth_delay, static_cast<int>(l_pitch_lookup_used.size()) - 1);
 			  if(l_smooth_delay_pos3 >= 0)
 			    {
 			      float l_pitch_at_2_smooth_delay = l_pitch_lookup_used.at(l_smooth_delay_pos3);
@@ -778,7 +778,7 @@ void VibratoWidget::doUpdate()
 	  l_vertices_counter = 0;
 	  l_colors_counter = 0;
 
-	  const double l_half_window_time = (double)l_active->size() / (double)(l_active->rate() * 2);
+	  const double l_half_window_time = static_cast<double>(l_active->size()) / static_cast<double>(l_active->rate() * 2);
 	  int l_pixel_left = toInt((l_active->chunkAtTime(g_data->getView().currentTime() - l_half_window_time) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset);
 	  int l_pixel_right = toInt((l_active->chunkAtTime(g_data->getView().currentTime() + l_half_window_time) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset);
 
@@ -852,7 +852,7 @@ void VibratoWidget::doUpdate()
 	      float l_x, l_y;
 	      for(int l_index = 0; l_index < l_maxima_size; l_index++)
 		{
-		  l_x = ((((float)l_note->get_maxima()->at(l_index) - l_smooth_delay)/ l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
+		  l_x = (((static_cast<float>(l_note->get_maxima()->at(l_index)) - l_smooth_delay)/ l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
 		  if (l_x < m_note_label_offset)
 		    {
 		      continue;
@@ -877,7 +877,7 @@ void VibratoWidget::doUpdate()
 	      float l_x, l_y;
 	      for(int l_index = 0; l_index < l_minima_size; l_index++)
 		{
-		  l_x = ((((float)l_note->get_minima()->at(l_index) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
+		  l_x = (((static_cast<float>(l_note->get_minima()->at(l_index)) - l_smooth_delay) / l_frames_per_chunk) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset;
 		  if (l_x < m_note_label_offset)
 		    {
 		      continue;

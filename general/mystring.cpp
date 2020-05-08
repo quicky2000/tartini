@@ -50,7 +50,7 @@ char * copy_string(const char * p_s)
     {
         return NULL;
     }
-    char * l_t = (char *)malloc(strlen(p_s) + 1);
+    char * l_t = static_cast<char *>(malloc(strlen(p_s) + 1));
     if(nullptr == l_t)
     {
         throw std::bad_alloc();

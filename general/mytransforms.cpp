@@ -68,12 +68,12 @@ void MyTransforms::init( int p_n
     m_equal_loudness = p_equal_loudness;
     m_num_harmonics = p_num_harmonics;
 
-    m_data_temp = (float*)fftwf_malloc(sizeof(float) * m_n);
-    m_data_time = (float*)fftwf_malloc(sizeof(float) * m_n);
-    m_data_FFT  =  (float*)fftwf_malloc(sizeof(float) * m_n);
-    m_autocorr_time = (float*)fftwf_malloc(sizeof(float) * m_size);
-    m_autocorr_FFT  = (float*)fftwf_malloc(sizeof(float) * m_size);
-    m_hanning_coeff  = (float*)fftwf_malloc(sizeof(float) * m_n);
+    m_data_temp = static_cast<float*>(fftwf_malloc(sizeof(float) * m_n));
+    m_data_time = static_cast<float*>(fftwf_malloc(sizeof(float) * m_n));
+    m_data_FFT  =  static_cast<float*>(fftwf_malloc(sizeof(float) * m_n));
+    m_autocorr_time = static_cast<float*>(fftwf_malloc(sizeof(float) * m_size));
+    m_autocorr_FFT  = static_cast<float*>(fftwf_malloc(sizeof(float) * m_size));
+    m_hanning_coeff  = static_cast<float*>(fftwf_malloc(sizeof(float) * m_n));
 
     m_plan_autocorr_time_2_FFT = fftwf_plan_r2r_1d(m_size, m_autocorr_time, m_autocorr_FFT, FFTW_R2HC, l_my_FFT_mode);
     m_plan_autocorr_FFT_2_time = fftwf_plan_r2r_1d(m_size, m_autocorr_FFT, m_autocorr_time, FFTW_HC2R, l_my_FFT_mode);
@@ -81,12 +81,12 @@ void MyTransforms::init( int p_n
     m_plan_data_time_2_FFT = fftwf_plan_r2r_1d(m_n, m_data_time, m_data_FFT, FFTW_R2HC, l_my_FFT_mode);
     m_plan_data_FFT_2_time = fftwf_plan_r2r_1d(m_n, m_data_FFT, m_data_time, FFTW_HC2R, l_my_FFT_mode); //???
 
-    m_harmonics_amp_left = (float*)fftwf_malloc(m_num_harmonics * sizeof(float));
-    m_harmonics_phase_left = (float*)fftwf_malloc(m_num_harmonics * sizeof(float));
-    m_harmonics_amp_center = (float*)fftwf_malloc(m_num_harmonics * sizeof(float));
-    m_harmonics_phase_center = (float*)fftwf_malloc(m_num_harmonics * sizeof(float));
-    m_harmonics_amp_right = (float*)fftwf_malloc(m_num_harmonics * sizeof(float));
-    m_harmonics_phase_right = (float*)fftwf_malloc(m_num_harmonics * sizeof(float));
+    m_harmonics_amp_left = static_cast<float*>(fftwf_malloc(m_num_harmonics * sizeof(float)));
+    m_harmonics_phase_left = static_cast<float*>(fftwf_malloc(m_num_harmonics * sizeof(float)));
+    m_harmonics_amp_center = static_cast<float*>(fftwf_malloc(m_num_harmonics * sizeof(float)));
+    m_harmonics_phase_center = static_cast<float*>(fftwf_malloc(m_num_harmonics * sizeof(float)));
+    m_harmonics_amp_right = static_cast<float*>(fftwf_malloc(m_num_harmonics * sizeof(float)));
+    m_harmonics_phase_right = static_cast<float*>(fftwf_malloc(m_num_harmonics * sizeof(float)));
 
     m_freq_per_bin = m_rate / double(m_size);
     //init m_hanning_coeff. The hanning windowing function

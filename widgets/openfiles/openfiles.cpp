@@ -104,7 +104,7 @@ void OpenFiles::listViewChanged()
     {
         QCheckBox * l_check_box = static_cast<QCheckBox *>(m_table->cellWidget(l_row,0));
         bool l_state = Qt::Checked == l_check_box->checkState();
-        myassert(l_row < (int)g_data->getChannelsSize());
+        myassert(l_row < static_cast<int>(g_data->getChannelsSize()));
         if(g_data->getChannelAt(l_row)->isVisible() != l_state)
         {
             l_found = true;

@@ -354,7 +354,7 @@ void AmplitudeWidget::drawChannelAmplitudeGL(Channel *p_channel)
         //l_base_X <= 1
         float l_val = 0.0;
         // Integer version of frame time
-        int l_int_chunk = (int) floor(l_left_frame_time);
+        int l_int_chunk = static_cast<int>(floor(l_left_frame_time));
         // So we skip some pixels
         double l_step_size = 1.0 / l_base_X;
         float l_x = 0.0f, l_y;
@@ -455,7 +455,7 @@ void AmplitudeWidget::drawChannelAmplitudeFilledGL(Channel *p_channel)
         //l_base_X <= 1
         float l_val = 0.0;
         // Integer version of frame time
-        int l_int_chunk = (int) floor(l_left_frame_time);
+        int l_int_chunk = static_cast<int>(floor(l_left_frame_time));
         // So we skip some pixels
         double l_step_size = 1.0 / l_base_X;
         float l_x = 0.0f, l_y;

@@ -458,7 +458,7 @@ void Channel::recalcScoreThresholds()
 //------------------------------------------------------------------------------
 bool Channel::isVisibleNote(int p_note_index) const
 {
-    myassert(p_note_index < (int)m_note_data.size());
+    myassert(p_note_index < static_cast<int>(m_note_data.size()));
     if(p_note_index == NO_NOTE)
     {
         return false;
@@ -494,9 +494,9 @@ bool Channel::isChangingChunk(AnalysisData * p_data) const
 //------------------------------------------------------------------------------
 void Channel::backTrackNoteChange(int p_chunk)
 {
-    int l_first = MAX(p_chunk - (int)ceil(g_long_time / timePerChunk()), getLastNote()->startChunk());
+    int l_first = MAX(p_chunk - static_cast<int>(ceil(g_long_time / timePerChunk())), getLastNote()->startChunk());
 #ifdef DEBUG_PRINTF
-    printf("ceil = %d, %d\n", (int)ceil(g_long_time / timePerChunk()), p_chunk-l_first);
+    printf("ceil = %d, %d\n", static_cast<int>(ceil(g_long_time / timePerChunk())), p_chunk-l_first);
 #endif // DEBUG_PRINTF
     int l_last = p_chunk; //currentNote->endChunk();
     if(l_first >= l_last)
@@ -586,7 +586,7 @@ bool Channel::isNoteChanging(int p_chunk)
         return true;
     }
 
-    int l_first_short_chunk = MAX(p_chunk - (int)ceil(g_short_time / timePerChunk()), getLastNote()->startChunk());
+    int l_first_short_chunk = MAX(p_chunk - static_cast<int>(ceil(g_short_time / timePerChunk())), getLastNote()->startChunk());
     AnalysisData * l_first_short_data = dataAtChunk(l_first_short_chunk);
     double l_spread_2 = fabs(l_analysis_data->getShortTermMean() - l_first_short_data->getLongTermMean()) -
                              (l_analysis_data->getShortTermDeviation() + l_first_short_data->getLongTermDeviation()
@@ -594,7 +594,7 @@ bool Channel::isNoteChanging(int p_chunk)
     l_analysis_data->setSpread(l_spread);
     l_analysis_data->setSpread2(l_spread_2);
 
-    if(l_num_chunks >= (int)(ceil(g_long_time / timePerChunk()) / 2.0) && l_spread_2 > 0.0)
+    if(l_num_chunks >= static_cast<int>(ceil(g_long_time / timePerChunk()) / 2.0) && l_spread_2 > 0.0)
     {
         l_analysis_data->setReason(4);
         return true;
@@ -615,7 +615,7 @@ bool Channel::isNoteChanging(int p_chunk)
 //------------------------------------------------------------------------------
 bool Channel::isLabelNote(int p_note_index) const
 {
-    myassert(p_note_index < (int)m_note_data.size());
+    myassert(p_note_index < static_cast<int>(m_note_data.size()));
     if(p_note_index >= 0 && m_note_data[p_note_index].isValid())
     {
         return true;
@@ -802,7 +802,7 @@ const NoteData * Channel::getCurrentNote() const
     if(l_analysis_data)
     {
         int l_note_index = l_analysis_data->getNoteIndex();
-        if(l_note_index >= 0 && l_note_index < (int)m_note_data.size())
+        if(l_note_index >= 0 && l_note_index < static_cast<int>(m_note_data.size()))
         {
             return &m_note_data[l_note_index];
         }
@@ -813,7 +813,7 @@ const NoteData * Channel::getCurrentNote() const
 //------------------------------------------------------------------------------
 const NoteData * Channel::getNote(int p_note_index) const
 {
-    if(p_note_index >= 0 && p_note_index < (int)m_note_data.size())
+    if(p_note_index >= 0 && p_note_index < static_cast<int>(m_note_data.size()))
     {
         return &m_note_data[p_note_index];
     }
@@ -853,8 +853,8 @@ void Channel::chooseCorrelationIndex1(int p_chunk)
     double l_freq = rate() / l_analysis_data.getPeriod();
     l_analysis_data.setFundamentalFreq(float(l_freq));
     l_analysis_data.setPitch(bound(freq2pitch(l_freq), 0.0, g_data->topPitch()));
-    l_analysis_data.setPitchSum((double)l_analysis_data.getPitch());
-    l_analysis_data.setPitch2Sum(sq((double)l_analysis_data.getPitch()));
+    l_analysis_data.setPitchSum(static_cast<double>(l_analysis_data.getPitch()));
+    l_analysis_data.setPitch2Sum(sq(static_cast<double>(l_analysis_data.getPitch())));
 }
 
 //------------------------------------------------------------------------------
@@ -904,13 +904,13 @@ bool Channel::chooseCorrelationIndex( int p_chunk
     l_analysis_data.setPitch(bound(freq2pitch(l_freq), 0.0, g_data->topPitch()));
     if(p_chunk > 0 && !isFirstChunkInNote(p_chunk))
     {
-        l_analysis_data.setPitchSum(dataAtChunk(p_chunk - 1)->getPitchSum() + (double)l_analysis_data.getPitch());
-        l_analysis_data.setPitch2Sum(dataAtChunk(p_chunk - 1)->getPitch2Sum() + sq((double)l_analysis_data.getPitch()));
+        l_analysis_data.setPitchSum(dataAtChunk(p_chunk - 1)->getPitchSum() + static_cast<double>(l_analysis_data.getPitch()));
+        l_analysis_data.setPitch2Sum(dataAtChunk(p_chunk - 1)->getPitch2Sum() + sq(static_cast<double>(l_analysis_data.getPitch())));
     }
     else
     {
-        l_analysis_data.setPitchSum((double)l_analysis_data.getPitch());
-        l_analysis_data.setPitch2Sum(sq((double)l_analysis_data.getPitch()));
+        l_analysis_data.setPitchSum(static_cast<double>(l_analysis_data.getPitch()));
+        l_analysis_data.setPitch2Sum(sq(static_cast<double>(l_analysis_data.getPitch())));
     }
     return l_is_different_index;
 }
@@ -928,7 +928,7 @@ void Channel::calcDeviation(int p_chunk)
     }
 
     //Do long term calculation
-    int l_first_chunk = MAX(l_last_chunk - (int)ceil(g_long_time / timePerChunk()), m_note_data[l_current_note_index].startChunk());
+    int l_first_chunk = MAX(l_last_chunk - static_cast<int>(ceil(g_long_time / timePerChunk())), m_note_data[l_current_note_index].startChunk());
     AnalysisData * l_first_chunk_data = dataAtChunk(l_first_chunk);
     int l_num_chunks = (l_last_chunk - l_first_chunk);
     double l_mean_sum;
@@ -953,7 +953,7 @@ void Channel::calcDeviation(int p_chunk)
     }
 
     //Do short term calculation
-    l_first_chunk = MAX(l_last_chunk - (int)ceil(g_short_time / timePerChunk()), m_note_data[l_current_note_index].startChunk());
+    l_first_chunk = MAX(l_last_chunk - static_cast<int>(ceil(g_short_time / timePerChunk())), m_note_data[l_current_note_index].startChunk());
     l_first_chunk_data = dataAtChunk(l_first_chunk);
     l_num_chunks = (l_last_chunk - l_first_chunk);
     if(l_num_chunks > 0)
@@ -1165,7 +1165,7 @@ float Channel::calcDetailedPitch( float * p_input
 #endif // DEBUG_PRINTF
     for(l_j = 0; l_j < l_num; l_j++)
     {
-        m_detailed_pitch_data_smoothed[l_j] = bound(m_detailed_pitch_data_smoothed[l_j], 0.0f, (float)g_data->topPitch());
+        m_detailed_pitch_data_smoothed[l_j] = bound(m_detailed_pitch_data_smoothed[l_j], 0.0f, static_cast<float>(g_data->topPitch()));
     }
 
     m_pitch_small_smoothing_filter->filter(l_unsmoothed.begin(), m_detailed_pitch_data.begin(), l_num);
@@ -1174,7 +1174,7 @@ float Channel::calcDetailedPitch( float * p_input
 #endif // DEBUG_PRINTF
     for(l_j = 0; l_j < l_num; l_j++)
     {
-        m_detailed_pitch_data[l_j] = bound(m_detailed_pitch_data[l_j], 0.0f, (float)g_data->topPitch());
+        m_detailed_pitch_data[l_j] = bound(m_detailed_pitch_data[l_j], 0.0f, static_cast<float>(g_data->topPitch()));
     }
 #ifdef DEBUG_PRINTF
     printf("end calcDetailedPitch\n"); fflush(stdout);

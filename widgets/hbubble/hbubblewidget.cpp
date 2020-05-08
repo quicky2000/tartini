@@ -49,7 +49,7 @@ void HBubbleWidget::setNumHarmonics(double num)
     if (m_num_harmonics != toInt(num))
     {
         m_num_harmonics = toInt(num);
-        emit numHarmonicsChanged((double)num);
+        emit numHarmonicsChanged(static_cast<double>(num));
     }
 }
 
@@ -60,7 +60,7 @@ void HBubbleWidget::setHistoryChunks(double num)
     if (m_history_chunks != toInt(num))
     {
         m_history_chunks = toInt(num);
-        emit historyChunksChanged((double)num);
+        emit historyChunksChanged(static_cast<double>(num));
     }
 }
 
@@ -93,7 +93,7 @@ void HBubbleWidget::paintEvent( QPaintEvent * )
                 {
                     for(l_i = 0; l_i < m_num_harmonics; l_i++)
                     {
-                        int l_radius = toInt((l_data->getHarmonicAmpNoCutOffAt(l_i) + 160.0) / 160.0 * (float)height() / m_num_harmonics / 2);
+                        int l_radius = toInt((l_data->getHarmonicAmpNoCutOffAt(l_i) + 160.0) / 160.0 * static_cast<float>(height()) / m_num_harmonics / 2);
                         if(l_radius > 0)
                         {
                             float l_flat_sharp = (l_data->getHarmonicFreqAt(l_i) / l_data->getFundamentalFreq() - (l_i + 1)) * 10;
@@ -106,9 +106,9 @@ void HBubbleWidget::paintEvent( QPaintEvent * )
                             {
                                 l_color = colorBetween(qRgb(255,255,255), qRgb(0,0,255),-l_flat_sharp);
                             }
-                            get_painter().setBrush(colorBetween(g_data->backgroundColor(),l_color,((l_j == (m_history_chunks - 1)) ? 1.0 : (float)l_j / m_history_chunks * 0.5)));
-                            get_painter().drawEllipse( toInt(width() / 8 * 3 + l_j * (float)width() / 8 / m_history_chunks - l_radius)
-                                                     , toInt(height() - (float) ((l_i + 1) * height()) / (m_num_harmonics + 2) - l_radius)
+                            get_painter().setBrush(colorBetween(g_data->backgroundColor(),l_color,((l_j == (m_history_chunks - 1)) ? 1.0 : static_cast<float>(l_j) / m_history_chunks * 0.5)));
+                            get_painter().drawEllipse( toInt(width() / 8 * 3 + l_j * static_cast<float>(width()) / 8 / m_history_chunks - l_radius)
+                                                     , toInt(height() - static_cast<float>((l_i + 1) * height()) / (m_num_harmonics + 2) - l_radius)
                                                      , l_radius * 2
                                                      , l_radius * 2
                                                      );
