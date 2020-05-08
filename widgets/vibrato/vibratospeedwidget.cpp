@@ -498,7 +498,7 @@ void VibratoSpeedWidget::doUpdate()
     if(l_active_channel)
     {
         AnalysisData * l_data;
-        if(g_data->getSoundMode() & SOUND_REC)
+        if(g_data->isSoundModeRecording())
         {
             l_data = l_active_channel->dataAtChunk(l_active_channel->chunkAtCurrentTime() - l_active_channel->pronyDelay());
         }

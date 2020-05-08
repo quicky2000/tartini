@@ -140,7 +140,7 @@ void SummaryDrawWidget::mouseMoveEvent(QMouseEvent * p_event)
         double l_note_ratio = double(height()) / (100.0 / m_scaler);
 
         // We should only change the current time if the file is stopped
-        if(g_data->getRunning() == STREAM_STOP)
+        if(g_data->getRunning() == GData::RunningMode::STREAM_STOP)
         {
             l_view.setCurrentTime(p_event->x() / l_time_ratio - g_data->leftTime() + m_click_current_time_diff);
         }

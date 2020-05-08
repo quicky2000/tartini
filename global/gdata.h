@@ -52,15 +52,6 @@ extern struct itimerval g_profiler_value;
 extern struct itimerval g_profiler_ovalue;
 #endif
 
-#define STREAM_STOP     0
-#define STREAM_FORWARD  1
-#define STREAM_PAUSE    2
-#define STREAM_UPDATE   3
-
-#define SOUND_PLAY      0x01
-#define SOUND_REC       0x02
-#define SOUND_PLAY_REC  0x03
-
 typedef enum class AnalysisModes { MPM, AUTOCORRELATION, MPM_MODIFIED_CEPSTRUM } t_analysis_modes;
 
 #define NUM_WIN_SIZES 5
@@ -88,7 +79,20 @@ class GData : public QObject
   Q_OBJECT
 
   public:
+    
+    enum class RunningMode
+    { STREAM_STOP
+    , STREAM_FORWARD
+    , STREAM_PAUSE
+    , STREAM_UPDATE
+    };
 
+    enum class SoundMode
+    { SOUND_PLAY
+    , SOUND_REC
+    , SOUND_PLAY_REC
+    };
+    
     typedef enum class SavingModes
     { ALWAYS_ASK
     , NEVER_SAVE
@@ -141,8 +145,9 @@ class GData : public QObject
   inline bool getSettingsBoolValue(const std::string & p_key)const;
   inline std::string getSettingsStringValue(const std::string & p_key)const;
 
-  inline int getSoundMode()const;
-  inline void setSoundMode(const int & p_mode);
+  inline bool isSoundModeRecording()const;
+  inline SoundMode getSoundMode()const;
+  inline void setSoundMode(const SoundMode & p_mode);
 
   inline AudioStream * getAudioStream()const;
   inline void setAudioStream(AudioStream * p_audio_stream);
@@ -153,8 +158,8 @@ class GData : public QObject
   inline const AudioThread & getAudioThread()const;
   inline void stopAndWaitAudioThread();
 
-  inline void setRunning(int p_running);
-  inline int getRunning()const;
+  inline void setRunning(RunningMode p_running);
+  inline RunningMode getRunning()const;
 
   inline size_t getChannelsSize()const;
   inline Channel * getChannelAt(size_t p_index)const;
@@ -347,7 +352,7 @@ public slots:
    */
     bool m_play_or_record;
 
-  int m_sound_mode;
+  SoundMode m_sound_mode;
   AudioStream * m_audio_stream;
   bool m_need_update;
 
@@ -361,7 +366,7 @@ public slots:
    */
   std::vector<Filter *> m_filter_lp;
   AudioThread m_audio_thread;
-  int m_running;
+  RunningMode m_running;
 
   std::vector<SoundFile *> m_sound_files;
   std::vector<Channel *> m_channels;

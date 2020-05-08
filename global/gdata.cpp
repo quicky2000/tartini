@@ -114,10 +114,10 @@ float phase_function(float p_x)
 GData::GData()
 : m_settings(NULL)
 , m_play_or_record(false)
-, m_sound_mode(SOUND_PLAY)
+, m_sound_mode(SoundMode::SOUND_PLAY)
 , m_audio_stream(NULL)
 , m_need_update(false)
-, m_running(STREAM_STOP)
+, m_running(RunningMode::STREAM_STOP)
 , m_next_color_index(0)
 , m_view(NULL)
 , m_active_channel(NULL)
@@ -236,13 +236,13 @@ SoundFile * GData::getActiveSoundFile()
 //------------------------------------------------------------------------------
 void GData::pauseSound()
 {
-    if(m_running == STREAM_FORWARD)
+    if(m_running == RunningMode::STREAM_FORWARD)
     {
-        m_running = STREAM_PAUSE;
+        m_running = RunningMode::STREAM_PAUSE;
     }
-    else if(m_running == STREAM_PAUSE)
+    else if(m_running == RunningMode::STREAM_PAUSE)
     {
-        m_running = STREAM_FORWARD;
+        m_running = RunningMode::STREAM_FORWARD;
     }
 }
 
@@ -269,14 +269,14 @@ bool GData::openPlayRecord( SoundFile * p_sound_file_rec
 
     if(p_soundfile_play)
     {
-        m_sound_mode = SOUND_PLAY_REC;
+        m_sound_mode = SoundMode::SOUND_PLAY_REC;
         l_open_mode = F_RDWR;
         p_soundfile_play->jumpToChunk(0);
         g_data->m_view->setCurrentTime(0);
     }
     else
     {
-        m_sound_mode = SOUND_REC;
+        m_sound_mode = SoundMode::SOUND_REC;
         l_open_mode = F_READ;
     }
 
@@ -313,12 +313,12 @@ bool GData::playSound(SoundFile * p_sound_file)
     {
         return false;
     }
-    if(m_running == STREAM_PAUSE)
+    if(m_running == RunningMode::STREAM_PAUSE)
     {
-        m_running = STREAM_FORWARD;
+        m_running = RunningMode::STREAM_FORWARD;
         return true;
     }
-    if(m_running != STREAM_STOP)
+    if(m_running != RunningMode::STREAM_STOP)
     {
         return true;
     }
@@ -331,7 +331,7 @@ bool GData::playSound(SoundFile * p_sound_file)
         p_sound_file->jumpToChunk(0); /*< If at the end of the file reset to the start */
     }
 
-    m_sound_mode = SOUND_PLAY;
+    m_sound_mode = SoundMode::SOUND_PLAY;
 
     if(!m_audio_stream)
     {
@@ -386,7 +386,7 @@ void GData::setActiveChannel(Channel * p_to_active)
 //------------------------------------------------------------------------------
 void GData::updateActiveChunkTime(double p_time)
 {
-    if((m_running != STREAM_STOP) && (m_sound_mode & SOUND_REC))
+    if((m_running != RunningMode::STREAM_STOP) && isSoundModeRecording())
     {
         return;
     }

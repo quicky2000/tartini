@@ -344,7 +344,7 @@ void FreqWidgetGL::paintGL()
     glClear(GL_COLOR_BUFFER_BIT);
     View & l_view = g_data->getView();
 
-    if(l_view.autoFollow() && g_data->getActiveChannel() && g_data->getRunning() == STREAM_FORWARD)
+    if(l_view.autoFollow() && g_data->getActiveChannel() && g_data->getRunning() == GData::RunningMode::STREAM_FORWARD)
     {
         setChannelVerticalView(g_data->getActiveChannel(), l_view.viewLeft(), l_view.currentTime(), l_view.zoomX(), l_view.viewBottom(), l_view.zoomY());
     }
@@ -566,7 +566,7 @@ void FreqWidgetGL::wheelEvent(QWheelEvent * p_wheel_event)
             double l_before = l_view.logZoomY();
             l_view.setZoomFactorY(l_view.logZoomY() + l_amount, height() - p_wheel_event->y());
             l_amount = l_view.logZoomY() - l_before;
-            if(g_data->getRunning() == STREAM_FORWARD)
+            if(g_data->getRunning() == GData::RunningMode::STREAM_FORWARD)
             {
                 l_view.setZoomFactorX(l_view.logZoomX() + l_amount);
             }
@@ -582,7 +582,7 @@ void FreqWidgetGL::wheelEvent(QWheelEvent * p_wheel_event)
             double l_before = l_view.logZoomY();
             l_view.setZoomFactorY(l_view.logZoomY() + l_amount, height() / 2);
             l_amount = l_view.logZoomY() - l_before;
-            if(g_data->getRunning() == STREAM_FORWARD)
+            if(g_data->getRunning() == GData::RunningMode::STREAM_FORWARD)
             {
                 l_view.setZoomFactorX(l_view.logZoomX() + l_amount);
             }

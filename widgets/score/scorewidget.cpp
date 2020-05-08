@@ -416,7 +416,7 @@ void ScoreWidget::mousePressEvent(QMouseEvent *p_event)
                 {
                     int l_start_chunk = l_active_channel->get_note_data()[l_data->getNoteIndex()].startChunk();
                     g_data->updateActiveChunkTime(l_active_channel->timeAtChunk(l_start_chunk));
-                    if(g_data->getRunning() == STREAM_STOP)
+                    if(g_data->getRunning() == GData::RunningMode::STREAM_STOP)
                     {
                         g_data->playSound(l_active_channel->getParent());
                     }
