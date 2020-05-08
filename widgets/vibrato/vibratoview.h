@@ -25,7 +25,6 @@ class VibratoPeriodWidget;
 class VibratoCircleWidget;
 class VibratoTimeAxis;
 class VibratoWidget;
-class LEDIndicator;
 
 class VibratoView: public ViewWidget
 {
@@ -39,8 +38,6 @@ class VibratoView: public ViewWidget
     virtual ~VibratoView();
 
     QSize sizeHint() const;
-
-    std::vector<LEDIndicator*> m_leds;
 
   private:
     VibratoSpeedWidget * m_vibrato_speed_widget;
