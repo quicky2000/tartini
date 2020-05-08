@@ -90,24 +90,10 @@ void OpenFiles::refreshChannelList()
     m_table->resizeColumnsToContents();
 }
 
-//TODO: Tidy this method up
 //------------------------------------------------------------------------------
-void OpenFiles::slotActiveChannelChanged(Channel * p_active)
+void OpenFiles::slotActiveChannelChanged(Channel * /* p_active */)
 {
-    // Find the index of the active channel
-    unsigned int l_index = 0;
-    bool l_found = false;
-    for(l_index = 0 ; !l_found && l_index < g_data->getChannelsSize() ; ++l_index)
-    {
-        l_found = g_data->getChannelAt(l_index) == p_active;
-    }
-    if(l_found)
-    {
-        for(int l_row_index = 0 ; l_row_index < m_table->rowCount() ; ++l_row_index)
-        {
-            m_table->setItem(l_row_index,1,new QTableWidgetItem(l_row_index == (int)l_index ? "A" : ""));
-        }
-    }
+    refreshChannelList();
 }
 
 //------------------------------------------------------------------------------
