@@ -92,7 +92,7 @@ void mygl_resize2d( int p_width
                   , int p_height
                   )
 {
-    glViewport(0, 0, (GLint)p_width, (GLint)p_height);
+    glViewport(0, 0, static_cast<GLint>(p_width), static_cast<GLint>(p_height));
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D(0, p_width, p_height, 0);

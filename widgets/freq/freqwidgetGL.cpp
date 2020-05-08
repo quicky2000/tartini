@@ -205,12 +205,12 @@ void FreqWidgetGL::drawReferenceLinesGL( const double & /* p_left_time*/
     MusicScale &l_music_scale = g_music_scales[g_data->musicKeyType()];
 
     int l_key_root = cycle(g_music_key_root[g_data->musicKey()] + l_music_scale.semitoneOffset(), 12);
-    int l_view_bottom_note = (int)p_view_bottom - l_key_root;
+    int l_view_bottom_note = static_cast<int>(p_view_bottom) - l_key_root;
     int l_remainder = cycle(l_view_bottom_note, 12);
     int l_low_root = l_view_bottom_note - l_remainder + l_key_root;
     int l_root_octave = l_low_root / 12;
     int l_root_offset = cycle(l_low_root, 12);
-    int l_num_octaves = int(ceil(p_zoom_Y * (double)height() / 12.0)) + 1;
+    int l_num_octaves = int(ceil(p_zoom_Y * static_cast<double>(height()) / 12.0)) + 1;
     int l_top_octave = l_root_octave + l_num_octaves;
     double l_line_Y;
     double l_cur_root;
@@ -383,7 +383,7 @@ void FreqWidgetGL::paintGL()
         QColor l_line_color = l_foreground;
         l_line_color.setAlpha(50);
         Channel *l_channel = g_data->getActiveChannel();
-        double l_half_window_time = (double)l_channel->size() / (double)(l_channel->rate() * 2);
+        double l_half_window_time = static_cast<double>(l_channel->size()) / static_cast<double>(l_channel->rate() * 2);
         int l_pixel_left = l_view.screenPixelX(l_view.currentTime() - l_half_window_time);
         int l_pixel_right = l_view.screenPixelX(l_view.currentTime() + l_half_window_time);
         qglColor(l_line_color);
@@ -781,7 +781,7 @@ void FreqWidgetGL::drawChannelGL( Channel *p_channel
         float l_vol;
 
         // Integer version of frame time
-        int l_int_chunk = (int) floor(l_frame_time);
+        int l_int_chunk = static_cast<int>(floor(l_frame_time));
         if(l_int_chunk < 0)
         {
             l_int_chunk = 0;
@@ -800,7 +800,7 @@ void FreqWidgetGL::drawChannelGL( Channel *p_channel
         int l_pen_X = 0;
         int l_pen_Y = 0;
 
-        for(double l_double_index = l_start; l_double_index < l_stop && l_int_chunk < (int)p_channel->totalChunks(); l_double_index += l_step_size, l_int_chunk++)
+        for(double l_double_index = l_start; l_double_index < l_stop && l_int_chunk < static_cast<int>(p_channel->totalChunks()); l_double_index += l_step_size, l_int_chunk++)
         {
             myassert(l_int_chunk >= 0);
             AnalysisData * l_data = p_channel->dataAtChunk(l_int_chunk);
@@ -832,7 +832,7 @@ void FreqWidgetGL::drawChannelGL( Channel *p_channel
                 if(fabs(l_prev_pitch - l_pitch) < 1.0 && l_double_index != l_start)
                 {
                     //if closer than one semi-tone from previous then draw a line between them
-                    mygl_line((float)l_pen_X, (float)l_pen_Y, (float)l_x, (float)l_y);
+                    mygl_line(static_cast<float>(l_pen_X), static_cast<float>(l_pen_Y), static_cast<float>(l_x), static_cast<float>(l_y));
                     l_pen_X = l_x;
                     l_pen_Y = l_y;
                 }
@@ -1026,7 +1026,7 @@ void FreqWidgetGL::drawChannelFilledGL( Channel *p_channel
         float l_err = 0.0;
         float l_pitch = 0.0;
         // Integer version of frame time
-        int l_int_chunk = (int) floor(l_frame_time);
+        int l_int_chunk = static_cast<int>(floor(l_frame_time));
         if(l_int_chunk < 0)
         {
             l_int_chunk = 0;
@@ -1042,7 +1042,7 @@ void FreqWidgetGL::drawChannelFilledGL( Channel *p_channel
         double l_start = (double(l_int_chunk) - l_frame_time) * l_step_size;
         double l_stop = width() + (2 * l_step_size);
         l_last_N = l_first_N = toInt(l_start);
-        for(double l_double_index = l_start; l_double_index < l_stop && l_int_chunk < (int)p_channel->totalChunks(); l_double_index += l_step_size, l_int_chunk++)
+        for(double l_double_index = l_start; l_double_index < l_stop && l_int_chunk < static_cast<int>(p_channel->totalChunks()); l_double_index += l_step_size, l_int_chunk++)
         {
             myassert(l_int_chunk >= 0);
             AnalysisData *l_data = p_channel->dataAtChunk(l_int_chunk);
@@ -1140,12 +1140,12 @@ bool FreqWidgetGL::calcZoomElement( Channel * p_channel
 {
     int l_start_chunk = toInt(double(p_base_element) * p_base_X);
     int l_finish_chunk = toInt(double(p_base_element + 1) * p_base_X) + 1;
-    if(l_finish_chunk >= (int)p_channel->totalChunks())
+    if(l_finish_chunk >= static_cast<int>(p_channel->totalChunks()))
     {
         //dont go off the end
         l_finish_chunk--;
     }
-    if(l_finish_chunk >= (int)p_channel->totalChunks())
+    if(l_finish_chunk >= static_cast<int>(p_channel->totalChunks()))
     {
         //that data doesn't exist yet
         return false;
@@ -1293,7 +1293,7 @@ void FreqWidgetGL::setChannelVerticalView( Channel * p_channel
         // More pixels than samples
         float l_pitch = 0.0;
         // Integer version of frame time
-        int l_int_chunk = (int) floor(l_frame_time);
+        int l_int_chunk = static_cast<int>(floor(l_frame_time));
         if(l_int_chunk < 0)
         {
             l_int_chunk = 0;
@@ -1304,7 +1304,7 @@ void FreqWidgetGL::setChannelVerticalView( Channel * p_channel
 
         double l_start = (double(l_int_chunk) - l_frame_time) * l_step_size;
         double l_stop = width() + (2 * l_step_size);
-        for(double l_double_index = l_start; l_double_index < l_stop && l_int_chunk < (int)p_channel->totalChunks(); l_double_index += l_step_size, l_int_chunk++)
+        for(double l_double_index = l_start; l_double_index < l_stop && l_int_chunk < static_cast<int>(p_channel->totalChunks()); l_double_index += l_step_size, l_int_chunk++)
         {
             myassert(l_int_chunk >= 0);
             AnalysisData *l_data = p_channel->dataAtChunk(l_int_chunk);

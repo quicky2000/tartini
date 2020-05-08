@@ -216,7 +216,7 @@ void ScoreWidget::drawNoteAtPitch( int p_x
     if(m_use_flats)
     {
         l_y_Steps = m_flats_lookup[p_pitch];
-        l_y_offset = toInt(m_scale_Y * (double)l_y_Steps * 0.5);
+        l_y_offset = toInt(m_scale_Y * static_cast<double>(l_y_Steps) * 0.5);
         if(isBlackNote(p_pitch))
         {
             get_painter().drawText(p_x - l_accidental_offset_X - m_font_width, p_y - l_y_offset + m_font_height / 2, "b");
@@ -225,7 +225,7 @@ void ScoreWidget::drawNoteAtPitch( int p_x
     else
     {
         l_y_Steps = m_sharps_lookup[p_pitch];
-        l_y_offset = toInt(m_scale_Y * (double)l_y_Steps * 0.5);
+        l_y_offset = toInt(m_scale_Y * static_cast<double>(l_y_Steps) * 0.5);
         if(isBlackNote(p_pitch))
         {
             get_painter().drawText(p_x - l_accidental_offset_X - m_font_width, p_y - l_y_offset + m_font_height / 2, "#");
@@ -400,10 +400,10 @@ void ScoreWidget::mousePressEvent(QMouseEvent *p_event)
     {
         while(l_score_segment_iterator.next())
         {
-            if(between(p_event->x(), (int)l_score_segment_iterator.leftX(), (int)(l_score_segment_iterator.leftX()+l_score_segment_iterator.widthX())) &&
+            if(between(p_event->x(), static_cast<int>(l_score_segment_iterator.leftX()), static_cast<int>(l_score_segment_iterator.leftX()+l_score_segment_iterator.widthX())) &&
 	           between(p_event->y(), l_score_segment_iterator.staveTop(), l_score_segment_iterator.staveBottom()))
             {
-                double l_t = l_score_segment_iterator.leftTime() + ((double)p_event->x() - l_score_segment_iterator.leftX()) / m_scale_X;
+                double l_t = l_score_segment_iterator.leftTime() + (static_cast<double>(p_event->x()) - l_score_segment_iterator.leftX()) / m_scale_X;
 
                 //Find the last note played at time l_t
                 int l_chunk = l_active_channel->chunkAtTime(l_t);

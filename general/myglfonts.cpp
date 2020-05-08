@@ -28,7 +28,7 @@ void MyGLFont::init(const QFont p_font)
 #endif // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
         l_width_raw = l_width + 3;
         l_width_raw -= (l_width_raw % 4); //round length up to multiple of 4
-        l_data = (GLubyte*)malloc(l_width_raw * l_height * sizeof(GLubyte));
+        l_data = static_cast<GLubyte *>(malloc(l_width_raw * l_height * sizeof(GLubyte)));
         if(nullptr == l_data)
         {
             throw std::bad_alloc();

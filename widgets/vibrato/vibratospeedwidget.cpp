@@ -91,7 +91,7 @@ void VibratoSpeedWidget::resizeGL(int p_width
                                  ,int p_height
                                  )
 {
-    glViewport(0, 0, (GLint)p_width, (GLint)p_height);
+    glViewport(0, 0, static_cast<GLint>(p_width), static_cast<GLint>(p_height));
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -557,7 +557,7 @@ void VibratoSpeedWidget::doUpdate()
                 if ((l_maximum_time !=0 ) && (l_minimum_time != 0))
                 {
                     // The speed and width can be calculated
-                    l_vibrato_speed = l_active_channel->rate() / (float)(2 * abs(l_maximum_time - l_minimum_time));
+                    l_vibrato_speed = l_active_channel->rate() / static_cast<float>(2 * abs(l_maximum_time - l_minimum_time));
                     l_vibrato_width = fabs(100 * (l_pitch_lookup_used.at(l_maximum_time) - l_pitch_lookup_used.at(l_minimum_time)));
                 }
             }

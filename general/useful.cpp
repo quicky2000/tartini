@@ -31,14 +31,14 @@ void ** malloc2d( const int p_row
                 , const int p_size
                 )
 {
-    void ** l_ptr = (void **)malloc(sizeof(void *) * p_row);
+    void ** l_ptr = static_cast<void**>(malloc(sizeof(void *) * p_row));
     if(nullptr == l_ptr)
     {
         throw std::bad_alloc();
     }
     for(int l_j = 0; l_j < p_row; l_j++)
     {
-        l_ptr[l_j] = (void *)malloc(p_size * p_col);
+        l_ptr[l_j] = static_cast<void *>(malloc(p_size * p_col));
         if(nullptr == l_ptr[l_j])
         {
             // Release previously allocated memory
@@ -71,7 +71,7 @@ void ** realloc2d( void ** p_ptr
             }
 
             {
-                void **l_new_ptr = (void **) realloc(p_ptr, sizeof(void *) * p_row);
+                void **l_new_ptr = static_cast<void **>(realloc(p_ptr, sizeof(void *) * p_row));
                 if (nullptr == l_new_ptr)
                 {
                     throw std::bad_alloc();
@@ -83,7 +83,7 @@ void ** realloc2d( void ** p_ptr
             {
                 for(l_j = 0; l_j < p_row; l_j++)
                 {
-                    void * l_new_ptr = (void *)realloc(p_ptr[l_j], p_size * p_col);
+                    void * l_new_ptr = static_cast<void *>(realloc(p_ptr[l_j], p_size * p_col));
                     if (nullptr == l_new_ptr)
                     {
                         throw std::bad_alloc();
@@ -96,7 +96,7 @@ void ** realloc2d( void ** p_ptr
         else if(p_row > p_old_row)
         {
             {
-                void **l_new_ptr = (void **) realloc(p_ptr, sizeof(void *) * p_row);
+                void **l_new_ptr = static_cast<void **>(realloc(p_ptr, sizeof(void *) * p_row));
                 if (nullptr == l_new_ptr)
                 {
                     throw std::bad_alloc();
@@ -107,7 +107,7 @@ void ** realloc2d( void ** p_ptr
             {
                 for(l_j = 0; l_j < p_old_row; l_j++)
                 {
-                    void * l_new_ptr = (void *)realloc(p_ptr[l_j], p_size * p_col);
+                    void * l_new_ptr = static_cast<void *>(realloc(p_ptr[l_j], p_size * p_col));
                     if (nullptr == l_new_ptr)
                     {
                         throw std::bad_alloc();
@@ -117,7 +117,7 @@ void ** realloc2d( void ** p_ptr
             }
             for(l_j = p_old_row; l_j < p_row; l_j++)
             {
-                p_ptr[l_j] = (void *)malloc(p_size * p_col);
+                p_ptr[l_j] = static_cast<void *>(malloc(p_size * p_col));
                 if(nullptr == p_ptr[l_j])
                 {
                     throw std::bad_alloc();
@@ -131,7 +131,7 @@ void ** realloc2d( void ** p_ptr
             {
                 for(l_j = 0; l_j < p_row; l_j++)
                 {
-                    void * l_new_ptr = (void *)realloc(p_ptr[l_j], p_size * p_col);
+                    void * l_new_ptr = static_cast<void *>(realloc(p_ptr[l_j], p_size * p_col));
                     if(nullptr == l_new_ptr)
                     {
                         throw std::bad_alloc();
@@ -323,7 +323,7 @@ int calcIndex( const double & p_frame_time
              , int p_size
              )
 {
-    int l_result = (int) myround((floor(p_frame_time / p_base_X) * p_base_X));
+    int l_result = static_cast<int>(myround((floor(p_frame_time / p_base_X) * p_base_X)));
     if (l_result < 0)
     {
         return 0;

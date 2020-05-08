@@ -41,7 +41,7 @@ int SoundStream::writeFloats( float ** p_channel_data
             unsigned char * l_pos1 = l_temp + l_c;
             for(l_pos = p_channel_data[l_c % p_ch]; l_pos < l_end; l_pos++, l_pos1 += m_channels)
             {
-                *l_pos1 = (unsigned char)((*l_pos * g_v8) + g_v8);
+                *l_pos1 = static_cast<unsigned char>((*l_pos * g_v8) + g_v8);
             }
         }
         l_written = write_bytes(l_temp, p_length * m_channels);
@@ -59,7 +59,7 @@ int SoundStream::writeFloats( float ** p_channel_data
             short * l_pos1 = l_temp + l_c;
             for(l_pos = p_channel_data[l_c % p_ch]; l_pos < l_end; l_pos++, l_pos1 += m_channels)
             {
-                *l_pos1 = (short)(*l_pos * g_v16);
+                *l_pos1 = static_cast<short>(*l_pos * g_v16);
 #ifdef IS_BIG_ENDIAN
                 *l_pos1 = ((*l_pos1 & 0xFF00) >> 8) | ((*l_pos1 & 0x00FF) << 8);
 #endif

@@ -86,7 +86,7 @@ void MusicKey::setName(const char * p_name)
 //------------------------------------------------------------------------------
 int MusicKey::nearestNoteIndex(const double & p_x)const
 {
-    return (int)(binary_search_closest(m_note_offsets.begin(), m_note_offsets.end(), p_x) - m_note_offsets.begin());
+    return static_cast<int>(binary_search_closest(m_note_offsets.begin(), m_note_offsets.end(), p_x) - m_note_offsets.begin());
 }
 
 //------------------------------------------------------------------------------
@@ -104,19 +104,19 @@ double MusicKey::nearestNoteDistance(const double & p_x)const
 
 std::vector<MusicKey> g_music_keys;
 
-char *g_music_key_name[NUM_MUSIC_KEYS] =
-        {(char*)"A             ",
-         (char*)"A#/Bb",
-         (char*)"B",
-         (char*)"C",
-         (char*)"C#/Db",
-         (char*)"D",
-         (char*)"D#/Eb",
-         (char*)"E",
-         (char*)"F",
-         (char*)"F#/Gb",
-         (char*)"G",
-         (char*)"G#/Ab"
+const char *g_music_key_name[NUM_MUSIC_KEYS] =
+        {"A             ",
+         "A#/Bb",
+         "B",
+         "C",
+         "C#/Db",
+         "D",
+         "D#/Eb",
+         "E",
+         "F",
+         "F#/Gb",
+         "G",
+         "G#/Ab"
         };
 int g_music_key_root[NUM_MUSIC_KEYS] = {9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8      };
 int g_music_key = 3; //C

@@ -78,7 +78,7 @@ void HTrackWidget::resizeGL( int p_w
                            )
 {
     // setup viewport, projection etc.:
-    glViewport( 0, 0, (GLint)p_w, (GLint)p_h );
+    glViewport( 0, 0, static_cast<GLint>(p_w), static_cast<GLint>(p_h) );
 }
 
 //------------------------------------------------------------------------------

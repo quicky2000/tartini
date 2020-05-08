@@ -93,7 +93,7 @@ void HCircleWidget::paintEvent( QPaintEvent * )
     if(m_threshold > m_lowest_value)
     {
         get_painter().setPen(QPen(colorBetween(g_data->backgroundColor(), qRgb(128,128,128), 0.3), 2));
-        int l_radius = toInt((double)height() * m_zoom * (m_threshold - m_lowest_value));
+        int l_radius = toInt(static_cast<double>(height()) * m_zoom * (m_threshold - m_lowest_value));
         get_painter().drawEllipse(width() / 2 - l_radius, height() / 2 - l_radius, 2 * l_radius, 2 * l_radius);
         get_painter().drawText(width() / 2 - l_radius + 5, height() / 2, "Threshold");
     }
@@ -106,7 +106,7 @@ void HCircleWidget::paintEvent( QPaintEvent * )
     {
         if (l_scale > m_lowest_value)
         {
-            int l_radius = toInt((double)height() * m_zoom * (l_scale - m_lowest_value));
+            int l_radius = toInt(static_cast<double>(height()) * m_zoom * (l_scale - m_lowest_value));
             get_painter().drawEllipse(width() / 2 - l_radius,height() / 2 - l_radius, 2 * l_radius, 2 * l_radius);
 	        std::stringstream l_stream;
 	        l_stream << std::fixed << std::setprecision(1) << l_scale;
@@ -132,7 +132,7 @@ void HCircleWidget::paintEvent( QPaintEvent * )
             int l_dot_size = 6;
             int l_half_dot_size = l_dot_size / 2;
             get_painter().setPen(QPen(Qt::black, 2));
-            int l_m = MIN(l_data->getHarmonicAmpNoCutOffSize(), (unsigned) l_num_harmonics);
+            int l_m = MIN(l_data->getHarmonicAmpNoCutOffSize(), static_cast<unsigned>(l_num_harmonics));
             assert(l_data->getHarmonicAmpNoCutOffSize() == l_data->getHarmonicFreqSize());
             for(l_i = 0; l_i < l_m; l_i++)
             {

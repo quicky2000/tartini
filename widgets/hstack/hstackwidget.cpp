@@ -46,7 +46,7 @@ void HStackWidget::setWindowSize(double p_window_size)
     if(m_window_size != p_window_size)
     {
         m_window_size = toInt(p_window_size);
-        emit windowSizeChanged((float)m_window_size);
+        emit windowSizeChanged(static_cast<float>(m_window_size));
     }
 }
 
@@ -106,7 +106,7 @@ void HStackWidget::paintEvent(QPaintEvent *)
         int l_num_harmonics = 16;
         
         float l_scale_Y = height() / m_view_height;
-        float l_scale_X = (float)width() / (float)m_window_size;
+        float l_scale_X = static_cast<float>(width()) / static_cast<float>(m_window_size);
         int l_not_on_graph = height() + 10;
 
         QPolygon l_points[l_num_harmonics];
@@ -146,28 +146,28 @@ void HStackWidget::paintEvent(QPaintEvent *)
             l_data = l_active_channel->dataAtChunk(l_start_chunk + l_i);
             if (l_data != 0) 
             { 
-                int l_m = MIN(l_data->getHarmonicAmpNoCutOffSize(), (unsigned) l_num_harmonics);
+                int l_m = MIN(l_data->getHarmonicAmpNoCutOffSize(), static_cast<unsigned>(l_num_harmonics));
                 for(l_j = 0; l_j < l_m;l_j++) 
                 { 
                     if (!isinf(l_data->getHarmonicAmpNoCutOffAt(l_j))) 
                     { 
-                        l_points[l_j].setPoint(l_i + 2, toInt(l_scale_X * (float)l_i), -toInt((-m_top + l_data->getHarmonicAmpNoCutOffAt(l_j)) * l_scale_Y)); 
+                        l_points[l_j].setPoint(l_i + 2, toInt(l_scale_X * static_cast<float>(l_i)), -toInt((-m_top + l_data->getHarmonicAmpNoCutOffAt(l_j)) * l_scale_Y));
                     } 
                     else 
                     { 
-                        l_points[l_j].setPoint(l_i + 2, toInt(l_scale_X * (float)l_i), l_not_on_graph); 
+                        l_points[l_j].setPoint(l_i + 2, toInt(l_scale_X * static_cast<float>(l_i)), l_not_on_graph);
                     } 
                 }
                 for (l_j = l_m; l_j < l_num_harmonics; l_j++) 
                 { 
-                    l_points[l_j].setPoint(l_i + 2, toInt(l_scale_X * (float)l_i), l_not_on_graph); 
+                    l_points[l_j].setPoint(l_i + 2, toInt(l_scale_X * static_cast<float>(l_i)), l_not_on_graph);
                 } 
             } 
             else 
             { 
                 for(l_j = 0; l_j < l_num_harmonics;l_j++) 
                 { 
-                    l_points[l_j].setPoint(l_i + 2,toInt(l_scale_X * (float)l_i),l_not_on_graph); 
+                    l_points[l_j].setPoint(l_i + 2,toInt(l_scale_X * static_cast<float>(l_i)),l_not_on_graph);
                 } 
             } 
         }

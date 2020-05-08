@@ -27,7 +27,7 @@ inline float interpolate_linear( int p_len
                                , float p_x
                                )
 {
-    int l_x0 = (int)p_x;
+    int l_x0 = static_cast<int>(p_x);
     if(l_x0 >= 0 && l_x0 < p_len - 1)
     {
         float l_y0 = p_array[l_x0];

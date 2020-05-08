@@ -139,7 +139,7 @@ Array2d<T>::Array2d( int p_width
     p_height = MAX(p_height, 0);
     m_width = p_width;
     m_height = p_height;
-    m_data = (T *)malloc(size() * sizeof(T));
+    m_data = static_cast<T *>(malloc(size() * sizeof(T)));
     myassert(m_data);
     //std::uninitialized_fill(begin(), end(), T());
 }
@@ -156,7 +156,7 @@ Array2d<T>::Array2d( int p_width
     p_height = MAX(p_height, 0);
     m_width = p_width;
     m_height = p_height;
-    m_data = (T *)malloc(size() * sizeof(T));
+    m_data = static_cast<T *>(malloc(size() * sizeof(T)));
     myassert(m_data);
     //for(T *p = data; p != end();)
     //*p++ = p_value;
@@ -272,7 +272,7 @@ void Array2d<T>::resize_raw( int p_width
     p_height = std::max(p_height, 0);
     m_width = p_width;
     m_height = p_height;
-    T * l_new_data_ptr = (T *)realloc(m_data, size() * sizeof(T));
+    T * l_new_data_ptr = static_cast<T *>(realloc(m_data, size() * sizeof(T)));
     if(nullptr == l_new_data_ptr)
     {
         throw std::bad_alloc();

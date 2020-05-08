@@ -154,7 +154,7 @@ int AudioStream::callback( void * p_output_buffer
                          , void * p_user_data
                          )
 {
-    AudioStream * l_self = (AudioStream *) p_user_data;
+    AudioStream * l_self = static_cast<AudioStream *>(p_user_data);
     
     // Call the callback instance method on "this" object.
     return l_self->callback(p_output_buffer, p_input_buffer, p_n_buffer_frames, p_stream_time, p_status);
@@ -173,8 +173,8 @@ int AudioStream::callback( void * p_output_buffer
 #endif // DEBUG_PRINTF
 
     // unsigned int i, j;
-    float * l_out_buffer = (float *) p_output_buffer;
-    float * l_in_buffer = (float *) p_input_buffer;
+    float * l_out_buffer = static_cast<float *>(p_output_buffer);
+    float * l_in_buffer = static_cast<float *>(p_input_buffer);
 
     if (p_status == RTAUDIO_INPUT_OVERFLOW)
     {

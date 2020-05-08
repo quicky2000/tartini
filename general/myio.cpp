@@ -55,8 +55,8 @@ long igetl(FILE *p_file)
             {
                 if((l_byte_4 = fgetc(p_file)) != EOF)
                 {
-                    return (((long)l_byte_4 << 24) | ((long)l_byte_3 << 16) |
-                            ((long)l_byte_2 << 8) | (long)l_byte_1
+                    return ((static_cast<long>(l_byte_4) << 24) | (static_cast<long>(l_byte_3) << 16) |
+                            (static_cast<long>(l_byte_2) << 8) | static_cast<long>(l_byte_1)
                            );
                 }
             }
@@ -106,10 +106,10 @@ long iputl( long p_long
     int l_byte_3;
     int l_byte_4;
 
-    l_byte_1 = (int)((p_long & 0xFF000000L) >> 24);
-    l_byte_2 = (int)((p_long & 0x00FF0000L) >> 16);
-    l_byte_3 = (int)((p_long & 0x0000FF00L) >> 8);
-    l_byte_4 = (int)p_long & 0x00FF;
+    l_byte_1 = static_cast<int>((p_long & 0xFF000000L) >> 24);
+    l_byte_2 = static_cast<int>((p_long & 0x00FF0000L) >> 16);
+    l_byte_3 = static_cast<int>((p_long & 0x0000FF00L) >> 8);
+    l_byte_4 = static_cast<int>(p_long & 0x00FF);
 
     if(fputc(l_byte_4, p_file) == l_byte_4)
     {
@@ -169,8 +169,8 @@ long mgetl(FILE * p_file)
             {
                 if((l_byte_4 = fgetc(p_file)) != EOF)
                 {
-                    return (((long)l_byte_1 << 24) | ((long)l_byte_2 << 16) |
-                            ((long)l_byte_3 << 8) | (long)l_byte_4
+                    return ((static_cast<long>(l_byte_1) << 24) | (static_cast<long>(l_byte_2) << 16) |
+                            (static_cast<long>(l_byte_3) << 8) | static_cast<long>(l_byte_4)
                            );
                 }
             }
@@ -220,10 +220,10 @@ long mputl( long p_long
     int l_byte_3;
     int l_byte_4;
 
-    l_byte_1 = (int)((p_long & 0xFF000000L) >> 24);
-    l_byte_2 = (int)((p_long & 0x00FF0000L) >> 16);
-    l_byte_3 = (int)((p_long & 0x0000FF00L) >> 8);
-    l_byte_4 = (int)p_long & 0x00FF;
+    l_byte_1 = static_cast<int>((p_long & 0xFF000000L) >> 24);
+    l_byte_2 = static_cast<int>((p_long & 0x00FF0000L) >> 16);
+    l_byte_3 = static_cast<int>((p_long & 0x0000FF00L) >> 8);
+    l_byte_4 = static_cast<int>(p_long & 0x00FF);
 
     if(fputc(l_byte_1, p_file) == l_byte_1)
     {
