@@ -27,25 +27,25 @@ class ScoreWidget : public DrawWidget
 {
   Q_OBJECT
 
-    enum StemType
+    typedef enum class StemType
             { StemNone
             , StemUp
             , StemDown
-            };
+            } t_stem_type;
 
-    enum FillType
+    typedef enum class FillType
             { FilledNote
             , EmptyNote
-            };
+            } t_fill_type;
 
-    enum NoteType
+    typedef enum class NoteType
             { DemiSemiQuaver
             , SemiQuaver
             , Quaver
             , Crotchet
             , Minum
             , SemiBreve
-            };
+            } t_note_type;
 
   public:
     ScoreWidget(QWidget * p_parent);

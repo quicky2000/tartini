@@ -98,7 +98,7 @@ void ScoreWidget::drawNote( int p_x
     {
         get_painter().setRenderHint(QPainter::Antialiasing, true);
     }
-    if(p_fill_type == FilledNote)
+    if(p_fill_type == FillType::FilledNote)
     {
         get_painter().setBrush(get_painter().pen().color());
     }
@@ -112,7 +112,7 @@ void ScoreWidget::drawNote( int p_x
     {
         get_painter().setRenderHint(QPainter::Antialiasing, false);
     }
-    if(p_step_type == StemUp)
+    if(p_step_type == StemType::StemUp)
     {
         int l_stem_X = p_x + toInt(l_note_width);
         get_painter().drawLine(l_stem_X, p_y - toInt(3 * m_scale_Y), l_stem_X, p_y);
@@ -121,7 +121,7 @@ void ScoreWidget::drawNote( int p_x
             get_painter().drawLine(l_stem_X, p_y - toInt((3.0 - 0.5 * l_j) * m_scale_Y), l_stem_X + toInt(l_note_width * 0.75), p_y - toInt((2.5 - 0.5 * l_j) * m_scale_Y));
         }
     }
-    else if(p_step_type == StemDown)
+    else if(p_step_type == StemType::StemDown)
     {
         int l_stem_X = p_x;
         get_painter().drawLine(l_stem_X, p_y + toInt(3 * m_scale_Y), l_stem_X, p_y);
@@ -140,27 +140,27 @@ ScoreWidget::NoteType ScoreWidget::getNoteType(double p_note_length)
 
     if(p_note_length < 0.25 - 0.1  )
     {
-        return DemiSemiQuaver;
+        return NoteType::DemiSemiQuaver;
     }
     else if(p_note_length < 0.5 - 0.125)
     {
-        return SemiQuaver;
+        return NoteType::SemiQuaver;
     }
     else if(p_note_length < 1.0 - 0.25 )
     {
-        return Quaver;
+        return NoteType::Quaver;
     }
     else if(p_note_length < 2.0 - 0.5  )
     {
-        return Crotchet;
+        return NoteType::Crotchet;
     }
     else if(p_note_length < 4.0 - 1.0  )
     {
-        return Minum;
+        return NoteType::Minum;
     }
     else
     {
-        return SemiBreve;
+        return NoteType::SemiBreve;
     }
 }
 
@@ -261,17 +261,17 @@ void ScoreWidget::drawNoteAtPitch( int p_x
     get_painter().setPen(QPen(l_note_color, 2));
     if(m_show_notes)
     {
-        StemType l_stem_type = StemNone;
-        if(l_note_type <= Minum)
+        StemType l_stem_type = StemType::StemNone;
+        if(l_note_type <= NoteType::Minum)
         {
-            l_stem_type = (l_y_Steps < 7) ? StemUp : StemDown;
+            l_stem_type = (l_y_Steps < 7) ? StemType::StemUp : StemType::StemDown;
         }
         int l_num_flicks = 0;
-        if(l_note_type <= Quaver)
+        if(l_note_type <= NoteType::Quaver)
         {
-            l_num_flicks = 1 + (Quaver - l_note_type);
+            l_num_flicks = 1 + (static_cast<int>(NoteType::Quaver) - static_cast<int>(l_note_type));
         }
-        drawNote(p_x, p_y-l_y_offset, l_stem_type, (l_note_type<=Crotchet) ? FilledNote : EmptyNote, l_num_flicks);
+        drawNote(p_x, p_y-l_y_offset, l_stem_type, (l_note_type<=NoteType::Crotchet) ? FillType::FilledNote : FillType::EmptyNote, l_num_flicks);
     }
     else
     {
