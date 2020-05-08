@@ -102,7 +102,7 @@ void AudioThread::run()
     m_frame_num = 0;
 
     //read to the 1 chunk befor time 0
-    if((g_data->getSoundMode() & SOUND_REC))
+    if(g_data->isSoundModeRecording())
     {
         g_data->setDoingActiveAnalysis(true);
         myassert(m_rec_sound_file->isFirstTimeThrough() == true);
@@ -110,7 +110,7 @@ void AudioThread::run()
     }
   
     QApplication::postEvent(g_main_window, new QEvent(static_cast<QEvent::Type>(SOUND_STARTED)));
-    g_data->setRunning(STREAM_FORWARD);
+    g_data->setRunning(GData::RunningMode::STREAM_FORWARD);
 
     while(!m_stopping)
     {
@@ -125,14 +125,14 @@ void AudioThread::run()
 #endif // WINDOWS
     }
 
-    g_data->setRunning(STREAM_STOP);
+    g_data->setRunning(GData::RunningMode::STREAM_STOP);
 
-    if((g_data->getSoundMode() & SOUND_REC))
+    if(g_data->isSoundModeRecording())
     {
         g_data->setDoingActiveAnalysis(false);
         m_rec_sound_file->setFirstTimeThrough(false);
         m_rec_sound_file->rec2play();
-        g_data->setSoundMode(SOUND_PLAY);
+        g_data->setSoundMode(GData::SoundMode::SOUND_PLAY);
     }
 
     if(g_data->getAudioStream())
@@ -150,7 +150,7 @@ void AudioThread::run()
 int AudioThread::doStuff()
 {
     int l_force_update = false;
-    if(g_data->getRunning() == STREAM_PAUSE)
+    if(g_data->getRunning() == GData::RunningMode::STREAM_PAUSE)
     {
         msleep(20);
         //paused
@@ -164,19 +164,19 @@ int AudioThread::doStuff()
     ++m_frame_num;
 	
     //update one frame before pausing again
-    if(g_data->getRunning() == STREAM_UPDATE)
+    if(g_data->getRunning() == GData::RunningMode::STREAM_UPDATE)
     {
         //update then pause
-        g_data->setRunning(STREAM_PAUSE);
+        g_data->setRunning(GData::RunningMode::STREAM_PAUSE);
         l_force_update = true;
     }
-    if(g_data->getRunning() != STREAM_FORWARD)
+    if(g_data->getRunning() != GData::RunningMode::STREAM_FORWARD)
     {
         return 0;
     }
   
     //This is the main block of code for reading or write the next chunk to the soundcard or file
-    if(g_data->getSoundMode() == SOUND_PLAY)
+    if(g_data->getSoundMode() == GData::SoundMode::SOUND_PLAY)
     {
         myassert(m_play_sound_file);
         if(!m_play_sound_file->playChunk())
@@ -194,7 +194,7 @@ int AudioThread::doStuff()
             }
         }
     }
-    else if(g_data->getSoundMode() == SOUND_REC)
+    else if(g_data->getSoundMode() == GData::SoundMode::SOUND_REC)
     {
         // SOUND_REC
         int l_buffer_chunks = g_data->getAudioStream()->inTotalBufferFrames() / m_rec_sound_file->framesPerChunk();
@@ -203,7 +203,7 @@ int AudioThread::doStuff()
             m_rec_sound_file->recordChunk(m_rec_sound_file->framesPerChunk());
         }
     }
-    else if(g_data->getSoundMode() == SOUND_PLAY_REC)
+    else if(g_data->getSoundMode() == GData::SoundMode::SOUND_PLAY_REC)
     {
         int l_buffer_chunks = g_data->getAudioStream()->inTotalBufferFrames() / m_rec_sound_file->framesPerChunk();
         if(m_frame_num > l_buffer_chunks)

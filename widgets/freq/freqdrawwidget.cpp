@@ -170,7 +170,7 @@ void FreqDrawWidget::paintEvent(QPaintEvent *)
 
     View & l_view = g_data->getView();
 
-    if(l_view.autoFollow() && g_data->getActiveChannel() && g_data->getRunning() == STREAM_FORWARD)
+    if(l_view.autoFollow() && g_data->getActiveChannel() && g_data->getRunning() == GData::RunningMode::STREAM_FORWARD)
     {
         setChannelVerticalView(g_data->getActiveChannel(), l_view.viewLeft(), l_view.currentTime(), l_view.zoomX(), l_view.viewBottom(), l_view.zoomY());
     }
@@ -395,7 +395,7 @@ void FreqDrawWidget::wheelEvent(QWheelEvent * p_wheel_event)
         if(p_wheel_event->delta() >= 0)
         {
             //zooming in
-            if(g_data->getRunning() == STREAM_FORWARD)
+            if(g_data->getRunning() == GData::RunningMode::STREAM_FORWARD)
             {
                 l_view.setZoomFactorX(l_view.logZoomX() + l_amount * 0.3);
             }
@@ -409,7 +409,7 @@ void FreqDrawWidget::wheelEvent(QWheelEvent * p_wheel_event)
         else
         {
             //zoom out toward center
-            if(g_data->getRunning() == STREAM_FORWARD)
+            if(g_data->getRunning() == GData::RunningMode::STREAM_FORWARD)
             {
                 l_view.setZoomFactorX(l_view.logZoomX() + l_amount * 0.3);
             }

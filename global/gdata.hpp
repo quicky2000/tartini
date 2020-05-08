@@ -154,13 +154,19 @@ std::string GData::getSettingsStringValue(const std::string & p_key)const
 }
 
 //------------------------------------------------------------------------------
-int GData::getSoundMode()const
+bool GData::isSoundModeRecording()const
+{
+    return (m_sound_mode == SoundMode::SOUND_REC) || (m_sound_mode == SoundMode::SOUND_PLAY_REC);
+}
+
+//------------------------------------------------------------------------------
+GData::SoundMode GData::getSoundMode()const
 {
     return m_sound_mode;
 }
 
 //------------------------------------------------------------------------------
-void GData::setSoundMode(const int & p_mode)
+void GData::setSoundMode(const GData::SoundMode & p_mode)
 {
     m_sound_mode = p_mode;
 }
@@ -202,13 +208,13 @@ void GData::stopAndWaitAudioThread()
 }
 
 //------------------------------------------------------------------------------
-void GData::setRunning(int p_running)
+void GData::setRunning(GData::RunningMode p_running)
 {
     m_running = p_running;
 }
 
 //------------------------------------------------------------------------------
-int GData::getRunning()const
+GData::RunningMode GData::getRunning()const
 {
     return m_running;
 }

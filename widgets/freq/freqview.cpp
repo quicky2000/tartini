@@ -249,7 +249,7 @@ FreqView::~FreqView()
 void FreqView::zoomIn()
 {
     bool l_done_it = false;
-    if(g_data->getRunning() != STREAM_FORWARD)
+    if(g_data->getRunning() != GData::RunningMode::STREAM_FORWARD)
     {
         if(m_freq_widget_GL->testAttribute(Qt::WA_UnderMouse))
         {
