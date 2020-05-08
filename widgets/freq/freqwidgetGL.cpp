@@ -95,6 +95,95 @@ FreqWidgetGL::~FreqWidgetGL()
 }
 
 //------------------------------------------------------------------------------
+// Non-GL version only used for printing
+void FreqWidgetGL::drawReferenceLines( QPaintDevice & p_paint_device
+                                       , QPainter & p_painter
+                                       , double p_current_time
+                                       , double p_zoom_X
+                                       , double p_view_bottom
+                                       , double p_zoom_Y
+                                       , int p_view_type
+                                       )
+{
+    // Draw the lines and notes
+    QFontMetrics l_font_metric = p_painter.fontMetrics();
+    int l_font_height_space = l_font_metric.height() / 4;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+    int l_font_width = l_font_metric.horizontalAdvance("C#0") + 3;
+#else // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+    int l_font_width = l_font_metric.width("C#0") + 3;
+#endif // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+
+    //number of pixels to jump between each line
+    double l_step = 1.0 / p_zoom_Y;
+    //in semi-tones
+    int l_note_jump;
+    if(l_step > 10.0)
+    {
+        l_note_jump = 1;
+    }
+    else if(l_step > 5.0)
+    {
+        l_note_jump = 6;
+    }
+    else
+    {
+        l_note_jump = 12;
+    }
+    double l_remainder = cycle(p_view_bottom, double(l_note_jump));
+    double l_to_first_note = double(l_note_jump) - l_remainder;
+    double l_start = l_to_first_note * l_step;
+    double l_stop = double(p_paint_device.height());
+    int l_name_index = toInt(p_view_bottom + l_to_first_note);
+    l_step *= l_note_jump;
+
+    //draw the note names and reference lines
+    QString l_note_label;
+    int l_line_Y = 0;
+    for(double l_y = l_start; l_y < l_stop; l_y += l_step, l_name_index+=l_note_jump)
+    {
+        l_line_Y = p_paint_device.height() - toInt(l_y);
+        if(!isBlackNote(l_name_index))
+        {
+            p_painter.setPen(Qt::black);
+            l_note_label = QString::fromStdString(music_notes::noteName(l_name_index) + std::to_string(noteOctave(l_name_index)));
+            p_painter.drawText(2, l_line_Y + l_font_height_space, l_note_label);
+            if(noteValue(l_name_index) == 0)
+            {
+                p_painter.setPen(QPen(Qt::black, 1, Qt::SolidLine));
+            }
+            else
+            {
+                //transperenct colors don't seem to work on the printer
+                if(p_view_type == DRAW_VIEW_PRINT)
+                {
+                    p_painter.setPen(QPen(QColor(128, 128, 128), 1, Qt::SolidLine));
+                }
+                else
+                {
+                    p_painter.setPen(QPen(QColor(144, 156, 170), 1, Qt::DashDotDotLine));
+                }
+            }
+        }
+        else
+        {
+            if(p_view_type == DRAW_VIEW_PRINT)
+            {
+                p_painter.setPen(QPen(QColor(196, 196, 196), 1, Qt::SolidLine));
+            }
+            else
+            {
+                p_painter.setPen(QPen(QColor(136, 161, 180), 1, Qt::DotLine));
+            }
+        }
+        int l_offset = toInt(p_current_time / p_zoom_X) % 32;
+        p_painter.setClipRect(l_font_width, 0, p_paint_device.width() - l_font_width, p_paint_device.height());
+        p_painter.drawLine(l_font_width - l_offset, l_line_Y, p_paint_device.width() - 1, l_line_Y);
+        p_painter.setClipRect(0, 0, p_paint_device.width(), p_paint_device.height());
+    }
+}
+
+//------------------------------------------------------------------------------
 void FreqWidgetGL::drawReferenceLinesGL( const double & /* p_left_time*/
                                        , const double & p_current_time
                                        , const double & p_zoom_X

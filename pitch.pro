@@ -161,7 +161,6 @@ HEADERS += \
   widgets/fft/fftwidget.h \
   widgets/freq/amplitudewidget.h \
   widgets/freq/amplitudewidget.hpp \
-  widgets/freq/freqdrawwidget.h \
   widgets/freq/freqview.h \
   widgets/freq/freqwidgetGL.h \
   widgets/freq/freqwidgetGL.hpp \
@@ -264,7 +263,6 @@ SOURCES += \
    widgets/fft/fftview.cpp \
    widgets/fft/fftwidget.cpp \
    widgets/freq/amplitudewidget.cpp \
-   widgets/freq/freqdrawwidget.cpp \
    widgets/freq/freqview.cpp \
    widgets/freq/freqwidgetGL.cpp \
    widgets/hblock/hblockview.cpp \
