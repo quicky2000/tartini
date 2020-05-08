@@ -21,7 +21,6 @@
 #include "view.h"
 #include "gdata.h"
 #include "myscrollbar.h"
-#include "freqdrawwidget.h"
 #include "freqwidgetGL.h"
 #include "amplitudewidget.h"
 #include "timeaxis.h"

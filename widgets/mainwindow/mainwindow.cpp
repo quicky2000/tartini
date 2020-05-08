@@ -1213,7 +1213,7 @@ void MainWindow::showDocumentation()
     QDesktopServices::openUrl(QUrl("http://www.tartini.net/doc"));
 }
 
-#include "freqdrawwidget.h"
+#include "freqwidgetGL.h"
 #include "drawwidget.h"
 
 //------------------------------------------------------------------------------
@@ -1235,7 +1235,7 @@ void MainWindow::printPitch()
         double l_view_top = l_view.viewTop();
         double l_zoom_X = (l_right_time-l_left_time) / double(l_width);
         double l_zoom_Y = (l_view_top-l_view_bottom) / double(l_height);
-        FreqDrawWidget::drawReferenceLines(l_printer, l_painter, 0.0, l_zoom_X, l_view_bottom, l_zoom_Y, DRAW_VIEW_PRINT);
+        FreqWidgetGL::drawReferenceLines(l_printer, l_painter, 0.0, l_zoom_X, l_view_bottom, l_zoom_Y, DRAW_VIEW_PRINT);
 
         double l_dots_per_line_step_Y = 1.0 / l_zoom_Y;
         double l_dots_per_MM = double(l_printer.height()) / double(l_printer.heightMM());

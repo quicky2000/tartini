@@ -44,6 +44,15 @@ class FreqWidgetGL : public QGLWidget
                 , const char* p_name = NULL
                 );
     virtual ~FreqWidgetGL();
+    static
+    void drawReferenceLines( QPaintDevice & p_paint_device
+                           , QPainter & p_painter
+                           , double p_current_time
+                           , double p_zoom_X
+                           , double p_view_bottom
+                           , double p_zoom_Y
+                           , int p_view_type
+                           );
 
   private:
 

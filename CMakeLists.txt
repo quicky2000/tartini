@@ -32,7 +32,6 @@ set(MY_HEADER_FILES
     widgets/mainwindow/mainwindow.h
     widgets/mainwindow/viewdata.h
     widgets/openfiles/openfiles.h
-    widgets/freq/freqdrawwidget.h
     widgets/freq/freqwidgetGL.h
     widgets/freq/freqwidgetGL.hpp
     widgets/freq/freqview.h
@@ -164,7 +163,6 @@ set(MY_SOURCE_FILES
     widgets/mainwindow/mainwindow.cpp
     widgets/mainwindow/viewdata.cpp
     widgets/openfiles/openfiles.cpp
-    widgets/freq/freqdrawwidget.cpp
     widgets/freq/freqwidgetGL.cpp
     widgets/freq/freqview.cpp
     widgets/pitchcompass/pitchcompassview.cpp
