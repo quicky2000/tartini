@@ -30,10 +30,6 @@
 #include "conversions.h"
 #include "myqt.h"
 
-#ifndef CERTAIN_THRESHOLD
-#define CERTAIN_THRESHOLD 0.9
-#endif
-
 int DrawWidget::m_line_width = 3;
 int DrawWidget::m_line_top_half_width = 2;
 int DrawWidget::m_line_bottom_half_width = 1;

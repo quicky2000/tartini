@@ -64,9 +64,6 @@ void HBubbleWidget::setHistoryChunks(double num)
     }
 }
 
-#define min(a,b) (a > b ? b : a)
-#define max(a,b) (a > b ? a : b)
-
 //------------------------------------------------------------------------------
 void HBubbleWidget::paintEvent( QPaintEvent * )
 {

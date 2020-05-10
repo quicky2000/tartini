@@ -21,7 +21,7 @@
 #include "useful.h"
 #include "musicnotes.h"
 
-double g_keyOffsetTable[12] =
+static double g_keyOffsetTable[12] =
         { 0.0
         , 15.5
         , 23.5

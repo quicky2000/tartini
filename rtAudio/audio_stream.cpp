@@ -113,7 +113,7 @@ int AudioStream::open( int p_mode
         // Just leave api as UNSPECIFIED.
         m_audio = new RtAudio();
 
-        m_audio->openStream(l_output_param_ptr, l_input_param_ptr, RTAUDIO_FLOAT32, get_frequency(), (unsigned int *)&m_buffer_size, callback, this, &l_options);
+        m_audio->openStream(l_output_param_ptr, l_input_param_ptr, RTAUDIO_FLOAT32, get_frequency(), reinterpret_cast<unsigned int *>(&m_buffer_size), callback, this, &l_options);
         // The value in options.numberOfBuffers is updated to the actual number of buffers used.
     }
     catch (RtAudioError & l_error)

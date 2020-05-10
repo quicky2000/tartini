@@ -29,22 +29,6 @@
 #include "channel.h"
 #include "musicnotes.h"
 
-int g_LED_letter_lookup[12] =
-        {
-        2,
-        2,
-        3,
-        3,
-        4,
-        5,
-        5,
-        6,
-        6,
-        0,
-        0,
-        1
-        };
-
 //------------------------------------------------------------------------------
 TunerView::TunerView(int p_view_iD_
                     ,QWidget *p_parent

@@ -32,7 +32,7 @@ class Settings
             , QString p_product
             );
 
-    virtual ~Settings() {};
+    virtual ~Settings() {}
 
     void init( QString p_domain
              , QString p_product

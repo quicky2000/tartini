@@ -588,6 +588,7 @@ void AmplitudeWidget::mouseMoveEvent(QMouseEvent *p_mouse_event)
                     unsetCursor();
                 }
             }
+        break;
         case DragModes::DragChannel:
         break;
     }
