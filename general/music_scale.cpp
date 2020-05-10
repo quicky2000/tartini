@@ -16,28 +16,19 @@
  ***************************************************************************/
 
 #include "music_scale.h"
-#include "mystring.h"
 
 //------------------------------------------------------------------------------
 MusicScale::~MusicScale()
 {
-    if(m_p_name)
-    {
-        free(m_p_name);
-    }
 }
 
 //------------------------------------------------------------------------------
-void MusicScale::addScale( const char * p_name
+void MusicScale::addScale( const std::string & p_name
         , const int * p_notes
         , int p_length
         , int p_semitone_offset
                          )
 {
-    if(m_p_name)
-    {
-        free(m_p_name);
-    }
     m_p_notes.resize_copy(p_notes, p_length);
     m_p_semitone_lookup.resize(12, false);
     for(int l_j = 0; l_j < p_length; l_j++)
@@ -45,7 +36,7 @@ void MusicScale::addScale( const char * p_name
         myassert(p_notes[l_j] >= 0 && p_notes[l_j] < 12);
         m_p_semitone_lookup[p_notes[l_j]] = true;
     }
-    m_p_name = copy_string(p_name);
+    m_name = p_name;
     m_semitone_offset = p_semitone_offset;
 }
 

@@ -982,7 +982,7 @@ void GData::setTemperedType(int p_type)
             QStringList l_string_list;
             for(unsigned int l_j = 2; l_j < g_music_scales.size(); l_j++)
             {
-                l_string_list << g_music_scales[l_j].name();
+                l_string_list << g_music_scales[l_j].name().c_str();
             }
             g_main_window->add_key_types(l_string_list);
         }

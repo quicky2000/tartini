@@ -15,7 +15,6 @@
    Please read LICENSE.txt for details.
  ***************************************************************************/
 #include "musicnotes.h"
-#include "mystring.h"
 #include "myassert.h"
 #include "music_scale.h"
 #include "music_key.h"

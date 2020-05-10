@@ -103,7 +103,6 @@
 
 #include <math.h>
 #include "useful.h"
-#include "mystring.h"
 #include <string.h>
 
 #include "pics/record32x32.xpm"
@@ -450,7 +449,7 @@ MainWindow::MainWindow()
     QStringList l_string_list;
     for(int l_j = 0; l_j < NUM_MUSIC_KEYS; l_j++)
     {
-        l_string_list << g_music_key_name[l_j];
+        l_string_list << g_music_key_name[l_j].c_str();
     }
     l_key_combo_box->addItems(l_string_list);
     l_key_combo_box->setCurrentIndex(g_data->musicKey());
@@ -464,7 +463,7 @@ MainWindow::MainWindow()
     l_string_list.clear();
     for(unsigned int l_j = 0; l_j < g_music_scales.size(); l_j++)
     {
-        l_string_list << g_music_scales[l_j].name();
+        l_string_list << g_music_scales[l_j].name().c_str();
     }
     m_key_type_combo_box->addItems(l_string_list);
     m_key_type_combo_box->setCurrentIndex(g_data->musicKeyType());
@@ -478,7 +477,7 @@ MainWindow::MainWindow()
     l_string_list.clear();
     for(unsigned int j = 0; j < g_music_keys.size(); j++)
     {
-        l_string_list << g_music_keys[j].name();
+        l_string_list << g_music_keys[j].name().c_str();
     }
     l_tempered_combo_box->addItems(l_string_list);
     l_tempered_combo_box->setCurrentIndex(g_data->temperedType());

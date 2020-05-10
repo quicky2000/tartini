@@ -36,7 +36,7 @@ class MusicScale
     inline MusicScale();
     ~MusicScale();
 
-    void addScale( const char *p_name
+    void addScale( const std::string & p_name
                  , const int * p_notes
                  , int p_length
                  , int p_semitone_offset
@@ -45,14 +45,14 @@ class MusicScale
     inline int size()const;
     inline int note(int j)const;
     inline bool hasSemitone(int p_j)const;
-    inline const char * name()const;
+    inline const std::string & name()const;
     inline int semitoneOffset()const;
 
   private:
 
     Array1d<int> m_p_notes;
     std::vector<bool> m_p_semitone_lookup;
-    char * m_p_name;
+    std::string m_name;
     int m_semitone_offset;
 
 };
