@@ -77,7 +77,7 @@ VibratoView::VibratoView(int p_view_ID
     QFrame * l_speed_frame = new QFrame;
     l_speed_frame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
     QVBoxLayout * l_speed_frame_layout = new QVBoxLayout;
-    m_vibrato_speed_widget = new VibratoSpeedWidget(0);
+    m_vibrato_speed_widget = new VibratoSpeedWidget(nullptr);
     m_vibrato_speed_widget->setWhatsThis("Indicates the instantaneous speed and peek-to-peek amplitude of the vibrato. Note: 100 cents = 1 semi-tone (even tempered).");
     l_speed_frame_layout->addWidget(m_vibrato_speed_widget);
     l_speed_frame_layout->setMargin(0);
@@ -108,7 +108,7 @@ VibratoView::VibratoView(int p_view_ID
     QFrame * l_circle_frame = new QFrame;
     l_circle_frame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
     QVBoxLayout *l_circle_frame_layout = new QVBoxLayout;
-    m_vibrato_circle_widget = new VibratoCircleWidget(0);
+    m_vibrato_circle_widget = new VibratoCircleWidget(nullptr);
     m_vibrato_circle_widget->setWhatsThis("Each cycle of your vibrato is represented by a 2D shape. A current cycle produces a circle if it has a perfect sine wave shape. "
     "Going outside the line indicates your phase is ahead of a sine-wave, and inside the line slower. Note: The shape of one cycle is blended into the next.");
     l_circle_frame_layout->addWidget(m_vibrato_circle_widget);
@@ -139,7 +139,7 @@ VibratoView::VibratoView(int p_view_ID
     QFrame * l_period_frame = new QFrame;
     l_period_frame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
     QVBoxLayout * l_period_frame_layout = new QVBoxLayout;
-    m_vibrato_period_widget = new VibratoPeriodWidget(0);
+    m_vibrato_period_widget = new VibratoPeriodWidget(nullptr);
     m_vibrato_period_widget->setWhatsThis("A detailed view of the current vibrato period. You can turn on and off some different options with the buttons. ");
     l_period_frame_layout->addWidget(m_vibrato_period_widget);
     l_period_frame_layout->setMargin(0);
@@ -221,13 +221,13 @@ VibratoView::VibratoView(int p_view_ID
     QGridLayout * l_bottom_layout = new QGridLayout;
 
     // The timeaxis
-    m_vibrato_time_axis = new VibratoTimeAxis(0, l_note_label_offset);
+    m_vibrato_time_axis = new VibratoTimeAxis(nullptr, l_note_label_offset);
 
     // The drawing object for displaying vibrato notes
     QFrame * l_vibrato_frame = new QFrame;
     l_vibrato_frame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
     QVBoxLayout * l_vibrato_frame_layout = new QVBoxLayout;
-    m_vibrato_widget = new VibratoWidget(0, l_note_label_offset);
+    m_vibrato_widget = new VibratoWidget(nullptr, l_note_label_offset);
     m_vibrato_widget->setWhatsThis("Shows the vibrato of the current note. "
     "Grey shading indicates the vibrato envelope. The black line indicates the center pitch. "
     "Other shading indicates half period times. "
@@ -300,7 +300,7 @@ VibratoView::VibratoView(int p_view_ID
     l_bottom_bottom_layout->addWidget(l_zoom_wheel_H, 0, 4, 1, 1);
 
     // The resize grip
-    QSizeGrip * l_size_grip = new QSizeGrip(0);
+    QSizeGrip * l_size_grip = new QSizeGrip(nullptr);
     l_size_grip->setFixedSize(15, 15);
     l_bottom_bottom_layout->addWidget(l_size_grip, 0, 5, 1, 1);
 

@@ -23,7 +23,7 @@ class TartiniSettingsDialog : public QDialog, private Ui_SettingsDialog
   Q_OBJECT
 
   public:
-    TartiniSettingsDialog(QWidget * p_parent = 0);
+    TartiniSettingsDialog(QWidget * p_parent = nullptr);
 
     void loadSetting( QObject * p_object
                     , const std::string & p_group

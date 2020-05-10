@@ -27,7 +27,7 @@ class HCircleView: public ViewWidget
 
   public:
     HCircleView( int p_view_id
-               , QWidget *p_parent = NULL
+               , QWidget *p_parent = nullptr
                );
     virtual ~HCircleView();
 

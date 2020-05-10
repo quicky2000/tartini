@@ -29,8 +29,8 @@
 
 //------------------------------------------------------------------------------
 AudioThread::AudioThread()
-: m_play_sound_file(NULL)
-, m_rec_sound_file(NULL)
+: m_play_sound_file(nullptr)
+, m_rec_sound_file(nullptr)
 , m_stopping(false)
 , m_fast_update_count(0)
 , m_slow_update_count(0)
@@ -44,8 +44,8 @@ AudioThread::AudioThread()
 void AudioThread::start()
 {
     fprintf(stderr, "Warning - audio thread created with no sound file specified.\n");
-    m_play_sound_file = NULL;
-    m_rec_sound_file = NULL;
+    m_play_sound_file = nullptr;
+    m_rec_sound_file = nullptr;
     m_stopping = false;
     QThread::start(QThread::HighPriority);
 }
@@ -138,10 +138,10 @@ void AudioThread::run()
     if(g_data->getAudioStream())
     {
         delete g_data->getAudioStream();
-        g_data->setAudioStream(NULL);
+        g_data->setAudioStream(nullptr);
     }
-    m_play_sound_file = NULL;
-    m_rec_sound_file = NULL;
+    m_play_sound_file = nullptr;
+    m_rec_sound_file = nullptr;
   
     QApplication::postEvent(g_main_window, new QEvent(static_cast<QEvent::Type>(SOUND_STOPPED)));
 }

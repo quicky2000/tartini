@@ -48,7 +48,7 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
 
     Channel *l_active_channel = g_data->getActiveChannel();
 
-    AnalysisData * l_data = NULL;
+    AnalysisData * l_data = nullptr;
     int l_chunk = 0;
     double l_dh2 = double(height() - 1) / 2.0;
     int l_x;

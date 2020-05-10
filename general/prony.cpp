@@ -32,8 +32,8 @@ bool pronyFit( PronyData * p_result
              , bool p_allow_offset
              )
 {
-    myassert(p_result != NULL);
-    myassert(p_x != NULL);
+    myassert(p_result != nullptr);
+    myassert(p_x != nullptr);
     int l_j;
     double l_alpha[3];
     double l_omega;
@@ -49,7 +49,7 @@ bool pronyFit( PronyData * p_result
     }
     if(p_allow_offset)
     {
-        if(!pinv(NULL, p_x + p_gap, l_x1.begin(), l_n, l_alpha))
+        if(!pinv(nullptr, p_x + p_gap, l_x1.begin(), l_n, l_alpha))
         {
             return false;
         }
@@ -76,7 +76,7 @@ bool pronyFit( PronyData * p_result
     }
     if(p_allow_offset)
     {
-        if(!pinv(NULL, l_x1.begin(), l_x2.begin(), p_x, p_length, l_alpha))
+        if(!pinv(nullptr, l_x1.begin(), l_x2.begin(), p_x, p_length, l_alpha))
         {
             return false;
         }

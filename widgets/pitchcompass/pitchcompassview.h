@@ -30,7 +30,7 @@ class PitchCompassView: public ViewWidget
   public:
 
     PitchCompassView( int p_view_id
-                    , QWidget * p_parent = NULL
+                    , QWidget * p_parent = nullptr
                     , int p_mode = 2
                     );
     virtual ~PitchCompassView();

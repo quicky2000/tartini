@@ -115,14 +115,14 @@ void SoundFile::jumpToTime(const double & p_time)
 //------------------------------------------------------------------------------
 int SoundFile::rate() const
 {
-    myassert(m_stream != NULL);
+    myassert(m_stream != nullptr);
     return m_stream->get_frequency();
 }
 
 //------------------------------------------------------------------------------
 int SoundFile::bits() const
 {
-    myassert(m_stream != NULL);
+    myassert(m_stream != nullptr);
     return m_stream->get_bits();
 }
 

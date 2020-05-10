@@ -29,7 +29,7 @@ class MyScrollBar : public QWidget
   public:
     MyScrollBar(Qt::Orientation p_orientation
                ,QWidget * p_parent
-               ,const char * p_name = 0
+               ,const char * p_name = nullptr
                );
 
     MyScrollBar(double p_min_value
@@ -40,7 +40,7 @@ class MyScrollBar : public QWidget
                ,double p_step
                ,Qt::Orientation p_orientation
                ,QWidget * p_parent
-               ,const char * p_name = 0
+               ,const char * p_name = nullptr
                );
 
     virtual ~MyScrollBar();

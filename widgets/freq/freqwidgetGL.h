@@ -41,7 +41,7 @@ class FreqWidgetGL : public QGLWidget
 
   public:
     FreqWidgetGL( QWidget *p_parent
-                , const char* p_name = NULL
+                , const char* p_name = nullptr
                 );
     virtual ~FreqWidgetGL();
     static

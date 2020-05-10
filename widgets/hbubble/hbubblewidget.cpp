@@ -84,7 +84,7 @@ void HBubbleWidget::paintEvent( QPaintEvent * )
         for(l_j = 0; l_j < m_history_chunks; l_j++)
         {
             l_data = l_active_channel->dataAtChunk(l_active_channel->currentChunk() - m_history_chunks + l_j + 1);
-            if(l_data != 0)
+            if(l_data != nullptr)
             {
                 if(l_data->getHarmonicFreqSize() != 0 && l_data->getFundamentalFreq() != 0)
                 {

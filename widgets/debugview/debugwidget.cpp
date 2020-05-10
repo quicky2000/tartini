@@ -60,7 +60,7 @@ void DebugWidget::paintEvent( QPaintEvent * )
     QFontMetrics l_font_metric = get_painter().fontMetrics();
     m_font_height = l_font_metric.height();
 
-    if(l_active_channel != NULL && l_active_channel->isValidChunk(l_active_channel->currentChunk()))
+    if(l_active_channel != nullptr && l_active_channel->isValidChunk(l_active_channel->currentChunk()))
     {
         //move text position back to the top
         m_text_Y = 0;

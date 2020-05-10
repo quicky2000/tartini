@@ -48,7 +48,7 @@ char * copy_string(const char * p_s)
 {
     if(!p_s)
     {
-        return NULL;
+        return nullptr;
     }
     char * l_t = static_cast<char *>(malloc(strlen(p_s) + 1));
     if(nullptr == l_t)
@@ -118,13 +118,13 @@ char * strip_space(char * p_s)
 const char * getFileExtension(const char * p_filename)
 {
     const char * l_ext;
-    if(p_filename && (l_ext = strrchr(p_filename, '.')) != NULL)
+    if(p_filename && (l_ext = strrchr(p_filename, '.')) != nullptr)
     {
         return l_ext + 1;
     }
     else
     {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -136,13 +136,13 @@ const char * getFilenamePart(const char * p_filename)
     const char *l_ext;
     if(!p_filename)
     {
-        return NULL;
+        return nullptr;
     }
-    if((l_ext = strrchr(p_filename, '/')) != NULL)
+    if((l_ext = strrchr(p_filename, '/')) != nullptr)
     {
         return l_ext + 1;
     }
-    if((l_ext = strrchr(p_filename, '\\')) != NULL)
+    if((l_ext = strrchr(p_filename, '\\')) != nullptr)
     {
         return l_ext + 1;
     }

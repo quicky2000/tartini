@@ -97,7 +97,7 @@ const char * g_pitch_method_strings[NUM_PITCH_METHODS] =
   , "Correlation (multiplied) 2"
   };
 
-GData * g_data = NULL;
+GData * g_data = nullptr;
 
 //Define the Phase function. This one is applicable to 
 //accelerating sources since the phase goes as x^2.
@@ -112,15 +112,15 @@ float phase_function(float p_x)
 
 //------------------------------------------------------------------------------
 GData::GData()
-: m_settings(NULL)
+: m_settings(nullptr)
 , m_play_or_record(false)
 , m_sound_mode(SoundMode::SOUND_PLAY)
-, m_audio_stream(NULL)
+, m_audio_stream(nullptr)
 , m_need_update(false)
 , m_running(RunningMode::STREAM_STOP)
 , m_next_color_index(0)
-, m_view(NULL)
-, m_active_channel(NULL)
+, m_view(nullptr)
+, m_active_channel(nullptr)
 , m_doing_harmonic_analysis(false)
 , m_doing_freq_analysis(false)
 , m_doing_equal_loudness(false)
@@ -230,7 +230,7 @@ GData::~GData()
 //------------------------------------------------------------------------------
 SoundFile * GData::getActiveSoundFile()
 {
-    return (m_active_channel) ? m_active_channel->getParent() : NULL;
+    return (m_active_channel) ? m_active_channel->getParent() : nullptr;
 }
 
 //------------------------------------------------------------------------------
@@ -286,7 +286,7 @@ bool GData::openPlayRecord( SoundFile * p_sound_file_rec
     {
         fprintf(stderr, "Error initilizing sound\n");
         delete m_audio_stream;
-        m_audio_stream = NULL;
+        m_audio_stream = nullptr;
         return false;
     }
     else
@@ -297,7 +297,7 @@ bool GData::openPlayRecord( SoundFile * p_sound_file_rec
         }
         else
         {
-            m_audio_thread.start(NULL, p_sound_file_rec);
+            m_audio_thread.start(nullptr, p_sound_file_rec);
         }
     }
     return true;
@@ -309,7 +309,7 @@ bool GData::openPlayRecord( SoundFile * p_sound_file_rec
 */
 bool GData::playSound(SoundFile * p_sound_file)
 {
-    if(p_sound_file == NULL)
+    if(p_sound_file == nullptr)
     {
         return false;
     }
@@ -340,10 +340,10 @@ bool GData::playSound(SoundFile * p_sound_file)
         {
             fprintf(stderr, "Error initialising sound\n");
             delete m_audio_stream;
-            m_audio_stream = NULL;
+            m_audio_stream = nullptr;
             g_main_window->message("Error opening sound device. Another program might be using it", 2000);
         }
-        m_audio_thread.start(p_sound_file, NULL);
+        m_audio_thread.start(p_sound_file, nullptr);
     }
     return true;
 }
@@ -633,7 +633,7 @@ void GData::removeFileFromList(SoundFile * p_sound_file)
         }
         if(m_channels.empty())
         {
-            setActiveChannel(NULL);
+            setActiveChannel(nullptr);
         }
         else
         {
@@ -770,7 +770,7 @@ int GData::closeFile( SoundFile * p_sound_file
                     , t_saving_modes p_saving_mode
                     )
 {
-    if(p_sound_file == NULL)
+    if(p_sound_file == nullptr)
     {
         return -1;
     }
@@ -794,7 +794,7 @@ int GData::closeFile( SoundFile * p_sound_file
     if(p_saving_mode == SavingModes::ALWAYS_ASK)
     {
         QString l_filename = QString(getFilenamePart(l_old_filename.toStdString().c_str()));
-        int l_option = QMessageBox::question(NULL
+        int l_option = QMessageBox::question(nullptr
                                             , QString("Save changes to file '") + l_filename + "' ?"
                                             , QString("Save changes to the file '") + l_filename + QString("' ?\n")
                                             , "&Yes"

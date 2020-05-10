@@ -33,7 +33,7 @@ class MyLabel : public DrawWidget
   public:
     MyLabel(const std::string & p_text
            ,QWidget * p_parent
-           ,const char * p_name = 0
+           ,const char * p_name = nullptr
            );
 
     inline

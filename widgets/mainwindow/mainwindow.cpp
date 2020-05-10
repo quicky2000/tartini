@@ -138,7 +138,7 @@ ViewData MainWindow::m_view_data[MainWindow::m_view_number];
 
 //------------------------------------------------------------------------------
 MainWindow::MainWindow()
-: QMainWindow(NULL)
+: QMainWindow(nullptr)
 {
     init_view_data();
     setAttribute(Qt::WA_DeleteOnClose);
@@ -768,7 +768,7 @@ void MainWindow::openRecord(bool p_and_play)
         return;
     }
 
-    SoundFile * l_play_sound_file = (p_and_play) ? g_data->getActiveSoundFile() : NULL;
+    SoundFile * l_play_sound_file = (p_and_play) ? g_data->getActiveSoundFile() : nullptr;
 
     int l_rate = g_data->getSettingsValue("Sound/sampleRate", 44100);
     std::string l_number_of_channels = g_data->getSettingsValue("Sound/numberOfChannels", std::string("mono"));
@@ -819,7 +819,7 @@ void MainWindow::openRecord(bool p_and_play)
     l_new_filename = QDir::toNativeSeparators(l_new_filename);
     if(!l_new_sound_file->openWrite(l_new_filename.toStdString().c_str(), l_rate, l_channels, l_bits, l_window_size, l_step_size))
     {
-        delete l_new_sound_file; l_new_sound_file = NULL;
+        delete l_new_sound_file; l_new_sound_file = nullptr;
         return;
     }
 
@@ -907,9 +907,9 @@ void MainWindow::menuPreferences()
 //------------------------------------------------------------------------------
 QWidget * MainWindow::openView(int p_view_id)
 {
-    QWidget * l_widget = NULL;
+    QWidget * l_widget = nullptr;
     int l_use_top_level_widgets = g_data->getSettingsValue("Display/useTopLevelWidgets", false);
-    QWidget * l_parent = (l_use_top_level_widgets) ? NULL : m_the_workspace;
+    QWidget * l_parent = (l_use_top_level_widgets) ? nullptr : m_the_workspace;
 
     switch(p_view_id)
     {

@@ -21,7 +21,7 @@ class ViewWidget : public QWidget
 {
   Q_OBJECT
  public:
-  ViewWidget( int p_view_ID, QWidget * p_parent = NULL);
+  ViewWidget( int p_view_ID, QWidget * p_parent = nullptr);
 
  private:
   int m_view_ID;

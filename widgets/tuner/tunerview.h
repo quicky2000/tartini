@@ -36,7 +36,7 @@ class TunerView : public ViewWidget
 
   public:
     TunerView(int p_view_iD_
-             ,QWidget *p_parent = NULL
+             ,QWidget *p_parent = nullptr
              );
     virtual ~TunerView();
 

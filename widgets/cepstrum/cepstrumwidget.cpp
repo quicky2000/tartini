@@ -46,7 +46,7 @@ void CepstrumWidget::paintEvent( QPaintEvent * )
 
     Channel * l_active_channel = g_data->getActiveChannel();
 
-    AnalysisData * l_data = NULL;
+    AnalysisData * l_data = nullptr;
     double l_pixel_step;
     int l_j;
     int l_x;

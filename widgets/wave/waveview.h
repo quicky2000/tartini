@@ -28,7 +28,7 @@ class WaveView: public ViewWidget
 
   public:
     WaveView(int p_view_ID
-            ,QWidget * p_parent = NULL
+            ,QWidget * p_parent = nullptr
             );
 
     virtual ~WaveView();

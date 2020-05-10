@@ -65,7 +65,7 @@ FreqView::FreqView( int p_view_id
     QFrame * l_freq_frame = new QFrame;
     l_freq_frame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
     QVBoxLayout *l_freq_frame_layout = new QVBoxLayout;
-    m_freq_widget_GL = new FreqWidgetGL(NULL);
+    m_freq_widget_GL = new FreqWidgetGL(nullptr);
     m_freq_widget_GL->setWhatsThis("The line represents the musical pitch of the sound. A higher pitch moves up, with note names shown at the left, with octave numbers. "
     "The black vertical line shows the current time. This line's position can be moved. "
     "Pitch-lines are drawn connected only because they change a small amount over a small time step. "
@@ -112,7 +112,7 @@ FreqView::FreqView( int p_view_id
     QFrame * l_amplitude_frame = new QFrame;
     l_amplitude_frame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
     QVBoxLayout * l_amplitude_frame_layout = new QVBoxLayout;
-    m_amplitude_widget = new AmplitudeWidget(NULL);
+    m_amplitude_widget = new AmplitudeWidget(nullptr);
     m_amplitude_widget->setWhatsThis("Shows the volume (or other parameters) at time lined up with the pitch above. Note: You can move the lines to change some thresholds.");
     l_amplitude_frame_layout->addWidget(m_amplitude_widget);
     l_amplitude_frame_layout->setMargin(0);

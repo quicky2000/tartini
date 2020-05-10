@@ -48,13 +48,13 @@ typedef unsigned char byte;
 //------------------------------------------------------------------------------
 SoundFile::SoundFile()
 {
-    m_filename = NULL;
-    m_filtered_filename = NULL;
-    m_stream = NULL;
-    m_filtered_stream = NULL;
+    m_filename = nullptr;
+    m_filtered_filename = nullptr;
+    m_stream = nullptr;
+    m_filtered_stream = nullptr;
     m_frames_per_chunk = 0;
-    m_temp_window_buffer = NULL;
-    m_temp_window_buffer_filtered = NULL;
+    m_temp_window_buffer = nullptr;
+    m_temp_window_buffer_filtered = nullptr;
     m_start_time = 0.0;
     m_chunk_num = 0;
     m_offset = 0; //Number of frame to read into file to get to time 0 (half buffer size).
@@ -81,19 +81,19 @@ void SoundFile::uninit()
 
     if(m_stream)
     {
-        delete m_stream; m_stream = NULL;
+        delete m_stream; m_stream = nullptr;
     }
     if(m_filtered_stream)
     {
-        delete m_filtered_stream; m_filtered_stream = NULL;
+        delete m_filtered_stream; m_filtered_stream = nullptr;
         //Delete the temporary filtered file from disk!
         if(::remove(m_filtered_filename) == -1)
         {
             fprintf(stderr, "Error removing file %s\n", m_filtered_filename);
         }
     }
-    setFilename(NULL);
-    setFilteredFilename(NULL);
+    setFilename(nullptr);
+    setFilteredFilename(nullptr);
     for(int l_j = 0; l_j < numChannels(); l_j++)
     {
         delete m_channels(l_j);
@@ -101,8 +101,8 @@ void SoundFile::uninit()
         delete[] (m_temp_window_buffer_filtered[l_j] - 16);
     }
     m_channels.resize(0);
-    delete[] m_temp_window_buffer; m_temp_window_buffer = NULL;
-    delete[] m_temp_window_buffer_filtered; m_temp_window_buffer_filtered = NULL;
+    delete[] m_temp_window_buffer; m_temp_window_buffer = nullptr;
+    delete[] m_temp_window_buffer_filtered; m_temp_window_buffer_filtered = nullptr;
 
     setFramesPerChunk(0);
     m_start_time = 0.0;
@@ -116,7 +116,7 @@ void SoundFile::setFilename(const char * p_filename)
     if(m_filename)
     {
         free(m_filename);
-        m_filename = NULL;
+        m_filename = nullptr;
     }
     if(p_filename)
     {
@@ -130,7 +130,7 @@ void SoundFile::setFilteredFilename(const char * p_filtered_filename)
     if(m_filtered_filename)
     {
         free(m_filtered_filename);
-        m_filtered_filename = NULL;
+        m_filtered_filename = nullptr;
     }
     if(p_filtered_filename)
     {
@@ -196,7 +196,7 @@ bool SoundFile::openRead(const char * p_filename)
     if(m_filtered_stream->open_write(m_filtered_filename, m_stream->get_frequency(), m_stream->get_channels(), m_stream->get_bits()))
     {
         fprintf(stderr, "Error opening %s\n", m_filtered_filename);
-        delete m_stream; m_stream = NULL;
+        delete m_stream; m_stream = nullptr;
         QString l_string = QString("Error opening ") + QString(m_filtered_filename) + QString(" for writing.\nPossible cause: temp folder is read-only or disk is out of space.\nPlease select a writable Temp Folder");
         QMessageBox::warning(g_main_window, "Error", l_string, QMessageBox::Ok, QMessageBox::NoButton);
         g_main_window->menuPreferences();
@@ -276,9 +276,9 @@ bool SoundFile::openWrite( const char * p_filename
     {
         fprintf(stderr, "Error opening %s for writting\n", m_filename);
         delete m_stream;
-        m_stream = NULL;
+        m_stream = nullptr;
         delete m_filtered_stream;
-        m_filtered_stream = NULL;
+        m_filtered_stream = nullptr;
         QString l_string = QString("Error opening ") + QString(m_filename) + QString(" for writing.\nPossible cause: temp folder is read-only or disk is out of space.\nPlease select a writable Temp Folder");
         QMessageBox::warning(g_main_window, "Error", l_string, QMessageBox::Ok, QMessageBox::NoButton);
         g_main_window->menuPreferences();
@@ -288,9 +288,9 @@ bool SoundFile::openWrite( const char * p_filename
     {
         fprintf(stderr, "Error opening %s for writting\n", m_filtered_filename);
         delete m_stream;
-        m_stream = NULL;
+        m_stream = nullptr;
         delete m_filtered_stream;
-        m_filtered_stream = NULL;
+        m_filtered_stream = nullptr;
         QString l_string = QString("Error opening ") + QString(m_filtered_filename) + QString(" for writing.\nPossible cause: temp folder is read-only or disk is out of space.\nPlease select a writable Temp Folder");
         QMessageBox::warning(g_main_window, "Error", l_string, QMessageBox::Ok, QMessageBox::NoButton);
         g_main_window->menuPreferences();
@@ -544,7 +544,7 @@ int SoundFile::blockingWrite( SoundStream * p_stream
                             , int p_n
                             )
 {
-    if(p_stream == NULL)
+    if(p_stream == nullptr)
     {
 
         return p_n;

@@ -21,7 +21,7 @@
 
 //------------------------------------------------------------------------------
 WaveStream::WaveStream()
-: m_file(NULL)
+: m_file(nullptr)
 , m_header_length(0)
 {
 }
@@ -42,7 +42,7 @@ void WaveStream::close()
             write_header();
         }
         fclose(m_file);
-        m_file = NULL;
+        m_file = nullptr;
     }
 }
 

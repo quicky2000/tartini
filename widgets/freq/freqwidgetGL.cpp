@@ -426,7 +426,7 @@ Channel *FreqWidgetGL::channelAtPixel( int p_x
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 //------------------------------------------------------------------------------
@@ -501,7 +501,7 @@ void FreqWidgetGL::mouseMoveEvent( QMouseEvent *p_mouse_event )
             {
                 setCursor(QCursor(Qt::SplitHCursor));
             }
-            else if(channelAtPixel(p_mouse_event->x(), p_mouse_event->y()) != NULL)
+            else if(channelAtPixel(p_mouse_event->x(), p_mouse_event->y()) != nullptr)
             {
                 setCursor(QCursor(Qt::PointingHandCursor));
             }

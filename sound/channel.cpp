@@ -133,7 +133,7 @@ Channel::Channel( SoundFile * p_parent
 , m_fast_smooth(new fast_smooth(p_size / 8))
 , m_color(Qt::black)
 , m_nsdf_aggregate_roof(0.0)
-, m_high_pass_filter(NULL)
+, m_high_pass_filter(nullptr)
 , m_pitch_small_smoothing_filter(new GrowingAverageFilter(m_parent->rate() / 64))
 , m_pitch_big_smoothing_filter(new FastSmoothedAveragingFilter(m_parent->rate() / 16))
 , m_rms_floor(g_data->dBFloor())
@@ -378,7 +378,7 @@ float Channel::averageMaxCorrelation( int p_begin
 const AnalysisData * Channel::getActiveChannelCurrentChunkData()
 {
     Channel * l_active_channel = g_data->getActiveChannel();
-    return (l_active_channel) ? l_active_channel->dataAtCurrentChunk() : NULL;
+    return (l_active_channel) ? l_active_channel->dataAtCurrentChunk() : nullptr;
 }
 
 //------------------------------------------------------------------------------
@@ -403,7 +403,7 @@ void Channel::recalcScoreThresholds()
     ChannelLocker l_channel_locker(this);
     for(int l_j = 0; l_j < totalChunks(); l_j++)
     {
-        if((l_analysis_data = dataAtChunk(l_j)) != NULL)
+        if((l_analysis_data = dataAtChunk(l_j)) != nullptr)
         {
             l_analysis_data->calcScores();
         }
@@ -715,7 +715,7 @@ void Channel::recalcNotePitches(int p_chunk)
 
     //recalculate the values for the note using the overall periodOctaveEstimate
     NoteData * l_current_note = getLastNote();
-    if(l_current_note == NULL)
+    if(l_current_note == nullptr)
     {
         return;
     }
@@ -741,13 +741,13 @@ void Channel::recalcNotePitches(int p_chunk)
 //------------------------------------------------------------------------------
 const NoteData * Channel::getLastNote() const
 {
-    return (m_note_data.empty()) ? NULL : &m_note_data.back();
+    return (m_note_data.empty()) ? nullptr : &m_note_data.back();
 }
 
 //------------------------------------------------------------------------------
 NoteData * Channel::getLastNote()
 {
-    return (m_note_data.empty()) ? NULL : &m_note_data.back();
+    return (m_note_data.empty()) ? nullptr : &m_note_data.back();
 }
 
 //------------------------------------------------------------------------------
@@ -762,7 +762,7 @@ const NoteData * Channel::getCurrentNote() const
             return &m_note_data[l_note_index];
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 //------------------------------------------------------------------------------
@@ -774,7 +774,7 @@ const NoteData * Channel::getNote(int p_note_index) const
     }
     else
     {
-        return NULL;
+        return nullptr;
     }
 }
 

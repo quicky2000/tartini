@@ -44,7 +44,7 @@ HTrackView::HTrackView( int p_view_ID
     QFrame * l_frame = new QFrame(this);
     l_frame->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
     QVBoxLayout *l_frame_layout = new QVBoxLayout;
-    m_h_track_widget = new HTrackWidget(NULL);
+    m_h_track_widget = new HTrackWidget(nullptr);
     l_frame_layout->addWidget(m_h_track_widget);
     l_frame_layout->setMargin(0);
     l_frame_layout->setSpacing(0);

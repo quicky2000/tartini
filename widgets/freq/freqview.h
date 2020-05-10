@@ -33,7 +33,7 @@ class FreqView: public ViewWidget
 
   public:
     FreqView( int p_view_id
-            , QWidget *p_parent = NULL
+            , QWidget *p_parent = nullptr
             );
     virtual ~FreqView();
 
