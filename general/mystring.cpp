@@ -150,7 +150,7 @@ const char * getFilenamePart(const char * p_filename)
 }
 
 // a static string used by getFolderPart and withTrailingSlash
-char g_mystring_folder[2048];
+static char g_mystring_folder[2048];
 
 // retuns a string which contains only the folder name part of the string.
 // if no folder name is found it return "./"

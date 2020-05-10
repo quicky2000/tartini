@@ -26,13 +26,12 @@
 #include "useful.h"
 #include <algorithm>
 
-//These are the sampling intensities in out lookup table (in dB)
-double g_i0[14] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130};
-
 //the best hearing is at 3700Hz. And another max at 13000Hz
 //These are the sampling frequencies in out lookup table
+static
 double g_f0[23] =                  {  20,  30,  40,  50,  70, 100,    200, 300, 400, 500, 700, 1000, 1600, 2000, 3000, 3700, 5000, 7000, 10000, 12000, 13000, 14000, 16000};
 
+static
 double g_loudness_table[16][23] = {{ -30, -30, -30, -30, -30, -30,    -30, -30, -25, -22, -20,  -20,  -20,  -20,  -20,  -15,  -17,  -30,   -30,   -30,   -30,   -30,   -30}, //-20dB
                                    { -30, -30, -30, -30, -30, -30,    -30, -20, -15, -12, -10,  -10,   -8,   -8,   -5,   -2,   -6,  -20,   -30,   -30,   -30,   -30,   -30}, //-10dB
                                    { -30, -30, -30, -30, -30, -30,    -20, -10,  -5,  -2,   0,    0,    2,    2,    6,    9,    5,  -10,   -20,   -25,   -22,   -30,   -30}, //  0dB
