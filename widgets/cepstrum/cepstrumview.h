@@ -28,7 +28,7 @@ class CepstrumView : public ViewWidget
 
   public:
     CepstrumView( int p_view_id
-                , QWidget * p_parent = 0
+                , QWidget * p_parent = nullptr
                 );
     virtual ~CepstrumView();
 

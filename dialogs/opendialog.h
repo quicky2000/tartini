@@ -32,7 +32,7 @@ class OpenDialog : public QFileDialog
     ~OpenDialog();
     void accept();
   
-    static QString getOpenWavFileName(QWidget * p_parent = 0);
+    static QString getOpenWavFileName(QWidget * p_parent = nullptr);
 
   private:
 

@@ -24,7 +24,7 @@ AudioStream::AudioStream()
 {
     m_buffer_size = 1024;
     m_num_buffers = 0;
-    m_audio = NULL;
+    m_audio = nullptr;
     m_in_buffer.setAutoGrow(true);
     m_out_buffer.setAutoGrow(true);
 }
@@ -70,8 +70,8 @@ int AudioStream::open( int p_mode
     m_buffer_size = p_buffer_size;
     m_num_buffers = g_data->getSettingsValue("Sound/numberOfBuffers", 4);
 
-    RtAudio::StreamParameters * l_input_param_ptr = NULL;
-    RtAudio::StreamParameters * l_output_param_ptr = NULL;
+    RtAudio::StreamParameters * l_input_param_ptr = nullptr;
+    RtAudio::StreamParameters * l_output_param_ptr = nullptr;
     
     RtAudio::StreamParameters l_input_parameters;
     if(get_mode() == F_READ || get_mode() == F_RDWR)
@@ -119,7 +119,7 @@ int AudioStream::open( int p_mode
     catch (RtAudioError & l_error)
     {
         l_error.printMessage();
-        m_audio = NULL;
+        m_audio = nullptr;
         return -1;
     }
 
@@ -378,7 +378,7 @@ QStringList AudioStream::getInputDeviceNames()
     QStringList l_to_return;
     l_to_return << "Default";
 
-    RtAudio * l_temp_audio = NULL;
+    RtAudio * l_temp_audio = nullptr;
     try
     {
         l_temp_audio = new RtAudio();
@@ -445,7 +445,7 @@ QStringList AudioStream::getOutputDeviceNames()
     QStringList l_to_return;
     l_to_return << "Default";
 
-    RtAudio * l_temp_audio = NULL;
+    RtAudio * l_temp_audio = nullptr;
     try
     {
         l_temp_audio = new RtAudio();
@@ -510,7 +510,7 @@ int AudioStream::getDeviceNumber(const char * p_device_name, bool p_input)
 
     int l_device_number = -1;
 
-    RtAudio * l_temp_audio = NULL;
+    RtAudio * l_temp_audio = nullptr;
     try
     {
         l_temp_audio = new RtAudio();

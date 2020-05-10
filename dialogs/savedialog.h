@@ -28,11 +28,11 @@ class SaveDialog : public QFileDialog
 {
   Q_OBJECT
   public:
-    SaveDialog(QWidget * p_parent = 0);
+    SaveDialog(QWidget * p_parent = nullptr);
     ~SaveDialog();
     void accept();
 
-    static QString getSaveWavFileName(QWidget * p_parent = 0);
+    static QString getSaveWavFileName(QWidget * p_parent = nullptr);
 
   private:
     QCheckBox * m_remember_folder_check_box;

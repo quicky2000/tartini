@@ -28,7 +28,7 @@ class FFTView: public ViewWidget
 
   public:
     FFTView( int p_view_id
-           , QWidget *p_parent = 0
+           , QWidget *p_parent = nullptr
            );
     virtual ~FFTView();
 

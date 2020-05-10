@@ -28,7 +28,7 @@ class CorrelationView : public ViewWidget
 
   public:
     CorrelationView( int p_view_ID
-                   , QWidget * p_parent = 0
+                   , QWidget * p_parent = nullptr
                    );
     virtual ~CorrelationView();
 

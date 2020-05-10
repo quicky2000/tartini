@@ -141,7 +141,7 @@ class RingBuffer
 template<class T>
 RingBuffer<T>::RingBuffer()
 {
-    m_bufffer = NULL;
+    m_bufffer = nullptr;
     m_buffer_size = 0;
     m_auto_grow = false;
     clear();
@@ -151,7 +151,7 @@ RingBuffer<T>::RingBuffer()
 template<class T>
 RingBuffer<T>::RingBuffer(int p_buf_size)
 {
-    m_bufffer = NULL;
+    m_bufffer = nullptr;
     m_buffer_size = 0;
     m_auto_grow = false;
     resize_clear(p_buf_size);

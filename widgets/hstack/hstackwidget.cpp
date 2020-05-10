@@ -144,7 +144,7 @@ void HStackWidget::paintEvent(QPaintEvent *)
         for(l_i = -1; l_i <= m_window_size + 1; l_i++) 
         { 
             l_data = l_active_channel->dataAtChunk(l_start_chunk + l_i);
-            if (l_data != 0) 
+            if (l_data != nullptr) 
             { 
                 int l_m = MIN(l_data->getHarmonicAmpNoCutOffSize(), static_cast<unsigned>(l_num_harmonics));
                 for(l_j = 0; l_j < l_m;l_j++) 

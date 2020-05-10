@@ -17,7 +17,7 @@
 
 //------------------------------------------------------------------------------
 ViewWidget::ViewWidget( int p_view_ID, QWidget * /*p_parent*/):
-  QWidget( NULL),
+  QWidget( nullptr),
   m_view_ID(p_view_ID)
 {
   setAttribute(Qt::WA_DeleteOnClose);

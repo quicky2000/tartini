@@ -21,7 +21,7 @@ template<class T>
 Array1d<T>::Array1d()
 : m_data_size(0)
 , m_allocated_size(0)
-, m_data(NULL)
+, m_data(nullptr)
 {
 }
 
@@ -32,7 +32,7 @@ Array1d<T>::Array1d(int p_length)
 , m_allocated_size(nextPowerOf2(m_data_size))
 , m_data(static_cast<T *>(malloc(m_allocated_size * sizeof(T))))
 {
-    myassert(m_data != NULL);
+    myassert(m_data != nullptr);
 }
 
 //------------------------------------------------------------------------------
@@ -44,7 +44,7 @@ Array1d<T>::Array1d( int p_length
 , m_allocated_size(nextPowerOf2(m_data_size))
 , m_data(static_cast<T *>(malloc(m_allocated_size * sizeof(T))))
 {
-    myassert(m_data != NULL);
+    myassert(m_data != nullptr);
     fill(p_val);
 }
 
@@ -57,7 +57,7 @@ Array1d<T>::Array1d( const T * p_src
 , m_allocated_size(nextPowerOf2(m_data_size))
 , m_data(static_cast<T *>(malloc(m_allocated_size * sizeof(T))))
 {
-    myassert(m_data != NULL);
+    myassert(m_data != nullptr);
     for(T * l_p = m_data; l_p != end();)
     {
         *l_p++ = *p_src++;
@@ -71,7 +71,7 @@ Array1d<T>::Array1d(Array1d<T> const & p_r)
 , m_allocated_size(nextPowerOf2(m_data_size))
 , m_data(static_cast<T *>(malloc(m_allocated_size * sizeof(T))))
 {
-    myassert(m_data != NULL);
+    myassert(m_data != nullptr);
     copy_raw(p_r.begin());
 }
 
@@ -125,7 +125,7 @@ const T& Array1d<T>::operator[](int p_x) const
 template<class T>
 T& Array1d<T>::at(int p_x)
 {
-    myassert(m_data != NULL);
+    myassert(m_data != nullptr);
     myassert(p_x >= 0 && p_x < size());
     return m_data[p_x];
 }
@@ -134,7 +134,7 @@ T& Array1d<T>::at(int p_x)
 template<class T>
 const T& Array1d<T>::at(int p_x) const
 {
-    myassert(m_data != NULL);
+    myassert(m_data != nullptr);
     myassert(p_x >= 0 && p_x < size());
     return m_data[p_x];
 }
@@ -164,7 +164,7 @@ T * Array1d<T>::end() const
 template<class T>
 bool Array1d<T>::isEmpty() const
 {
-    return (m_data == NULL);
+    return (m_data == nullptr);
 }
 
 //------------------------------------------------------------------------------
@@ -311,7 +311,7 @@ void Array1d<T>::clear()
     if(m_data)
     {
         free(m_data);
-        m_data = NULL;
+        m_data = nullptr;
     }
     m_data_size = 0;
     m_allocated_size = 0;

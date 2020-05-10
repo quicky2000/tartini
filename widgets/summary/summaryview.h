@@ -29,7 +29,7 @@ class SummaryView: public ViewWidget
   public:
 
     SummaryView(int p_view_id
-               ,QWidget *p_parent = NULL
+               ,QWidget *p_parent = nullptr
                );
     virtual ~SummaryView();
 

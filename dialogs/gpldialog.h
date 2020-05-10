@@ -25,7 +25,7 @@ class GPLDialog :public QDialog
     Q_OBJECT
 
   public:
-    GPLDialog(QWidget *p_parent = NULL);
+    GPLDialog(QWidget *p_parent = nullptr);
     QSize sizeHint() const;
 };
 

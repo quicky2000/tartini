@@ -28,7 +28,7 @@ class ScoreView: public ViewWidget
 
   public:
   ScoreView(int p_view_id
-           ,QWidget *p_parent = NULL
+           ,QWidget *p_parent = nullptr
            );
   virtual ~ScoreView();
 

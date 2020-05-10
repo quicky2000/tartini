@@ -130,7 +130,7 @@ void VolumeMeterWidget::paintEvent(QPaintEvent *)
 
     QColor l_colour;
     float l_the_val[2];
-    if (l_active != NULL && l_active->isValidChunk(l_active->currentChunk()))
+    if (l_active != nullptr && l_active->isValidChunk(l_active->currentChunk()))
     {
         int l_chunk = l_active->currentChunk();
         if(l_active->getParent()->numChannels() > 1)

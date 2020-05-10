@@ -194,13 +194,13 @@ double Channel::timeAtChunk(int p_chunk) const
 //------------------------------------------------------------------------------
 const AnalysisData * Channel::dataAtChunk(int p_chunk) const
 {
-    return (isValidChunk(p_chunk)) ? &m_lookup[p_chunk] : NULL;
+    return (isValidChunk(p_chunk)) ? &m_lookup[p_chunk] : nullptr;
 }
 
 //------------------------------------------------------------------------------
 AnalysisData * Channel::dataAtChunk(int p_chunk)
 {
-    return (isValidChunk(p_chunk)) ? &m_lookup[p_chunk] : NULL;
+    return (isValidChunk(p_chunk)) ? &m_lookup[p_chunk] : nullptr;
 }
 
 //------------------------------------------------------------------------------
