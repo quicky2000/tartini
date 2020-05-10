@@ -248,9 +248,7 @@ class SoundFile
     int m_chunk_num;
     int m_frames_per_chunk; /**< The number of samples to move every chunk */
     float ** m_temp_window_buffer; //array is indexed from -16 !!
-    double ** m_temp_window_buffer_double; //array is indexed from -16 !!
     float ** m_temp_window_buffer_filtered; //array is indexed from -16 !!
-    double ** m_temp_window_buffer_filtered_double; //array is indexed from -16 !!
     double m_start_time;
     int m_offset;
     bool m_saved;

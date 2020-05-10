@@ -54,9 +54,7 @@ SoundFile::SoundFile()
     m_filtered_stream = NULL;
     m_frames_per_chunk = 0;
     m_temp_window_buffer = NULL;
-    m_temp_window_buffer_double = NULL;
     m_temp_window_buffer_filtered = NULL;
-    m_temp_window_buffer_filtered_double = NULL;
     m_start_time = 0.0;
     m_chunk_num = 0;
     m_offset = 0; //Number of frame to read into file to get to time 0 (half buffer size).
@@ -100,15 +98,11 @@ void SoundFile::uninit()
     {
         delete m_channels(l_j);
         delete[] (m_temp_window_buffer[l_j] - 16);
-        delete[] (m_temp_window_buffer_double[l_j] - 16);
         delete[] (m_temp_window_buffer_filtered[l_j] - 16);
-        delete[] (m_temp_window_buffer_filtered_double[l_j] - 16);
     }
     m_channels.resize(0);
     delete[] m_temp_window_buffer; m_temp_window_buffer = NULL;
-    delete[] m_temp_window_buffer_double; m_temp_window_buffer_double = NULL;
     delete[] m_temp_window_buffer_filtered; m_temp_window_buffer_filtered = NULL;
-    delete[] m_temp_window_buffer_filtered_double; m_temp_window_buffer_filtered_double = NULL;
 
     setFramesPerChunk(0);
     m_start_time = 0.0;
@@ -236,15 +230,11 @@ bool SoundFile::openRead(const char * p_filename)
 
     //setup the tempChunkBuffers
     m_temp_window_buffer = new float *[numChannels()];
-    m_temp_window_buffer_double = new double *[numChannels()];
     m_temp_window_buffer_filtered = new float *[numChannels()];
-    m_temp_window_buffer_filtered_double = new double *[numChannels()];
     for(int l_c = 0; l_c < numChannels(); l_c++)
     {
         m_temp_window_buffer[l_c] = (new float[bufferSize() + 16]) + 16; //array ranges from -16 to bufferSize()
-        m_temp_window_buffer_double[l_c] = (new double[bufferSize() + 16]) + 16; //array ranges from -16 to bufferSize()
         m_temp_window_buffer_filtered[l_c] = (new float[bufferSize() + 16]) + 16; //array ranges from -16 to bufferSize()
-        m_temp_window_buffer_filtered_double[l_c] = (new double[bufferSize() + 16]) + 16; //array ranges from -16 to bufferSize()
     }
 
     m_doing_detailed_pitch = g_data->doingDetailedPitch();
@@ -323,15 +313,11 @@ bool SoundFile::openWrite( const char * p_filename
 
     //setup the tempChunkBuffers
     m_temp_window_buffer = new float*[numChannels()];
-    m_temp_window_buffer_double = new double*[numChannels()];
     m_temp_window_buffer_filtered = new float*[numChannels()];
-    m_temp_window_buffer_filtered_double = new double*[numChannels()];
     for(int l_c = 0; l_c < numChannels(); l_c++)
     {
         m_temp_window_buffer[l_c] = (new float[bufferSize() + 16]) + 16; //array ranges from -16 to bufferSize()
-        m_temp_window_buffer_double[l_c] = (new double[bufferSize() + 16]) + 16; //array ranges from -16 to bufferSize()
         m_temp_window_buffer_filtered[l_c] = (new float[bufferSize() + 16]) + 16; //array ranges from -16 to bufferSize()
-        m_temp_window_buffer_filtered_double[l_c] = (new double[bufferSize() + 16]) + 16; //array ranges from -16 to bufferSize()
     }
 
     m_doing_detailed_pitch = g_data->doingDetailedPitch();
