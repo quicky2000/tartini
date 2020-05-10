@@ -410,7 +410,8 @@ bool moveFile( const char * p_src
 //------------------------------------------------------------------------------
 int nextPowerOf2(int p_x)
 {
-    myassert(p_x > 1 << 31);
+    myassert(p_x <= (1 << 30));
+
     int l_y = 1;
     while(l_y < p_x)
     {
