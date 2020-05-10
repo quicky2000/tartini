@@ -59,8 +59,8 @@ class MusicKey
             , int p_n
                        );
 
-    void setName(const char * p_name);
-    inline const char * name()const;
+    void setName(const std::string & p_name);
+    inline const std::string & name()const;
     inline int size() const;
     inline double noteOffset(int p_j) const;
     inline int noteType(int p_j) const;
@@ -75,7 +75,7 @@ class MusicKey
      */
     Array1d<double> m_note_offsets;
     Array1d<int> m_note_types;
-    char * m_name;
+    std::string m_name;
 
 };
 
@@ -84,7 +84,7 @@ class MusicKey
 #define NUM_MUSIC_KEYS 12
 extern std::vector<MusicKey> g_music_keys;
 
-extern const char * g_music_key_name[NUM_MUSIC_KEYS];
+extern const std::string g_music_key_name[NUM_MUSIC_KEYS];
 extern int g_music_key_root[NUM_MUSIC_KEYS];
 extern int g_music_key;
 

@@ -16,15 +16,10 @@
  ***************************************************************************/
 #include "music_key.h"
 #include "musicnotes.h"
-#include "mystring.h"
 
 //------------------------------------------------------------------------------
 MusicKey::~MusicKey()
 {
-    if(m_name)
-    {
-        free(m_name);
-    }
 }
 
 //------------------------------------------------------------------------------
@@ -74,13 +69,9 @@ void MusicKey::setScaleRatios( double * p_note_offsets
 }
 
 //------------------------------------------------------------------------------
-void MusicKey::setName(const char * p_name)
+void MusicKey::setName(const std::string & p_name)
 {
-    if(m_name)
-    {
-        free(m_name);
-    }
-    m_name = copy_string(p_name);
+    m_name = p_name;
 }
 
 //------------------------------------------------------------------------------
@@ -104,7 +95,7 @@ double MusicKey::nearestNoteDistance(const double & p_x)const
 
 std::vector<MusicKey> g_music_keys;
 
-const char *g_music_key_name[NUM_MUSIC_KEYS] =
+const std::string g_music_key_name[NUM_MUSIC_KEYS] =
         {"A             ",
          "A#/Bb",
          "B",

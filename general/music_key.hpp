@@ -20,12 +20,12 @@
 
 //------------------------------------------------------------------------------
 MusicKey::MusicKey()
-: m_name(nullptr)
+: m_name()
 {
 }
 
 //------------------------------------------------------------------------------
-const char * MusicKey::name()const
+const std::string & MusicKey::name()const
 {
     return m_name;
 }

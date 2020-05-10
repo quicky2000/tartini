@@ -16,7 +16,7 @@
  ***************************************************************************/
 //------------------------------------------------------------------------------
 MusicScale::MusicScale()
-: m_p_name(nullptr)
+: m_name()
 , m_semitone_offset(0)
 {
 }
@@ -48,9 +48,9 @@ bool MusicScale::hasSemitone(int p_j)const
 }
 
 //------------------------------------------------------------------------------
-const char * MusicScale::name()const
+const std::string & MusicScale::name()const
 {
-    return m_p_name;
+    return m_name;
 }
 
 //------------------------------------------------------------------------------
