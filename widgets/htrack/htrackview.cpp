@@ -126,7 +126,7 @@ HTrackView::HTrackView( int p_view_ID
     l_main_layout->addWidget(l_size_grip, 1, 1);
 
     //make the widget get updated when the view changes
-    connect(&(g_data->getView()), SIGNAL(onSlowUpdate(double)), m_h_track_widget, SLOT(update()));
+    connect(&(GData::getUniqueInstance().getView()), SIGNAL(onSlowUpdate(double)), m_h_track_widget, SLOT(update()));
     connect(m_peak_threshold_slider, SIGNAL(valueChanged(int)), this, SLOT(setPeakThreshold(int)));
     connect(m_rotate_Y_wheel, SIGNAL(valueChanged(double)), m_h_track_widget, SLOT(setViewAngleVertical(double)));
     connect(m_rotate_Y_wheel, SIGNAL(valueChanged(double)), m_h_track_widget, SLOT(update()));

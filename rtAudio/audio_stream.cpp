@@ -68,7 +68,7 @@ int AudioStream::open( int p_mode
     //bits_; //ignored, just use floats and let rtAudio do the conversion
     set_bits(32);
     m_buffer_size = p_buffer_size;
-    m_num_buffers = g_data->getSettingsValue("Sound/numberOfBuffers", 4);
+    m_num_buffers = GData::getUniqueInstance().getSettingsValue("Sound/numberOfBuffers", 4);
 
     RtAudio::StreamParameters * l_input_param_ptr = nullptr;
     RtAudio::StreamParameters * l_output_param_ptr = nullptr;
@@ -77,7 +77,7 @@ int AudioStream::open( int p_mode
     if(get_mode() == F_READ || get_mode() == F_RDWR)
     {
         QStringList l_in_names = getInputDeviceNames();
-        const std::string l_audio_input = g_data->getSettingsValue("Sound/soundInput", std::string("Default"));
+        const std::string l_audio_input = GData::getUniqueInstance().getSettingsValue("Sound/soundInput", std::string("Default"));
         int l_in_device = getDeviceNumber(l_audio_input.c_str(), true);
 
         l_input_parameters.deviceId = l_in_device;
@@ -91,7 +91,7 @@ int AudioStream::open( int p_mode
     if(get_mode() == F_WRITE || get_mode() == F_RDWR)
     {
         QStringList l_out_names = getOutputDeviceNames();
-        const std::string l_audio_output = g_data->getSettingsValue("Sound/soundOutput", std::string("Default"));
+        const std::string l_audio_output = GData::getUniqueInstance().getSettingsValue("Sound/soundOutput", std::string("Default"));
         int l_out_device = getDeviceNumber(l_audio_output.c_str(), false);
 
         l_output_parameters.deviceId = l_out_device;

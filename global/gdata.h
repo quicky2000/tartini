@@ -99,8 +99,14 @@ class GData : public QObject
     , ALWAYS_SAVE
     } t_saving_modes;
 
-    GData();
-    virtual ~GData();
+    inline static
+    GData & getUniqueInstance();
+
+    inline static
+    void createUniqueInstance();
+
+    inline static
+    void deleteUniqueInstance();
 
     inline
     void set_play_or_record(bool p_value);
@@ -342,7 +348,11 @@ public slots:
     void doFastChunkUpdate();
 
   private:
-  QSettings * m_settings;
+
+    GData();
+    virtual ~GData();
+
+    QSettings * m_settings;
 
   /**
    * Indicate if playing of recording mode is on going when we wnat to refresh
@@ -429,9 +439,9 @@ public slots:
    */
   double m_top_pitch;
 
+  static
+  GData * g_data;
 };
-
-extern GData * g_data;
 
 #include "gdata.hpp"
 

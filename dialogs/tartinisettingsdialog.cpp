@@ -58,28 +58,28 @@ void TartiniSettingsDialog::loadSetting( QObject * p_object
     }
     else if(l_class_name == "QLineEdit")
     {
-         static_cast<QLineEdit*>(p_object)->setText(QString::fromStdString(g_data->getSettingsStringValue(l_full_key)));
+         static_cast<QLineEdit*>(p_object)->setText(QString::fromStdString(GData::getUniqueInstance().getSettingsStringValue(l_full_key)));
     }
     else if(l_class_name == "QComboBox")
     {
-         static_cast<QComboBox*>(p_object)->setCurrentIndex(static_cast<QComboBox*>(p_object)->findText(QString::fromStdString(g_data->getSettingsStringValue(l_full_key))));
+         static_cast<QComboBox*>(p_object)->setCurrentIndex(static_cast<QComboBox*>(p_object)->findText(QString::fromStdString(GData::getUniqueInstance().getSettingsStringValue(l_full_key))));
     }
     else if(l_class_name == "QPushButton" && static_cast<QPushButton*>(p_object)->isCheckable())
     {
-        static_cast<QPushButton*>(p_object)->setChecked(g_data->getSettingsBoolValue(l_full_key));
+        static_cast<QPushButton*>(p_object)->setChecked(GData::getUniqueInstance().getSettingsBoolValue(l_full_key));
     }
     else if(l_class_name == "QCheckBox")
     {
-         static_cast<QCheckBox*>(p_object)->setChecked(g_data->getSettingsBoolValue(l_full_key));
+         static_cast<QCheckBox*>(p_object)->setChecked(GData::getUniqueInstance().getSettingsBoolValue(l_full_key));
     }
     else if(l_class_name == "QSpinBox")
     {
-        static_cast<QSpinBox*>(p_object)->setValue(g_data->getSettingsIntValue(l_full_key));
+        static_cast<QSpinBox*>(p_object)->setValue(GData::getUniqueInstance().getSettingsIntValue(l_full_key));
     }
     else if(l_class_name == "QFrame")
     {
         QColor l_color;
-        l_color.setNamedColor(QString::fromStdString(g_data->getSettingsStringValue(l_full_key)));
+        l_color.setNamedColor(QString::fromStdString(GData::getUniqueInstance().getSettingsStringValue(l_full_key)));
         QPalette l_palette = static_cast<QFrame*>(p_object)->palette();
         l_palette.setColor(l_palette.currentColorGroup(),QPalette::Window,l_color);
         static_cast<QFrame*>(p_object)->setPalette(l_palette);
@@ -215,28 +215,28 @@ void TartiniSettingsDialog::saveSetting(QObject *p_object, const std::string  & 
     }
     else if(l_class_name == "QLineEdit")
     {
-        g_data->setSettingsValue(l_full_key, static_cast<QLineEdit*>(p_object)->text().toStdString());
+        GData::getUniqueInstance().setSettingsValue(l_full_key, static_cast<QLineEdit*>(p_object)->text().toStdString());
     }
     else if(l_class_name == "QComboBox")
     {
-        g_data->setSettingsValue(l_full_key, static_cast<QComboBox*>(p_object)->currentText().toStdString());
+        GData::getUniqueInstance().setSettingsValue(l_full_key, static_cast<QComboBox*>(p_object)->currentText().toStdString());
     }
     else if(l_class_name == "QPushButton" && static_cast<QPushButton*>(p_object)->isCheckable())
     {
-        g_data->setSettingsValue(l_full_key, static_cast<QPushButton*>(p_object)->isChecked());
+        GData::getUniqueInstance().setSettingsValue(l_full_key, static_cast<QPushButton*>(p_object)->isChecked());
     }
     else if(l_class_name == "QCheckBox")
     {
-        g_data->setSettingsValue(l_full_key, static_cast<QCheckBox*>(p_object)->isChecked());
+        GData::getUniqueInstance().setSettingsValue(l_full_key, static_cast<QCheckBox*>(p_object)->isChecked());
     }
     else if(l_class_name == "QSpinBox")
     {
-        g_data->setSettingsValue(l_full_key, static_cast<QSpinBox*>(p_object)->value());
+        GData::getUniqueInstance().setSettingsValue(l_full_key, static_cast<QSpinBox*>(p_object)->value());
     }
     else if(l_class_name == "QFrame")
     {
         QColor l_color =  static_cast<QFrame*>(p_object)->palette().color(QPalette::Window);
-        g_data->setSettingsValue(l_full_key,l_color.name().toStdString());
+        GData::getUniqueInstance().setSettingsValue(l_full_key,l_color.name().toStdString());
     }
     else if("QVBoxLayout" != l_class_name &&
             "QHBoxLayout" != l_class_name &&
@@ -275,7 +275,7 @@ void TartiniSettingsDialog::saveSettings()
             saveSetting(*l_widget_iterator, l_group);
         }
     }
-    g_data->syncSettings();
+    GData::getUniqueInstance().syncSettings();
     QApplication::postEvent(g_main_window, new QEvent(static_cast<QEvent::Type>(SETTINGS_CHANGED)));
     TartiniSettingsDialog::accept();
 }
@@ -413,9 +413,9 @@ void TartiniSettingsDialog::setUnknownsToDefault(GData & p_gdata)
 //------------------------------------------------------------------------------
 void TartiniSettingsDialog::resetDefaults()
 {
-    g_data->clearSettings();
-    setUnknownsToDefault(*g_data);
-    g_data->syncSettings();
+    GData::getUniqueInstance().clearSettings();
+    setUnknownsToDefault(GData::getUniqueInstance());
+    GData::getUniqueInstance().syncSettings();
     init();
 }
 

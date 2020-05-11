@@ -19,19 +19,19 @@
 //------------------------------------------------------------------------------
 double FreqWidgetGL::leftTime() const
 {
-    return g_data->getView().viewLeft();
+    return GData::getUniqueInstance().getView().viewLeft();
 }
 
 //------------------------------------------------------------------------------
 double FreqWidgetGL::rightTime() const
 {
-    return g_data->getView().viewRight();
+    return GData::getUniqueInstance().getView().viewRight();
 }
 
 //------------------------------------------------------------------------------
 double FreqWidgetGL::timeWidth() const
 {
-    return g_data->getView().viewTotalTime();
+    return GData::getUniqueInstance().getView().viewTotalTime();
 }
 
 //------------------------------------------------------------------------------

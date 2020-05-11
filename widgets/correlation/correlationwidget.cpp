@@ -46,7 +46,7 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
     l_timer.start();
 #endif // TIME_PAINT
 
-    Channel *l_active_channel = g_data->getActiveChannel();
+    Channel *l_active_channel = GData::getUniqueInstance().getActiveChannel();
 
     AnalysisData * l_data = nullptr;
     int l_chunk = 0;
@@ -70,20 +70,20 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
             double l_scale_X = l_period * double(width()) / double(l_active_channel->get_nsdf_data().size());
       
             //draw alternating background color indicating l_period
-            if(g_data->getView().backgroundShading() && l_period > 4.0 && l_period < double(l_active_channel->get_nsdf_data().size()))
+            if(GData::getUniqueInstance().getView().backgroundShading() && l_period > 4.0 && l_period < double(l_active_channel->get_nsdf_data().size()))
             {
                 //number of colored patches
                 int l_n = int(ceil(double(width()) / l_scale_X));
                 get_painter().setPen(Qt::NoPen);
-                QColor l_color_1 = colorBetween(g_data->backgroundColor(), g_data->shading1Color(), l_data->getCorrelation());
-                QColor l_color_2 = colorBetween(g_data->backgroundColor(), g_data->shading2Color(), l_data->getCorrelation());
+                QColor l_color_1 = colorBetween(GData::getUniqueInstance().backgroundColor(), GData::getUniqueInstance().shading1Color(), l_data->getCorrelation());
+                QColor l_color_2 = colorBetween(GData::getUniqueInstance().backgroundColor(), GData::getUniqueInstance().shading2Color(), l_data->getCorrelation());
                 for(int l_j = 0; l_j<l_n; l_j++)
                 {
                     l_x = toInt(l_scale_X*double(l_j));
                     get_painter().setBrush((l_j%2) ? l_color_1 : l_color_2);
                     get_painter().drawRect(l_x, 0, toInt(l_scale_X * double(l_j + 1)) - toInt(l_scale_X * double(l_j)), height());
                 }
-                get_painter().setPen(colorBetween(g_data->backgroundColor(), Qt::black, 0.3 * l_data->getCorrelation()));
+                get_painter().setPen(colorBetween(GData::getUniqueInstance().backgroundColor(), Qt::black, 0.3 * l_data->getCorrelation()));
                 for(int l_j = 0; l_j < l_n; l_j++)
                 {
                     l_x = toInt(l_scale_X * double(l_j));
@@ -118,7 +118,7 @@ void CorrelationWidget::paintEvent( QPaintEvent * )
 
     if(l_active_channel)
     {
-        if(g_data->doingFreqAnalysis())
+        if(GData::getUniqueInstance().doingFreqAnalysis())
         {
             //only do every second pixel (for speed)
             int l_w = width() / 2;

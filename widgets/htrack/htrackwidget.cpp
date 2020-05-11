@@ -89,9 +89,9 @@ void HTrackWidget::paintGL()
     l_timer.start();
 #endif // TIME_PAINT
 
-    Channel *l_active_channel = g_data->getActiveChannel();
+    Channel *l_active_channel = GData::getUniqueInstance().getActiveChannel();
 
-    QColor l_background = g_data->backgroundColor();
+    QColor l_background = GData::getUniqueInstance().backgroundColor();
     glClearColor( double(l_background.red()) / 256.0, double(l_background.green()) / 256.0, double(l_background.blue()) / 256.0, 0.0 );
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

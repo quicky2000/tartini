@@ -101,7 +101,7 @@ void DrawWidget::drawToScreen()
 //------------------------------------------------------------------------------
 void DrawWidget::clearBackground()
 {
-  m_painter.fillRect(0, 0, width(), height(), g_data->backgroundColor());
+  m_painter.fillRect(0, 0, width(), height(), GData::getUniqueInstance().backgroundColor());
 }
 
 //------------------------------------------------------------------------------
@@ -243,7 +243,7 @@ void DrawWidget::drawChannel(QPaintDevice & p_paint_device,
 	  AnalysisData * l_data = p_channel->dataAtChunk(l_int_chunk);
 	  l_err = l_data->getCorrelation();
 	  vol = dB2Normalised(l_data->getLogRms(), p_channel->get_rms_ceiling(), p_channel->get_rms_floor());
-	  if(g_data->pitchContourMode() == 0)
+	  if(GData::getUniqueInstance().pitchContourMode() == 0)
 	    {
 	      if(p_view_type == DRAW_VIEW_PRINT)
 		{
@@ -251,7 +251,7 @@ void DrawWidget::drawChannel(QPaintDevice & p_paint_device,
 		}
 	      else
 		{
-		  p_painter.setPen(QPen(colorBetween(g_data->backgroundColor(), p_channel->get_color(), l_err * vol), m_line_width));
+		  p_painter.setPen(QPen(colorBetween(GData::getUniqueInstance().backgroundColor(), p_channel->get_color(), l_err * vol), m_line_width));
 		}
 	    }
 	  else
@@ -261,7 +261,7 @@ void DrawWidget::drawChannel(QPaintDevice & p_paint_device,
       
 	  l_x = toInt(l_n);
 	  l_pitch = (p_channel->isVisibleChunk(l_data)) ? l_data->getPitch() : 0.0f;
-	  myassert(l_pitch >= 0.0 && l_pitch <= g_data->topPitch());
+	  myassert(l_pitch >= 0.0 && l_pitch <= GData::getUniqueInstance().topPitch());
 	  l_y = p_paint_device.height() - 1 - toInt(l_pitch / p_zoom_Y) + l_view_bottom_offset;
 	  if(l_pitch > 0.0f)
 	    {
@@ -385,7 +385,7 @@ void DrawWidget::drawChannelFilled(Channel * p_channel,
 	      myassert(p_channel->isValidChunk(l_zoom_element.midChunk()));
 	      AnalysisData * l_data = p_channel->dataAtChunk(l_zoom_element.midChunk());
 
-	      if(g_data->showMeanVarianceBars())
+	      if(GData::getUniqueInstance().showMeanVarianceBars())
 		{
 		  //longTermMean bars
 		  l_y2 = height() - 1 - toInt((l_data->getLongTermMean() + l_data->getLongTermDeviation()) / p_zoom_Y) + l_view_bottom_offset;
@@ -421,15 +421,15 @@ void DrawWidget::drawChannelFilled(Channel * p_channel,
 	  l_last_N = l_n;
 	}
       p_painter.setPen(Qt::NoPen);
-      p_painter.setBrush(g_data->shading1Color());
+      p_painter.setBrush(GData::getUniqueInstance().shading1Color());
       p_painter.drawRect(l_first_N, 0, l_last_N, height());
-      p_painter.setPen(g_data->shading2Color());
+      p_painter.setPen(GData::getUniqueInstance().shading2Color());
       if(l_point_index > 1)
 	{
 	  p_painter.drawLines(l_bottom_points.constData(), l_point_index / 2);
 	}
 
-      if(g_data->showMeanVarianceBars())
+      if(GData::getUniqueInstance().showMeanVarianceBars())
 	{
 	  //shortTermMean bars
 	  p_painter.setPen(Qt::green);
@@ -481,7 +481,7 @@ void DrawWidget::drawChannelFilled(Channel * p_channel,
 	  AnalysisData * l_data = p_channel->dataAtChunk(l_int_chunk);
 	  l_err = l_data->getCorrelation();
       
-	  if(g_data->pitchContourMode() == 0)
+	  if(GData::getUniqueInstance().pitchContourMode() == 0)
 	    {
 	      p_painter.setPen(QPen(colorBetween(QColor(255, 255, 255), p_channel->get_color(), l_err * dB2ViewVal(l_data->getLogRms())), m_line_width));
 	    }
@@ -497,7 +497,7 @@ void DrawWidget::drawChannelFilled(Channel * p_channel,
 	    {
 	      l_is_note_rect_even[l_rect_index] = (l_data->getNoteIndex() % 2) == 0;
 
-	      if(g_data->showMeanVarianceBars())
+	      if(GData::getUniqueInstance().showMeanVarianceBars())
 		{
 		  //longTermMean bars
 		  l_y2 = height() - 1 - toInt((l_data->getLongTermMean() + l_data->getLongTermDeviation()) / p_zoom_Y) + l_view_bottom_offset;
@@ -516,7 +516,7 @@ void DrawWidget::drawChannelFilled(Channel * p_channel,
 		  l_note_rect2[l_rect_index2++].setBottom(l_y3);
 		}
 	    }
-	  myassert(l_pitch >= 0.0 && l_pitch <= g_data->topPitch());
+	  myassert(l_pitch >= 0.0 && l_pitch <= GData::getUniqueInstance().topPitch());
 	  l_y = height() - 1 - toInt(l_pitch / p_zoom_Y) + l_view_bottom_offset;
 	  l_bottom_points.setPoint(l_point_index++, l_x, l_y);
 	}
@@ -525,12 +525,12 @@ void DrawWidget::drawChannelFilled(Channel * p_channel,
 
       myassert(l_point_index <= width() * 2);
       p_painter.setPen(Qt::NoPen);
-      p_painter.setBrush(g_data->shading1Color());
+      p_painter.setBrush(GData::getUniqueInstance().shading1Color());
       p_painter.drawRect(l_first_N, 0, l_last_N, height());
-      p_painter.setBrush(g_data->shading2Color());
+      p_painter.setBrush(GData::getUniqueInstance().shading2Color());
       p_painter.drawPolygon(l_bottom_points.constData(), l_point_index, Qt::OddEvenFill);
 
-      if(g_data->showMeanVarianceBars())
+      if(GData::getUniqueInstance().showMeanVarianceBars())
 	{
 	  //shortTermMean bars
 	  for(int l_j = 0; l_j < l_rect_index2; l_j++)
@@ -584,7 +584,7 @@ void DrawWidget::setChannelVerticalView(Channel * p_channel,
   std::vector<float> l_weightings;
   l_weightings.reserve(width());
   float l_max_Y = 0.0f;
-  float l_min_Y = g_data->topPitch();
+  float l_min_Y = GData::getUniqueInstance().topPitch();
   float l_total_Y = 0.0f;
   float l_num_Y = 0.0f;
   
@@ -690,7 +690,7 @@ void DrawWidget::setChannelVerticalView(Channel * p_channel,
 	AnalysisData * l_data = p_channel->dataAtChunk(l_int_chunk);
       
 	l_pitch = (p_channel->isVisibleChunk(l_data)) ? l_data->getPitch() : 0.0f;
-	myassert(l_pitch >= 0.0 && l_pitch <= g_data->topPitch());
+	myassert(l_pitch >= 0.0 && l_pitch <= GData::getUniqueInstance().topPitch());
 	l_corr = l_data->getCorrelation() * dB2ViewVal(l_data->getLogRms());
 	if(l_pitch > 0.0f)
 	  {
@@ -714,7 +714,7 @@ void DrawWidget::setChannelVerticalView(Channel * p_channel,
   if(!l_ys.empty() > 0)
     {
       float l_mean_Y = l_total_Y / l_num_Y;
-      g_data->getView().setViewBottomRaw(l_mean_Y - g_data->getView().viewHeight() / 2.0);
+      GData::getUniqueInstance().getView().setViewBottomRaw(l_mean_Y - GData::getUniqueInstance().getView().viewHeight() / 2.0);
     }
 }
 
@@ -766,7 +766,7 @@ bool DrawWidget::calcZoomElement(Channel * p_channel,
       l_note_index = NO_NOTE;
     }
   float l_corr = l_err->getCorrelation() * dB2Normalised(l_err->getLogRms(), p_channel->get_rms_ceiling(), p_channel->get_rms_floor());
-  QColor l_the_color = (g_data->pitchContourMode() == 0) ? colorBetween(g_data->backgroundColor(), p_channel->get_color(), l_corr) : p_channel->get_color();
+  QColor l_the_color = (GData::getUniqueInstance().pitchContourMode() == 0) ? colorBetween(GData::getUniqueInstance().backgroundColor(), p_channel->get_color(), l_corr) : p_channel->get_color();
 
   p_zoom_element.set(l_low, l_high, l_corr, l_the_color, l_note_index, (l_start_chunk + l_finish_chunk) / 2);
   return true;

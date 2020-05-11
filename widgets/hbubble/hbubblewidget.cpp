@@ -34,7 +34,7 @@ HBubbleWidget::HBubbleWidget(QWidget *p_parent)
     m_num_harmonics = 40;
 
     //make the widget get updated when the view changes
-    connect(&(g_data->getView()), SIGNAL(onFastUpdate(double)), this, SLOT(update()));
+    connect(&(GData::getUniqueInstance().getView()), SIGNAL(onFastUpdate(double)), this, SLOT(update()));
     fprintf(stderr,"Done\n");
 }
 
@@ -72,7 +72,7 @@ void HBubbleWidget::paintEvent( QPaintEvent * )
     l_timer.start();
 #endif // TIME_PAINT
 
-    Channel * l_active_channel = g_data->getActiveChannel();
+    Channel * l_active_channel = GData::getUniqueInstance().getActiveChannel();
     AnalysisData * l_data;
     int l_i;
     int l_j;
@@ -103,7 +103,7 @@ void HBubbleWidget::paintEvent( QPaintEvent * )
                             {
                                 l_color = colorBetween(qRgb(255,255,255), qRgb(0,0,255),-l_flat_sharp);
                             }
-                            get_painter().setBrush(colorBetween(g_data->backgroundColor(),l_color,((l_j == (m_history_chunks - 1)) ? 1.0 : static_cast<float>(l_j) / m_history_chunks * 0.5)));
+                            get_painter().setBrush(colorBetween(GData::getUniqueInstance().backgroundColor(),l_color,((l_j == (m_history_chunks - 1)) ? 1.0 : static_cast<float>(l_j) / m_history_chunks * 0.5)));
                             get_painter().drawEllipse( toInt(width() / 8 * 3 + l_j * static_cast<float>(width()) / 8 / m_history_chunks - l_radius)
                                                      , toInt(height() - static_cast<float>((l_i + 1) * height()) / (m_num_harmonics + 2) - l_radius)
                                                      , l_radius * 2

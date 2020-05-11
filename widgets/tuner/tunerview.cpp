@@ -92,7 +92,7 @@ TunerView::TunerView(int p_view_iD_
     l_layout->setRowStretch( 1, 1 );
     l_layout->setRowStretch( 2, 0 );
 
-    connect(g_data, SIGNAL(onChunkUpdate()), this, SLOT(doUpdate()));
+    connect(&GData::getUniqueInstance(), SIGNAL(onChunkUpdate()), this, SLOT(doUpdate()));
     connect(m_tuner_widget, SIGNAL(ledSet(int, bool)), this, SLOT(setLed(int, bool)));
 }
 
@@ -141,14 +141,14 @@ void TunerView::setLed(int p_index, bool p_value)
 //------------------------------------------------------------------------------
 void TunerView::doUpdate()
 {
-    Channel *l_active_channel = g_data->getActiveChannel();
+    Channel *l_active_channel = GData::getUniqueInstance().getActiveChannel();
     if(l_active_channel == nullptr || !l_active_channel->hasAnalysisData())
     {
         m_tuner_widget->doUpdate(0.0);
         return;
     }
     ChannelLocker l_channel_locker(l_active_channel);
-    double l_time = g_data->getView().currentTime();
+    double l_time = GData::getUniqueInstance().getView().currentTime();
 
     // To work out note:
     //   * Find the slider's value. This tells us how many seconds to average over.

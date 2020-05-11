@@ -97,7 +97,7 @@ const std::string g_pitch_method_strings[NUM_PITCH_METHODS] =
   , "Correlation (multiplied) 2"
   };
 
-GData * g_data = nullptr;
+GData * GData::g_data = nullptr;
 
 //Define the Phase function. This one is applicable to 
 //accelerating sources since the phase goes as x^2.

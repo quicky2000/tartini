@@ -44,7 +44,7 @@ void FFTWidget::paintEvent( QPaintEvent * )
     l_timer.start();
 #endif // TIME_PAINT
 
-    Channel *l_active_channel = g_data->getActiveChannel();
+    Channel *l_active_channel = GData::getUniqueInstance().getActiveChannel();
 
     AnalysisData *l_data;
     double l_pixel_step;
@@ -72,20 +72,20 @@ void FFTWidget::paintEvent( QPaintEvent * )
             double l_scale_X = l_normalised_freq * double(width());
       
             //draw alternating background color indicating period
-            if(g_data->getView().backgroundShading() && l_scale_X > 4.0 && l_scale_X < double(width()))
+            if(GData::getUniqueInstance().getView().backgroundShading() && l_scale_X > 4.0 && l_scale_X < double(width()))
             {
                 //number of colored patches
                 int l_n = int(ceil(double(width()) / l_scale_X));
                 get_painter().setPen(Qt::NoPen);
-                QColor l_color1 = colorBetween(g_data->backgroundColor(), g_data->shading1Color(), l_data->getCorrelation());
-                QColor l_color2 = colorBetween(g_data->backgroundColor(), g_data->shading2Color(), l_data->getCorrelation());
+                QColor l_color1 = colorBetween(GData::getUniqueInstance().backgroundColor(), GData::getUniqueInstance().shading1Color(), l_data->getCorrelation());
+                QColor l_color2 = colorBetween(GData::getUniqueInstance().backgroundColor(), GData::getUniqueInstance().shading2Color(), l_data->getCorrelation());
                 for(l_j = 0; l_j < l_n; l_j++)
                 {
                     l_x = toInt(l_scale_X * double(l_j));
                     get_painter().setBrush((l_j % 2) ? l_color1 : l_color2);
                     get_painter().drawRect(l_x, 0, toInt(l_scale_X * double(l_j + 1)) - toInt(l_scale_X * double(l_j)), height());
                 }
-                get_painter().setPen(colorBetween(g_data->backgroundColor(), Qt::black, 0.3 * l_data->getCorrelation()));
+                get_painter().setPen(colorBetween(GData::getUniqueInstance().backgroundColor(), Qt::black, 0.3 * l_data->getCorrelation()));
                 for(l_j = 0; l_j < l_n; l_j++)
                 {
                     l_x = toInt(l_scale_X * double(l_j));

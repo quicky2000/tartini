@@ -28,7 +28,7 @@ NoteData::NoteData(const Channel & p_channel)
 : m_maxima(std::make_shared<Array1d<int>>())
 , m_minima(std::make_shared<Array1d<int>>())
 , m_channel(&p_channel)
-, m_max_log_RMS(g_data->dBFloor())
+, m_max_log_RMS(GData::getUniqueInstance().dBFloor())
 , m_num_periods(0)
 , m_period_octave_estimate(1.0f)
 {
@@ -50,7 +50,7 @@ NoteData::NoteData( const Channel & p_channel
 , m_max_log_RMS(p_analysis_data.getLogRms())
 , m_max_intensity_DB(p_analysis_data.getMaxIntensityDB())
 , m_max_correlation(p_analysis_data.getCorrelation())
-, m_max_purity(p_analysis_data.getVolumeValue(*g_data))
+, m_max_purity(p_analysis_data.getVolumeValue(GData::getUniqueInstance()))
 , m_num_periods(0.0f) //periods;
 , m_period_octave_estimate(1.0f)
 , m_volume(0.0f)
@@ -84,10 +84,10 @@ void NoteData::addData( const AnalysisData & p_analysis_data
     m_max_log_RMS = MAX(m_max_log_RMS, p_analysis_data.getLogRms());
     m_max_intensity_DB = MAX(m_max_intensity_DB, p_analysis_data.getMaxIntensityDB());
     m_max_correlation = MAX(m_max_correlation, p_analysis_data.getCorrelation());
-    m_max_purity = MAX(m_max_purity, p_analysis_data.getVolumeValue(*g_data));
-    m_volume = MAX(m_volume, dB2Normalised(p_analysis_data.getLogRms(), *g_data));
+    m_max_purity = MAX(m_max_purity, p_analysis_data.getVolumeValue(GData::getUniqueInstance()));
+    m_volume = MAX(m_volume, dB2Normalised(p_analysis_data.getLogRms(), GData::getUniqueInstance()));
     m_num_periods += p_periods; //sum up the periods
-    m_avg_pitch = bound(freq2pitch(avgFreq()), 0.0, g_data->topPitch());
+    m_avg_pitch = bound(freq2pitch(avgFreq()), 0.0, GData::getUniqueInstance().topPitch());
 }
 
 //------------------------------------------------------------------------------
@@ -251,7 +251,7 @@ void NoteData::recalcAvgPitch()
     {
         m_num_periods += float(m_channel->framesPerChunk()) / float(m_channel->dataAtChunk(l_j)->getPeriod());
     }
-    m_avg_pitch = bound(freq2pitch(avgFreq()), 0.0, g_data->topPitch());
+    m_avg_pitch = bound(freq2pitch(avgFreq()), 0.0, GData::getUniqueInstance().topPitch());
 }
 
 // EOF

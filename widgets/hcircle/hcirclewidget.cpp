@@ -35,7 +35,7 @@ HCircleWidget::HCircleWidget(QWidget *p_parent)
     m_zoom = 0.001;
     m_threshold = -100;
     m_lowest_value = -110;
-    connect(&(g_data->getView()), SIGNAL(onFastUpdate(double)), this, SLOT(update()));
+    connect(&(GData::getUniqueInstance().getView()), SIGNAL(onFastUpdate(double)), this, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------
@@ -78,7 +78,7 @@ void HCircleWidget::paintEvent( QPaintEvent * )
     l_timer.start();
 #endif // TIME_PAINT
 
-    Channel * l_active_channel = g_data->getActiveChannel();
+    Channel * l_active_channel = GData::getUniqueInstance().getActiveChannel();
     int l_num_harmonics = 40;
 
     beginDrawing();
@@ -92,7 +92,7 @@ void HCircleWidget::paintEvent( QPaintEvent * )
 
     if(m_threshold > m_lowest_value)
     {
-        get_painter().setPen(QPen(colorBetween(g_data->backgroundColor(), qRgb(128,128,128), 0.3), 2));
+        get_painter().setPen(QPen(colorBetween(GData::getUniqueInstance().backgroundColor(), qRgb(128,128,128), 0.3), 2));
         int l_radius = toInt(static_cast<double>(height()) * m_zoom * (m_threshold - m_lowest_value));
         get_painter().drawEllipse(width() / 2 - l_radius, height() / 2 - l_radius, 2 * l_radius, 2 * l_radius);
         get_painter().drawText(width() / 2 - l_radius + 5, height() / 2, "Threshold");

@@ -56,7 +56,7 @@ void WaveWidget::paintEvent(QPaintEvent *)
     l_timer.start();
 #endif // TIME_PAINT
 
-    Channel * l_active = g_data->getActiveChannel();
+    Channel * l_active = GData::getUniqueInstance().getActiveChannel();
 
     beginDrawing(false);
 
@@ -74,19 +74,19 @@ void WaveWidget::paintEvent(QPaintEvent *)
             double l_scale_X = l_period * double(width()) / double(l_active->size());
 
             //draw altinating background color indicating period
-            if(g_data->getView().backgroundShading() && l_period > 4.0 && l_period < double(l_active->get_nsdf_data().size()))
+            if(GData::getUniqueInstance().getView().backgroundShading() && l_period > 4.0 && l_period < double(l_active->get_nsdf_data().size()))
             {
                 int l_n = int(ceil(double(l_center_X) / l_scale_X));
                 get_painter().setPen(Qt::NoPen);
-                QColor l_color1 = colorBetween(g_data->backgroundColor(), g_data->shading1Color(), l_data->getCorrelation());
-                QColor l_color2 = colorBetween(g_data->backgroundColor(), g_data->shading2Color(), l_data->getCorrelation());
+                QColor l_color1 = colorBetween(GData::getUniqueInstance().backgroundColor(), GData::getUniqueInstance().shading1Color(), l_data->getCorrelation());
+                QColor l_color2 = colorBetween(GData::getUniqueInstance().backgroundColor(), GData::getUniqueInstance().shading2Color(), l_data->getCorrelation());
                 for(int l_j = -l_n; l_j < l_n; l_j++)
                 {
                     int l_x = l_center_X + toInt(l_scale_X * double(l_j));
                     get_painter().setBrush((l_j % 2) ? l_color1 : l_color2);
                     get_painter().drawRect(l_x, 0, toInt(l_scale_X * double(l_j + 1)) - toInt(l_scale_X * double(l_j)), height());
                 }
-                get_painter().setPen(colorBetween(g_data->backgroundColor(), Qt::black, 0.3 * l_data->getCorrelation()));
+                get_painter().setPen(colorBetween(GData::getUniqueInstance().backgroundColor(), Qt::black, 0.3 * l_data->getCorrelation()));
                 for(int l_j = -l_n; l_j < l_n; l_j++)
                 {
                     int l_x = l_center_X + toInt(l_scale_X * l_j);

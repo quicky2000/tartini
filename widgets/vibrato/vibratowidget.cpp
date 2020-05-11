@@ -64,7 +64,7 @@ VibratoWidget::~VibratoWidget()
 //------------------------------------------------------------------------------
 void VibratoWidget::initializeGL()
 {
-  qglClearColor(g_data->backgroundColor());
+  qglClearColor(GData::getUniqueInstance().backgroundColor());
 
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
@@ -198,7 +198,7 @@ void VibratoWidget::doUpdate()
   glNewList(m_maxima_minima_points, GL_COMPILE);
   glEndList();
 
-  Channel * l_active = g_data->getActiveChannel();
+  Channel * l_active = GData::getUniqueInstance().getActiveChannel();
 
   if (l_active)
     {
@@ -297,9 +297,9 @@ void VibratoWidget::doUpdate()
 	      l_vertices = new GLfloat[(l_color1_bars + l_color2_bars) * 8];
 	      l_colors = new GLubyte[(l_color1_bars + l_color2_bars) * 12];
 
-	      const char l_color1_red = g_data->shading1Color().red();
-	      const char l_color1_green = g_data->shading1Color().green();
-	      const char l_color1_blue = g_data->shading1Color().blue();
+	      const char l_color1_red = GData::getUniqueInstance().shading1Color().red();
+	      const char l_color1_green = GData::getUniqueInstance().shading1Color().green();
+	      const char l_color1_blue = GData::getUniqueInstance().shading1Color().blue();
 
 	      l_vertices_counter = 0;
 	      l_colors_counter = 0;
@@ -350,9 +350,9 @@ void VibratoWidget::doUpdate()
 		}
 
 	      // Calculate the bars with the left side at a minimum
-	      const char l_color2_red = g_data->shading2Color().red();
-	      const char l_color2_green = g_data->shading2Color().green();
-	      const char l_color2_blue = g_data->shading2Color().blue();
+	      const char l_color2_red = GData::getUniqueInstance().shading2Color().red();
+	      const char l_color2_green = GData::getUniqueInstance().shading2Color().green();
+	      const char l_color2_blue = GData::getUniqueInstance().shading2Color().blue();
 
 	      for(int l_index = 0; l_index < l_color2_bars; l_index++)
 		{
@@ -779,8 +779,8 @@ void VibratoWidget::doUpdate()
 	  l_colors_counter = 0;
 
 	  const double l_half_window_time = static_cast<double>(l_active->size()) / static_cast<double>(l_active->rate() * 2);
-	  int l_pixel_left = toInt((l_active->chunkAtTime(g_data->getView().currentTime() - l_half_window_time) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset);
-	  int l_pixel_right = toInt((l_active->chunkAtTime(g_data->getView().currentTime() + l_half_window_time) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset);
+	  int l_pixel_left = toInt((l_active->chunkAtTime(GData::getUniqueInstance().getView().currentTime() - l_half_window_time) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset);
+	  int l_pixel_right = toInt((l_active->chunkAtTime(GData::getUniqueInstance().getView().currentTime() + l_half_window_time) - l_my_start_chunk) * m_zoom_factor_X - l_window_offset);
 
 	  l_vertices[l_vertices_counter++] = l_pixel_left;
 	  l_vertices[l_vertices_counter++] = 0;

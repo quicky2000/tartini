@@ -72,9 +72,9 @@ SoundFile::~SoundFile()
 //------------------------------------------------------------------------------
 void SoundFile::uninit()
 {
-    if(g_data->getAudioThread().playSoundFile() == this || g_data->getAudioThread().recSoundFile() == this)
+    if(GData::getUniqueInstance().getAudioThread().playSoundFile() == this || GData::getUniqueInstance().getAudioThread().recSoundFile() == this)
     {
-        g_data->stop();
+        GData::getUniqueInstance().stop();
     }
 
     if(m_stream)
@@ -123,7 +123,7 @@ void SoundFile::setFilteredFilename(const std::string & p_filtered_filename)
 //------------------------------------------------------------------------------
 QString SoundFile::getNextTempFilename() const
 {
-    std::string l_temp_file_folder = g_data->getSettingsValue("General/tempFilesFolder", QDir::toNativeSeparators(QDir::currentPath()).toStdString());
+    std::string l_temp_file_folder = GData::getUniqueInstance().getSettingsValue("General/tempFilesFolder", QDir::toNativeSeparators(QDir::currentPath()).toStdString());
     QDir l_dir = QDir(QString::fromStdString(l_temp_file_folder));
     QFileInfo l_file_info;
     QString l_file_name;
@@ -186,10 +186,10 @@ bool SoundFile::openRead(const std::string & p_filename)
     }
 
     m_channels.resize(m_stream->get_channels());
-    int l_window_size_ = g_data->getAnalysisBufferSize(m_stream->get_frequency());
+    int l_window_size_ = GData::getUniqueInstance().getAnalysisBufferSize(m_stream->get_frequency());
     fprintf(stderr, "channels = %d\n", numChannels());
 
-    int l_step_size = g_data->getAnalysisStepSize(m_stream->get_frequency());
+    int l_step_size = GData::getUniqueInstance().getAnalysisStepSize(m_stream->get_frequency());
     m_offset = l_window_size_ / 2;
     setFramesPerChunk(l_step_size); // The user needs to be able to set this
 
@@ -197,9 +197,9 @@ bool SoundFile::openRead(const std::string & p_filename)
     {
         m_channels(l_j) = new Channel(this, l_window_size_);
         fprintf(stderr, "channel size = %d\n", m_channels(l_j)->size());
-        m_channels(l_j)->setColor(g_data->getNextColor());
+        m_channels(l_j)->setColor(GData::getUniqueInstance().getNextColor());
     }
-    m_my_transforms.init(l_window_size_, 0, m_stream->get_frequency(), g_data->doingEqualLoudness());
+    m_my_transforms.init(l_window_size_, 0, m_stream->get_frequency(), GData::getUniqueInstance().doingEqualLoudness());
 
     fprintf(stderr, "----------Opening------------\n");
     fprintf(stderr, "filename = %s\n", p_filename.c_str());
@@ -219,7 +219,7 @@ bool SoundFile::openRead(const std::string & p_filename)
         m_temp_window_buffer_filtered[l_c] = (new float[bufferSize() + 16]) + 16; //array ranges from -16 to bufferSize()
     }
 
-    m_doing_detailed_pitch = g_data->doingDetailedPitch();
+    m_doing_detailed_pitch = GData::getUniqueInstance().doingDetailedPitch();
 
     return true;
 }
@@ -279,7 +279,7 @@ bool SoundFile::openWrite( const std::string & p_filename
         return false;
     }
 #ifdef DEBUG_PRINTF
-    printf("in_channels = %zu\n", g_data->getChannelsSize());
+    printf("in_channels = %zu\n", GData::getUniqueInstance().getChannelsSize());
     printf("m_stream->channels=%d\n", m_stream->get_channels());
 #endif // DEBUG_PRINTF
 
@@ -289,9 +289,9 @@ bool SoundFile::openWrite( const std::string & p_filename
     {
         m_channels(l_j) = new Channel(this, p_window_size);
         fprintf(stderr, "channel size = %d\n", m_channels(l_j)->size());
-        m_channels(l_j)->setColor(g_data->getNextColor());
+        m_channels(l_j)->setColor(GData::getUniqueInstance().getNextColor());
     }
-    m_my_transforms.init(p_window_size, 0, m_stream->get_frequency(), g_data->doingEqualLoudness());
+    m_my_transforms.init(p_window_size, 0, m_stream->get_frequency(), GData::getUniqueInstance().doingEqualLoudness());
 
     //setup the tempChunkBuffers
     m_temp_window_buffer = new float*[numChannels()];
@@ -302,7 +302,7 @@ bool SoundFile::openWrite( const std::string & p_filename
         m_temp_window_buffer_filtered[l_c] = (new float[bufferSize() + 16]) + 16; //array ranges from -16 to bufferSize()
     }
 
-    m_doing_detailed_pitch = g_data->doingDetailedPitch();
+    m_doing_detailed_pitch = GData::getUniqueInstance().doingDetailedPitch();
 
     return true;
 }
@@ -346,7 +346,7 @@ bool SoundFile::playChunk()
     {
         return false;
     }
-    int l_ret = blockingWrite(g_data->getAudioStream(), m_temp_window_buffer, framesPerChunk());
+    int l_ret = blockingWrite(GData::getUniqueInstance().getAudioStream(), m_temp_window_buffer, framesPerChunk());
     if(l_ret < framesPerChunk())
     {
         fprintf(stderr, "Error writing to audio device\n");
@@ -372,7 +372,7 @@ void SoundFile::applyEqualLoudnessFilter(int p_n)
 //------------------------------------------------------------------------------
 void SoundFile::recordChunk(int p_n)
 {
-    int l_ret = blockingRead(g_data->getAudioStream(), m_temp_window_buffer, p_n);
+    int l_ret = blockingRead(GData::getUniqueInstance().getAudioStream(), m_temp_window_buffer, p_n);
     if(l_ret < p_n)
     {
         fprintf(stderr, "Data lost in reading from audio device\n");
@@ -435,7 +435,7 @@ bool SoundFile::setupPlayChunk()
     {
         m_channels(l_c)->shift_left(l_n);
         toChannelBuffer(l_c, l_n);
-        if(g_data->doingActive() && m_channels(l_c) == g_data->getActiveChannel())
+        if(GData::getUniqueInstance().doingActive() && m_channels(l_c) == GData::getUniqueInstance().getActiveChannel())
         {
             m_channels(l_c)->processChunk(currentChunk() + 1);
         }
@@ -457,7 +457,7 @@ bool SoundFile::playRecordChunk( SoundFile * p_play_sound_file
 
     p_play_sound_file->setupPlayChunk();
 
-    int l_ret = blockingWriteRead(g_data->getAudioStream(), p_play_sound_file->m_temp_window_buffer, p_play_sound_file->numChannels(), p_rec->m_temp_window_buffer, p_rec->numChannels(), l_n);
+    int l_ret = blockingWriteRead(GData::getUniqueInstance().getAudioStream(), p_play_sound_file->m_temp_window_buffer, p_play_sound_file->numChannels(), p_rec->m_temp_window_buffer, p_rec->numChannels(), l_n);
     if(l_ret < l_n)
     {
         fprintf(stderr, "Error writing/reading to audio device\n");
@@ -601,7 +601,7 @@ int SoundFile::readN(int p_n)
 //------------------------------------------------------------------------------
 void SoundFile::preProcess()
 {
-    g_data->setDoingActiveAnalysis(true);
+    GData::getUniqueInstance().setDoingActiveAnalysis(true);
     myassert(m_first_time_through == true);
     readChunk(bufferSize() - offset());
 
@@ -653,7 +653,7 @@ void SoundFile::preProcess()
     delete l_progress;
     delete l_message;
 
-    g_data->setDoingActiveAnalysis(false);
+    GData::getUniqueInstance().setDoingActiveAnalysis(false);
     m_first_time_through = false;
 }
 

@@ -27,7 +27,7 @@
 SaveDialog::SaveDialog(QWidget * p_parent)
 : QFileDialog( p_parent
              , tr("Save file")
-             , QDir::toNativeSeparators(QString::fromStdString( g_data->getSettingsValue( "Dialogs/saveFilesFolder"
+             , QDir::toNativeSeparators(QString::fromStdString( GData::getUniqueInstance().getSettingsValue( "Dialogs/saveFilesFolder"
                                                                                         , QDir::currentPath().toStdString()
                                                                                         )
                                                               )
@@ -46,10 +46,10 @@ SaveDialog::SaveDialog(QWidget * p_parent)
     l_layout->addItem(l_base_layout);
 
     m_append_wav_check_box = new QCheckBox(tr("Append .wav extension if needed"), this);
-    m_append_wav_check_box->setChecked(g_data->getSettingsValue("Dialogs/appendWav", true));
+    m_append_wav_check_box->setChecked(GData::getUniqueInstance().getSettingsValue("Dialogs/appendWav", true));
 
     m_remember_folder_check_box = new QCheckBox(tr("Remember current folder"), this);
-    m_remember_folder_check_box->setChecked(g_data->getSettingsValue("Dialogs/rememberSaveFolder", true));
+    m_remember_folder_check_box->setChecked(GData::getUniqueInstance().getSettingsValue("Dialogs/rememberSaveFolder", true));
 
     l_base_layout->addSpacing(10);
     l_base_layout->addWidget(m_append_wav_check_box);
@@ -65,14 +65,14 @@ SaveDialog::~SaveDialog()
 void SaveDialog::accept()
 {
     bool l_remember = m_remember_folder_check_box->isChecked();
-    g_data->setSettingsValue("Dialogs/rememberSaveFolder", l_remember);
+    GData::getUniqueInstance().setSettingsValue("Dialogs/rememberSaveFolder", l_remember);
     if(l_remember == true)
     {
         QDir l_current_dir = directory();
-        g_data->setSettingsValue("Dialogs/saveFilesFolder", l_current_dir.absolutePath().toStdString());
+        GData::getUniqueInstance().setSettingsValue("Dialogs/saveFilesFolder", l_current_dir.absolutePath().toStdString());
     }
     bool l_append_wav = m_append_wav_check_box->isChecked();
-    g_data->setSettingsValue("Dialogs/appendWav", l_append_wav);
+    GData::getUniqueInstance().setSettingsValue("Dialogs/appendWav", l_append_wav);
     if(l_append_wav == true)
     {
         QStringList l_selected_files = selectedFiles();

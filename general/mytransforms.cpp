@@ -239,7 +239,7 @@ double MyTransforms::nsdf( float * p_input
     double l_sum_sq = autocorr(p_input, p_output);
 
     double l_total_sum_sq = l_sum_sq * 2.0;
-    if(g_data->analysisType() == AnalysisModes::MPM || g_data->analysisType() == AnalysisModes::MPM_MODIFIED_CEPSTRUM)
+    if(GData::getUniqueInstance().analysisType() == AnalysisModes::MPM || GData::getUniqueInstance().analysisType() == AnalysisModes::MPM_MODIFIED_CEPSTRUM)
     {
         //nsdf
         for(int l_j = 0; l_j < m_k; l_j++)
@@ -406,31 +406,31 @@ void MyTransforms::calculateAnalysisData(/*float *input, */
     float * l_current_input = (m_equal_loudness) ? p_channel->get_filtered_input().begin() : p_channel->get_direct_input().begin();
 
     std::vector<int> l_nsdf_max_positions;
-    l_analysis_data.setMaxIntensityDB(linear2dB(fabs(*std::max_element(l_current_input, l_current_input + m_n, absoluteLess<float>())), *g_data));
+    l_analysis_data.setMaxIntensityDB(linear2dB(fabs(*std::max_element(l_current_input, l_current_input + m_n, absoluteLess<float>())), GData::getUniqueInstance()));
   
     doChannelDataFFT(p_channel, l_current_input, p_chunk);
     std::copy(l_current_input, l_current_input + m_n, m_data_time);
   
-    if(g_data->doingFreqAnalysis() && (p_channel->firstTimeThrough() || g_data->doingActiveAnalysis()))
+    if(GData::getUniqueInstance().doingFreqAnalysis() && (p_channel->firstTimeThrough() || GData::getUniqueInstance().doingActiveAnalysis()))
     {
         //calculate the Normalised Square Difference Function
-        double l_log_rms = linear2dB(nsdf(m_data_time, p_channel->get_nsdf_data().begin()) / double(m_n), *g_data); /**< Do the NSDF calculation */
+        double l_log_rms = linear2dB(nsdf(m_data_time, p_channel->get_nsdf_data().begin()) / double(m_n), GData::getUniqueInstance()); /**< Do the NSDF calculation */
         l_analysis_data.setLogRms(l_log_rms);
-        if(g_data->doingAutoNoiseFloor() && !l_analysis_data.isDone())
+        if(GData::getUniqueInstance().doingAutoNoiseFloor() && !l_analysis_data.isDone())
         {
             //do it for g_data. this is only here for old code. remove some stage
             if(p_chunk == 0)
             {
-                g_data->set_rms_floor(0.0);
-                g_data->set_rms_ceiling(g_data->dBFloor());
+                GData::getUniqueInstance().set_rms_floor(0.0);
+                GData::getUniqueInstance().set_rms_ceiling(GData::getUniqueInstance().dBFloor());
             }
-            if(l_log_rms + 15 < g_data->rmsFloor())
+            if(l_log_rms + 15 < GData::getUniqueInstance().rmsFloor())
             {
-                g_data->set_rms_floor(l_log_rms + 15);
+                GData::getUniqueInstance().set_rms_floor(l_log_rms + 15);
             }
-            if(l_log_rms > g_data->rmsCeiling())
+            if(l_log_rms > GData::getUniqueInstance().rmsCeiling())
             {
-                g_data->set_rms_ceiling(l_log_rms);
+                GData::getUniqueInstance().set_rms_ceiling(l_log_rms);
             }
 
             //do it for the channel
@@ -438,7 +438,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */
             {
 
                 p_channel->set_rms_floor(0.0);
-                p_channel->set_rms_ceiling(g_data->dBFloor());
+                p_channel->set_rms_ceiling(GData::getUniqueInstance().dBFloor());
             }
             if(l_log_rms + 15 < p_channel->get_rms_floor())
             {
@@ -508,7 +508,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */
 
             if(!l_analysis_data.isDone())
             {
-                if(g_data->analysisType() == AnalysisModes::MPM_MODIFIED_CEPSTRUM)
+                if(GData::getUniqueInstance().analysisType() == AnalysisModes::MPM_MODIFIED_CEPSTRUM)
                 {
                     //calculate pitch
                     p_channel->chooseCorrelationIndex(p_chunk, float(l_analysis_data.getCepstrumIndex()));
@@ -534,7 +534,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */
 
             l_analysis_data.setChangeness(0.0f);
 
-            if(g_data->doingHarmonicAnalysis())
+            if(GData::getUniqueInstance().doingHarmonicAnalysis())
             {
                 std::copy(m_data_time, m_data_time + m_n, m_data_temp);
                 if(l_analysis_data.getChosenCorrelationIndex() >= 0)
@@ -544,7 +544,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */
             }
         }
 
-        if(g_data->doingFreqAnalysis() && p_channel->doingDetailedPitch() && p_channel->firstTimeThrough())
+        if(GData::getUniqueInstance().doingFreqAnalysis() && p_channel->doingDetailedPitch() && p_channel->firstTimeThrough())
         {
             float l_period_diff_2 = p_channel->calcDetailedPitch(l_current_input, l_analysis_data.getPeriod(), p_chunk);
             l_period_diff = l_period_diff_2;
@@ -560,13 +560,13 @@ void MyTransforms::calculateAnalysisData(/*float *input, */
             l_analysis_data.setDone(true);
         }
 
-        if(g_data->doingFreqAnalysis() && p_channel->doingDetailedPitch() && p_channel->firstTimeThrough())
+        if(GData::getUniqueInstance().doingFreqAnalysis() && p_channel->doingDetailedPitch() && p_channel->firstTimeThrough())
         {
             p_channel->calcVibratoData(p_chunk);
         }
     }
 
-    if(g_data->doingFreqAnalysis() && p_channel->doingDetailedPitch() && (!p_channel->firstTimeThrough()))
+    if(GData::getUniqueInstance().doingFreqAnalysis() && p_channel->doingDetailedPitch() && (!p_channel->firstTimeThrough()))
     {
         p_channel->get_pitch_lookup().copyTo(p_channel->get_detailed_pitch_data().begin(), p_chunk * p_channel->get_detailed_pitch_data().size(), p_channel->get_detailed_pitch_data().size());
         p_channel->get_pitch_lookup_smoothed().copyTo(p_channel->get_detailed_pitch_data_smoothed().begin(), p_chunk * p_channel->get_detailed_pitch_data_smoothed().size(), p_channel->get_detailed_pitch_data_smoothed().size());
@@ -581,7 +581,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */
         {
             l_rms += sq(m_data_time[l_j]);
         }
-        l_analysis_data.setLogRms(linear2dB(l_rms / float(m_n), *g_data));
+        l_analysis_data.setLogRms(linear2dB(l_rms / float(m_n), GData::getUniqueInstance()));
         l_analysis_data.calcScores();
         l_analysis_data.setDone(true);
     }
@@ -858,29 +858,29 @@ void MyTransforms::doChannelDataFFT( Channel * p_channel
         p_channel->get_fft_data2()[l_j] = logBaseN(l_log_base, 1.0 + 2.0 * sqrt(l_sq_value) / double(l_n_div_2) * (l_log_base - 1.0));
         if(l_sq_value > 0.0)
         {
-            p_channel->get_fft_data1()[l_j] = bound(log10(l_sq_value) / 2.0 - l_log_size, g_data->dBFloor(), 0.0);
+            p_channel->get_fft_data1()[l_j] = bound(log10(l_sq_value) / 2.0 - l_log_size, GData::getUniqueInstance().dBFloor(), 0.0);
         }
         else
         {
-            p_channel->get_fft_data1()[l_j] = g_data->dBFloor();
+            p_channel->get_fft_data1()[l_j] = GData::getUniqueInstance().dBFloor();
         }
     }
     l_sq_value = sq(m_data_FFT[0]) + sq(m_data_FFT[l_n_div_2]);
     p_channel->get_fft_data2()[0] = logBaseN(l_log_base, 1.0 + 2.0 * sqrt(l_sq_value) / double(l_n_div_2) * (l_log_base - 1.0));
     if(l_sq_value > 0.0)
     {
-        p_channel->get_fft_data1()[0] = bound(log10(l_sq_value) / 2.0 - l_log_size, g_data->dBFloor(), 0.0);
+        p_channel->get_fft_data1()[0] = bound(log10(l_sq_value) / 2.0 - l_log_size, GData::getUniqueInstance().dBFloor(), 0.0);
     }
     else
     {
-        p_channel->get_fft_data1()[0] = g_data->dBFloor();
+        p_channel->get_fft_data1()[0] = GData::getUniqueInstance().dBFloor();
     }
 
 #ifdef DEBUG_PRINTF
     printf("n = %d, fff = %f\n", l_n_div_2, *std::max_element(p_channel->get_fft_data2().begin(), p_channel->get_fft_data2().end()));
 #endif // DEBUG_PRINTF
 
-    if(g_data->analysisType() == AnalysisModes::MPM_MODIFIED_CEPSTRUM)
+    if(GData::getUniqueInstance().analysisType() == AnalysisModes::MPM_MODIFIED_CEPSTRUM)
     {
         for(int l_j = 1; l_j < l_n_div_2; l_j++)
         {
@@ -999,7 +999,7 @@ void MyTransforms::doHarmonicAnalysis( float * p_input
     {
         p_analysis_data.setHarmonicAmpAt(l_j, log10(m_harmonics_amp_center[l_j] / m_hanning_scalar) * 20);
         p_analysis_data.setHarmonicAmpNoCutOffAt(l_j, p_analysis_data.getHarmonicAmpAt(l_j));
-        p_analysis_data.setHarmonicAmpAt(l_j, 1.0 - (p_analysis_data.getHarmonicAmpAt(l_j) / g_data->ampThreshold(AMPLITUDE_RMS, 0)));
+        p_analysis_data.setHarmonicAmpAt(l_j, 1.0 - (p_analysis_data.getHarmonicAmpAt(l_j) / GData::getUniqueInstance().ampThreshold(AMPLITUDE_RMS, 0)));
         if(p_analysis_data.getHarmonicAmpAt(l_j) < 0.0)
         {
             p_analysis_data.setHarmonicAmpAt(l_j, 0.0);

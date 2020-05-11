@@ -17,6 +17,34 @@
 */
 
 //------------------------------------------------------------------------------
+GData & GData::getUniqueInstance()
+{
+    myassert(g_data);
+    return *g_data;
+}
+
+//------------------------------------------------------------------------------
+void GData::createUniqueInstance()
+{
+    myassert(nullptr == g_data);
+    g_data = new GData();
+    /*
+    The view needs to be created here, not in GData's constructor because of the View's
+    autofollow method and the signals in the View class. It can try to reference the GData
+    object before the constructor finishes, which causes an access violation in
+    Visual Studio 6.
+    */
+    g_data->setView(*(new View()));
+}
+
+//------------------------------------------------------------------------------
+void GData::deleteUniqueInstance()
+{
+    myassert(g_data);
+    delete g_data;
+}
+
+//------------------------------------------------------------------------------
 void GData::set_play_or_record(bool p_value)
 {
     m_play_or_record = p_value & !getSettingsBoolValue("Display/updateForEachChunk");
