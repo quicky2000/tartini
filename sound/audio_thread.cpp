@@ -102,15 +102,15 @@ void AudioThread::run()
     m_frame_num = 0;
 
     //read to the 1 chunk befor time 0
-    if(g_data->isSoundModeRecording())
+    if(GData::getUniqueInstance().isSoundModeRecording())
     {
-        g_data->setDoingActiveAnalysis(true);
+        GData::getUniqueInstance().setDoingActiveAnalysis(true);
         myassert(m_rec_sound_file->isFirstTimeThrough() == true);
         m_rec_sound_file->recordChunk(m_rec_sound_file->offset());
     }
   
     QApplication::postEvent(g_main_window, new QEvent(static_cast<QEvent::Type>(SOUND_STARTED)));
-    g_data->setRunning(GData::RunningMode::STREAM_FORWARD);
+    GData::getUniqueInstance().setRunning(GData::RunningMode::STREAM_FORWARD);
 
     while(!m_stopping)
     {
@@ -125,20 +125,20 @@ void AudioThread::run()
 #endif // WINDOWS
     }
 
-    g_data->setRunning(GData::RunningMode::STREAM_STOP);
+    GData::getUniqueInstance().setRunning(GData::RunningMode::STREAM_STOP);
 
-    if(g_data->isSoundModeRecording())
+    if(GData::getUniqueInstance().isSoundModeRecording())
     {
-        g_data->setDoingActiveAnalysis(false);
+        GData::getUniqueInstance().setDoingActiveAnalysis(false);
         m_rec_sound_file->setFirstTimeThrough(false);
         m_rec_sound_file->rec2play();
-        g_data->setSoundMode(GData::SoundMode::SOUND_PLAY);
+        GData::getUniqueInstance().setSoundMode(GData::SoundMode::SOUND_PLAY);
     }
 
-    if(g_data->getAudioStream())
+    if(GData::getUniqueInstance().getAudioStream())
     {
-        delete g_data->getAudioStream();
-        g_data->setAudioStream(nullptr);
+        delete GData::getUniqueInstance().getAudioStream();
+        GData::getUniqueInstance().setAudioStream(nullptr);
     }
     m_play_sound_file = nullptr;
     m_rec_sound_file = nullptr;
@@ -150,7 +150,7 @@ void AudioThread::run()
 int AudioThread::doStuff()
 {
     int l_force_update = false;
-    if(g_data->getRunning() == GData::RunningMode::STREAM_PAUSE)
+    if(GData::getUniqueInstance().getRunning() == GData::RunningMode::STREAM_PAUSE)
     {
         msleep(20);
         //paused
@@ -164,19 +164,19 @@ int AudioThread::doStuff()
     ++m_frame_num;
 	
     //update one frame before pausing again
-    if(g_data->getRunning() == GData::RunningMode::STREAM_UPDATE)
+    if(GData::getUniqueInstance().getRunning() == GData::RunningMode::STREAM_UPDATE)
     {
         //update then pause
-        g_data->setRunning(GData::RunningMode::STREAM_PAUSE);
+        GData::getUniqueInstance().setRunning(GData::RunningMode::STREAM_PAUSE);
         l_force_update = true;
     }
-    if(g_data->getRunning() != GData::RunningMode::STREAM_FORWARD)
+    if(GData::getUniqueInstance().getRunning() != GData::RunningMode::STREAM_FORWARD)
     {
         return 0;
     }
   
     //This is the main block of code for reading or write the next chunk to the soundcard or file
-    if(g_data->getSoundMode() == GData::SoundMode::SOUND_PLAY)
+    if(GData::getUniqueInstance().getSoundMode() == GData::SoundMode::SOUND_PLAY)
     {
         myassert(m_play_sound_file);
         if(!m_play_sound_file->playChunk())
@@ -185,7 +185,7 @@ int AudioThread::doStuff()
             QApplication::postEvent(g_main_window, new QEvent(static_cast<QEvent::Type>(UPDATE_SLOW)));
             return 0; //stop the audio thread playing
         }
-        if(!g_data->getAudioStream())
+        if(!GData::getUniqueInstance().getAudioStream())
         {
             if(++m_sleep_count % 4 == 0)
             {
@@ -194,18 +194,18 @@ int AudioThread::doStuff()
             }
         }
     }
-    else if(g_data->getSoundMode() == GData::SoundMode::SOUND_REC)
+    else if(GData::getUniqueInstance().getSoundMode() == GData::SoundMode::SOUND_REC)
     {
         // SOUND_REC
-        int l_buffer_chunks = g_data->getAudioStream()->inTotalBufferFrames() / m_rec_sound_file->framesPerChunk();
+        int l_buffer_chunks = GData::getUniqueInstance().getAudioStream()->inTotalBufferFrames() / m_rec_sound_file->framesPerChunk();
         if(m_frame_num > l_buffer_chunks)
         {
             m_rec_sound_file->recordChunk(m_rec_sound_file->framesPerChunk());
         }
     }
-    else if(g_data->getSoundMode() == GData::SoundMode::SOUND_PLAY_REC)
+    else if(GData::getUniqueInstance().getSoundMode() == GData::SoundMode::SOUND_PLAY_REC)
     {
-        int l_buffer_chunks = g_data->getAudioStream()->inTotalBufferFrames() / m_rec_sound_file->framesPerChunk();
+        int l_buffer_chunks = GData::getUniqueInstance().getAudioStream()->inTotalBufferFrames() / m_rec_sound_file->framesPerChunk();
         if(m_frame_num > l_buffer_chunks)
         {
             if(!SoundFile::playRecordChunk(m_play_sound_file, m_rec_sound_file))
@@ -221,25 +221,25 @@ int AudioThread::doStuff()
     m_fast_update_count++;
     m_slow_update_count++;
 
-    int l_slow_update_after = toInt(double(g_data->slowUpdateSpeed()) / 1000.0 / curSoundFile()->timePerChunk());
-    int l_fast_update_after = toInt(double(g_data->fastUpdateSpeed()) / 1000.0 / curSoundFile()->timePerChunk());
-    if(!g_data->needUpdate())
+    int l_slow_update_after = toInt(double(GData::getUniqueInstance().slowUpdateSpeed()) / 1000.0 / curSoundFile()->timePerChunk());
+    int l_fast_update_after = toInt(double(GData::getUniqueInstance().fastUpdateSpeed()) / 1000.0 / curSoundFile()->timePerChunk());
+    if(!GData::getUniqueInstance().needUpdate())
     {
         if((m_slow_update_count >= l_slow_update_after) || l_force_update)
         {
-            g_data->setNeedUpdate(true);
+            GData::getUniqueInstance().setNeedUpdate(true);
             m_fast_update_count = 0;
             m_slow_update_count = 0;
             QApplication::postEvent(g_main_window, new QEvent(static_cast<QEvent::Type>(UPDATE_SLOW)));
         }
         else if(m_fast_update_count >= l_fast_update_after)
         {
-            g_data->setNeedUpdate(true);
+            GData::getUniqueInstance().setNeedUpdate(true);
             m_fast_update_count = 0;
             QApplication::postEvent(g_main_window, new QEvent(static_cast<QEvent::Type>(UPDATE_FAST)));
         }
     }
-    g_data->doChunkUpdate();
+    GData::getUniqueInstance().doChunkUpdate();
 
     return 1;
 }

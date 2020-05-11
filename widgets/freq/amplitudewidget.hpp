@@ -25,19 +25,19 @@ QSize AmplitudeWidget::sizeHint()const
 //------------------------------------------------------------------------------
 double AmplitudeWidget::leftTime()const
 {
-    return g_data->getView().viewLeft();
+    return GData::getUniqueInstance().getView().viewLeft();
 }
 
 //------------------------------------------------------------------------------
 double AmplitudeWidget::rightTime()const
 {
-    return g_data->getView().viewRight();
+    return GData::getUniqueInstance().getView().viewRight();
 }
 
 //------------------------------------------------------------------------------
 double AmplitudeWidget::timeWidth()const
 {
-    return g_data->getView().viewTotalTime();
+    return GData::getUniqueInstance().getView().viewTotalTime();
 }
 
 //------------------------------------------------------------------------------

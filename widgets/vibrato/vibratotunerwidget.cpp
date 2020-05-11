@@ -58,7 +58,7 @@ VibratoTunerWidget::~VibratoTunerWidget()
 //------------------------------------------------------------------------------
 void VibratoTunerWidget::initializeGL()
 {
-    QColor l_background = g_data->backgroundColor();
+    QColor l_background = GData::getUniqueInstance().backgroundColor();
     glClearColor( double(l_background.red()) / 256.0, double(l_background.green()) / 256.0, double(l_background.blue()) / 256.0, 0.0 );
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -240,7 +240,7 @@ void VibratoTunerWidget::paintGL()
     l_timer.start();
 #endif // TIME_PAINT
 
-    QColor l_background = g_data->backgroundColor();
+    QColor l_background = GData::getUniqueInstance().backgroundColor();
     glClearColor( double(l_background.red()) / 256.0, double(l_background.green()) / 256.0, double(l_background.blue()) / 256.0, 0.0 );
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -282,7 +282,7 @@ void VibratoTunerWidget::doUpdate(double p_pitch)
 {
     m_cur_pitch = p_pitch;
 
-    Channel * l_active_channel = g_data->getActiveChannel();
+    Channel * l_active_channel = GData::getUniqueInstance().getActiveChannel();
 
     float l_needle_value = 0;
     int l_close_pitch = 0;

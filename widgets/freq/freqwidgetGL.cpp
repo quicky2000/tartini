@@ -70,13 +70,13 @@ FreqWidgetGL::FreqWidgetGL( QWidget * p_parent
     setSizePolicy(l_size_policy);
 
     setFocusPolicy(Qt::StrongFocus);
-    g_data->getView().setPixelHeight(height());
+    GData::getUniqueInstance().getView().setPixelHeight(height());
 }
 
 //------------------------------------------------------------------------------
 void FreqWidgetGL::initializeGL()
 {
-    qglClearColor(g_data->backgroundColor());
+    qglClearColor(GData::getUniqueInstance().backgroundColor());
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -203,10 +203,10 @@ void FreqWidgetGL::drawReferenceLinesGL( const double & /* p_left_time*/
     int l_font_width = l_font_metric.width("C#0") + 3;
 #endif // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
 
-    MusicKey &l_music_key = g_music_keys[g_data->temperedType()];
-    MusicScale &l_music_scale = g_music_scales[g_data->musicKeyType()];
+    MusicKey &l_music_key = g_music_keys[GData::getUniqueInstance().temperedType()];
+    MusicScale &l_music_scale = g_music_scales[GData::getUniqueInstance().musicKeyType()];
 
-    int l_key_root = cycle(g_music_key_root[g_data->musicKey()] + l_music_scale.semitoneOffset(), 12);
+    int l_key_root = cycle(g_music_key_root[GData::getUniqueInstance().musicKey()] + l_music_scale.semitoneOffset(), 12);
     int l_view_bottom_note = static_cast<int>(p_view_bottom) - l_key_root;
     int l_remainder = cycle(l_view_bottom_note, 12);
     int l_low_root = l_view_bottom_note - l_remainder + l_key_root;
@@ -238,7 +238,7 @@ void FreqWidgetGL::drawReferenceLinesGL( const double & /* p_left_time*/
                     glColor4ub(0, 0, 0, 128);
                     mygl_line(l_font_width, l_line_Y, width() - 1, l_line_Y);
                 }
-                else if((g_data->musicKeyType() == MusicScale::Chromatic) && !g_music_scales[MusicScale::Major].hasSemitone(l_music_key.noteType(l_j)))
+                else if((GData::getUniqueInstance().musicKeyType() == MusicScale::Chromatic) && !g_music_scales[MusicScale::Major].hasSemitone(l_music_key.noteType(l_j)))
                 {
                     glColor4ub(25, 125, 170, 128);
                     glEnable(GL_LINE_STIPPLE);
@@ -344,11 +344,11 @@ void FreqWidgetGL::paintGL()
 #endif // TIME_PAINT
     
     glClear(GL_COLOR_BUFFER_BIT);
-    View & l_view = g_data->getView();
+    View & l_view = GData::getUniqueInstance().getView();
 
-    if(l_view.autoFollow() && g_data->getActiveChannel() && g_data->getRunning() == GData::RunningMode::STREAM_FORWARD)
+    if(l_view.autoFollow() && GData::getUniqueInstance().getActiveChannel() && GData::getUniqueInstance().getRunning() == GData::RunningMode::STREAM_FORWARD)
     {
-        setChannelVerticalView(g_data->getActiveChannel(), l_view.viewLeft(), l_view.currentTime(), l_view.zoomX(), l_view.viewBottom(), l_view.zoomY());
+        setChannelVerticalView(GData::getUniqueInstance().getActiveChannel(), l_view.viewLeft(), l_view.currentTime(), l_view.zoomX(), l_view.viewBottom(), l_view.zoomY());
     }
 
     int l_cur_time_pixel = l_view.screenPixelX(l_view.currentTime());
@@ -356,9 +356,9 @@ void FreqWidgetGL::paintGL()
     glLineWidth(3.0f);
 
     //draw the red/blue background color shading if needed
-    if(l_view.backgroundShading() && g_data->getActiveChannel())
+    if(l_view.backgroundShading() && GData::getUniqueInstance().getActiveChannel())
     {
-        drawChannelFilledGL(g_data->getActiveChannel(), l_view.viewLeft(), l_view.currentTime(), l_view.zoomX(), l_view.viewBottom(), l_view.zoomY(), DRAW_VIEW_NORMAL);
+        drawChannelFilledGL(GData::getUniqueInstance().getActiveChannel(), l_view.viewLeft(), l_view.currentTime(), l_view.zoomX(), l_view.viewBottom(), l_view.zoomY(), DRAW_VIEW_NORMAL);
     }
 
     glLineWidth(1.0f);
@@ -366,9 +366,9 @@ void FreqWidgetGL::paintGL()
 
     glEnable(GL_LINE_SMOOTH);
     //draw all the visible channels
-    for(unsigned int l_i = 0; l_i < g_data->getChannelsSize(); l_i++)
+    for(unsigned int l_i = 0; l_i < GData::getUniqueInstance().getChannelsSize(); l_i++)
     {
-        Channel *l_channel = g_data->getChannelAt(l_i);
+        Channel *l_channel = GData::getUniqueInstance().getChannelAt(l_i);
         if(!l_channel->isVisible())
         {
             continue;
@@ -380,11 +380,11 @@ void FreqWidgetGL::paintGL()
     QPalette l_palette;
     QColor l_foreground = l_palette.color(QPalette::WindowText);
     // Draw a light grey band indicating which time is being used in the current window
-    if(g_data->getActiveChannel())
+    if(GData::getUniqueInstance().getActiveChannel())
     {
         QColor l_line_color = l_foreground;
         l_line_color.setAlpha(50);
-        Channel *l_channel = g_data->getActiveChannel();
+        Channel *l_channel = GData::getUniqueInstance().getActiveChannel();
         double l_half_window_time = static_cast<double>(l_channel->size()) / static_cast<double>(l_channel->rate() * 2);
         int l_pixel_left = l_view.screenPixelX(l_view.currentTime() - l_half_window_time);
         int l_pixel_right = l_view.screenPixelX(l_view.currentTime() + l_half_window_time);
@@ -410,15 +410,15 @@ Channel *FreqWidgetGL::channelAtPixel( int p_x
     double l_time = mouseTime(p_x);
     float l_pitch = mousePitch(p_y);
     //10 pixel l_tolerance
-    float l_tolerance = 6 * g_data->getView().zoomY();
+    float l_tolerance = 6 * GData::getUniqueInstance().getView().zoomY();
 
     std::vector<Channel*> l_channels;
 
     //loop through l_channels in reverse order finding which one the user clicked on
     unsigned int l_index = 0;
-    for(l_index = 0 ; l_index < g_data->getChannelsSize() ; ++l_index)
+    for(l_index = 0 ; l_index < GData::getUniqueInstance().getChannelsSize() ; ++l_index)
     {
-        Channel * l_channel = g_data->getChannelAt(g_data->getChannelsSize() - 1 - l_index);
+        Channel * l_channel = GData::getUniqueInstance().getChannelAt(GData::getUniqueInstance().getChannelsSize() - 1 - l_index);
         if(l_channel->isVisible())
         {
             const AnalysisData *l_data = l_channel->dataAtTime(l_time);
@@ -434,7 +434,7 @@ Channel *FreqWidgetGL::channelAtPixel( int p_x
 //------------------------------------------------------------------------------
 void FreqWidgetGL::mousePressEvent( QMouseEvent *p_mouse_event)
 {
-    View & l_view = g_data->getView();
+    View & l_view = GData::getUniqueInstance().getView();
     int l_time_X = toInt(l_view.viewOffset() / l_view.zoomX());
     m_drag_mode = t_drag_modes::DragNone;
 
@@ -477,7 +477,7 @@ void FreqWidgetGL::mousePressEvent( QMouseEvent *p_mouse_event)
         if(l_channel)
         {
             //Clicked on a channel
-            g_data->setActiveChannel(l_channel);
+            GData::getUniqueInstance().setActiveChannel(l_channel);
             m_drag_mode = t_drag_modes::DragChannel;
         }
         else
@@ -493,7 +493,7 @@ void FreqWidgetGL::mousePressEvent( QMouseEvent *p_mouse_event)
 //------------------------------------------------------------------------------
 void FreqWidgetGL::mouseMoveEvent( QMouseEvent *p_mouse_event )
 {
-    View & l_view = g_data->getView();
+    View & l_view = GData::getUniqueInstance().getView();
     int l_pixel_at_current_time_X = toInt(l_view.viewOffset() / l_view.zoomX());
 
     switch(m_drag_mode)
@@ -517,7 +517,7 @@ void FreqWidgetGL::mouseMoveEvent( QMouseEvent *p_mouse_event )
             break;
         case t_drag_modes::DragBackground:
             l_view.setViewBottom(m_down_note - (m_mouse_Y - p_mouse_event->y()) * l_view.zoomY());
-            g_data->updateActiveChunkTime(m_down_time - (p_mouse_event->x() - m_mouse_X) * l_view.zoomX());
+            GData::getUniqueInstance().updateActiveChunkTime(m_down_time - (p_mouse_event->x() - m_mouse_X) * l_view.zoomX());
             l_view.doSlowUpdate();
             break;
         case t_drag_modes::DragTimeBar:
@@ -540,21 +540,21 @@ void FreqWidgetGL::mouseReleaseEvent( QMouseEvent * )
 //------------------------------------------------------------------------------
 double FreqWidgetGL::mouseTime(int p_x)const
 {
-    return g_data->getView().viewLeft() + g_data->getView().zoomX() * p_x;
+    return GData::getUniqueInstance().getView().viewLeft() + GData::getUniqueInstance().getView().zoomX() * p_x;
 }
 
 //------------------------------------------------------------------------------
 double FreqWidgetGL::mousePitch(int p_y)const
 {
-    return g_data->getView().viewBottom() + g_data->getView().zoomY() * (height() - p_y);
+    return GData::getUniqueInstance().getView().viewBottom() + GData::getUniqueInstance().getView().zoomY() * (height() - p_y);
 }
 
 //------------------------------------------------------------------------------
 void FreqWidgetGL::wheelEvent(QWheelEvent * p_wheel_event)
 {
-    View & l_view = g_data->getView();
+    View & l_view = GData::getUniqueInstance().getView();
     double l_amount = double(p_wheel_event->delta()) / WHEEL_DELTA * 0.15;
-    bool l_is_zoom = g_data->mouseWheelZooms();
+    bool l_is_zoom = GData::getUniqueInstance().mouseWheelZooms();
     if(p_wheel_event->QInputEvent::modifiers() & (Qt::ControlModifier | Qt::ShiftModifier))
     {
         l_is_zoom = !l_is_zoom;
@@ -568,7 +568,7 @@ void FreqWidgetGL::wheelEvent(QWheelEvent * p_wheel_event)
             double l_before = l_view.logZoomY();
             l_view.setZoomFactorY(l_view.logZoomY() + l_amount, height() - p_wheel_event->y());
             l_amount = l_view.logZoomY() - l_before;
-            if(g_data->getRunning() == GData::RunningMode::STREAM_FORWARD)
+            if(GData::getUniqueInstance().getRunning() == GData::RunningMode::STREAM_FORWARD)
             {
                 l_view.setZoomFactorX(l_view.logZoomX() + l_amount);
             }
@@ -584,7 +584,7 @@ void FreqWidgetGL::wheelEvent(QWheelEvent * p_wheel_event)
             double l_before = l_view.logZoomY();
             l_view.setZoomFactorY(l_view.logZoomY() + l_amount, height() / 2);
             l_amount = l_view.logZoomY() - l_before;
-            if(g_data->getRunning() == GData::RunningMode::STREAM_FORWARD)
+            if(GData::getUniqueInstance().getRunning() == GData::RunningMode::STREAM_FORWARD)
             {
                 l_view.setZoomFactorX(l_view.logZoomX() + l_amount);
             }
@@ -614,7 +614,7 @@ void FreqWidgetGL::resizeEvent (QResizeEvent *p_resize_event)
         return;
     }
 
-    View & l_view = g_data->getView();
+    View & l_view = GData::getUniqueInstance().getView();
 
     double l_old_view_width = double(l_view.viewWidth());
 
@@ -707,7 +707,7 @@ void FreqWidgetGL::drawChannelGL( Channel *p_channel
                                 , int p_view_type
                                 )
 {
-    p_view_bottom += g_data->semitoneOffset();
+    p_view_bottom += GData::getUniqueInstance().semitoneOffset();
     float l_line_width = 3.0f;
     float l_line_half_width = l_line_width / 2;
     ZoomLookup *l_zoom_lookup;
@@ -809,7 +809,7 @@ void FreqWidgetGL::drawChannelGL( Channel *p_channel
             l_err = l_data->getCorrelation();
             l_vol = dB2Normalised(l_data->getLogRms(), p_channel->get_rms_ceiling(), p_channel->get_rms_floor());
             glLineWidth(l_line_width);
-            if(g_data->pitchContourMode() == 0)
+            if(GData::getUniqueInstance().pitchContourMode() == 0)
             {
                 if(p_view_type == DRAW_VIEW_PRINT)
                 {
@@ -817,7 +817,7 @@ void FreqWidgetGL::drawChannelGL( Channel *p_channel
                 }
                 else
                 {
-                    qglColor(colorBetween(g_data->backgroundColor(), p_channel->get_color(), l_err * l_vol));
+                    qglColor(colorBetween(GData::getUniqueInstance().backgroundColor(), p_channel->get_color(), l_err * l_vol));
                 }
             }
             else
@@ -827,7 +827,7 @@ void FreqWidgetGL::drawChannelGL( Channel *p_channel
 
             l_x = toInt(l_double_index);
             l_pitch = (p_channel->isVisibleChunk(l_data)) ? l_data->getPitch() : 0.0f;
-            myassert(l_pitch >= 0.0 && l_pitch <= g_data->topPitch());
+            myassert(l_pitch >= 0.0 && l_pitch <= GData::getUniqueInstance().topPitch());
             l_y = height() - 1 - toInt(l_pitch / p_zoom_Y) + l_view_bottom_offset;
             if(l_pitch > 0.0f)
             {
@@ -864,7 +864,7 @@ void FreqWidgetGL::drawChannelFilledGL( Channel *p_channel
                                       , int p_view_type
                                       )
 {
-    p_view_bottom += g_data->semitoneOffset();
+    p_view_bottom += GData::getUniqueInstance().semitoneOffset();
     ZoomLookup * l_zoom_lookup;
     if(p_view_type == DRAW_VIEW_SUMMARY)
     {
@@ -947,7 +947,7 @@ void FreqWidgetGL::drawChannelFilledGL( Channel *p_channel
                 myassert(p_channel->isValidChunk(l_zoom_element.midChunk()));
                 AnalysisData * l_data = p_channel->dataAtChunk(l_zoom_element.midChunk());
 
-                if(g_data->showMeanVarianceBars())
+                if(GData::getUniqueInstance().showMeanVarianceBars())
                 {
                     //longTermMean bars
                     l_y2 = height() - 1 - toInt((l_data->getLongTermMean() + l_data->getLongTermDeviation()) / p_zoom_Y) + l_view_bottom_offset;
@@ -982,16 +982,16 @@ void FreqWidgetGL::drawChannelFilledGL( Channel *p_channel
             l_bottom_points[l_point_index++].set(l_n, height());
             l_last_N = l_n;
         }
-        qglColor(g_data->shading1Color());
+        qglColor(GData::getUniqueInstance().shading1Color());
         mygl_rect(l_first_N, 0, l_last_N, height());
-        qglColor(g_data->shading2Color());
+        qglColor(GData::getUniqueInstance().shading2Color());
         if(l_point_index > 1)
         {
             glVertexPointer(2, GL_FLOAT, 0, l_bottom_points.begin());
             glDrawArrays(GL_QUAD_STRIP, 0, l_point_index);
         }
 
-        if(g_data->showMeanVarianceBars())
+        if(GData::getUniqueInstance().showMeanVarianceBars())
         {
             //shortTermMean bars
             qglColor(Qt::green);
@@ -1050,7 +1050,7 @@ void FreqWidgetGL::drawChannelFilledGL( Channel *p_channel
             AnalysisData *l_data = p_channel->dataAtChunk(l_int_chunk);
             l_err = l_data->getCorrelation();
 
-            if(g_data->pitchContourMode() == 0)
+            if(GData::getUniqueInstance().pitchContourMode() == 0)
             {
                 qglColor(colorBetween(QColor(255, 255, 255), p_channel->get_color(), l_err * dB2ViewVal(l_data->getLogRms())));
             }
@@ -1067,7 +1067,7 @@ void FreqWidgetGL::drawChannelFilledGL( Channel *p_channel
             {
                 l_is_note_rect_even[l_rect_index] = (l_data->getNoteIndex() % 2) == 0;
 
-                if(g_data->showMeanVarianceBars())
+                if(GData::getUniqueInstance().showMeanVarianceBars())
                 {
                     l_x2 = toInt(l_double_index + l_step_size);
                     //longTermMean bars
@@ -1084,20 +1084,20 @@ void FreqWidgetGL::drawChannelFilledGL( Channel *p_channel
                 }
             }
 
-            myassert(l_pitch >= 0.0 && l_pitch <= g_data->topPitch());
+            myassert(l_pitch >= 0.0 && l_pitch <= GData::getUniqueInstance().topPitch());
             l_y = height() - 1 - toInt(l_pitch / p_zoom_Y) + l_view_bottom_offset;
             l_bottom_points[l_point_index++].set(l_x, l_y);
             l_bottom_points[l_point_index++].set(l_x, height());
         }
 
         myassert(l_point_index <= width() * 2);
-        qglColor(g_data->shading1Color());
+        qglColor(GData::getUniqueInstance().shading1Color());
         mygl_rect(l_first_N, 0, l_last_N, height());
-        qglColor(g_data->shading2Color());
+        qglColor(GData::getUniqueInstance().shading2Color());
         glVertexPointer(2, GL_FLOAT, 0, l_bottom_points.begin());
         glDrawArrays(GL_QUAD_STRIP, 0, l_point_index);
 
-        if(g_data->showMeanVarianceBars())
+        if(GData::getUniqueInstance().showMeanVarianceBars())
         {
             //shortTermMean bars
             for(int l_j = 0; l_j < l_rect_index_2; l_j += 2)
@@ -1182,7 +1182,7 @@ bool FreqWidgetGL::calcZoomElement( Channel * p_channel
         l_note_index = NO_NOTE;
     }
     float l_corr = l_err->getCorrelation() * dB2Normalised(l_err->getLogRms(), p_channel->get_rms_ceiling(), p_channel->get_rms_floor());
-    QColor l_the_color = (g_data->pitchContourMode() == 0) ? colorBetween(g_data->backgroundColor(), p_channel->get_color(), l_corr) : p_channel->get_color();
+    QColor l_the_color = (GData::getUniqueInstance().pitchContourMode() == 0) ? colorBetween(GData::getUniqueInstance().backgroundColor(), p_channel->get_color(), l_corr) : p_channel->get_color();
 
     p_zoom_element.set(l_low, l_high, l_corr, l_the_color, l_note_index, (l_start_chunk + l_finish_chunk) / 2);
     return true;
@@ -1206,7 +1206,7 @@ void FreqWidgetGL::setChannelVerticalView( Channel * p_channel
     std::vector<float> l_weightings;
     l_weightings.reserve(width());
     float l_max_Y = 0.0f;
-    float l_min_Y = g_data->topPitch();
+    float l_min_Y = GData::getUniqueInstance().topPitch();
     float l_total_Y = 0.0f;
     float l_num_Y = 0.0f;
   
@@ -1312,7 +1312,7 @@ void FreqWidgetGL::setChannelVerticalView( Channel * p_channel
             AnalysisData *l_data = p_channel->dataAtChunk(l_int_chunk);
 
             l_pitch = (p_channel->isVisibleChunk(l_data)) ? l_data->getPitch() : 0.0f;
-            myassert(l_pitch >= 0.0 && l_pitch <= g_data->topPitch());
+            myassert(l_pitch >= 0.0 && l_pitch <= GData::getUniqueInstance().topPitch());
             l_corr = l_data->getCorrelation() * dB2ViewVal(l_data->getLogRms());
             if(l_pitch > 0.0f)
             {
@@ -1336,7 +1336,7 @@ void FreqWidgetGL::setChannelVerticalView( Channel * p_channel
     if(!l_ys.empty() > 0)
     {
         float l_mean_Y = l_total_Y / l_num_Y;
-        g_data->getView().setViewBottomRaw(l_mean_Y - g_data->getView().viewHeight() / 2.0);
+        GData::getUniqueInstance().getView().setViewBottomRaw(l_mean_Y - GData::getUniqueInstance().getView().viewHeight() / 2.0);
     }
 }
 //EOF

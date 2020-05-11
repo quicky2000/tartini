@@ -65,21 +65,12 @@ int main( int p_argc
     std::cerr << "QWT_VERSION=" << std::hex << QWT_VERSION << std::dec << std::endl;
 
     //Create one instance only of the global data
-    g_data = new GData();
-
-    /*
-      The view needs to be created here, not in GData's constructor because of the View's
-      autofollow method and the signals in the View class. It can try to reference the GData
-      object before the constructor finishes, which causes an access violation in
-      Visual Studio 6.
-
-    */
-    g_data->setView(*(new View()));
+   GData::createUniqueInstance();
 
     g_main_window = new MainWindow();
 
     //call init after we know the windows size
-    g_data->getView().init();
+    GData::getUniqueInstance().getView().init();
 
     g_main_window->showMaximized();
     
@@ -103,8 +94,8 @@ int main( int p_argc
   
     int l_ret_value = l_app.exec();
 
-    delete & (g_data->getView());
-    delete g_data;
+    delete & (GData::getUniqueInstance().getView());
+    GData::deleteUniqueInstance();
   
     return l_ret_value;
 }

@@ -52,7 +52,7 @@ void DebugWidget::paintEvent( QPaintEvent * )
     l_timer.start();
 #endif // TIME_PAINT
 
-    Channel *l_active_channel = g_data->getActiveChannel();
+    Channel *l_active_channel = GData::getUniqueInstance().getActiveChannel();
 
     beginDrawing();
 
@@ -87,7 +87,7 @@ void DebugWidget::paintEvent( QPaintEvent * )
         printString(QString::fromStdString(std::string("m_spread = ") + std::to_string(l_data.getSpread())));
         printString(QString::fromStdString(std::string("m_spread_2 = ") + std::to_string(l_data.getSpread2())));
         printString(QString::fromStdString(std::string("logrms = ") + std::to_string(l_data.getLogRms())));
-        printString(QString::fromStdString(std::string("normalised_logrms = ") + std::to_string(dB2Normalised(l_data.getLogRms(),*g_data))));
+        printString(QString::fromStdString(std::string("normalised_logrms = ") + std::to_string(dB2Normalised(l_data.getLogRms(),GData::getUniqueInstance()))));
         printString(QString::fromStdString(std::string("detailedPeriod.size() = ") + std::to_string(l_active_channel->get_detailed_pitch_data().size())));
         printString(QString::fromStdString(std::string("m_vibrato_pitch = ") + std::to_string(l_data.getVibratoPitch())));
         printString(QString::fromStdString(std::string("m_vibrato_width = ") + std::to_string(l_data.getVibratoWidth())));

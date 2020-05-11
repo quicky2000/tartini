@@ -47,7 +47,7 @@ FreqView::FreqView( int p_view_id
                   )
 : ViewWidget(p_view_id, p_parent)
 {
-    View & l_view = g_data->getView();
+    View & l_view = GData::getUniqueInstance().getView();
 
     QVBoxLayout *l_main_layout = new QVBoxLayout(this);
     l_main_layout->setSizeConstraint(QLayout::SetNoConstraint);
@@ -58,7 +58,7 @@ FreqView::FreqView( int p_view_id
     QVBoxLayout * l_top_left_layout = new QVBoxLayout();
     l_top_layout->addLayout(l_top_left_layout);
   
-    m_time_axis = new TimeAxis(l_top_widget, g_data->leftTime(), g_data->rightTime(), true);
+    m_time_axis = new TimeAxis(l_top_widget, GData::getUniqueInstance().leftTime(), GData::getUniqueInstance().rightTime(), true);
     m_time_axis->setWhatsThis("The time in seconds");
     l_top_left_layout->addWidget(m_time_axis);
 
@@ -97,8 +97,8 @@ FreqView::FreqView( int p_view_id
     l_top_right_layout->addWidget(m_freq_wheel_Y, 0);
   
     //Create the vertical scrollbar
-    m_freq_scroll_bar = new MyScrollBar(0, g_data->topPitch() - l_view.viewHeight(), 0.5, l_view.viewHeight(), 0, 20, Qt::Vertical, l_top_widget);
-    m_freq_scroll_bar->setValue(g_data->topPitch() - l_view.viewHeight() - l_view.viewBottom());
+    m_freq_scroll_bar = new MyScrollBar(0, GData::getUniqueInstance().topPitch() - l_view.viewHeight(), 0.5, l_view.viewHeight(), 0, 20, Qt::Vertical, l_top_widget);
+    m_freq_scroll_bar->setValue(GData::getUniqueInstance().topPitch() - l_view.viewHeight() - l_view.viewBottom());
     l_top_right_layout->addWidget(m_freq_scroll_bar, 4);
 
     l_top_layout->addLayout(l_top_right_layout);
@@ -156,7 +156,7 @@ FreqView::FreqView( int p_view_id
         l_string_list << g_amp_mode_names[l_j].c_str();
     }
     l_amplitude_mode_combo_box->addItems(l_string_list);
-    connect(l_amplitude_mode_combo_box, SIGNAL(activated(int)), g_data, SLOT(setAmplitudeMode(int)));
+    connect(l_amplitude_mode_combo_box, SIGNAL(activated(int)), &GData::getUniqueInstance(), SLOT(setAmplitudeMode(int)));
     connect(l_amplitude_mode_combo_box, SIGNAL(activated(int)), m_amplitude_widget, SLOT(update()));
 
     QComboBox * l_pitch_contour_mode_combo_box = new QComboBox(l_bottom_widget);
@@ -165,7 +165,7 @@ FreqView::FreqView( int p_view_id
     l_string_list.clear();
     l_string_list << "Clarity fading" << "Note grouping";
     l_pitch_contour_mode_combo_box->addItems(l_string_list);
-    connect(l_pitch_contour_mode_combo_box, SIGNAL(activated(int)), g_data, SLOT(setPitchContourMode(int)));
+    connect(l_pitch_contour_mode_combo_box, SIGNAL(activated(int)), &GData::getUniqueInstance(), SLOT(setPitchContourMode(int)));
     connect(l_pitch_contour_mode_combo_box, SIGNAL(activated(int)), m_freq_widget_GL, SLOT(update()));
 
     m_freq_wheel_X = new QwtWheel(l_bottom_widget);
@@ -232,10 +232,10 @@ FreqView::FreqView( int p_view_id
     connect(m_amplitude_widget, SIGNAL(offsetChanged(double)), m_amplitude_scroll_bar, SLOT(setValue(double)));
 
     //make the widgets get updated when the view changes
-    connect(&(g_data->getView()), SIGNAL(onSlowUpdate(double)), m_freq_widget_GL, SLOT(update()));
-    connect(&(g_data->getView()), SIGNAL(onSlowUpdate(double)), m_amplitude_widget, SLOT(update()));
-    connect(&(g_data->getView()), SIGNAL(onSlowUpdate(double)), m_time_axis, SLOT(update()));
-    connect(&(g_data->getView()), SIGNAL(timeViewRangeChanged(double, double)), m_time_axis, SLOT(setRange(double, double)));
+    connect(&(GData::getUniqueInstance().getView()), SIGNAL(onSlowUpdate(double)), m_freq_widget_GL, SLOT(update()));
+    connect(&(GData::getUniqueInstance().getView()), SIGNAL(onSlowUpdate(double)), m_amplitude_widget, SLOT(update()));
+    connect(&(GData::getUniqueInstance().getView()), SIGNAL(onSlowUpdate(double)), m_time_axis, SLOT(update()));
+    connect(&(GData::getUniqueInstance().getView()), SIGNAL(timeViewRangeChanged(double, double)), m_time_axis, SLOT(setRange(double, double)));
 }
 
 //------------------------------------------------------------------------------
@@ -248,27 +248,27 @@ FreqView::~FreqView()
 void FreqView::zoomIn()
 {
     bool l_done_it = false;
-    if(g_data->getRunning() != GData::RunningMode::STREAM_FORWARD)
+    if(GData::getUniqueInstance().getRunning() != GData::RunningMode::STREAM_FORWARD)
     {
         if(m_freq_widget_GL->testAttribute(Qt::WA_UnderMouse))
         {
             QPoint l_mouse_pos = m_freq_widget_GL->mapFromGlobal(QCursor::pos());
-            g_data->getView().setZoomFactorX(g_data->getView().logZoomX() + 0.1, l_mouse_pos.x());
-            g_data->getView().setZoomFactorY(g_data->getView().logZoomY() + 0.1, m_freq_widget_GL->height() - l_mouse_pos.y());
+            GData::getUniqueInstance().getView().setZoomFactorX(GData::getUniqueInstance().getView().logZoomX() + 0.1, l_mouse_pos.x());
+            GData::getUniqueInstance().getView().setZoomFactorY(GData::getUniqueInstance().getView().logZoomY() + 0.1, m_freq_widget_GL->height() - l_mouse_pos.y());
             l_done_it = true;
         }
         else if(m_amplitude_widget->testAttribute(Qt::WA_UnderMouse))
         {
             QPoint l_mouse_pos = m_amplitude_widget->mapFromGlobal(QCursor::pos());
-            g_data->getView().setZoomFactorX(g_data->getView().logZoomX() + 0.1, l_mouse_pos.x());
+            GData::getUniqueInstance().getView().setZoomFactorX(GData::getUniqueInstance().getView().logZoomX() + 0.1, l_mouse_pos.x());
             l_done_it = true;
 
         }
     }
     if(!l_done_it)
     {
-        g_data->getView().setZoomFactorX(g_data->getView().logZoomX() + 0.1);
-        g_data->getView().setZoomFactorY(g_data->getView().logZoomY() + 0.1);
+        GData::getUniqueInstance().getView().setZoomFactorX(GData::getUniqueInstance().getView().logZoomX() + 0.1);
+        GData::getUniqueInstance().getView().setZoomFactorY(GData::getUniqueInstance().getView().logZoomY() + 0.1);
         l_done_it = true;
     }
 }
@@ -276,10 +276,10 @@ void FreqView::zoomIn()
 //------------------------------------------------------------------------------
 void FreqView::zoomOut()
 {
-    g_data->getView().setZoomFactorX(g_data->getView().logZoomX() - 0.1);
+    GData::getUniqueInstance().getView().setZoomFactorX(GData::getUniqueInstance().getView().logZoomX() - 0.1);
     if(!m_amplitude_widget->testAttribute(Qt::WA_UnderMouse))
     {
-        g_data->getView().setZoomFactorY(g_data->getView().logZoomY() - 0.1);
+        GData::getUniqueInstance().getView().setZoomFactorY(GData::getUniqueInstance().getView().logZoomY() - 0.1);
     }
 }
 

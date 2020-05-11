@@ -32,7 +32,7 @@ PianoView::PianoView( int p_view_id
     m_piano_widget->show();
 
     //make the widget get updated when the view changes
-    connect(&(g_data->getView()), SIGNAL(onFastUpdate(double)), this, SLOT(changeKey()));
+    connect(&(GData::getUniqueInstance().getView()), SIGNAL(onFastUpdate(double)), this, SLOT(changeKey()));
 }
 
 //------------------------------------------------------------------------------
@@ -50,7 +50,7 @@ void PianoView::resizeEvent(QResizeEvent *)
 //------------------------------------------------------------------------------
 void PianoView::changeKey()
 {
-    Channel * l_active_channel = g_data->getActiveChannel();
+    Channel * l_active_channel = GData::getUniqueInstance().getActiveChannel();
     if(l_active_channel)
     {
         AnalysisData * l_data = l_active_channel->dataAtCurrentChunk();

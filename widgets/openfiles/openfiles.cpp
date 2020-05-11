@@ -52,8 +52,8 @@ OpenFiles::OpenFiles( int p_id
     m_table->setFocusPolicy(Qt::NoFocus);
     m_table->setSortingEnabled(false);
     m_table->verticalHeader()->setVisible(false);
-    connect(g_data, SIGNAL(channelsChanged()), this, SLOT(refreshChannelList()));
-    connect(g_data, SIGNAL(activeChannelChanged(Channel*)), this, SLOT(slotActiveChannelChanged(Channel *)));
+    connect(&GData::getUniqueInstance(), SIGNAL(channelsChanged()), this, SLOT(refreshChannelList()));
+    connect(&GData::getUniqueInstance(), SIGNAL(activeChannelChanged(Channel*)), this, SLOT(slotActiveChannelChanged(Channel *)));
     connect(m_table, SIGNAL(cellClicked(int,int)), this, SLOT(slotCurrentChanged(int)));
 
     refreshChannelList();
@@ -69,18 +69,18 @@ void OpenFiles::refreshChannelList()
 {
     m_table->clearContents();
 
-    m_table->setRowCount(g_data->getChannelsSize());
+    m_table->setRowCount(GData::getUniqueInstance().getChannelsSize());
     int l_index = 0;
     //put in any channel items that already exist
     unsigned int l_channel_index = 0;
-    for(l_channel_index = 0 ; l_channel_index < g_data->getChannelsSize() ; ++l_channel_index)
+    for(l_channel_index = 0 ; l_channel_index < GData::getUniqueInstance().getChannelsSize() ; ++l_channel_index)
     {
-        QString l_file_name = g_data->getChannelAt(l_channel_index)->getUniqueFilename();
+        QString l_file_name = GData::getUniqueInstance().getChannelAt(l_channel_index)->getUniqueFilename();
         QCheckBox *l_checkbox = new QCheckBox(l_file_name,m_table);
-        l_checkbox->setCheckState(g_data->getChannelAt(l_channel_index)->isVisible() ? Qt::Checked : Qt::Unchecked);
+        l_checkbox->setCheckState(GData::getUniqueInstance().getChannelAt(l_channel_index)->isVisible() ? Qt::Checked : Qt::Unchecked);
         m_table->setCellWidget(l_index,0,l_checkbox);
         connect(l_checkbox, SIGNAL(stateChanged(int)), this,SLOT(listViewChanged()));
-        if(g_data->getChannelAt(l_channel_index) == g_data->getActiveChannel())
+        if(GData::getUniqueInstance().getChannelAt(l_channel_index) == GData::getUniqueInstance().getActiveChannel())
         {
             m_table->setItem(l_index,1,new QTableWidgetItem("A"));
         }
@@ -104,12 +104,12 @@ void OpenFiles::listViewChanged()
     {
         QCheckBox * l_check_box = static_cast<QCheckBox *>(m_table->cellWidget(l_row,0));
         bool l_state = Qt::Checked == l_check_box->checkState();
-        myassert(l_row < static_cast<int>(g_data->getChannelsSize()));
-        if(g_data->getChannelAt(l_row)->isVisible() != l_state)
+        myassert(l_row < static_cast<int>(GData::getUniqueInstance().getChannelsSize()));
+        if(GData::getUniqueInstance().getChannelAt(l_row)->isVisible() != l_state)
         {
             l_found = true;
-            g_data->getChannelAt(l_row)->setVisible(l_state);
-            g_data->getView().doUpdate();
+            GData::getUniqueInstance().getChannelAt(l_row)->setVisible(l_state);
+            GData::getUniqueInstance().getView().doUpdate();
         }
     }
 }
@@ -118,8 +118,8 @@ void OpenFiles::listViewChanged()
 void OpenFiles::slotCurrentChanged(int p_row)
 {
     int l_selected_row = p_row;
-    myassert(0 <= l_selected_row && l_selected_row < int(g_data->getChannelsSize()));
-    g_data->setActiveChannel(g_data->getChannelAt(l_selected_row));
+    myassert(0 <= l_selected_row && l_selected_row < int(GData::getUniqueInstance().getChannelsSize()));
+    GData::getUniqueInstance().setActiveChannel(GData::getUniqueInstance().getChannelAt(l_selected_row));
     refreshChannelList();
 }
 

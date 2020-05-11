@@ -186,7 +186,7 @@ MainWindow::MainWindow()
     l_save_action->setShortcut(tr("Ctrl+S"));
     l_save_action->setWhatsThis(tr("Save the active sound to a file"));
     l_file_tool_bar->addAction(l_save_action);
-    connect(l_save_action, SIGNAL(triggered()), g_data, SLOT(saveActiveFile()));
+    connect(l_save_action, SIGNAL(triggered()), &GData::getUniqueInstance(), SLOT(saveActiveFile()));
 
     QIcon l_close_icon;
     l_close_icon.addPixmap(QPixmap(close32x32_xpm), QIcon::Normal);
@@ -194,11 +194,11 @@ MainWindow::MainWindow()
     l_close_action->setShortcut(tr("Ctrl+W"));
     l_close_action->setWhatsThis(tr("Close the active sound. If unsaved will ask to save. Note: Asking can be disabled in the preferences"));
     l_file_tool_bar->addAction(l_close_action);
-    connect(l_close_action, SIGNAL(triggered()), g_data, SLOT(closeActiveFile()));
+    connect(l_close_action, SIGNAL(triggered()), &GData::getUniqueInstance(), SLOT(closeActiveFile()));
 
     QAction * l_close_all_action = new QAction(tr("Close All"), this);
     l_close_all_action->setWhatsThis(tr("Close all the sounds. If any sounds are unsaved, it will ask to save. Note: Asking can be disabled in the preferences"));
-    connect(l_close_all_action, SIGNAL(triggered()), g_data, SLOT(closeAllFiles()));
+    connect(l_close_all_action, SIGNAL(triggered()), &GData::getUniqueInstance(), SLOT(closeAllFiles()));
   
     QAction * l_print_action = new QAction(tr("Print"), this);
     l_print_action->setShortcut(tr("Ctrl+P"));
@@ -216,10 +216,10 @@ MainWindow::MainWindow()
     l_beginning_action->setToolTip(tr("Rewind to the beginning"));
     l_beginning_action->setWhatsThis(tr("Jump to the beginning of the sound"));
     l_sound_tool_bar->addAction(l_beginning_action);
-    connect(l_beginning_action, SIGNAL(triggered()), g_data, SLOT(beginning()));
+    connect(l_beginning_action, SIGNAL(triggered()), &GData::getUniqueInstance(), SLOT(beginning()));
 
     m_rewind_timer = new QTimer(this);
-    connect(m_rewind_timer, SIGNAL(timeout()), g_data, SLOT(rewind()));
+    connect(m_rewind_timer, SIGNAL(timeout()), &GData::getUniqueInstance(), SLOT(rewind()));
     QIcon l_rewind_icon;
     l_rewind_icon.addPixmap(QPixmap(rewind32x32_xpm), QIcon::Normal);
     QAction * l_rewind_action = new QAction(l_rewind_icon, tr("Rewind"), l_sound_tool_bar);
@@ -244,7 +244,7 @@ MainWindow::MainWindow()
     connect(m_play_stop_action, SIGNAL(triggered()), this, SLOT(playStopClicked()));
 
     m_fast_forward_timer = new QTimer(this);
-    connect(m_fast_forward_timer, SIGNAL(timeout()), g_data, SLOT(fastforward()));
+    connect(m_fast_forward_timer, SIGNAL(timeout()), &GData::getUniqueInstance(), SLOT(fastforward()));
     QIcon l_fastforward_icon;
     l_fastforward_icon.addPixmap(QPixmap(fastforward32x32_xpm), QIcon::Normal);
     QAction * l_fast_forward_action = new QAction(l_fastforward_icon, tr("Fast-forward"), l_sound_tool_bar);
@@ -261,7 +261,7 @@ MainWindow::MainWindow()
     QAction * l_end_action = new QAction(l_end_icon, tr("&End"), this);
     l_end_action->setWhatsThis(tr("Jump to the end of the sound"));
     l_end_action->setShortcut(tr("Ctrl+E"));
-    connect(l_end_action, SIGNAL(triggered()), g_data, SLOT(end()));
+    connect(l_end_action, SIGNAL(triggered()), &GData::getUniqueInstance(), SLOT(end()));
     l_sound_tool_bar->addAction(l_end_action);
 
     //Create the Actions, to be used in Menus and Toolbars
@@ -352,13 +352,13 @@ MainWindow::MainWindow()
     QAction * l_auto_follow_action = new QAction(l_auto_follow_icon_set, tr("Auto Follow"),l_analysis_tool_bar);
     l_auto_follow_action->setToolTip(tr("Moves the view up and down automaticlly with the active channel when playing or recording"));
     l_auto_follow_action->setCheckable(true);
-    l_auto_follow_action->setChecked(g_data->getView().autoFollow());
+    l_auto_follow_action->setChecked(GData::getUniqueInstance().getView().autoFollow());
     QToolButton * l_auto_follow_button = new QToolButton(l_analysis_tool_bar);
     l_auto_follow_button->setDefaultAction(l_auto_follow_action);
     l_auto_follow_button->setAutoRaise(true);
     l_auto_follow_button->setWhatsThis(tr("Scrolls the Pitch Contour view up and down automaticlly with the active channel when playing or recording. Note: Manual scrolling (vertically) will be disabled during this time."));
     l_analysis_tool_bar->addWidget(l_auto_follow_button);
-    connect(l_auto_follow_action, SIGNAL(toggled(bool)), &(g_data->getView()), SLOT(setAutoFollow(bool)));
+    connect(l_auto_follow_action, SIGNAL(toggled(bool)), &(GData::getUniqueInstance().getView()), SLOT(setAutoFollow(bool)));
 
     QIcon l_background_shading_icon_set;
     l_background_shading_icon_set.addPixmap(QPixmap(shadingon32x32_xpm), QIcon::Normal, QIcon::On);
@@ -367,17 +367,17 @@ MainWindow::MainWindow()
     QAction * l_background_shading_action = new QAction(l_background_shading_icon_set, "Background Shading",l_analysis_tool_bar);
     l_background_shading_action->setToolTip("Toggle background shading on/off");
     l_background_shading_action->setCheckable(true);
-    l_background_shading_action->setChecked(g_data->getView().backgroundShading());
+    l_background_shading_action->setChecked(GData::getUniqueInstance().getView().backgroundShading());
     QToolButton * l_background_shading_button = new QToolButton(l_analysis_tool_bar);
     l_background_shading_button->setDefaultAction(l_background_shading_action);
     l_background_shading_button->setAutoRaise(true);
     l_background_shading_button->setWhatsThis(tr("Draw solid color underneath the Pitch Contour, to help you find the line"));
     l_analysis_tool_bar->addWidget(l_background_shading_button);
-    connect(l_background_shading_action, SIGNAL(toggled(bool)), &(g_data->getView()), SLOT(setBackgroundShading(bool)));
+    connect(l_background_shading_action, SIGNAL(toggled(bool)), &(GData::getUniqueInstance().getView()), SLOT(setBackgroundShading(bool)));
 
     l_analysis_tool_bar->addAction(l_whats_this);
 
-    View & l_view = g_data->getView();
+    View & l_view = GData::getUniqueInstance().getView();
     QToolBar * l_time_bar_dock = new QToolBar(tr("Time-axis Slider"), this);
     addToolBar(Qt::BottomToolBarArea, l_time_bar_dock);
     l_time_bar_dock->setIconSize(QSize(32, 32));
@@ -392,11 +392,11 @@ MainWindow::MainWindow()
     m_time_slider->setTrough(true);
 
     // Due to changes in Qwt desing it seems that the notion of range has been relaced by the notion of Scale defined in qwt_abstract_scale class
-    //  m_time_slider->setRange(g_data->leftTime(), g_data->rightTime(), 1.0/10000.0, 1000);
-    m_time_slider->setScale(g_data->leftTime(), g_data->rightTime());
+    //  m_time_slider->setRange(GData::getUniqueInstance().leftTime(), GData::getUniqueInstance().rightTime(), 1.0/10000.0, 1000);
+    m_time_slider->setScale(GData::getUniqueInstance().leftTime(), GData::getUniqueInstance().rightTime());
 
     // the parameters defining how the slider behave inside the scale is now defined in class qwt_abstract_slider
-    double l_range_wdith = ( g_data->leftTime() < g_data->rightTime() ? g_data->rightTime() - g_data->leftTime() : g_data->leftTime() - g_data->rightTime());
+    double l_range_wdith = ( GData::getUniqueInstance().leftTime() < GData::getUniqueInstance().rightTime() ? GData::getUniqueInstance().rightTime() - GData::getUniqueInstance().leftTime() : GData::getUniqueInstance().leftTime() - GData::getUniqueInstance().rightTime());
     unsigned int l_nb_steps = (static_cast<unsigned int>(l_range_wdith * 10000.0));
     m_time_slider->setTotalSteps(l_nb_steps);
     m_time_slider->setPageSteps(1000);
@@ -416,18 +416,18 @@ MainWindow::MainWindow()
     m_time_slider->setThumbWidth(20);
     m_time_slider->setThumbLength(60);
     m_time_slider->setMargins(2, 2);
-    m_time_slider->setRange(g_data->leftTime(), g_data->rightTime(), 1.0/10000.0, 1000);
+    m_time_slider->setRange(GData::getUniqueInstance().leftTime(), GData::getUniqueInstance().rightTime(), 1.0/10000.0, 1000);
 #endif // QWT_VERSION >= 0x060000
     m_time_slider->setValue(l_view.currentTime());
     m_time_slider->setTracking(true);
     m_time_slider->setBorderWidth(4);
     m_time_slider->setMinimumWidth(200);
     m_time_slider->setWhatsThis("Drag the time slider to move back and forward through the sound file");
-    connect(m_time_slider, SIGNAL(sliderMoved(double)), g_data, SLOT(updateActiveChunkTime(double)));
+    connect(m_time_slider, SIGNAL(sliderMoved(double)), &GData::getUniqueInstance(), SLOT(updateActiveChunkTime(double)));
     // This is no longer needed, since View::setCurrentTime() now calls doUpdate() to update all views (fast and slow ones).
     // connect(m_time_slider, SIGNAL(sliderMoved(double)), &l_view, SLOT(doSlowUpdate()));
     connect(&l_view, SIGNAL(onSlowUpdate(double)), m_time_slider, SLOT(setValue(double)));
-    connect(g_data, SIGNAL(timeRangeChanged(double, double)), this, SLOT(setTimeRange(double, double)));
+    connect(&GData::getUniqueInstance(), SIGNAL(timeRangeChanged(double, double)), this, SLOT(setTimeRange(double, double)));
     l_time_bar_dock->addWidget(m_time_slider);
 
     QToolBar * l_volume_meter_tool_bar = new QToolBar(tr("Volume Meter"), this);
@@ -452,11 +452,11 @@ MainWindow::MainWindow()
         l_string_list << g_music_key_name[l_j].c_str();
     }
     l_key_combo_box->addItems(l_string_list);
-    l_key_combo_box->setCurrentIndex(g_data->musicKey());
+    l_key_combo_box->setCurrentIndex(GData::getUniqueInstance().musicKey());
     l_key_tool_bar->addWidget(l_key_combo_box);
-    connect(l_key_combo_box, SIGNAL(activated(int)), g_data, SLOT(setMusicKey(int)));
-    connect(g_data, SIGNAL(musicKeyChanged(int)), l_key_combo_box, SLOT(setCurrentIndex(int)));
-    connect(g_data, SIGNAL(musicKeyChanged(int)), &(g_data->getView()), SLOT(doUpdate()));
+    connect(l_key_combo_box, SIGNAL(activated(int)), &GData::getUniqueInstance(), SLOT(setMusicKey(int)));
+    connect(&GData::getUniqueInstance(), SIGNAL(musicKeyChanged(int)), l_key_combo_box, SLOT(setCurrentIndex(int)));
+    connect(&GData::getUniqueInstance(), SIGNAL(musicKeyChanged(int)), &(GData::getUniqueInstance().getView()), SLOT(doUpdate()));
 
     m_key_type_combo_box = new QComboBox(l_key_tool_bar);
     m_key_type_combo_box->setWindowTitle(tr("Scale type"));
@@ -466,11 +466,11 @@ MainWindow::MainWindow()
         l_string_list << g_music_scales[l_j].name().c_str();
     }
     m_key_type_combo_box->addItems(l_string_list);
-    m_key_type_combo_box->setCurrentIndex(g_data->musicKeyType());
+    m_key_type_combo_box->setCurrentIndex(GData::getUniqueInstance().musicKeyType());
     l_key_tool_bar->addWidget(m_key_type_combo_box);
-    connect(m_key_type_combo_box, SIGNAL(activated(int)), g_data, SLOT(setMusicKeyType(int)));
-    connect(g_data, SIGNAL(musicKeyTypeChanged(int)), m_key_type_combo_box, SLOT(setCurrentIndex(int)));
-    connect(g_data, SIGNAL(musicKeyTypeChanged(int)), &(g_data->getView()), SLOT(doUpdate()));
+    connect(m_key_type_combo_box, SIGNAL(activated(int)), &GData::getUniqueInstance(), SLOT(setMusicKeyType(int)));
+    connect(&GData::getUniqueInstance(), SIGNAL(musicKeyTypeChanged(int)), m_key_type_combo_box, SLOT(setCurrentIndex(int)));
+    connect(&GData::getUniqueInstance(), SIGNAL(musicKeyTypeChanged(int)), &(GData::getUniqueInstance().getView()), SLOT(doUpdate()));
 
     QComboBox * l_tempered_combo_box = new QComboBox(l_key_tool_bar);
     l_tempered_combo_box->setWindowTitle(tr("Tempered type"));
@@ -480,11 +480,11 @@ MainWindow::MainWindow()
         l_string_list << g_music_keys[j].name().c_str();
     }
     l_tempered_combo_box->addItems(l_string_list);
-    l_tempered_combo_box->setCurrentIndex(g_data->temperedType());
+    l_tempered_combo_box->setCurrentIndex(GData::getUniqueInstance().temperedType());
     l_key_tool_bar->addWidget(l_tempered_combo_box);
-    connect(l_tempered_combo_box, SIGNAL(activated(int)), g_data, SLOT(setTemperedType(int)));
-    connect(g_data, SIGNAL(temperedTypeChanged(int)), l_tempered_combo_box, SLOT(setCurrentIndex(int)));
-    connect(g_data, SIGNAL(temperedTypeChanged(int)), &(g_data->getView()), SLOT(doUpdate()));
+    connect(l_tempered_combo_box, SIGNAL(activated(int)), &GData::getUniqueInstance(), SLOT(setTemperedType(int)));
+    connect(&GData::getUniqueInstance(), SIGNAL(temperedTypeChanged(int)), l_tempered_combo_box, SLOT(setCurrentIndex(int)));
+    connect(&GData::getUniqueInstance(), SIGNAL(temperedTypeChanged(int)), &(GData::getUniqueInstance().getView()), SLOT(doUpdate()));
 
     QToolBar * l_freq_A_tool_bar = new QToolBar(tr("Frequency Offset Toolbar"), this);
     l_freq_A_tool_bar->setWhatsThis(tr("The frequency of an even-tempered 'A' used for reference lines in the Pitch Contour View. Default 440 Hz."
@@ -499,33 +499,33 @@ MainWindow::MainWindow()
     l_freq_A_spin_box->setPrefix("A=");
     l_freq_A_spin_box->setSuffix(" Hz");
     l_freq_A_spin_box->setFocusPolicy(Qt::NoFocus);
-    l_freq_A_spin_box->setValue(toInt(g_data->freqA()));
+    l_freq_A_spin_box->setValue(toInt(GData::getUniqueInstance().freqA()));
     l_freq_A_tool_bar->addWidget(l_freq_A_spin_box);
-    connect(l_freq_A_spin_box, SIGNAL(valueChanged(int)), g_data, SLOT(setFreqA(int)));
-    connect(l_freq_A_spin_box, SIGNAL(valueChanged(int)), &(g_data->getView()), SLOT(doUpdate()));
+    connect(l_freq_A_spin_box, SIGNAL(valueChanged(int)), &GData::getUniqueInstance(), SLOT(setFreqA(int)));
+    connect(l_freq_A_spin_box, SIGNAL(valueChanged(int)), &(GData::getUniqueInstance().getView()), SLOT(doUpdate()));
 
     m_note_label = new MyLabel("Note: 9999", statusBar(), "notelabel");
     statusBar()->addPermanentWidget(m_note_label, 0);
     setNoteLabel();
     m_note_label->setToolTip("The current note number in the active file");
-    connect(&(g_data->getView()), SIGNAL(onSlowUpdate(double)), this, SLOT(setNoteLabel()));
+    connect(&(GData::getUniqueInstance().getView()), SIGNAL(onSlowUpdate(double)), this, SLOT(setNoteLabel()));
 
 
     m_chunk_label = new MyLabel("Chunk: 999999", statusBar(), "chunklabel");
     statusBar()->addPermanentWidget(m_chunk_label, 0);
     setChunkLabel();
     m_chunk_label->setToolTip("The current chunk number in the active file");
-    connect(&(g_data->getView()), SIGNAL(onSlowUpdate(double)), this, SLOT(setChunkLabel()));
+    connect(&(GData::getUniqueInstance().getView()), SIGNAL(onSlowUpdate(double)), this, SLOT(setChunkLabel()));
 
     m_time_label = new MyLabel("Time: -00:00.000", statusBar(), "timelabel");
     statusBar()->addPermanentWidget(m_time_label, 0);
     setTimeLabel(0);
     m_time_label->setToolTip(tr("The current time positon for all files (mins:sec)"));
-    connect(&(g_data->getView()), SIGNAL(onSlowUpdate(double)), this, SLOT(setTimeLabel(double)));
+    connect(&(GData::getUniqueInstance().getView()), SIGNAL(onSlowUpdate(double)), this, SLOT(setTimeLabel(double)));
 
     statusBar()->showMessage( "Ready", 2000 );
     
-    connect(g_data, SIGNAL(activeChannelChanged(Channel*)), this, SLOT(setTitle(Channel*)));
+    connect(&GData::getUniqueInstance(), SIGNAL(activeChannelChanged(Channel*)), this, SLOT(setTitle(Channel*)));
 }
 
 //------------------------------------------------------------------------------
@@ -542,7 +542,7 @@ MainWindow::~MainWindow()
 //------------------------------------------------------------------------------
 void MainWindow::closeEvent(QCloseEvent *p_event)
 {
-    if(g_data->closeAllFiles())
+    if(GData::getUniqueInstance().closeAllFiles())
     {
         saveViewGeometry();
         p_event->accept();
@@ -558,15 +558,15 @@ bool MainWindow::event(QEvent * p_event)
 {
     if(p_event->type() == UPDATE_FAST || p_event->type() == UPDATE_SLOW)
     {
-        SoundFile * l_sound_file = g_data->getAudioThread().curSoundFile();
+        SoundFile * l_sound_file = GData::getUniqueInstance().getAudioThread().curSoundFile();
         if(l_sound_file)
         {
             l_sound_file->lock();
-            g_data->getView().setCurrentTime(l_sound_file->timeAtCurrentChunk());
+            GData::getUniqueInstance().getView().setCurrentTime(l_sound_file->timeAtCurrentChunk());
             l_sound_file->unlock();
         }
-        g_data->updateViewLeftRightTimes();
-        g_data->setNeedUpdate(false);
+        GData::getUniqueInstance().updateViewLeftRightTimes();
+        GData::getUniqueInstance().setNeedUpdate(false);
         return true;
     }
     else if(p_event->type() == SOUND_STARTED)
@@ -589,7 +589,7 @@ bool MainWindow::event(QEvent * p_event)
     }
     else if(p_event->type() == SETTINGS_CHANGED)
     {
-        g_data->updateQuickRefSettings();
+        GData::getUniqueInstance().updateQuickRefSettings();
     }
     return QMainWindow::event(p_event);
 }
@@ -597,7 +597,7 @@ bool MainWindow::event(QEvent * p_event)
 //------------------------------------------------------------------------------
 void MainWindow::keyPressEvent (QKeyEvent * p_event)
 {
-    View & l_view = g_data->getView();
+    View & l_view = GData::getUniqueInstance().getView();
 
     double l_speed = 1;
     if(p_event->QInputEvent::modifiers() & Qt::ShiftModifier)
@@ -614,73 +614,73 @@ void MainWindow::keyPressEvent (QKeyEvent * p_event)
     {
 #ifdef MYDEBUG
         case Qt::Key_Escape:
-            g_data->stopAndWaitAudioThread();
+            GData::getUniqueInstance().stopAndWaitAudioThread();
             close();
         break;
 #endif // MYDEBUG
         case Qt::Key_Left:
-            if(g_data->getRunning() == GData::RunningMode::STREAM_FORWARD)
+            if(GData::getUniqueInstance().getRunning() == GData::RunningMode::STREAM_FORWARD)
             {
-                g_data->rewind();
+                GData::getUniqueInstance().rewind();
             }
             else
             {
-                if(g_data->getActiveChannel())
+                if(GData::getUniqueInstance().getActiveChannel())
                 {
-                    l_new_time = l_view.currentTime() - g_data->getActiveChannel()->timePerChunk() * l_speed;
+                    l_new_time = l_view.currentTime() - GData::getUniqueInstance().getActiveChannel()->timePerChunk() * l_speed;
                 }
                 else
                 {
                     //move 1/5th of a second back
                     l_new_time = l_view.currentTime() - 0.10 * l_speed;
                 }
-                g_data->updateActiveChunkTime(l_new_time);
+                GData::getUniqueInstance().updateActiveChunkTime(l_new_time);
             }
         break;
         case Qt::Key_Right:
-            if(g_data->getRunning() == GData::RunningMode::STREAM_FORWARD)
+            if(GData::getUniqueInstance().getRunning() == GData::RunningMode::STREAM_FORWARD)
             {
-                g_data->fastforward();
+                GData::getUniqueInstance().fastforward();
             }
             else
             {
-                if(g_data->getActiveChannel())
+                if(GData::getUniqueInstance().getActiveChannel())
                 {
-                    l_new_time = l_view.currentTime() + g_data->getActiveChannel()->timePerChunk()*l_speed;
+                    l_new_time = l_view.currentTime() + GData::getUniqueInstance().getActiveChannel()->timePerChunk()*l_speed;
                 }
                 else
                 {
                     //move 1/5th of a second forward
                     l_new_time = l_view.currentTime() + 0.10 * l_speed;
                 }
-                g_data->updateActiveChunkTime(l_new_time);
+                GData::getUniqueInstance().updateActiveChunkTime(l_new_time);
             }
         break;
         case Qt::Key_Up:
             //move 1/5 of a semi-tone
             l_view.setViewBottom(l_view.viewBottom() + 0.2 * l_speed);
-            g_data->getView().doSlowUpdate();
+            GData::getUniqueInstance().getView().doSlowUpdate();
         break;
         case Qt::Key_Down:
             //move 1/5 of a semi-tone
             l_view.setViewBottom(l_view.viewBottom() - 0.2 * l_speed);
-            g_data->getView().doSlowUpdate();
+            GData::getUniqueInstance().getView().doSlowUpdate();
         break;
         case Qt::Key_PageUp:
             //move 1/5 of a semi-tone
             l_view.setViewBottom(l_view.viewBottom() + 1.0 * l_speed);
-            g_data->getView().doSlowUpdate();
+            GData::getUniqueInstance().getView().doSlowUpdate();
         break;
         case Qt::Key_PageDown:
             //move 1/5 of a semi-tone
             l_view.setViewBottom(l_view.viewBottom() - 1.0 * l_speed);
-            g_data->getView().doSlowUpdate();
+            GData::getUniqueInstance().getView().doSlowUpdate();
         break;
         case Qt::Key_Home:
-            g_data->updateActiveChunkTime(g_data->leftTime());
+            GData::getUniqueInstance().updateActiveChunkTime(GData::getUniqueInstance().leftTime());
         break;
         case Qt::Key_End:
-            g_data->updateActiveChunkTime(g_data->rightTime());
+            GData::getUniqueInstance().updateActiveChunkTime(GData::getUniqueInstance().rightTime());
         break;
         case Qt::Key_Comma:
             l_view.setViewOffset(l_view.viewOffset() - l_view.viewWidth()/20.0);
@@ -705,14 +705,14 @@ void MainWindow::keyPressEvent (QKeyEvent * p_event)
 //------------------------------------------------------------------------------
 void MainWindow::openFile()
 {
-    QString l_last_folder = QDir::toNativeSeparators(QString::fromStdString(g_data->getSettingsValue("Dialogs/openFilesFolder", QDir::currentPath().toStdString())));
+    QString l_last_folder = QDir::toNativeSeparators(QString::fromStdString(GData::getUniqueInstance().getSettingsValue("Dialogs/openFilesFolder", QDir::currentPath().toStdString())));
     QString l_file_name = QFileDialog::getOpenFileName(this, "Open File", l_last_folder, "Sounds (*.wav)");
     if(l_file_name.isEmpty())
     {
         return;
     }
     l_file_name = QDir::toNativeSeparators(l_file_name);
-    g_data->setSettingsValue("Dialogs/openFilesFolder", l_file_name.toStdString());
+    GData::getUniqueInstance().setSettingsValue("Dialogs/openFilesFolder", l_file_name.toStdString());
     openFile(l_file_name.toStdString().c_str());
 }
 
@@ -738,12 +738,12 @@ void MainWindow::openFile(const char *p_file_name)
     std::cout << "Pre-processing took " << l_timer.elapsed() << " ms for " << l_new_sound_file->totalChunks() << " chunks (" <<
         l_ms_per_chunk << " ms per chunk, " << l_frames_per_sec << " frames/sec)" << std::endl;
 #endif // TIME_PREPROCESS
-    g_data->updateViewLeftRightTimes();
+    GData::getUniqueInstance().updateViewLeftRightTimes();
 
-    g_data->addFileToList(l_new_sound_file);
-    g_data->setActiveChannel(&(l_new_sound_file->getChannel(0)));
+    GData::getUniqueInstance().addFileToList(l_new_sound_file);
+    GData::getUniqueInstance().setActiveChannel(&(l_new_sound_file->getChannel(0)));
     QApplication::postEvent(g_main_window, new QEvent(static_cast<QEvent::Type>(UPDATE_SLOW)));
-    g_data->getView().doUpdate();
+    GData::getUniqueInstance().getView().doUpdate();
 }
 
 //------------------------------------------------------------------------------
@@ -761,16 +761,16 @@ void MainWindow::openPlayRecord()
 //------------------------------------------------------------------------------
 void MainWindow::openRecord(bool p_and_play)
 {
-    if(g_data->getRunning() != GData::RunningMode::STREAM_STOP)
+    if(GData::getUniqueInstance().getRunning() != GData::RunningMode::STREAM_STOP)
     {
-        g_data->stop();
+        GData::getUniqueInstance().stop();
         return;
     }
 
-    SoundFile * l_play_sound_file = (p_and_play) ? g_data->getActiveSoundFile() : nullptr;
+    SoundFile * l_play_sound_file = (p_and_play) ? GData::getUniqueInstance().getActiveSoundFile() : nullptr;
 
-    int l_rate = g_data->getSettingsValue("Sound/sampleRate", 44100);
-    std::string l_number_of_channels = g_data->getSettingsValue("Sound/numberOfChannels", std::string("mono"));
+    int l_rate = GData::getUniqueInstance().getSettingsValue("Sound/sampleRate", 44100);
+    std::string l_number_of_channels = GData::getUniqueInstance().getSettingsValue("Sound/numberOfChannels", std::string("mono"));
     int l_channels;
     if(QString::fromStdString(l_number_of_channels).toLower() == "mono")
     {
@@ -780,9 +780,9 @@ void MainWindow::openRecord(bool p_and_play)
     {
         l_channels = 2;
     }
-    int l_bits = g_data->getSettingsValue("Sound/bitsPerSample", 16);
-    int l_window_size = g_data->getAnalysisBufferSize(l_rate);
-    int l_step_size = g_data->getAnalysisStepSize(l_rate);
+    int l_bits = GData::getUniqueInstance().getSettingsValue("Sound/bitsPerSample", 16);
+    int l_window_size = GData::getUniqueInstance().getAnalysisBufferSize(l_rate);
+    int l_step_size = GData::getUniqueInstance().getAnalysisStepSize(l_rate);
 
     //If playing and recording then overide the record settings to the same as the playing file
     if(l_play_sound_file)
@@ -794,7 +794,7 @@ void MainWindow::openRecord(bool p_and_play)
         l_step_size = l_play_sound_file->bufferSize()/2;
     }
 
-    std::string l_temp_file_folder = g_data->getSettingsValue("General/tempFilesFolder", QDir::toNativeSeparators(QDir::currentPath()).toStdString());
+    std::string l_temp_file_folder = GData::getUniqueInstance().getSettingsValue("General/tempFilesFolder", QDir::toNativeSeparators(QDir::currentPath()).toStdString());
     QDir l_dir = QDir(QString::fromStdString(l_temp_file_folder));
     QFileInfo l_file_info;
     QString l_file_name;
@@ -802,13 +802,13 @@ void MainWindow::openRecord(bool p_and_play)
     do
     {
         l_file_exists = false;
-        l_file_name = g_data->getFilenameString();
+        l_file_name = GData::getUniqueInstance().getFilenameString();
         l_file_info.setFile(l_dir, l_file_name);
         if(l_file_info.exists())
         {
             l_file_exists = true;
-            int l_file_generating_number = g_data->getSettingsValue("General/fileGeneratingNumber", 1);\
-            g_data->setSettingsValue("General/fileGeneratingNumber", l_file_generating_number + 1);
+            int l_file_generating_number = GData::getUniqueInstance().getSettingsValue("General/fileGeneratingNumber", 1);\
+            GData::getUniqueInstance().setSettingsValue("General/fileGeneratingNumber", l_file_generating_number + 1);
         }
     }
     while(l_file_exists);
@@ -822,18 +822,18 @@ void MainWindow::openRecord(bool p_and_play)
         return;
     }
 
-    if(!g_data->openPlayRecord(l_new_sound_file, l_play_sound_file))
+    if(!GData::getUniqueInstance().openPlayRecord(l_new_sound_file, l_play_sound_file))
     {
-        g_data->closeFile(l_new_sound_file, GData::SavingModes::NEVER_SAVE);
+        GData::getUniqueInstance().closeFile(l_new_sound_file, GData::SavingModes::NEVER_SAVE);
         QMessageBox::warning(g_main_window, "Error", QString("Error opening sound device for recording"), QMessageBox::Ok, QMessageBox::NoButton);
         return;
     }
-    g_data->addFileToList(l_new_sound_file);
-    g_data->getView().setCurrentTime(0.0);
-    g_data->setActiveChannel(&(l_new_sound_file->getChannel(0)));
+    GData::getUniqueInstance().addFileToList(l_new_sound_file);
+    GData::getUniqueInstance().getView().setCurrentTime(0.0);
+    GData::getUniqueInstance().setActiveChannel(&(l_new_sound_file->getChannel(0)));
 
-    int l_file_generating_number = g_data->getSettingsValue("General/fileGeneratingNumber", 1);
-    g_data->setSettingsValue("General/fileGeneratingNumber", l_file_generating_number + 1);
+    int l_file_generating_number = GData::getUniqueInstance().getSettingsValue("General/fileGeneratingNumber", 1);
+    GData::getUniqueInstance().setSettingsValue("General/fileGeneratingNumber", l_file_generating_number + 1);
 }
 
 //------------------------------------------------------------------------------
@@ -907,7 +907,7 @@ void MainWindow::menuPreferences()
 QWidget * MainWindow::openView(int p_view_id)
 {
     QWidget * l_widget = nullptr;
-    int l_use_top_level_widgets = g_data->getSettingsValue("Display/useTopLevelWidgets", false);
+    int l_use_top_level_widgets = GData::getUniqueInstance().getSettingsValue("Display/useTopLevelWidgets", false);
     QWidget * l_parent = (l_use_top_level_widgets) ? nullptr : m_the_workspace;
 
     switch(p_view_id)
@@ -1057,7 +1057,7 @@ void MainWindow::setTimeLabel(double p_t)
 void MainWindow::setChunkLabel()
 {
     char l_temp[128];
-    Channel *l_active_channel = g_data->getActiveChannel();
+    Channel *l_active_channel = GData::getUniqueInstance().getActiveChannel();
     if(l_active_channel)
     {
         sprintf(l_temp, "Chunk: %d", l_active_channel->currentChunk());
@@ -1073,7 +1073,7 @@ void MainWindow::setChunkLabel()
 void MainWindow::setNoteLabel()
 {
     char l_temp[128];
-    Channel *l_active_channel = g_data->getActiveChannel();
+    Channel *l_active_channel = GData::getUniqueInstance().getActiveChannel();
     if(l_active_channel)
     {
         l_active_channel->lock();
@@ -1120,9 +1120,9 @@ void MainWindow::setTimeRange( double p_min
 //------------------------------------------------------------------------------
 void MainWindow::rewindPressed()
 {
-    g_data->rewind();
+    GData::getUniqueInstance().rewind();
     //every 0.2 seconds
-    m_rewind_timer->start(g_data->fastUpdateSpeed());
+    m_rewind_timer->start(GData::getUniqueInstance().fastUpdateSpeed());
 }
 
 //------------------------------------------------------------------------------
@@ -1135,22 +1135,22 @@ void MainWindow::rewindReleased()
 //------------------------------------------------------------------------------
 void MainWindow::playStopClicked()
 {
-    if(g_data->getRunning() != GData::RunningMode::STREAM_STOP)
+    if(GData::getUniqueInstance().getRunning() != GData::RunningMode::STREAM_STOP)
     {
-        g_data->stop();
+        GData::getUniqueInstance().stop();
     }
     else
     {
-        g_data->play();
+        GData::getUniqueInstance().play();
     }  
 }
 
 //------------------------------------------------------------------------------
 void MainWindow::fastforwardPressed()
 {
-    g_data->fastforward();
+    GData::getUniqueInstance().fastforward();
     //every 0.2 seconds
-    m_fast_forward_timer->start(g_data->fastUpdateSpeed());
+    m_fast_forward_timer->start(GData::getUniqueInstance().fastUpdateSpeed());
 }
 
 //------------------------------------------------------------------------------
@@ -1223,7 +1223,7 @@ void MainWindow::printPitch()
     QPrintDialog l_print_dialog(&l_printer, this);
     if(l_print_dialog.exec() == QDialog::Accepted)
     {
-        View & l_view = g_data->getView();
+        View & l_view = GData::getUniqueInstance().getView();
         QPainter l_painter;
         l_painter.begin(&l_printer);
         int l_width = l_printer.width();
@@ -1241,15 +1241,15 @@ void MainWindow::printPitch()
         //1mm thick line
         DrawWidget::setLineWidth(toInt(std::min(l_dots_per_MM * 1.0, l_dots_per_line_step_Y * 0.2)));
         //draw all the visible channels
-        for (unsigned int l_i = 0; l_i < g_data->getChannelsSize(); l_i++)
+        for (unsigned int l_i = 0; l_i < GData::getUniqueInstance().getChannelsSize(); l_i++)
         {
-            Channel *l_channel = g_data->getChannelAt(l_i);
+            Channel *l_channel = GData::getUniqueInstance().getChannelAt(l_i);
             if(!l_channel->isVisible())
             {
                 continue;
             }
             DrawWidget::drawChannel(l_printer, l_channel, l_painter, l_left_time, 0.0, l_zoom_X, l_view_bottom, l_zoom_Y, DRAW_VIEW_PRINT);
-            if(l_channel == g_data->getActiveChannel())
+            if(l_channel == GData::getUniqueInstance().getActiveChannel())
             {
                 l_painter.setPen(Qt::black);
                 QString l_file_name = l_channel->getUniqueFilename();
@@ -1266,7 +1266,7 @@ void MainWindow::printPitch()
 //------------------------------------------------------------------------------
 void MainWindow::exportChannel(int p_type, QString p_type_string)
 {
-    Channel *l_channel = g_data->getActiveChannel();
+    Channel *l_channel = GData::getUniqueInstance().getActiveChannel();
     if(l_channel)
     {
         l_channel->exportChannel(p_type, p_type_string);
@@ -1300,10 +1300,10 @@ bool MainWindow::loadViewGeometry()
     {
         QString l_base = QString("geometry/") + QString::fromStdString(m_view_data[l_j].get_class_name());
         QString l_key = l_base+"/visible";
-        if(g_data->settingsContains(l_key.toStdString()) && g_data->getSettingsValue(l_key.toStdString(), false) == true)
+        if(GData::getUniqueInstance().settingsContains(l_key.toStdString()) && GData::getUniqueInstance().getSettingsValue(l_key.toStdString(), false) == true)
         {
-            l_pos = g_data->getSettingsValue((l_base + "/pos").toStdString(), QPoint(0, 0));
-            l_size = g_data->getSettingsValue((l_base + "/size").toStdString(), QSize(100, 100));
+            l_pos = GData::getUniqueInstance().getSettingsValue((l_base + "/pos").toStdString(), QPoint(0, 0));
+            l_size = GData::getUniqueInstance().getSettingsValue((l_base + "/size").toStdString(), QSize(100, 100));
             QWidget * l_widget = openView(l_j);
             //get the subwindow frame
             QWidget * l_parent_widget = static_cast<QWidget*>(l_widget->parent());
@@ -1342,16 +1342,16 @@ void MainWindow::saveViewGeometry()
             const std::string l_view_class_name = m_view_data[l_j].get_class_name();
             if(l_widget_class_name == l_view_class_name)
             {
-                g_data->setSettingsValue((l_base + "/visible").toStdString(), true);
-                g_data->setSettingsValue((l_base + "/pos").toStdString(), (*l_iterator)->pos());
-                g_data->setSettingsValue((l_base + "/size").toStdString(), (*l_iterator)->size());
+                GData::getUniqueInstance().setSettingsValue((l_base + "/visible").toStdString(), true);
+                GData::getUniqueInstance().setSettingsValue((l_base + "/pos").toStdString(), (*l_iterator)->pos());
+                GData::getUniqueInstance().setSettingsValue((l_base + "/size").toStdString(), (*l_iterator)->size());
                 l_found = true;
                 break;
             }
         }
         if(!l_found)
         {
-            g_data->setSettingsValue((l_base + "/visible").toStdString(), false);
+            GData::getUniqueInstance().setSettingsValue((l_base + "/visible").toStdString(), false);
         }
     }
 }
