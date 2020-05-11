@@ -23,13 +23,13 @@
 
 //------------------------------------------------------------------------------
 LEDIndicator::LEDIndicator(QWidget *p_parent
-                          ,const char *p_name
+                          ,const std::string & p_name
                           ,const QColor & p_on
                           ,const QColor &p_off
                           )
 : QWidget(p_parent)
 {
-    setObjectName(p_name);
+    setObjectName(p_name.c_str());
     setMinimumSize(sizeHint());
     m_on = p_on;
     m_off = p_off;

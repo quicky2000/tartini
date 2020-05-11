@@ -30,7 +30,7 @@ class LEDIndicator : public QWidget
 
   public:
     LEDIndicator(QWidget * p_parent = nullptr
-                ,const char *p_name = nullptr
+                ,const std::string &p_name = ""
                 ,const QColor & p_on = Qt::red
                 ,const QColor & p_off = Qt::darkRed
                 );

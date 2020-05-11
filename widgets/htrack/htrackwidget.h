@@ -31,7 +31,7 @@ class HTrackWidget : public QGLWidget
 
   public:
     HTrackWidget( QWidget *p_parent
-                , const char *p_name = nullptr
+                , const std::string & p_name = ""
                 );
     ~HTrackWidget();
 

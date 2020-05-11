@@ -33,12 +33,12 @@
 
 //------------------------------------------------------------------------------
 PitchCompassDrawWidget::PitchCompassDrawWidget( QWidget *p_parent
-                                              , const char* p_name
+                                              , const std::string & p_name
                                               , int p_mode
                                               )
 : QWidget(p_parent)
 {
-    setObjectName(p_name);
+    setObjectName(p_name.c_str());
     setAttribute(Qt::WA_DeleteOnClose);
     this->m_mode = p_mode;
 

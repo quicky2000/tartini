@@ -34,11 +34,11 @@
 
 //------------------------------------------------------------------------------
 HTrackWidget::HTrackWidget( QWidget *p_parent
-                          , const char *p_name
+                          , const std::string & p_name
                           )
 : QGLWidget(p_parent)
 {
-  setObjectName(p_name);
+    setObjectName(p_name.c_str());
 }
 
 //------------------------------------------------------------------------------

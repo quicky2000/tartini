@@ -37,11 +37,12 @@
 #endif
 
 //------------------------------------------------------------------------------
-AmplitudeWidget::AmplitudeWidget(QWidget * /*parent*/, const char* /*name*/)
+AmplitudeWidget::AmplitudeWidget(QWidget * p_parent, const std::string & p_name)
 // Replace call to setRange(0.8); and setOffset(0.0) by final value assignations
 // to avoid issue with non initialised values. We don't care about signal emissions
 // because at construction time there are still not bound to slots
-: m_drag_mode(DragModes::DragNone)
+: QGLWidget(p_parent)
+, m_drag_mode(DragModes::DragNone)
 , m_mouse_X(0)
 , m_mouse_Y(0)
 , m_down_time(0.0)
@@ -53,6 +54,7 @@ AmplitudeWidget::AmplitudeWidget(QWidget * /*parent*/, const char* /*name*/)
 , m_line_width(0.0)
 , m_half_line_width(0.0)
 {
+    setObjectName(p_name.c_str());
     setMouseTracking(true);
     setAttribute(Qt::WA_OpaquePaintEvent);
 }
