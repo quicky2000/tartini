@@ -30,10 +30,7 @@
 
 #include "gdata.h"
 #include "channel.h"
-
-#define DRAW_VIEW_NORMAL   0
-#define DRAW_VIEW_SUMMARY  1
-#define DRAW_VIEW_PRINT    2
+#include "widget_utils.h"
 
 class FreqWidgetGL : public QGLWidget
 {
@@ -51,7 +48,7 @@ class FreqWidgetGL : public QGLWidget
                            , double p_zoom_X
                            , double p_view_bottom
                            , double p_zoom_Y
-                           , int p_view_type
+                           , widget_utils::t_draw_mode p_view_type
                            );
 
   private:
@@ -72,7 +69,7 @@ class FreqWidgetGL : public QGLWidget
                              , const double & p_zoom_X
                              , const double & p_view_bottom
                              , const double & p_zoom_Y
-                             , int p_view_type
+                             , widget_utils::t_draw_mode p_view_type
                              );
     void drawChannelGL( Channel * p_channel
                       , const double & p_left_time
@@ -80,7 +77,7 @@ class FreqWidgetGL : public QGLWidget
                       , const double & p_zoom_X
                       , double p_view_bottom
                       , const double & p_zoom_Y
-                      , int p_view_type
+                      , widget_utils::t_draw_mode p_view_type
                       );
     void drawChannelFilledGL( Channel * p_channel
                             , const double & p_left_time
@@ -88,7 +85,7 @@ class FreqWidgetGL : public QGLWidget
                             , const double & p_zoom_X
                             , double p_view_bottom
                             , const double & p_zoom_Y
-                            , int p_view_type
+                            , widget_utils::t_draw_mode p_view_type
                             );
 
     /** calculates elements in the zoom lookup table

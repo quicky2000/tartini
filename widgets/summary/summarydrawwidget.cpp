@@ -71,7 +71,7 @@ void SummaryDrawWidget::paintEvent(QPaintEvent *)
         {
             continue;
         }
-        drawChannel(*this, l_channel, get_painter(), GData::getUniqueInstance().leftTime(), l_view.currentTime(), (GData::getUniqueInstance().totalTime() / static_cast<double>(width())), 0.0f, static_cast<double>(GData::getUniqueInstance().topPitch()) / static_cast<double>(height()), DRAW_VIEW_SUMMARY);
+        drawChannel(*this, l_channel, get_painter(), GData::getUniqueInstance().leftTime(), l_view.currentTime(), (GData::getUniqueInstance().totalTime() / static_cast<double>(width())), 0.0f, static_cast<double>(GData::getUniqueInstance().topPitch()) / static_cast<double>(height()), widget_utils::t_draw_mode::DRAW_VIEW_SUMMARY);
     }
 
     //draw the view rectangle

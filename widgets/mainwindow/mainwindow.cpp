@@ -1234,7 +1234,7 @@ void MainWindow::printPitch()
         double l_view_top = l_view.viewTop();
         double l_zoom_X = (l_right_time-l_left_time) / double(l_width);
         double l_zoom_Y = (l_view_top-l_view_bottom) / double(l_height);
-        FreqWidgetGL::drawReferenceLines(l_printer, l_painter, 0.0, l_zoom_X, l_view_bottom, l_zoom_Y, DRAW_VIEW_PRINT);
+        FreqWidgetGL::drawReferenceLines(l_printer, l_painter, 0.0, l_zoom_X, l_view_bottom, l_zoom_Y, widget_utils::t_draw_mode::DRAW_VIEW_PRINT);
 
         double l_dots_per_line_step_Y = 1.0 / l_zoom_Y;
         double l_dots_per_MM = double(l_printer.height()) / double(l_printer.heightMM());
@@ -1248,7 +1248,7 @@ void MainWindow::printPitch()
             {
                 continue;
             }
-            DrawWidget::drawChannel(l_printer, l_channel, l_painter, l_left_time, 0.0, l_zoom_X, l_view_bottom, l_zoom_Y, DRAW_VIEW_PRINT);
+            DrawWidget::drawChannel(l_printer, l_channel, l_painter, l_left_time, 0.0, l_zoom_X, l_view_bottom, l_zoom_Y, widget_utils::t_draw_mode::DRAW_VIEW_PRINT);
             if(l_channel == GData::getUniqueInstance().getActiveChannel())
             {
                 l_painter.setPen(Qt::black);

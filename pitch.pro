@@ -215,6 +215,7 @@ HEADERS += \
   widgets/timeaxis.h \
   widgets/timeaxis.hpp \
   widgets/viewwidget.h \
+  widgets/widget_utils.h \
   main.h
 
 SOURCES += \

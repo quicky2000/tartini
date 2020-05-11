@@ -147,11 +147,11 @@ void DrawWidget::drawChannel( QPaintDevice & p_paint_device
                             , double p_zoom_X
                             , double p_view_bottom
                             , double p_zoom_Y
-                            , int p_view_type
+                            , widget_utils::t_draw_mode p_view_type
                             )
 {
     ZoomLookup * l_zoom_lookup;
-    if(p_view_type == DRAW_VIEW_SUMMARY)
+    if(p_view_type == widget_utils::t_draw_mode::DRAW_VIEW_SUMMARY)
     {
         l_zoom_lookup = & p_channel->get_summary_zoom_lookup();
     }
@@ -251,7 +251,7 @@ void DrawWidget::drawChannel( QPaintDevice & p_paint_device
             vol = dB2Normalised(l_data->getLogRms(), p_channel->get_rms_ceiling(), p_channel->get_rms_floor());
             if(GData::getUniqueInstance().pitchContourMode() == 0)
             {
-                if(p_view_type == DRAW_VIEW_PRINT)
+                if(p_view_type == widget_utils::t_draw_mode::DRAW_VIEW_PRINT)
                 {
                     p_painter.setPen(QPen(colorBetween(QColor(255, 255, 255), p_channel->get_color(), l_err * vol), m_line_width));
                 }
@@ -304,11 +304,11 @@ void DrawWidget::drawChannelFilled( Channel * p_channel
                                   , double p_zoom_X
                                   , double p_view_bottom
                                   , double p_zoom_Y
-                                  , int p_view_type
+                                  , widget_utils::t_draw_mode p_view_type
                                   )
 {
     ZoomLookup * l_zoom_lookup;
-    if(p_view_type == DRAW_VIEW_SUMMARY)
+    if(p_view_type == widget_utils::t_draw_mode::DRAW_VIEW_SUMMARY)
     {
         l_zoom_lookup = & p_channel->get_summary_zoom_lookup();
     }
