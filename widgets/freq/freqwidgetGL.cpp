@@ -104,7 +104,7 @@ void FreqWidgetGL::drawReferenceLines( QPaintDevice & p_paint_device
                                        , double p_zoom_X
                                        , double p_view_bottom
                                        , double p_zoom_Y
-                                       , int p_view_type
+                                       , widget_utils::t_draw_mode p_view_type
                                        )
 {
     // Draw the lines and notes
@@ -157,7 +157,7 @@ void FreqWidgetGL::drawReferenceLines( QPaintDevice & p_paint_device
             else
             {
                 //transperenct colors don't seem to work on the printer
-                if(p_view_type == DRAW_VIEW_PRINT)
+                if(p_view_type == widget_utils::t_draw_mode::DRAW_VIEW_PRINT)
                 {
                     p_painter.setPen(QPen(QColor(128, 128, 128), 1, Qt::SolidLine));
                 }
@@ -169,7 +169,7 @@ void FreqWidgetGL::drawReferenceLines( QPaintDevice & p_paint_device
         }
         else
         {
-            if(p_view_type == DRAW_VIEW_PRINT)
+            if(p_view_type == widget_utils::t_draw_mode::DRAW_VIEW_PRINT)
             {
                 p_painter.setPen(QPen(QColor(196, 196, 196), 1, Qt::SolidLine));
             }
@@ -191,7 +191,7 @@ void FreqWidgetGL::drawReferenceLinesGL( const double & /* p_left_time*/
                                        , const double & p_zoom_X
                                        , const double & p_view_bottom
                                        , const double & p_zoom_Y
-                                       , int /* p_view_type*/
+                                       , widget_utils::t_draw_mode /* p_view_type*/
                                        )
 {
     // Draw the lines and notes
@@ -358,11 +358,11 @@ void FreqWidgetGL::paintGL()
     //draw the red/blue background color shading if needed
     if(l_view.backgroundShading() && GData::getUniqueInstance().getActiveChannel())
     {
-        drawChannelFilledGL(GData::getUniqueInstance().getActiveChannel(), l_view.viewLeft(), l_view.currentTime(), l_view.zoomX(), l_view.viewBottom(), l_view.zoomY(), DRAW_VIEW_NORMAL);
+        drawChannelFilledGL(GData::getUniqueInstance().getActiveChannel(), l_view.viewLeft(), l_view.currentTime(), l_view.zoomX(), l_view.viewBottom(), l_view.zoomY(), widget_utils::t_draw_mode::DRAW_VIEW_NORMAL);
     }
 
     glLineWidth(1.0f);
-    drawReferenceLinesGL(l_view.viewLeft(), l_view.currentTime(), l_view.zoomX(), l_view.viewBottom(), l_view.zoomY(), DRAW_VIEW_NORMAL);
+    drawReferenceLinesGL(l_view.viewLeft(), l_view.currentTime(), l_view.zoomX(), l_view.viewBottom(), l_view.zoomY(), widget_utils::t_draw_mode::DRAW_VIEW_NORMAL);
 
     glEnable(GL_LINE_SMOOTH);
     //draw all the visible channels
@@ -373,7 +373,7 @@ void FreqWidgetGL::paintGL()
         {
             continue;
         }
-        drawChannelGL(l_channel, l_view.viewLeft(), l_view.currentTime(), l_view.zoomX(), l_view.viewBottom(), l_view.zoomY(), DRAW_VIEW_NORMAL);
+        drawChannelGL(l_channel, l_view.viewLeft(), l_view.currentTime(), l_view.zoomX(), l_view.viewBottom(), l_view.zoomY(), widget_utils::t_draw_mode::DRAW_VIEW_NORMAL);
     }
     glDisable(GL_LINE_SMOOTH);
 
@@ -704,14 +704,14 @@ void FreqWidgetGL::drawChannelGL( Channel *p_channel
                                 , const double & p_zoom_X
                                 , double p_view_bottom
                                 , const double & p_zoom_Y
-                                , int p_view_type
+                                , widget_utils::t_draw_mode p_view_type
                                 )
 {
     p_view_bottom += GData::getUniqueInstance().semitoneOffset();
     float l_line_width = 3.0f;
     float l_line_half_width = l_line_width / 2;
     ZoomLookup *l_zoom_lookup;
-    if(p_view_type == DRAW_VIEW_SUMMARY)
+    if(p_view_type == widget_utils::t_draw_mode::DRAW_VIEW_SUMMARY)
     {
         l_zoom_lookup = &p_channel->get_summary_zoom_lookup();
     }
@@ -811,7 +811,7 @@ void FreqWidgetGL::drawChannelGL( Channel *p_channel
             glLineWidth(l_line_width);
             if(GData::getUniqueInstance().pitchContourMode() == 0)
             {
-                if(p_view_type == DRAW_VIEW_PRINT)
+                if(p_view_type == widget_utils::t_draw_mode::DRAW_VIEW_PRINT)
                 {
                     qglColor(colorBetween(QColor(255, 255, 255), p_channel->get_color(), l_err * l_vol));
                 }
@@ -861,12 +861,12 @@ void FreqWidgetGL::drawChannelFilledGL( Channel *p_channel
                                       , const double & p_zoom_X
                                       , double p_view_bottom
                                       , const double & p_zoom_Y
-                                      , int p_view_type
+                                      , widget_utils::t_draw_mode p_view_type
                                       )
 {
     p_view_bottom += GData::getUniqueInstance().semitoneOffset();
     ZoomLookup * l_zoom_lookup;
-    if(p_view_type == DRAW_VIEW_SUMMARY)
+    if(p_view_type == widget_utils::t_draw_mode::DRAW_VIEW_SUMMARY)
     {
         l_zoom_lookup = & p_channel->get_summary_zoom_lookup();
     }

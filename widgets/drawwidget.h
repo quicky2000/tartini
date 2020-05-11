@@ -27,10 +27,7 @@
 #include <QPaintDevice>
 
 #include "useful.h"
-
-#define DRAW_VIEW_NORMAL   0
-#define DRAW_VIEW_SUMMARY  1
-#define DRAW_VIEW_PRINT    2
+#include "widget_utils.h"
 
 class Channel;
 class QPixmap;
@@ -58,7 +55,7 @@ class DrawWidget : public QWidget
                     , double p_zoom_X
                     , double p_view_bottom
                     , double p_zoom_Y
-                    , int p_view_type
+                    , widget_utils::t_draw_mode p_view_type
                     );
 
     void drawChannelFilled( Channel * p_channel
@@ -68,7 +65,7 @@ class DrawWidget : public QWidget
                           , double p_zoom_X
                           , double p_view_bottom
                           , double p_zoom_Y
-                          , int p_view_type
+                          , widget_utils::t_draw_mode p_view_type
                           )
                           ;
 
