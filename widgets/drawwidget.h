@@ -41,7 +41,7 @@ class DrawWidget : public QWidget
   Q_OBJECT
 
 public:
-  DrawWidget(QWidget * p_parent, const char * p_name);
+  DrawWidget(QWidget * p_parent, const std::string &);
   virtual ~DrawWidget();
 
 

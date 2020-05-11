@@ -52,15 +52,17 @@
 #endif
 
 //------------------------------------------------------------------------------
-FreqWidgetGL::FreqWidgetGL( QWidget * /*parent*/
-                          , const char* /*name*/
+FreqWidgetGL::FreqWidgetGL( QWidget * p_parent
+                          , const std::string & p_name
                           )
-: m_drag_mode(t_drag_modes::DragNone)
+: QGLWidget(p_parent)
+, m_drag_mode(t_drag_modes::DragNone)
 , m_mouse_X(0)
 , m_mouse_Y(0)
 , m_down_time(0.0)
 , m_down_note(0.0)
 {
+    setObjectName(p_name.c_str());
     setMouseTracking(true);
 
     QSizePolicy l_size_policy(QSizePolicy::Expanding, QSizePolicy::Expanding);

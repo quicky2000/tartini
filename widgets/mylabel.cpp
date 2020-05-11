@@ -22,7 +22,7 @@
 //------------------------------------------------------------------------------
 MyLabel::MyLabel(const std::string & p_text
                 ,QWidget * p_parent
-                ,const char * p_name
+                ,const std::string & p_name
                 )
 : DrawWidget(p_parent, p_name)
 , m_text(p_text)
@@ -30,6 +30,7 @@ MyLabel::MyLabel(const std::string & p_text
 , m_text_width(0)
 , m_size_computed(false)
 {
+   setObjectName(p_name.c_str());
    this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
    compute_text_width();
 }

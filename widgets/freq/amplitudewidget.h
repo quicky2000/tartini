@@ -42,7 +42,7 @@ class AmplitudeWidget : public QGLWidget
     } t_drag_modes;
 
     AmplitudeWidget( QWidget * p_parent
-                   , const char * p_name = nullptr
+                   , const std::string & p_name = ""
                    );
     virtual ~AmplitudeWidget();
 

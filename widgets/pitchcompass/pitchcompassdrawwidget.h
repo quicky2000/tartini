@@ -24,7 +24,7 @@ class PitchCompassDrawWidget: public QWidget
 
   public:
     PitchCompassDrawWidget( QWidget * p_parent
-                          , const char * p_name = nullptr
+                          , const std::string & p_name = ""
                           , int p_mode = 0
                           );
     virtual ~PitchCompassDrawWidget();

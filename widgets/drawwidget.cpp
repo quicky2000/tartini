@@ -35,10 +35,10 @@ int DrawWidget::m_line_top_half_width = 2;
 int DrawWidget::m_line_bottom_half_width = 1;
 
 //------------------------------------------------------------------------------
-DrawWidget::DrawWidget(QWidget * p_parent, const char * p_name):
+DrawWidget::DrawWidget(QWidget * p_parent, const std::string & p_name):
   QWidget(p_parent)
 {
-  setObjectName(p_name);
+    setObjectName(p_name.c_str());
 #ifdef SHARED_DRAWING_BUFFER
   m_buffer = gdata->drawingBuffer();
   m_buffer->resize(m_buffer->size().expandedTo(size()));
