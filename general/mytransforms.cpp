@@ -597,7 +597,7 @@ float MyTransforms::get_fine_clarity_measure(double p_period)
     float l_match_val;
     float l_match_min = 1.0;
     //create some data points at the fractional period delay into l_temp_data
-    stretch_array(m_n, m_data_time, l_temp_N, l_temp_data, p_period, l_temp_N, LINEAR);
+    stretch_array(m_n, m_data_time, l_temp_N, l_temp_data, p_period, l_temp_N, t_spline_type::LINEAR);
     //l_temp_N / 4;
     int l_dN = int(floor(p_period));
     for(int l_j = 0; l_j < l_dN; l_j++)
@@ -945,7 +945,7 @@ void MyTransforms::doHarmonicAnalysis( float * p_input
     //do left
     double l_start = l_center_X - (l_num_periods_fit / 2.0) * p_period;
     double l_length = (l_num_periods_use) * p_period;
-    stretch_array(m_n, p_input, m_n, m_data_time, l_start, l_length, LINEAR);
+    stretch_array(m_n, p_input, m_n, m_data_time, l_start, l_length, t_spline_type::LINEAR);
     applyHanningWindow(m_data_time);
     fftwf_execute(m_plan_data_time_2_FFT);
     calcHarmonicAmpPhase(m_harmonics_amp_left, m_harmonics_phase_left, l_int_num_periods_use);
@@ -960,7 +960,7 @@ void MyTransforms::doHarmonicAnalysis( float * p_input
   
     //do center
     l_start += p_period / 2.0;
-    stretch_array(m_n, p_input, m_n, m_data_time, l_start, l_length, LINEAR);
+    stretch_array(m_n, p_input, m_n, m_data_time, l_start, l_length, t_spline_type::LINEAR);
     applyHanningWindow(m_data_time);
     fftwf_execute(m_plan_data_time_2_FFT);
     calcHarmonicAmpPhase(m_harmonics_amp_center, m_harmonics_phase_center, l_int_num_periods_use);
@@ -975,7 +975,7 @@ void MyTransforms::doHarmonicAnalysis( float * p_input
   
     //do right
     l_start += p_period / 2.0;
-    stretch_array(m_n, p_input, m_n, m_data_time, l_start, l_length, LINEAR);
+    stretch_array(m_n, p_input, m_n, m_data_time, l_start, l_length, t_spline_type::LINEAR);
     applyHanningWindow(m_data_time);
     fftwf_execute(m_plan_data_time_2_FFT);
     calcHarmonicAmpPhase(m_harmonics_amp_right, m_harmonics_phase_right, l_int_num_periods_use);
