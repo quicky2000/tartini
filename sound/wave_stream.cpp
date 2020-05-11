@@ -37,7 +37,7 @@ void WaveStream::close()
 {
     if(m_file)
     {
-        if(get_mode() & F_WRITE)
+        if(is_write_mode())
         {
             write_header();
         }
@@ -54,7 +54,7 @@ int WaveStream::open_read(const std::string & p_filename)
     {
         return -1;
     }
-    set_mode(F_READ);
+    set_mode(t_open_mode::F_READ);
     setPos(0);
     return read_header();
 }
@@ -62,7 +62,7 @@ int WaveStream::open_read(const std::string & p_filename)
 //------------------------------------------------------------------------------
 int WaveStream::read_header()
 {
-    if(!m_file || !(get_mode() & F_READ))
+    if(!m_file || !is_read_mode())
     {
         return -1;
     }
@@ -182,7 +182,7 @@ long WaveStream::read_bytes( void *p_data
                            , long p_length
                            )
 {
-    if(!m_file || !(get_mode() & F_READ))
+    if(!m_file || !is_read_mode())
     {
         return 0;
     }
@@ -201,7 +201,7 @@ long WaveStream::read_frames( void *p_data
                             , long p_length
                             )
 {
-    if(!m_file || !(get_mode() & F_READ))
+    if(!m_file || !is_read_mode())
     {
         return 0;
     }
@@ -228,7 +228,7 @@ int WaveStream::open_write(const std::string & p_filename, int p_freq, int p_cha
     {
         return -1;
     }
-    set_mode(F_WRITE);
+    set_mode(t_open_mode::F_WRITE);
     write_header();
     return 0;
 }
@@ -236,7 +236,7 @@ int WaveStream::open_write(const std::string & p_filename, int p_freq, int p_cha
 //------------------------------------------------------------------------------
 void WaveStream::write_header()
 {
-    if(!m_file || !(get_mode() & F_WRITE))
+    if(!m_file || !is_write_mode())
     {
         return;
     }
@@ -266,7 +266,7 @@ long WaveStream::write_bytes( void * p_data
                             , long p_length
                             )
 {
-    if(!m_file || !(get_mode() & F_WRITE))
+    if(!m_file || !is_write_mode())
     {
         return 0;
     }
@@ -285,7 +285,7 @@ long WaveStream::write_frames( void *p_data
                              , long p_length
                              )
 {
-    if(!m_file || !(get_mode() & F_WRITE))
+    if(!m_file || !is_write_mode())
     {
         return 0;
     }

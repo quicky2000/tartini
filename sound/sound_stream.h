@@ -17,17 +17,14 @@
 #ifndef SOUND_STREAM_H
 #define SOUND_STREAM_H
 
-#define F_NONE         0
-#define F_READ         1
-#define F_WRITE        2
-#define F_RDWR         3
-
 //class FBuffer;
 class QStringList;
 
 class SoundStream
 {
   public:
+
+    typedef enum class OpenMode { F_NONE, F_READ, F_WRITE, F_RDWR} t_open_mode;
 
     inline SoundStream();
     virtual inline ~SoundStream();
@@ -77,20 +74,26 @@ class SoundStream
     inline int get_channels() const;
     inline int get_bits() const;
 
+    inline bool is_write_mode() const;
+
   protected:
+
     inline void set_frequency(int p_frequency);
     inline void set_channels(int p_channels);
     inline void set_bits(int p_bits);
-    inline void set_mode(int p_mode);
-    inline int get_mode() const;
+    inline void set_mode(t_open_mode p_mode);
+    inline t_open_mode get_mode() const;
+    inline bool is_read_mode() const;
 
   private:
+
     int m_freq;
     int m_channels;
     int m_bits;
-    int m_mode;
+    t_open_mode m_mode;
 };
 
 #include "sound_stream.hpp"
 
-#endif
+#endif // SOUND_STREAM_H
+// EOF

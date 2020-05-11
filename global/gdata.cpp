@@ -258,7 +258,7 @@ bool GData::openPlayRecord( SoundFile * p_sound_file_rec
                           , SoundFile * p_soundfile_play
                           )
 {
-    int l_open_mode;
+    SoundStream::t_open_mode l_open_mode;
 
     stop();
 
@@ -272,14 +272,14 @@ bool GData::openPlayRecord( SoundFile * p_sound_file_rec
     if(p_soundfile_play)
     {
         m_sound_mode = SoundMode::SOUND_PLAY_REC;
-        l_open_mode = F_RDWR;
+        l_open_mode = SoundStream::t_open_mode::F_RDWR;
         p_soundfile_play->jumpToChunk(0);
         g_data->m_view->setCurrentTime(0);
     }
     else
     {
         m_sound_mode = SoundMode::SOUND_REC;
-        l_open_mode = F_READ;
+        l_open_mode = SoundStream::t_open_mode::F_READ;
     }
 
     //open the audio input
@@ -293,7 +293,7 @@ bool GData::openPlayRecord( SoundFile * p_sound_file_rec
     }
     else
     {
-        if((l_open_mode & F_WRITE))
+        if(m_audio_stream->is_write_mode())
         {
             m_audio_thread.start(p_soundfile_play, p_sound_file_rec);
         }
@@ -338,7 +338,7 @@ bool GData::playSound(SoundFile * p_sound_file)
     if(!m_audio_stream)
     {
         m_audio_stream = new AudioStream;
-        if(m_audio_stream->open(F_WRITE, p_sound_file->rate(), p_sound_file->numChannels(), p_sound_file->bits(), p_sound_file->bufferSize() / 2))
+        if(m_audio_stream->open(SoundStream::t_open_mode::F_WRITE, p_sound_file->rate(), p_sound_file->numChannels(), p_sound_file->bits(), p_sound_file->bufferSize() / 2))
         {
             fprintf(stderr, "Error initialising sound\n");
             delete m_audio_stream;

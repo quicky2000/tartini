@@ -37,7 +37,7 @@ class AudioStream: public SoundStream
 
     void close();
 
-    int open( int p_mode
+    int open( t_open_mode p_mode
             , int p_freq = 44100
             , int p_channels = 2
             , int p_bits = 16
