@@ -36,10 +36,10 @@ class SoundFile
     SoundFile();
     ~SoundFile();
 
-    void setFilename(const char * p_filename);
+    void setFilename(const std::string & p_filename);
     inline int numChannels() const;
-    bool openRead(const char * p_filename);
-    bool openWrite( const char * p_filename
+    bool openRead(const std::string & p_filename);
+    bool openWrite( const std::string & p_filename
                   , int p_rate
                   , int p_channels
                   , int p_bits
@@ -123,7 +123,7 @@ class SoundFile
 
     inline bool isFirstTimeThrough() const;
     inline void setFirstTimeThrough(bool);
-    inline const char * getFileName() const;
+    inline const std::string & getFileName() const;
     inline void calculateAnalysisData( int p_chunk
                                      , Channel *p_channel
                                      );
@@ -143,7 +143,7 @@ class SoundFile
        free up all the memory of everything used
     */
     void uninit();
-    void setFilteredFilename(const char * p_filtered_filename);
+    void setFilteredFilename(const std::string & p_filtered_filename);
     QString getNextTempFilename() const;
 
     // Check if really used
@@ -237,8 +237,8 @@ class SoundFile
                         , int p_n
                         );
 
-    char * m_filename;
-    char * m_filtered_filename;
+    std::string m_filename;
+    std::string m_filtered_filename;
     SoundFileStream * m_stream; /**< Pointer to the file's SoundFileStream */
     SoundFileStream * m_filtered_stream; /**< Pointer to the file's filtered SoundFileStream */
     Array1d<Channel*> m_channels; /**< The actual sound data is stored seperately for each channel */

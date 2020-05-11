@@ -346,8 +346,8 @@ struct absoluteGreater : public std::binary_function<T, T, bool>
    If dest already exists it will be overwitten
    @return true on success, false on error
 */
-bool copyFile( const char * p_src
-             , const char * p_dest
+bool copyFile( const std::string & p_src
+             , const std::string & p_dest
              );
 
 /**
@@ -356,8 +356,8 @@ bool copyFile( const char * p_src
    Otherwise it is copied, and the original removed.
    @return true on success, false on error
 */
-bool moveFile( const char * p_src
-             , const char * p_dest
+bool moveFile( const std::string & p_src
+             , const std::string & p_dest
              );
 
 /**

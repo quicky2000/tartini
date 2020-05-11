@@ -41,7 +41,7 @@ enum AmplitudeModes
 
 class GData;
 
-extern const char * g_amp_mode_names[NUM_AMP_MODES];
+extern const std::string g_amp_mode_names[NUM_AMP_MODES];
 extern const std::string g_amp_display_string[NUM_AMP_MODES];
 extern double(* g_amp_mode_func[NUM_AMP_MODES])( const double &
                                                , const GData &

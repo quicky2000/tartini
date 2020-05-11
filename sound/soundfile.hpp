@@ -169,7 +169,7 @@ bool SoundFile::isFirstTimeThrough() const
 }
 
 //------------------------------------------------------------------------------
-const char * SoundFile::getFileName() const
+const std::string & SoundFile::getFileName() const
 {
     return m_filename;
 }
