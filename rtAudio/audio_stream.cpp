@@ -51,7 +51,7 @@ void AudioStream::close()
 }
 
 //------------------------------------------------------------------------------
-int AudioStream::open( int p_mode
+int AudioStream::open( t_open_mode p_mode
                      , int p_freq
                      , int p_channels
                      , int /*bits_*/
@@ -74,7 +74,7 @@ int AudioStream::open( int p_mode
     RtAudio::StreamParameters * l_output_param_ptr = nullptr;
     
     RtAudio::StreamParameters l_input_parameters;
-    if(get_mode() == F_READ || get_mode() == F_RDWR)
+    if(is_read_mode())
     {
         QStringList l_in_names = getInputDeviceNames();
         const std::string l_audio_input = GData::getUniqueInstance().getSettingsValue("Sound/soundInput", std::string("Default"));
@@ -88,7 +88,7 @@ int AudioStream::open( int p_mode
     }
 
     RtAudio::StreamParameters l_output_parameters;
-    if(get_mode() == F_WRITE || get_mode() == F_RDWR)
+    if(is_write_mode())
     {
         QStringList l_out_names = getOutputDeviceNames();
         const std::string l_audio_output = GData::getUniqueInstance().getSettingsValue("Sound/soundOutput", std::string("Default"));

@@ -23,7 +23,7 @@ SoundStream::SoundStream()
 : m_freq(0)
 , m_channels(0)
 , m_bits(0)
-, m_mode(F_NONE)
+, m_mode(t_open_mode::F_NONE)
 {
 }
 
@@ -100,16 +100,27 @@ SoundStream::get_bits() const
 
 //------------------------------------------------------------------------------
 void
-SoundStream::set_mode(int p_mode)
+SoundStream::set_mode(t_open_mode p_mode)
 {
     m_mode = p_mode;
 }
 
 //------------------------------------------------------------------------------
-int
+SoundStream::t_open_mode
 SoundStream::get_mode() const
 {
     return m_mode;
 }
 
+//------------------------------------------------------------------------------
+bool SoundStream::is_write_mode() const
+{
+    return t_open_mode::F_WRITE == m_mode || t_open_mode::F_RDWR == m_mode;
+}
+
+//------------------------------------------------------------------------------
+bool SoundStream::is_read_mode() const
+{
+    return t_open_mode::F_READ == m_mode || t_open_mode::F_RDWR == m_mode;
+}
 //EOF
