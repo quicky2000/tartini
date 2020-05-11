@@ -23,14 +23,12 @@ int str_case_cmp( const std::string & p_s1
                 );
 
 /**
-   @return a pointer to the file extention part or NULL
-   if no file extention found
+   @return file extension part or empty string if no file extension is found
 */
 std::string getFileExtension(const std::string & p_filename);
 
 /**
-   @return a pointer to the filename part of a full path name
-   or NULL if no filename is found
+   @return the filename part of a full path name or empty string if no filename is found
 */
 std::string getFilenamePart(const std::string & p_filename);
 

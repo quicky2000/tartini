@@ -13,15 +13,7 @@
    Please read LICENSE.txt for details.
  ***************************************************************************/
 #include "mystring.h"
-#include <string.h>
-#include <stdlib.h>
-#include <ctype.h>
-#ifdef WINDOWS
-#include <string.h>
-#else
-#include <strings.h>
-#endif
-#include <new>
+#include <string>
 
 //------------------------------------------------------------------------------
 int str_case_cmp( const std::string & p_s1
@@ -35,35 +27,29 @@ int str_case_cmp( const std::string & p_s1
 #endif // WINDOWS
 }
 
-// returns a pointer to the file extention part or NULL
-// if no file extention found
 //------------------------------------------------------------------------------
 std::string getFileExtension(const std::string & p_filename)
 {
-    const char * l_ext;
-    if((l_ext = strrchr(p_filename.c_str(), '.')) != nullptr)
+    size_t l_pos = p_filename.rfind('.');
+    if(std::string::npos != l_pos && l_pos < p_filename.size() - 1)
     {
-        return l_ext + 1;
+        return p_filename.substr(l_pos + 1);
     }
-    else
-    {
-        return "";
-    }
+    return "";
 }
 
-//returns a pointer to the filename part of a full path name
-//or NULL if no filename is found
 //------------------------------------------------------------------------------
 std::string getFilenamePart(const std::string & p_filename)
 {
-    const char *l_ext;
-    if((l_ext = strrchr(p_filename.c_str(), '/')) != nullptr)
+    size_t l_pos = p_filename.rfind('/');
+    if(std::string::npos != l_pos && l_pos < p_filename.size() - 1)
     {
-        return l_ext + 1;
+        return p_filename.substr(l_pos + 1);
     }
-    if((l_ext = strrchr(p_filename.c_str(), '\\')) != nullptr)
+    l_pos = p_filename.rfind('\\');
+    if(std::string::npos != l_pos && l_pos < p_filename.size() - 1)
     {
-        return l_ext + 1;
+        return p_filename.substr(l_pos + 1);
     }
     return p_filename;
 }
