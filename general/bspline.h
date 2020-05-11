@@ -19,9 +19,7 @@
 #ifndef BSPLINE_H
 #define BSPLINE_H
 
-#define LINEAR           0
-#define BSPLINE          1
-#define HERMITE_CUBIC    2
+typedef enum class SplineType { LINEAR, BSPLINE, HERMITE_CUBIC } t_spline_type;
 
 /**
    a linear interpolation
@@ -66,7 +64,7 @@ void stretch_array( int p_in_len
                   , float * p_out
                   , float p_start
                   , float p_len
-                  , int p_type
+                  , t_spline_type p_type
                   );
 
 #endif // BSPLINE_H

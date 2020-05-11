@@ -982,7 +982,7 @@ void Channel::addToNSDFAggregate( const float p_scaler
     Array1d<float> l_stretch_data(l_len);
 
     //the scaled version
-    stretch_array(l_len, m_nsdf_data.begin(), l_len, l_stretch_data.begin(), 0.0f, l_stretch_len, LINEAR);
+    stretch_array(l_len, m_nsdf_data.begin(), l_len, l_stretch_data.begin(), 0.0f, l_stretch_len, t_spline_type::LINEAR);
     addElements(m_nsdf_aggregate_data_scaled.begin(), m_nsdf_aggregate_data_scaled.end(), l_stretch_data.begin(), p_scaler);
     copyElementsDivide(m_nsdf_aggregate_data_scaled.begin(), m_nsdf_aggregate_data_scaled.end(), l_current_note->get_nsdf_aggregate_data_scaled().begin(), l_current_note->get_nsdf_aggregate_roof());
 

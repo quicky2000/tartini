@@ -20,6 +20,7 @@
 #include "bspline.h"
 #include <math.h>
 #include "useful.h"
+#include "myassert.h"
 
 //------------------------------------------------------------------------------
 inline float interpolate_linear( int p_len
@@ -154,13 +155,13 @@ void stretch_array( int p_in_len
                   , float * p_out
                   , float p_start
                   , float p_len
-                  , int p_type
+                  , t_spline_type p_type
                   )
 {
     float l_x = p_start;
     float l_step = p_len / float(p_out_len);
   
-    if(p_type == LINEAR)
+    if(p_type == t_spline_type::LINEAR)
     {
         for(int l_j = 0; l_j < p_out_len; l_j++)
         {
@@ -168,7 +169,7 @@ void stretch_array( int p_in_len
             l_x += l_step;
         }
     }
-    else if(p_type == BSPLINE)
+    else if(p_type == t_spline_type::BSPLINE)
     {
         for(int l_j = 0; l_j < p_out_len; l_j++)
         {
@@ -176,13 +177,17 @@ void stretch_array( int p_in_len
             l_x += l_step;
         }
     }
-    else
+    else if(p_type == t_spline_type::HERMITE_CUBIC)
     {
         for(int l_j = 0; l_j < p_out_len; l_j++)
         {
             p_out[l_j] = interpolate_cubic(p_in_len, p_in, l_x);
             l_x += l_step;
         }
+    }
+    else
+    {
+        myassert(false);
     }
 }
 
