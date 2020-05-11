@@ -159,7 +159,7 @@ bool SoundFile::openRead(const std::string & p_filename)
     QByteArray l_array = getNextTempFilename().toLocal8Bit();
     setFilteredFilename(l_array.data());
     fprintf(stderr, "Opening file: %s\n(FilteredFilename: %s)\n", m_filename.c_str(), m_filtered_filename.c_str());
-    if("wav" == getFileExtension(m_filename))
+    if(str_case_cmp(getFileExtension(m_filename), "wav") == 0)
     {
         m_stream = new WaveStream;
         m_filtered_stream = new WaveStream;

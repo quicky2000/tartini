@@ -16,6 +16,18 @@
 #include <string>
 
 //------------------------------------------------------------------------------
+int str_case_cmp( const std::string & p_s1
+                , const std::string & p_s2
+                )
+{
+#ifdef WINDOWS
+    return _stricmp(p_s1.c_str(), p_s2.c_str());
+#else // WINDOWS
+    return strcasecmp(p_s1.c_str(), p_s2.c_str());
+#endif // WINDOWS
+}
+
+//------------------------------------------------------------------------------
 std::string getFileExtension(const std::string & p_filename)
 {
     size_t l_pos = p_filename.rfind('.');

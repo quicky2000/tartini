@@ -16,6 +16,13 @@
 #define MYSTRING_H
 
 /**
+   works exactly like strcasecmp but also works on windows
+*/
+int str_case_cmp( const std::string & p_s1
+                , const std::string & p_s2
+                );
+
+/**
    @return file extension part or empty string if no file extension is found
 */
 std::string getFileExtension(const std::string & p_filename);
