@@ -304,12 +304,12 @@ QString Channel::getUniqueFilename() const
 
     if(getParent()->numChannels() == 1)
     {
-        return QString(getFilenamePart(getParent()->getFileName())) + l_ending_star;
+        return QString(getFilenamePart(getParent()->getFileName()).c_str()) + l_ending_star;
     }
     else
     {
         int l_index = getParent()->getChannelIndex(*this);
-        return QString(getFilenamePart(getParent()->getFileName())) + " (" + QString::number(l_index + 1) + ")" + l_ending_star;
+        return QString(getFilenamePart(getParent()->getFileName()).c_str()) + " (" + QString::number(l_index + 1) + ")" + l_ending_star;
     }
 }
 

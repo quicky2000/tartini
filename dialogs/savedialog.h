@@ -22,8 +22,6 @@
 
 class QCheckBox;
 
-extern const char *windowSizeBoxStr[];
-
 class SaveDialog : public QFileDialog
 {
   Q_OBJECT

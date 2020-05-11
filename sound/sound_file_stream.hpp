@@ -55,7 +55,7 @@ void SoundFileStream::setPos(int p_pos)
 }
 
 //------------------------------------------------------------------------------
-int SoundFileStream::open_read(const char * /*filename*/)
+int SoundFileStream::open_read(const std::string & /*filename*/)
 {
     return 0;
 };
@@ -78,7 +78,7 @@ long SoundFileStream::read_frames( void * /*data*/
 
 
 //------------------------------------------------------------------------------
-int SoundFileStream::open_write( const char * /*filename*/
+int SoundFileStream::open_write( const std::string & /*filename*/
                                , int /*freq_*/
                                , int /*channels_*/
                                , int /*bits_*/

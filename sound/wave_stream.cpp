@@ -47,9 +47,9 @@ void WaveStream::close()
 }
 
 //------------------------------------------------------------------------------
-int WaveStream::open_read(const char *p_filename)
+int WaveStream::open_read(const std::string & p_filename)
 {
-    m_file = fopen(p_filename, "rb");
+    m_file = fopen(p_filename.c_str(), "rb");
     if(!m_file)
     {
         return -1;
@@ -216,14 +216,14 @@ long WaveStream::read_frames( void *p_data
 }
 
 //------------------------------------------------------------------------------
-int WaveStream::open_write(const char *p_filename, int p_freq, int p_channels, int p_bits)
+int WaveStream::open_write(const std::string & p_filename, int p_freq, int p_channels, int p_bits)
 {
     set_frequency(p_freq);
     set_channels(p_channels);
     set_bits(p_bits);
     setPos(0);
     set_total_frames(0);
-    m_file = fopen(p_filename, "wb");
+    m_file = fopen(p_filename.c_str(), "wb");
     if(!m_file)
     {
         return -1;

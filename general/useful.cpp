@@ -336,25 +336,25 @@ int calcIndex( const double & p_frame_time
 }
 
 //------------------------------------------------------------------------------
-bool copyFile( const char * p_src
-             , const char * p_dest
+bool copyFile( const std::string & p_src
+             , const std::string & p_dest
              )
 {
     char l_buffer[4096];
     size_t l_bytes_read;
   
-    FILE * l_input_file = fopen(p_src, "rb");
+    FILE * l_input_file = fopen(p_src.c_str(), "rb");
     if(!l_input_file)
     {
-        fprintf(stderr, "copyFile: Error opening %s for reading\n", p_src);
+        fprintf(stderr, "copyFile: Error opening %s for reading\n", p_src.c_str());
         return false;
     }
   
-    FILE * l_output_file = fopen(p_dest, "wb");
+    FILE * l_output_file = fopen(p_dest.c_str(), "wb");
     if(!l_output_file)
     {
         fclose(l_input_file);
-        fprintf(stderr, "copyFile: Error opening %s for writing\n", p_dest);
+        fprintf(stderr, "copyFile: Error opening %s for writing\n", p_dest.c_str());
         return false;
     }
   
@@ -362,7 +362,7 @@ bool copyFile( const char * p_src
     {
         if(fwrite(l_buffer, 1, l_bytes_read, l_output_file) < l_bytes_read)
         {
-            fprintf(stderr, "copyFile: Error writing to %s. Possibly out of disk\n", p_dest);
+            fprintf(stderr, "copyFile: Error writing to %s. Possibly out of disk\n", p_dest.c_str());
             fclose(l_input_file);
             fclose(l_output_file);
             return false;
@@ -375,11 +375,11 @@ bool copyFile( const char * p_src
 }
 
 //------------------------------------------------------------------------------
-bool moveFile( const char * p_src
-             , const char * p_dest
+bool moveFile( const std::string & p_src
+             , const std::string & p_dest
              )
 {
-    if(rename(p_src, p_dest) == 0)
+    if(rename(p_src.c_str(), p_dest.c_str()) == 0)
     {
         return true;
     }
@@ -388,10 +388,10 @@ bool moveFile( const char * p_src
         //on different file system
         if(copyFile(p_src, p_dest))
         {
-            if(remove(p_src))
+            if(remove(p_src.c_str()))
             {
 
-                fprintf(stderr, "moveFile: Copy to %s Successful. Error removing old file %s\n", p_dest, p_src);
+                fprintf(stderr, "moveFile: Copy to %s Successful. Error removing old file %s\n", p_dest.c_str(), p_src.c_str());
                 return false;
             }
             else
@@ -402,7 +402,7 @@ bool moveFile( const char * p_src
     }
     else
     {
-        fprintf(stderr, "moveFile: Error moving '%s' to '%s'\n", p_src, p_dest);
+        fprintf(stderr, "moveFile: Error moving '%s' to '%s'\n", p_src.c_str(), p_dest.c_str());
     }
     return false;
 }

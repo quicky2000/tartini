@@ -26,7 +26,7 @@ class WaveStream : public SoundFileStream
     WaveStream();
     virtual ~WaveStream();
 
-    int open_read(const char * p_filename);
+    int open_read(const std::string & p_filename);
     int read_header();
     long read_bytes( void * p_data
                    , long p_length
@@ -35,7 +35,7 @@ class WaveStream : public SoundFileStream
                     , long p_length
                     );
 
-    int open_write( const char * p_filename
+    int open_write( const std::string & p_filename
                   , int p_freq = 44100
                   , int p_channels = 2
                   , int p_bits = 16

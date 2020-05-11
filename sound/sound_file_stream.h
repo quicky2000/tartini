@@ -31,7 +31,7 @@ class SoundFileStream : public SoundStream
     inline int totalFrames() const;
     inline int pos() const;
   
-    virtual inline int open_read(const char * /*filename*/);
+    virtual inline int open_read(const std::string & /*filename*/);
     virtual inline long read_bytes( void * /*data*/
                                   , long /*length*/
                                   );
@@ -39,7 +39,7 @@ class SoundFileStream : public SoundStream
                                    , long /*length*/
                                    );
 
-    virtual inline int open_write( const char * /*filename*/
+    virtual inline int open_write( const std::string & /*filename*/
                                  , int /*freq_*/ = 44100
                                  , int /*channels_*/ = 2
                                  , int /*bits_*/ = 16

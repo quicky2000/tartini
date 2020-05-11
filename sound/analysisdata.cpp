@@ -18,7 +18,7 @@
 #include "analysisdata.h"
 #include "gdata.h"
 
-const char *g_amp_mode_names[NUM_AMP_MODES] =
+const std::string g_amp_mode_names[NUM_AMP_MODES] =
   { "RMS Amplitude (dB)"
   , "Max Amplitude (dB)"
   , "Amplitude Correlation"
