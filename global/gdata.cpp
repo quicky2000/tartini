@@ -197,6 +197,8 @@ GData::GData()
 //------------------------------------------------------------------------------
 GData::~GData()
 {
+    delete m_view;
+    m_view = nullptr;
     m_audio_thread.stopAndWait();
 
     m_settings->sync();

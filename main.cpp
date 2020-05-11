@@ -94,7 +94,6 @@ int main( int p_argc
   
     int l_ret_value = l_app.exec();
 
-    delete & (GData::getUniqueInstance().getView());
     GData::deleteUniqueInstance();
   
     return l_ret_value;

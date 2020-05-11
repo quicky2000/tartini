@@ -172,7 +172,6 @@ class GData : public QObject
 
   inline const View & getView()const;
   inline View & getView();
-  inline void setView(View & p_view);
 
   void setActiveChannel(Channel * p_to_active);
   inline Channel * getActiveChannel();
@@ -351,6 +350,9 @@ public slots:
 
     GData();
     virtual ~GData();
+
+    inline
+    void setView(View & p_view);
 
     QSettings * m_settings;
 
