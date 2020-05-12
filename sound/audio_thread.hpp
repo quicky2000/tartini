@@ -42,30 +42,30 @@ SoundFile * AudioThread::curSoundFile() const
 //------------------------------------------------------------------------------
 QEvent::Type AudioThread::get_update_fast_event_id()
 {
-    return UPDATE_FAST;
+    return m_update_fast_event_id;
 }
 
 //------------------------------------------------------------------------------
 QEvent::Type AudioThread::get_update_slow_event_id()
 {
-    return UPDATE_SLOW;
+    return m_update_slow_event_id;
 }
 
 //------------------------------------------------------------------------------
 QEvent::Type AudioThread::get_sound_started_event_id()
 {
-    return SOUND_STARTED;
+    return m_sound_started_event_id;
 }
 
 //------------------------------------------------------------------------------
 QEvent::Type AudioThread::get_sound_stopped_event_id()
 {
-    return SOUND_STOPPED;
+    return m_sound_stopped_event_id;
 }
 
 //------------------------------------------------------------------------------
 QEvent::Type AudioThread::get_settings_changed_event_id()
 {
-    return SETTINGS_CHANGED;
+    return m_settings_changed_event_id;
 }
 //EOF

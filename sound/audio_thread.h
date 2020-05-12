@@ -80,11 +80,11 @@ class AudioThread : public QThread
 
     int m_sleep_count;
 
-    static const QEvent::Type UPDATE_FAST = static_cast<QEvent::Type>(QEvent::User + 1);
-    static const QEvent::Type UPDATE_SLOW = static_cast<QEvent::Type>(QEvent::User + 2);
-    static const QEvent::Type SOUND_STARTED = static_cast<QEvent::Type>(QEvent::User + 3);
-    static const QEvent::Type SOUND_STOPPED = static_cast<QEvent::Type>(QEvent::User + 4);
-    static const QEvent::Type SETTINGS_CHANGED = static_cast<QEvent::Type>(QEvent::User + 5);
+    static const QEvent::Type m_update_fast_event_id = static_cast<QEvent::Type>(QEvent::User + 1);
+    static const QEvent::Type m_update_slow_event_id = static_cast<QEvent::Type>(QEvent::User + 2);
+    static const QEvent::Type m_sound_started_event_id = static_cast<QEvent::Type>(QEvent::User + 3);
+    static const QEvent::Type m_sound_stopped_event_id = static_cast<QEvent::Type>(QEvent::User + 4);
+    static const QEvent::Type m_settings_changed_event_id = static_cast<QEvent::Type>(QEvent::User + 5);
 
 };
 
