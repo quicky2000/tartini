@@ -18,14 +18,14 @@
 #ifndef TARTINI_MUSIC_SCALE_H
 #define TARTINI_MUSIC_SCALE_H
 
-#include "array1d.h"
+#include "music_key.h"
 #include <vector>
 
 class MusicScale
 {
   public:
 
-    enum MusicScale_t
+    enum class ScaleType
     { Chromatic
     , Major
     , NaturalMinor
@@ -33,33 +33,40 @@ class MusicScale
     , MelodicMinor
     };
 
-    inline MusicScale();
+    MusicScale( const std::string & p_name
+              , ScaleType p_scale_type
+              , const std::vector<int> & p_notes
+              , int p_semitone_offset = 0
+              );
     ~MusicScale();
 
-    void addScale( const std::string & p_name
-                 , const int * p_notes
-                 , int p_length
-                 , int p_semitone_offset
-                 );
-
+    inline ScaleType scaleType()const;
     inline int size()const;
     inline int note(int j)const;
     inline bool hasSemitone(int p_j)const;
     inline const std::string & name()const;
     inline int semitoneOffset()const;
+    inline bool isChromaticScale()const;
+    inline bool isMinorScale()const;
+    inline bool isCompatibleWithTemparament(MusicKey::TemparamentType p_temparament_type)const;
 
-  private:
+    static void init();
+    static inline const std::vector<MusicScale> & getScales();
+    static const MusicScale & getScale(ScaleType p_scale_type);
+    static bool isMajorScaleNote(int p_note);
 
-    Array1d<int> m_p_notes;
-    std::vector<bool> m_p_semitone_lookup;
+private:
+
     std::string m_name;
+    ScaleType m_scale_type;
+    std::vector<int> m_notes;
+    std::vector<bool> m_semitone_lookup;
     int m_semitone_offset;
-
+    
+    static std::vector<MusicScale> g_music_scales;
 };
 
 #include "music_scale.hpp"
-
-extern std::vector<MusicScale> g_music_scales;
 
 #endif //TARTINI_MUSIC_SCALE_H
 // EOF

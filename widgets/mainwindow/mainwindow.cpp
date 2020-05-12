@@ -460,13 +460,8 @@ MainWindow::MainWindow()
 
     m_key_type_combo_box = new QComboBox(l_key_tool_bar);
     m_key_type_combo_box->setWindowTitle(tr("Scale type"));
-    l_string_list.clear();
-    for(unsigned int l_j = 0; l_j < g_music_scales.size(); l_j++)
-    {
-        l_string_list << g_music_scales[l_j].name().c_str();
-    }
-    m_key_type_combo_box->addItems(l_string_list);
-    m_key_type_combo_box->setCurrentIndex(GData::getUniqueInstance().musicKeyType());
+    updateKeyTypes(GData::getUniqueInstance().temperedType());
+    m_key_type_combo_box->setCurrentIndex(static_cast<int>(GData::getUniqueInstance().musicKeyType()));
     l_key_tool_bar->addWidget(m_key_type_combo_box);
     connect(m_key_type_combo_box, SIGNAL(activated(int)), &GData::getUniqueInstance(), SLOT(setMusicKeyType(int)));
     connect(&GData::getUniqueInstance(), SIGNAL(musicKeyTypeChanged(int)), m_key_type_combo_box, SLOT(setCurrentIndex(int)));
@@ -483,6 +478,7 @@ MainWindow::MainWindow()
     l_tempered_combo_box->setCurrentIndex(GData::getUniqueInstance().temperedType());
     l_key_tool_bar->addWidget(l_tempered_combo_box);
     connect(l_tempered_combo_box, SIGNAL(activated(int)), &GData::getUniqueInstance(), SLOT(setTemperedType(int)));
+    connect(&GData::getUniqueInstance(), SIGNAL(temperedTypeChanged(int)), this, SLOT(updateKeyTypes(int)));
     connect(&GData::getUniqueInstance(), SIGNAL(temperedTypeChanged(int)), l_tempered_combo_box, SLOT(setCurrentIndex(int)));
     connect(&GData::getUniqueInstance(), SIGNAL(temperedTypeChanged(int)), &(GData::getUniqueInstance().getView()), SLOT(doUpdate()));
 
@@ -1392,17 +1388,22 @@ MainWindow::get_view_data(unsigned int p_index)
 
 //------------------------------------------------------------------------------
 void
-MainWindow::remove_key_type(int p_index)
+MainWindow::updateKeyTypes(int p_tempered_type)
 {
-    assert(p_index < m_key_type_combo_box->count());
-    m_key_type_combo_box->removeItem(p_index);
-}
-
-//------------------------------------------------------------------------------
-void
-MainWindow::add_key_types(const QStringList & p_list)
-{
-    m_key_type_combo_box->addItems(p_list);
+    // Update the list of key types based on the tempered type
+    QStringList l_string_list;
+    for(const MusicScale & l_music_scale : MusicScale::getScales())
+    {
+        //remove out the minors
+        if(l_music_scale.isCompatibleWithTemparament(static_cast<MusicKey::TemparamentType>(p_tempered_type)))
+        {
+            l_string_list << l_music_scale.name().c_str();
+        }
+    }
+    QString l_current_text = m_key_type_combo_box->currentText();
+    m_key_type_combo_box->clear();
+    m_key_type_combo_box->addItems(l_string_list);
+    m_key_type_combo_box->setCurrentText(l_current_text);
 }
 
 // EOF

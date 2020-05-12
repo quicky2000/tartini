@@ -60,18 +60,7 @@ void initMusicStuff()
 {
     music_notes::init_note_names();
     MusicKey::init();
-
-    int l_all_note_scale[12] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-    int l_major_scale[7]                   = {0, 2, 4, 5, 7, 9, 11 };
-    int l_natural_minor_scale[7]           = {0, 2, 3, 5, 7, 8, 10 };
-    int l_harmonic_minor_scale[7]          = {0, 2, 3, 5, 7, 8, 11 };
-    int l_ascending_melodic_minor_scale[7] = {0, 2, 3, 5, 7, 9, 11 };
-    g_music_scales.resize(5);
-    g_music_scales[MusicScale::Chromatic].addScale("All Notes", l_all_note_scale, 12, 0);
-    g_music_scales[MusicScale::Major].addScale("Major", l_major_scale, 7, 0);
-    g_music_scales[MusicScale::NaturalMinor].addScale("Minor (Natural)", l_natural_minor_scale, 7, 0);
-    g_music_scales[MusicScale::HarmonicMinor].addScale("Minor (Harmonic)", l_harmonic_minor_scale, 7, 0);
-    g_music_scales[MusicScale::MelodicMinor].addScale("Minor (Ascending Melodic)", l_ascending_melodic_minor_scale, 7, 0);
+    MusicScale::init();
 }
 
 /**
