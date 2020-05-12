@@ -1175,7 +1175,7 @@ bool FreqWidgetGL::calcZoomElement( Channel * p_channel
     {
         l_low = 0;
         l_high = 0;
-        l_note_index = NO_NOTE;
+        l_note_index = AnalysisData::get_no_note();
     }
     float l_corr = l_err->getCorrelation() * dB2Normalised(l_err->getLogRms(), p_channel->get_rms_ceiling(), p_channel->get_rms_floor());
     QColor l_the_color = (GData::getUniqueInstance().pitchContourMode() == 0) ? colorBetween(GData::getUniqueInstance().backgroundColor(), p_channel->get_color(), l_corr) : p_channel->get_color();

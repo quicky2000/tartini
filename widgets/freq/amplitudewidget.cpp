@@ -238,7 +238,7 @@ bool AmplitudeWidget::calcZoomElement(ZoomElement &p_zoom_element, Channel *p_ch
     float l_low = (*g_amp_mode_func[static_cast<int>(l_mode)])(a.first->getValue(l_mode), GData::getUniqueInstance());
     float l_high = (*g_amp_mode_func[static_cast<int>(l_mode)])(a.second->getValue(l_mode), GData::getUniqueInstance());
 
-    p_zoom_element.set(l_low, l_high, 0, p_channel->get_color(), NO_NOTE, (l_start_chunk + l_finish_chunk) / 2);
+    p_zoom_element.set(l_low, l_high, 0, p_channel->get_color(), AnalysisData::get_no_note(), (l_start_chunk + l_finish_chunk) / 2);
     return true;
 }
 

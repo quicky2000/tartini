@@ -20,6 +20,11 @@
 #include <assert.h>
 
 //------------------------------------------------------------------------------
+int AnalysisData::get_no_note()
+{
+    return NO_NOTE;
+}
+//------------------------------------------------------------------------------
 float AnalysisData::getValue(t_amplitude_modes p_index)const
 {
     assert(static_cast<int>(p_index) <= static_cast<int>(t_amplitude_modes::NOTE_CHANGE_SCORE));

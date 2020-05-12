@@ -48,8 +48,6 @@ extern double(* g_amp_mode_inv_func[static_cast<int>(t_amplitude_modes::NOTE_CHA
                                                    , const GData &
                                                    );
 
-#define NO_NOTE -1
-
 class AnalysisData
 {
   public:
@@ -176,6 +174,9 @@ class AnalysisData
 
     inline float getNoteChangeScore()const;
 
+    static inline
+    int get_no_note();
+
   private:
     float m_values[static_cast<int>(t_amplitude_modes::NOTE_CHANGE_SCORE) + 1];
     float m_period; /*< The period of the fundamental (in samples) */
@@ -213,6 +214,8 @@ class AnalysisData
     int m_note_index; //The index of the note in the m_note_data, or NO_NOTE
     bool m_note_playing;
     bool m_done;
+
+    static const int NO_NOTE = -1;
 };
 
 struct lessFundametalFreq: public std::binary_function< AnalysisData &

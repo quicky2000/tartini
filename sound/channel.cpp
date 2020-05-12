@@ -414,7 +414,7 @@ void Channel::recalcScoreThresholds()
 bool Channel::isVisibleNote(int p_note_index) const
 {
     myassert(p_note_index < static_cast<int>(m_note_data.size()));
-    if(p_note_index == NO_NOTE)
+    if(p_note_index == AnalysisData::get_no_note())
     {
         return false;
     }
@@ -476,7 +476,7 @@ void Channel::backTrackNoteChange(int p_chunk)
     //start on next note
     for(int l_cur_chunk = l_largest_diff_chunk; l_cur_chunk <= l_last; l_cur_chunk++)
     {
-        dataAtChunk(l_cur_chunk)->setNoteIndex(NO_NOTE);
+        dataAtChunk(l_cur_chunk)->setNoteIndex(AnalysisData::get_no_note());
         dataAtChunk(l_cur_chunk)->setNotePlaying(false);
         dataAtChunk(l_cur_chunk)->setShortTermMean(dataAtChunk(l_cur_chunk)->getPitch());
         dataAtChunk(l_cur_chunk)->setLongTermMean(dataAtChunk(l_cur_chunk)->getPitch());
