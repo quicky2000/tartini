@@ -52,13 +52,19 @@ Piano3d::~Piano3d()
 //------------------------------------------------------------------------------
 double Piano3d::pianoWidth()
 {
-    return (isBlackNote(m_num_keys - 1) + m_first_key) ? m_key_offsets[m_num_keys - 1] + BLACK_KEY_WIDTH : m_key_offsets[m_num_keys - 1] + WHITE_KEY_WIDTH;
+    return (isBlackNote(m_num_keys - 1) + m_first_key) ? m_key_offsets[m_num_keys - 1] + m_black_key_width : m_key_offsets[m_num_keys - 1] + m_white_key_width;
 }
 
 //------------------------------------------------------------------------------
 double Piano3d::offsetAtKey(int p_key_num)
 {
-    return (noteOctave(p_key_num) + 1) * OCTAVE_WIDTH + g_keyOffsetTable[cycle(p_key_num, 12)] - m_first_key_offset;
+    return (noteOctave(p_key_num) + 1) * m_octave_width + g_keyOffsetTable[cycle(p_key_num, 12)] - m_first_key_offset;
+}
+
+//------------------------------------------------------------------------------
+float Piano3d::octaveWidth()
+{
+    return m_octave_width;
 }
 
 //------------------------------------------------------------------------------
@@ -70,7 +76,7 @@ void Piano3d::init( int p_num_keys
     m_first_key = p_first_key;
     m_key_states.resize(m_num_keys, false);
     m_key_offsets.resize(m_num_keys);
-    m_first_key_offset = (noteOctave(m_first_key) + 1) * OCTAVE_WIDTH + g_keyOffsetTable[cycle(m_first_key, 12)];
+    m_first_key_offset = (noteOctave(m_first_key) + 1) * m_octave_width + g_keyOffsetTable[cycle(m_first_key, 12)];
     int l_cur_key;
     for(int l_j = 0; l_j < m_num_keys; l_j++)
     {
@@ -101,21 +107,21 @@ void Piano3d::drawWhiteKey()
     glBegin(GL_QUAD_STRIP);
     //top surface
     glNormal3f(0.0, 1.0, 0.0);
-    glVertex3f(WHITE_KEY_WIDTH, 0.0, 0.0);
+    glVertex3f(m_white_key_width, 0.0, 0.0);
     glVertex3f(0.0, 0.0, 0.0);
 
-    glVertex3f(WHITE_KEY_WIDTH, 0.0, WHITE_KEY_LENGTH);
-    glVertex3f(0.0, 0.0, WHITE_KEY_LENGTH);
+    glVertex3f(m_white_key_width, 0.0, m_white_key_length);
+    glVertex3f(0.0, 0.0, m_white_key_length);
 
     //front surface
     // todo: fix normal
     glNormal3f(0.0f, -1.0f, 0.2f);
-    glVertex3f(WHITE_KEY_WIDTH, -2.0f, WHITE_KEY_LENGTH_INSIDE);
-    glVertex3f(0.0f, -2.0f, WHITE_KEY_LENGTH_INSIDE);
+    glVertex3f(m_white_key_width, -2.0f, m_white_key_length_inside);
+    glVertex3f(0.0f, -2.0f, m_white_key_length_inside);
 
     glNormal3f(0.0f, 0.0f, 1.0f);
-    glVertex3f(WHITE_KEY_WIDTH, -WHITE_KEY_HEIGHT, WHITE_KEY_LENGTH_INSIDE);
-    glVertex3f(0.0f, -WHITE_KEY_HEIGHT, WHITE_KEY_LENGTH_INSIDE);
+    glVertex3f(m_white_key_width, -m_white_key_height, m_white_key_length_inside);
+    glVertex3f(0.0f, -m_white_key_height, m_white_key_length_inside);
     glEnd();
 }
 
@@ -125,24 +131,24 @@ void Piano3d::drawBlackKey()
     glBegin(GL_QUAD_STRIP);
     glNormal3f(-1.0, 0.0, 0.0);
     glVertex3f(0.0, 0.0, 0.0);
-    glVertex3f(0.0, 0.0, BLACK_KEY_LENGTH_BOTTOM);
-    glVertex3f(0.0, BLACK_KEY_HEIGHT, 0.0);
-    glVertex3f(0.0, BLACK_KEY_HEIGHT, BLACK_KEY_LENGTH_TOP);
+    glVertex3f(0.0, 0.0, m_black_key_length_bottom);
+    glVertex3f(0.0, m_black_key_height, 0.0);
+    glVertex3f(0.0, m_black_key_height, m_black_key_length_top);
     glNormal3f(0.0, 1.0, 0.0);
-    glVertex3f(BLACK_KEY_WIDTH, BLACK_KEY_HEIGHT, 0.0);
-    glVertex3f(BLACK_KEY_WIDTH, BLACK_KEY_HEIGHT, BLACK_KEY_LENGTH_TOP);
+    glVertex3f(m_black_key_width, m_black_key_height, 0.0);
+    glVertex3f(m_black_key_width, m_black_key_height, m_black_key_length_top);
     glNormal3f(1.0, 0.0, 0.0);
-    glVertex3f(BLACK_KEY_WIDTH, 0.0, 0.0);
-    glVertex3f(BLACK_KEY_WIDTH, 0.0, BLACK_KEY_LENGTH_BOTTOM);
+    glVertex3f(m_black_key_width, 0.0, 0.0);
+    glVertex3f(m_black_key_width, 0.0, m_black_key_length_bottom);
     glEnd();
 
     glBegin(GL_QUADS);
     //todo: fix normal
     glNormal3f(0.0, 3.0, 1.0);
-    glVertex3f(BLACK_KEY_WIDTH, 0.0, BLACK_KEY_LENGTH_BOTTOM);
-    glVertex3f(BLACK_KEY_WIDTH, BLACK_KEY_HEIGHT, BLACK_KEY_LENGTH_TOP);
-    glVertex3f(0.0, BLACK_KEY_HEIGHT, BLACK_KEY_LENGTH_TOP);
-    glVertex3f(0.0, 0.0, BLACK_KEY_LENGTH_BOTTOM);
+    glVertex3f(m_black_key_width, 0.0, m_black_key_length_bottom);
+    glVertex3f(m_black_key_width, m_black_key_height, m_black_key_length_top);
+    glVertex3f(0.0, m_black_key_height, m_black_key_length_top);
+    glVertex3f(0.0, 0.0, m_black_key_length_bottom);
     glEnd();
 }
 
@@ -193,7 +199,7 @@ void Piano3d::draw()
             {
                 glCallList(m_a_white_key);
             }
-            glTranslatef(WHITE_KEY_WIDTH, 0.0, 0.0);
+            glTranslatef(m_white_key_width, 0.0, 0.0);
         }
     }
     glPopMatrix();
@@ -244,7 +250,7 @@ void Piano3d::draw()
             {
                 glCallList(m_a_white_key);
             }
-            glTranslatef(WHITE_KEY_WIDTH, 0.0, 0.0);
+            glTranslatef(m_white_key_width, 0.0, 0.0);
         }
     }
     glPopMatrix();

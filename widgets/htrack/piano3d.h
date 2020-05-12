@@ -23,16 +23,6 @@
 #include <QGLWidget>
 #include "myassert.h"
 
-#define WHITE_KEY_WIDTH            23.5f
-#define WHITE_KEY_LENGTH           148.0f
-#define WHITE_KEY_LENGTH_INSIDE    142.0f
-#define WHITE_KEY_HEIGHT           16.0f
-#define BLACK_KEY_WIDTH            11.0f
-#define BLACK_KEY_LENGTH_TOP       94.0f
-#define BLACK_KEY_LENGTH_BOTTOM    100.0f
-#define BLACK_KEY_HEIGHT           10.0f
-#define OCTAVE_WIDTH               164.5f
-
 class Piano3d
 {
   public:
@@ -78,8 +68,19 @@ class Piano3d
     inline int numKeys();
     inline int firstKey();
     inline const double & get_first_key_offset() const;
+    float octaveWidth();
 
   private:
+    static constexpr float m_white_key_width            = 23.5f;
+    static constexpr float m_white_key_length           = 148.0f;
+    static constexpr float m_white_key_length_inside    = 142.0f;
+    static constexpr float m_white_key_height           = 16.0f;
+    static constexpr float m_black_key_width            = 11.0f;
+    static constexpr float m_black_key_length_top       = 94.0f;
+    static constexpr float m_black_key_length_bottom    = 100.0f;
+    static constexpr float m_black_key_height           = 10.0f;
+    static constexpr float m_octave_width               = 164.5f;
+
     double m_first_key_offset;
 
     std::vector<bool> m_key_states;
