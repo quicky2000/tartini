@@ -89,16 +89,16 @@ void
 music_notes::init_note_names()
 {
     m_note_names[0] = QObject::tr("C").toStdString();
-    m_note_names[1] = QObject::tr("C#").toStdString();
+    m_note_names[1] = QObject::tr("C♯").toStdString();
     m_note_names[2] = QObject::tr("D").toStdString();
-    m_note_names[3] = QObject::tr("D#").toStdString();
+    m_note_names[3] = QObject::tr("D♯").toStdString();
     m_note_names[4] = QObject::tr("E").toStdString();
     m_note_names[5] = QObject::tr("F").toStdString();
-    m_note_names[6] = QObject::tr("F#").toStdString();
+    m_note_names[6] = QObject::tr("F♯").toStdString();
     m_note_names[7] = QObject::tr("G").toStdString();
-    m_note_names[8] = QObject::tr("G#").toStdString();
+    m_note_names[8] = QObject::tr("G♯").toStdString();
     m_note_names[9] = QObject::tr("A").toStdString();
-    m_note_names[10] = QObject::tr("A#").toStdString();
+    m_note_names[10] = QObject::tr("A♯").toStdString();
     m_note_names[11] = QObject::tr("B").toStdString();
 }
 
