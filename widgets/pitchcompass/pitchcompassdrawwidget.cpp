@@ -29,8 +29,6 @@
 
 #include "assert.h"
 
-#define INTERVAL 90
-
 //------------------------------------------------------------------------------
 PitchCompassDrawWidget::PitchCompassDrawWidget( QWidget *p_parent
                                               , const std::string & p_name
@@ -142,13 +140,13 @@ void PitchCompassDrawWidget::updateCompass(double p_time)
     if(l_data && l_data->getCorrelation() >= 0.9)
     {
         double l_pitch = l_data->getPitch();
+        unsigned int l_interval = 90;
 
         if(m_mode == 0)
         {
             QMap< double, QString > l_notes;
             double l_zero_val = myround(l_pitch);
-
-            double l_value = (l_pitch - l_zero_val) * INTERVAL;
+            double l_value = (l_pitch - l_zero_val) * l_interval;
             m_compass->setValue(l_value);
 
 #if QWT_VERSION >= 0x060000
@@ -159,9 +157,9 @@ void PitchCompassDrawWidget::updateCompass(double p_time)
             unsigned int l_div = 1;
 #endif // QWT_VERSION >= 0x060000
 
-            l_notes[(INTERVAL * 3 ) / l_div] = QString::fromStdString(music_notes::noteName(toInt(l_zero_val)));
+            l_notes[(l_interval * 3 ) / l_div] = QString::fromStdString(music_notes::noteName(toInt(l_zero_val)));
             l_notes[0 / l_div] = QString::fromStdString(music_notes::noteName(toInt(l_zero_val += 2)));
-            l_notes[INTERVAL / l_div] = QString::fromStdString(music_notes::noteName(toInt(l_zero_val)));
+            l_notes[l_interval / l_div] = QString::fromStdString(music_notes::noteName(toInt(l_zero_val)));
 
 #if QWT_VERSION >= 0x060000
             QwtCompassScaleDraw * l_scale_draw = dynamic_cast<QwtCompassScaleDraw*>(m_compass->scaleDraw());
@@ -175,7 +173,7 @@ void PitchCompassDrawWidget::updateCompass(double p_time)
         {
             QMap< double, QString > l_notes;
             double l_close_pitch = myround(l_pitch);
-            double l_start = toInt((l_close_pitch - l_pitch) * INTERVAL);
+            double l_start = toInt((l_close_pitch - l_pitch) * l_interval);
 
             if(l_start < 0)
             {
@@ -187,8 +185,8 @@ void PitchCompassDrawWidget::updateCompass(double p_time)
             }
 
             l_notes[l_start] = QString::fromStdString(music_notes::noteName(toInt(l_close_pitch)));
-            l_notes[l_start - INTERVAL] = QString::fromStdString(music_notes::noteName(toInt(l_close_pitch - 1)));
-            l_notes[l_start + INTERVAL] = QString::fromStdString(music_notes::noteName(toInt(l_close_pitch + 1)));
+            l_notes[l_start - l_interval] = QString::fromStdString(music_notes::noteName(toInt(l_close_pitch - 1)));
+            l_notes[l_start + l_interval] = QString::fromStdString(music_notes::noteName(toInt(l_close_pitch + 1)));
 
 #if QWT_VERSION >= 0x060000
             QwtCompassScaleDraw * l_scale_draw = dynamic_cast<QwtCompassScaleDraw*>(m_compass->scaleDraw());
