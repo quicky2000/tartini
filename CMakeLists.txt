@@ -139,7 +139,7 @@ set(MY_HEADER_FILES
     general/music_key.hpp
     dialogs/tartinidialog.h
     dialogs/gpldialog.h
-    widgets/wave/widget_utils.h
+    widgets/widget_utils.h
    )
 
 set(MY_SOURCE_FILES
