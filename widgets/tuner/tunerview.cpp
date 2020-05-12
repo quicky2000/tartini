@@ -75,7 +75,7 @@ TunerView::TunerView(int p_view_iD_
     m_leds.push_back(new LEDIndicator(this, "F"));
     m_leds.push_back(new LEDIndicator(this, "G"));
 
-    m_leds.push_back(new LEDIndicator(this, "#"));
+    m_leds.push_back(new LEDIndicator(this, "♯"));
 
     // Add the leds for note names into the positions (1, 0) to (1, 6)
     for(int l_n = 0; l_n < 7; l_n++)

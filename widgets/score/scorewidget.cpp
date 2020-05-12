@@ -47,9 +47,9 @@ ScoreWidget::ScoreWidget(QWidget *p_parent)
     m_pitch_offset = 0; //-12; //display 1 octave down
     m_font = QFont(tr("AnyStyle"), m_font_height);
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
-    m_font_width = QFontMetrics(m_font).horizontalAdvance('#');
+    m_font_width = QFontMetrics(m_font).horizontalAdvance("♯");
 #else // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
-    m_font_width = QFontMetrics(m_font).width('#');
+    m_font_width = QFontMetrics(m_font).width("♯");
 #endif // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
     //half a page look ahead
     m_look_ahead = 0.5;
@@ -219,7 +219,7 @@ void ScoreWidget::drawNoteAtPitch( int p_x
         l_y_offset = toInt(m_scale_Y * static_cast<double>(l_y_Steps) * 0.5);
         if(isBlackNote(p_pitch))
         {
-            get_painter().drawText(p_x - l_accidental_offset_X - m_font_width, p_y - l_y_offset + m_font_height / 2, "b");
+            get_painter().drawText(p_x - l_accidental_offset_X - m_font_width, p_y - l_y_offset + m_font_height / 2, "♭");
         }
     }
     else
@@ -228,7 +228,7 @@ void ScoreWidget::drawNoteAtPitch( int p_x
         l_y_offset = toInt(m_scale_Y * static_cast<double>(l_y_Steps) * 0.5);
         if(isBlackNote(p_pitch))
         {
-            get_painter().drawText(p_x - l_accidental_offset_X - m_font_width, p_y - l_y_offset + m_font_height / 2, "#");
+            get_painter().drawText(p_x - l_accidental_offset_X - m_font_width, p_y - l_y_offset + m_font_height / 2, "♯");
         }
     }
 
