@@ -211,11 +211,11 @@ class AnalysisData
     std::vector<float> m_harmonic_freq;
     std::vector<float> m_harmonic_noise;
     FilterState m_filter_state; //the state of the filter at the beginning of the chunk
-    int m_note_index; //The index of the note in the m_note_data, or NO_NOTE
+    int m_note_index; //The index of the note in the m_note_data, or value of m_no_note
     bool m_note_playing;
     bool m_done;
 
-    static const int NO_NOTE = -1;
+    static const int m_no_note = -1;
 };
 
 struct lessFundametalFreq: public std::binary_function< AnalysisData &

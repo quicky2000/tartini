@@ -22,7 +22,7 @@
 //------------------------------------------------------------------------------
 int AnalysisData::get_no_note()
 {
-    return NO_NOTE;
+    return m_no_note;
 }
 //------------------------------------------------------------------------------
 float AnalysisData::getValue(t_amplitude_modes p_index)const

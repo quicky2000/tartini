@@ -84,7 +84,7 @@ AnalysisData::AnalysisData()
 , m_period_ratio(1.0f)
 , m_cepstrum_index(-1)
 , m_cepstrum_pitch(0.0f)
-, m_note_index(NO_NOTE)
+, m_note_index(m_no_note)
 , m_note_playing(false)
 , m_done(false)
 {
