@@ -39,4 +39,33 @@ SoundFile * AudioThread::curSoundFile() const
     return (m_rec_sound_file) ? m_rec_sound_file : m_play_sound_file;
 }
 
+//------------------------------------------------------------------------------
+QEvent::Type AudioThread::get_update_fast_event_id()
+{
+    return UPDATE_FAST;
+}
+
+//------------------------------------------------------------------------------
+QEvent::Type AudioThread::get_update_slow_event_id()
+{
+    return UPDATE_SLOW;
+}
+
+//------------------------------------------------------------------------------
+QEvent::Type AudioThread::get_sound_started_event_id()
+{
+    return SOUND_STARTED;
+}
+
+//------------------------------------------------------------------------------
+QEvent::Type AudioThread::get_sound_stopped_event_id()
+{
+    return SOUND_STOPPED;
+}
+
+//------------------------------------------------------------------------------
+QEvent::Type AudioThread::get_settings_changed_event_id()
+{
+    return SETTINGS_CHANGED;
+}
 //EOF

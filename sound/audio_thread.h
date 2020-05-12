@@ -25,12 +25,6 @@
 #include <windows.h>
 #endif
 
-#define UPDATE_FAST      QEvent::User + 1
-#define UPDATE_SLOW      QEvent::User + 2
-#define SOUND_STARTED    QEvent::User + 3
-#define SOUND_STOPPED    QEvent::User + 4
-#define SETTINGS_CHANGED QEvent::User + 5
-
 class GData;
 class SoundFile;
 
@@ -59,7 +53,22 @@ class AudioThread : public QThread
     inline SoundFile * playSoundFile() const;
     inline SoundFile * recSoundFile() const;
     inline SoundFile * curSoundFile() const;
-  
+
+    inline static
+    QEvent::Type get_update_fast_event_id();
+
+    inline static
+    QEvent::Type get_update_slow_event_id();
+
+    inline static
+    QEvent::Type get_sound_started_event_id();
+
+    inline static
+    QEvent::Type get_sound_stopped_event_id();
+
+    inline static
+    QEvent::Type get_settings_changed_event_id();
+
   private:
     SoundFile * m_play_sound_file;
     SoundFile * m_rec_sound_file;
@@ -70,6 +79,13 @@ class AudioThread : public QThread
     int m_frame_num;
 
     int m_sleep_count;
+
+    static const QEvent::Type UPDATE_FAST = static_cast<QEvent::Type>(QEvent::User + 1);
+    static const QEvent::Type UPDATE_SLOW = static_cast<QEvent::Type>(QEvent::User + 2);
+    static const QEvent::Type SOUND_STARTED = static_cast<QEvent::Type>(QEvent::User + 3);
+    static const QEvent::Type SOUND_STOPPED = static_cast<QEvent::Type>(QEvent::User + 4);
+    static const QEvent::Type SETTINGS_CHANGED = static_cast<QEvent::Type>(QEvent::User + 5);
+
 };
 
 #include "audio_thread.hpp"

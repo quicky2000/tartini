@@ -556,7 +556,8 @@ void MainWindow::closeEvent(QCloseEvent *p_event)
 //------------------------------------------------------------------------------
 bool MainWindow::event(QEvent * p_event)
 {
-    if(p_event->type() == UPDATE_FAST || p_event->type() == UPDATE_SLOW)
+    if(p_event->type() == AudioThread::get_update_fast_event_id() || p_event->type() ==
+                                                                             AudioThread::get_update_slow_event_id())
     {
         SoundFile * l_sound_file = GData::getUniqueInstance().getAudioThread().curSoundFile();
         if(l_sound_file)
@@ -569,7 +570,7 @@ bool MainWindow::event(QEvent * p_event)
         GData::getUniqueInstance().setNeedUpdate(false);
         return true;
     }
-    else if(p_event->type() == SOUND_STARTED)
+    else if(p_event->type() == AudioThread::get_sound_started_event_id())
     {
         m_play_stop_action->setIcon(*m_stop_icon_set);
         m_play_stop_action->setText("Stop");
@@ -578,7 +579,7 @@ bool MainWindow::event(QEvent * p_event)
         m_play_record_action->setIcon(*m_stop_icon_set);
         m_play_record_action->setText("Stop");
     }
-    else if(p_event->type() == SOUND_STOPPED)
+    else if(p_event->type() == AudioThread::get_sound_stopped_event_id())
     {
         m_play_stop_action->setIcon(*m_play_icon_set);
         m_play_stop_action->setText("Play");
@@ -587,7 +588,7 @@ bool MainWindow::event(QEvent * p_event)
         m_play_record_action->setIcon(*m_play_record_icon_set);
         m_play_record_action->setText("Play and Record");
     }
-    else if(p_event->type() == SETTINGS_CHANGED)
+    else if(p_event->type() == AudioThread::get_settings_changed_event_id())
     {
         GData::getUniqueInstance().updateQuickRefSettings();
     }
@@ -742,7 +743,7 @@ void MainWindow::openFile(const char *p_file_name)
 
     GData::getUniqueInstance().addFileToList(l_new_sound_file);
     GData::getUniqueInstance().setActiveChannel(&(l_new_sound_file->getChannel(0)));
-    QApplication::postEvent(g_main_window, new QEvent(static_cast<QEvent::Type>(UPDATE_SLOW)));
+    QApplication::postEvent(g_main_window, new QEvent(AudioThread::get_update_slow_event_id()));
     GData::getUniqueInstance().getView().doUpdate();
 }
 

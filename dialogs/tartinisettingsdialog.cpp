@@ -276,7 +276,7 @@ void TartiniSettingsDialog::saveSettings()
         }
     }
     GData::getUniqueInstance().syncSettings();
-    QApplication::postEvent(g_main_window, new QEvent(static_cast<QEvent::Type>(SETTINGS_CHANGED)));
+    QApplication::postEvent(g_main_window, new QEvent(AudioThread::get_settings_changed_event_id()));
     TartiniSettingsDialog::accept();
 }
 
