@@ -140,7 +140,7 @@ void HTrackWidget::paintGL()
 
     glTranslatef(-m_piano_3d->get_first_key_offset(), 0.0, 0.0);
     //set a scale of 1 semitime = 1 unit
-    glScaled(OCTAVE_WIDTH / 12.0, 200.0, 5.0);
+    glScaled(m_piano_3d->octaveWidth() / 12.0, 200.0, 5.0);
 
     glColor4f( 0.3f, 0.3f, 0.3f, 1.0f );
     glLineWidth(1.0);
