@@ -18,7 +18,7 @@
 #include "analysisdata.h"
 #include "gdata.h"
 
-const std::string g_amp_mode_names[NUM_AMP_MODES] =
+const std::string g_amp_mode_names[static_cast<int>(t_amplitude_modes::NOTE_CHANGE_SCORE) + 1] =
   { "RMS Amplitude (dB)"
   , "Max Amplitude (dB)"
   , "Amplitude Correlation"
@@ -28,7 +28,7 @@ const std::string g_amp_mode_names[NUM_AMP_MODES] =
   , "Note Change Score"
   };
 
-const std::string g_amp_display_string[NUM_AMP_MODES] =
+const std::string g_amp_display_string[static_cast<int>(t_amplitude_modes::NOTE_CHANGE_SCORE) + 1] =
   { "RMS Amp Threshold"
   , "Max Amp Threshold"
   , "Amp Corr Threshold"
@@ -38,7 +38,7 @@ const std::string g_amp_display_string[NUM_AMP_MODES] =
   , "Note Change Score Threshold"
   };
 
-double(*g_amp_mode_func[NUM_AMP_MODES])(const double &, const GData &) =
+double(*g_amp_mode_func[static_cast<int>(t_amplitude_modes::NOTE_CHANGE_SCORE) + 1])(const double &, const GData &) =
 { &dB2Normalised
 , &dB2Normalised
 , &same
@@ -48,7 +48,7 @@ double(*g_amp_mode_func[NUM_AMP_MODES])(const double &, const GData &) =
 , &same
 };
 
-double(*g_amp_mode_inv_func[NUM_AMP_MODES])(const double &, const GData &) =
+double(*g_amp_mode_inv_func[static_cast<int>(t_amplitude_modes::NOTE_CHANGE_SCORE) + 1])(const double &, const GData &) =
 { &normalised2dB
 , &normalised2dB
 , &same
@@ -88,14 +88,14 @@ AnalysisData::AnalysisData()
 , m_note_playing(false)
 , m_done(false)
 {
-    std::fill(m_values, m_values + NUM_AMP_MODES, 0.0f);
+    std::fill(m_values, m_values + static_cast<int>(t_amplitude_modes::NOTE_CHANGE_SCORE) + 1, 0.0f);
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::calcScores()
 {
-    double l_a[NUM_AMP_MODES - 2];
-    for(int l_j = 0; l_j < NUM_AMP_MODES - 2 ; l_j++)
+    double l_a[static_cast<int>(t_amplitude_modes::DELTA_FREQ_CENTROID) + 1];
+    for(int l_j = static_cast<int>(t_amplitude_modes::AMPLITUDE_RMS); l_j <= static_cast<int>(t_amplitude_modes::DELTA_FREQ_CENTROID); l_j++)
     {
         l_a[l_j] = bound(((*g_amp_mode_func[l_j])(m_values[l_j], GData::getUniqueInstance()) - (*g_amp_mode_func[l_j])(GData::getUniqueInstance().ampThreshold(static_cast<t_amplitude_modes>(l_j), 0), GData::getUniqueInstance())) / ((*g_amp_mode_func[l_j])(GData::getUniqueInstance().ampThreshold(static_cast<t_amplitude_modes>(l_j), 1), GData::getUniqueInstance()) - (*g_amp_mode_func[l_j])(GData::getUniqueInstance().ampThreshold(static_cast<t_amplitude_modes>(l_j), 0), GData::getUniqueInstance())), 0.0, 1.0);
     }

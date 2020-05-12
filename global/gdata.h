@@ -426,8 +426,8 @@ public slots:
   int m_pitch_contour_mode;
   t_analysis_modes m_analysis_type;
   double m_dB_floor;
-  double m_amp_thresholds[NUM_AMP_MODES][2];
-  double m_amp_weights[NUM_AMP_MODES];
+  double m_amp_thresholds[static_cast<int>(t_amplitude_modes::NOTE_CHANGE_SCORE) + 1][2];
+  double m_amp_weights[static_cast<int>(t_amplitude_modes::NOTE_CHANGE_SCORE) + 1];
 
   QPixmap * m_drawing_buffer;
   QColor m_background_color;

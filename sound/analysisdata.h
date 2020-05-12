@@ -37,16 +37,14 @@ typedef enum class AmplitudeModes
         , NOTE_CHANGE_SCORE = 6
         } t_amplitude_modes;
 
-#define NUM_AMP_MODES 7
-
 class GData;
 
-extern const std::string g_amp_mode_names[NUM_AMP_MODES];
-extern const std::string g_amp_display_string[NUM_AMP_MODES];
-extern double(* g_amp_mode_func[NUM_AMP_MODES])( const double &
+extern const std::string g_amp_mode_names[static_cast<int>(t_amplitude_modes::NOTE_CHANGE_SCORE) + 1];
+extern const std::string g_amp_display_string[static_cast<int>(t_amplitude_modes::NOTE_CHANGE_SCORE) + 1];
+extern double(* g_amp_mode_func[static_cast<int>(t_amplitude_modes::NOTE_CHANGE_SCORE) + 1])( const double &
                                                , const GData &
                                                );
-extern double(* g_amp_mode_inv_func[NUM_AMP_MODES])( const double &
+extern double(* g_amp_mode_inv_func[static_cast<int>(t_amplitude_modes::NOTE_CHANGE_SCORE) + 1])( const double &
                                                    , const GData &
                                                    );
 
@@ -179,7 +177,7 @@ class AnalysisData
     inline float getNoteChangeScore()const;
 
   private:
-    float m_values[NUM_AMP_MODES];
+    float m_values[static_cast<int>(t_amplitude_modes::NOTE_CHANGE_SCORE) + 1];
     float m_period; /*< The period of the fundamental (in samples) */
     float m_fundamental_freq; /*< The fundamental frequency in hertz */
     float m_pitch; /*< The pitch in semi-tones */

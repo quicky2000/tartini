@@ -151,7 +151,7 @@ FreqView::FreqView( int p_view_id
     l_amplitude_mode_combo_box->setWhatsThis("Select different algorithm parameters to view in the bottom pannel");
     int l_j;
     QStringList l_string_list;
-    for(l_j = 0; l_j < NUM_AMP_MODES; l_j++)
+    for(l_j = static_cast<int>(t_amplitude_modes::AMPLITUDE_RMS); l_j <= static_cast<int>(t_amplitude_modes::NOTE_CHANGE_SCORE); l_j++)
     {
         l_string_list << g_amp_mode_names[l_j].c_str();
     }
