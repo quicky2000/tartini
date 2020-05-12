@@ -25,12 +25,9 @@
 #include "array1d.h"
 #include "piano3d.h"
 #include "musicnotes.h"
+#include "widget_utils.h"
 #include <glu.h>
 #include <gl.h>
-
-#ifndef WHEEL_DELTA
-#define WHEEL_DELTA 120
-#endif
 
 //------------------------------------------------------------------------------
 HTrackWidget::HTrackWidget( QWidget *p_parent
@@ -407,7 +404,7 @@ void HTrackWidget::mouseReleaseEvent( QMouseEvent * )
 //------------------------------------------------------------------------------
 void HTrackWidget::wheelEvent(QWheelEvent * p_event)
 {
-    setDistanceAway(m_distance_away * pow(2.0, -(double(p_event->delta()) / double(WHEEL_DELTA)) / 20.0));
+    setDistanceAway(m_distance_away * pow(2.0, -(double(p_event->delta()) / double(widget_utils::get_wheel_delta())) / 20.0));
     update();
     p_event->accept();
 }

@@ -27,14 +27,10 @@
 #include <QPaintEvent>
 #include "analysisdata.h"
 #include "conversions.h"
-
+#include "widget_utils.h"
 #include <QPixmap>
 #include <sstream>
 #include <iomanip>
-
-#ifndef WHEEL_DELTA
-#define WHEEL_DELTA 120
-#endif
 
 //------------------------------------------------------------------------------
 AmplitudeWidget::AmplitudeWidget(QWidget * p_parent, const std::string & p_name)
@@ -610,17 +606,17 @@ void AmplitudeWidget::wheelEvent(QWheelEvent * p_mouse_event)
     {
         if(GData::getUniqueInstance().getRunning() == GData::RunningMode::STREAM_FORWARD)
         {
-            l_view.setZoomFactorX(l_view.logZoomX() + double(p_mouse_event->delta() / WHEEL_DELTA) * 0.3);
+            l_view.setZoomFactorX(l_view.logZoomX() + double(p_mouse_event->delta() / widget_utils::get_wheel_delta()) * 0.3);
         }
         else
         {
             if(p_mouse_event->delta() < 0)
             {
-                l_view.setZoomFactorX(l_view.logZoomX() + double(p_mouse_event->delta() / WHEEL_DELTA) * 0.3, width() / 2);
+                l_view.setZoomFactorX(l_view.logZoomX() + double(p_mouse_event->delta() / widget_utils::get_wheel_delta()) * 0.3, width() / 2);
             }
             else
             {
-                l_view.setZoomFactorX(l_view.logZoomX() + double(p_mouse_event->delta() / WHEEL_DELTA) * 0.3, p_mouse_event->x());
+                l_view.setZoomFactorX(l_view.logZoomX() + double(p_mouse_event->delta() / widget_utils::get_wheel_delta()) * 0.3, p_mouse_event->x());
             }
         }
         l_view.doSlowUpdate();

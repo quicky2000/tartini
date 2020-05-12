@@ -47,10 +47,6 @@
 #include <sstream>
 #include <QtGlobal>
 
-#ifndef WHEEL_DELTA
-#define WHEEL_DELTA 120
-#endif
-
 //------------------------------------------------------------------------------
 FreqWidgetGL::FreqWidgetGL( QWidget * p_parent
                           , const std::string & p_name
@@ -553,7 +549,7 @@ double FreqWidgetGL::mousePitch(int p_y)const
 void FreqWidgetGL::wheelEvent(QWheelEvent * p_wheel_event)
 {
     View & l_view = GData::getUniqueInstance().getView();
-    double l_amount = double(p_wheel_event->delta()) / WHEEL_DELTA * 0.15;
+    double l_amount = double(p_wheel_event->delta()) / widget_utils::get_wheel_delta() * 0.15;
     bool l_is_zoom = GData::getUniqueInstance().mouseWheelZooms();
     if(p_wheel_event->QInputEvent::modifiers() & (Qt::ControlModifier | Qt::ShiftModifier))
     {

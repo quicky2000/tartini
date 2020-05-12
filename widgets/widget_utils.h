@@ -20,7 +20,19 @@ class widget_utils
 {
   public:
     typedef enum class draw_mode { DRAW_VIEW_NORMAL, DRAW_VIEW_SUMMARY, DRAW_VIEW_PRINT} t_draw_mode;
+
+    inline static
+    unsigned int get_wheel_delta();
+
   private:
+
+    static const unsigned int m_wheel_delta = 120;
 };
+
+//-----------------------------------------------------------------------------
+unsigned int widget_utils::get_wheel_delta()
+{
+    return m_wheel_delta;
+}
 #endif //WIDGET_UTILS_H
 // EOF
