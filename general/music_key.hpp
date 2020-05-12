@@ -19,15 +19,15 @@
 #define TARTINI_MUSIC_KEY_HPP
 
 //------------------------------------------------------------------------------
-MusicKey::MusicKey()
-: m_name()
-{
-}
-
-//------------------------------------------------------------------------------
 const std::string & MusicKey::name()const
 {
     return m_name;
+}
+
+//------------------------------------------------------------------------------
+MusicKey::TemparamentType MusicKey::temparament_type()const
+{
+    return m_temparament_type;
 }
 
 //------------------------------------------------------------------------------
@@ -54,6 +54,12 @@ int MusicKey::noteType(int p_j) const
 #else // MYDEBUG
     return m_note_types[p_j];
 #endif // MYDEBUG
+}
+
+//------------------------------------------------------------------------------
+const std::vector<MusicKey> & MusicKey::getKeys()
+{
+    return g_music_keys;
 }
 
 #endif //TARTINI_MUSIC_KEY_HPP

@@ -475,9 +475,9 @@ MainWindow::MainWindow()
     QComboBox * l_tempered_combo_box = new QComboBox(l_key_tool_bar);
     l_tempered_combo_box->setWindowTitle(tr("Tempered type"));
     l_string_list.clear();
-    for(unsigned int j = 0; j < g_music_keys.size(); j++)
+    for(const MusicKey & l_music_key : MusicKey::getKeys())
     {
-        l_string_list << g_music_keys[j].name().c_str();
+        l_string_list << l_music_key.name().c_str();
     }
     l_tempered_combo_box->addItems(l_string_list);
     l_tempered_combo_box->setCurrentIndex(GData::getUniqueInstance().temperedType());

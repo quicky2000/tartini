@@ -44,7 +44,6 @@
 #include "useful.h"
 #include "view.h"
 #include "analysisdata.h"
-extern int g_music_key;
 
 #ifndef WINDOWS
 //for multi-threaded profiling
@@ -408,6 +407,7 @@ public slots:
   bool m_show_mean_variance_bars;
   t_saving_modes m_saving_mode;
   bool m_vibrato_sine_style;
+  int m_music_key;
   int m_music_key_type;
   int m_tempered_type;
   bool m_mouse_wheel_zooms;

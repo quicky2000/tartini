@@ -17,7 +17,6 @@
 #ifndef TARTINI_MUSIC_KEY_H
 #define TARTINI_MUSIC_KEY_H
 
-#include "array1d.h"
 #include <vector>
 
 /**
@@ -26,67 +25,58 @@
 class MusicKey
 {
   public:
-    inline MusicKey();
+
+    enum class TemparamentType
+    { Even
+    , Just
+    , Pythagorean
+    , Meantone
+    };
+    
+    enum class NoteOffsetType
+    { Midi      // e.g. [0.0, 1.0, 2.0, 3.0, 4.0, ... 11.0] for equal tempered
+    , Cents     // e.g. [0, 100, 200, 300, 400, ... 1100] for equal tempered
+    , Ratio     // e.g. [1.0, 5.0/4, 4.0/3, 3.0/2]
+    };
+
+    MusicKey(const std::string & p_name
+           , TemparamentType p_temparament_type
+           , NoteOffsetType p_note_offset_type
+           , const std::vector<double> & p_note_offsets
+           , const std::vector<int> & p_note_types
+            );
     ~MusicKey();
 
-    /**
-       @param a the array of ratios
-       @param p_n the size of the array
-       e.g. [0.0, 1.0, 2.0, 3.0, 4.0, ... 11.0] for equal tempered
-    */
-    void setScaleMidi( double * p_note_offsets
-            , int * p_types
-            , int p_n
-                     );
-
-    /**
-       @param a the array of ratios
-       @param p_n the size of the array
-       e.g. [0, 100, 200, 300, 400, ... 1100] for equal tempered
-    */
-    void setScaleCents( double * p_note_offsets
-            , int * p_types
-            , int p_n
-                      );
-
-    /**
-       @param a the array of ratios
-       @param p_n the size of the array
-       e.g. [1.0, 5.0/4, 4.0/3, 3.0/2]
-    */
-    void setScaleRatios( double * p_note_offsets
-            , int * p_types
-            , int p_n
-                       );
-
-    void setName(const std::string & p_name);
     inline const std::string & name()const;
+    inline TemparamentType temparament_type()const;
     inline int size() const;
     inline double noteOffset(int p_j) const;
     inline int noteType(int p_j) const;
     int nearestNoteIndex(const double & p_x)const;
     double nearestNote(const double & p_x)const;
     double nearestNoteDistance(const double & p_x)const;
+    
+    static void init();
+    static inline const std::vector<MusicKey> & getKeys();
 
   private:
 
+    std::string m_name;
+    TemparamentType m_temparament_type;
     /**
      * ordered midi values of the notes in 1 octave
      */
-    Array1d<double> m_note_offsets;
-    Array1d<int> m_note_types;
-    std::string m_name;
+    std::vector<double> m_note_offsets;
+    std::vector<int> m_note_types;
 
+    static std::vector<MusicKey> g_music_keys;
 };
 
 #include "music_key.hpp"
 
 #define NUM_MUSIC_KEYS 12
-extern std::vector<MusicKey> g_music_keys;
-
 extern const std::string g_music_key_name[NUM_MUSIC_KEYS];
 extern int g_music_key_root[NUM_MUSIC_KEYS];
-extern int g_music_key;
 
 
 #endif //TARTINI_MUSIC_KEY_H
