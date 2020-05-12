@@ -134,6 +134,7 @@ GData::GData()
 , m_show_mean_variance_bars(false)
 , m_saving_mode(SavingModes::ALWAYS_ASK)
 , m_vibrato_sine_style(false)
+, m_music_key(3) // C
 , m_music_key_type(0) //ALL_NOTES
 , m_tempered_type(0) //EVEN_TEMPERED
 , m_mouse_wheel_zooms(false)
