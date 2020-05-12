@@ -17,7 +17,7 @@
 #include "cmath"
 #include "algorithm"
 
-#define MY_EPSILON 0.000001
+const float g_epsilon = 0.000001;
 
 //------------------------------------------------------------------------------
 void print2x2matrix(const double * p_x)
@@ -40,7 +40,7 @@ bool invert2x2matrix( const double * p_input
                     )
 {
     double l_det = determinant2x2(p_input[0], p_input[1], p_input[2], p_input[3]);
-    if(fabs(l_det) < MY_EPSILON)
+    if(fabs(l_det) < g_epsilon)
     {
         return false;
     }
@@ -57,7 +57,7 @@ bool invert3x3matrix( const double * p_x
                     )
 {
     double l_det = determinant3x3(p_x);
-    if(fabs(l_det) < MY_EPSILON)
+    if(fabs(l_det) < g_epsilon)
     {
         return false;
     }
@@ -87,7 +87,7 @@ bool pinv( const float * p_x1
         l_sum_x1_y += p_x1[l_j] * p_y[l_j];
         l_sum_x1_x1 += p_x1[l_j] * p_x1[l_j];
     }
-    if(fabs(l_sum_x1_x1) < MY_EPSILON)
+    if(fabs(l_sum_x1_x1) < g_epsilon)
     {
         return false;
     }
