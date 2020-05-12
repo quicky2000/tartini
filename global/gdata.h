@@ -233,17 +233,17 @@ class GData : public QObject
   inline bool doingDetailedPitch()const;
   inline bool doingActive()const;
   inline bool vibratoSineStyle()const;
-  inline int amplitudeMode()const;
+  inline t_amplitude_modes amplitudeMode()const;
   inline int pitchContourMode()const;
   inline int fastUpdateSpeed()const;
   inline int slowUpdateSpeed()const;
   inline bool mouseWheelZooms()const;
 
-  void setAmpThreshold( int p_mode
+  void setAmpThreshold( t_amplitude_modes p_mode
                       , int p_index
                       , double p_value
                       );
-  double ampThreshold( int p_mode
+  double ampThreshold( t_amplitude_modes p_mode
                      , int p_index
                      );
   void setAmpWeight( int p_mode
@@ -297,7 +297,14 @@ signals:
   void temperedTypeChanged(int p_type);
 
 public slots:
-  void setAmplitudeMode(int p_amplitude_mode);
+
+    /**
+     * Signal emitted by Qt combox provide int argument
+     * this slot will convert it to t_amplitude_modes
+     * @param p_amplitude_mode
+     */
+  inline
+  void setAmplitudeModeInt(int p_amplitude_mode);
   void setPitchContourMode(int p_pitch_contour_mode);
 
   inline void setMusicKey(int p_key);
@@ -346,6 +353,7 @@ public slots:
     void doFastChunkUpdate();
 
   private:
+    void setAmplitudeMode(t_amplitude_modes p_amplitude_mode);
 
     GData();
     virtual ~GData();
@@ -414,7 +422,7 @@ public slots:
   double m_freq_A;
   double m_semitone_offset;
 
-  int m_amplitude_mode;
+  t_amplitude_modes m_amplitude_mode;
   int m_pitch_contour_mode;
   t_analysis_modes m_analysis_type;
   double m_dB_floor;

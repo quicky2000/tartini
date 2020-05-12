@@ -20,10 +20,10 @@
 #include <assert.h>
 
 //------------------------------------------------------------------------------
-float AnalysisData::getValue(size_t p_index)const
+float AnalysisData::getValue(t_amplitude_modes p_index)const
 {
-    assert(p_index < NUM_AMP_MODES);
-    return m_values[p_index];
+    assert(static_cast<int>(p_index) < NUM_AMP_MODES);
+    return m_values[static_cast<int>(p_index)];
 }
 
 //------------------------------------------------------------------------------
@@ -574,67 +574,67 @@ bool AnalysisData::isDone()const
 //------------------------------------------------------------------------------
 float AnalysisData::getLogRms()const
 {
-    return m_values[AMPLITUDE_RMS];
+    return m_values[static_cast<int>(t_amplitude_modes::AMPLITUDE_RMS)];
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::setLogRms(float p_log_rms)
 {
-    m_values[AMPLITUDE_RMS] = p_log_rms;
+    m_values[static_cast<int>(t_amplitude_modes::AMPLITUDE_RMS)] = p_log_rms;
 }
 
 //------------------------------------------------------------------------------
 float AnalysisData::getMaxIntensityDB()const
 {
-    return m_values[AMPLITUDE_MAX_INTENSITY];
+    return m_values[static_cast<int>(t_amplitude_modes::AMPLITUDE_MAX_INTENSITY)];
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::setMaxIntensityDB(float p_value)
 {
-    m_values[AMPLITUDE_MAX_INTENSITY] = p_value;
+    m_values[static_cast<int>(t_amplitude_modes::AMPLITUDE_MAX_INTENSITY)] = p_value;
 }
 
 //------------------------------------------------------------------------------
 float AnalysisData::getCorrelation()const
 {
-    return m_values[AMPLITUDE_CORRELATION];
+    return m_values[static_cast<int>(t_amplitude_modes::AMPLITUDE_CORRELATION)];
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::setCorrelation(float p_value)
 {
-    m_values[AMPLITUDE_CORRELATION] = p_value;
+    m_values[static_cast<int>(t_amplitude_modes::AMPLITUDE_CORRELATION)] = p_value;
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::setChangeness(float p_value)
 {
-    m_values[FREQ_CHANGENESS] = p_value;
+    m_values[static_cast<int>(t_amplitude_modes::FREQ_CHANGENESS)] = p_value;
 }
 
 //------------------------------------------------------------------------------
 void AnalysisData::setDeltaFreqCentroid(float p_value)
 {
-    m_values[DELTA_FREQ_CENTROID] = p_value;
+    m_values[static_cast<int>(t_amplitude_modes::DELTA_FREQ_CENTROID)] = p_value;
 }
 
 //------------------------------------------------------------------------------
 float AnalysisData::getVolumeValue(const GData & p_data)const
 {
-    return (dB2Normalised(m_values[AMPLITUDE_RMS], p_data) + m_values[AMPLITUDE_CORRELATION] - 1.0f) * 0.2;
+    return (dB2Normalised(m_values[static_cast<int>(t_amplitude_modes::AMPLITUDE_RMS)], p_data) + m_values[static_cast<int>(t_amplitude_modes::AMPLITUDE_CORRELATION)] - 1.0f) * 0.2;
 }
 
 //------------------------------------------------------------------------------
 float AnalysisData::getNoteScore()const
 {
-    return m_values[NOTE_SCORE];
+    return m_values[static_cast<int>(t_amplitude_modes::NOTE_SCORE)];
 }
 
 //------------------------------------------------------------------------------
 float AnalysisData::getNoteChangeScore()const
 {
-    return m_values[NOTE_CHANGE_SCORE];
+    return m_values[static_cast<int>(t_amplitude_modes::NOTE_CHANGE_SCORE)];
 }
 
 //------------------------------------------------------------------------------
@@ -670,7 +670,7 @@ bool greaterPitch::operator()( const AnalysisData & p_x
 }
 
 //------------------------------------------------------------------------------
-lessValue::lessValue(int p_value)
+lessValue::lessValue(t_amplitude_modes p_value)
 {
     m_value = p_value;
 }
@@ -684,7 +684,7 @@ bool lessValue::operator()( const AnalysisData & p_x
 }
 
 //------------------------------------------------------------------------------
-greaterValue::greaterValue(int p_value)
+greaterValue::greaterValue(t_amplitude_modes p_value)
 {
     m_value = p_value;
 }

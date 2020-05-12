@@ -97,9 +97,9 @@ void AnalysisData::calcScores()
     double l_a[NUM_AMP_MODES - 2];
     for(int l_j = 0; l_j < NUM_AMP_MODES - 2 ; l_j++)
     {
-        l_a[l_j] = bound(((*g_amp_mode_func[l_j])(m_values[l_j], GData::getUniqueInstance()) - (*g_amp_mode_func[l_j])(GData::getUniqueInstance().ampThreshold(l_j, 0), GData::getUniqueInstance())) / ((*g_amp_mode_func[l_j])(GData::getUniqueInstance().ampThreshold(l_j, 1), GData::getUniqueInstance()) - (*g_amp_mode_func[l_j])(GData::getUniqueInstance().ampThreshold(l_j, 0), GData::getUniqueInstance())), 0.0, 1.0);
+        l_a[l_j] = bound(((*g_amp_mode_func[l_j])(m_values[l_j], GData::getUniqueInstance()) - (*g_amp_mode_func[l_j])(GData::getUniqueInstance().ampThreshold(static_cast<t_amplitude_modes>(l_j), 0), GData::getUniqueInstance())) / ((*g_amp_mode_func[l_j])(GData::getUniqueInstance().ampThreshold(static_cast<t_amplitude_modes>(l_j), 1), GData::getUniqueInstance()) - (*g_amp_mode_func[l_j])(GData::getUniqueInstance().ampThreshold(static_cast<t_amplitude_modes>(l_j), 0), GData::getUniqueInstance())), 0.0, 1.0);
     }
-    m_values[NOTE_SCORE] = l_a[AMPLITUDE_RMS] * l_a[AMPLITUDE_CORRELATION];
-    m_values[NOTE_CHANGE_SCORE] = (1.0 - l_a[FREQ_CHANGENESS]);
+    m_values[static_cast<int>(t_amplitude_modes::NOTE_SCORE)] = l_a[static_cast<int>(t_amplitude_modes::AMPLITUDE_RMS)] * l_a[static_cast<int>(t_amplitude_modes::AMPLITUDE_CORRELATION)];
+    m_values[static_cast<int>(t_amplitude_modes::NOTE_CHANGE_SCORE)] = (1.0 - l_a[static_cast<int>(t_amplitude_modes::FREQ_CHANGENESS)]);
 }
 //EOF

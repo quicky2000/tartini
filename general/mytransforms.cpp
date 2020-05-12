@@ -999,7 +999,7 @@ void MyTransforms::doHarmonicAnalysis( float * p_input
     {
         p_analysis_data.setHarmonicAmpAt(l_j, log10(m_harmonics_amp_center[l_j] / m_hanning_scalar) * 20);
         p_analysis_data.setHarmonicAmpNoCutOffAt(l_j, p_analysis_data.getHarmonicAmpAt(l_j));
-        p_analysis_data.setHarmonicAmpAt(l_j, 1.0 - (p_analysis_data.getHarmonicAmpAt(l_j) / GData::getUniqueInstance().ampThreshold(AMPLITUDE_RMS, 0)));
+        p_analysis_data.setHarmonicAmpAt(l_j, 1.0 - (p_analysis_data.getHarmonicAmpAt(l_j) / GData::getUniqueInstance().ampThreshold(t_amplitude_modes::AMPLITUDE_RMS, 0)));
         if(p_analysis_data.getHarmonicAmpAt(l_j) < 0.0)
         {
             p_analysis_data.setHarmonicAmpAt(l_j, 0.0);

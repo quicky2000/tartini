@@ -156,7 +156,7 @@ FreqView::FreqView( int p_view_id
         l_string_list << g_amp_mode_names[l_j].c_str();
     }
     l_amplitude_mode_combo_box->addItems(l_string_list);
-    connect(l_amplitude_mode_combo_box, SIGNAL(activated(int)), &GData::getUniqueInstance(), SLOT(setAmplitudeMode(int)));
+    connect(l_amplitude_mode_combo_box, SIGNAL(activated(int)), &GData::getUniqueInstance(), SLOT(setAmplitudeModeInt(int)));
     connect(l_amplitude_mode_combo_box, SIGNAL(activated(int)), m_amplitude_widget, SLOT(update()));
 
     QComboBox * l_pitch_contour_mode_combo_box = new QComboBox(l_bottom_widget);

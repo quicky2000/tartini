@@ -231,12 +231,12 @@ bool AmplitudeWidget::calcZoomElement(ZoomElement &p_zoom_element, Channel *p_ch
 
     myassert(l_start_chunk < l_finish_chunk);
 
-    int l_mode = GData::getUniqueInstance().amplitudeMode();
+    t_amplitude_modes l_mode = GData::getUniqueInstance().amplitudeMode();
     std::pair<large_vector<AnalysisData>::iterator, large_vector<AnalysisData>::iterator> a =
     minMaxElement(p_channel->dataIteratorAtChunk(l_start_chunk), p_channel->dataIteratorAtChunk(l_finish_chunk), lessValue(l_mode));
     myassert(a.second != p_channel->dataIteratorAtChunk(l_finish_chunk));
-    float l_low = (*g_amp_mode_func[l_mode])(a.first->getValue(l_mode), GData::getUniqueInstance());
-    float l_high = (*g_amp_mode_func[l_mode])(a.second->getValue(l_mode), GData::getUniqueInstance());
+    float l_low = (*g_amp_mode_func[static_cast<int>(l_mode)])(a.first->getValue(l_mode), GData::getUniqueInstance());
+    float l_high = (*g_amp_mode_func[static_cast<int>(l_mode)])(a.second->getValue(l_mode), GData::getUniqueInstance());
 
     p_zoom_element.set(l_low, l_high, 0, p_channel->get_color(), NO_NOTE, (l_start_chunk + l_finish_chunk) / 2);
     return true;
@@ -245,14 +245,14 @@ bool AmplitudeWidget::calcZoomElement(ZoomElement &p_zoom_element, Channel *p_ch
 //------------------------------------------------------------------------------
 double AmplitudeWidget::calculateElement(AnalysisData *p_data)
 {
-    double l_val = (*g_amp_mode_func[GData::getUniqueInstance().amplitudeMode()])(p_data->getValue(GData::getUniqueInstance().amplitudeMode()), GData::getUniqueInstance());
+    double l_val = (*g_amp_mode_func[static_cast<int>(GData::getUniqueInstance().amplitudeMode())])(p_data->getValue(GData::getUniqueInstance().amplitudeMode()), GData::getUniqueInstance());
     return l_val;
 }
 
 //------------------------------------------------------------------------------
 double AmplitudeWidget::getCurrentThreshold(int p_index)
 {
-    return (*g_amp_mode_func[GData::getUniqueInstance().amplitudeMode()])(GData::getUniqueInstance().ampThreshold(GData::getUniqueInstance().amplitudeMode(), p_index), GData::getUniqueInstance());
+    return (*g_amp_mode_func[static_cast<int>(GData::getUniqueInstance().amplitudeMode())])(GData::getUniqueInstance().ampThreshold(GData::getUniqueInstance().amplitudeMode(), p_index), GData::getUniqueInstance());
 }
 
 //------------------------------------------------------------------------------
@@ -268,7 +268,7 @@ void AmplitudeWidget::setCurrentThreshold(double p_new_threshold, int p_index)
         setOffset(maxOffset() - (p_new_threshold - range()));
     }
 
-    GData::getUniqueInstance().setAmpThreshold(GData::getUniqueInstance().amplitudeMode(), p_index, (*g_amp_mode_inv_func[GData::getUniqueInstance().amplitudeMode()])(p_new_threshold, GData::getUniqueInstance()));
+    GData::getUniqueInstance().setAmpThreshold(GData::getUniqueInstance().amplitudeMode(), p_index, (*g_amp_mode_inv_func[static_cast<int>(GData::getUniqueInstance().amplitudeMode())])(p_new_threshold, GData::getUniqueInstance()));
 }
 
 //------------------------------------------------------------------------------
@@ -276,7 +276,7 @@ QString AmplitudeWidget::getCurrentThresholdString()const
 {
     std::stringstream l_stream;
     l_stream << std::fixed << std::setprecision(2) << GData::getUniqueInstance().ampThreshold(GData::getUniqueInstance().amplitudeMode(), 0) << " " << GData::getUniqueInstance().ampThreshold(GData::getUniqueInstance().amplitudeMode(), 1);
-    std::string l_threshold_str = g_amp_display_string[GData::getUniqueInstance().amplitudeMode()] + " = " + l_stream.str();
+    std::string l_threshold_str = g_amp_display_string[static_cast<int>(GData::getUniqueInstance().amplitudeMode())] + " = " + l_stream.str();
     return QString::fromStdString(l_threshold_str);
 }
 

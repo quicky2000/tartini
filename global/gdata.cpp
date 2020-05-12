@@ -140,7 +140,7 @@ GData::GData()
 , m_mouse_wheel_zooms(false)
 , m_freq_A(440)
 , m_semitone_offset(0.0)
-, m_amplitude_mode(0)
+, m_amplitude_mode(t_amplitude_modes::AMPLITUDE_RMS)
 , m_pitch_contour_mode(0)
 , m_analysis_type(AnalysisModes::MPM)
 , m_dB_floor(-150.0)
@@ -152,26 +152,26 @@ GData::GData()
     setLeftTime(0.0);
     setRightTime(5.0);
 
-    m_amp_thresholds[AMPLITUDE_RMS][0]           = -85.0;
-    m_amp_thresholds[AMPLITUDE_RMS][1]           = -0.0;
+    m_amp_thresholds[static_cast<int>(t_amplitude_modes::AMPLITUDE_RMS)][0]           = -85.0;
+    m_amp_thresholds[static_cast<int>(t_amplitude_modes::AMPLITUDE_RMS)][1]           = -0.0;
 
-    m_amp_thresholds[AMPLITUDE_MAX_INTENSITY][0] = -30.0;
-    m_amp_thresholds[AMPLITUDE_MAX_INTENSITY][1] = -20.0;
+    m_amp_thresholds[static_cast<int>(t_amplitude_modes::AMPLITUDE_MAX_INTENSITY)][0] = -30.0;
+    m_amp_thresholds[static_cast<int>(t_amplitude_modes::AMPLITUDE_MAX_INTENSITY)][1] = -20.0;
 
-    m_amp_thresholds[AMPLITUDE_CORRELATION][0]   =  0.40;
-    m_amp_thresholds[AMPLITUDE_CORRELATION][1]   =  1.00;
+    m_amp_thresholds[static_cast<int>(t_amplitude_modes::AMPLITUDE_CORRELATION)][0]   =  0.40;
+    m_amp_thresholds[static_cast<int>(t_amplitude_modes::AMPLITUDE_CORRELATION)][1]   =  1.00;
 
-    m_amp_thresholds[FREQ_CHANGENESS][0]         =  0.50;
-    m_amp_thresholds[FREQ_CHANGENESS][1]         =  0.02;
+    m_amp_thresholds[static_cast<int>(t_amplitude_modes::FREQ_CHANGENESS)][0]         =  0.50;
+    m_amp_thresholds[static_cast<int>(t_amplitude_modes::FREQ_CHANGENESS)][1]         =  0.02;
 
-    m_amp_thresholds[DELTA_FREQ_CENTROID][0]     =  0.00;
-    m_amp_thresholds[DELTA_FREQ_CENTROID][1]     =  0.10;
+    m_amp_thresholds[static_cast<int>(t_amplitude_modes::DELTA_FREQ_CENTROID)][0]     =  0.00;
+    m_amp_thresholds[static_cast<int>(t_amplitude_modes::DELTA_FREQ_CENTROID)][1]     =  0.10;
 
-    m_amp_thresholds[NOTE_SCORE][0]              =  0.03;
-    m_amp_thresholds[NOTE_SCORE][1]              =  0.20;
+    m_amp_thresholds[static_cast<int>(t_amplitude_modes::NOTE_SCORE)][0]              =  0.03;
+    m_amp_thresholds[static_cast<int>(t_amplitude_modes::NOTE_SCORE)][1]              =  0.20;
 
-    m_amp_thresholds[NOTE_CHANGE_SCORE][0]       =  0.12;
-    m_amp_thresholds[NOTE_CHANGE_SCORE][1]       =  0.30;
+    m_amp_thresholds[static_cast<int>(t_amplitude_modes::NOTE_CHANGE_SCORE)][0]       =  0.12;
+    m_amp_thresholds[static_cast<int>(t_amplitude_modes::NOTE_CHANGE_SCORE)][1]       =  0.30;
 
     m_amp_weights[0] = 0.2;
     m_amp_weights[1] = 0.2;
@@ -849,7 +849,7 @@ void GData::clearFreqLookup()
 }
 
 //------------------------------------------------------------------------------
-void GData::setAmplitudeMode(int p_amplitude_mode)
+void GData::setAmplitudeMode(t_amplitude_modes p_amplitude_mode)
 {
     if(p_amplitude_mode != m_amplitude_mode)
     {
@@ -902,22 +902,22 @@ void GData::resetActiveIntThreshold(int p_threshold_percentage)
 }
 
 //------------------------------------------------------------------------------
-void GData::setAmpThreshold( int p_mode
+void GData::setAmpThreshold( t_amplitude_modes p_mode
                            , int p_index
                            , double p_value
                            )
 {
-    m_amp_thresholds[p_mode][p_index] = p_value;
+    m_amp_thresholds[static_cast<int>(p_mode)][p_index] = p_value;
     clearFreqLookup();
     recalcScoreThresholds();
 }
 
 //------------------------------------------------------------------------------
-double GData::ampThreshold( int p_mode
+double GData::ampThreshold( t_amplitude_modes p_mode
                           , int p_index
                           )
 {
-    return m_amp_thresholds[p_mode][p_index];
+    return m_amp_thresholds[static_cast<int>(p_mode)][p_index];
 }
 
 //------------------------------------------------------------------------------

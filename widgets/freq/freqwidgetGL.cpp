@@ -1156,7 +1156,7 @@ bool FreqWidgetGL::calcZoomElement( Channel * p_channel
         return false;
     }
 
-    large_vector<AnalysisData>::iterator l_err = std::max_element(p_channel->dataIteratorAtChunk(l_start_chunk), p_channel->dataIteratorAtChunk(l_finish_chunk), lessValue(0));
+    large_vector<AnalysisData>::iterator l_err = std::max_element(p_channel->dataIteratorAtChunk(l_start_chunk), p_channel->dataIteratorAtChunk(l_finish_chunk), lessValue(t_amplitude_modes::AMPLITUDE_RMS));
     if(l_err == p_channel->dataIteratorAtChunk(l_finish_chunk))
     {
         return false;

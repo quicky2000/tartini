@@ -425,7 +425,7 @@ bool Channel::isVisibleNote(int p_note_index) const
 bool Channel::isVisibleChunk(const AnalysisData * p_data) const
 {
     myassert(p_data);
-    if(p_data->getNoteScore() >= GData::getUniqueInstance().ampThreshold(NOTE_SCORE, 0))
+    if(p_data->getNoteScore() >= GData::getUniqueInstance().ampThreshold(t_amplitude_modes::NOTE_SCORE, 0))
     {
         return true;
     }
@@ -436,7 +436,7 @@ bool Channel::isVisibleChunk(const AnalysisData * p_data) const
 bool Channel::isChangingChunk(AnalysisData * p_data) const
 {
     myassert(p_data);
-    if(p_data->getNoteChangeScore() >= GData::getUniqueInstance().ampThreshold(NOTE_CHANGE_SCORE, 0))
+    if(p_data->getNoteChangeScore() >= GData::getUniqueInstance().ampThreshold(t_amplitude_modes::NOTE_CHANGE_SCORE, 0))
     {
         return true;
     }

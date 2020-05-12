@@ -402,7 +402,13 @@ bool GData::vibratoSineStyle()const
 }
 
 //------------------------------------------------------------------------------
-int GData::amplitudeMode()const
+void GData::setAmplitudeModeInt(int p_amplitude_mode)
+{
+    setAmplitudeMode(static_cast<t_amplitude_modes>(p_amplitude_mode));
+}
+
+//------------------------------------------------------------------------------
+t_amplitude_modes GData::amplitudeMode()const
 {
     return m_amplitude_mode;
 }
@@ -488,25 +494,25 @@ void GData::setDBFloor(double p_dB_floor)
 //------------------------------------------------------------------------------
 const double & GData::rmsFloor()const
 {
-    return m_amp_thresholds[AMPLITUDE_RMS][0];
+    return m_amp_thresholds[static_cast<int>(t_amplitude_modes::AMPLITUDE_RMS)][0];
 }
 
 //------------------------------------------------------------------------------
 const double & GData::rmsCeiling()const
 {
-    return m_amp_thresholds[AMPLITUDE_RMS][1];
+    return m_amp_thresholds[static_cast<int>(t_amplitude_modes::AMPLITUDE_RMS)][1];
 }
 
 //------------------------------------------------------------------------------
 void GData::set_rms_floor(const double & p_rms_floor)
 {
-    m_amp_thresholds[AMPLITUDE_RMS][0] = p_rms_floor;
+    m_amp_thresholds[static_cast<int>(t_amplitude_modes::AMPLITUDE_RMS)][0] = p_rms_floor;
 }
 
 //------------------------------------------------------------------------------
 void GData::set_rms_ceiling(const double & p_rms_ceiling)
 {
-    m_amp_thresholds[AMPLITUDE_RMS][1] = p_rms_ceiling;
+    m_amp_thresholds[static_cast<int>(t_amplitude_modes::AMPLITUDE_RMS)][1] = p_rms_ceiling;
 }
 
 //------------------------------------------------------------------------------

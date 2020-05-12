@@ -27,15 +27,15 @@
 #include "conversions.h"
 #include <string>
 
-enum AmplitudeModes
-        { AMPLITUDE_RMS
-        , AMPLITUDE_MAX_INTENSITY
-        , AMPLITUDE_CORRELATION
-        , FREQ_CHANGENESS
-        , DELTA_FREQ_CENTROID
-        , NOTE_SCORE
-        , NOTE_CHANGE_SCORE
-        };
+typedef enum class AmplitudeModes
+        { AMPLITUDE_RMS = 0
+        , AMPLITUDE_MAX_INTENSITY = 1
+        , AMPLITUDE_CORRELATION = 2
+        , FREQ_CHANGENESS = 3
+        , DELTA_FREQ_CENTROID = 4
+        , NOTE_SCORE = 5
+        , NOTE_CHANGE_SCORE = 6
+        } t_amplitude_modes;
 
 #define NUM_AMP_MODES 7
 
@@ -58,7 +58,7 @@ class AnalysisData
     AnalysisData();
     void calcScores();
 
-    inline float getValue(size_t p_index)const;
+    inline float getValue(t_amplitude_modes p_index)const;
     inline float getPeriod()const;
     inline void setPeriod(float p_period);
     inline float getFundamentalFreq()const;
@@ -264,14 +264,14 @@ class lessValue: public std::binary_function< AnalysisData &
 {
   public:
 
-    inline lessValue(int p_value);
+    inline lessValue(t_amplitude_modes p_value);
     inline bool operator()( const AnalysisData & p_x
                           , const AnalysisData & p_y
                           );
 
   private:
 
-    int m_value;
+    t_amplitude_modes m_value;
 
 };
 
@@ -282,14 +282,14 @@ class greaterValue: public std::binary_function< AnalysisData &
 {
   public:
 
-    inline greaterValue(int p_value);
+    inline greaterValue(t_amplitude_modes p_value);
     inline bool operator()( const AnalysisData & p_x
                           , const AnalysisData & p_y
                           );
 
   private:
 
-    int m_value;
+    t_amplitude_modes m_value;
 };
 
 #include "analysisdata.hpp"
