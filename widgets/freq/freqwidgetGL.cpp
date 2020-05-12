@@ -200,7 +200,7 @@ void FreqWidgetGL::drawReferenceLinesGL( const double & /* p_left_time*/
 #endif // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
 
     const MusicKey &l_music_key = MusicKey::getKeys()[GData::getUniqueInstance().temperedType()];
-    const MusicScale &l_music_scale = g_music_scales[GData::getUniqueInstance().musicKeyType()];
+    const MusicScale &l_music_scale = MusicScale::getScale(GData::getUniqueInstance().musicKeyType());
 
     int l_key_root = cycle(g_music_key_root[GData::getUniqueInstance().musicKey()] + l_music_scale.semitoneOffset(), 12);
     int l_view_bottom_note = static_cast<int>(p_view_bottom) - l_key_root;
@@ -234,7 +234,7 @@ void FreqWidgetGL::drawReferenceLinesGL( const double & /* p_left_time*/
                     glColor4ub(0, 0, 0, 128);
                     mygl_line(l_font_width, l_line_Y, width() - 1, l_line_Y);
                 }
-                else if((GData::getUniqueInstance().musicKeyType() == MusicScale::Chromatic) && !g_music_scales[MusicScale::Major].hasSemitone(l_music_key.noteType(l_j)))
+                else if(l_music_scale.isChromaticScale() && !MusicScale::isMajorScaleNote(l_music_key.noteType(l_j)))
                 {
                     glColor4ub(25, 125, 170, 128);
                     glEnable(GL_LINE_STIPPLE);

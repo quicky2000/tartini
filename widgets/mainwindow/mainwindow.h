@@ -72,8 +72,6 @@ class MainWindow : public QMainWindow
 
     void keyPressEvent(QKeyEvent * p_event);
     void message(QString p_string, int p_msec);
-    void remove_key_type(int p_index);
-    void add_key_types(const QStringList & p_list);
 
   protected:
     bool event(QEvent * p_event);
@@ -97,6 +95,8 @@ class MainWindow : public QMainWindow
     void windowMenuAboutToShow();
     void windowMenuActivated();
     void newViewAboutToShow();
+
+    void updateKeyTypes(int p_tempered_type);
 
     /**
      * Opens a view based on a viewId (which should be #defined).

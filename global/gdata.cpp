@@ -135,7 +135,7 @@ GData::GData()
 , m_saving_mode(SavingModes::ALWAYS_ASK)
 , m_vibrato_sine_style(false)
 , m_music_key(3) // C
-, m_music_key_type(0) //ALL_NOTES
+, m_music_key_type(MusicScale::ScaleType::Chromatic) //ALL_NOTES
 , m_tempered_type(0) //EVEN_TEMPERED
 , m_mouse_wheel_zooms(false)
 , m_freq_A(440)
@@ -968,26 +968,10 @@ void GData::setTemperedType(int p_type)
 {
     if(m_tempered_type != p_type)
     {
-        if(m_tempered_type == 0 && p_type > 0)
+        // If the current key type is not compatible with the new tempered type, then set the key type to Chromatic.
+        if(!MusicScale::getScale(m_music_key_type).isCompatibleWithTemparament(static_cast<MusicKey::TemparamentType>(p_type)))
         {
-            //remove out the minors
-            if(m_music_key_type >= 2)
-            {
-                setMusicKeyType(0);
-            }
-            for(int l_j = g_music_scales.size() - 1; l_j >= 2; l_j--)
-            {
-                g_main_window->remove_key_type(l_j);
-            }
-        }
-        else if(m_tempered_type > 0 && p_type == 0)
-        {
-            QStringList l_string_list;
-            for(unsigned int l_j = 2; l_j < g_music_scales.size(); l_j++)
-            {
-                l_string_list << g_music_scales[l_j].name().c_str();
-            }
-            g_main_window->add_key_types(l_string_list);
+            setMusicKeyType(MusicScale::ScaleType::Chromatic);
         }
         m_tempered_type = p_type; emit temperedTypeChanged(p_type);
     }

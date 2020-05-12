@@ -15,25 +15,24 @@
    Please read LICENSE.txt for details.
  ***************************************************************************/
 //------------------------------------------------------------------------------
-MusicScale::MusicScale()
-: m_name()
-, m_semitone_offset(0)
+MusicScale::ScaleType MusicScale::scaleType()const
 {
+    return m_scale_type;
 }
 
 //------------------------------------------------------------------------------
 int MusicScale::size()const
 {
-    return m_p_notes.size();
+    return m_notes.size();
 }
 
 //------------------------------------------------------------------------------
 int MusicScale::note(int j)const
 {
 #ifdef MYDEBUG
-    return m_p_notes.at(j);
+    return m_notes.at(j);
 #else // MYDEBUG
-    return m_p_notes[j];
+    return m_notes[j];
 #endif // MYDEBUG
 }
 
@@ -41,9 +40,9 @@ int MusicScale::note(int j)const
 bool MusicScale::hasSemitone(int p_j)const
 {
 #ifdef MYDEBUG
-    return m_p_semitone_lookup.at(p_j);
+    return m_semitone_lookup.at(p_j);
 #else // MYDEBUG
-    return m_p_semitone_lookup[p_j];
+    return m_semitone_lookup[p_j];
 #endif // MYDEBUG
 }
 
@@ -57,6 +56,40 @@ const std::string & MusicScale::name()const
 int MusicScale::semitoneOffset()const
 {
     return m_semitone_offset;
+}
+
+//------------------------------------------------------------------------------
+bool MusicScale::isChromaticScale()const
+{
+    return m_scale_type == ScaleType::Chromatic;
+}
+
+//------------------------------------------------------------------------------
+bool MusicScale::isMinorScale()const
+{
+    switch(m_scale_type)
+    {
+        case ScaleType::Chromatic:
+        case ScaleType::Major:
+            return false;
+            
+        case ScaleType::NaturalMinor:
+        case ScaleType::HarmonicMinor:
+        case ScaleType::MelodicMinor:
+            return true;
+    }
+}
+
+//------------------------------------------------------------------------------
+bool MusicScale::isCompatibleWithTemparament(MusicKey::TemparamentType p_temparament_type)const
+{
+    return (p_temparament_type == MusicKey::TemparamentType::Even || !isMinorScale());
+}
+
+//------------------------------------------------------------------------------
+const std::vector<MusicScale> & MusicScale::getScales()
+{
+    return g_music_scales;
 }
 
 // EOF

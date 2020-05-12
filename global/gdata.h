@@ -44,6 +44,7 @@
 #include "useful.h"
 #include "view.h"
 #include "analysisdata.h"
+#include "music_scale.h"
 
 #ifndef WINDOWS
 //for multi-threaded profiling
@@ -276,7 +277,7 @@ class GData : public QObject
   inline void set_rms_ceiling(const double &);
 
   inline int musicKey()const;
-  inline int musicKeyType()const;
+  inline MusicScale::ScaleType musicKeyType()const;
   inline int temperedType()const;
   inline const double & freqA()const;
   inline const double & semitoneOffset()const;
@@ -309,6 +310,7 @@ public slots:
 
   inline void setMusicKey(int p_key);
   inline void setMusicKeyType(int p_type);
+  inline void setMusicKeyType(MusicScale::ScaleType p_type);
   void setTemperedType(int p_type);
   void setFreqA(double p_x);
   inline void setFreqA(int p_x);
@@ -416,7 +418,7 @@ public slots:
   t_saving_modes m_saving_mode;
   bool m_vibrato_sine_style;
   int m_music_key;
-  int m_music_key_type;
+  MusicScale::ScaleType m_music_key_type;
   int m_tempered_type;
   bool m_mouse_wheel_zooms;
   double m_freq_A;
