@@ -76,6 +76,45 @@ double MusicTemperament::nearestNoteDistance(const double & p_x)const
     return fabs(*binary_search_closest(m_note_offsets.begin(), m_note_offsets.end(), p_x) - p_x);
 }
 
+//------------------------------------------------------------------------------
+const MusicTemperament & MusicTemperament::getTemperament(TemperamentType p_temparament_type)
+{
+    return g_music_temperaments[static_cast<int>(p_temparament_type)];
+}
+
+/**
+   Just Intonation
+   1:1   Root
+   9:8   2nd
+   6:5   Minor 3rd
+   5:4   Major 3rd
+   4:3   Forth
+   25:18 F# - Geoff
+   3:2   Fifth
+   (8:5   Minor 6th?) (25:16 Minor 6th - Geoff)
+   5:3   Major 6th
+  
+   15:8  Major 7th
+   2:1   Octave
+*/
+
+/**
+   Pythagorean Tuning
+   Ref = Wikipedia
+   D  1:1     Root
+   Eb 256:242
+   E  9:8
+   F  32:27   Minor 3rd
+   F# 81:64   Major 3rd
+   G  4:3     4th
+   G# 729:512
+   A  3:2     5th
+   Bb 128:81
+   B  27:16
+   C  16:9
+   C# 243:128
+*/
+
 void MusicTemperament::init()
 {
     const std::vector<double> l_even_tempered_scale =
@@ -96,38 +135,37 @@ void MusicTemperament::init()
     const std::vector<double> l_meantone_temperament_scale =
         {0, 76, 193, 310, 386, 503, 579, 697, 773, 890, 1007, 1083 };
 
-    g_music_temperaments.push_back(MusicTemperament("Even Tempered"
-                                  , TemperamentType::Even
-                                  , NoteOffsetType::Midi
-                                  , l_even_tempered_scale
-                                  , l_twelve_note_type
-                                    ));
-
-    g_music_temperaments.push_back(MusicTemperament("Just Intonation"
-                                  , TemperamentType::Just
-                                  , NoteOffsetType::Ratio
-                                  , l_just_intonation_ratios
-                                  , l_just_intonation_type
-                                    ));
-
-    g_music_temperaments.push_back(MusicTemperament("Pythagorean Tuning"
-                                  , TemperamentType::Pythagorean
-                                  , NoteOffsetType::Ratio
-                                  , l_pythagorean_ratio
-                                  , l_twelve_note_type
-                                    ));
-
-    g_music_temperaments.push_back(MusicTemperament("Meantone Temperament"
-                                  , TemperamentType::Meantone
-                                  , NoteOffsetType::Cents
-                                  , l_meantone_temperament_scale
-                                  , l_twelve_note_type
-                                    ));
+    g_music_temperaments =
+    { MusicTemperament("Even Tempered"
+                     , TemperamentType::Even
+                     , NoteOffsetType::Midi
+                     , l_even_tempered_scale
+                     , l_twelve_note_type
+                       )
+    , MusicTemperament("Just Intonation"
+                     , TemperamentType::Just
+                     , NoteOffsetType::Ratio
+                     , l_just_intonation_ratios
+                     , l_just_intonation_type
+                       )
+    , MusicTemperament("Pythagorean Tuning"
+                     , TemperamentType::Pythagorean
+                     , NoteOffsetType::Ratio
+                     , l_pythagorean_ratio
+                     , l_twelve_note_type
+                       )
+    , MusicTemperament("Meantone Temperament"
+                     , TemperamentType::Meantone
+                     , NoteOffsetType::Cents
+                     , l_meantone_temperament_scale
+                     , l_twelve_note_type
+                       )
+       };
 }
 
 std::vector<MusicTemperament> MusicTemperament::g_music_temperaments;
 
-const std::string g_music_key_name[NUM_MUSIC_KEYS] =
+const std::vector<std::string> g_music_key_names =
         {"A             ",
          "A♯/B♭",
          "B",
@@ -141,6 +179,6 @@ const std::string g_music_key_name[NUM_MUSIC_KEYS] =
          "G",
          "G♯/A♭"
         };
-int g_music_key_root[NUM_MUSIC_KEYS] = { 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+const std::vector<int> g_music_key_roots = { 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8 };
 
 // EOF

@@ -22,13 +22,11 @@
 MusicScale::MusicScale( const std::string & p_name
                       , ScaleType p_scale_type
                       , const std::vector<int> & p_notes
-                      , int p_semitone_offset
                       )
 : m_name(p_name)
 , m_scale_type(p_scale_type)
 , m_notes(p_notes)
 , m_semitone_lookup(12, false)
-, m_semitone_offset(p_semitone_offset)
 {
     for(int l_note : m_notes)
     {
@@ -53,6 +51,21 @@ bool MusicScale::isMajorScaleNote(int p_note)
 {
     return getScale(ScaleType::Major).hasSemitone(p_note);
 }
+
+/**
+   0  Root (1st)
+   1
+   2  (2nd)
+   3  Minor 3rd
+   4  Major 3rd (3rd)
+   5  4th
+   6
+   7  5th
+   8  Minor 6th
+   9  Major 6th (6th)
+   10 Minor 7th
+   11 Major 7th (7th)
+*/
 
 //------------------------------------------------------------------------------
 void MusicScale::init()

@@ -1,5 +1,5 @@
 /***************************************************************************
-                          useful.h  -  Generic useful functions
+                          musicnotes.h
                              -------------------
     begin                : 2002
     copyright            : (C) 2002-2005 by Philip McLeod
@@ -18,8 +18,7 @@
 #define MUSICNOTES_H
 
 #include "useful.h"
-#include "array1d.h"
-#include "gdata.h"
+#include "myassert.h"
 #include <string>
 
 class music_notes
@@ -36,7 +35,7 @@ class music_notes
     void init_note_names();
 
   private:
-    static std::string m_note_names[12];
+    static std::vector<std::string> m_note_names;
 };
 
 /**

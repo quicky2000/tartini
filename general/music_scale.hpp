@@ -53,12 +53,6 @@ const std::string & MusicScale::name()const
 }
 
 //------------------------------------------------------------------------------
-int MusicScale::semitoneOffset()const
-{
-    return m_semitone_offset;
-}
-
-//------------------------------------------------------------------------------
 bool MusicScale::isChromaticScale()const
 {
     return m_scale_type == ScaleType::Chromatic;
