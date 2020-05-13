@@ -96,12 +96,6 @@ HEADERS += \
   general/fast_smooth.hpp \
   general/large_vector.h \
   general/large_vector.hpp \
-  general/music_scale.h \
-  general/music_scale.hpp \
-  general/music_temperament.h \
-  general/music_temperament.hpp \
-  general/musicnotes.h \
-  general/musicnotes.hpp \
   general/myalgo.h \
   general/mygl.h \
   general/mygl.hpp \
@@ -128,6 +122,12 @@ HEADERS += \
   include/array2d.h \
   include/myassert.h \
   include/RingBuffer.h \
+  music/music_scale.h \
+  music/music_scale.hpp \
+  music/music_temperament.h \
+  music/music_temperament.hpp \
+  music/musicnotes.h \
+  music/musicnotes.hpp \
   sound/filters/FastSmoothedAveragingFilter.h \
   sound/filters/Filter.h \
   sound/filters/FixedAveragingFilter.h \
@@ -135,6 +135,7 @@ HEADERS += \
   sound/filters/IIR_Filter.h \
   sound/analysisdata.h \
   sound/analysisdata.hpp \
+  sound/audio_stream.h \
   sound/audio_thread.h \
   sound/audio_thread.hpp \
   sound/channel.h \
@@ -227,9 +228,6 @@ SOURCES += \
    general/bspline.cpp \
    general/equalloudness.cpp \
    general/fast_smooth.cpp \
-   general/music_scale.cpp \
-   general/music_temperament.cpp \
-   general/musicnotes.cpp \
    general/myalgo.cpp \
    general/myglfonts.cpp \
    general/myio.cpp \
@@ -243,11 +241,15 @@ SOURCES += \
    global/conversions.cpp \
    global/gdata.cpp \
    global/view.cpp \
+   music/music_scale.cpp \
+   music/music_temperament.cpp \
+   music/musicnotes.cpp \
    sound/filters/FastSmoothedAveragingFilter.cpp \
    sound/filters/FixedAveragingFilter.cpp \
    sound/filters/GrowingAveragingFilter.cpp \
    sound/filters/IIR_Filter.cpp \
    sound/analysisdata.cpp \
+   sound/audio_stream.cpp \
    sound/audio_thread.cpp \
    sound/channel.cpp \
    sound/notedata.cpp \
@@ -317,7 +319,7 @@ PRECOMPILED_HEADER = include/static.h
 TRANSLATIONS += tartini_de.ts \
                 tartini_fr.ts
 
-MYPATHS = include/ general/ sound/ widgets/ global/ dialogs/
+MYPATHS = include/ general/ sound/ widgets/ global/ dialogs/ music/
 MYPATHS += widgets/mainwindow widgets/freq widgets/summary widgets/pitchcompass widgets/openfiles widgets/volumemeter widgets/tuner widgets/hblock widgets/hstack widgets/wave widgets/piano widgets/htrack widgets/correlation widgets/fft widgets/cepstrum widgets/hbubble widgets/hcircle widgets/debugview widgets/score widgets/vibrato sound/filters
 
 INCLUDEPATH += $$MYPATHS
@@ -334,15 +336,10 @@ unix{
   }
   macx{
 
-    #INCLUDEPATH += macx/
-    #DEPENDPATH += macx/
-    #HEADERS += macx/audio_stream.h
-    #SOURCES += macx/audio_stream.cpp
-
     INCLUDEPATH += rtAudio/
     DEPENDPATH += rtAudio/
-    HEADERS += rtAudio/audio_stream.h rtAudio/RtAudio.h
-    SOURCES += rtAudio/audio_stream.cpp rtAudio/rtAudio.cpp
+    HEADERS += rtAudio/RtAudio.h
+    SOURCES += rtAudio/rtAudio.cpp
 
     QMAKE_LFLAGS_SONAME = -W1,-install_name,@executable_path/..Frameworks/
     INCLUDEPATH += $$MY_INCLUDE_PATH
@@ -361,17 +358,11 @@ unix{
   }
   else{ #linux
 
-    #old sound library routines
-    #INCLUDEPATH += unix/
-    #DEPENDPATH += unix/
-    #HEADERS += unix/audio_stream.h
-    #SOURCES += unix/audio_stream.cpp
-
     #RtAudio sound library routines
     INCLUDEPATH += rtAudio/
     DEPENDPATH += rtAudio/
-    HEADERS += rtAudio/audio_stream.h rtAudio/RtAudio.h
-    SOURCES += rtAudio/audio_stream.cpp rtAudio/rtAudio.cpp
+    HEADERS += rtAudio/RtAudio.h
+    SOURCES += rtAudio/rtAudio.cpp
     #DEFINES += __LINUX_OSS__
     DEFINES += __LINUX_ALSA__
     #DEFINES += __LINUX_JACK__  #Uncomment to use Jack. Note untested.
