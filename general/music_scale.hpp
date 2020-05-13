@@ -67,17 +67,20 @@ bool MusicScale::isChromaticScale()const
 //------------------------------------------------------------------------------
 bool MusicScale::isMinorScale()const
 {
+    bool l_result;
     switch(m_scale_type)
     {
         case ScaleType::Chromatic:
         case ScaleType::Major:
-            return false;
-            
+            l_result = false;
+            break;
         case ScaleType::NaturalMinor:
         case ScaleType::HarmonicMinor:
         case ScaleType::MelodicMinor:
-            return true;
+            l_result = true;
+            break;
     }
+    return l_result;
 }
 
 //------------------------------------------------------------------------------
