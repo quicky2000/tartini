@@ -16,6 +16,7 @@ set(MY_HEADER_FILES
     sound/wave_stream.h
     sound/sound_file_stream.h
     sound/sound_file_stream.hpp
+    sound/audio_stream.h
     sound/audio_thread.h
     sound/audio_thread.hpp
     general/myio.h
@@ -129,14 +130,14 @@ set(MY_HEADER_FILES
     general/mygl.h
     general/mygl.hpp
     general/myqt.h
-    general/musicnotes.h
-    general/musicnotes.hpp
+    music/musicnotes.h
+    music/musicnotes.hpp
     general/myalgo.h
     include/RingBuffer.h
-    general/music_scale.h
-    general/music_scale.hpp
-    general/music_temperament.h
-    general/music_temperament.hpp
+    music/music_scale.h
+    music/music_scale.hpp
+    music/music_temperament.h
+    music/music_temperament.hpp
     dialogs/tartinidialog.h
     dialogs/gpldialog.h
     widgets/widget_utils.h
@@ -145,6 +146,7 @@ set(MY_HEADER_FILES
 set(MY_SOURCE_FILES
     main.cpp
     sound/wave_stream.cpp
+    sound/audio_stream.cpp
     sound/audio_thread.cpp
     general/myio.cpp
     sound/filters/IIR_Filter.cpp
@@ -227,10 +229,10 @@ set(MY_SOURCE_FILES
     general/mymatrix.cpp
     general/myglfonts.cpp
     general/myqt.cpp
-    general/musicnotes.cpp
+    music/musicnotes.cpp
     general/myalgo.cpp
-    general/music_scale.cpp
-    general/music_temperament.cpp
+    music/music_scale.cpp
+    music/music_temperament.cpp
     dialogs/tartinidialog.cpp
     dialogs/gpldialog.cpp
    )
@@ -265,6 +267,7 @@ set(MY_INCLUDE_DIRECTORIES
     widgets/score
     widgets/vibrato
     sound/filters
+    music
     )
 
 set(MY_CPP_FLAGS -Wall -O0 -D_REENTRANT -DSINGLE_DRAWING_BUFFER -DMYDEBUG)
@@ -276,12 +279,10 @@ endif(${USE_DEBUG_PRINTF})
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux" OR ${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
     set(MY_HEADER_FILES
         ${MY_HEADER_FILES}
-        rtAudio/audio_stream.h
         rtAudio/RtAudio.h
        )
     set(MY_SOURCE_FILES
         ${MY_SOURCE_FILES}
-        rtAudio/audio_stream.cpp
         rtAudio/RtAudio.cpp
        )
     set(MY_INCLUDE_DIRECTORIES
