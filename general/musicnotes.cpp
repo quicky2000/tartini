@@ -17,7 +17,7 @@
 #include "musicnotes.h"
 #include "myassert.h"
 #include "music_scale.h"
-#include "music_key.h"
+#include "music_temperament.h"
 #include <QObject>
 
 std::string music_notes::m_note_names[12];
@@ -59,7 +59,7 @@ std::string music_notes::m_note_names[12];
 void initMusicStuff()
 {
     music_notes::init_note_names();
-    MusicKey::init();
+    MusicTemperament::init();
     MusicScale::init();
 }
 

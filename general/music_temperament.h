@@ -1,5 +1,5 @@
 /***************************************************************************
-                          useful.h  -  Generic useful functions
+                          music_temperament.h
                              -------------------
     begin                : 2002
     copyright            : (C) 2002-2005 by Philip McLeod
@@ -14,19 +14,19 @@
 
    Please read LICENSE.txt for details.
  ***************************************************************************/
-#ifndef TARTINI_MUSIC_KEY_H
-#define TARTINI_MUSIC_KEY_H
+#ifndef TARTINI_MUSIC_TEMPERAMENT_H
+#define TARTINI_MUSIC_TEMPERAMENT_H
 
 #include <vector>
 
 /**
    This defines the notes relative to the root for 1 octave of the scale
 */
-class MusicKey
+class MusicTemperament
 {
   public:
 
-    enum class TemparamentType
+    enum class TemperamentType
     { Even
     , Just
     , Pythagorean
@@ -39,16 +39,16 @@ class MusicKey
     , Ratio     // e.g. [1.0, 5.0/4, 4.0/3, 3.0/2]
     };
 
-    MusicKey(const std::string & p_name
-           , TemparamentType p_temparament_type
+    MusicTemperament(const std::string & p_name
+           , TemperamentType p_temparament_type
            , NoteOffsetType p_note_offset_type
            , const std::vector<double> & p_note_offsets
            , const std::vector<int> & p_note_types
             );
-    ~MusicKey();
+    ~MusicTemperament();
 
     inline const std::string & name()const;
-    inline TemparamentType temparament_type()const;
+    inline TemperamentType temparament_type()const;
     inline int size() const;
     inline double noteOffset(int p_j) const;
     inline int noteType(int p_j) const;
@@ -57,27 +57,27 @@ class MusicKey
     double nearestNoteDistance(const double & p_x)const;
     
     static void init();
-    static inline const std::vector<MusicKey> & getKeys();
+    static inline const std::vector<MusicTemperament> & getTemperaments();
 
   private:
 
     std::string m_name;
-    TemparamentType m_temparament_type;
+    TemperamentType m_temparament_type;
     /**
      * ordered midi values of the notes in 1 octave
      */
     std::vector<double> m_note_offsets;
     std::vector<int> m_note_types;
 
-    static std::vector<MusicKey> g_music_keys;
+    static std::vector<MusicTemperament> g_music_temperaments;
 };
 
-#include "music_key.hpp"
+#include "music_temperament.hpp"
 
 #define NUM_MUSIC_KEYS 12
 extern const std::string g_music_key_name[NUM_MUSIC_KEYS];
 extern int g_music_key_root[NUM_MUSIC_KEYS];
 
 
-#endif //TARTINI_MUSIC_KEY_H
+#endif //TARTINI_MUSIC_TEMPERAMENT_H
 // EOF

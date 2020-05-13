@@ -135,8 +135,8 @@ set(MY_HEADER_FILES
     include/RingBuffer.h
     general/music_scale.h
     general/music_scale.hpp
-    general/music_key.h
-    general/music_key.hpp
+    general/music_temperament.h
+    general/music_temperament.hpp
     dialogs/tartinidialog.h
     dialogs/gpldialog.h
     widgets/widget_utils.h
@@ -230,7 +230,7 @@ set(MY_SOURCE_FILES
     general/musicnotes.cpp
     general/myalgo.cpp
     general/music_scale.cpp
-    general/music_key.cpp
+    general/music_temperament.cpp
     dialogs/tartinidialog.cpp
     dialogs/gpldialog.cpp
    )

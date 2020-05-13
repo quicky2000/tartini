@@ -96,10 +96,10 @@ HEADERS += \
   general/fast_smooth.hpp \
   general/large_vector.h \
   general/large_vector.hpp \
-  general/music_key.h \
-  general/music_key.hpp \
   general/music_scale.h \
   general/music_scale.hpp \
+  general/music_temperament.h \
+  general/music_temperament.hpp \
   general/musicnotes.h \
   general/musicnotes.hpp \
   general/myalgo.h \
@@ -227,8 +227,8 @@ SOURCES += \
    general/bspline.cpp \
    general/equalloudness.cpp \
    general/fast_smooth.cpp \
-   general/music_key.cpp \
    general/music_scale.cpp \
+   general/music_temperament.cpp \
    general/musicnotes.cpp \
    general/myalgo.cpp \
    general/myglfonts.cpp \

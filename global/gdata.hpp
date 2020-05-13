@@ -522,15 +522,15 @@ int GData::musicKey()const
 }
 
 //------------------------------------------------------------------------------
-MusicScale::ScaleType GData::musicKeyType()const
+MusicScale::ScaleType GData::musicScale()const
 {
     return m_music_key_type;
 }
 
 //------------------------------------------------------------------------------
-int GData::temperedType()const
+int GData::musicTemperament()const
 {
-    return m_tempered_type;
+    return m_music_temperament;
 }
 
 //------------------------------------------------------------------------------
@@ -556,18 +556,18 @@ void GData::setMusicKey(int p_key)
 }
 
 //------------------------------------------------------------------------------
-void GData::setMusicKeyType(int p_type)
+void GData::setMusicScale(int p_type)
 {
-    setMusicKeyType(static_cast<MusicScale::ScaleType>(p_type));
+    setMusicScale(static_cast<MusicScale::ScaleType>(p_type));
 }
 
 //------------------------------------------------------------------------------
-void GData::setMusicKeyType(MusicScale::ScaleType p_type)
+void GData::setMusicScale(MusicScale::ScaleType p_type)
 {
     if(m_music_key_type != p_type)
     {
         m_music_key_type = p_type;
-        emit musicKeyTypeChanged(static_cast<int>(p_type));
+        emit musicScaleChanged(static_cast<int>(p_type));
     }
 }
 

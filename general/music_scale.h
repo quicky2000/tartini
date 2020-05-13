@@ -18,7 +18,7 @@
 #ifndef TARTINI_MUSIC_SCALE_H
 #define TARTINI_MUSIC_SCALE_H
 
-#include "music_key.h"
+#include "music_temperament.h"
 #include <vector>
 
 class MusicScale
@@ -48,7 +48,7 @@ class MusicScale
     inline int semitoneOffset()const;
     inline bool isChromaticScale()const;
     inline bool isMinorScale()const;
-    inline bool isCompatibleWithTemparament(MusicKey::TemparamentType p_temparament_type)const;
+    inline bool isCompatibleWithTemparament(MusicTemperament::TemperamentType p_temparament_type)const;
 
     static void init();
     static inline const std::vector<MusicScale> & getScales();

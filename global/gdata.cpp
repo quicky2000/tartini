@@ -136,7 +136,7 @@ GData::GData()
 , m_vibrato_sine_style(false)
 , m_music_key(3) // C
 , m_music_key_type(MusicScale::ScaleType::Chromatic) //ALL_NOTES
-, m_tempered_type(0) //EVEN_TEMPERED
+, m_music_temperament(0) //EVEN_TEMPERED
 , m_mouse_wheel_zooms(false)
 , m_freq_A(440)
 , m_semitone_offset(0.0)
@@ -964,16 +964,16 @@ void GData::doFastChunkUpdate()
 }
 
 //------------------------------------------------------------------------------
-void GData::setTemperedType(int p_type)
+void GData::setMusicTemperament(int p_music_temperament)
 {
-    if(m_tempered_type != p_type)
+    if(m_music_temperament != p_music_temperament)
     {
         // If the current key type is not compatible with the new tempered type, then set the key type to Chromatic.
-        if(!MusicScale::getScale(m_music_key_type).isCompatibleWithTemparament(static_cast<MusicKey::TemparamentType>(p_type)))
+        if(!MusicScale::getScale(m_music_key_type).isCompatibleWithTemparament(static_cast<MusicTemperament::TemperamentType>(p_music_temperament)))
         {
-            setMusicKeyType(MusicScale::ScaleType::Chromatic);
+            setMusicScale(MusicScale::ScaleType::Chromatic);
         }
-        m_tempered_type = p_type; emit temperedTypeChanged(p_type);
+        m_music_temperament = p_music_temperament; emit musicTemperamentChanged(p_music_temperament);
     }
 }
 
