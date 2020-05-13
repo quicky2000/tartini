@@ -136,34 +136,35 @@ void MusicTemperament::init()
         {0, 76, 193, 310, 386, 503, 579, 697, 773, 890, 1007, 1083 };
 
     g_music_temperaments =
-    { MusicTemperament("Even Tempered"
-                     , TemperamentType::Even
-                     , NoteOffsetType::Midi
-                     , l_even_tempered_scale
-                     , l_twelve_note_type
+    {{ MusicTemperament(QObject::tr("Even Tempered").toStdString()
+                       , TemperamentType::Even
+                       , NoteOffsetType::Midi
+                       , l_even_tempered_scale
+                       , l_twelve_note_type
                        )
-    , MusicTemperament("Just Intonation"
-                     , TemperamentType::Just
-                     , NoteOffsetType::Ratio
-                     , l_just_intonation_ratios
-                     , l_just_intonation_type
+     , MusicTemperament(QObject::tr("Just Intonation").toStdString()
+                      , TemperamentType::Just
+                      , NoteOffsetType::Ratio
+                      , l_just_intonation_ratios
+                      , l_just_intonation_type
+                      )
+     , MusicTemperament(QObject::tr("Pythagorean Tuning").toStdString()
+                       , TemperamentType::Pythagorean
+                       , NoteOffsetType::Ratio
+                       , l_pythagorean_ratio
+                       , l_twelve_note_type
                        )
-    , MusicTemperament("Pythagorean Tuning"
-                     , TemperamentType::Pythagorean
-                     , NoteOffsetType::Ratio
-                     , l_pythagorean_ratio
-                     , l_twelve_note_type
+     , MusicTemperament(QObject::tr("Meantone Temperament").toStdString()
+                       , TemperamentType::Meantone
+                       , NoteOffsetType::Cents
+                       , l_meantone_temperament_scale
+                       , l_twelve_note_type
                        )
-    , MusicTemperament("Meantone Temperament"
-                     , TemperamentType::Meantone
-                     , NoteOffsetType::Cents
-                     , l_meantone_temperament_scale
-                     , l_twelve_note_type
-                       )
-       };
+     }
+    };
 }
 
-std::vector<MusicTemperament> MusicTemperament::g_music_temperaments;
+std::array<MusicTemperament, 4> MusicTemperament::g_music_temperaments = {{MusicTemperament(), MusicTemperament(), MusicTemperament(), MusicTemperament()}};
 
 const std::array<std::string, 12> g_music_key_names =
         {{ "A             "

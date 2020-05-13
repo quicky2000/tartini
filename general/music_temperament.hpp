@@ -57,7 +57,7 @@ int MusicTemperament::noteType(int p_j) const
 }
 
 //------------------------------------------------------------------------------
-const std::vector<MusicTemperament> & MusicTemperament::getTemperaments()
+const std::array<MusicTemperament, 4> & MusicTemperament::getTemperaments()
 {
     return g_music_temperaments;
 }

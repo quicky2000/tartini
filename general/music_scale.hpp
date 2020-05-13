@@ -84,7 +84,7 @@ bool MusicScale::isCompatibleWithTemparament(MusicTemperament::TemperamentType p
 }
 
 //------------------------------------------------------------------------------
-const std::vector<MusicScale> & MusicScale::getScales()
+const std::array<MusicScale,5> & MusicScale::getScales()
 {
     return g_music_scales;
 }

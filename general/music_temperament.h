@@ -40,6 +40,7 @@ class MusicTemperament
     , Ratio     // e.g. [1.0, 5.0/4, 4.0/3, 3.0/2]
     };
 
+    MusicTemperament() = default;
     MusicTemperament(const std::string & p_name
            , TemperamentType p_temparament_type
            , NoteOffsetType p_note_offset_type
@@ -58,7 +59,7 @@ class MusicTemperament
     double nearestNoteDistance(const double & p_x)const;
     
     static void init();
-    static inline const std::vector<MusicTemperament> & getTemperaments();
+    static inline const std::array<MusicTemperament, 4> & getTemperaments();
     static const MusicTemperament & getTemperament(TemperamentType p_temparament_type);
 
   private:
@@ -71,7 +72,7 @@ class MusicTemperament
     std::vector<double> m_note_offsets;
     std::vector<int> m_note_types;
 
-    static std::vector<MusicTemperament> g_music_temperaments;
+    static std::array<MusicTemperament, 4> g_music_temperaments;
 };
 
 #include "music_temperament.hpp"

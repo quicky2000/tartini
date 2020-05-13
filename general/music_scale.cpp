@@ -77,14 +77,23 @@ void MusicScale::init()
     const std::vector<int> l_ascending_melodic_minor_scale  = {0, 2, 3, 5, 7, 9, 11 };
     
     g_music_scales =
-    { MusicScale("All Notes", ScaleType::Chromatic, l_all_note_scale)
-    , MusicScale("Major", ScaleType::Major, l_major_scale)
-    , MusicScale("Minor (Natural)", ScaleType::NaturalMinor, l_natural_minor_scale)
-    , MusicScale("Minor (Harmonic)", ScaleType::HarmonicMinor, l_harmonic_minor_scale)
-    , MusicScale("Minor (Ascending Melodic)", ScaleType::MelodicMinor, l_ascending_melodic_minor_scale)
+    {{ MusicScale(QObject::tr("All Notes").toStdString(), ScaleType::Chromatic, l_all_note_scale)
+     , MusicScale(QObject::tr("Major").toStdString(), ScaleType::Major, l_major_scale)
+     , MusicScale(QObject::tr("Minor (Natural)").toStdString(), ScaleType::NaturalMinor, l_natural_minor_scale)
+     , MusicScale(QObject::tr("Minor (Harmonic)").toStdString(), ScaleType::HarmonicMinor, l_harmonic_minor_scale)
+     , MusicScale(QObject::tr("Minor (Ascending Melodic)").toStdString(), ScaleType::MelodicMinor, l_ascending_melodic_minor_scale)
+     }
     };
 }
 
-std::vector<MusicScale> MusicScale::g_music_scales;
+std::array<MusicScale,5 > MusicScale::g_music_scales =
+        {{ MusicScale()
+         , MusicScale()
+         , MusicScale()
+         , MusicScale()
+         , MusicScale()
+         }
+        };
+        ;
 
 // EOF

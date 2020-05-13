@@ -33,6 +33,7 @@ class MusicScale
     , MelodicMinor
     };
 
+    MusicScale() = default;
     MusicScale( const std::string & p_name
               , ScaleType p_scale_type
               , const std::vector<int> & p_notes
@@ -49,7 +50,7 @@ class MusicScale
     inline bool isCompatibleWithTemparament(MusicTemperament::TemperamentType p_temparament_type)const;
 
     static void init();
-    static inline const std::vector<MusicScale> & getScales();
+    static inline const std::array<MusicScale,5> & getScales();
     static const MusicScale & getScale(ScaleType p_scale_type);
     static bool isMajorScaleNote(int p_note);
 
@@ -60,7 +61,7 @@ private:
     std::vector<int> m_notes;
     std::vector<bool> m_semitone_lookup;
     
-    static std::vector<MusicScale> g_music_scales;
+    static std::array<MusicScale,5> g_music_scales;
 };
 
 #include "music_scale.hpp"
