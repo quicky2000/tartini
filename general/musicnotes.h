@@ -35,7 +35,7 @@ class music_notes
     void init_note_names();
 
   private:
-    static std::vector<std::string> m_note_names;
+    static std::array<std::string, 12> m_note_names;
 };
 
 /**

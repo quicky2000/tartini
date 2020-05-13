@@ -18,6 +18,7 @@
 #define TARTINI_MUSIC_TEMPERAMENT_H
 
 #include <vector>
+#include <array>
 
 /**
    This defines the notes relative to the root for 1 octave of the scale
@@ -75,8 +76,8 @@ class MusicTemperament
 
 #include "music_temperament.hpp"
 
-extern const std::vector<std::string> g_music_key_names;
-extern const std::vector<int> g_music_key_roots;
+extern const std::array<std::string, 12> g_music_key_names;
+extern const std::array<int, 12> g_music_key_roots;
 
 
 #endif //TARTINI_MUSIC_TEMPERAMENT_H

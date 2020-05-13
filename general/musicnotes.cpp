@@ -20,7 +20,7 @@
 #include "music_temperament.h"
 #include <QObject>
 
-std::vector<std::string> music_notes::m_note_names;
+std::array<std::string, 12> music_notes::m_note_names;
 
 //------------------------------------------------------------------------------
 void initMusicStuff()
@@ -41,19 +41,19 @@ void
 music_notes::init_note_names()
 {
     m_note_names =
-    { QObject::tr("C").toStdString()
-    , QObject::tr("C♯").toStdString()
-    , QObject::tr("D").toStdString()
-    , QObject::tr("D♯").toStdString()
-    , QObject::tr("E").toStdString()
-    , QObject::tr("F").toStdString()
-    , QObject::tr("F♯").toStdString()
-    , QObject::tr("G").toStdString()
-    , QObject::tr("G♯").toStdString()
-    , QObject::tr("A").toStdString()
-    , QObject::tr("A♯").toStdString()
-    , QObject::tr("B").toStdString()
-    };
+    {{ QObject::tr("C").toStdString()
+     , QObject::tr("C♯").toStdString()
+     , QObject::tr("D").toStdString()
+     , QObject::tr("D♯").toStdString()
+     , QObject::tr("E").toStdString()
+     , QObject::tr("F").toStdString()
+     , QObject::tr("F♯").toStdString()
+     , QObject::tr("G").toStdString()
+     , QObject::tr("G♯").toStdString()
+     , QObject::tr("A").toStdString()
+     , QObject::tr("A♯").toStdString()
+     , QObject::tr("B").toStdString()
+    }};
 }
 
 //------------------------------------------------------------------------------

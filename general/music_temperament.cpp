@@ -165,20 +165,21 @@ void MusicTemperament::init()
 
 std::vector<MusicTemperament> MusicTemperament::g_music_temperaments;
 
-const std::vector<std::string> g_music_key_names =
-        {"A             ",
-         "A♯/B♭",
-         "B",
-         "C",
-         "C♯/D♭",
-         "D",
-         "D♯/E♭",
-         "E",
-         "F",
-         "F♯/G♭",
-         "G",
-         "G♯/A♭"
+const std::array<std::string, 12> g_music_key_names =
+        {{ "A             "
+         , "A♯/B♭"
+         , "B"
+         , "C"
+         , "C♯/D♭"
+         , "D"
+         , "D♯/E♭"
+         , "E"
+         , "F"
+         , "F♯/G♭"
+         , "G"
+         , "G♯/A♭"
+         }
         };
-const std::vector<int> g_music_key_roots = { 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+const std::array<int, 12> g_music_key_roots = {{ 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8 }};
 
 // EOF
