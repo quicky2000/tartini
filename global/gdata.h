@@ -278,7 +278,7 @@ class GData : public QObject
 
   inline int musicKey()const;
   inline MusicScale::ScaleType musicScale()const;
-  inline int musicTemperament()const;
+  inline MusicTemperament::TemperamentType musicTemperament()const;
   inline const double & freqA()const;
   inline const double & semitoneOffset()const;
 
@@ -293,8 +293,8 @@ signals:
   void channelsChanged();
   void onChunkUpdate();
 
-  void musicKeyChanged(int p_key);
-  void musicScaleChanged(int p_type);
+  void musicKeyChanged(int p_music_key);
+  void musicScaleChanged(int p_music_scale);
   void musicTemperamentChanged(int p_music_temperament);
 
 public slots:
@@ -308,10 +308,11 @@ public slots:
   void setAmplitudeModeInt(int p_amplitude_mode);
   void setPitchContourMode(int p_pitch_contour_mode);
 
-  inline void setMusicKey(int p_key);
-  inline void setMusicScale(int p_type);
-  inline void setMusicScale(MusicScale::ScaleType p_type);
+  inline void setMusicKey(int p_music_key);
+  inline void setMusicScale(int p_music_scale);
+  inline void setMusicScale(MusicScale::ScaleType p_music_scale);
   void setMusicTemperament(int p_music_temperament);
+  void setMusicTemperament(MusicTemperament::TemperamentType p_music_temperament);
   void setFreqA(double p_x);
   inline void setFreqA(int p_x);
 
@@ -418,8 +419,8 @@ public slots:
   t_saving_modes m_saving_mode;
   bool m_vibrato_sine_style;
   int m_music_key;
-  MusicScale::ScaleType m_music_key_type;
-  int m_music_temperament;
+  MusicScale::ScaleType m_music_scale;
+  MusicTemperament::TemperamentType m_music_temperament;
   bool m_mouse_wheel_zooms;
   double m_freq_A;
   double m_semitone_offset;

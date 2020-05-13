@@ -199,10 +199,10 @@ void FreqWidgetGL::drawReferenceLinesGL( const double & /* p_left_time*/
     int l_font_width = l_font_metric.width("C♯0") + 3;
 #endif // QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
 
-    const MusicTemperament &l_music_temperament = MusicTemperament::getTemperaments()[GData::getUniqueInstance().musicTemperament()];
+    const MusicTemperament &l_music_temperament = MusicTemperament::getTemperament(GData::getUniqueInstance().musicTemperament());
     const MusicScale &l_music_scale = MusicScale::getScale(GData::getUniqueInstance().musicScale());
 
-    int l_key_root = cycle(g_music_key_root[GData::getUniqueInstance().musicKey()] + l_music_scale.semitoneOffset(), 12);
+    int l_key_root = g_music_key_roots[GData::getUniqueInstance().musicKey()];
     int l_view_bottom_note = static_cast<int>(p_view_bottom) - l_key_root;
     int l_remainder = cycle(l_view_bottom_note, 12);
     int l_low_root = l_view_bottom_note - l_remainder + l_key_root;

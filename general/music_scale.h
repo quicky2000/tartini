@@ -36,7 +36,6 @@ class MusicScale
     MusicScale( const std::string & p_name
               , ScaleType p_scale_type
               , const std::vector<int> & p_notes
-              , int p_semitone_offset = 0
               );
     ~MusicScale();
 
@@ -45,7 +44,6 @@ class MusicScale
     inline int note(int j)const;
     inline bool hasSemitone(int p_j)const;
     inline const std::string & name()const;
-    inline int semitoneOffset()const;
     inline bool isChromaticScale()const;
     inline bool isMinorScale()const;
     inline bool isCompatibleWithTemparament(MusicTemperament::TemperamentType p_temparament_type)const;
@@ -61,7 +59,6 @@ private:
     ScaleType m_scale_type;
     std::vector<int> m_notes;
     std::vector<bool> m_semitone_lookup;
-    int m_semitone_offset;
     
     static std::vector<MusicScale> g_music_scales;
 };

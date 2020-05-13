@@ -447,9 +447,9 @@ MainWindow::MainWindow()
     QComboBox * l_key_combo_box = new QComboBox(l_key_tool_bar);
     l_key_combo_box->setWindowTitle(tr("Key"));
     QStringList l_string_list;
-    for(int l_j = 0; l_j < NUM_MUSIC_KEYS; l_j++)
+    for (const std::string & l_music_key_name : g_music_key_names)
     {
-        l_string_list << g_music_key_name[l_j].c_str();
+        l_string_list << l_music_key_name.c_str();
     }
     l_key_combo_box->addItems(l_string_list);
     l_key_combo_box->setCurrentIndex(GData::getUniqueInstance().musicKey());
@@ -460,7 +460,7 @@ MainWindow::MainWindow()
 
     m_key_type_combo_box = new QComboBox(l_key_tool_bar);
     m_key_type_combo_box->setWindowTitle(tr("Scale type"));
-    updateKeyTypes(GData::getUniqueInstance().musicTemperament());
+    updateKeyTypes(static_cast<int>(GData::getUniqueInstance().musicTemperament()));
     m_key_type_combo_box->setCurrentIndex(static_cast<int>(GData::getUniqueInstance().musicScale()));
     l_key_tool_bar->addWidget(m_key_type_combo_box);
     connect(m_key_type_combo_box, SIGNAL(activated(int)), &GData::getUniqueInstance(), SLOT(setMusicScale(int)));
@@ -475,7 +475,7 @@ MainWindow::MainWindow()
         l_string_list << l_music_temperament.name().c_str();
     }
     l_tempered_combo_box->addItems(l_string_list);
-    l_tempered_combo_box->setCurrentIndex(GData::getUniqueInstance().musicTemperament());
+    l_tempered_combo_box->setCurrentIndex(static_cast<int>(GData::getUniqueInstance().musicTemperament()));
     l_key_tool_bar->addWidget(l_tempered_combo_box);
     connect(l_tempered_combo_box, SIGNAL(activated(int)), &GData::getUniqueInstance(), SLOT(setMusicTemperament(int)));
     connect(&GData::getUniqueInstance(), SIGNAL(musicTemperamentChanged(int)), this, SLOT(updateKeyTypes(int)));

@@ -58,6 +58,7 @@ class MusicTemperament
     
     static void init();
     static inline const std::vector<MusicTemperament> & getTemperaments();
+    static const MusicTemperament & getTemperament(TemperamentType p_temparament_type);
 
   private:
 
@@ -74,9 +75,8 @@ class MusicTemperament
 
 #include "music_temperament.hpp"
 
-#define NUM_MUSIC_KEYS 12
-extern const std::string g_music_key_name[NUM_MUSIC_KEYS];
-extern int g_music_key_root[NUM_MUSIC_KEYS];
+extern const std::vector<std::string> g_music_key_names;
+extern const std::vector<int> g_music_key_roots;
 
 
 #endif //TARTINI_MUSIC_TEMPERAMENT_H
