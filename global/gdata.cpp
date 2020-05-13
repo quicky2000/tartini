@@ -52,51 +52,6 @@ struct itimerval g_profiler_value;
 struct itimerval g_profiler_ovalue;
 #endif
 
-int g_frame_window_sizes[NUM_WIN_SIZES] =
-  { 512
-  , 1024
-  , 2048
-  , 4096
-  , 8192
-  };
-
-const std::string g_frame_window_strings[NUM_WIN_SIZES] =
-  { "512"
-  , "1024"
-  , "2048"
-  , "4096"
-  , "8192"
-  };
-
-float g_step_sizes[NUM_STEP_SIZES] =
-  { 1.0f
-  , 0.5f
-  , 0.25f
-  , 0.2f
-  , 0.1f
-  , 0.05f
-  };
-
-const std::string g_step_size_strings[NUM_STEP_SIZES] =
-  { "100%"
-  , "50%"
-  , "25%"
-  , "20%"
-  , "10%"
-  , "5%"
-  };
-
-const std::string g_pitch_method_strings[NUM_PITCH_METHODS] =
-  { "FFT interpolation"
-  , "Fast-correlation"
-  , "Correlation (squared error) 1"
-  , "Correlation (squared error) 2"
-  , "Correlation (abs error) 1"
-  , "Correlation (abs error) 2"
-  , "Correlation (multiplied) 1"
-  , "Correlation (multiplied) 2"
-  };
-
 GData * GData::g_data = nullptr;
 
 //Define the Phase function. This one is applicable to 

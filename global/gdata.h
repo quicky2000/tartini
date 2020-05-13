@@ -54,17 +54,6 @@ extern struct itimerval g_profiler_ovalue;
 
 typedef enum class AnalysisModes { MPM, AUTOCORRELATION, MPM_MODIFIED_CEPSTRUM } t_analysis_modes;
 
-#define NUM_WIN_SIZES 5
-extern int g_frame_window_sizes[NUM_WIN_SIZES];
-extern const std::string g_frame_window_strings[NUM_WIN_SIZES];
-
-#define NUM_STEP_SIZES 6
-extern float g_step_sizes[NUM_STEP_SIZES];
-extern const std::string g_step_size_strings[NUM_STEP_SIZES];
-
-#define NUM_PITCH_METHODS 8
-extern const std::string g_pitch_method_strings[NUM_PITCH_METHODS];
-
 class FBuffer;
 class SoundStream;
 class SoundFileStream;
