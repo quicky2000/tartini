@@ -84,9 +84,9 @@ bool MusicScale::isMinorScale()const
 }
 
 //------------------------------------------------------------------------------
-bool MusicScale::isCompatibleWithTemparament(MusicKey::TemparamentType p_temparament_type)const
+bool MusicScale::isCompatibleWithTemparament(MusicTemperament::TemperamentType p_temparament_type)const
 {
-    return (p_temparament_type == MusicKey::TemparamentType::Even || !isMinorScale());
+    return (p_temparament_type == MusicTemperament::TemperamentType::Even || !isMinorScale());
 }
 
 //------------------------------------------------------------------------------

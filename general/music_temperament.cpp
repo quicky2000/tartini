@@ -1,5 +1,5 @@
 /***************************************************************************
-                          music_scale.h
+                          music_temperament.cpp
                              -------------------
     begin                : 2002
     copyright            : (C) 2002-2005 by Philip McLeod
@@ -14,12 +14,12 @@
 
    Please read LICENSE.txt for details.
  ***************************************************************************/
-#include "music_key.h"
+#include "music_temperament.h"
 #include "musicnotes.h"
 
 //------------------------------------------------------------------------------
-MusicKey::MusicKey(const std::string & p_name
-                 , TemparamentType p_temparament_type
+MusicTemperament::MusicTemperament(const std::string & p_name
+                 , TemperamentType p_temparament_type
                  , NoteOffsetType p_note_offset_type
                  , const std::vector<double> & p_note_offsets
                  , const std::vector<int> & p_note_types
@@ -54,29 +54,29 @@ MusicKey::MusicKey(const std::string & p_name
 }
 
 //------------------------------------------------------------------------------
-MusicKey::~MusicKey()
+MusicTemperament::~MusicTemperament()
 {
 }
 
 //------------------------------------------------------------------------------
-int MusicKey::nearestNoteIndex(const double & p_x)const
+int MusicTemperament::nearestNoteIndex(const double & p_x)const
 {
     return static_cast<int>(binary_search_closest(m_note_offsets.begin(), m_note_offsets.end(), p_x) - m_note_offsets.begin());
 }
 
 //------------------------------------------------------------------------------
-double MusicKey::nearestNote(const double & p_x)const
+double MusicTemperament::nearestNote(const double & p_x)const
 {
     return *binary_search_closest(m_note_offsets.begin(), m_note_offsets.end(), p_x);
 }
 
 //------------------------------------------------------------------------------
-double MusicKey::nearestNoteDistance(const double & p_x)const
+double MusicTemperament::nearestNoteDistance(const double & p_x)const
 {
     return fabs(*binary_search_closest(m_note_offsets.begin(), m_note_offsets.end(), p_x) - p_x);
 }
 
-void MusicKey::init()
+void MusicTemperament::init()
 {
     const std::vector<double> l_even_tempered_scale =
         {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0 };
@@ -96,36 +96,36 @@ void MusicKey::init()
     const std::vector<double> l_meantone_temperament_scale =
         {0, 76, 193, 310, 386, 503, 579, 697, 773, 890, 1007, 1083 };
 
-    g_music_keys.push_back(MusicKey("Even Tempered"
-                                  , TemparamentType::Even
+    g_music_temperaments.push_back(MusicTemperament("Even Tempered"
+                                  , TemperamentType::Even
                                   , NoteOffsetType::Midi
                                   , l_even_tempered_scale
                                   , l_twelve_note_type
                                     ));
 
-    g_music_keys.push_back(MusicKey("Just Intonation"
-                                  , TemparamentType::Just
+    g_music_temperaments.push_back(MusicTemperament("Just Intonation"
+                                  , TemperamentType::Just
                                   , NoteOffsetType::Ratio
                                   , l_just_intonation_ratios
                                   , l_just_intonation_type
                                     ));
 
-    g_music_keys.push_back(MusicKey("Pythagorean Tuning"
-                                  , TemparamentType::Pythagorean
+    g_music_temperaments.push_back(MusicTemperament("Pythagorean Tuning"
+                                  , TemperamentType::Pythagorean
                                   , NoteOffsetType::Ratio
                                   , l_pythagorean_ratio
                                   , l_twelve_note_type
                                     ));
 
-    g_music_keys.push_back(MusicKey("Meantone Temperament"
-                                  , TemparamentType::Meantone
+    g_music_temperaments.push_back(MusicTemperament("Meantone Temperament"
+                                  , TemperamentType::Meantone
                                   , NoteOffsetType::Cents
                                   , l_meantone_temperament_scale
                                   , l_twelve_note_type
                                     ));
 }
 
-std::vector<MusicKey> MusicKey::g_music_keys;
+std::vector<MusicTemperament> MusicTemperament::g_music_temperaments;
 
 const std::string g_music_key_name[NUM_MUSIC_KEYS] =
         {"A             ",

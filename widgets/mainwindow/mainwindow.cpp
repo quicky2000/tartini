@@ -58,7 +58,7 @@
 #include "myscrollbar.h"
 #include "mylabel.h"
 #include "music_scale.h"
-#include "music_key.h"
+#include "music_temperament.h"
 #include "tartinidialog.h"
 #include "gpldialog.h"
 
@@ -460,27 +460,27 @@ MainWindow::MainWindow()
 
     m_key_type_combo_box = new QComboBox(l_key_tool_bar);
     m_key_type_combo_box->setWindowTitle(tr("Scale type"));
-    updateKeyTypes(GData::getUniqueInstance().temperedType());
-    m_key_type_combo_box->setCurrentIndex(static_cast<int>(GData::getUniqueInstance().musicKeyType()));
+    updateKeyTypes(GData::getUniqueInstance().musicTemperament());
+    m_key_type_combo_box->setCurrentIndex(static_cast<int>(GData::getUniqueInstance().musicScale()));
     l_key_tool_bar->addWidget(m_key_type_combo_box);
-    connect(m_key_type_combo_box, SIGNAL(activated(int)), &GData::getUniqueInstance(), SLOT(setMusicKeyType(int)));
-    connect(&GData::getUniqueInstance(), SIGNAL(musicKeyTypeChanged(int)), m_key_type_combo_box, SLOT(setCurrentIndex(int)));
-    connect(&GData::getUniqueInstance(), SIGNAL(musicKeyTypeChanged(int)), &(GData::getUniqueInstance().getView()), SLOT(doUpdate()));
+    connect(m_key_type_combo_box, SIGNAL(activated(int)), &GData::getUniqueInstance(), SLOT(setMusicScale(int)));
+    connect(&GData::getUniqueInstance(), SIGNAL(musicScaleChanged(int)), m_key_type_combo_box, SLOT(setCurrentIndex(int)));
+    connect(&GData::getUniqueInstance(), SIGNAL(musicScaleChanged(int)), &(GData::getUniqueInstance().getView()), SLOT(doUpdate()));
 
     QComboBox * l_tempered_combo_box = new QComboBox(l_key_tool_bar);
     l_tempered_combo_box->setWindowTitle(tr("Tempered type"));
     l_string_list.clear();
-    for(const MusicKey & l_music_key : MusicKey::getKeys())
+    for(const MusicTemperament & l_music_temperament : MusicTemperament::getTemperaments())
     {
-        l_string_list << l_music_key.name().c_str();
+        l_string_list << l_music_temperament.name().c_str();
     }
     l_tempered_combo_box->addItems(l_string_list);
-    l_tempered_combo_box->setCurrentIndex(GData::getUniqueInstance().temperedType());
+    l_tempered_combo_box->setCurrentIndex(GData::getUniqueInstance().musicTemperament());
     l_key_tool_bar->addWidget(l_tempered_combo_box);
-    connect(l_tempered_combo_box, SIGNAL(activated(int)), &GData::getUniqueInstance(), SLOT(setTemperedType(int)));
-    connect(&GData::getUniqueInstance(), SIGNAL(temperedTypeChanged(int)), this, SLOT(updateKeyTypes(int)));
-    connect(&GData::getUniqueInstance(), SIGNAL(temperedTypeChanged(int)), l_tempered_combo_box, SLOT(setCurrentIndex(int)));
-    connect(&GData::getUniqueInstance(), SIGNAL(temperedTypeChanged(int)), &(GData::getUniqueInstance().getView()), SLOT(doUpdate()));
+    connect(l_tempered_combo_box, SIGNAL(activated(int)), &GData::getUniqueInstance(), SLOT(setMusicTemperament(int)));
+    connect(&GData::getUniqueInstance(), SIGNAL(musicTemperamentChanged(int)), this, SLOT(updateKeyTypes(int)));
+    connect(&GData::getUniqueInstance(), SIGNAL(musicTemperamentChanged(int)), l_tempered_combo_box, SLOT(setCurrentIndex(int)));
+    connect(&GData::getUniqueInstance(), SIGNAL(musicTemperamentChanged(int)), &(GData::getUniqueInstance().getView()), SLOT(doUpdate()));
 
     QToolBar * l_freq_A_tool_bar = new QToolBar(tr("Frequency Offset Toolbar"), this);
     l_freq_A_tool_bar->setWhatsThis(tr("The frequency of an even-tempered 'A' used for reference lines in the Pitch Contour View. Default 440 Hz."
@@ -1395,7 +1395,7 @@ MainWindow::updateKeyTypes(int p_tempered_type)
     for(const MusicScale & l_music_scale : MusicScale::getScales())
     {
         //remove out the minors
-        if(l_music_scale.isCompatibleWithTemparament(static_cast<MusicKey::TemparamentType>(p_tempered_type)))
+        if(l_music_scale.isCompatibleWithTemparament(static_cast<MusicTemperament::TemperamentType>(p_tempered_type)))
         {
             l_string_list << l_music_scale.name().c_str();
         }

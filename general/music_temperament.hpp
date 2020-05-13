@@ -1,5 +1,5 @@
 /***************************************************************************
-                          useful.h  -  Generic useful functions
+                          music_temperament.hpp
                              -------------------
     begin                : 2002
     copyright            : (C) 2002-2005 by Philip McLeod
@@ -15,29 +15,29 @@
    Please read LICENSE.txt for details.
  ***************************************************************************/
 
-#ifndef TARTINI_MUSIC_KEY_HPP
-#define TARTINI_MUSIC_KEY_HPP
+#ifndef TARTINI_MUSIC_TEMPERAMENT_HPP
+#define TARTINI_MUSIC_TEMPERAMENT_HPP
 
 //------------------------------------------------------------------------------
-const std::string & MusicKey::name()const
+const std::string & MusicTemperament::name()const
 {
     return m_name;
 }
 
 //------------------------------------------------------------------------------
-MusicKey::TemparamentType MusicKey::temparament_type()const
+MusicTemperament::TemperamentType MusicTemperament::temparament_type()const
 {
     return m_temparament_type;
 }
 
 //------------------------------------------------------------------------------
-int MusicKey::size() const
+int MusicTemperament::size() const
 {
     return m_note_offsets.size();
 }
 
 //------------------------------------------------------------------------------
-double MusicKey::noteOffset(int p_j) const
+double MusicTemperament::noteOffset(int p_j) const
 {
 #ifdef MYDEBUG
     return m_note_offsets.at(p_j);
@@ -47,7 +47,7 @@ double MusicKey::noteOffset(int p_j) const
 }
 
 //------------------------------------------------------------------------------
-int MusicKey::noteType(int p_j) const
+int MusicTemperament::noteType(int p_j) const
 {
 #ifdef MYDEBUG
     return m_note_types.at(p_j);
@@ -57,10 +57,10 @@ int MusicKey::noteType(int p_j) const
 }
 
 //------------------------------------------------------------------------------
-const std::vector<MusicKey> & MusicKey::getKeys()
+const std::vector<MusicTemperament> & MusicTemperament::getTemperaments()
 {
-    return g_music_keys;
+    return g_music_temperaments;
 }
 
-#endif //TARTINI_MUSIC_KEY_HPP
+#endif //TARTINI_MUSIC_TEMPERAMENT_HPP
 // EOF
