@@ -35,7 +35,7 @@ HTrackWidget::HTrackWidget( QWidget *p_parent
                           )
 : QGLWidget(p_parent)
 {
-    setObjectName(p_name.c_str());
+    setObjectName(QString::fromStdString(p_name));
 }
 
 //------------------------------------------------------------------------------

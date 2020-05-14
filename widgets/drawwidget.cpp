@@ -40,7 +40,7 @@ DrawWidget::DrawWidget( QWidget * p_parent
                       )
 : QWidget(p_parent)
 {
-    setObjectName(p_name.c_str());
+    setObjectName(QString::fromStdString(p_name));
 #ifdef SHARED_DRAWING_BUFFER
     m_buffer = gdata->drawingBuffer();
     m_buffer->resize(m_buffer->size().expandedTo(size()));

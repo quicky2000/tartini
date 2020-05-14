@@ -625,7 +625,7 @@ void GData::saveActiveFile()
     {
         stop();
     }
-    int l_val = saveFile(l_sound_file, saveFileAsk(l_sound_file->getFileName().c_str()));
+    int l_val = saveFile(l_sound_file, saveFileAsk(QString::fromStdString(l_sound_file->getFileName())));
     if(l_val == 0)
     {
         //success
@@ -633,7 +633,7 @@ void GData::saveActiveFile()
     }
     else if(l_val == -1)
     {
-        QMessageBox::warning(g_main_window, "Error", QString("Error saving file '") + QString(l_sound_file->getFileName().c_str()) + QString("'"), QMessageBox::Ok, Qt::NoButton);
+        QMessageBox::warning(g_main_window, "Error", QString("Error saving file '") + QString::fromStdString(l_sound_file->getFileName()) + QString("'"), QMessageBox::Ok, Qt::NoButton);
     }
 }
 
@@ -670,7 +670,7 @@ int GData::saveFile( SoundFile * p_sound_file
     {
         return 1;
     }
-    QString l_old_filename(p_sound_file->getFileName().c_str());
+    QString l_old_filename = QString::fromStdString(p_sound_file->getFileName());
     l_old_filename = QDir::toNativeSeparators(l_old_filename);
     int l_pos = p_sound_file->getStream().pos();
     p_sound_file->getStream().close();
@@ -733,7 +733,7 @@ int GData::closeFile( SoundFile * p_sound_file
         return -1;
     }
     QString l_new_filename;
-    QString l_old_filename(p_sound_file->getFileName().c_str());
+    QString l_old_filename = QString::fromStdString(p_sound_file->getFileName());
     l_old_filename = QDir::toNativeSeparators(l_old_filename);
 
     if(g_data->m_audio_thread.playSoundFile() == p_sound_file || g_data->m_audio_thread.recSoundFile() == p_sound_file)

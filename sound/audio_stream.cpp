@@ -84,7 +84,7 @@ int AudioStream::open( t_open_mode p_mode
         l_input_parameters.nChannels = get_channels();
         l_input_param_ptr = &l_input_parameters;
         
-        std::cerr << "Input Device " << l_in_device << ": " << l_audio_input.c_str() << std::endl;
+        std::cerr << "Input Device " << l_in_device << ": " << l_audio_input << std::endl;
     }
 
     RtAudio::StreamParameters l_output_parameters;
@@ -98,7 +98,7 @@ int AudioStream::open( t_open_mode p_mode
         l_output_parameters.nChannels = get_channels();
         l_output_param_ptr = &l_output_parameters;
 
-        std::cerr << "Output Device " << l_out_device << ": " << l_audio_output.c_str() << std::endl;
+        std::cerr << "Output Device " << l_out_device << ": " << l_audio_output << std::endl;
     }
 
     if(!l_input_param_ptr && !l_output_param_ptr)
@@ -425,7 +425,7 @@ QStringList AudioStream::getInputDeviceNames()
 #ifdef DEBUG_PRINTF
             std::cout << "  found input device" << std::endl;
 #endif // DEBUG_PRINTF
-            l_to_return << l_info.name.c_str();
+            l_to_return << QString::fromStdString(l_info.name);
 
         }
     }
@@ -493,7 +493,7 @@ QStringList AudioStream::getOutputDeviceNames()
 #ifdef DEBUG_PRINTF
             std::cout << "  found output device" << std::endl;
 #endif // DEBUG_PRINTF
-            l_to_return << l_info.name.c_str();
+            l_to_return << QString::fromStdString(l_info.name);
         }
     }
     // Clean up

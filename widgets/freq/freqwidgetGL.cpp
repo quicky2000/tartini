@@ -58,7 +58,7 @@ FreqWidgetGL::FreqWidgetGL( QWidget * p_parent
 , m_down_time(0.0)
 , m_down_note(0.0)
 {
-    setObjectName(p_name.c_str());
+    setObjectName(QString::fromStdString(p_name));
     setMouseTracking(true);
 
     QSizePolicy l_size_policy(QSizePolicy::Expanding, QSizePolicy::Expanding);

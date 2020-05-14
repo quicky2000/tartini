@@ -30,7 +30,7 @@ MyLabel::MyLabel(const std::string & p_text
 , m_text_width(0)
 , m_size_computed(false)
 {
-   setObjectName(p_name.c_str());
+   setObjectName(QString::fromStdString(p_name));
    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
    compute_text_width();
 }

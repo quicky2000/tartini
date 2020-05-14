@@ -50,7 +50,7 @@ AmplitudeWidget::AmplitudeWidget(QWidget * p_parent, const std::string & p_name)
 , m_line_width(0.0)
 , m_half_line_width(0.0)
 {
-    setObjectName(p_name.c_str());
+    setObjectName(QString::fromStdString(p_name));
     setMouseTracking(true);
     setAttribute(Qt::WA_OpaquePaintEvent);
 }

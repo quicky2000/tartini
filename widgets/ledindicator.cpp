@@ -29,7 +29,7 @@ LEDIndicator::LEDIndicator(QWidget *p_parent
                           )
 : QWidget(p_parent)
 {
-    setObjectName(p_name.c_str());
+    setObjectName(QString::fromStdString(p_name));
     setMinimumSize(sizeHint());
     m_on = p_on;
     m_off = p_off;
