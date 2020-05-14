@@ -948,7 +948,7 @@ void VibratoWidget::compose_note_label(QString & p_note_label, const int & p_not
     {
       l_composed_note_label << music_notes::noteName(p_note) << " ";
     }
-  p_note_label = l_composed_note_label.str().c_str();
+  p_note_label = QString::fromStdString(l_composed_note_label.str());
 }
 
 //------------------------------------------------------------------------------

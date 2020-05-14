@@ -153,7 +153,7 @@ FreqView::FreqView( int p_view_id
     QStringList l_string_list;
     for(l_j = static_cast<int>(t_amplitude_modes::AMPLITUDE_RMS); l_j <= static_cast<int>(t_amplitude_modes::NOTE_CHANGE_SCORE); l_j++)
     {
-        l_string_list << g_amp_mode_names[l_j].c_str();
+        l_string_list << QString::fromStdString(g_amp_mode_names[l_j]);
     }
     l_amplitude_mode_combo_box->addItems(l_string_list);
     connect(l_amplitude_mode_combo_box, SIGNAL(activated(int)), &GData::getUniqueInstance(), SLOT(setAmplitudeModeInt(int)));

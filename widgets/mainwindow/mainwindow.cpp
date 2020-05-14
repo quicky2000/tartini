@@ -449,7 +449,7 @@ MainWindow::MainWindow()
     QStringList l_string_list;
     for (const std::string & l_music_key_name : g_music_key_names)
     {
-        l_string_list << l_music_key_name.c_str();
+        l_string_list << QString::fromStdString(l_music_key_name);
     }
     l_key_combo_box->addItems(l_string_list);
     l_key_combo_box->setCurrentIndex(GData::getUniqueInstance().musicKey());
@@ -472,7 +472,7 @@ MainWindow::MainWindow()
     l_string_list.clear();
     for(const MusicTemperament & l_music_temperament : MusicTemperament::getTemperaments())
     {
-        l_string_list << l_music_temperament.name().c_str();
+        l_string_list << QString::fromStdString(l_music_temperament.name());
     }
     l_tempered_combo_box->addItems(l_string_list);
     l_tempered_combo_box->setCurrentIndex(static_cast<int>(GData::getUniqueInstance().musicTemperament()));
@@ -1397,7 +1397,7 @@ MainWindow::updateKeyTypes(int p_tempered_type)
         //remove out the minors
         if(l_music_scale.isCompatibleWithTemparament(static_cast<MusicTemperament::TemperamentType>(p_tempered_type)))
         {
-            l_string_list << l_music_scale.name().c_str();
+            l_string_list << QString::fromStdString(l_music_scale.name());
         }
     }
     QString l_current_text = m_key_type_combo_box->currentText();

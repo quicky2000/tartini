@@ -179,7 +179,7 @@ bool SoundFile::openRead(const std::string & p_filename)
     {
         fprintf(stderr, "Error opening %s\n", m_filtered_filename.c_str());
         delete m_stream; m_stream = nullptr;
-        QString l_string = QString("Error opening ") + QString(m_filtered_filename.c_str()) + QString(" for writing.\nPossible cause: temp folder is read-only or disk is out of space.\nPlease select a writable Temp Folder");
+        QString l_string = QString("Error opening ") + QString::fromStdString(m_filtered_filename) + QString(" for writing.\nPossible cause: temp folder is read-only or disk is out of space.\nPlease select a writable Temp Folder");
         QMessageBox::warning(g_main_window, "Error", l_string, QMessageBox::Ok, QMessageBox::NoButton);
         g_main_window->menuPreferences();
         return false;
@@ -261,7 +261,7 @@ bool SoundFile::openWrite( const std::string & p_filename
         m_stream = nullptr;
         delete m_filtered_stream;
         m_filtered_stream = nullptr;
-        QString l_string = QString("Error opening ") + QString(m_filename.c_str()) + QString(" for writing.\nPossible cause: temp folder is read-only or disk is out of space.\nPlease select a writable Temp Folder");
+        QString l_string = QString("Error opening ") + QString::fromStdString(m_filename) + QString(" for writing.\nPossible cause: temp folder is read-only or disk is out of space.\nPlease select a writable Temp Folder");
         QMessageBox::warning(g_main_window, "Error", l_string, QMessageBox::Ok, QMessageBox::NoButton);
         g_main_window->menuPreferences();
         return false;
@@ -273,7 +273,7 @@ bool SoundFile::openWrite( const std::string & p_filename
         m_stream = nullptr;
         delete m_filtered_stream;
         m_filtered_stream = nullptr;
-        QString l_string = QString("Error opening ") + QString(m_filtered_filename.c_str()) + QString(" for writing.\nPossible cause: temp folder is read-only or disk is out of space.\nPlease select a writable Temp Folder");
+        QString l_string = QString("Error opening ") + QString::fromStdString(m_filtered_filename) + QString(" for writing.\nPossible cause: temp folder is read-only or disk is out of space.\nPlease select a writable Temp Folder");
         QMessageBox::warning(g_main_window, "Error", l_string, QMessageBox::Ok, QMessageBox::NoButton);
         g_main_window->menuPreferences();
         return false;
