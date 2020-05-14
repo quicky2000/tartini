@@ -350,7 +350,7 @@ void View::doAutoFollowing()
  
     Channel * l_active_channel = GData::getUniqueInstance().getActiveChannel();
 
-    if(l_active_channel == nullptr)
+    if(nullptr == l_active_channel)
     {
         return;
     }

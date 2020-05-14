@@ -715,7 +715,7 @@ void Channel::recalcNotePitches(int p_chunk)
 
     //recalculate the values for the note using the overall periodOctaveEstimate
     NoteData * l_current_note = getLastNote();
-    if(l_current_note == nullptr)
+    if(nullptr == l_current_note)
     {
         return;
     }

@@ -164,7 +164,7 @@ T * Array1d<T>::end() const
 template<class T>
 bool Array1d<T>::isEmpty() const
 {
-    return (m_data == nullptr);
+    return (nullptr == m_data);
 }
 
 //------------------------------------------------------------------------------

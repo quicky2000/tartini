@@ -526,7 +526,7 @@ int SoundFile::blockingWrite( SoundStream * p_stream
                             , int p_n
                             )
 {
-    if(p_stream == nullptr)
+    if(nullptr == p_stream)
     {
 
         return p_n;

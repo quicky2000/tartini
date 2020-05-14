@@ -267,7 +267,7 @@ bool GData::openPlayRecord( SoundFile * p_sound_file_rec
 */
 bool GData::playSound(SoundFile * p_sound_file)
 {
-    if(p_sound_file == nullptr)
+    if(nullptr == p_sound_file)
     {
         return false;
     }
@@ -728,7 +728,7 @@ int GData::closeFile( SoundFile * p_sound_file
                     , t_saving_modes p_saving_mode
                     )
 {
-    if(p_sound_file == nullptr)
+    if(nullptr == p_sound_file)
     {
         return -1;
     }

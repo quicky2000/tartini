@@ -142,7 +142,7 @@ void TunerView::setLed(int p_index, bool p_value)
 void TunerView::doUpdate()
 {
     Channel *l_active_channel = GData::getUniqueInstance().getActiveChannel();
-    if(l_active_channel == nullptr || !l_active_channel->hasAnalysisData())
+    if(nullptr == l_active_channel || !l_active_channel->hasAnalysisData())
     {
         m_tuner_widget->doUpdate(0.0);
         return;

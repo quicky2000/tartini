@@ -258,7 +258,7 @@ T * Array2d<T>::end(int p_y)
 template<class T>
 bool Array2d<T>::isEmpty() const
 {
-    return (m_data == nullptr);
+    return (nullptr == m_data);
 }
 
 //-----------------------------------------------------------------------------
