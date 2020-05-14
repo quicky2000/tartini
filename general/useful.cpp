@@ -420,4 +420,32 @@ int nextPowerOf2(int p_x)
     return l_y;
 }
 
+//------------------------------------------------------------------------------
+std::string toSubscriptString(int p_number)
+{
+    std::string l_string;
+
+    for (char l_digit : std::to_string(p_number))
+    {
+        switch(l_digit)
+        {
+            // Convert characters to corresponding Unicode subscript characters.
+            case '0': l_string += "\u2080"; break;
+            case '1': l_string += "\u2081"; break;
+            case '2': l_string += "\u2082"; break;
+            case '3': l_string += "\u2083"; break;
+            case '4': l_string += "\u2084"; break;
+            case '5': l_string += "\u2085"; break;
+            case '6': l_string += "\u2086"; break;
+            case '7': l_string += "\u2087"; break;
+            case '8': l_string += "\u2088"; break;
+            case '9': l_string += "\u2089"; break;
+            case '+': l_string += "\u208A"; break;
+            case '-': l_string += "\u208B"; break;
+            default: myassert(false); break;
+        }
+    }
+    return l_string;
+}
+
 //EOF
