@@ -40,7 +40,7 @@ SaveDialog::SaveDialog(QWidget * p_parent)
     setFileMode(QFileDialog::AnyFile);
     setModal(true);
     setOption(QFileDialog::DontUseNativeDialog,true);
-    QLayout * l_layout = this->layout();
+    QLayout * l_layout = layout();
 
     QVBoxLayout * l_base_layout = new QVBoxLayout();
     l_layout->addItem(l_base_layout);
