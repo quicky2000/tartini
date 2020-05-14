@@ -365,6 +365,8 @@ bool moveFile( const std::string & p_src
 */
 int nextPowerOf2(int p_x);
 
+std::string toSubscriptString(int p_number);
+
 #include <algorithm>
 
 /**

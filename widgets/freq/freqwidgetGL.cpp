@@ -144,7 +144,7 @@ void FreqWidgetGL::drawReferenceLines( QPaintDevice & p_paint_device
         if(!isBlackNote(l_name_index))
         {
             p_painter.setPen(Qt::black);
-            l_note_label = QString::fromStdString(music_notes::noteName(l_name_index) + std::to_string(noteOctave(l_name_index)));
+            l_note_label = QString::fromStdString(music_notes::noteName(l_name_index) + toSubscriptString(noteOctave(l_name_index)));
             p_painter.drawText(2, l_line_Y + l_font_height_space, l_note_label);
             if(noteValue(l_name_index) == 0)
             {
@@ -272,9 +272,7 @@ void FreqWidgetGL::drawReferenceLinesGL( const double & /* p_left_time*/
                 l_line_Y = double(height()) - myround((l_cur_pitch - p_view_bottom) / p_zoom_Y);
                 l_name_index = toInt(l_cur_pitch);
                 glColor3ub(0, 0, 0);
-                std::stringstream l_stream ;
-                l_stream << music_notes::noteName(l_name_index) << noteOctave(l_name_index);
-                l_note_label = QString(l_stream.str().c_str());
+                l_note_label = QString::fromStdString(music_notes::noteName(l_name_index) + toSubscriptString(noteOctave(l_name_index)));
                 renderText(2, toInt(l_line_Y) + l_font_height_space, l_note_label);
             }
             if(p_zoom_Y > 0.1)
