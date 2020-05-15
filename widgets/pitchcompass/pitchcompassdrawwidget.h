@@ -12,7 +12,6 @@
 #ifndef PITCHCOMPASSDRAWWIDGET_H
 #define PITCHCOMPASSDRAWWIDGET_H
 
-#include "drawwidget.h"
 #include <QResizeEvent>
 
 class QwtCompass;
