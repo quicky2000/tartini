@@ -35,12 +35,13 @@ PitchCompassDrawWidget::PitchCompassDrawWidget( QWidget *p_parent
                                               , int p_mode
                                               )
 : QWidget(p_parent)
+, m_compass(new QwtCompass(this))
+, m_blank_count(9)
+, m_mode(p_mode)
 {
     setObjectName(QString::fromStdString(p_name));
     setAttribute(Qt::WA_DeleteOnClose);
-    this->m_mode = p_mode;
 
-    m_compass = new QwtCompass(this);
     m_compass->setLineWidth(4);
     m_compass->setFrameShadow(QwtCompass::Sunken);
 
@@ -106,7 +107,6 @@ PitchCompassDrawWidget::PitchCompassDrawWidget( QWidget *p_parent
     m_compass->setValue(0.0);
 
     // Force a blank update
-    m_blank_count = 9;
     blank();
 
     m_compass->setReadOnly(true);
