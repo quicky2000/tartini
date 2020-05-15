@@ -29,9 +29,15 @@ class PitchCompassView: public ViewWidget
 
   public:
 
+    enum class CompassMode
+    { Mode0
+    , Mode1
+    , Mode2
+    };
+    
     PitchCompassView( int p_view_id
                     , QWidget * p_parent = nullptr
-                    , int p_mode = 2
+                    , CompassMode p_mode = CompassMode::Mode2
                     );
     virtual ~PitchCompassView();
 
@@ -40,7 +46,7 @@ class PitchCompassView: public ViewWidget
     void resizeEvent(QResizeEvent *);
 
  private:
-    void changeMode(int p_mode);
+    void changeMode(CompassMode p_mode);
 
     PitchCompassDrawWidget * m_pitch_compass_draw_widget;
 
