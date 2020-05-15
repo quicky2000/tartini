@@ -93,6 +93,8 @@ void PitchCompassDrawWidget::setCompassScale()
     }
     else if(m_mode == PitchCompassView::CompassMode::Mode2)
     {
+        int l_music_key = GData::getUniqueInstance().musicKey();
+
         m_compass->setMode(QwtCompass::RotateNeedle);
         QMap< double, QString > l_notes;
 #if QWT_VERSION >= 0x060000
@@ -101,14 +103,15 @@ void PitchCompassDrawWidget::setCompassScale()
         m_compass->setSingleSteps(30);
         for(int l_index = 0; l_index < 12; l_index++)
         {
-            l_notes[l_index] = QString::fromStdString(music_notes::noteName(l_index));
+            std::string label = music_notes::noteName(cycle(l_index + g_music_key_roots[l_music_key], 12));
+            l_notes[l_index] = QString::fromStdString(label);
         }
         l_scale_draw->setLabelMap(l_notes);
 #else
         m_compass->setScale(11, 2, 30);
         for(int l_index = 0; l_index < 12; l_index++)
         {
-            l_notes[l_index * 30] = noteName(l_index);
+            l_notes[l_index * 30] = music_notes::noteName(cycle(l_index + g_music_key_roots[l_music_key], 12));
         }
         m_compass->setLabelMap(l_notes);
 #endif // QWT_VERSION >= 0x060000
@@ -125,6 +128,12 @@ void PitchCompassDrawWidget::setCompassScale()
     l_scale_draw->setTickLength( QwtScaleDiv::MediumTick,20);
     l_scale_draw->setTickLength( QwtScaleDiv::MajorTick,30);
     m_compass->setScaleDraw(l_scale_draw);
+
+    // Force the compass to invalidate its cache and redraw.
+    // QwtDial::invalidateCache() is a protected member.
+    // TODO: Is there a cleaner way to do this?
+    m_compass->setMode(QwtCompass::RotateScale);
+    m_compass->setMode(QwtCompass::RotateNeedle);
 #else
     m_compass->setScaleTicks(1, 1, 3);
 #endif // QWT_VERSION >= 0x060000
@@ -220,8 +229,8 @@ void PitchCompassDrawWidget::updateCompass(double p_time)
         }
         else if (m_mode == PitchCompassView::CompassMode::Mode2)
         {
-            // mode == 2
-            m_compass->setValue(noteValue(l_pitch) + l_pitch - toInt(l_pitch));
+            int l_music_key = GData::getUniqueInstance().musicKey();
+            m_compass->setValue(cycle(noteValue(l_pitch) - g_music_key_roots[l_music_key], 12) + l_pitch - toInt(l_pitch));
         }
         else
         {
