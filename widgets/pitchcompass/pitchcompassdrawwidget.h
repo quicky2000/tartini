@@ -36,7 +36,7 @@ class PitchCompassDrawWidget: public QWidget
 
   private:
 
-    void blank();
+    void blank(bool p_force = false);
 
     QwtCompass * m_compass;
 

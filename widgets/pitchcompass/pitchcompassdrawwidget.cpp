@@ -36,7 +36,7 @@ PitchCompassDrawWidget::PitchCompassDrawWidget( QWidget *p_parent
                                               )
 : QWidget(p_parent)
 , m_compass(new QwtCompass(this))
-, m_blank_count(9)
+, m_blank_count(0)
 , m_mode(p_mode)
 {
     setObjectName(QString::fromStdString(p_name));
@@ -107,7 +107,7 @@ PitchCompassDrawWidget::PitchCompassDrawWidget( QWidget *p_parent
     m_compass->setValue(0.0);
 
     // Force a blank update
-    blank();
+    blank(true);
 
     m_compass->setReadOnly(true);
     m_compass->show();
@@ -211,9 +211,9 @@ void PitchCompassDrawWidget::updateCompass(double p_time)
 }
 
 //------------------------------------------------------------------------------
-void PitchCompassDrawWidget::blank()
+void PitchCompassDrawWidget::blank(bool p_force)
 {
-    if(++m_blank_count % 10 == 0)
+    if(p_force || ++m_blank_count >= 10)
     {
         if(m_mode != 2)
         {
