@@ -166,8 +166,6 @@ class MainWindow : public QMainWindow
 };
 
 extern MainWindow * g_main_window;
-class MyGLFont;
-extern MyGLFont * g_mygl_font;
 
 #endif // MAINWINDOW_H
 // EOF
