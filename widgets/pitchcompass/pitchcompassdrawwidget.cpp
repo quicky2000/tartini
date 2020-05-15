@@ -94,6 +94,7 @@ void PitchCompassDrawWidget::setCompassScale()
     else if(m_mode == PitchCompassView::CompassMode::Mode2)
     {
         int l_music_key = GData::getUniqueInstance().musicKey();
+        const MusicScale &l_music_scale = MusicScale::getScale(GData::getUniqueInstance().musicScale());
 
         m_compass->setMode(QwtCompass::RotateNeedle);
         QMap< double, QString > l_notes;
@@ -103,8 +104,32 @@ void PitchCompassDrawWidget::setCompassScale()
         m_compass->setSingleSteps(30);
         for(int l_index = 0; l_index < 12; l_index++)
         {
-            std::string label = music_notes::noteName(cycle(l_index + g_music_key_roots[l_music_key], 12));
-            l_notes[l_index] = QString::fromStdString(label);
+            if(l_music_scale.hasSemitone(l_index))
+            {
+                std::string label = music_notes::noteName(cycle(l_index + g_music_key_roots[l_music_key], 12));
+                
+                // Minimize how much the compass resizes due to differences in the lengths of the labels.
+                // Make all of the labels two characters wide.  Don't use regular spaces, since the compass will trim them.
+                if (label.length() < 2)
+                {
+                    if (l_index > 0 && l_index < 6)
+                    {
+                        // Right side of the compass -- pad on the right
+                        label += "\u2002";  // Unicode "En Space"
+                    }
+                    else if (l_index > 6)
+                    {
+                        // Left side of the compass -- pad on the left
+                        label = "\u2002" + label;  // Unicode "En Space"
+                    }
+                }
+                l_notes[l_index] = QString::fromStdString(label);
+            }
+            else
+            {
+                // Pad with two spaces
+                l_notes[l_index] = "\u2002\u2002";  // Unicode "En Space"
+            }
         }
         l_scale_draw->setLabelMap(l_notes);
 #else
