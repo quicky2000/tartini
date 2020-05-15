@@ -43,6 +43,34 @@ PitchCompassDrawWidget::PitchCompassDrawWidget( QWidget *p_parent
     m_compass->setLineWidth(4);
     m_compass->setFrameShadow(QwtCompass::Sunken);
 
+    setCompassScale();
+
+    m_compass->setNeedle(new QwtCompassMagnetNeedle(QwtCompassMagnetNeedle::ThinStyle));
+    m_compass->setValue(0.0);
+
+    // Force a blank update
+    blank(true);
+
+    m_compass->setReadOnly(true);
+    m_compass->show();
+
+}
+
+//------------------------------------------------------------------------------
+PitchCompassDrawWidget::~PitchCompassDrawWidget()
+{
+    delete m_compass;
+}
+
+//------------------------------------------------------------------------------
+void PitchCompassDrawWidget::resizeEvent(QResizeEvent *)
+{
+    m_compass->resize(size());
+}
+
+//------------------------------------------------------------------------------
+void PitchCompassDrawWidget::setCompassScale()
+{
 #if QWT_VERSION >= 0x060000
     QwtCompassScaleDraw *l_scale_draw = new QwtCompassScaleDraw();
 #endif // QWT_VERSION >= 0x060000
@@ -52,8 +80,8 @@ PitchCompassDrawWidget::PitchCompassDrawWidget( QWidget *p_parent
         m_compass->setMode(QwtCompass::RotateNeedle);
 #if QWT_VERSION >= 0x060000
         m_compass->setScale(36, 5);
-	    // Stepping is now defined by qwt_abstract_slider
-	    m_compass->setSingleSteps(0);
+        // Stepping is now defined by qwt_abstract_slider
+        m_compass->setSingleSteps(0);
 #else
         m_compass->setScale(36, 5, 0);
 #endif // QWT_VERSION >= 0x060000
@@ -100,34 +128,6 @@ PitchCompassDrawWidget::PitchCompassDrawWidget( QWidget *p_parent
 #else
     m_compass->setScaleTicks(1, 1, 3);
 #endif // QWT_VERSION >= 0x060000
-
-    m_compass->setNeedle(new QwtCompassMagnetNeedle(QwtCompassMagnetNeedle::ThinStyle));
-    m_compass->setValue(0.0);
-
-    // Force a blank update
-    blank(true);
-
-    m_compass->setReadOnly(true);
-    m_compass->show();
-
-}
-
-//------------------------------------------------------------------------------
-PitchCompassDrawWidget::~PitchCompassDrawWidget()
-{
-    delete m_compass;
-}
-
-//------------------------------------------------------------------------------
-void PitchCompassDrawWidget::resizeEvent(QResizeEvent *)
-{
-    m_compass->resize(size());
-}
-
-//------------------------------------------------------------------------------
-void PitchCompassDrawWidget::setCompassScale()
-{
-    // Placeholder
 }
 
 //------------------------------------------------------------------------------
