@@ -27,8 +27,6 @@
 #include <qwt_dial_needle.h>
 #include <QResizeEvent>
 
-#include "assert.h"
-
 //------------------------------------------------------------------------------
 PitchCompassDrawWidget::PitchCompassDrawWidget( QWidget *p_parent
                                               , const std::string & p_name
