@@ -127,15 +127,14 @@ void PitchCompassDrawWidget::resizeEvent(QResizeEvent *)
 //------------------------------------------------------------------------------
 void PitchCompassDrawWidget::updateCompass(double p_time)
 {
+    const AnalysisData *l_data = nullptr;
     Channel *l_active_channel = GData::getUniqueInstance().getActiveChannel();
-    if(l_active_channel == nullptr)
+    
+    if(l_active_channel)
     {
-        blank();
-        return;
+        l_data = l_active_channel->dataAtTime(p_time);
     }
-
-    const AnalysisData *l_data = l_active_channel->dataAtTime(p_time);
-
+    
     if(l_data && l_data->getCorrelation() >= 0.9)
     {
         double l_pitch = l_data->getPitch();
