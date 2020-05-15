@@ -25,7 +25,6 @@ QString macxPathString;
 
 #include "gdata.h"
 #include "myassert.h"
-#include "myglfonts.h"
 
 int main( int p_argc
         , char ** p_argv

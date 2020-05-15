@@ -122,8 +122,6 @@
 #include "pics/shadingon32x32.xpm"
 #include "pics/shadingoff32x32.xpm"
 
-#include "myglfonts.h"
-
 #ifdef MACX
 #include "main.h"
 #endif // MACX
@@ -131,7 +129,6 @@
 #include "myassert.h"
 
 MainWindow *g_main_window;
-MyGLFont *g_mygl_font;
 
 ViewData MainWindow::m_view_data[MainWindow::m_view_number];
 
@@ -147,7 +144,6 @@ MainWindow::MainWindow()
     QFont l_my_font = QFont();
     l_my_font.setPointSize(9);
     l_my_font.setStyleStrategy(QFont::PreferAntialias);
-    g_mygl_font = new MyGLFont(l_my_font);
 
 #ifndef WINDOWS
     //for running multi-threaded profiling

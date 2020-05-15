@@ -20,7 +20,6 @@
 #include "gdata.h"
 #include "channel.h"
 #include "analysisdata.h"
-#include "myglfonts.h"
 #include "musicnotes.h"
 #include <glu.h>
 #include <gl.h>
@@ -41,7 +40,7 @@ VibratoWidget::VibratoWidget(QWidget * p_parent, int p_nls):
       m_note_labels[l_index].set(QString(8,' '), 0.0f);
     }
   m_vibrato_font = QFont();
-  m_vibrato_font.setPointSize(9);
+  m_vibrato_font.setPointSize(12);
 }
 
 //------------------------------------------------------------------------------
@@ -150,14 +149,13 @@ void VibratoWidget::paintGL()
   glCallList(m_maxima_minima_points);
 
   // Draw the note labels
-  g_mygl_font->beginGLtext(width(), height());
   glColor3ub(0,0,0);
   for(int l_index = 0; l_index < m_note_label_counter; l_index++)
     {
-      g_mygl_font->drawGLtextRaw(3, m_note_labels[l_index].get_y() - 4, m_note_labels[l_index].get_label());
-      g_mygl_font->drawGLtextRaw(width() - m_note_label_offset + 3, m_note_labels[l_index].get_y() - 4, m_note_labels[l_index].get_label());
+      double l_y = height() - (m_note_labels[l_index].get_y() - 4);
+      renderText(3, l_y, m_note_labels[l_index].get_label(), m_vibrato_font);
+      renderText(width() - m_note_label_offset + 3, l_y, m_note_labels[l_index].get_label(), m_vibrato_font);
     }
-  g_mygl_font->endGLtext();
 
 #ifdef TIME_PAINT
     std::cout << l_timer.elapsed() << " ms: VibratoWidget::paintGL()" << std::endl;
@@ -942,7 +940,7 @@ void VibratoWidget::compose_note_label(QString & p_note_label, const int & p_not
   std::stringstream l_composed_note_label;
   if ((noteOctave(p_note) >= 0) && (noteOctave(p_note) <= 9))
     {
-      l_composed_note_label << music_notes::noteName(p_note) << noteOctave(p_note);
+      l_composed_note_label << music_notes::noteName(p_note) << toSubscriptString(noteOctave(p_note));
     }
   else
     {

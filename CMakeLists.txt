@@ -125,8 +125,6 @@ set(MY_HEADER_FILES
     general/prony.h
     general/mymatrix.h
     general/mymatrix.hpp
-    general/myglfonts.h
-    general/myglfonts.hpp
     general/mygl.h
     general/mygl.hpp
     general/myqt.h
@@ -227,7 +225,6 @@ set(MY_SOURCE_FILES
     widgets/vibrato/vibratocirclewidget.cpp
     general/prony.cpp
     general/mymatrix.cpp
-    general/myglfonts.cpp
     general/myqt.cpp
     music/musicnotes.cpp
     general/myalgo.cpp

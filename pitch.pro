@@ -99,8 +99,6 @@ HEADERS += \
   general/myalgo.h \
   general/mygl.h \
   general/mygl.hpp \
-  general/myglfonts.h \
-  general/myglfonts.hpp \
   general/myio.h \
   general/mymatrix.h \
   general/mymatrix.hpp \
@@ -229,7 +227,6 @@ SOURCES += \
    general/equalloudness.cpp \
    general/fast_smooth.cpp \
    general/myalgo.cpp \
-   general/myglfonts.cpp \
    general/myio.cpp \
    general/mymatrix.cpp \
    general/myqt.cpp \
