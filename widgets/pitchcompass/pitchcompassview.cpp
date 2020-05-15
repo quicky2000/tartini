@@ -22,7 +22,7 @@
 //------------------------------------------------------------------------------
 PitchCompassView::PitchCompassView( int p_view_id
                                   , QWidget *p_parent
-                                  , int p_mode
+                                  , CompassMode p_mode
                                   )
 : ViewWidget(p_view_id, p_parent)
 , m_pitch_compass_draw_widget(new PitchCompassDrawWidget(this, "compass", p_mode))
@@ -43,7 +43,7 @@ void PitchCompassView::resizeEvent(QResizeEvent *)
 }
 
 //------------------------------------------------------------------------------
-void PitchCompassView::changeMode(int p_mode)
+void PitchCompassView::changeMode(CompassMode p_mode)
 {
     delete m_pitch_compass_draw_widget;
     m_pitch_compass_draw_widget = new PitchCompassDrawWidget(this, "compass", p_mode);

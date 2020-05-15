@@ -32,7 +32,7 @@
 //------------------------------------------------------------------------------
 PitchCompassDrawWidget::PitchCompassDrawWidget( QWidget *p_parent
                                               , const std::string & p_name
-                                              , int p_mode
+                                              , PitchCompassView::CompassMode p_mode
                                               )
 : QWidget(p_parent)
 , m_compass(new QwtCompass(this))
@@ -49,7 +49,7 @@ PitchCompassDrawWidget::PitchCompassDrawWidget( QWidget *p_parent
     QwtCompassScaleDraw *l_scale_draw = new QwtCompassScaleDraw();
 #endif // QWT_VERSION >= 0x060000
 
-    if(p_mode == 0)
+    if(m_mode == PitchCompassView::CompassMode::Mode0)
     {
         m_compass->setMode(QwtCompass::RotateNeedle);
 #if QWT_VERSION >= 0x060000
@@ -60,12 +60,12 @@ PitchCompassDrawWidget::PitchCompassDrawWidget( QWidget *p_parent
         m_compass->setScale(36, 5, 0);
 #endif // QWT_VERSION >= 0x060000
     }
-    else if(p_mode == 1)
+    else if(m_mode == PitchCompassView::CompassMode::Mode1)
     {
         m_compass->setMode(QwtCompass::RotateScale);
         m_compass->setScale(360, 0);
     }
-    else if(p_mode == 2)
+    else if(m_mode == PitchCompassView::CompassMode::Mode2)
     {
         m_compass->setMode(QwtCompass::RotateNeedle);
         QMap< double, QString > l_notes;
@@ -142,7 +142,7 @@ void PitchCompassDrawWidget::updateCompass(double p_time)
         double l_pitch = l_data->getPitch();
         unsigned int l_interval = 90;
 
-        if(m_mode == 0)
+        if(m_mode == PitchCompassView::CompassMode::Mode0)
         {
             QMap< double, QString > l_notes;
             double l_zero_val = myround(l_pitch);
@@ -169,7 +169,7 @@ void PitchCompassDrawWidget::updateCompass(double p_time)
             m_compass->setLabelMap(l_notes);
 #endif // QWT_VERSION >= 0x060000
         }
-        else if(m_mode == 1)
+        else if(m_mode == PitchCompassView::CompassMode::Mode1)
         {
             QMap< double, QString > l_notes;
             double l_close_pitch = myround(l_pitch);
@@ -196,10 +196,14 @@ void PitchCompassDrawWidget::updateCompass(double p_time)
             m_compass->setLabelMap(l_notes);
 #endif // QWT_VERSION >= 0x060000
         }
-        else
+        else if (m_mode == PitchCompassView::CompassMode::Mode2)
         {
             // mode == 2
             m_compass->setValue(noteValue(l_pitch) + l_pitch - toInt(l_pitch));
+        }
+        else
+        {
+            myassert(false);
         }
 
         m_compass->setValid(true);
@@ -215,7 +219,7 @@ void PitchCompassDrawWidget::blank(bool p_force)
 {
     if(p_force || ++m_blank_count >= 10)
     {
-        if(m_mode != 2)
+        if(m_mode != PitchCompassView::CompassMode::Mode2)
         {
             QMap< double, QString > l_notes;
 #if QWT_VERSION >= 0x060000

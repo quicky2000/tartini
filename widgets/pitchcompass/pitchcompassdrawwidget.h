@@ -13,6 +13,7 @@
 #define PITCHCOMPASSDRAWWIDGET_H
 
 #include <QResizeEvent>
+#include "pitchcompassview.h"
 
 class QwtCompass;
 
@@ -24,7 +25,7 @@ class PitchCompassDrawWidget: public QWidget
   public:
     PitchCompassDrawWidget( QWidget * p_parent
                           , const std::string & p_name = ""
-                          , int p_mode = 0
+                          , PitchCompassView::CompassMode p_mode = PitchCompassView::CompassMode::Mode2
                           );
     virtual ~PitchCompassDrawWidget();
 
@@ -42,7 +43,7 @@ class PitchCompassDrawWidget: public QWidget
 
     int m_blank_count;
 
-    int m_mode;
+    PitchCompassView::CompassMode m_mode;
 };
 #endif // PITCHCOMPASSDRAWWIDGET_H
 // EOF
