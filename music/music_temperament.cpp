@@ -118,21 +118,25 @@ const MusicTemperament & MusicTemperament::getTemperament(TemperamentType p_temp
 void MusicTemperament::init()
 {
     const std::vector<double> l_even_tempered_scale =
+        //C,  C♯   D,   E♭,  E,   F,   F♯,  G,   G♯,  A,   B♭,   B
         {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0 };
 
     const std::vector<int> l_twelve_note_type =
         {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
 
     const std::vector<double> l_just_intonation_ratios =
+        //C,  D,       E♭,      E,       F,       F♯,        G,       G♯,        A,       B
         {1.0, 9.0 / 8, 6.0 / 5, 5.0 / 4, 4.0 / 3, 25.0 / 18, 3.0 / 2, 25.0 / 16, 5.0 / 3, 15.0 / 8 };
 
     const std::vector<int> l_just_intonation_type =
-    {0, 2, 3, 4, 5, 6, 7, 8, 9, 11 };
+        {0, 2, 3, 4, 5, 6, 7, 8, 9, 11 };
 
     const std::vector<double> l_pythagorean_ratio =
+        //C,  D♭,          D,       E♭,        E,         F,       F♯,          G,       A♭,         A,         B♭,       B
         {1.0, 256.0 / 243, 9.0 / 8, 32.0 / 27, 81.0 / 64, 4.0 / 3, 729.0 / 512, 3.0 / 2, 128.0 / 81, 27.0 / 16, 16.0 / 9, 243.0 / 128 };
 
     const std::vector<double> l_meantone_temperament_scale =
+        //C,C♯, D,   E♭,  E,   F,   F♯,  G,   G♯,  A,   B♭,   B
         {0, 76, 193, 310, 386, 503, 579, 697, 773, 890, 1007, 1083 };
 
     g_music_temperaments =
