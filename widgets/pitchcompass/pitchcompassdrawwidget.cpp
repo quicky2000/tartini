@@ -117,6 +117,7 @@ PitchCompassDrawWidget::PitchCompassDrawWidget( QWidget *p_parent
 //------------------------------------------------------------------------------
 PitchCompassDrawWidget::~PitchCompassDrawWidget()
 {
+    delete m_compass;
 }
 
 //------------------------------------------------------------------------------

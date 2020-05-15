@@ -34,6 +34,7 @@ PitchCompassView::PitchCompassView( int p_view_id
 //------------------------------------------------------------------------------
 PitchCompassView::~PitchCompassView()
 {
+    delete m_pitch_compass_draw_widget;
 }
 
 //------------------------------------------------------------------------------
