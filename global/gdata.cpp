@@ -751,7 +751,7 @@ int GData::closeFile( SoundFile * p_sound_file
 
     if(p_saving_mode == SavingModes::ALWAYS_ASK)
     {
-        QString l_filename = QString(getFilenamePart(l_old_filename.toStdString()).c_str());
+        QString l_filename = QString::fromStdString(getFilenamePart(l_old_filename.toStdString()));
         int l_option = QMessageBox::question(nullptr
                                             , QString("Save changes to file '") + l_filename + "' ?"
                                             , QString("Save changes to the file '") + l_filename + QString("' ?\n")
