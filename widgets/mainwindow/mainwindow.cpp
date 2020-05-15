@@ -710,16 +710,16 @@ void MainWindow::openFile()
     }
     l_file_name = QDir::toNativeSeparators(l_file_name);
     GData::getUniqueInstance().setSettingsValue("Dialogs/openFilesFolder", l_file_name.toStdString());
-    openFile(l_file_name.toStdString().c_str());
+    openFile(l_file_name.toStdString());
 }
 
 //------------------------------------------------------------------------------
-void MainWindow::openFile(const char *p_file_name)
+void MainWindow::openFile(const std::string & p_file_name)
 {
     SoundFile * l_new_sound_file = new SoundFile();
     if(!l_new_sound_file->openRead(p_file_name))
     {
-        fprintf(stderr, "Error opening %s\n", p_file_name);
+        fprintf(stderr, "Error opening %s\n", p_file_name.c_str());
         delete l_new_sound_file;
         return;
     }
@@ -813,7 +813,7 @@ void MainWindow::openRecord(bool p_and_play)
     SoundFile * l_new_sound_file = new SoundFile();
     QString l_new_filename(l_file_info.absoluteFilePath());
     l_new_filename = QDir::toNativeSeparators(l_new_filename);
-    if(!l_new_sound_file->openWrite(l_new_filename.toStdString().c_str(), l_rate, l_channels, l_bits, l_window_size, l_step_size))
+    if(!l_new_sound_file->openWrite(l_new_filename.toStdString(), l_rate, l_channels, l_bits, l_window_size, l_step_size))
     {
         delete l_new_sound_file; l_new_sound_file = nullptr;
         return;

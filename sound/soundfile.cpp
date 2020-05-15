@@ -136,7 +136,7 @@ QString SoundFile::getNextTempFilename() const
         l_stream << "temp" << std::setfill('0') << std::setw(3) << l_index << ".wav";
         l_file_name = QString::fromStdString(l_stream.str());
 #ifdef DEBUG_PRINTF
-        printf("trying %s\n", l_file_name.toStdString().c_str());
+        printf("trying %s\n", qUtf8Printable(l_file_name);
 #endif // DEBUG_PRINTF
         l_file_info.setFile(l_dir, l_file_name);
         if(l_file_info.exists())
