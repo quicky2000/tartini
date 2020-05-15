@@ -125,6 +125,30 @@ void PitchCompassDrawWidget::resizeEvent(QResizeEvent *)
 }
 
 //------------------------------------------------------------------------------
+void PitchCompassDrawWidget::setCompassScale()
+{
+    // Placeholder
+}
+
+//------------------------------------------------------------------------------
+void PitchCompassDrawWidget::updateMusicKey(int)
+{
+    if (m_mode == PitchCompassView::CompassMode::Mode2)
+    {
+        setCompassScale();
+    }
+}
+
+//------------------------------------------------------------------------------
+void PitchCompassDrawWidget::updateMusicScale(int)
+{
+    if (m_mode == PitchCompassView::CompassMode::Mode2)
+    {
+        setCompassScale();
+    }
+}
+
+//------------------------------------------------------------------------------
 void PitchCompassDrawWidget::updateCompass(double p_time)
 {
     const AnalysisData *l_data = nullptr;

@@ -33,10 +33,13 @@ class PitchCompassDrawWidget: public QWidget
 
   public slots:
 
+    void updateMusicKey(int p_music_key);
+    void updateMusicScale(int p_music_scale);
     void updateCompass(double p_time);
 
   private:
 
+    void setCompassScale();
     void blank(bool p_force = false);
 
     QwtCompass * m_compass;

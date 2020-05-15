@@ -28,6 +28,9 @@ PitchCompassView::PitchCompassView( int p_view_id
 , m_pitch_compass_draw_widget(new PitchCompassDrawWidget(this, "compass", p_mode))
 {
     connect(&(GData::getUniqueInstance().getView()), SIGNAL(onFastUpdate(double)), m_pitch_compass_draw_widget, SLOT(updateCompass(double)));
+    connect(&(GData::getUniqueInstance()), SIGNAL(musicKeyChanged(int)), m_pitch_compass_draw_widget, SLOT(updateMusicKey(int)));
+    connect(&(GData::getUniqueInstance()), SIGNAL(musicScaleChanged(int)), m_pitch_compass_draw_widget, SLOT(updateMusicScale(int)));
+
     m_pitch_compass_draw_widget->show();
 }
 
