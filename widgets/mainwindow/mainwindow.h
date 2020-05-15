@@ -83,7 +83,7 @@ class MainWindow : public QMainWindow
 
   public slots:
     void openFile();
-    void openFile(const char *p_file_name);
+    void openFile(const std::string & p_file_name);
 
     void openRecord();
     void openPlayRecord();

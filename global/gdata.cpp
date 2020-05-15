@@ -678,14 +678,14 @@ int GData::saveFile( SoundFile * p_sound_file
     int l_ret = (moveFile(l_old_filename.toStdString(), p_new_filename.toStdString())) ? 0 : -1;
     if(l_ret == 0)
     {
-        p_sound_file->getStream().open_read(p_new_filename.toStdString().c_str());
+        p_sound_file->getStream().open_read(p_new_filename.toStdString());
         p_sound_file->getStream().jump_to_frame(l_pos);
         p_sound_file->setSaved(true);
-        p_sound_file->setFilename(p_new_filename.toStdString().c_str());
+        p_sound_file->setFilename(p_new_filename.toStdString());
     }
     else
     {
-        p_sound_file->getStream().open_read(l_old_filename.toStdString().c_str());
+        p_sound_file->getStream().open_read(l_old_filename.toStdString());
         p_sound_file->getStream().jump_to_frame(l_pos);
     }
     return l_ret;

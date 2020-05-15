@@ -1168,7 +1168,7 @@ void Channel::exportChannel( int p_type
 {
     QString l_string = QFileDialog::getSaveFileName(g_main_window, "Choose a filename to save under", ".", p_type_string);
 #ifdef DEBUG_PRINTF
-    printf("file = %s\n", l_string.toStdString().c_str());
+    printf("file = %s\n", qUtf8Printable(l_string));
 #endif // DEBUG_PRINTF
     if(l_string.isEmpty())
     {
