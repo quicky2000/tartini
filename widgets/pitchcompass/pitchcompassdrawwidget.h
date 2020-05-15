@@ -41,8 +41,6 @@ class PitchCompassDrawWidget: public QWidget
 
     QwtCompass * m_compass;
 
-    bool m_move_needle;
-
     int m_blank_count;
 
     int m_mode;
