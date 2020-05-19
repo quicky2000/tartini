@@ -150,6 +150,8 @@ HEADERS += \
   sound/wave_stream.h \
   sound/zoomlookup.h \
   sound/zoomlookup.hpp \
+  widgets/base/baseview.h \
+  widgets/base/basewidget.h \
   widgets/cepstrum/cepstrumview.h \
   widgets/cepstrum/cepstrumwidget.h \
   widgets/correlation/correlationview.h \
@@ -254,6 +256,8 @@ SOURCES += \
    sound/soundfile.cpp \
    sound/wave_stream.cpp \
    sound/zoomlookup.cpp \
+   widgets/base/baseview.cpp \
+   widgets/base/basewidget.cpp \
    widgets/cepstrum/cepstrumview.cpp \
    widgets/cepstrum/cepstrumwidget.cpp \
    widgets/correlation/correlationview.cpp \
