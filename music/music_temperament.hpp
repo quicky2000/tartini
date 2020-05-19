@@ -31,9 +31,15 @@ MusicTemperament::TemperamentType MusicTemperament::temparament_type()const
 }
 
 //------------------------------------------------------------------------------
+bool MusicTemperament::isEvenTempered() const
+{
+    return m_temparament_type == TemperamentType::Even;
+}
+
+//------------------------------------------------------------------------------
 int MusicTemperament::size() const
 {
-    return m_note_offsets.size();
+    return m_size;
 }
 
 //------------------------------------------------------------------------------

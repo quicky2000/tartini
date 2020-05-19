@@ -51,12 +51,31 @@ class MusicTemperament
 
     inline const std::string & name()const;
     inline TemperamentType temparament_type()const;
+    inline bool isEvenTempered() const;
     inline int size() const;
+    /**
+       The pitch offset (0.0 - 12.0) of the temparament entry.  Includes an extra entry for the octave.
+       @param p_j 0..size()
+    */
     inline double noteOffset(int p_j) const;
+    /**
+       The nominal note (0 - 12) of the temparament entry.  Includes an extra entry for the octave.
+       @param p_j 0..size()
+    */
     inline int noteType(int p_j) const;
+    /**
+       @return The index of the  temparament entry that has the closest pitch offset to the given offset.  Returns size() if the octave is closest.
+    */
     int nearestNoteIndex(const double & p_x)const;
-    double nearestNote(const double & p_x)const;
+    /**
+       @return The pitch offset of the temparament entry that is closest to the given offset.  Returns 12.0 if the octave is closest.
+    */
+    double nearestNoteOffset(const double & p_x)const;
     double nearestNoteDistance(const double & p_x)const;
+    /**
+       @return The nominal note of the temparament entry that is closest to the given offset.  Returns 12 if the octave is closest.
+    */
+    int nearestNoteType(const double & p_x)const;
     
     static void init();
     static inline const std::array<MusicTemperament, 4> & getTemperaments();
@@ -66,6 +85,7 @@ class MusicTemperament
 
     std::string m_name;
     TemperamentType m_temparament_type;
+    int m_size;
     /**
      * ordered midi values of the notes in 1 octave
      */

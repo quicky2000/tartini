@@ -26,6 +26,7 @@ MusicTemperament::MusicTemperament(const std::string & p_name
                    )
 : m_name(p_name)
 , m_temparament_type(p_temparament_type)
+, m_size(p_note_offsets.size())
 , m_note_offsets(p_note_offsets)
 , m_note_types(p_note_types)
 {
@@ -51,6 +52,10 @@ MusicTemperament::MusicTemperament(const std::string & p_name
             }
             break;
     }
+    
+    // Add entries for the octave so that binary search works for notes at the top of the scale.
+    m_note_offsets.push_back(12.0);
+    m_note_types.push_back(12);
 }
 
 //------------------------------------------------------------------------------
@@ -65,15 +70,21 @@ int MusicTemperament::nearestNoteIndex(const double & p_x)const
 }
 
 //------------------------------------------------------------------------------
-double MusicTemperament::nearestNote(const double & p_x)const
+double MusicTemperament::nearestNoteOffset(const double & p_x)const
 {
-    return *binary_search_closest(m_note_offsets.begin(), m_note_offsets.end(), p_x);
+    return noteOffset(nearestNoteIndex(p_x));
 }
 
 //------------------------------------------------------------------------------
 double MusicTemperament::nearestNoteDistance(const double & p_x)const
 {
-    return fabs(*binary_search_closest(m_note_offsets.begin(), m_note_offsets.end(), p_x) - p_x);
+    return fabs(nearestNoteOffset(p_x) - p_x);
+}
+
+//------------------------------------------------------------------------------
+int MusicTemperament::nearestNoteType(const double & p_x)const
+{
+    return noteType(nearestNoteIndex(p_x));
 }
 
 //------------------------------------------------------------------------------
