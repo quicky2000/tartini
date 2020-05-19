@@ -283,16 +283,6 @@ void VibratoTunerWidget::doUpdate(double p_pitch)
 {
     m_cur_pitch = p_pitch;
 
-    Channel * l_active_channel = GData::getUniqueInstance().getActiveChannel();
-
-    if (l_active_channel)
-    {
-        AnalysisData * l_data = l_active_channel->dataAtCurrentChunk();
-        if(l_data && l_active_channel->isVisibleNote(l_data->getNoteIndex()) && l_active_channel->isLabelNote(l_data->getNoteIndex()))
-        {
-        }
-    }
-
     // The current musical key and temperament.
     int l_music_key = g_music_key_roots[GData::getUniqueInstance().musicKey()];
     const MusicTemperament &l_music_temperament = MusicTemperament::getTemperament(GData::getUniqueInstance().musicTemperament());
