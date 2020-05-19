@@ -277,15 +277,13 @@ void VibratoTunerWidget::paintGL()
 #endif // TIME_PAINT
 }
 
+#define DEBUG_PRINTF
 //------------------------------------------------------------------------------
 void VibratoTunerWidget::doUpdate(double p_pitch)
 {
     m_cur_pitch = p_pitch;
 
     Channel * l_active_channel = GData::getUniqueInstance().getActiveChannel();
-
-    float l_needle_value = 0;
-    int l_close_pitch = 0;
 
     if (l_active_channel)
     {
@@ -294,10 +292,26 @@ void VibratoTunerWidget::doUpdate(double p_pitch)
         {
         }
     }
-  
-    l_close_pitch = toInt(p_pitch);
-    l_needle_value = 100 * (p_pitch - float(l_close_pitch));
 
+    // The current musical key and temperament.
+    int l_music_key = g_music_key_roots[GData::getUniqueInstance().musicKey()];
+    const MusicTemperament &l_music_temperament = MusicTemperament::getTemperament(GData::getUniqueInstance().musicTemperament());
+    
+    // The nominal note that has the closest tempered pitch to p_pitch (used to update the LEDs).
+    int l_close_note = music_notes::closestNote(p_pitch, l_music_key, l_music_temperament);
+    // The tempered pitch associated with the nominal note value (used for the needle).
+    double l_close_pitch = music_notes::temperedPitch(l_close_note, l_music_key, l_music_temperament);
+    float l_needle_value = 100 * (p_pitch - l_close_pitch);
+
+#ifdef DEBUG_PRINTF
+    std::cout << ">>> VibratoTunerWidget::doUpdate() <<<" << std::endl;
+    std::cout << "  input pitch = " << p_pitch << std::endl;
+    std::cout << "  music temperament = " << l_music_temperament.name() << std::endl;
+    std::cout << "  closest note = " << l_close_note << " (" << music_notes::noteName(l_close_note) << ")" << std::endl;
+    std::cout << "  tempered pitch of closest note = " << l_close_pitch << std::endl;
+    std::cout << "  needle value = " << l_needle_value << std::endl;
+#endif // DEBUG_PRINTF
+    
     if ((fabs(m_prev_needle_value - l_needle_value) < 0.05) && (m_prev_close_pitch == l_close_pitch))
     {
         // Pitch hasn't changed (much), no update needed
@@ -324,9 +338,9 @@ void VibratoTunerWidget::doUpdate(double p_pitch)
             // Pitch, draw the needle this update
             int l_VTLED_letter_lookup[12] = { 2, 2, 3, 3, 4, 5, 5, 6, 6, 0, 0, 1 };
             resetLeds();
-            emit(ledSet(l_VTLED_letter_lookup[noteValue(l_close_pitch)], true));
+            emit(ledSet(l_VTLED_letter_lookup[noteValue(l_close_note)], true));
 
-            if(isBlackNote(l_close_pitch))
+            if(isBlackNote(l_close_note))
             {
                 emit(ledSet(7, true));
             }

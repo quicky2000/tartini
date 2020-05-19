@@ -93,6 +93,8 @@ TunerView::TunerView(int p_view_iD_
     l_layout->setRowStretch( 2, 0 );
 
     connect(&GData::getUniqueInstance(), SIGNAL(onChunkUpdate()), this, SLOT(doUpdate()));
+    connect(&GData::getUniqueInstance(), SIGNAL(musicKeyChanged(int)), this, SLOT(doUpdate()));
+    connect(&GData::getUniqueInstance(), SIGNAL(musicTemperamentChanged(int)), this, SLOT(doUpdate()));
     connect(m_tuner_widget, SIGNAL(ledSet(int, bool)), this, SLOT(setLed(int, bool)));
 }
 
