@@ -179,16 +179,16 @@ class AnalysisData
 
   private:
     float m_values[static_cast<int>(t_amplitude_modes::NOTE_CHANGE_SCORE) + 1];
-    float m_period; /*< The period of the fundamental (in samples) */
-    float m_fundamental_freq; /*< The fundamental frequency in hertz */
-    float m_pitch; /*< The pitch in semi-tones */
+    float m_period; ///< The period of the fundamental (in samples)
+    float m_fundamental_freq; ///< The fundamental frequency in hertz
+    float m_pitch; ///< The pitch in semi-tones
     float m_freq_centroid;
-    double m_pitch_sum; /*< The sum of pitches so far in a note */
-    double m_pitch_squared_sum; /*< The sum of pitches squared so far in a note */
-    double m_short_term_mean; /*< The mean note so far */
-    double m_short_term_deviation; /*< The deviation of the note so far (based on standard deviation) */
-    double m_long_term_mean; /*> The mean note so far */
-    double m_long_term_deviation; /*< The deviation of the note so far (based on standard deviation) */
+    double m_pitch_sum; ///< The sum of pitches so far in a note
+    double m_pitch_squared_sum; ///< The sum of pitches squared so far in a note
+    double m_short_term_mean; ///< The mean note so far
+    double m_short_term_deviation; ///< The deviation of the note so far (based on standard deviation)
+    double m_long_term_mean; ///< The mean note so far
+    double m_long_term_deviation; ///< The deviation of the note so far (based on standard deviation)
     double m_spread;
     double m_spread_2;
     float m_vibrato_pitch;
@@ -197,10 +197,10 @@ class AnalysisData
     float m_vibrato_speed;
     float m_vibrato_phase;
     float m_vibrato_error;
-    int m_reason; /*< The reason why there was a note change */
+    int m_reason; ///< The reason why there was a note change
     int m_highest_correlation_index;
     int m_chosen_correlation_index;
-    float m_period_ratio; /*< The ratio of the current period to the period at the beginning of the current note */
+    float m_period_ratio; ///< The ratio of the current period to the period at the beginning of the current note
     int m_cepstrum_index;
     float m_cepstrum_pitch;
     std::vector<float> m_period_estimates;

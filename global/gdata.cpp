@@ -286,7 +286,7 @@ bool GData::playSound(SoundFile * p_sound_file)
     int l_chunk = p_sound_file->currentChunk();
     if(l_chunk < 0 || l_chunk + 1 >= p_sound_file->totalChunks())
     {
-        p_sound_file->jumpToChunk(0); /*< If at the end of the file reset to the start */
+        p_sound_file->jumpToChunk(0); /* If at the end of the file reset to the start */
     }
 
     m_sound_mode = SoundMode::SOUND_PLAY;
@@ -721,7 +721,7 @@ void GData::closeActiveFile()
 
 /**
   @param p_sound_file The sound file to be closed (This pointer will become invalid after returning)
-  //@param ask If true (default), the user will be asked to save the file if it's been modified.
+  @param p_saving_mode If true (default), the user will be asked to save the file if it's been modified.
   @return 0 if the file was closed, 1 if canclled, -1 if error
 */
 int GData::closeFile( SoundFile * p_sound_file

@@ -156,7 +156,9 @@ inline T bound( T p_var
 
 /**
    Returns the x position of the min/max of a parabola
-   @param p_a, p_b and c are the values of the function at -1, 0 and 1
+   @param p_a the value of the function at -1
+   @param p_b the value of the function at 0
+   @param p_c the value of the function at 1
    @return The x position, or zero if no solution.
 */
 inline double parabolaTurningPoint( const double & p_a
@@ -166,7 +168,9 @@ inline double parabolaTurningPoint( const double & p_a
 
 /**
    Calculate the x position and the y position of the min/max of a parabola at the same time
-   @param p_y_1, p_y0 and y1 are the values of the function at xOffset-1, xOffset and xOffset+1
+   @param p_y_1 is the values of the function at xOffset-1
+   @param p_y0 is the values of the function at xOffset
+   @param p_y1 is the values of the function at  xOffset+1
    @param p_x_offset the x value at which y0 is a function of
    @param p_x The x result will be put in here
    @param p_y The y result will be put in here

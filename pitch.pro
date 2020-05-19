@@ -352,6 +352,7 @@ unix{
     #QMAKE_CXXFLAGS_RELEASE -= -Os
     QMAKE_CXXFLAGS_RELEASE += -O2
     #CONFIG += ppc
+    QMAKE_CXXFLAGS += -Wdocumentation
   }
   else{ #linux
 

@@ -55,7 +55,7 @@ class ScoreWidget : public DrawWidget
      * Draw a crotchet at x, y
      * @param p_x The lefthand-side x pixel
      * @param p_y The center y pixel
-     * @param stemUp true if the stem is to be drawn upwards, else its drawn downwards
+     * @param p_step_type true if the stem is to be drawn upwards, else its drawn downwards
      */
     void drawNote( int p_x
                  , int p_y

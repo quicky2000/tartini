@@ -180,7 +180,7 @@ class SoundFile
     inline void setFramesPerChunk(int p_step_size);
 
     // Check if really used
-    bool inFile() const; /**< Returns false if past end of file */
+    bool inFile() const; ///< Returns false if past end of file
     // End of check
 
     inline bool equalLoudness() const;
@@ -239,14 +239,14 @@ class SoundFile
 
     std::string m_filename;
     std::string m_filtered_filename;
-    SoundFileStream * m_stream; /**< Pointer to the file's SoundFileStream */
-    SoundFileStream * m_filtered_stream; /**< Pointer to the file's filtered SoundFileStream */
-    Array1d<Channel*> m_channels; /**< The actual sound data is stored seperately for each channel */
+    SoundFileStream * m_stream; ///< Pointer to the file's SoundFileStream
+    SoundFileStream * m_filtered_stream; ///< Pointer to the file's filtered SoundFileStream
+    Array1d<Channel*> m_channels; ///< The actual sound data is stored seperately for each channel
     MyTransforms m_my_transforms;
     bool m_first_time_through;
 
     int m_chunk_num;
-    int m_frames_per_chunk; /**< The number of samples to move every chunk */
+    int m_frames_per_chunk; ///< The number of samples to move every chunk
     float ** m_temp_window_buffer; //array is indexed from -16 !!
     float ** m_temp_window_buffer_filtered; //array is indexed from -16 !!
     double m_start_time;

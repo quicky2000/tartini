@@ -99,7 +99,7 @@ class MainWindow : public QMainWindow
     void updateKeyTypes(int p_tempered_type);
 
     /**
-     * Opens a view based on a viewId (which should be #defined).
+     * Opens a view based on a viewId (which should be "#defined").
      * All widgets should be created anonymously - ie no saving pointers!
      *
      * @param p_view_id the view to open's ID.

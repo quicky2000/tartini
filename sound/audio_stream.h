@@ -88,7 +88,7 @@ class AudioStream: public SoundStream
        and the same length, and this length is the same size as the AudioStream buffer
        @param p_out_channel_data The data to write out to the sound card
        @param p_in_channel_data The data read back from the sound card
-       @param length The amount of data per channel. This has to be the same for in and out data
+       @param p_length The amount of data per channel. This has to be the same for in and out data
        @param ch The number of channels. This has to be the same of in and out data
     */
     int writeReadFloats( float ** p_out_channel_data

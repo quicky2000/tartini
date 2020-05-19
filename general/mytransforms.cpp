@@ -414,7 +414,7 @@ void MyTransforms::calculateAnalysisData(/*float *input, */
     if(GData::getUniqueInstance().doingFreqAnalysis() && (p_channel->firstTimeThrough() || GData::getUniqueInstance().doingActiveAnalysis()))
     {
         //calculate the Normalised Square Difference Function
-        double l_log_rms = linear2dB(nsdf(m_data_time, p_channel->get_nsdf_data().begin()) / double(m_n), GData::getUniqueInstance()); /**< Do the NSDF calculation */
+        double l_log_rms = linear2dB(nsdf(m_data_time, p_channel->get_nsdf_data().begin()) / double(m_n), GData::getUniqueInstance()); // Do the NSDF calculation
         l_analysis_data.setLogRms(l_log_rms);
         if(GData::getUniqueInstance().doingAutoNoiseFloor() && !l_analysis_data.isDone())
         {

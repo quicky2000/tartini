@@ -105,8 +105,8 @@ class Channel
     /**
        Returns the average pitch for a given channel between two frames.
        It weights using a -ve cos shaped window
-       @param begin the starting frame number.
-       @param end   the ending frame number.
+       @param p_begin the starting frame number.
+       @param p_end the ending frame number.
        @return the average pitch, or -1 if there were no valid pitches.
     */
     float averagePitch( int p_begin
@@ -195,7 +195,7 @@ class Channel
        Calculate (the middle half of) pitches within the current window of the input
        Calculates pitches for positions 1/4 of size() to 3/4 of size()
        e.g. for size() == 1024, does indexs 256 through < 768
-       @param period The period estimate
+       @param p_period The period estimate
        @return The change in period size
     */
     float calcDetailedPitch( float * p_input
@@ -206,7 +206,7 @@ class Channel
     inline bool doingDetailedPitch() const;
 
     void calcVibratoData(int p_chunk);
-    float periodOctaveEstimate(int p_chunk) const; /*< A estimate from over the whole duration of the note, to help get the correct octave */
+    float periodOctaveEstimate(int p_chunk) const; ///< A estimate from over the whole duration of the note, to help get the correct octave
 
     void exportChannel( int p_type
                       , QString p_type_string
