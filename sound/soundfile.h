@@ -160,7 +160,6 @@ class SoundFile
        into the end of the channel buffers. I.e losing framesPerChunk
        frames from the beginning of the channel buffers.
        If s is NULL (the defult) the the file stream is used
-       @param s The SoundStream to read from or NULL (the default) the current file stream is used
        @return The number of frames actually read ( <= framesPerChunk() )
     */
     int readChunk(int p_n);
@@ -218,7 +217,6 @@ class SoundFile
        @param p_write_buffer The data that is to be written to the stream
        @param p_read_buffer The data that is read back from the stream
        @param p_n The amount of data in each of the buffers. Note: They must be the same size
-       @param ch The number of channels
     */
     static int blockingWriteRead( SoundStream * p_stream
                                 , float ** p_write_buffer

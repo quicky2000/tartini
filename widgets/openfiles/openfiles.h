@@ -47,8 +47,6 @@ class OpenFiles : public ViewWidget
 
     /**
      * Toggles a channel on or off for a specified item.
-     *
-     * @param p_item the channel to toggle.
      */
     void listViewChanged();
 

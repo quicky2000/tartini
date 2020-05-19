@@ -37,7 +37,6 @@ class MyTransforms
        @param p_n The size of the data windows to be processed
        @param p_k The number of outputs wanted (autocorr size = n_ + k_). Set k_ = 0, to get default n_/2
        @param p_rate The sampling rate of the incoming signal to process
-       @param threshold The ratio of highest peak to the first peak allowed to be chosen
     */
     void init( int p_n
              , int p_k
@@ -120,9 +119,6 @@ class MyTransforms
        positive zero crossing and is over the threshold.
        If no maxima are over the threshold then the the highest maximum is returned.
        If no positive zero crossing is found, zero is returned.
-       @param input An array of length n.
-       @param threshold A number between 0 and 1 at which maxima above are acceped.
-       @return The estimated period (in samples), or zero if none found.
     */
     void calculateAnalysisData(/*float *input, */
                                 int p_chunk
