@@ -25,7 +25,7 @@ class BaseView : public ViewWidget
 
   public:
     BaseView( int p_view_id
-            , QWidget * p_parent = 0
+            , QWidget * p_parent = nullptr
             );
     virtual ~BaseView();
 
