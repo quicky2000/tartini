@@ -21,6 +21,9 @@
 #include "myassert.h"
 #include <string>
 
+class MusicScale;
+class MusicTemperament;
+
 class music_notes
 {
   public:
@@ -30,6 +33,25 @@ class music_notes
 
     static inline
     const std::string & noteName(const double & p_pitch);
+    static int noteValueInKey(int p_pitch, int p_key);
+    static double noteOffsetInKey(const double & p_pitch, int p_key);
+
+    /**
+       @return The tempered value of a nominal pitch, given the key, and temperament.  Returns 0 if the temperament does not include this note.
+    */
+    static double temperedPitch(int p_nominal_pitch
+                              , int p_music_key
+                              , const MusicTemperament & p_music_temperament
+                                );
+
+    /**
+       Finds the closest tempered pitch to a pitch, given the key, and temperament.
+       @return The nominal pitch of the closest tempered pitch.
+    */
+    static int closestNote(const double & p_pitch
+                         , int p_music_key
+                         , const MusicTemperament & p_music_temperament
+                           );
 
     static
     void init_note_names();
