@@ -139,6 +139,8 @@ set(MY_HEADER_FILES
     dialogs/tartinidialog.h
     dialogs/gpldialog.h
     widgets/widget_utils.h
+    widgets/base/baseview.h
+    widgets/base/basewidget.h
    )
 
 set(MY_SOURCE_FILES
@@ -232,6 +234,8 @@ set(MY_SOURCE_FILES
     music/music_temperament.cpp
     dialogs/tartinidialog.cpp
     dialogs/gpldialog.cpp
+   widgets/base/baseview.cpp
+   widgets/base/basewidget.cpp
    )
 
 # List header directories in project
