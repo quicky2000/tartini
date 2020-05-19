@@ -34,13 +34,12 @@ BaseView::BaseView( int p_view_id
                   , QWidget * p_parent
                   )
 : ViewWidget( p_view_id, p_parent)
+, m_base_widget(new BaseWidget(this))
 {
-    //create a drawing object
-    m_base_widget = new BaseWidget(this);
     m_base_widget->show();
 
     //make any connections
-    connect(gdata->view, SIGNAL(onFastUpdate(double)), baseWidget, SLOT(update()));
+    connect(&(GData::getUniqueInstance().getView()), SIGNAL(onFastUpdate(double)), m_base_widget, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------

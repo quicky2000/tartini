@@ -23,7 +23,7 @@
 
 //------------------------------------------------------------------------------
 BaseWidget::BaseWidget(QWidget * p_parent)
-: DrawWidget(p_parent)
+: DrawWidget(p_parent, "BaseWidget")
 {
 }
 
@@ -35,12 +35,12 @@ BaseWidget::~BaseWidget()
 //------------------------------------------------------------------------------
 void BaseWidget::paintEvent( QPaintEvent * )
 {
-    Channel * l_active_channel = gdata->getActiveChannel();
+    // Channel * l_active_channel = GData::getUniqueInstance().getActiveChannel();
 
     beginDrawing();
 
     // Drawing code goes here
-    p.drawLine(0, 0, width(), height());
+    get_painter().drawLine(0, 0, width(), height());
 
     endDrawing();
 }
