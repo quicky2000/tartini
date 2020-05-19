@@ -1,5 +1,5 @@
 /***************************************************************************
-                          basewidget.cpp  -  description
+                          samplewidget.cpp  -  description
                              -------------------
     begin                : May 18 2005
     copyright            : (C) 2005 by Philip McLeod
@@ -15,25 +15,25 @@
 #include <QPixmap>
 #include <QPainter>
 
-#include "basewidget.h"
+#include "samplewidget.h"
 #include "gdata.h"
 #include "channel.h"
 #include "analysisdata.h"
 #include "useful.h"
 
 //------------------------------------------------------------------------------
-BaseWidget::BaseWidget(QWidget * p_parent)
-: DrawWidget(p_parent, "BaseWidget")
+SampleWidget::SampleWidget(QWidget * p_parent)
+: DrawWidget(p_parent, "SampleWidget")
 {
 }
 
 //------------------------------------------------------------------------------
-BaseWidget::~BaseWidget()
+SampleWidget::~SampleWidget()
 {
 }
 
 //------------------------------------------------------------------------------
-void BaseWidget::paintEvent( QPaintEvent * )
+void SampleWidget::paintEvent( QPaintEvent * )
 {
     // Channel * l_active_channel = GData::getUniqueInstance().getActiveChannel();
 
@@ -46,7 +46,7 @@ void BaseWidget::paintEvent( QPaintEvent * )
 }
 
 //------------------------------------------------------------------------------
-QSize BaseWidget::sizeHint() const
+QSize SampleWidget::sizeHint() const
 {
     return QSize(300, 200);
 }
