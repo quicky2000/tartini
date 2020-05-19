@@ -20,9 +20,8 @@
 #include "useful.h"
 #include "myassert.h"
 #include <string>
-
-class MusicScale;
-class MusicTemperament;
+#include "gdata.h"
+#include "music_temperament.h"
 
 class music_notes
 {
@@ -40,8 +39,8 @@ class music_notes
        @return The tempered value of a nominal pitch, given the key, and temperament.  Returns 0 if the temperament does not include this note.
     */
     static double temperedPitch(int p_nominal_pitch
-                              , int p_music_key
-                              , const MusicTemperament & p_music_temperament
+                              , int p_music_key = g_music_key_roots[GData::getUniqueInstance().musicKey()]
+                              , const MusicTemperament & p_music_temperament = MusicTemperament::getTemperament(GData::getUniqueInstance().musicTemperament())
                                 );
 
     /**
@@ -49,8 +48,8 @@ class music_notes
        @return The nominal pitch of the closest tempered pitch.
     */
     static int closestNote(const double & p_pitch
-                         , int p_music_key
-                         , const MusicTemperament & p_music_temperament
+                         , int p_music_key = g_music_key_roots[GData::getUniqueInstance().musicKey()]
+                         , const MusicTemperament & p_music_temperament = MusicTemperament::getTemperament(GData::getUniqueInstance().musicTemperament())
                            );
 
     static

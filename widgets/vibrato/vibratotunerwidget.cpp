@@ -282,14 +282,10 @@ void VibratoTunerWidget::doUpdate(double p_pitch)
 {
     m_cur_pitch = p_pitch;
 
-    // The current musical key and temperament.
-    int l_music_key = g_music_key_roots[GData::getUniqueInstance().musicKey()];
-    const MusicTemperament &l_music_temperament = MusicTemperament::getTemperament(GData::getUniqueInstance().musicTemperament());
-    
     // The nominal note that has the closest tempered pitch to p_pitch (used to update the LEDs).
-    int l_close_note = music_notes::closestNote(p_pitch, l_music_key, l_music_temperament);
+    int l_close_note = music_notes::closestNote(p_pitch);
     // The tempered pitch associated with the nominal note value (used for the needle).
-    double l_close_pitch = music_notes::temperedPitch(l_close_note, l_music_key, l_music_temperament);
+    double l_close_pitch = music_notes::temperedPitch(l_close_note);
     float l_needle_value = 100 * (p_pitch - l_close_pitch);
 
 #ifdef DEBUG_PRINTF
