@@ -1,5 +1,5 @@
 /***************************************************************************
-                          baseview.h  -  description
+                          sampleview.h  -  description
                              -------------------
     begin                : May 18 2005
     copyright            : (C) 2005 by Philip McLeod
@@ -17,24 +17,24 @@
 
 #include "viewwidget.h"
 
-class BaseWidget;
+class SampleWidget;
 
-class BaseView : public ViewWidget
+class SampleView : public ViewWidget
 {
   Q_OBJECT
 
   public:
-    BaseView( int p_view_id
+    SampleView( int p_view_id
             , QWidget * p_parent = nullptr
             );
-    virtual ~BaseView();
+    virtual ~SampleView();
 
     void resizeEvent(QResizeEvent *);
 
     QSize sizeHint() const;
 
   private:
-    BaseWidget *m_base_widget;
+    SampleWidget *m_sample_widget;
 };
 #endif // BASEVIEW_H
 // EOF

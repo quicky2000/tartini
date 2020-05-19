@@ -1,5 +1,5 @@
 /***************************************************************************
-                          baseview.cpp  -  description
+                          sampleview.cpp  -  description
                              -------------------
     begin                : May 18 2005
     copyright            : (C) 2005 by Philip McLeod
@@ -14,8 +14,8 @@
  ***************************************************************************/
 
 /** To create a new tartini widget
-    1. Copy the base folder (and files)
-    2. Rename the base* files to myclass* files, e.g. mv baseview.cpp myclassview.cpp
+    1. Copy the sample folder (and files)
+    2. Rename the sample* files to myclass* files, e.g. mv sampleview.cpp myclassview.cpp
     3. Change the class names to MyClassView & MyClassWidget (where MyClass is the name of your new class)
     4. In MainWindow.h increment NUM_VIEWS and add to the enum VIEW_MYCLASS
     5. Add a ViewData item to viewData in MainWindow.cpp
@@ -25,37 +25,37 @@
     9. Done. Just rebuild the project (regenerating the Makefile)
 */
 
-#include "baseview.h"
-#include "basewidget.h"
+#include "sampleview.h"
+#include "samplewidget.h"
 #include "gdata.h"
 
 //------------------------------------------------------------------------------
-BaseView::BaseView( int p_view_id
+SampleView::SampleView( int p_view_id
                   , QWidget * p_parent
                   )
 : ViewWidget( p_view_id, p_parent)
-, m_base_widget(new BaseWidget(this))
+, m_sample_widget(new SampleWidget(this))
 {
-    m_base_widget->show();
+    m_sample_widget->show();
 
     //make any connections
-    connect(&(GData::getUniqueInstance().getView()), SIGNAL(onFastUpdate(double)), m_base_widget, SLOT(update()));
+    connect(&(GData::getUniqueInstance().getView()), SIGNAL(onFastUpdate(double)), m_sample_widget, SLOT(update()));
 }
 
 //------------------------------------------------------------------------------
-BaseView::~BaseView()
+SampleView::~SampleView()
 {
-    delete m_base_widget;
+    delete m_sample_widget;
 }
 
 //------------------------------------------------------------------------------
-void BaseView::resizeEvent(QResizeEvent *)
+void SampleView::resizeEvent(QResizeEvent *)
 {
-    m_base_widget->resize(size());
+    m_sample_widget->resize(size());
 }
 
 //------------------------------------------------------------------------------
-QSize BaseView::sizeHint() const
+QSize SampleView::sizeHint() const
 {
     return QSize(300, 200);
 }

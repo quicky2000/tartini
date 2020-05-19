@@ -150,8 +150,6 @@ HEADERS += \
   sound/wave_stream.h \
   sound/zoomlookup.h \
   sound/zoomlookup.hpp \
-  widgets/base/baseview.h \
-  widgets/base/basewidget.h \
   widgets/cepstrum/cepstrumview.h \
   widgets/cepstrum/cepstrumwidget.h \
   widgets/correlation/correlationview.h \
@@ -187,6 +185,8 @@ HEADERS += \
   widgets/piano/pianowidget.hpp \
   widgets/pitchcompass/pitchcompassdrawwidget.h \
   widgets/pitchcompass/pitchcompassview.h \
+  widgets/sample/sampleview.h \
+  widgets/sample/samplewidget.h \
   widgets/score/scoresegmentiterator.h \
   widgets/score/scoresegmentiterator.hpp \
   widgets/score/scoreview.h \
@@ -256,8 +256,6 @@ SOURCES += \
    sound/soundfile.cpp \
    sound/wave_stream.cpp \
    sound/zoomlookup.cpp \
-   widgets/base/baseview.cpp \
-   widgets/base/basewidget.cpp \
    widgets/cepstrum/cepstrumview.cpp \
    widgets/cepstrum/cepstrumwidget.cpp \
    widgets/correlation/correlationview.cpp \
@@ -287,6 +285,8 @@ SOURCES += \
    widgets/piano/pianowidget.cpp \
    widgets/pitchcompass/pitchcompassdrawwidget.cpp \
    widgets/pitchcompass/pitchcompassview.cpp \
+   widgets/sample/sampleview.cpp \
+   widgets/sample/samplewidget.cpp \
    widgets/score/scoresegmentiterator.cpp \
    widgets/score/scoreview.cpp \
    widgets/score/scorewidget.cpp \

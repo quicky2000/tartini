@@ -1,5 +1,5 @@
 /***************************************************************************
-                          basewidget.h  -  description
+                          samplewidget.h  -  description
                              -------------------
     begin                : May 18 2005
     copyright            : (C) 2005 by Philip McLeod
@@ -17,13 +17,13 @@
 
 #include "drawwidget.h"
 
-class BaseWidget : public DrawWidget
+class SampleWidget : public DrawWidget
 {
   Q_OBJECT
 
   public:
-    BaseWidget(QWidget * p_parent);
-    virtual ~BaseWidget();
+    SampleWidget(QWidget * p_parent);
+    virtual ~SampleWidget();
 
     void paintEvent( QPaintEvent * );
 
