@@ -97,8 +97,8 @@ class Settings
 
   private:
 
-    std::map<QString, std::map<QString, QString> > m_settings; /*< A memory version of the settings on disk. Only the Settings form can change these values. */
-	//std::map<QString, std::map<QString, QString> > defaults; /*< Default settings */
+    std::map<QString, std::map<QString, QString> > m_settings; ///< A memory version of the settings on disk. Only the Settings form can change these values.
+	//std::map<QString, std::map<QString, QString> > defaults; ///< Default settings
   
 	QString m_domain;
 	QString m_product;

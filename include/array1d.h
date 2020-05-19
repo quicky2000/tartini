@@ -155,7 +155,6 @@ class Array1d
     /**
        Copies data from src to this, assuming this is large enough to hold it
        @param p_src The array to copy from
-       @param length The amount of data to copy
     */
     void copy_raw(const T * p_src);
 

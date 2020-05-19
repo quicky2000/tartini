@@ -139,7 +139,7 @@ class FreqWidgetGL : public QGLWidget
 
     /**
      Calculates at what note pitch the mouse is at.
-     @param x the mouse's y co-ordinate
+     @param p_y the mouse's y co-ordinate
      @return the pitch the mouse is positioned at.
     */
     double mousePitch(int p_y)const;

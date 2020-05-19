@@ -41,3 +41,5 @@ Note: To compile on Windows you need to use MinGW (www.mingw.org),
 since Qt4 is not supported for Visual Studio under the GPL edition.
 
 Note: qmake comes as part of the Qt5 package
+
+Note: Run 'doxygen' to build the documentation

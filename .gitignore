@@ -19,4 +19,6 @@ Debug/
 Release/
 tartini.app/
 tartini.xcodeproj/
+html
+latex
 #EOF

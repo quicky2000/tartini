@@ -76,7 +76,7 @@ inline double freq2pitch(const double & p_freq);
 inline double pitch2freq(const double & p_note);
 
 /**
-   @param note The midi note number
+   @param p_pitch The midi note number
    @return The note octave. Middle C (midi note 60) is defined as octave 4. Making midi note 0 in octave -1
 */
 int noteOctave(int p_pitch);

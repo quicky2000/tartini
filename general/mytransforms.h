@@ -37,7 +37,7 @@ class MyTransforms
        @param p_n The size of the data windows to be processed
        @param p_k The number of outputs wanted (autocorr size = n_ + k_). Set k_ = 0, to get default n_/2
        @param p_rate The sampling rate of the incoming signal to process
-       @param threshold_ The ratio of highest peak to the first peak allowed to be chosen
+       @param threshold The ratio of highest peak to the first peak allowed to be chosen
     */
     void init( int p_n
              , int p_k
@@ -51,7 +51,7 @@ class MyTransforms
     /**
         Performs an autocorrelation on the input
         @param p_input An array of length n, in which the autocorrelation is taken
-        @param ouput This should be an array of length k.
+        @param p_output This should be an array of length k.
         This is the correlation of the signal with itself
         for delays 1 to k (stored in elements 0 to k-1)
         @return The sum of squares of the input. (ie the zero delay correlation)
@@ -66,8 +66,8 @@ class MyTransforms
 
     /**
        The Average Square Difference Function.
-       @param input. An array of length n, in which the ASDF is taken
-       @param ouput. This should be an array of length k
+       @param p_input An array of length n, in which the ASDF is taken
+       @param p_output This should be an array of length k
     */
     double asdf( float * p_input
                , float * p_output
@@ -75,8 +75,8 @@ class MyTransforms
 
     /**
        The Normalised Square Difference Function.
-       @param input. An array of length n, in which the ASDF is taken
-       @param ouput. This should be an array of length k
+       @param p_input An array of length n, in which the ASDF is taken
+       @param p_output This should be an array of length k
        @return The sum of square
     */
     double nsdf( float * p_input
@@ -120,8 +120,8 @@ class MyTransforms
        positive zero crossing and is over the threshold.
        If no maxima are over the threshold then the the highest maximum is returned.
        If no positive zero crossing is found, zero is returned.
-       @param input. An array of length n.
-       @param threshold. A number between 0 and 1 at which maxima above are acceped.
+       @param input An array of length n.
+       @param threshold A number between 0 and 1 at which maxima above are acceped.
        @return The estimated period (in samples), or zero if none found.
     */
     void calculateAnalysisData(/*float *input, */
