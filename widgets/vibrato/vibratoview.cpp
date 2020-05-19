@@ -15,18 +15,6 @@
    Please read LICENSE.txt for details.
  ***************************************************************************/
 
-/** To create a new tartini widget
-    1. Copy the base folder (and files)
-    2. Rename the base* files to myclass* files, e.g. mv baseview.cpp myclassview.cpp
-    3. Change the class names to MyClassView & MyClassWidget (where MyClass is the name of your new class)
-    4. In MainWindow.h increment NUM_VIEWS and add to the enum VIEW_MYCLASS
-    5. Add a ViewData item to viewData in MainWindow.cpp
-    6. Add #include "myclassview.h" near top of MainWindow.cpp
-    7. In MainWindow::openView(int viewID) add a case to create your class
-    8. Add your files names and folder names into the pitch.pro (HEADERS, SOURCES and MYPATHS respectivly)
-    9. Done. Just rebuild the project (regenerating the Makefile)
-*/
-
 #include "vibratoview.h"
 #include "vibratotunerwidget.h"
 #include "vibratospeedwidget.h"
