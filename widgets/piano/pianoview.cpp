@@ -56,8 +56,14 @@ void PianoView::changeKey()
         AnalysisData * l_data = l_active_channel->dataAtCurrentChunk();
         if(l_data && l_active_channel->isVisibleChunk(l_data))
         {
+            // The current musical key and temperament.
+            int l_music_key = g_music_key_roots[GData::getUniqueInstance().musicKey()];
+            const MusicTemperament &l_music_temperament = MusicTemperament::getTemperament(GData::getUniqueInstance().musicTemperament());
             float l_pitch = l_data->getPitch();
-            m_piano_widget->setCurrentNote(noteValue(l_pitch), l_data->getCorrelation());
+            
+            // The nominal note that has the closest tempered pitch to p_pitch (used to update the LEDs).
+            int l_close_note = music_notes::closestNote(l_pitch, l_music_key, l_music_temperament);
+            m_piano_widget->setCurrentNote(noteValue(l_close_note), l_data->getCorrelation());
         }
         else
         {
