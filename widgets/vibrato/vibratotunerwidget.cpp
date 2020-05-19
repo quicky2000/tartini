@@ -28,7 +28,7 @@ VibratoTunerWidget::VibratoTunerWidget(QWidget *parent)
 : QGLWidget(parent)
 , m_needle_value_to_draw(-999)
 , m_prev_needle_value(-999)
-, m_prev_close_pitch(0)
+, m_prev_close_note(0)
 , m_cur_pitch(0.0)
 , m_cents_label_X(0.0)
 , m_cents_label_Y(0.0)
@@ -228,7 +228,7 @@ void VibratoTunerWidget::resizeGL( int p_width
     // Do forced update on resize
     m_needle_value_to_draw = -999;
     m_prev_needle_value = -999;
-    m_prev_close_pitch = -1;
+    m_prev_close_note = 0;
     doUpdate(m_cur_pitch);
 }
 
@@ -277,7 +277,6 @@ void VibratoTunerWidget::paintGL()
 #endif // TIME_PAINT
 }
 
-#define DEBUG_PRINTF
 //------------------------------------------------------------------------------
 void VibratoTunerWidget::doUpdate(double p_pitch)
 {
@@ -302,7 +301,7 @@ void VibratoTunerWidget::doUpdate(double p_pitch)
     std::cout << "  needle value = " << l_needle_value << std::endl;
 #endif // DEBUG_PRINTF
     
-    if ((fabs(m_prev_needle_value - l_needle_value) < 0.05) && (m_prev_close_pitch == l_close_pitch))
+    if ((fabs(m_prev_needle_value - l_needle_value) < 0.05) && (m_prev_close_note == l_close_note))
     {
         // Pitch hasn't changed (much), no update needed
     }
@@ -314,11 +313,11 @@ void VibratoTunerWidget::doUpdate(double p_pitch)
         glNewList(m_needle, GL_COMPILE);
         glEndList();
 
-        if (l_close_pitch == 0)
+        if (l_close_note == 0)
         {
             // No pitch, don't draw the needle this update
             m_prev_needle_value = -999;
-            m_prev_close_pitch = 0;
+            m_prev_close_note = 0;
             m_needle_value_to_draw = -999;
             resetLeds();
             updateGL();
@@ -336,7 +335,7 @@ void VibratoTunerWidget::doUpdate(double p_pitch)
             }
 
             m_prev_needle_value = l_needle_value;
-            m_prev_close_pitch = l_close_pitch;
+            m_prev_close_note = l_close_note;
 
             m_needle_value_to_draw = l_needle_value;
 
