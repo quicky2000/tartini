@@ -938,9 +938,9 @@ QSize VibratoWidget::sizeHint() const
 void VibratoWidget::compose_note_label(QString & p_note_label, const int & p_note)
 {
   std::stringstream l_composed_note_label;
-  if ((noteOctave(p_note) >= 0) && (noteOctave(p_note) <= 9))
+  if ((MusicNote::noteOctave(p_note) >= 0) && (MusicNote::noteOctave(p_note) <= 9))
     {
-      l_composed_note_label << MusicNote::noteName(p_note) << toSubscriptString(noteOctave(p_note));
+      l_composed_note_label << MusicNote::noteName(p_note) << toSubscriptString(MusicNote::noteOctave(p_note));
     }
   else
     {

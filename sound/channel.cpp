@@ -807,7 +807,7 @@ void Channel::chooseCorrelationIndex1(int p_chunk)
     l_analysis_data.setPeriod(l_analysis_data.getPeriodEstimatesAt(l_choosen_max_index));
     double l_freq = rate() / l_analysis_data.getPeriod();
     l_analysis_data.setFundamentalFreq(float(l_freq));
-    l_analysis_data.setPitch(bound(freq2pitch(l_freq), 0.0, GData::getUniqueInstance().topPitch()));
+    l_analysis_data.setPitch(bound(MusicNote::freq2pitch(l_freq), 0.0, GData::getUniqueInstance().topPitch()));
     l_analysis_data.setPitchSum(static_cast<double>(l_analysis_data.getPitch()));
     l_analysis_data.setPitch2Sum(sq(static_cast<double>(l_analysis_data.getPitch())));
 }
@@ -856,7 +856,7 @@ bool Channel::chooseCorrelationIndex( int p_chunk
     l_analysis_data.setPeriod(l_analysis_data.getPeriodEstimatesAt(l_choosen_max_index));
     double l_freq = rate() / l_analysis_data.getPeriod();
     l_analysis_data.setFundamentalFreq(float(l_freq));
-    l_analysis_data.setPitch(bound(freq2pitch(l_freq), 0.0, GData::getUniqueInstance().topPitch()));
+    l_analysis_data.setPitch(bound(MusicNote::freq2pitch(l_freq), 0.0, GData::getUniqueInstance().topPitch()));
     if(p_chunk > 0 && !isFirstChunkInNote(p_chunk))
     {
         l_analysis_data.setPitchSum(dataAtChunk(p_chunk - 1)->getPitchSum() + static_cast<double>(l_analysis_data.getPitch()));
@@ -1111,7 +1111,7 @@ float Channel::calcDetailedPitch( float * p_input
 
     for(l_j = 0; l_j < l_num; l_j++)
     {
-        l_unsmoothed[l_j] = freq2pitch(rate() / l_unsmoothed[l_j]);
+        l_unsmoothed[l_j] = MusicNote::freq2pitch(rate() / l_unsmoothed[l_j]);
     }
 
     m_pitch_big_smoothing_filter->filter(l_unsmoothed.begin(), m_detailed_pitch_data_smoothed.begin(), l_num);

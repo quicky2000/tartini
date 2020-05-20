@@ -902,7 +902,7 @@ void MyTransforms::doChannelDataFFT( Channel * p_channel
         }
         AnalysisData &l_analysis_data = *p_channel->dataAtChunk(p_chunk);
         l_analysis_data.setCepstrumIndex(findNSDFsubMaximum(m_data_time, l_n_div_2, 0.6f));
-        l_analysis_data.setCepstrumPitch(freq2pitch(double(l_analysis_data.getCepstrumIndex()) / p_channel->rate()));
+        l_analysis_data.setCepstrumPitch(MusicNote::freq2pitch(double(l_analysis_data.getCepstrumIndex()) / p_channel->rate()));
     }
 }
 

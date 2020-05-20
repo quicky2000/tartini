@@ -52,13 +52,13 @@ Piano3d::~Piano3d()
 //------------------------------------------------------------------------------
 double Piano3d::pianoWidth()
 {
-    return (isBlackNote(m_num_keys - 1) + m_first_key) ? m_key_offsets[m_num_keys - 1] + m_black_key_width : m_key_offsets[m_num_keys - 1] + m_white_key_width;
+    return (MusicNote::isBlackNote(m_num_keys - 1) + m_first_key) ? m_key_offsets[m_num_keys - 1] + m_black_key_width : m_key_offsets[m_num_keys - 1] + m_white_key_width;
 }
 
 //------------------------------------------------------------------------------
 double Piano3d::offsetAtKey(int p_key_num)
 {
-    return (noteOctave(p_key_num) + 1) * m_octave_width + g_keyOffsetTable[cycle(p_key_num, 12)] - m_first_key_offset;
+    return (MusicNote::noteOctave(p_key_num) + 1) * m_octave_width + g_keyOffsetTable[cycle(p_key_num, 12)] - m_first_key_offset;
 }
 
 //------------------------------------------------------------------------------
@@ -76,7 +76,7 @@ void Piano3d::init( int p_num_keys
     m_first_key = p_first_key;
     m_key_states.resize(m_num_keys, false);
     m_key_offsets.resize(m_num_keys);
-    m_first_key_offset = (noteOctave(m_first_key) + 1) * m_octave_width + g_keyOffsetTable[cycle(m_first_key, 12)];
+    m_first_key_offset = (MusicNote::noteOctave(m_first_key) + 1) * m_octave_width + g_keyOffsetTable[cycle(m_first_key, 12)];
     int l_cur_key;
     for(int l_j = 0; l_j < m_num_keys; l_j++)
     {
@@ -184,7 +184,7 @@ void Piano3d::draw()
     for(l_j = 0; l_j < m_num_keys; l_j++)
     {
         l_cur_key = l_j + m_first_key;
-        if(!isBlackNote(l_cur_key))
+        if(!MusicNote::isBlackNote(l_cur_key))
         {
             if(m_key_states[l_j])
             {
@@ -209,7 +209,7 @@ void Piano3d::draw()
     for(l_j = 0; l_j < m_num_keys; l_j++)
     {
         l_cur_key = l_j + m_first_key;
-        if(isBlackNote(l_cur_key))
+        if(MusicNote::isBlackNote(l_cur_key))
         {
             glPushMatrix();
             glTranslatef(m_key_offsets[l_j], 0.0, 0.0);
@@ -237,7 +237,7 @@ void Piano3d::draw()
     for(l_j = 0; l_j < m_num_keys; l_j++)
     {
         l_cur_key = l_j + m_first_key;
-        if(!isBlackNote(l_cur_key))
+        if(!MusicNote::isBlackNote(l_cur_key))
         {
             if(m_key_states[l_j])
             {
@@ -260,7 +260,7 @@ void Piano3d::draw()
     for(l_j = 0; l_j < m_num_keys; l_j++)
     {
         l_cur_key = l_j + m_first_key;
-        if(isBlackNote(l_cur_key))
+        if(MusicNote::isBlackNote(l_cur_key))
         {
             glPushMatrix();
             glTranslatef(m_key_offsets[l_j], 0.0, 0.0);

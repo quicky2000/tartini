@@ -147,7 +147,7 @@ GData::GData()
     m_line_color.push_back(Qt::darkYellow);
     m_line_color.push_back(Qt::darkGray);
 
-    initMusicStuff();
+    MusicNote::initMusicStuff();
 }
 
 //------------------------------------------------------------------------------
@@ -943,7 +943,7 @@ void GData::setMusicTemperament(MusicTemperament::TemperamentType p_music_temper
 void GData::setFreqA(double p_x)
 {
     m_freq_A = p_x;
-    m_semitone_offset = freq2pitch(p_x) - freq2pitch(440.0);
+    m_semitone_offset = MusicNote::freq2pitch(p_x) - MusicNote::freq2pitch(440.0);
     m_settings->setValue("View/freqA", p_x);
 }
 

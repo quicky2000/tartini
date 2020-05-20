@@ -87,7 +87,7 @@ void NoteData::addData( const AnalysisData & p_analysis_data
     m_max_purity = MAX(m_max_purity, p_analysis_data.getVolumeValue(GData::getUniqueInstance()));
     m_volume = MAX(m_volume, dB2Normalised(p_analysis_data.getLogRms(), GData::getUniqueInstance()));
     m_num_periods += p_periods; //sum up the periods
-    m_avg_pitch = bound(freq2pitch(avgFreq()), 0.0, GData::getUniqueInstance().topPitch());
+    m_avg_pitch = bound(MusicNote::freq2pitch(avgFreq()), 0.0, GData::getUniqueInstance().topPitch());
 }
 
 //------------------------------------------------------------------------------
@@ -251,7 +251,7 @@ void NoteData::recalcAvgPitch()
     {
         m_num_periods += float(m_channel->framesPerChunk()) / float(m_channel->dataAtChunk(l_j)->getPeriod());
     }
-    m_avg_pitch = bound(freq2pitch(avgFreq()), 0.0, GData::getUniqueInstance().topPitch());
+    m_avg_pitch = bound(MusicNote::freq2pitch(avgFreq()), 0.0, GData::getUniqueInstance().topPitch());
 }
 
 // EOF

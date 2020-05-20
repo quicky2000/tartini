@@ -45,10 +45,10 @@ MusicTemperament::MusicTemperament(const std::string & p_name
             break;
             
         case NoteOffsetType::Ratio:
-            const double l_k = freq2pitch(1.0);
+            const double l_k = MusicNote::freq2pitch(1.0);
             for (double & l_note_offset : m_note_offsets)
             {
-                l_note_offset = freq2pitch(l_note_offset) - l_k;
+                l_note_offset = MusicNote::freq2pitch(l_note_offset) - l_k;
             }
             break;
     }

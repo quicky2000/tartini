@@ -60,7 +60,7 @@ void PianoView::changeKey()
             
             // The nominal note that has the closest tempered pitch to p_pitch (used to update the LEDs).
             int l_close_note = MusicNote::closestNote(l_pitch);
-            m_piano_widget->setCurrentNote(noteValue(l_close_note), l_data->getCorrelation());
+            m_piano_widget->setCurrentNote(MusicNote::noteValue(l_close_note), l_data->getCorrelation());
         }
         else
         {
