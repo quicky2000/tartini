@@ -31,9 +31,9 @@ double freq2pitch(const double & p_freq)
 }
 
 //------------------------------------------------------------------------------
-double pitch2freq(const double & p_note)
+double pitch2freq(const double & p_pitch)
 {
-    double l_result = pow10((p_note + 36.3763165622959152488) / 39.8631371386483481);
+    double l_result = pow10((p_pitch + 36.3763165622959152488) / 39.8631371386483481);
     return l_result;
 }
 
