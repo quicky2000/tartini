@@ -20,7 +20,7 @@
 #include "gdata.h"
 #include "channel.h"
 #include "analysisdata.h"
-#include "musicnotes.h"
+#include "music_note.h"
 #include <glu.h>
 #include <gl.h>
 #include <sstream>
@@ -940,11 +940,11 @@ void VibratoWidget::compose_note_label(QString & p_note_label, const int & p_not
   std::stringstream l_composed_note_label;
   if ((noteOctave(p_note) >= 0) && (noteOctave(p_note) <= 9))
     {
-      l_composed_note_label << music_notes::noteName(p_note) << toSubscriptString(noteOctave(p_note));
+      l_composed_note_label << MusicNote::noteName(p_note) << toSubscriptString(noteOctave(p_note));
     }
   else
     {
-      l_composed_note_label << music_notes::noteName(p_note) << " ";
+      l_composed_note_label << MusicNote::noteName(p_note) << " ";
     }
   p_note_label = QString::fromStdString(l_composed_note_label.str());
 }

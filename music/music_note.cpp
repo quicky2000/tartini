@@ -1,5 +1,5 @@
 /***************************************************************************
-                          musicnotes.cpp
+                          music_note.cpp
                              -------------------
     begin                : 2002
     copyright            : (C) 2002-2005 by Philip McLeod
@@ -14,31 +14,31 @@
    
    Please read LICENSE.txt for details.
  ***************************************************************************/
-#include "musicnotes.h"
+#include "music_note.h"
 #include "myassert.h"
 #include "music_scale.h"
 #include "music_temperament.h"
 #include <QObject>
 
-std::array<std::string, 12> music_notes::m_note_names;
+std::array<std::string, 12> MusicNote::m_note_names;
 
 //------------------------------------------------------------------------------
 void initMusicStuff()
 {
-    music_notes::init_note_names();
+    MusicNote::init_note_names();
     MusicTemperament::init();
     MusicScale::init();
 }
 
 //------------------------------------------------------------------------------
-const std::string & music_notes::noteName(int p_note)
+const std::string & MusicNote::noteName(int p_note)
 {
     return m_note_names[cycle(p_note, 12)];
 }
 
 //------------------------------------------------------------------------------
 void
-music_notes::init_note_names()
+MusicNote::init_note_names()
 {
     m_note_names =
     {{ QObject::tr("C").toStdString()
@@ -69,19 +69,19 @@ int noteValue(int p_note)
 }
 
 //------------------------------------------------------------------------------
-int music_notes::noteValueInKey(int p_note, int p_key)
+int MusicNote::noteValueInKey(int p_note, int p_key)
 {
     return noteValue(p_note - p_key);
 }
 
 //------------------------------------------------------------------------------
-double music_notes::pitchOffsetInKey(const double & p_pitch, int p_key)
+double MusicNote::pitchOffsetInKey(const double & p_pitch, int p_key)
 {
     return cycle(p_pitch - (double)p_key, 12.0);
 }
 
 //------------------------------------------------------------------------------
-double music_notes::temperedPitch(int p_note
+double MusicNote::temperedPitch(int p_note
                                 , int p_music_key
                                 , const MusicTemperament & p_music_temperament
                                   )
@@ -113,7 +113,7 @@ double music_notes::temperedPitch(int p_note
     double l_tempered_pitch = p_note + (l_temperament_pitch - l_note_in_key);
 
 #ifdef DEBUG_PRINTF
-    std::cout << ">>> music_notes::temperedPitch() <<<" << std::endl;
+    std::cout << ">>> MusicNote::temperedPitch() <<<" << std::endl;
     std::cout << "  nominal pitch = " << p_note << " (" << noteName(p_note) << ")" << std::endl;
     std::cout << "  music key = " << p_music_key << " (" << noteName(p_music_key) << ")" << std::endl;
     std::cout << "  music temperament = " << p_music_temperament.name() << std::endl;
@@ -127,7 +127,7 @@ double music_notes::temperedPitch(int p_note
 }
 
 //------------------------------------------------------------------------------
-int music_notes::closestNote(const double & p_pitch
+int MusicNote::closestNote(const double & p_pitch
                            , int p_music_key
                            , const MusicTemperament & p_music_temperament
                              )
@@ -143,7 +143,7 @@ int music_notes::closestNote(const double & p_pitch
     double l_closest_note = l_root_of_key + l_closest_offset;
 
 #ifdef DEBUG_PRINTF
-    std::cout << ">>> music_notes::closestNote() <<<" << std::endl;
+    std::cout << ">>> MusicNote::closestNote() <<<" << std::endl;
     std::cout << "  input pitch = " << p_pitch << std::endl;
     std::cout << "  music key = " << p_music_key << " (" << noteName(p_music_key) << ")" << std::endl;
     std::cout << "  music temperament = " << p_music_temperament.name() << std::endl;

@@ -21,7 +21,7 @@
 #include "gdata.h"
 #include "channel.h"
 #include "useful.h"
-#include "musicnotes.h"
+#include "music_note.h"
 
 //------------------------------------------------------------------------------
 NoteData::NoteData(const Channel & p_channel)

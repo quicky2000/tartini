@@ -120,12 +120,12 @@ HEADERS += \
   include/array2d.h \
   include/myassert.h \
   include/RingBuffer.h \
+  music/music_note.h \
+  music/music_note.hpp \
   music/music_scale.h \
   music/music_scale.hpp \
   music/music_temperament.h \
   music/music_temperament.hpp \
-  music/musicnotes.h \
-  music/musicnotes.hpp \
   sound/filters/FastSmoothedAveragingFilter.h \
   sound/filters/Filter.h \
   sound/filters/FixedAveragingFilter.h \
@@ -240,9 +240,9 @@ SOURCES += \
    global/conversions.cpp \
    global/gdata.cpp \
    global/view.cpp \
+   music/music_note.cpp \
    music/music_scale.cpp \
    music/music_temperament.cpp \
-   music/musicnotes.cpp \
    sound/filters/FastSmoothedAveragingFilter.cpp \
    sound/filters/FixedAveragingFilter.cpp \
    sound/filters/GrowingAveragingFilter.cpp \

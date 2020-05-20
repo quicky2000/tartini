@@ -24,7 +24,7 @@
 #include "channel.h"
 #include "Filter.h"
 #include "conversions.h"
-#include "musicnotes.h"
+#include "music_note.h"
 
 #include "useful.h"
 #include <algorithm>

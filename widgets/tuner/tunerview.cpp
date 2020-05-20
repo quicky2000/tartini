@@ -27,7 +27,7 @@
 #include "useful.h"
 #include "gdata.h"
 #include "channel.h"
-#include "musicnotes.h"
+#include "music_note.h"
 
 //------------------------------------------------------------------------------
 TunerView::TunerView(int p_view_iD_

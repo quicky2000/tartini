@@ -1,5 +1,5 @@
 /***************************************************************************
-                          musicnotes.h
+                          music_note.h
                              -------------------
     begin                : 2002
     copyright            : (C) 2002-2005 by Philip McLeod
@@ -38,7 +38,7 @@
  
  You can pass the key and temperament explicitly or rely on the default values, which use the globally selected key and temperament in `GData`
  */
-class music_notes
+class MusicNote
 {
   public:
 
@@ -123,7 +123,7 @@ inline bool isBlackNote(const double & p_pitch);
 
 void initMusicStuff();
 
-#include "musicnotes.hpp"
+#include "music_note.hpp"
 
 #endif // MUSICNOTES_H
 //EOF

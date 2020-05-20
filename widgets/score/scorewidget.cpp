@@ -28,7 +28,7 @@
 #include "qfontmetrics.h"
 #include "qpen.h"
 #include "scoresegmentiterator.h"
-#include "musicnotes.h"
+#include "music_note.h"
 
 //------------------------------------------------------------------------------
 ScoreWidget::ScoreWidget(QWidget *p_parent)

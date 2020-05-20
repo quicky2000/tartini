@@ -41,7 +41,7 @@
 #include "tartinisettingsdialog.h"
 #include "savedialog.h"
 #include "conversions.h"
-#include "musicnotes.h"
+#include "music_note.h"
 #include "music_scale.h"
 #include <sstream>
 #include <iomanip>
