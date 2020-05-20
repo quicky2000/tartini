@@ -30,11 +30,11 @@ class CepstrumView : public ViewWidget
     CepstrumView( int p_view_id
                 , QWidget * p_parent = nullptr
                 );
-    virtual ~CepstrumView();
+    ~CepstrumView() override;
 
-    void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *) override;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
   private:
     CepstrumWidget *m_cepstrum_widget;

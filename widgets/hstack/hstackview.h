@@ -29,12 +29,12 @@ class HStackView : public ViewWidget
     HStackView( int p_view_id
               , QWidget * p_parent = nullptr
               );
-    virtual ~HStackView();
+    ~HStackView() override;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
  private:
-    void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *) override;
 
     HStackWidget * m_h_stack_widget;
 };

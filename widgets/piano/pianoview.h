@@ -31,11 +31,11 @@ class PianoView : public ViewWidget
     PianoView( int p_view_id
              , QWidget *p_parent = nullptr
              );
-    virtual ~PianoView();
+    ~PianoView() override;
 
-    void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *) override;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
   public slots:
     void changeKey();

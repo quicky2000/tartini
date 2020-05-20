@@ -29,12 +29,12 @@ class HCircleView: public ViewWidget
     HCircleView( int p_view_id
                , QWidget *p_parent = nullptr
                );
-    virtual ~HCircleView();
+    ~HCircleView() override;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
   private:
-    void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *) override;
 
     HCircleWidget *m_h_circle_widget;
 };

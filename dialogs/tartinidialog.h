@@ -26,7 +26,7 @@ class TartiniDialog :public QDialog
 
   public:
     TartiniDialog(QWidget *p_parent = nullptr);
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 };
 
 

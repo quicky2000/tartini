@@ -30,11 +30,11 @@ class HBlockView : public ViewWidget
     HBlockView( int p_view_id
               , QWidget *p_parent = nullptr
               );
-    virtual ~HBlockView();
+    ~HBlockView() override;
 
-    void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *) override;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
   private:
     HBlockWidget * m_h_block_widget;

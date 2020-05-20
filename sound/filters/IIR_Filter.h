@@ -41,7 +41,7 @@ class IIR_Filter : public Filter
               , int p_n
               , int p_m = -1
               );
-    inline ~IIR_Filter() { }
+    inline ~IIR_Filter() override = default;
 
 
     /**
@@ -64,12 +64,12 @@ class IIR_Filter : public Filter
     void filter( const float * p_input
                , float * p_output
                , int p_n
-               );
+               ) override;
 
     /**
        Resets the filter back to an initial state of zeros
     */
-    void reset();
+    void reset() override;
     void getState(FilterState * p_filter_state) const;
     void setState(const FilterState * p_filter_state);
 

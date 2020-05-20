@@ -25,33 +25,33 @@ class SoundFileStream : public SoundStream
   public:
 
     inline SoundFileStream();
-    virtual inline ~SoundFileStream();
+    inline ~SoundFileStream() override;
 
     inline int data_length() const;
     inline int totalFrames() const;
     inline int pos() const;
   
     virtual inline int open_read(const std::string & /*filename*/);
-    virtual inline long read_bytes( void * /*data*/
-                                  , long /*length*/
-                                  );
-    virtual inline long read_frames( void * /*data*/
-                                   , long /*length*/
-                                   );
+    inline long read_bytes( void * /*data*/
+                          , long /*length*/
+                          ) override;
+    inline long read_frames( void * /*data*/
+                           , long /*length*/
+                           ) override;
 
-    virtual inline int open_write( const std::string & /*filename*/
-                                 , int /*freq_*/ = 44100
-                                 , int /*channels_*/ = 2
-                                 , int /*bits_*/ = 16
-                                 );
+    inline int open_write( const std::string & /*filename*/
+                         , int /*freq_*/ = 44100
+                         , int /*channels_*/ = 2
+                         , int /*bits_*/ = 16
+                         );
 
-    virtual inline long write_bytes( void * /*data*/
-                                   , long /*length*/
-                                   );
+    inline long write_bytes( void * /*data*/
+                           , long /*length*/
+                           ) override;
 
-    virtual inline long write_frames( void * /*data*/
-                                    , long /*length*/
-                                    );
+    inline long write_frames( void * /*data*/
+                            , long /*length*/
+                            ) override;
 
     virtual inline void close();
 

@@ -31,7 +31,7 @@ class View : public QObject
   public:
 
     View();
-    virtual ~View();
+    ~View() override;
 
     void init(); //please call this after a window has been created
 

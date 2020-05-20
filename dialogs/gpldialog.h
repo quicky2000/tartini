@@ -26,7 +26,7 @@ class GPLDialog :public QDialog
 
   public:
     GPLDialog(QWidget *p_parent = nullptr);
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 };
 
 

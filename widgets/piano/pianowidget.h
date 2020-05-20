@@ -29,12 +29,12 @@ public DrawWidget
   public:
 
     PianoWidget(QWidget * p_parent);
-    ~PianoWidget();
+    ~PianoWidget() override;
 
-    void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *) override;
   
 
-    inline QSize sizeHint() const;
+    inline QSize sizeHint() const override;
     inline int currentNote();
     void setCurrentNote( int p_n
                        , float p_amount_pressed = 1.0

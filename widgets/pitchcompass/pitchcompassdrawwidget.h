@@ -27,9 +27,10 @@ class PitchCompassDrawWidget: public QWidget
                           , const std::string & p_name = ""
                           , PitchCompassView::CompassMode p_mode = PitchCompassView::CompassMode::Mode2
                           );
-    virtual ~PitchCompassDrawWidget();
 
-    void resizeEvent(QResizeEvent *);
+    ~PitchCompassDrawWidget() override;
+
+    void resizeEvent(QResizeEvent *) override;
 
   public slots:
 

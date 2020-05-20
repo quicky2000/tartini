@@ -35,16 +35,16 @@ class LEDIndicator : public QWidget
                 ,const QColor & p_off = Qt::darkRed
                 );
 
-    virtual ~LEDIndicator();
+    ~LEDIndicator() override;
 
     void setOn(bool p_on);
     void toggle();
 
     bool lit();
 
-    void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *) override;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
   private:
     QColor m_on;

@@ -68,13 +68,13 @@ class MainWindow : public QMainWindow
   public:
 
     MainWindow();
-    virtual ~MainWindow();
+    ~MainWindow() override;
 
-    void keyPressEvent(QKeyEvent * p_event);
+    void keyPressEvent(QKeyEvent * p_event) override;
     void message(QString p_string, int p_msec);
 
   protected:
-    bool event(QEvent * p_event);
+    bool event(QEvent * p_event) override;
 
   signals:
     void changedMusicFolder(const QString &);
@@ -89,7 +89,7 @@ class MainWindow : public QMainWindow
     void openPlayRecord();
     void openRecord(bool p_and_play);
     void closeAllWidgets();
-    void closeEvent(QCloseEvent *p_event);
+    void closeEvent(QCloseEvent *p_event) override;
     void menuPreferences();
 
     void windowMenuAboutToShow();

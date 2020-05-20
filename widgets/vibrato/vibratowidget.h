@@ -23,13 +23,13 @@ class VibratoWidget :public QGLWidget
 
  public:
   VibratoWidget(QWidget * parent, int nls);
-  virtual ~VibratoWidget();
+  ~VibratoWidget() override;
 
-  void initializeGL();
-  void resizeGL(int w, int h);
-  void paintGL();
+  void initializeGL() override;
+  void resizeGL(int w, int h) override;
+  void paintGL() override;
 
-  QSize sizeHint() const;
+  QSize sizeHint() const override;
 
  public slots:
   void doUpdate();

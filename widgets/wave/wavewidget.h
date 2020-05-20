@@ -31,11 +31,11 @@ class WaveWidget : public DrawWidget
   public:
     WaveWidget(QWidget *parent);
 
-    virtual ~WaveWidget();
+    ~WaveWidget() override ;
 
-    void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *) override;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
     const double & zoomY() const;
 
   signals:

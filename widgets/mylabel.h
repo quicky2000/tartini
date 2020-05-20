@@ -42,10 +42,10 @@ class MyLabel : public DrawWidget
     inline
     void setText(const std::string & p_text);
 
-    void paintEvent( QPaintEvent * );
+    void paintEvent( QPaintEvent * ) override;
 
     inline
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
   private:
 

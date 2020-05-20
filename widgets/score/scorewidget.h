@@ -49,7 +49,7 @@ class ScoreWidget : public DrawWidget
 
   public:
     ScoreWidget(QWidget * p_parent);
-    virtual ~ScoreWidget();
+    ~ScoreWidget() override;
 
     /**
      * Draw a crotchet at x, y
@@ -101,10 +101,10 @@ class ScoreWidget : public DrawWidget
                          , int p_width_X
                          );
 
-    void paintEvent(QPaintEvent * );
+    void paintEvent(QPaintEvent * ) override;
     inline int getStaveHeight();
     inline int getStaveCenterY();
-    inline QSize sizeHint() const;
+    inline QSize sizeHint() const override;
     NoteType getNoteType(double p_note_length);
 
     inline double scaleX();
@@ -121,9 +121,9 @@ class ScoreWidget : public DrawWidget
     inline void setShowAllMode(int p_mode);
 
   private:
-    void mousePressEvent(QMouseEvent * p_event);
-    void mouseMoveEvent(QMouseEvent * p_event);
-    void mouseReleaseEvent(QMouseEvent * p_event);
+    void mousePressEvent(QMouseEvent * p_event) override;
+    void mouseMoveEvent(QMouseEvent * p_event) override;
+    void mouseReleaseEvent(QMouseEvent * p_event) override;
 
 
     //data goes here

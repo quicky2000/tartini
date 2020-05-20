@@ -37,14 +37,14 @@ class SummaryDrawWidget: public DrawWidget
   public:
 
     SummaryDrawWidget(QWidget * p_parent);
-    virtual ~SummaryDrawWidget();
+    ~SummaryDrawWidget() override;
 
-    void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *) override;
 
-    void mousePressEvent(QMouseEvent * p_event);
-    void mouseMoveEvent(QMouseEvent * p_event);
-    void mouseReleaseEvent(QMouseEvent * p_event);
-    void wheelEvent(QWheelEvent *p_event);
+    void mousePressEvent(QMouseEvent * p_event) override;
+    void mouseMoveEvent(QMouseEvent * p_event) override;
+    void mouseReleaseEvent(QMouseEvent * p_event) override;
+    void wheelEvent(QWheelEvent *p_event) override;
 
  private:
 

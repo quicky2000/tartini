@@ -27,8 +27,8 @@ class application: public QApplication
   Q_OBJECT
  public:
   inline application(int & p_argc, char ** p_argv);
-  inline bool notify(QObject * p_receiver, QEvent * p_event);
-  inline virtual ~application(){}
+  inline bool notify(QObject * p_receiver, QEvent * p_event) override;
+  inline ~application() override = default;
 };
 
 #include "application.hpp"

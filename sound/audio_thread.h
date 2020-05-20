@@ -33,9 +33,9 @@ class AudioThread : public QThread
 
   public:
     AudioThread();
-    inline virtual ~AudioThread();
+    inline ~AudioThread() override;
 
-    virtual void run();
+    void run() override;
     void start();
     void start(SoundFile *p_s_play, SoundFile *p_s_rec);
 

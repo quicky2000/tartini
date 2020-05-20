@@ -40,7 +40,7 @@ class DrawWidget : public QWidget
   public:
 
     DrawWidget(QWidget * p_parent, const std::string &);
-    virtual ~DrawWidget();
+    ~DrawWidget() override;
 
 
     /**

@@ -26,12 +26,12 @@ class DebugWidget : public DrawWidget
 
   public:
     DebugWidget(QWidget * p_parent);
-    virtual ~DebugWidget();
+    ~DebugWidget() override;
 
-    void paintEvent( QPaintEvent * );
+    void paintEvent( QPaintEvent * ) override;
     void printString(const QString & p_string);
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
   private:
     int m_text_Y;

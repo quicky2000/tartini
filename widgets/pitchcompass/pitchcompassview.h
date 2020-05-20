@@ -39,11 +39,12 @@ class PitchCompassView: public ViewWidget
                     , QWidget * p_parent = nullptr
                     , CompassMode p_mode = CompassMode::Mode2
                     );
-    virtual ~PitchCompassView();
 
-    QSize sizeHint() const;
+    ~PitchCompassView() override;
 
-    void resizeEvent(QResizeEvent *);
+    QSize sizeHint() const override;
+
+    void resizeEvent(QResizeEvent *) override;
 
  private:
     void changeMode(CompassMode p_mode);

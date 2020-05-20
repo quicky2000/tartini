@@ -40,7 +40,7 @@ class FreqWidgetGL : public QGLWidget
     FreqWidgetGL( QWidget *p_parent
                 , const std::string & p_name = ""
                 );
-    virtual ~FreqWidgetGL();
+    ~FreqWidgetGL() override;
     static
     void drawReferenceLines( QPaintDevice & p_paint_device
                            , QPainter & p_painter
@@ -60,10 +60,10 @@ class FreqWidgetGL : public QGLWidget
     , DragTimeBar = 3
     } t_drag_modes;
 
-    void initializeGL();
+    void initializeGL() override;
     void resizeGL( int p_w
                  , int p_h
-                 );
+                 ) override;
     void drawReferenceLinesGL( const double & p_leftTime
                              , const double & p_current_time
                              , const double & p_zoom_X
@@ -99,8 +99,8 @@ class FreqWidgetGL : public QGLWidget
                         , int p_base_element
                         , const double & p_base_X
                         );
-    void paintGL();
-    inline QSize sizeHint()const;
+    void paintGL() override;
+    inline QSize sizeHint()const override;
 
     /*
      * Changes the cursor icon to be one of the zoom ones depending on if the control or alt keys were pressed.
@@ -108,15 +108,15 @@ class FreqWidgetGL : public QGLWidget
      *
      * @param k the QKeyEvent to respond to.
      */
-    void keyPressEvent( QKeyEvent * p_key_event);
+    void keyPressEvent( QKeyEvent * p_key_event) override;
 
     /*
      * Unsets the cursor icon if the control or alt key was released. Otherwise, ignores the event.
      *
      * @param k the QKeyEvent to respond to.
      */
-    void keyReleaseEvent( QKeyEvent * p_key_event);
-    void leaveEvent ( QEvent * p_event);
+    void keyReleaseEvent( QKeyEvent * p_key_event) override;
+    void leaveEvent ( QEvent * p_event) override;
   
     /*
      * If control or alt is pressed, zooms. If shift is also pressed, it 'reverses' the zoom: ie ctrl+shift zooms x
@@ -124,11 +124,11 @@ class FreqWidgetGL : public QGLWidget
      *
      * @param e the QMouseEvent to respond to.
      */
-    void mousePressEvent( QMouseEvent * p_mouse_event);
-    void mouseMoveEvent( QMouseEvent * p_mouse_event);
-    void mouseReleaseEvent( QMouseEvent * p_mouse_event);
-    void wheelEvent(QWheelEvent * p_wheel_event);
-    void resizeEvent (QResizeEvent * p_resize_event);
+    void mousePressEvent( QMouseEvent * p_mouse_event) override;
+    void mouseMoveEvent( QMouseEvent * p_mouse_event) override;
+    void mouseReleaseEvent( QMouseEvent * p_mouse_event) override;
+    void wheelEvent(QWheelEvent * p_wheel_event) override;
+    void resizeEvent (QResizeEvent * p_resize_event) override;
 
     /**
      Calculates at what time the mouse is.

@@ -33,14 +33,14 @@ class OpenFiles : public ViewWidget
     OpenFiles( int p_id
              , QWidget *p_parent
              );
-    virtual ~OpenFiles();
+    ~OpenFiles() override;
 
     //private: // Although it should be private, really
     QTableWidget * m_table;
 
-    void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *) override;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
   private slots:
     void refreshChannelList();

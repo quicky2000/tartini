@@ -34,11 +34,11 @@ class VolumeMeterWidget: public DrawWidget
   public:
     VolumeMeterWidget(QWidget * p_parent);
 
-    virtual ~VolumeMeterWidget();
+    ~VolumeMeterWidget() override;
 
-    void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *) override;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
     void setFontSize(int fontSize);
 
   private:

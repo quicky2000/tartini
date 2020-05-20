@@ -30,11 +30,11 @@ class FFTView: public ViewWidget
     FFTView( int p_view_id
            , QWidget *p_parent = nullptr
            );
-    virtual ~FFTView();
+    ~FFTView() override;
 
-    void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *) override;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
   private:
     FFTWidget * m_fft_widget;

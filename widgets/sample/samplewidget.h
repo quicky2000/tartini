@@ -23,11 +23,11 @@ class SampleWidget : public DrawWidget
 
   public:
     SampleWidget(QWidget * p_parent);
-    virtual ~SampleWidget();
+    ~SampleWidget() override;
 
-    void paintEvent( QPaintEvent * );
+    void paintEvent( QPaintEvent * ) override;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
   private:
     //data goes here

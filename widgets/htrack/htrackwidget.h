@@ -33,7 +33,7 @@ class HTrackWidget : public QGLWidget
     HTrackWidget( QWidget *p_parent
                 , const std::string & p_name = ""
                 );
-    ~HTrackWidget();
+    ~HTrackWidget() override;
 
   public slots:
     inline void setPeakThreshold(float p_peak_threshold);
@@ -48,11 +48,11 @@ class HTrackWidget : public QGLWidget
     void viewAngleVerticalChanged(double);
 
   private:
-    void initializeGL();
+    void initializeGL() override;
     void resizeGL( int p_w
                  , int p_h
-                 );
-    void paintGL();
+                 ) override;
+    void paintGL() override;
 
     void rotateX(const double & p_angle);
     void rotateY(const double & p_angle);
@@ -60,10 +60,10 @@ class HTrackWidget : public QGLWidget
                   , float p_y
                   , float p_z
                   );
-    void mousePressEvent(QMouseEvent * p_event);
-    void mouseMoveEvent(QMouseEvent * p_event);
-    void mouseReleaseEvent(QMouseEvent * p_event);
-    void wheelEvent(QWheelEvent * p_event);
+    void mousePressEvent(QMouseEvent * p_event) override;
+    void mouseMoveEvent(QMouseEvent * p_event) override;
+    void mouseReleaseEvent(QMouseEvent * p_event) override;
+    void wheelEvent(QWheelEvent * p_event) override;
   
     inline float peakThreshold()const;
     inline const double & viewAngleHorizontal()const;

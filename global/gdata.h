@@ -348,7 +348,7 @@ public slots:
     void setAmplitudeMode(t_amplitude_modes p_amplitude_mode);
 
     GData();
-    virtual ~GData();
+    ~GData() override;
 
     inline
     void setView(View & p_view);

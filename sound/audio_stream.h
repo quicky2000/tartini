@@ -27,7 +27,7 @@ class AudioStream: public SoundStream
   public:
 
     AudioStream();
-    virtual ~AudioStream();
+    ~AudioStream() override;
 
     int bufferSize() { return m_buffer_size; }
     int numBuffers() { return m_num_buffers; }
@@ -47,28 +47,28 @@ class AudioStream: public SoundStream
     //note: use the writeFloats or readFloats instead
     long read_bytes( void * /*data*/
                    , long /*length*/
-                   )
+                   ) override
     {
         return 0;
     } //not implemented
 
     long read_frames( void * /*data*/
                     , long /*length*/
-                    )
+                    ) override
     {
         return 0;
     } //not implemented
 
     long write_bytes( void * /*data*/
                     , long /*length*/
-                    )
+                    ) override
     {
         return 0;
     } //not implemented
 
     long write_frames( void * /*data*/
                      , long /*length*/
-                     )
+                     ) override
     {
         return 0;
     } //not implemented
@@ -76,11 +76,11 @@ class AudioStream: public SoundStream
     int writeFloats( float ** p_channel_data
                    , int p_length
                    , int p_ch
-                   );
+                   ) override;
     int readFloats( float ** p_channel_data
                   , int p_length
                   , int p_ch
-                  );
+                  ) override;
 
 
     /**
@@ -95,7 +95,7 @@ class AudioStream: public SoundStream
                        , float ** p_in_channel_data
                        , int p_in_channel
                        , int p_length
-                       );
+                       ) override;
 
     static QStringList getInputDeviceNames();
     static QStringList getOutputDeviceNames();

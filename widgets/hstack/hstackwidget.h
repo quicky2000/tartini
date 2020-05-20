@@ -30,9 +30,9 @@ class HStackWidget : public DrawWidget
 
   public:
     HStackWidget(QWidget * p_parent);
-    virtual ~HStackWidget();
+    ~HStackWidget() override;
 
-    void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *) override;
 
   public slots:
     void setWindowSize(double);

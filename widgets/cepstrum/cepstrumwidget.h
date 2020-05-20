@@ -30,11 +30,11 @@ class CepstrumWidget : public DrawWidget
 
   public:
     CepstrumWidget(QWidget * p_parent);
-    virtual ~CepstrumWidget();
+    ~CepstrumWidget() override;
 
-    void paintEvent( QPaintEvent * );
+    void paintEvent( QPaintEvent * ) override;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
   private:
     QPolygon m_point_array;

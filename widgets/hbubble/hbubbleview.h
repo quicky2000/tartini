@@ -29,12 +29,12 @@ class HBubbleView : public ViewWidget
   HBubbleView( int p_view_id
              , QWidget * p_parent = nullptr
              );
-  virtual ~HBubbleView();
+  ~HBubbleView() override;
 
-  QSize sizeHint() const;
+  QSize sizeHint() const override;
 
   private:
-    void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *) override;
 
     HBubbleWidget *m_h_bubble_widget;
 };

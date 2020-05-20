@@ -38,12 +38,12 @@ class TunerView : public ViewWidget
     TunerView(int p_view_iD_
              ,QWidget *p_parent = nullptr
              );
-    virtual ~TunerView();
+    ~TunerView() override;
 
-    void resizeEvent(QResizeEvent *);
-    void paintEvent( QPaintEvent* );
+    void resizeEvent(QResizeEvent *) override;
+    void paintEvent( QPaintEvent* ) override;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
   public slots:
 

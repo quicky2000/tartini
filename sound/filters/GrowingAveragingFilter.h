@@ -33,9 +33,9 @@ class GrowingAverageFilter : public Filter
     void filter( const float * p_input
                , float * p_output
                , int p_n
-               );
-    void reset();
-    inline int delay() const { return m_size / 2; }
+               ) override;
+    void reset() override;
+    inline int delay() const override { return m_size / 2; }
 
   private:
     int m_size;

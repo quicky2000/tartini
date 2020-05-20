@@ -43,11 +43,11 @@ class MyScrollBar : public QWidget
                ,const std::string & p_name = ""
                );
 
-    virtual ~MyScrollBar();
+    ~MyScrollBar() override;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
-    void resizeEvent(QResizeEvent * p_event);
+    void resizeEvent(QResizeEvent * p_event) override;
 
     inline
     double minValue() const;

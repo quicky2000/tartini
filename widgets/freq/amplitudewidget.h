@@ -44,9 +44,9 @@ class AmplitudeWidget : public QGLWidget
     AmplitudeWidget( QWidget * p_parent
                    , const std::string & p_name = ""
                    );
-    virtual ~AmplitudeWidget();
+    ~AmplitudeWidget() override;
 
-    inline QSize sizeHint() const;
+    inline QSize sizeHint() const override;
     inline const double & range()const;
 
   public slots:
@@ -59,11 +59,11 @@ class AmplitudeWidget : public QGLWidget
     void offsetInvChanged(double);
 
   private:
-    void initializeGL();
+    void initializeGL() override;
     void resizeGL( int p_width
                  , int p_height
-                 );
-    void paintGL();
+                 ) override;
+    void paintGL() override;
 
     void setLineWidth(float p_width);
     void drawVerticalRefLines();
@@ -85,10 +85,10 @@ class AmplitudeWidget : public QGLWidget
                             , int p_index
                             );
 
-    void mousePressEvent( QMouseEvent * p_mouse_event);
-    void mouseMoveEvent( QMouseEvent * p_mouse_event);
-    void mouseReleaseEvent( QMouseEvent * p_mouse_event);
-    void wheelEvent(QWheelEvent * p_mouse_event);
+    void mousePressEvent( QMouseEvent * p_mouse_event) override;
+    void mouseMoveEvent( QMouseEvent * p_mouse_event) override;
+    void mouseReleaseEvent( QMouseEvent * p_mouse_event) override;
+    void wheelEvent(QWheelEvent * p_mouse_event) override;
 
     inline double leftTime()const;
     inline double rightTime()const;

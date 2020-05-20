@@ -25,15 +25,15 @@ class VibratoSpeedWidget: public QGLWidget
 
   public:
     VibratoSpeedWidget(QWidget * p_parent);
-    virtual ~VibratoSpeedWidget();
+    ~VibratoSpeedWidget() override;
 
-    void initializeGL();
+    void initializeGL() override;
     void resizeGL(int p_width
                  ,int p_height
-                 );
-    void paintGL();
+                 ) override;
+    void paintGL() override;
 
-    QSize minimumSizeHint() const;
+    QSize minimumSizeHint() const override;
 
  public slots:
     void doUpdate();

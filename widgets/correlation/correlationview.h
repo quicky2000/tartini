@@ -30,9 +30,10 @@ class CorrelationView : public ViewWidget
     CorrelationView( int p_view_ID
                    , QWidget * p_parent = nullptr
                    );
-    virtual ~CorrelationView();
 
-    QSize sizeHint() const;
+    ~CorrelationView() override;
+
+    QSize sizeHint() const override;
 
   private:
     CorrelationWidget * m_correlation_widget;

@@ -25,12 +25,12 @@ class VibratoTimeAxis: public DrawWidget
 
   public:
     VibratoTimeAxis(QWidget * p_parent, int p_nls);
-    virtual ~VibratoTimeAxis();
+    ~VibratoTimeAxis() override;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
-    void paintEvent(QPaintEvent *);
-    void resizeEvent( QResizeEvent *);
+    void paintEvent(QPaintEvent *) override;
+    void resizeEvent( QResizeEvent *) override;
 
  private:
     //data goes here

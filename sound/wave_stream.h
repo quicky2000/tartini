@@ -24,16 +24,16 @@ class WaveStream : public SoundFileStream
 {
   public:
     WaveStream();
-    virtual ~WaveStream();
+    ~WaveStream() override;
 
-    int open_read(const std::string & p_filename);
+    int open_read(const std::string & p_filename) override;
     int read_header();
     long read_bytes( void * p_data
                    , long p_length
-                   );
+                   ) override;
     long read_frames( void * p_data
                     , long p_length
-                    );
+                    ) override;
 
     int open_write( const std::string & p_filename
                   , int p_freq = 44100
@@ -45,19 +45,19 @@ class WaveStream : public SoundFileStream
 
     long write_bytes( void * p_data
                     , long p_length
-                    );
+                    ) override;
 
     long write_frames( void * p_data
                      , long p_length
-                     );
+                     ) override;
 
     QStringList getOutputDeviceNames();
 
-    void close();
+    void close() override;
 
-    void jump_to_frame(int p_frame);
-    void jump_back(int p_frames);
-    void jump_forward(int p_frames);
+    void jump_to_frame(int p_frame) override;
+    void jump_back(int p_frames) override;
+    void jump_forward(int p_frames) override;
 
   private:
     FILE * m_file;

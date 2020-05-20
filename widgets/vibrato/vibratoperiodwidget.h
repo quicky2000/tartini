@@ -25,13 +25,13 @@ class VibratoPeriodWidget: public QGLWidget
 
   public:
     VibratoPeriodWidget(QWidget * p_parent);
-    virtual ~VibratoPeriodWidget();
+    ~VibratoPeriodWidget() override;
 
-    void initializeGL();
-    void resizeGL(int p_width, int p_height);
-    void paintGL();
+    void initializeGL() override;
+    void resizeGL(int p_width, int p_height) override;
+    void paintGL() override;
 
-    QSize minimumSizeHint() const;
+    QSize minimumSizeHint() const override;
 
   public slots:
     void doUpdate();

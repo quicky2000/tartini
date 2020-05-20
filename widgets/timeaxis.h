@@ -41,10 +41,10 @@ class TimeAxis : public DrawWidget
             ,bool p_numbers_on_top = true
             );
 
-    ~TimeAxis();
+    ~TimeAxis() override;
 
     inline
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
     void init();
 
@@ -59,7 +59,7 @@ class TimeAxis : public DrawWidget
 
     void setFontSize(int p_font_size);
 
-    void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *) override;
 
   public slots:
 

@@ -35,9 +35,9 @@ class VibratoView: public ViewWidget
                ,QWidget * p_parent = nullptr
                );
 
-    virtual ~VibratoView();
+    ~VibratoView() override;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
   private:
     VibratoSpeedWidget * m_vibrato_speed_widget;

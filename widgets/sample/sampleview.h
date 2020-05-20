@@ -27,11 +27,11 @@ class SampleView : public ViewWidget
     SampleView( int p_view_id
             , QWidget * p_parent = nullptr
             );
-    virtual ~SampleView();
+    ~SampleView() override;
 
-    void resizeEvent(QResizeEvent *);
+    void resizeEvent(QResizeEvent *) override;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
   private:
     SampleWidget *m_sample_widget;

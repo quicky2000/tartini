@@ -35,9 +35,9 @@ class FreqView: public ViewWidget
     FreqView( int p_view_id
             , QWidget *p_parent = nullptr
             );
-    virtual ~FreqView();
+    ~FreqView() override;
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
   public slots:
     void zoomIn();
