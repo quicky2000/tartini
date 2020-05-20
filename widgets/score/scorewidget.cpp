@@ -60,7 +60,7 @@ ScoreWidget::ScoreWidget(QWidget *p_parent)
     for(int l_j = 0; l_j <= 128; l_j++)
     {
         m_flats_lookup[l_j] = l_counter;
-        if(!isBlackNote(l_j))
+        if(!MusicNote::isBlackNote(l_j))
         {
             l_counter++;
         }
@@ -217,7 +217,7 @@ void ScoreWidget::drawNoteAtPitch( int p_x
     {
         l_y_Steps = m_flats_lookup[p_pitch];
         l_y_offset = toInt(m_scale_Y * static_cast<double>(l_y_Steps) * 0.5);
-        if(isBlackNote(p_pitch))
+        if(MusicNote::isBlackNote(p_pitch))
         {
             get_painter().drawText(p_x - l_accidental_offset_X - m_font_width, p_y - l_y_offset + m_font_height / 2, "♭");
         }
@@ -226,7 +226,7 @@ void ScoreWidget::drawNoteAtPitch( int p_x
     {
         l_y_Steps = m_sharps_lookup[p_pitch];
         l_y_offset = toInt(m_scale_Y * static_cast<double>(l_y_Steps) * 0.5);
-        if(isBlackNote(p_pitch))
+        if(MusicNote::isBlackNote(p_pitch))
         {
             get_painter().drawText(p_x - l_accidental_offset_X - m_font_width, p_y - l_y_offset + m_font_height / 2, "♯");
         }

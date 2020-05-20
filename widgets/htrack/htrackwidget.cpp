@@ -179,7 +179,7 @@ void HTrackWidget::paintGL()
             {
                 for(l_harmonic=0; l_harmonic < l_num_harmonics; l_harmonic++)
                 {
-                    l_pitches(l_harmonic, l_chunk_offset) = freq2pitch(l_data->getHarmonicFreqAt(l_harmonic));
+                    l_pitches(l_harmonic, l_chunk_offset) = MusicNote::freq2pitch(l_data->getHarmonicFreqAt(l_harmonic));
                     l_amps(l_harmonic, l_chunk_offset) = l_data->getHarmonicAmpAt(l_harmonic);
                 }
             }

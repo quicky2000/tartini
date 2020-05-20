@@ -141,12 +141,12 @@ void FreqWidgetGL::drawReferenceLines( QPaintDevice & p_paint_device
     for(double l_y = l_start; l_y < l_stop; l_y += l_step, l_name_index+=l_note_jump)
     {
         l_line_Y = p_paint_device.height() - toInt(l_y);
-        if(!isBlackNote(l_name_index))
+        if(!MusicNote::isBlackNote(l_name_index))
         {
             p_painter.setPen(Qt::black);
-            l_note_label = QString::fromStdString(MusicNote::noteName(l_name_index) + toSubscriptString(noteOctave(l_name_index)));
+            l_note_label = QString::fromStdString(MusicNote::noteName(l_name_index) + toSubscriptString(MusicNote::noteOctave(l_name_index)));
             p_painter.drawText(2, l_line_Y + l_font_height_space, l_note_label);
-            if(noteValue(l_name_index) == 0)
+            if(MusicNote::noteValue(l_name_index) == 0)
             {
                 p_painter.setPen(QPen(Qt::black, 1, Qt::SolidLine));
             }
@@ -272,7 +272,7 @@ void FreqWidgetGL::drawReferenceLinesGL( const double & /* p_left_time*/
                 l_line_Y = double(height()) - myround((l_cur_pitch - p_view_bottom) / p_zoom_Y);
                 l_name_index = toInt(l_cur_pitch);
                 glColor3ub(0, 0, 0);
-                l_note_label = QString::fromStdString(MusicNote::noteName(l_name_index) + toSubscriptString(noteOctave(l_name_index)));
+                l_note_label = QString::fromStdString(MusicNote::noteName(l_name_index) + toSubscriptString(MusicNote::noteOctave(l_name_index)));
                 renderText(2, toInt(l_line_Y) + l_font_height_space, l_note_label);
             }
             if(p_zoom_Y > 0.1)

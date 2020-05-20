@@ -17,7 +17,7 @@
 */
 
 //------------------------------------------------------------------------------
-double freq2pitch(const double & p_freq)
+double MusicNote::freq2pitch(const double & p_freq)
 {
 #ifdef log2
     //From log rules  log(x/y) = log(x) - log(y)
@@ -31,7 +31,7 @@ double freq2pitch(const double & p_freq)
 }
 
 //------------------------------------------------------------------------------
-double pitch2freq(const double & p_pitch)
+double MusicNote::pitch2freq(const double & p_pitch)
 {
     double l_result = pow10((p_pitch + 36.3763165622959152488) / 39.8631371386483481);
     return l_result;
@@ -46,27 +46,27 @@ const std::string & MusicNote::noteName(const double & p_pitch)
 }
 
 //------------------------------------------------------------------------------
-int noteOctave(const double & p_pitch)
+int MusicNote::noteOctave(const double & p_pitch)
 {
     // This function is deprecated, but don't remove it.
     // Otherwise, a call to `noteOctave(double)` would use implicit conversions to call `noteOctave(int)`, which would truncate the pitch value.
-    return noteOctave(MusicNote::closestNote(p_pitch));
+    return noteOctave(closestNote(p_pitch));
 }
 
 //------------------------------------------------------------------------------
-int noteValue(const double & p_pitch)
+int MusicNote::noteValue(const double & p_pitch)
 {
     // This function is deprecated, but don't remove it.
     // Otherwise, a call to `noteValue(double)` would use implicit conversions to call `noteValue(int)`, which would truncate the pitch value.
-    return noteValue(MusicNote::closestNote(p_pitch));
+    return noteValue(closestNote(p_pitch));
 }
 
 //------------------------------------------------------------------------------
-bool isBlackNote(const double & p_pitch)
+bool MusicNote::isBlackNote(const double & p_pitch)
 {
     // This function is deprecated, but don't remove it.
     // Otherwise, a call to `isBlackNote(double)` would use implicit conversions to call `isBlackNote(int)`, which would truncate the pitch value.
-    return isBlackNote(MusicNote::closestNote(p_pitch));
+    return isBlackNote(closestNote(p_pitch));
 }
 
 //EOF

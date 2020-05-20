@@ -23,9 +23,9 @@
 std::array<std::string, 12> MusicNote::m_note_names;
 
 //------------------------------------------------------------------------------
-void initMusicStuff()
+void MusicNote::initMusicStuff()
 {
-    MusicNote::init_note_names();
+    init_note_names();
     MusicTemperament::init();
     MusicScale::init();
 }
@@ -57,13 +57,13 @@ MusicNote::init_note_names()
 }
 
 //------------------------------------------------------------------------------
-int noteOctave(int p_note)
+int MusicNote::noteOctave(int p_note)
 {
     return (p_note / 12) - 1;
 }
 
 //------------------------------------------------------------------------------
-int noteValue(int p_note)
+int MusicNote::noteValue(int p_note)
 {
     return cycle(p_note, 12);
 }
@@ -113,7 +113,7 @@ double MusicNote::temperedPitch(int p_note
     double l_tempered_pitch = p_note + (l_temperament_pitch - l_note_in_key);
 
 #ifdef DEBUG_PRINTF
-    std::cout << ">>> MusicNote::temperedPitch() <<<" << std::endl;
+    std::cout << ">>> temperedPitch() <<<" << std::endl;
     std::cout << "  nominal pitch = " << p_note << " (" << noteName(p_note) << ")" << std::endl;
     std::cout << "  music key = " << p_music_key << " (" << noteName(p_music_key) << ")" << std::endl;
     std::cout << "  music temperament = " << p_music_temperament.name() << std::endl;
@@ -143,7 +143,7 @@ int MusicNote::closestNote(const double & p_pitch
     double l_closest_note = l_root_of_key + l_closest_offset;
 
 #ifdef DEBUG_PRINTF
-    std::cout << ">>> MusicNote::closestNote() <<<" << std::endl;
+    std::cout << ">>> closestNote() <<<" << std::endl;
     std::cout << "  input pitch = " << p_pitch << std::endl;
     std::cout << "  music key = " << p_music_key << " (" << noteName(p_music_key) << ")" << std::endl;
     std::cout << "  music temperament = " << p_music_temperament.name() << std::endl;
@@ -157,7 +157,7 @@ int MusicNote::closestNote(const double & p_pitch
 }
 
 //------------------------------------------------------------------------------
-bool isBlackNote(int p_note)
+bool MusicNote::isBlackNote(int p_note)
 {
     switch(cycle(p_note, 12))
     {
