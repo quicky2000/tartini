@@ -20,7 +20,7 @@
 #include "pianowidget.h"
 #include "gdata.h"
 #include "channel.h"
-#include "musicnotes.h"
+#include "music_note.h"
 
 //------------------------------------------------------------------------------
 PianoView::PianoView( int p_view_id
@@ -59,7 +59,7 @@ void PianoView::changeKey()
             float l_pitch = l_data->getPitch();
             
             // The nominal note that has the closest tempered pitch to p_pitch (used to update the LEDs).
-            int l_close_note = music_notes::closestNote(l_pitch);
+            int l_close_note = MusicNote::closestNote(l_pitch);
             m_piano_widget->setCurrentNote(noteValue(l_close_note), l_data->getCorrelation());
         }
         else

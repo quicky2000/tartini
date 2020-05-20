@@ -18,7 +18,7 @@
 #include "gdata.h"
 #include "channel.h"
 #include "analysisdata.h"
-#include "musicnotes.h"
+#include "music_note.h"
 #include <glu.h>
 #include <gl.h>
 #include <QtGlobal>
@@ -283,16 +283,16 @@ void VibratoTunerWidget::doUpdate(double p_pitch)
     m_cur_pitch = p_pitch;
 
     // The nominal note that has the closest tempered pitch to p_pitch (used to update the LEDs).
-    int l_close_note = music_notes::closestNote(p_pitch);
+    int l_close_note = MusicNote::closestNote(p_pitch);
     // The tempered pitch associated with the nominal note value (used for the needle).
-    double l_close_pitch = music_notes::temperedPitch(l_close_note);
+    double l_close_pitch = MusicNote::temperedPitch(l_close_note);
     float l_needle_value = 100 * (p_pitch - l_close_pitch);
 
 #ifdef DEBUG_PRINTF
     std::cout << ">>> VibratoTunerWidget::doUpdate() <<<" << std::endl;
     std::cout << "  input pitch = " << p_pitch << std::endl;
     std::cout << "  music temperament = " << l_music_temperament.name() << std::endl;
-    std::cout << "  closest note = " << l_close_note << " (" << music_notes::noteName(l_close_note) << ")" << std::endl;
+    std::cout << "  closest note = " << l_close_note << " (" << MusicNote::noteName(l_close_note) << ")" << std::endl;
     std::cout << "  tempered pitch of closest note = " << l_close_pitch << std::endl;
     std::cout << "  needle value = " << l_needle_value << std::endl;
 #endif // DEBUG_PRINTF

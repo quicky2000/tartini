@@ -29,7 +29,7 @@
 #include "FixedAveragingFilter.h"
 #include "GrowingAveragingFilter.h"
 #include "prony.h"
-#include "musicnotes.h"
+#include "music_note.h"
 #include "bspline.h"
 
 const double g_short_time = 0.08;

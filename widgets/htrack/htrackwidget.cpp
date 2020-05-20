@@ -24,7 +24,7 @@
 #include "channel.h"
 #include "array1d.h"
 #include "piano3d.h"
-#include "musicnotes.h"
+#include "music_note.h"
 #include "widget_utils.h"
 #include <glu.h>
 #include <gl.h>

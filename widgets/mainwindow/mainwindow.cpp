@@ -82,7 +82,7 @@
 #include "debugview.h"
 #include "scoreview.h"
 #include "vibratoview.h"
-#include "musicnotes.h"
+#include "music_note.h"
 
 #include "savedialog.h"
 #include "opendialog.h"

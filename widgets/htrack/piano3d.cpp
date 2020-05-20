@@ -19,7 +19,7 @@
 
 #include "piano3d.h"
 #include "useful.h"
-#include "musicnotes.h"
+#include "music_note.h"
 
 static double g_keyOffsetTable[12] =
         { 0.0

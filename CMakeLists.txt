@@ -128,8 +128,8 @@ set(MY_HEADER_FILES
     general/mygl.h
     general/mygl.hpp
     general/myqt.h
-    music/musicnotes.h
-    music/musicnotes.hpp
+    music/music_note.h
+    music/music_note.hpp
     general/myalgo.h
     include/RingBuffer.h
     music/music_scale.h
@@ -228,7 +228,7 @@ set(MY_SOURCE_FILES
     general/prony.cpp
     general/mymatrix.cpp
     general/myqt.cpp
-    music/musicnotes.cpp
+    music/music_note.cpp
     general/myalgo.cpp
     music/music_scale.cpp
     music/music_temperament.cpp

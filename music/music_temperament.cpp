@@ -15,7 +15,7 @@
    Please read LICENSE.txt for details.
  ***************************************************************************/
 #include "music_temperament.h"
-#include "musicnotes.h"
+#include "music_note.h"
 
 //------------------------------------------------------------------------------
 MusicTemperament::MusicTemperament(const std::string & p_name

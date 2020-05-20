@@ -38,7 +38,7 @@ double pitch2freq(const double & p_pitch)
 }
 
 //------------------------------------------------------------------------------
-const std::string & music_notes::noteName(const double & p_pitch)
+const std::string & MusicNote::noteName(const double & p_pitch)
 {
     // This method is deprecated, but don't remove it.
     // Otherwise, a call to `noteName(double)` would use implicit conversions to call `noteName(int)`, which would truncate the pitch value.
@@ -50,7 +50,7 @@ int noteOctave(const double & p_pitch)
 {
     // This function is deprecated, but don't remove it.
     // Otherwise, a call to `noteOctave(double)` would use implicit conversions to call `noteOctave(int)`, which would truncate the pitch value.
-    return noteOctave(music_notes::closestNote(p_pitch));
+    return noteOctave(MusicNote::closestNote(p_pitch));
 }
 
 //------------------------------------------------------------------------------
@@ -58,7 +58,7 @@ int noteValue(const double & p_pitch)
 {
     // This function is deprecated, but don't remove it.
     // Otherwise, a call to `noteValue(double)` would use implicit conversions to call `noteValue(int)`, which would truncate the pitch value.
-    return noteValue(music_notes::closestNote(p_pitch));
+    return noteValue(MusicNote::closestNote(p_pitch));
 }
 
 //------------------------------------------------------------------------------
@@ -66,7 +66,7 @@ bool isBlackNote(const double & p_pitch)
 {
     // This function is deprecated, but don't remove it.
     // Otherwise, a call to `isBlackNote(double)` would use implicit conversions to call `isBlackNote(int)`, which would truncate the pitch value.
-    return isBlackNote(music_notes::closestNote(p_pitch));
+    return isBlackNote(MusicNote::closestNote(p_pitch));
 }
 
 //EOF
