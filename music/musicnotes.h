@@ -30,8 +30,8 @@ class music_notes
     static
     const std::string & noteName(int p_pitch);
 
-    static inline
-    const std::string & noteName(const double & p_pitch);
+    [[deprecated("Use closestNote() instead")]]
+    static inline const std::string & noteName(const double & p_pitch);
     static int noteValueInKey(int p_pitch, int p_key);
     static double noteOffsetInKey(const double & p_pitch, int p_key);
 
@@ -79,6 +79,7 @@ inline double pitch2freq(const double & p_note);
    @return The note octave. Middle C (midi note 60) is defined as octave 4. Making midi note 0 in octave -1
 */
 int noteOctave(int p_pitch);
+[[deprecated("Use closestNote() instead")]]
 inline int noteOctave(const double & p_pitch);
 
 /**
@@ -86,9 +87,11 @@ inline int noteOctave(const double & p_pitch);
    @return The midi note within one octave. Range = 0 to 11. Where 0=C, 1=C# ... 11 = B.
 */
 int noteValue(int p_pitch);
+[[deprecated("Use closestNote() instead")]]
 inline int noteValue(const double & p_pitch);
 
 bool isBlackNote(int p_pitch);
+[[deprecated("Use closestNote() instead")]]
 inline bool isBlackNote(const double & p_pitch);
 
 
