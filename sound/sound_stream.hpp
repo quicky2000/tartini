@@ -45,18 +45,6 @@ int SoundStream::frame_size() const
 }
 
 //------------------------------------------------------------------------------
-long SoundStream::wait_bytes(long /*length*/)
-{
-    return 0;
-}
-
-//------------------------------------------------------------------------------
-long SoundStream::wait_frames(long /*length*/)
-{
-    return 0;
-}
-
-//------------------------------------------------------------------------------
 void
 SoundStream::set_frequency(int p_frequency)
 {

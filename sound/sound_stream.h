@@ -48,11 +48,6 @@ class SoundStream
                              , long p_length
                              ) = 0;
 
-    inline virtual long wait_bytes(long /*length*/);
-
-    inline virtual long wait_frames(long /*length*/);
-
-
     virtual int writeFloats( float ** p_channel_data
                            , int p_length
                            , int p_ch
