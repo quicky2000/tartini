@@ -39,7 +39,7 @@ class WaveStream : public SoundFileStream
                   , int p_freq = 44100
                   , int p_channels = 2
                   , int p_bits = 16
-                  );
+                  ) override;
 
     void write_header();
 
