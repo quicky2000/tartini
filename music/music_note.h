@@ -46,11 +46,19 @@ class MusicNote
     const std::string & noteName(int p_note);
 
     /**
+     The octave number of the note in Scientific Pitch Notation
+     @param p_note The note number
+     @return The octave number. Middle C (MIDI note 60) is defined as octave 4.  Note number 0 is in octave -1
+    */
+    static int noteOctave(int p_note);
+
+    /**
     The semitone value of the note within its octave
     @param p_note The note number
     @return The semitone value (0..11), which corresponds to the note letters C, C♯, ..,, B♭, B.
     */
     static int semitoneValue(int p_note);
+
     /**
      The semitone value of the note, transposed into the given musical key
      @param p_note The note number
@@ -104,12 +112,6 @@ class MusicNote
        Does the opposite of the function above
     */
     static inline double pitch2freq(const double & p_pitch);
-
-    /**
-       @param p_note The midi note number
-       @return The note octave. Middle C (midi note 60) is defined as octave 4. Making midi note 0 in octave -1
-    */
-    static int noteOctave(int p_note);
 
     static void initMusicStuff();
     
