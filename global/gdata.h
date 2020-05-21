@@ -291,7 +291,6 @@ public slots:
     /**
      * Signal emitted by Qt combox provide int argument
      * this slot will convert it to t_amplitude_modes
-     * @param p_amplitude_mode
      */
   inline
   void setAmplitudeModeInt(int p_amplitude_mode);
