@@ -39,7 +39,7 @@ class SoundFileStream : public SoundStream
                            , long /*length*/
                            ) override;
 
-    inline int open_write( const std::string & /*filename*/
+    virtual inline int open_write( const std::string & /*filename*/
                          , int /*freq_*/ = 44100
                          , int /*channels_*/ = 2
                          , int /*bits_*/ = 16
