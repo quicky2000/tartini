@@ -60,8 +60,6 @@ class RingBuffer
 
 	/**
 	 * ignore - read past num elements without returning them
-	 * @param p_num
-	 * @return
 	 */
 	int ignore(int p_num);
 
@@ -81,22 +79,17 @@ class RingBuffer
 
 	/**
 	 * always put item, may lose the oldest item from the buffer
-	 * @param p_item
 	 */
 	void force_put(const T & p_item);
 
 	/**
 	 * always put items, may lose some older items from the buffer
-	 * @param p_items
-	 * @param num
 	 */
 	void force_put( const T * p_items
 	              , int num
 	              );
 	/**
 	 * retrieves 1 item without removing it
-	 * @param p_item
-	 * @return
 	 */
 	bool peek(T * p_item);
 
@@ -112,9 +105,6 @@ class RingBuffer
 
 	/**
 	 * returns the number of items returned, max of num items
-	 * @param p_items
-	 * @param p_num
-	 * @return
 	 */
 	int get( T * p_items
 	       , int p_num
