@@ -54,11 +54,11 @@ int MusicNote::noteOctave(const double & p_pitch)
 }
 
 //------------------------------------------------------------------------------
-int MusicNote::noteValue(const double & p_pitch)
+int MusicNote::semitoneValue(const double & p_pitch)
 {
     // This function is deprecated, but don't remove it.
-    // Otherwise, a call to `noteValue(double)` would use implicit conversions to call `noteValue(int)`, which would truncate the pitch value.
-    return noteValue(closestNote(p_pitch));
+    // Otherwise, a call to `semitoneValue(double)` would use implicit conversions to call `semitoneValue(int)`, which would truncate the pitch value.
+    return semitoneValue(closestNote(p_pitch));
 }
 
 //------------------------------------------------------------------------------

@@ -33,7 +33,7 @@ void MusicNote::initMusicStuff()
 //------------------------------------------------------------------------------
 const std::string & MusicNote::noteName(int p_note)
 {
-    return m_note_names[cycle(p_note, 12)];
+    return m_note_names[semitoneValue(p_note)];
 }
 
 //------------------------------------------------------------------------------
@@ -63,21 +63,21 @@ int MusicNote::noteOctave(int p_note)
 }
 
 //------------------------------------------------------------------------------
-int MusicNote::noteValue(int p_note)
+int MusicNote::semitoneValue(int p_note)
 {
     return cycle(p_note, 12);
 }
 
 //------------------------------------------------------------------------------
-int MusicNote::noteValueInKey(int p_note, int p_key)
+int MusicNote::semitoneValueInKey(int p_note, int p_music_key)
 {
-    return noteValue(p_note - p_key);
+    return semitoneValue(p_note - p_music_key);
 }
 
 //------------------------------------------------------------------------------
-double MusicNote::pitchOffsetInKey(const double & p_pitch, int p_key)
+double MusicNote::pitchOffsetInKey(const double & p_pitch, int p_music_key)
 {
-    return cycle(p_pitch - (double)p_key, 12.0);
+    return cycle(p_pitch - (double)p_music_key, 12.0);
 }
 
 //------------------------------------------------------------------------------
@@ -91,12 +91,12 @@ double MusicNote::temperedPitch(int p_note
         return (double)p_note;
     }
     
-    int l_note_in_key = noteValueInKey(p_note, p_music_key);
+    int l_semitone = semitoneValueInKey(p_note, p_music_key);
     int l_temperament_index = -1;
     
     for (int l_i = 0; l_i < p_music_temperament.size(); l_i++)
     {
-        if (p_music_temperament.noteType(l_i) == l_note_in_key)
+        if (p_music_temperament.noteType(l_i) == l_semitone)
         {
             l_temperament_index = l_i;
             break;
@@ -110,14 +110,14 @@ double MusicNote::temperedPitch(int p_note
     }
     
     double l_temperament_pitch = p_music_temperament.noteOffset(l_temperament_index);
-    double l_tempered_pitch = p_note + (l_temperament_pitch - l_note_in_key);
+    double l_tempered_pitch = p_note + (l_temperament_pitch - l_semitone);
 
 #ifdef DEBUG_PRINTF
     std::cout << ">>> temperedPitch() <<<" << std::endl;
     std::cout << "  nominal pitch = " << p_note << " (" << noteName(p_note) << ")" << std::endl;
     std::cout << "  music key = " << p_music_key << " (" << noteName(p_music_key) << ")" << std::endl;
     std::cout << "  music temperament = " << p_music_temperament.name() << std::endl;
-    std::cout << "  note in key = " << l_note_in_key << std::endl;
+    std::cout << "  semitone = " << l_semitone << std::endl;
     std::cout << "  tempered offset = " << l_temperament_pitch << std::endl;
     std::cout << "  tempered pitch = " << l_tempered_pitch << std::endl;
 #endif // DEBUG_PRINTF
@@ -159,7 +159,7 @@ int MusicNote::closestNote(const double & p_pitch
 //------------------------------------------------------------------------------
 bool MusicNote::isBlackNote(int p_note)
 {
-    switch(cycle(p_note, 12))
+    switch(semitoneValue(p_note))
     {
         case 1:
         case 3:

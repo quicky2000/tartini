@@ -146,7 +146,7 @@ void FreqWidgetGL::drawReferenceLines( QPaintDevice & p_paint_device
             p_painter.setPen(Qt::black);
             l_note_label = QString::fromStdString(MusicNote::noteName(l_name_index) + toSubscriptString(MusicNote::noteOctave(l_name_index)));
             p_painter.drawText(2, l_line_Y + l_font_height_space, l_note_label);
-            if(MusicNote::noteValue(l_name_index) == 0)
+            if(MusicNote::semitoneValue(l_name_index) == 0)
             {
                 p_painter.setPen(QPen(Qt::black, 1, Qt::SolidLine));
             }
