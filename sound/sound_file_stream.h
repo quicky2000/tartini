@@ -31,33 +31,19 @@ class SoundFileStream : public SoundStream
     inline int totalFrames() const;
     inline int pos() const;
   
-    virtual inline int open_read(const std::string & /*filename*/);
-    inline long read_bytes( void * /*data*/
-                          , long /*length*/
-                          ) override;
-    inline long read_frames( void * /*data*/
-                           , long /*length*/
-                           ) override;
+    virtual int open_read(const std::string & /*filename*/) = 0;
 
-    virtual inline int open_write( const std::string & /*filename*/
-                         , int /*freq_*/ = 44100
-                         , int /*channels_*/ = 2
-                         , int /*bits_*/ = 16
-                         );
+    virtual int open_write( const std::string & /*filename*/
+                          , int /*freq_*/ = 44100
+                          , int /*channels_*/ = 2
+                          , int /*bits_*/ = 16
+                           ) = 0;
 
-    inline long write_bytes( void * /*data*/
-                           , long /*length*/
-                           ) override;
+    virtual void close() = 0;
 
-    inline long write_frames( void * /*data*/
-                            , long /*length*/
-                            ) override;
-
-    virtual inline void close();
-
-    virtual inline void jump_to_frame(int /*frame*/);
-    virtual inline void jump_back(int /*frames*/);
-    virtual inline void jump_forward(int /*frames*/);
+    virtual void jump_to_frame(int /*frame*/) = 0;
+    virtual void jump_back(int /*frames*/) = 0;
+    virtual void jump_forward(int /*frames*/) = 0;
 
   protected:
 
