@@ -27,7 +27,8 @@
  Helper class for musical notes -- all members are static.
  
  Terminology:
- - A "note" is an integer value that represents a musical note, such as C<SUB>4</SUB>.  The values are MIDI note numbers, e.g. C<SUB>4</SUB> = 60.
+ - A "note" is an integer value that represents a musical note, such as C<SUB>4</SUB>.  The values are [MIDI note numbers](https://newt.phys.unsw.edu.au/jw/notes.html),
+ e.g. C<SUB>4</SUB> = 60.
  - A "pitch" is a floating-point value that represents a musical pitch, also measured on the MIDI scale.
  
  The mapping between note numbers and pitches depends on the key and temperament.
@@ -39,23 +40,24 @@
  You can pass the key and temperament explicitly or rely on the default values, which use the globally selected key and temperament in `GData`.
  
  - A "semitone" is the integer value of the position of the note within the octave (0..11).  It corresponds to the note names C, C♯, ..., B♭, B.
- - An "octave" is the octave number of the note in Scientific Pitch Notation. Middle C (note number 60) is defined as octave 4.  Note number 0 is in octave -1.
+ - An "octave" is the octave number of the note in [Scientific Pitch Notation](https://en.wikipedia.org/wiki/Scientific_pitch_notation).
+ Middle C, or  C<SUB>4</SUB> (note number 60) is defined as octave 4.  Note number 0 is in octave -1.
  */
 class MusicNote
 {
   public:
 
     /**
-     The name of the note, including the octave number
+     The name of the note in [Scientific Pitch Notation](https://en.wikipedia.org/wiki/Scientific_pitch_notation)
      @param p_note The note number
      @return The name of the note: C<SUB>4</SUB>, B♭<SUB>5</SUB>, etc. Uses Unicode characters for sharps, flats and subscript digits
     */
     static std::string noteName(int p_note);
 
     /**
-     The octave number of the note in Scientific Pitch Notation
+     The octave number of the note in [Scientific Pitch Notation](https://en.wikipedia.org/wiki/Scientific_pitch_notation)
      @param p_note The note number
-     @return The octave number. Middle C (note number 60) is defined as octave 4.  Note number 0 is in octave -1
+     @return The octave number. Middle C, or  C<SUB>4</SUB> (note number 60) is defined as octave 4.  Note number 0 is in octave -1
     */
     static int noteOctave(int p_note);
 
@@ -132,7 +134,7 @@ class MusicNote
     static bool isBlackNote(int p_note);
     
     /**
-     Converts the frequency (in hertz) to the corresponding pitch on the MIDI scale
+     Converts the frequency (in Hz) to the corresponding pitch on the MIDI scale using the [MIDI Tuning Standard](https://en.wikipedia.org/wiki/MIDI_tuning_standard)
      @param p_freq The frequency in Hz
      @return The pitch on the MIDI scale
     */
