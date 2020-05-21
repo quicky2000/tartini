@@ -27,16 +27,19 @@
  Helper class for musical notes -- all members are static.
  
  Terminology:
- - A "note" is an integer value that represents a musical note, such as C4.  The values are MIDI note numbers, e.g. C4 = 60.
+ - A "note" is an integer value that represents a musical note, such as C<SUB>4</SUB>.  The values are MIDI note numbers, e.g. C<SUB>4</SUB> = 60.
  - A "pitch" is a floating-point value that represents a musical pitch, also measured on the MIDI scale.
  
  The mapping between note numbers and pitches depends on the key and temperament.
- For example, the note G4 (66) in Pythagorean temperament (in the key of C) has a pitch of 66.0196, which is 1.96 cents higher than in even temperament.
+ For example, the note G<SUB>4</SUB> (note number 66) in Pythagorean temperament (in the key of C) has a pitch of 66.0196, which is 1.96 cents higher than in even temperament.
  Only in even temperament do the note numbers correspond to the pitch values.
  - Use `temperedPitch()` to convert from a note number to the corresponding pitch.
- - Use `closestNote()` to convert from a pitch to the closest note number.
+ - Use `closestNote()` to convert from a pitch to the note number of the closest tempered pitch.
  
- You can pass the key and temperament explicitly or rely on the default values, which use the globally selected key and temperament in `GData`
+ You can pass the key and temperament explicitly or rely on the default values, which use the globally selected key and temperament in `GData`.
+ 
+ - A "semitone" is the integer value of the position of the note within its octave (0..11).  It corresponds to the note names C, C♯, ..., B♭, B.
+ - An "octave" is the octave number of the note in Scientific Pitch Notation. Middle C (note number 60) is defined as octave 4.  Note number 0 is in octave -1.
  */
 class MusicNote
 {
@@ -45,21 +48,21 @@ class MusicNote
     /**
      The name of the note within its octave
      @param p_note The note number (or semitone value)
-     @return The name of the note: C, C♯, ..,, B♭, B.
+     @return The name of the note: C, C♯, ..., B♭, B. Uses Unicode characters for sharps and flats.
     */
     static const std::string & noteName(int p_note);
 
     /**
      The octave number of the note in Scientific Pitch Notation
      @param p_note The note number
-     @return The octave number. Middle C (MIDI note 60) is defined as octave 4.  Note number 0 is in octave -1
+     @return The octave number. Middle C (note number 60) is defined as octave 4.  Note number 0 is in octave -1
     */
     static int noteOctave(int p_note);
 
     /**
     The semitone value of the note within its octave
     @param p_note The note number
-    @return The semitone value (0..11), which corresponds to the note letters C, C♯, ..,, B♭, B.
+    @return The semitone value (0..11), which corresponds to the note names C, C♯, ..., B♭, B.
     */
     static int semitoneValue(int p_note);
 
@@ -67,7 +70,7 @@ class MusicNote
      The semitone value of the note, transposed into the given musical key
      @param p_note The note number
      @param p_music_key The musical key (0..11).  If not specified, defaults to the globally selected key: `GData::musicKey()`
-     @return The semitone value (0..11), which corresponds to the note letters C, C♯, ..,, B♭, B.
+     @return The semitone value (0..11), which corresponds to the note names C, C♯, ..., B♭, B.
     */
     static int semitoneValueInKey(int p_note
                                 , int p_music_key = g_music_key_roots[GData::getUniqueInstance().musicKey()]
