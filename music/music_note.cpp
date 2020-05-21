@@ -25,7 +25,7 @@ std::array<std::string, 12> MusicNote::m_note_names;
 //------------------------------------------------------------------------------
 void MusicNote::initMusicStuff()
 {
-    init_note_names();
+    init();
     MusicTemperament::init();
     MusicScale::init();
 }
@@ -38,7 +38,7 @@ const std::string & MusicNote::noteName(int p_note)
 
 //------------------------------------------------------------------------------
 void
-MusicNote::init_note_names()
+MusicNote::init()
 {
     m_note_names =
     {{ QObject::tr("C").toStdString()
