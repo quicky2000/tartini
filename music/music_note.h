@@ -42,8 +42,12 @@ class MusicNote
 {
   public:
 
-    static
-    const std::string & noteName(int p_note);
+    /**
+     The name of the note within its octave
+     @param p_note The note number (or semitone value)
+     @return The name of the note: C, C♯, ..,, B♭, B.
+    */
+    static const std::string & noteName(int p_note);
 
     /**
      The octave number of the note in Scientific Pitch Notation
@@ -69,7 +73,15 @@ class MusicNote
                                 , int p_music_key = g_music_key_roots[GData::getUniqueInstance().musicKey()]
                                   );
 
-    static double pitchOffsetInKey(const double & p_pitch, int p_music_key);
+    /**
+     The pitch offset relative to the root of the given musical key
+     @param p_pitch The pitch
+     @param p_music_key The musical key (0..11).  If not specified, defaults to the globally selected key: `GData::musicKey()`
+     @return The pitch offset in the range 0.0 <= x < 12.0
+    */
+    static double pitchOffsetInKey(const double & p_pitch
+                                 , int p_music_key = g_music_key_roots[GData::getUniqueInstance().musicKey()]
+                                   );
 
     /**
      The tempered pitch of a note, given the key and temperament
@@ -95,21 +107,25 @@ class MusicNote
                          , const MusicTemperament & p_music_temperament = MusicTemperament::getTemperament(GData::getUniqueInstance().musicTemperament())
                            );
 
+    /**
+     Does the note correspond to a black key on a piano?
+     @param p_note The note number
+     @return True if the note is not in the C Major scale
+    */
+    static bool isBlackNote(int p_note);
+    
     static
     void init_note_names();
 
     /**
-       Converts the frequencies freq (in hertz) into their pitch on the midi scale
-       i.e. the number of semi-tones above C0
-       Note: The note's pitch will contain its fractional part
-       Reference = http://www.borg.com/~jglatt/tutr/notenum.htm
-       @param p_freq The frequency in Hz
-       @return The pitch in fractional part semitones from the midi scale.
+     Converts the frequency (in hertz) to the corresponding pitch on the MIDI scale
+     @param p_freq The frequency in Hz
+     @return The pitch on the MIDI scale
     */
     static inline double freq2pitch(const double & p_freq);
 
     /**
-       Does the opposite of the function above
+     Does the opposite of `freq2pitch()`
     */
     static inline double pitch2freq(const double & p_pitch);
 
@@ -129,7 +145,6 @@ class MusicNote
     [[deprecated("Use closestNote() to convert pitches to notes")]]
     static inline int semitoneValue(const double & p_pitch);
 
-    static bool isBlackNote(int p_note);
     /// @deprecated Use closestNote() to convert pitches to notes
     [[deprecated("Use closestNote() to convert pitches to notes")]]
     static inline bool isBlackNote(const double & p_pitch);
