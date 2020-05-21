@@ -114,9 +114,6 @@ class MusicNote
     */
     static bool isBlackNote(int p_note);
     
-    static
-    void init_note_names();
-
     /**
      Converts the frequency (in hertz) to the corresponding pitch on the MIDI scale
      @param p_freq The frequency in Hz
@@ -150,6 +147,8 @@ class MusicNote
     static inline bool isBlackNote(const double & p_pitch);
 
     private:
+      static void init();
+
       static std::array<std::string, 12> m_note_names;
 };
 
