@@ -106,7 +106,7 @@ void PitchCompassDrawWidget::setCompassScale()
         {
             if(l_music_scale.hasSemitone(l_index))
             {
-                std::string label = MusicNote::noteName(cycle(l_index + g_music_key_roots[l_music_key], 12));
+                std::string label = MusicNote::semitoneName(cycle(l_index + g_music_key_roots[l_music_key], 12));
                 
                 // Minimize how much the compass resizes due to differences in the lengths of the labels.
                 // Make all of the labels two characters wide.  Don't use regular spaces, since the compass will trim them.
@@ -136,7 +136,7 @@ void PitchCompassDrawWidget::setCompassScale()
         m_compass->setScale(11, 2, 30);
         for(int l_index = 0; l_index < 12; l_index++)
         {
-            l_notes[l_index * 30] = MusicNote::noteName(cycle(l_index + g_music_key_roots[l_music_key], 12));
+            l_notes[l_index * 30] = MusicNote::semitoneName(cycle(l_index + g_music_key_roots[l_music_key], 12));
         }
         m_compass->setLabelMap(l_notes);
 #endif // QWT_VERSION >= 0x060000
@@ -213,9 +213,9 @@ void PitchCompassDrawWidget::updateCompass(double p_time)
             unsigned int l_div = 1;
 #endif // QWT_VERSION >= 0x060000
 
-            l_notes[(l_interval * 3 ) / l_div] = QString::fromStdString(MusicNote::noteName(toInt(l_zero_val)));
-            l_notes[0 / l_div] = QString::fromStdString(MusicNote::noteName(toInt(l_zero_val += 2)));
-            l_notes[l_interval / l_div] = QString::fromStdString(MusicNote::noteName(toInt(l_zero_val)));
+            l_notes[(l_interval * 3 ) / l_div] = QString::fromStdString(MusicNote::semitoneName(toInt(l_zero_val)));
+            l_notes[0 / l_div] = QString::fromStdString(MusicNote::semitoneName(toInt(l_zero_val += 2)));
+            l_notes[l_interval / l_div] = QString::fromStdString(MusicNote::semitoneName(toInt(l_zero_val)));
 
 #if QWT_VERSION >= 0x060000
             QwtCompassScaleDraw * l_scale_draw = dynamic_cast<QwtCompassScaleDraw*>(m_compass->scaleDraw());
@@ -240,9 +240,9 @@ void PitchCompassDrawWidget::updateCompass(double p_time)
                 l_start = fmod(l_start, 360.0);
             }
 
-            l_notes[l_start] = QString::fromStdString(MusicNote::noteName(toInt(l_close_pitch)));
-            l_notes[l_start - l_interval] = QString::fromStdString(MusicNote::noteName(toInt(l_close_pitch - 1)));
-            l_notes[l_start + l_interval] = QString::fromStdString(MusicNote::noteName(toInt(l_close_pitch + 1)));
+            l_notes[l_start] = QString::fromStdString(MusicNote::semitoneName(toInt(l_close_pitch)));
+            l_notes[l_start - l_interval] = QString::fromStdString(MusicNote::semitoneName(toInt(l_close_pitch - 1)));
+            l_notes[l_start + l_interval] = QString::fromStdString(MusicNote::semitoneName(toInt(l_close_pitch + 1)));
 
 #if QWT_VERSION >= 0x060000
             QwtCompassScaleDraw * l_scale_draw = dynamic_cast<QwtCompassScaleDraw*>(m_compass->scaleDraw());

@@ -20,7 +20,7 @@
 #include "music_temperament.h"
 #include <QObject>
 
-std::array<std::string, 12> MusicNote::m_note_names;
+std::array<std::string, 12> MusicNote::m_semitone_names;
 
 //------------------------------------------------------------------------------
 void MusicNote::initMusicStuff()
@@ -31,16 +31,24 @@ void MusicNote::initMusicStuff()
 }
 
 //------------------------------------------------------------------------------
-const std::string & MusicNote::noteName(int p_note)
+std::string MusicNote::noteName(int p_note)
 {
-    return m_note_names[semitoneValue(p_note)];
+    return semitoneName(semitoneValue(p_note)) + octaveName(noteOctave(p_note));
+}
+
+//------------------------------------------------------------------------------
+const std::string & MusicNote::semitoneName(int p_semitone)
+{
+    myassert(p_semitone >= 0 && p_semitone < 12);
+    
+    return m_semitone_names[semitoneValue(p_semitone)];
 }
 
 //------------------------------------------------------------------------------
 void
 MusicNote::init()
 {
-    m_note_names =
+    m_semitone_names =
     {{ QObject::tr("C").toStdString()
      , QObject::tr("C♯").toStdString()
      , QObject::tr("D").toStdString()
@@ -54,6 +62,35 @@ MusicNote::init()
      , QObject::tr("A♯").toStdString()
      , QObject::tr("B").toStdString()
     }};
+}
+
+//------------------------------------------------------------------------------
+std::string MusicNote::octaveName(int p_octave)
+{
+    std::string l_string;
+
+    for (char l_digit : std::to_string(p_octave))
+    {
+        switch(l_digit)
+        {
+            // Convert characters to corresponding Unicode subscript characters.
+            case '0': l_string += "\u2080"; break;
+            case '1': l_string += "\u2081"; break;
+            case '2': l_string += "\u2082"; break;
+            case '3': l_string += "\u2083"; break;
+            case '4': l_string += "\u2084"; break;
+            case '5': l_string += "\u2085"; break;
+            case '6': l_string += "\u2086"; break;
+            case '7': l_string += "\u2087"; break;
+            case '8': l_string += "\u2088"; break;
+            case '9': l_string += "\u2089"; break;
+            case '+': l_string += "\u208A"; break;
+            case '-': l_string += "\u208B"; break;
+            default: myassert(false); break;
+        }
+    }
+    
+    return l_string;
 }
 
 //------------------------------------------------------------------------------

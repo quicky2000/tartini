@@ -38,7 +38,7 @@ double MusicNote::pitch2freq(const double & p_pitch)
 }
 
 //------------------------------------------------------------------------------
-const std::string & MusicNote::noteName(const double & p_pitch)
+std::string MusicNote::noteName(const double & p_pitch)
 {
     // This method is deprecated, but don't remove it.
     // Otherwise, a call to `noteName(double)` would use implicit conversions to call `noteName(int)`, which would truncate the pitch value.
