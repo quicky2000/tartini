@@ -45,10 +45,6 @@ class MusicNote
     static
     const std::string & noteName(int p_note);
 
-    /// @deprecated Use closestNote() to convert pitches to notes
-    [[deprecated("Use closestNote() to convert pitches to notes")]]
-    static inline const std::string & noteName(const double & p_pitch);
-
     /**
     The semitone value of the note within its octave
     @param p_note The note number
@@ -114,6 +110,15 @@ class MusicNote
        @return The note octave. Middle C (midi note 60) is defined as octave 4. Making midi note 0 in octave -1
     */
     static int noteOctave(int p_note);
+
+    static void initMusicStuff();
+    
+    // Deprecated member functions (do not remove)
+    
+    /// @deprecated Use closestNote() to convert pitches to notes
+    [[deprecated("Use closestNote() to convert pitches to notes")]]
+    static inline const std::string & noteName(const double & p_pitch);
+
     /// @deprecated Use closestNote() to convert pitches to notes
     [[deprecated("Use closestNote() to convert pitches to notes")]]
     static inline int noteOctave(const double & p_pitch);
@@ -126,9 +131,6 @@ class MusicNote
     /// @deprecated Use closestNote() to convert pitches to notes
     [[deprecated("Use closestNote() to convert pitches to notes")]]
     static inline bool isBlackNote(const double & p_pitch);
-
-
-    static void initMusicStuff();
 
     private:
       static std::array<std::string, 12> m_note_names;
