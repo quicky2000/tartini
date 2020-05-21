@@ -48,8 +48,24 @@ class MusicNote
     /// @deprecated Use closestNote() to convert pitches to notes
     [[deprecated("Use closestNote() to convert pitches to notes")]]
     static inline const std::string & noteName(const double & p_pitch);
-    static int noteValueInKey(int p_note, int p_key);
-    static double pitchOffsetInKey(const double & p_pitch, int p_key);
+
+    /**
+    The semitone value of the note within its octave
+    @param p_note The note number
+    @return The semitone value (0..11), which corresponds to the note letters C, C♯, ..,, B♭, B.
+    */
+    static int semitoneValue(int p_note);
+    /**
+     The semitone value of the note, transposed into the given musical key
+     @param p_note The note number
+     @param p_music_key The musical key (0..11).  If not specified, defaults to the globally selected key: `GData::musicKey()`
+     @return The semitone value (0..11), which corresponds to the note letters C, C♯, ..,, B♭, B.
+    */
+    static int semitoneValueInKey(int p_note
+                                , int p_music_key = g_music_key_roots[GData::getUniqueInstance().musicKey()]
+                                  );
+
+    static double pitchOffsetInKey(const double & p_pitch, int p_music_key);
 
     /**
      The tempered pitch of a note, given the key and temperament
@@ -102,14 +118,9 @@ class MusicNote
     [[deprecated("Use closestNote() to convert pitches to notes")]]
     static inline int noteOctave(const double & p_pitch);
 
-    /**
-       @param p_note The midi note number
-       @return The midi note within one octave. Range = 0 to 11. Where 0=C, 1=C# ... 11 = B.
-    */
-    static int noteValue(int p_note);
     /// @deprecated Use closestNote() to convert pitches to notes
     [[deprecated("Use closestNote() to convert pitches to notes")]]
-    static inline int noteValue(const double & p_pitch);
+    static inline int semitoneValue(const double & p_pitch);
 
     static bool isBlackNote(int p_note);
     /// @deprecated Use closestNote() to convert pitches to notes

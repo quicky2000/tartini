@@ -323,7 +323,7 @@ void VibratoTunerWidget::doUpdate(double p_pitch)
             // Pitch, draw the needle this update
             int l_VTLED_letter_lookup[12] = { 2, 2, 3, 3, 4, 5, 5, 6, 6, 0, 0, 1 };
             resetLeds();
-            emit(ledSet(l_VTLED_letter_lookup[MusicNote::noteValue(l_close_note)], true));
+            emit(ledSet(l_VTLED_letter_lookup[MusicNote::semitoneValue(l_close_note)], true));
 
             if(MusicNote::isBlackNote(l_close_note))
             {
