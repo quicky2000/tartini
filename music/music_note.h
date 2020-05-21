@@ -38,7 +38,7 @@
  
  You can pass the key and temperament explicitly or rely on the default values, which use the globally selected key and temperament in `GData`.
  
- - A "semitone" is the integer value of the position of the note within its octave (0..11).  It corresponds to the note names C, C♯, ..., B♭, B.
+ - A "semitone" is the integer value of the position of the note within the octave (0..11).  It corresponds to the note names C, C♯, ..., B♭, B.
  - An "octave" is the octave number of the note in Scientific Pitch Notation. Middle C (note number 60) is defined as octave 4.  Note number 0 is in octave -1.
  */
 class MusicNote
@@ -46,11 +46,11 @@ class MusicNote
   public:
 
     /**
-     The name of the note within its octave
-     @param p_note The note number (or semitone value)
-     @return The name of the note: C, C♯, ..., B♭, B. Uses Unicode characters for sharps and flats.
+     The name of the note, including the octave number
+     @param p_note The note number
+     @return The name of the note: C<SUB>4</SUB>, B♭<SUB>5</SUB>, etc. Uses Unicode characters for sharps, flats and subscript digits
     */
-    static const std::string & noteName(int p_note);
+    static std::string noteName(int p_note);
 
     /**
      The octave number of the note in Scientific Pitch Notation
@@ -60,11 +60,25 @@ class MusicNote
     static int noteOctave(int p_note);
 
     /**
-    The semitone value of the note within its octave
+     The name of the octave, using Unicode subscript digits
+     @param p_octave The octave number
+     @return The name of the octave (e.g. <SUB>4</SUB>). Uses Unicode characters for subscript numbers
+    */
+    static std::string octaveName(int p_octave);
+
+    /**
+    The semitone value of the note within the octave
     @param p_note The note number
     @return The semitone value (0..11), which corresponds to the note names C, C♯, ..., B♭, B.
     */
     static int semitoneValue(int p_note);
+
+    /**
+     The name of the semitone
+     @param p_semitone The semitone value (0..11)
+     @return The name of the semitone: C, C♯, ..., B♭, B. Uses Unicode characters for sharps and flats.
+    */
+    static const std::string & semitoneName(int p_semitone);
 
     /**
      The semitone value of the note, transposed into the given musical key
@@ -135,7 +149,7 @@ class MusicNote
     
     /// @deprecated Use closestNote() to convert pitches to notes
     [[deprecated("Use closestNote() to convert pitches to notes")]]
-    static inline const std::string & noteName(const double & p_pitch);
+    static inline std::string noteName(const double & p_pitch);
 
     /// @deprecated Use closestNote() to convert pitches to notes
     [[deprecated("Use closestNote() to convert pitches to notes")]]
@@ -152,7 +166,7 @@ class MusicNote
     private:
       static void init();
 
-      static std::array<std::string, 12> m_note_names;
+      static std::array<std::string, 12> m_semitone_names;
 };
 
 #include "music_note.hpp"
