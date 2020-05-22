@@ -349,6 +349,9 @@ unix{
     DEFINES += MACX
     DEFINES += __MACOSX_CORE__
 
+    # Suppress warnings about Open GL. Apple deprecated OpenGL entirely in macOS 10.14, but they still support OpenGL 4.1 (at least through macOS 10.15).
+    DEFINES += GL_SILENCE_DEPRECATION
+
     #CONFIG += link_prl
     #CONFIG += static
     #REQUIRES  = full-config
