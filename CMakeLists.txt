@@ -295,7 +295,7 @@ endif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux" OR ${CMAKE_SYSTEM_NAME} STREQUAL "Da
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
     set(MY_CPP_FLAGS
         ${MY_CPP_FLAGS}
-        -DMACX -D__MACOSX_CORE__
+        -DMACX -D__MACOSX_CORE__ -DGL_SILENCE_DEPRECATION
         )
 endif(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
 # Specific to Linux
