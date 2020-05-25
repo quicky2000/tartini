@@ -28,11 +28,11 @@
 class FastSmoothedAveragingFilter : public Filter
 {
   public:
+    FastSmoothedAveragingFilter() { }
     /**
        Construct a FastSmoothedAverageFilter
-       @param size The total width of the hanning window. To keep data centered use an odd size
+       @param p_size The total width of the hanning window. To keep data centered use an odd size
     */
-    FastSmoothedAveragingFilter() { }
     FastSmoothedAveragingFilter(int p_size);
     void init(int p_size);
     void filter( const float * p_input
