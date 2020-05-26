@@ -121,11 +121,12 @@ double MusicNote::pitchOffsetInKey(const double & p_pitch, int p_music_key)
 double MusicNote::temperedPitch(int p_note
                                 , int p_music_key
                                 , const MusicTemperament & p_music_temperament
+                                , double p_semitone_offset
                                   )
 {
     if (p_music_temperament.isEvenTempered())
     {
-        return (double)p_note;
+        return (double)p_note + p_semitone_offset;
     }
     
     int l_semitone = semitoneValueInKey(p_note, p_music_key);
@@ -147,7 +148,7 @@ double MusicNote::temperedPitch(int p_note
     }
     
     double l_temperament_pitch = p_music_temperament.noteOffset(l_temperament_index);
-    double l_tempered_pitch = p_note + (l_temperament_pitch - l_semitone);
+    double l_tempered_pitch = p_note + (l_temperament_pitch - l_semitone) + p_semitone_offset;
 
 #ifdef DEBUG_PRINTF
     std::cout << ">>> temperedPitch() <<<" << std::endl;
@@ -156,6 +157,7 @@ double MusicNote::temperedPitch(int p_note
     std::cout << "  music temperament = " << p_music_temperament.name() << std::endl;
     std::cout << "  semitone = " << l_semitone << std::endl;
     std::cout << "  tempered offset = " << l_temperament_pitch << std::endl;
+    std::cout << "  semitone offset = " << p_semitone_offset << std::endl;
     std::cout << "  tempered pitch = " << l_tempered_pitch << std::endl;
 #endif // DEBUG_PRINTF
     
@@ -167,14 +169,15 @@ double MusicNote::temperedPitch(int p_note
 int MusicNote::closestNote(const double & p_pitch
                            , int p_music_key
                            , const MusicTemperament & p_music_temperament
+                           , double p_semitone_offset
                              )
 {
     if (p_music_temperament.isEvenTempered())
     {
-        return toInt(p_pitch);
+        return toInt(p_pitch - p_semitone_offset);
     }
     
-    double l_offset_in_key = pitchOffsetInKey(p_pitch, p_music_key);
+    double l_offset_in_key = pitchOffsetInKey(p_pitch - p_semitone_offset, p_music_key);
     int l_closest_offset = p_music_temperament.nearestNoteType(l_offset_in_key);
     int l_root_of_key = toInt(p_pitch - l_offset_in_key);
     double l_closest_note = l_root_of_key + l_closest_offset;
@@ -182,6 +185,7 @@ int MusicNote::closestNote(const double & p_pitch
 #ifdef DEBUG_PRINTF
     std::cout << ">>> closestNote() <<<" << std::endl;
     std::cout << "  input pitch = " << p_pitch << std::endl;
+    std::cout << "  semitone offset = " << p_semitone_offset << std::endl;
     std::cout << "  music key = " << p_music_key << " (" << noteName(p_music_key) << ")" << std::endl;
     std::cout << "  music temperament = " << p_music_temperament.name() << std::endl;
     std::cout << "  offset in key = " << l_offset_in_key << std::endl;
