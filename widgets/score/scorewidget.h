@@ -68,12 +68,12 @@ class ScoreWidget : public DrawWidget
      * Draw a single note
      * @param p_x The x pos in pixels
      * @param p_y The y pos of the center of the scale (Middle C)
-     * @param p_pitch The midi number of the note (60 == Middle C)
+     * @param p_note The midi number of the note (60 == Middle C)
      * @param p_note_length in seconds
      */
     void drawNoteAtPitch( int p_x
                         , int p_y
-                        , int p_pitch
+                        , int p_note
                         , double p_note_length
                         , double p_volume = 1.0
                         );

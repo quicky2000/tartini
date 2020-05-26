@@ -167,12 +167,12 @@ ScoreWidget::NoteType ScoreWidget::getNoteType(double p_note_length)
 //------------------------------------------------------------------------------
 void ScoreWidget::drawNoteAtPitch( int p_x
                                  , int p_y
-                                 , int p_pitch
+                                 , int p_note
                                  , double p_note_length
                                  , double p_volume
                                  )
 {
-    p_pitch = bound(p_pitch + m_pitch_offset, 0, 128);
+    p_note = bound(p_note + m_pitch_offset, 0, 128);
     if(!m_show_all_mode)
     {
         if(p_note_length < 0.2)
@@ -181,7 +181,7 @@ void ScoreWidget::drawNoteAtPitch( int p_x
             return;
         }
 
-        if(p_pitch > 84)
+        if(p_note > 84)
         {
             //Don't show extreame notes
             return;
@@ -189,14 +189,14 @@ void ScoreWidget::drawNoteAtPitch( int p_x
 
         if(m_show_base_clef)
         {
-            if(p_pitch < 36)
+            if(p_note < 36)
             {
                 return;
             }
         }
         else
         {
-            if(p_pitch < 57)
+            if(p_note < 57)
             {
                 return;
             }
@@ -215,18 +215,18 @@ void ScoreWidget::drawNoteAtPitch( int p_x
     }
     if(m_use_flats)
     {
-        l_y_Steps = m_flats_lookup[p_pitch];
+        l_y_Steps = m_flats_lookup[p_note];
         l_y_offset = toInt(m_scale_Y * static_cast<double>(l_y_Steps) * 0.5);
-        if(MusicNote::isBlackNote(p_pitch))
+        if(MusicNote::isBlackNote(p_note))
         {
             get_painter().drawText(p_x - l_accidental_offset_X - m_font_width, p_y - l_y_offset + m_font_height / 2, "♭");
         }
     }
     else
     {
-        l_y_Steps = m_sharps_lookup[p_pitch];
+        l_y_Steps = m_sharps_lookup[p_note];
         l_y_offset = toInt(m_scale_Y * static_cast<double>(l_y_Steps) * 0.5);
-        if(MusicNote::isBlackNote(p_pitch))
+        if(MusicNote::isBlackNote(p_note))
         {
             get_painter().drawText(p_x - l_accidental_offset_X - m_font_width, p_y - l_y_offset + m_font_height / 2, "♯");
         }
@@ -334,7 +334,7 @@ void ScoreWidget::drawScoreSegment( Channel * p_channel
                     //FIXME: avgPitch is quite slow to calc
                     drawNoteAtPitch(toInt(p_left_X + (l_note_time - p_left_time) * m_scale_X)
                                    ,p_line_center_Y
-                                   ,toInt(p_channel->get_note_data()[l_j].avgPitch())
+                                   ,MusicNote::closestNote(p_channel->get_note_data()[l_j].avgPitch())
                                    ,p_channel->get_note_data()[l_j].noteLength()
                                    ,p_channel->get_note_data()[l_j].volume()
                                    );
