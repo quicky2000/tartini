@@ -929,7 +929,7 @@ void GData::setMusicTemperament(MusicTemperament::TemperamentType p_music_temper
 {
     if(m_music_temperament != p_music_temperament)
     {
-        // If the current key type is not compatible with the new tempered type, then set the key type to Chromatic.
+        // If the current music scale is not compatible with the new tempered type, then set the music scale to Chromatic.
         if(!MusicScale::getScale(m_music_scale).isCompatibleWithTemparament(p_music_temperament))
         {
             setMusicScale(MusicScale::ScaleType::Chromatic);
@@ -940,11 +940,15 @@ void GData::setMusicTemperament(MusicTemperament::TemperamentType p_music_temper
 }
 
 //------------------------------------------------------------------------------
-void GData::setFreqA(double p_x)
+void GData::setFreqA(double p_freq)
 {
-    m_freq_A = p_x;
-    m_semitone_offset = MusicNote::freq2pitch(p_x) - MusicNote::freq2pitch(440.0);
-    m_settings->setValue("View/freqA", p_x);
+    if (m_freq_A != p_freq)
+    {
+        m_freq_A = p_freq;
+        m_semitone_offset = MusicNote::freq2pitch(p_freq) - MusicNote::freq2pitch(440.0);
+        m_settings->setValue("View/freqA", p_freq);
+        emit freqAChanged(p_freq);
+    }
 }
 
 //EOF

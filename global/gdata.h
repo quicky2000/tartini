@@ -285,6 +285,7 @@ signals:
   void musicKeyChanged(int p_music_key);
   void musicScaleChanged(int p_music_scale);
   void musicTemperamentChanged(int p_music_temperament);
+  void freqAChanged(double p_freq);
 
 public slots:
 
@@ -301,8 +302,8 @@ public slots:
   inline void setMusicScale(MusicScale::ScaleType p_music_scale);
   void setMusicTemperament(int p_music_temperament);
   void setMusicTemperament(MusicTemperament::TemperamentType p_music_temperament);
-  void setFreqA(double p_x);
-  inline void setFreqA(int p_x);
+  void setFreqA(double p_freq);
+  inline void setFreqA(int p_freq);
 
   void pauseSound();
   bool openPlayRecord( SoundFile * p_sound_file_rec
