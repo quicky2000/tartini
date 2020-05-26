@@ -95,6 +95,7 @@ TunerView::TunerView(int p_view_iD_
     connect(&GData::getUniqueInstance(), SIGNAL(onChunkUpdate()), this, SLOT(doUpdate()));
     connect(&GData::getUniqueInstance(), SIGNAL(musicKeyChanged(int)), this, SLOT(doUpdate()));
     connect(&GData::getUniqueInstance(), SIGNAL(musicTemperamentChanged(int)), this, SLOT(doUpdate()));
+    connect(&GData::getUniqueInstance(), SIGNAL(freqAChanged(double)), this, SLOT(doUpdate()));
     connect(m_tuner_widget, SIGNAL(ledSet(int, bool)), this, SLOT(setLed(int, bool)));
 }
 
