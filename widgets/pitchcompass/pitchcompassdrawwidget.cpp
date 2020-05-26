@@ -195,7 +195,7 @@ void PitchCompassDrawWidget::updateCompass(double p_time)
     
     if(l_data && l_data->getCorrelation() >= 0.9)
     {
-        double l_pitch = l_data->getPitch();
+        double l_pitch = l_data->getPitch() - GData::getUniqueInstance().semitoneOffset();
         unsigned int l_interval = 90;
 
         if(m_mode == PitchCompassView::CompassMode::Mode0)
