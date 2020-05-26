@@ -483,14 +483,15 @@ void VibratoWidget::doUpdate()
 	  l_vertices_counter = 0;
 	  l_colors_counter = 0;
 
-	  const int l_nearest_note = toInt(l_avg_pitch);
+      const int l_nearest_note = MusicNote::closestNote(l_avg_pitch);
+      const double l_nearest_pitch = MusicNote::temperedPitch(l_nearest_note);
 	  QString l_note_label;
 	  const float l_reference_line_X1 = m_note_label_offset;
 	  const float l_reference_line_X2 = width() - m_note_label_offset;
 	  float l_reference_line_Y;
 
 	  // Calculate the nearest reference line + note label
-	  l_reference_line_Y = l_half_height + ((l_nearest_note - l_avg_pitch) * l_zoom_factor_Y_x_100) + m_offset_Y;
+	  l_reference_line_Y = l_half_height + ((l_nearest_pitch - l_avg_pitch) * l_zoom_factor_Y_x_100) + m_offset_Y;
 
 	  l_vertices[l_vertices_counter++] = l_reference_line_X1;
 	  l_vertices[l_vertices_counter++] = l_reference_line_Y;
@@ -511,7 +512,9 @@ void VibratoWidget::doUpdate()
 	  // Calculate as many reference lines + note labels above the note as can be seen
 	  for(int l_index = 1; ; l_index++)
 	    {
-	      l_reference_line_Y = l_half_height + ((l_nearest_note + l_index - l_avg_pitch) * l_zoom_factor_Y_x_100) + m_offset_Y;
+          const int l_reference_note = l_nearest_note + l_index;
+          const double l_reference_pitch = MusicNote::temperedPitch(l_reference_note);
+	      l_reference_line_Y = l_half_height + ((l_reference_pitch - l_avg_pitch) * l_zoom_factor_Y_x_100) + m_offset_Y;
 	      if (l_reference_line_Y > height())
 		{
 		  break;
@@ -529,7 +532,7 @@ void VibratoWidget::doUpdate()
 	      l_colors[l_colors_counter++] = 156;
 	      l_colors[l_colors_counter++] = 170;
 	
-	      compose_note_label(l_note_label, l_nearest_note + l_index);
+	      compose_note_label(l_note_label, l_reference_note);
 	      m_note_labels[m_note_label_counter].set( l_note_label, l_reference_line_Y);
 	      m_note_label_counter++;
 	    }
@@ -537,7 +540,9 @@ void VibratoWidget::doUpdate()
 	  // Calculate as many reference lines + note labels below the note as can be seen
 	  for(int l_index = -1; ; l_index--)
 	    {
-	      l_reference_line_Y = l_half_height + ((l_nearest_note + l_index - l_avg_pitch) * l_zoom_factor_Y_x_100) + m_offset_Y;
+          const int l_reference_note = l_nearest_note + l_index;
+          const double l_reference_pitch = MusicNote::temperedPitch(l_reference_note);
+	      l_reference_line_Y = l_half_height + ((l_reference_pitch - l_avg_pitch) * l_zoom_factor_Y_x_100) + m_offset_Y;
 	      if (l_reference_line_Y < 0)
 		{
 		  break;
@@ -555,7 +560,7 @@ void VibratoWidget::doUpdate()
 	      l_colors[l_colors_counter++] = 156;
 	      l_colors[l_colors_counter++] = 170;
 
-	      compose_note_label(l_note_label, l_nearest_note + l_index);
+	      compose_note_label(l_note_label, l_reference_note);
 	      m_note_labels[m_note_label_counter].set( l_note_label, l_reference_line_Y);
 	      m_note_label_counter++;
 	    }
