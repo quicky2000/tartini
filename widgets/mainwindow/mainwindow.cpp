@@ -494,7 +494,7 @@ MainWindow::MainWindow()
     l_freq_A_spin_box->setValue(toInt(GData::getUniqueInstance().freqA()));
     l_freq_A_tool_bar->addWidget(l_freq_A_spin_box);
     connect(l_freq_A_spin_box, SIGNAL(valueChanged(int)), &GData::getUniqueInstance(), SLOT(setFreqA(int)));
-    connect(l_freq_A_spin_box, SIGNAL(valueChanged(int)), &(GData::getUniqueInstance().getView()), SLOT(doUpdate()));
+    connect(&GData::getUniqueInstance(), SIGNAL(freqAChanged(double)), &(GData::getUniqueInstance().getView()), SLOT(doUpdate()));
 
     m_note_label = new MyLabel("Note: 9999", statusBar(), "notelabel");
     statusBar()->addPermanentWidget(m_note_label, 0);
