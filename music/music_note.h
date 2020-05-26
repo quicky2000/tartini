@@ -31,9 +31,9 @@
  e.g. C<SUB>4</SUB> = 60.
  - A "pitch" is a floating-point value that represents a musical pitch, also measured on the MIDI scale.
  
- The mapping between note numbers and pitches depends on the key and temperament.
+ The mapping between note numbers and pitches depends on the key, the temperament, and the tuning reference pitch A<SUB>4</SUB>.
  For example, the note G<SUB>4</SUB> (note number 66) in Pythagorean temperament (in the key of C) has a pitch of 66.0196, which is 1.96 cents higher than in even temperament.
- Only in even temperament do the note numbers correspond to the pitch values.
+ Note numbers only correspond numerically to pitch values when using even temperament and when the tuning reference pitch A<SUB>4</SUB> = 440.
  - Use `temperedPitch()` to convert from a note number to the corresponding pitch.
  - Use `closestNote()` to convert from a pitch to the note number of the closest tempered pitch.
  
@@ -107,11 +107,13 @@ class MusicNote
      @param p_note The note number
      @param p_music_key The musical key (0..11).  If not specified, defaults to the globally selected key: `GData::musicKey()`
      @param p_music_temperament The musical temperament.  If not specified, defaults to the globally selected temperament: `GData::musicTemperament()`
+     @param p_semitone_offset The tuning offset from A<SUB>4</SUB> = 440 in semitones.   If not specified, defaults to the globally selected temperament: `GData::semitoneOffset()`
      @return The tempered pitch.  Returns 0 if the temperament does not include the note
     */
     static double temperedPitch(int p_note
                               , int p_music_key = g_music_key_roots[GData::getUniqueInstance().musicKey()]
                               , const MusicTemperament & p_music_temperament = MusicTemperament::getTemperament(GData::getUniqueInstance().musicTemperament())
+                              , double p_semitone_offset = GData::getUniqueInstance().semitoneOffset()
                                 );
 
     /**
@@ -119,11 +121,13 @@ class MusicNote
      @param p_pitch The pitch
      @param p_music_key The musical key (0..11).  If not specified, defaults to the globally selected key: `GData::musicKey()`
      @param p_music_temperament The musical temperament.  If not specified, defaults to the globally selected temperament: `GData::musicTemperament()`
+     @param p_semitone_offset The tuning offset from A<SUB>4</SUB> = 440 in semitones.   If not specified, defaults to the globally selected temperament: `GData::semitoneOffset()`
      @return The note associated with the closest pitch in the temperament
     */
     static int closestNote(const double & p_pitch
                          , int p_music_key = g_music_key_roots[GData::getUniqueInstance().musicKey()]
                          , const MusicTemperament & p_music_temperament = MusicTemperament::getTemperament(GData::getUniqueInstance().musicTemperament())
+                         , double p_semitone_offset = GData::getUniqueInstance().semitoneOffset()
                            );
 
     /**
