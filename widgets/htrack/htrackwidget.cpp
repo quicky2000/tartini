@@ -125,7 +125,7 @@ void HTrackWidget::paintGL()
         AnalysisData *l_data = l_active_channel->dataAtCurrentChunk();
         if(l_data && l_active_channel->isVisibleChunk(l_data))
         {
-            m_piano_3d->setMidiKeyState(toInt(l_data->getPitch()), true);
+            m_piano_3d->setMidiKeyState(MusicNote::closestNote(l_data->getPitch()), true);
         }
     }
     glLineWidth(0.01f);
