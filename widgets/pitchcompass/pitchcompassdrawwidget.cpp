@@ -94,9 +94,10 @@ void PitchCompassDrawWidget::setCompassScale(double p_pitch)
         QMap< double, QString > l_notes;
         int l_zero_note = MusicNote::closestNote(p_pitch);
 
-        l_notes[3] = QString::fromStdString(MusicNote::semitoneName(MusicNote::semitoneValue(l_zero_note - 1)));
-        l_notes[0] = QString::fromStdString(MusicNote::semitoneName(MusicNote::semitoneValue(l_zero_note)));
-        l_notes[1] = QString::fromStdString(MusicNote::semitoneName(MusicNote::semitoneValue(l_zero_note + 1)));
+        l_notes[3] = QString::fromStdString(padLabel(MusicNote::semitoneName(MusicNote::semitoneValue(l_zero_note - 1)), -1));
+        l_notes[0] = QString::fromStdString(padLabel(MusicNote::semitoneName(MusicNote::semitoneValue(l_zero_note)), 0));
+        l_notes[1] = QString::fromStdString(padLabel(MusicNote::semitoneName(MusicNote::semitoneValue(l_zero_note + 1)), 1));
+        l_notes[2] = QString::fromStdString(padLabel("", 0));
 
         myassert(l_scale_draw);
         l_scale_draw->setLabelMap(l_notes);
@@ -106,9 +107,10 @@ void PitchCompassDrawWidget::setCompassScale(double p_pitch)
         QMap< double, QString > l_notes;
         int l_close_note = MusicNote::closestNote(p_pitch);
 
-        l_notes[3] = QString::fromStdString(MusicNote::semitoneName(MusicNote::semitoneValue(l_close_note - 1)));
-        l_notes[0] = QString::fromStdString(MusicNote::semitoneName(MusicNote::semitoneValue(l_close_note)));
-        l_notes[1] = QString::fromStdString(MusicNote::semitoneName(MusicNote::semitoneValue(l_close_note + 1)));
+        l_notes[3] = QString::fromStdString(padLabel(MusicNote::semitoneName(MusicNote::semitoneValue(l_close_note - 1)), -1));
+        l_notes[0] = QString::fromStdString(padLabel(MusicNote::semitoneName(MusicNote::semitoneValue(l_close_note)), 0));
+        l_notes[1] = QString::fromStdString(padLabel(MusicNote::semitoneName(MusicNote::semitoneValue(l_close_note + 1)), 1));
+        l_notes[2] = QString::fromStdString(padLabel("", 0));
 
         myassert(l_scale_draw);
         l_scale_draw->setLabelMap(l_notes);
@@ -123,23 +125,8 @@ void PitchCompassDrawWidget::setCompassScale(double p_pitch)
         {
             if(l_music_scale.hasSemitone(l_index))
             {
-                std::string label = MusicNote::semitoneName(cycle(l_index + g_music_key_roots[l_music_key], 12));
-                
-                // Minimize how much the compass resizes due to differences in the lengths of the labels.
-                // Make all of the labels two characters wide.  Don't use regular spaces, since the compass will trim them.
-                if (label.length() < 2)
-                {
-                    if (l_index > 0 && l_index < 6)
-                    {
-                        // Right side of the compass -- pad on the right
-                        label += "\u2002";  // Unicode "En Space"
-                    }
-                    else if (l_index > 6)
-                    {
-                        // Left side of the compass -- pad on the left
-                        label = "\u2002" + label;  // Unicode "En Space"
-                    }
-                }
+                int l_side = (l_index > 0 && l_index < 6) ? 1 : ( (l_index > 6) ? -1 : 0 );
+                std::string label = padLabel(MusicNote::semitoneName(cycle(l_index + g_music_key_roots[l_music_key], 12)), l_side);
                 l_notes[l_index] = QString::fromStdString(label);
             }
             else
@@ -175,6 +162,35 @@ void PitchCompassDrawWidget::setCompassScale(double p_pitch)
         m_compass->setMode(QwtCompass::RotateNeedle);
         m_compass->setMode(QwtCompass::RotateScale);
     }
+}
+
+//------------------------------------------------------------------------------
+// Minimize how much the compass resizes due to differences in the lengths of the labels.
+// Make all of the labels two characters wide.  Don't use regular spaces, since the compass will trim them.
+std::string PitchCompassDrawWidget::padLabel(const std::string & p_label, int p_side)
+{
+    std::string l_label = p_label;
+    
+    if (p_side == 0 && l_label.length() == 0)
+    {
+        // Top or bottom of the compass -- set to two spaces
+        l_label = "\u2002\u2002";  // Unicode "En Space"
+    }
+    else if (l_label.length() < 2)
+    {
+        if (p_side == 1)
+        {
+            // Right side of the compass -- pad on the right
+            l_label += "\u2002";  // Unicode "En Space"
+        }
+        else if (p_side == -1)
+        {
+            // Left side of the compass -- pad on the left
+            l_label = "\u2002" + l_label;  // Unicode "En Space"
+        }
+    }
+    
+    return l_label;
 }
 
 //------------------------------------------------------------------------------
