@@ -40,7 +40,7 @@ class PitchCompassDrawWidget: public QWidget
 
   private:
 
-    void setCompassScale();
+    void setCompassScale(double p_pitch = 0.0);
     void blank(bool p_force = false);
 
     QwtCompass * m_compass;

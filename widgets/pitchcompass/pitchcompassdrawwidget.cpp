@@ -85,15 +85,33 @@ void PitchCompassDrawWidget::resizeEvent(QResizeEvent *)
 }
 
 //------------------------------------------------------------------------------
-void PitchCompassDrawWidget::setCompassScale()
+void PitchCompassDrawWidget::setCompassScale(double p_pitch)
 {
     QwtCompassScaleDraw *l_scale_draw = new QwtCompassScaleDraw();
 
     if(m_mode == PitchCompassView::CompassMode::Mode0)
     {
+        QMap< double, QString > l_notes;
+        int l_zero_note = MusicNote::closestNote(p_pitch);
+
+        l_notes[3] = QString::fromStdString(MusicNote::semitoneName(MusicNote::semitoneValue(l_zero_note - 1)));
+        l_notes[0] = QString::fromStdString(MusicNote::semitoneName(MusicNote::semitoneValue(l_zero_note)));
+        l_notes[1] = QString::fromStdString(MusicNote::semitoneName(MusicNote::semitoneValue(l_zero_note + 1)));
+
+        myassert(l_scale_draw);
+        l_scale_draw->setLabelMap(l_notes);
     }
     else if(m_mode == PitchCompassView::CompassMode::Mode1)
     {
+        QMap< double, QString > l_notes;
+        int l_close_note = MusicNote::closestNote(p_pitch);
+
+        l_notes[3] = QString::fromStdString(MusicNote::semitoneName(MusicNote::semitoneValue(l_close_note - 1)));
+        l_notes[0] = QString::fromStdString(MusicNote::semitoneName(MusicNote::semitoneValue(l_close_note)));
+        l_notes[1] = QString::fromStdString(MusicNote::semitoneName(MusicNote::semitoneValue(l_close_note + 1)));
+
+        myassert(l_scale_draw);
+        l_scale_draw->setLabelMap(l_notes);
     }
     else if(m_mode == PitchCompassView::CompassMode::Mode2)
     {
@@ -198,34 +216,21 @@ void PitchCompassDrawWidget::updateCompass(double p_time)
     {
         if(m_mode == PitchCompassView::CompassMode::Mode0)
         {
-            QMap< double, QString > l_notes;
+            setCompassScale(l_pitch);
+            
             int l_zero_note = MusicNote::closestNote(l_pitch);
             double l_zero_pitch = MusicNote::temperedPitch(l_zero_note);
             double l_value = cycle(l_pitch - l_zero_pitch, 4.0);
             m_compass->setValue(l_value);
-
-            l_notes[3] = QString::fromStdString(MusicNote::semitoneName(MusicNote::semitoneValue(l_zero_note)));
-            l_notes[0] = QString::fromStdString(MusicNote::semitoneName(MusicNote::semitoneValue(l_zero_note += 2)));
-            l_notes[1] = QString::fromStdString(MusicNote::semitoneName(MusicNote::semitoneValue(l_zero_note)));
-
-            QwtCompassScaleDraw * l_scale_draw = dynamic_cast<QwtCompassScaleDraw*>(m_compass->scaleDraw());
-            myassert(l_scale_draw);
-            l_scale_draw->setLabelMap(l_notes);
         }
         else if(m_mode == PitchCompassView::CompassMode::Mode1)
         {
-            QMap< double, QString > l_notes;
+            setCompassScale(l_pitch);
+            
             int l_close_note = MusicNote::closestNote(l_pitch);
             double l_close_pitch = MusicNote::temperedPitch(l_close_note);
-            double l_start = cycle(l_pitch - l_close_pitch, 4.0);
-
-            l_notes[l_start] = QString::fromStdString(MusicNote::semitoneName(MusicNote::semitoneValue(l_close_note)));
-            l_notes[l_start - 1] = QString::fromStdString(MusicNote::semitoneName(MusicNote::semitoneValue(l_close_note - 1)));
-            l_notes[l_start + 1] = QString::fromStdString(MusicNote::semitoneName(MusicNote::semitoneValue(l_close_note + 1)));
-
-            QwtCompassScaleDraw * l_scale_draw = dynamic_cast<QwtCompassScaleDraw*>(m_compass->scaleDraw());
-            myassert(l_scale_draw);
-            l_scale_draw->setLabelMap(l_notes);
+            double l_value = cycle(l_pitch - l_close_pitch, 4.0);
+            m_compass->setValue(l_value);
         }
         else if (m_mode == PitchCompassView::CompassMode::Mode2)
         {
