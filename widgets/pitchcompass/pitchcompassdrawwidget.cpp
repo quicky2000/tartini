@@ -43,6 +43,22 @@ PitchCompassDrawWidget::PitchCompassDrawWidget( QWidget *p_parent
     m_compass->setLineWidth(4);
     m_compass->setFrameShadow(QwtCompass::Sunken);
 
+    if(m_mode == PitchCompassView::CompassMode::Mode0)
+    {
+        m_compass->setMode(QwtCompass::RotateNeedle);
+        m_compass->setScale(36, 5);
+    }
+    else if(m_mode == PitchCompassView::CompassMode::Mode1)
+    {
+        m_compass->setMode(QwtCompass::RotateScale);
+        m_compass->setScale(360, 0);
+    }
+    else if(m_mode == PitchCompassView::CompassMode::Mode2)
+    {
+        m_compass->setMode(QwtCompass::RotateNeedle);
+        m_compass->setScale(0, 12);
+    }
+
     setCompassScale();
 
     m_compass->setNeedle(new QwtCompassMagnetNeedle(QwtCompassMagnetNeedle::ThinStyle));
@@ -75,22 +91,16 @@ void PitchCompassDrawWidget::setCompassScale()
 
     if(m_mode == PitchCompassView::CompassMode::Mode0)
     {
-        m_compass->setMode(QwtCompass::RotateNeedle);
-        m_compass->setScale(36, 5);
     }
     else if(m_mode == PitchCompassView::CompassMode::Mode1)
     {
-        m_compass->setMode(QwtCompass::RotateScale);
-        m_compass->setScale(360, 0);
     }
     else if(m_mode == PitchCompassView::CompassMode::Mode2)
     {
         int l_music_key = GData::getUniqueInstance().musicKey();
         const MusicScale &l_music_scale = MusicScale::getScale(GData::getUniqueInstance().musicScale());
 
-        m_compass->setMode(QwtCompass::RotateNeedle);
         QMap< double, QString > l_notes;
-        m_compass->setScale(0, 12);
         for(int l_index = 0; l_index < 12; l_index++)
         {
             if(l_music_scale.hasSemitone(l_index))
