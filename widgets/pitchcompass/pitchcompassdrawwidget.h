@@ -24,8 +24,8 @@ class PitchCompassDrawWidget: public QWidget
 
   public:
     PitchCompassDrawWidget( QWidget * p_parent
-                          , const std::string & p_name = ""
-                          , PitchCompassView::CompassMode p_mode = PitchCompassView::CompassMode::Mode2
+                          , const std::string & p_name
+                          , PitchCompassView::CompassMode p_mode
                           );
 
     ~PitchCompassDrawWidget() override;
