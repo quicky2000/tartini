@@ -180,9 +180,22 @@ void PitchCompassDrawWidget::updateCompass(double p_time)
         l_data = l_active_channel->dataAtTime(p_time);
     }
     
-    if(l_data && l_data->getCorrelation() >= 0.9)
+    double l_pitch = 0.0;
+    if(l_data && l_active_channel->hasAnalysisData())
     {
-        double l_pitch = l_data->getPitch() - GData::getUniqueInstance().semitoneOffset();
+        int l_chunk = l_active_channel->currentChunk();
+        if(l_chunk >= l_active_channel->totalChunks())
+        {
+            l_chunk = l_active_channel->totalChunks() - 1;
+        }
+        if(l_chunk >= 0)
+        {
+            l_pitch = l_active_channel->dataAtChunk(l_chunk)->getPitch();
+        }
+    }
+    
+    if (l_pitch > 0)
+    {
         unsigned int l_interval = 90;
 
         if(m_mode == PitchCompassView::CompassMode::Mode0)
