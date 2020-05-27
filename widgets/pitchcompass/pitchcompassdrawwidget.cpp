@@ -255,13 +255,6 @@ void PitchCompassDrawWidget::blank(bool p_force)
 {
     if(p_force || ++m_blank_count >= 10)
     {
-        if(m_mode != PitchCompassView::CompassMode::Mode2)
-        {
-            QMap< double, QString > l_notes;
-            QwtCompassScaleDraw * l_scale_draw = dynamic_cast<QwtCompassScaleDraw*>(m_compass->scaleDraw());
-            myassert(l_scale_draw);
-            l_scale_draw->setLabelMap(l_notes);
-        }
         m_compass->setValid(false);
         m_blank_count = 1;
     }
