@@ -41,6 +41,7 @@ class PitchCompassDrawWidget: public QWidget
   private:
 
     void setCompassScale(double p_pitch = 0.0);
+    std::string padLabel(const std::string & p_label, int p_side);
     void blank(bool p_force = false);
 
     QwtCompass * m_compass;
