@@ -96,10 +96,12 @@ class MusicNote
      The pitch offset relative to the root of the given musical key
      @param p_pitch The pitch
      @param p_music_key The musical key (0..11).  If not specified, defaults to the globally selected key: `GData::musicKey()`
+     @param p_semitone_offset The tuning offset from A<SUB>4</SUB> = 440 in semitones.   If not specified, defaults to the globally selected temperament: `GData::semitoneOffset()`
      @return The pitch offset in the range 0.0 <= x < 12.0
     */
     static double pitchOffsetInKey(const double & p_pitch
                                  , int p_music_key = g_music_key_roots[GData::getUniqueInstance().musicKey()]
+                                 , double p_semitone_offset = GData::getUniqueInstance().semitoneOffset()
                                    );
 
     /**
