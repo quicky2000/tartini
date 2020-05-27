@@ -165,8 +165,16 @@ void PitchCompassDrawWidget::setCompassScale(double p_pitch)
     // Force the compass to invalidate its cache and redraw.
     // QwtDial::invalidateCache() is a protected member.
     // TODO: Is there a cleaner way to do this?
-    m_compass->setMode(QwtCompass::RotateScale);
-    m_compass->setMode(QwtCompass::RotateNeedle);
+    if (m_mode != PitchCompassView::CompassMode::Mode1)
+    {
+        m_compass->setMode(QwtCompass::RotateScale);
+        m_compass->setMode(QwtCompass::RotateNeedle);
+    }
+    else
+    {
+        m_compass->setMode(QwtCompass::RotateNeedle);
+        m_compass->setMode(QwtCompass::RotateScale);
+    }
 }
 
 //------------------------------------------------------------------------------
