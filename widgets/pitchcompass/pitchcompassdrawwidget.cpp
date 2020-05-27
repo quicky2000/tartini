@@ -236,8 +236,7 @@ void PitchCompassDrawWidget::updateCompass(double p_time)
         }
         else if (m_mode == PitchCompassView::CompassMode::Mode2)
         {
-            int l_music_key = GData::getUniqueInstance().musicKey();
-            m_compass->setValue(cycle(l_pitch - (double)g_music_key_roots[l_music_key], 12.0) );
+            m_compass->setValue(MusicNote::pitchOffsetInKey(l_pitch));
         }
         else
         {
