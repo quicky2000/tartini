@@ -201,16 +201,10 @@ void PitchCompassDrawWidget::updateMusicScale(int)
 //------------------------------------------------------------------------------
 void PitchCompassDrawWidget::updateCompass(double p_time)
 {
-    const AnalysisData *l_data = nullptr;
-    Channel *l_active_channel = GData::getUniqueInstance().getActiveChannel();
-    
-    if(l_active_channel)
-    {
-        l_data = l_active_channel->dataAtTime(p_time);
-    }
-    
     double l_pitch = 0.0;
-    if(l_data && l_active_channel->hasAnalysisData())
+    Channel *l_active_channel = GData::getUniqueInstance().getActiveChannel();
+
+    if(l_active_channel && l_active_channel->dataAtTime(p_time) && l_active_channel->hasAnalysisData())
     {
         int l_chunk = l_active_channel->currentChunk();
         if(l_chunk >= l_active_channel->totalChunks())
