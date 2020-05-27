@@ -77,8 +77,6 @@ void PitchCompassDrawWidget::setCompassScale()
     {
         m_compass->setMode(QwtCompass::RotateNeedle);
         m_compass->setScale(36, 5);
-        // Stepping is now defined by qwt_abstract_slider
-        m_compass->setSingleSteps(0);
     }
     else if(m_mode == PitchCompassView::CompassMode::Mode1)
     {
@@ -93,8 +91,6 @@ void PitchCompassDrawWidget::setCompassScale()
         m_compass->setMode(QwtCompass::RotateNeedle);
         QMap< double, QString > l_notes;
         m_compass->setScale(0, 12);
-        // Stepping is now defined by qwt_abstract_slider
-        m_compass->setSingleSteps(30);
         for(int l_index = 0; l_index < 12; l_index++)
         {
             if(l_music_scale.hasSemitone(l_index))
