@@ -112,9 +112,12 @@ int MusicNote::semitoneValueInKey(int p_note, int p_music_key)
 }
 
 //------------------------------------------------------------------------------
-double MusicNote::pitchOffsetInKey(const double & p_pitch, int p_music_key)
+double MusicNote::pitchOffsetInKey(const double & p_pitch
+                                 , int p_music_key
+                                 , double p_semitone_offset
+                                   )
 {
-    return cycle(p_pitch - (double)p_music_key, 12.0);
+    return cycle(p_pitch - (double)p_music_key - p_semitone_offset, 12.0);
 }
 
 //------------------------------------------------------------------------------
@@ -177,7 +180,7 @@ int MusicNote::closestNote(const double & p_pitch
         return toInt(p_pitch - p_semitone_offset);
     }
     
-    double l_offset_in_key = pitchOffsetInKey(p_pitch - p_semitone_offset, p_music_key);
+    double l_offset_in_key = pitchOffsetInKey(p_pitch, p_music_key, p_semitone_offset);
     int l_closest_offset = p_music_temperament.nearestNoteType(l_offset_in_key);
     int l_root_of_key = toInt(p_pitch - l_offset_in_key);
     double l_closest_note = l_root_of_key + l_closest_offset;
