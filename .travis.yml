@@ -4,20 +4,17 @@ matrix:
       sudo: required
       dist: bionic
       compiler: gcc
-    - os: osx
 
 language: cpp
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update; sudo apt-get install -y qt5-default libqwt-qt5-dev libfftw3-dev libglu1-mesa-dev libasound2-dev libqt5opengl5-dev; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; brew install -v glfw fftw qt5 qwt ; brew link qt5 --force ; fi
+  - sudo apt-get update
+  - sudo apt-get install -y qt5-default libqwt-qt5-dev libfftw3-dev libglu1-mesa-dev libasound2-dev libqt5opengl5-dev
 
 script:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then qmake pitch.pro ;fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then qmake -Wnone pitch.pro ;fi
+  - qmake pitch.pro
   - make
   - mkdir cmake-build; cd cmake-build
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cmake .. ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export QWT_INSTALL=/usr/local/opt/qwt/lib; cmake -d -DCMAKE_PREFIX_PATH=$(brew --prefix qt5) .. ; fi
+  - cmake ..
   - make
 #EOF
